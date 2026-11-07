@@ -4556,11 +4556,11 @@ window.UP = window.UP || {};
     function renderSeries(papers, heading){
       return [...new Set(papers.map(p => p.series))].map(label => {
         const links = papers.filter(p => p.series === label).sort((a,b) => a.set-b.set).map(p => `
-          <a class="source-test-paper" data-paper-id="${esc(p.id)}"${p.course ? ` data-course="${esc(p.course)}"` : ''} href="${esc(p.file)}" target="_blank" rel="noopener noreferrer" aria-label="${esc((hi ? 'मूल प्रश्नपत्र ' : 'Original test paper ') + (p.course ? courseName(p.course) + ', ' : '') + p.paperCode + ', ' + (hi ? 'सीरीज़ ' : 'series ') + p.series + (p.course ? (hi ? ', सेट ' : ', Set ') + p.set : '') + (p.footerCode ? (hi ? ', फ़ुटर ' : ', footer ') + p.footerCode : '') + (p.imageOnly ? (hi ? ', स्कैन PDF' : ', scanned PDF') : '') + (p.printedPages && p.printedPages !== p.pages ? (hi ? ', PDF में ' + p.pages + ' पृष्ठ; मुखपृष्ठ पर ' + p.printedPages + ' मुद्रित पृष्ठ' : ', ' + p.pages + ' PDF pages; cover says ' + p.printedPages + ' printed pages') : '') + (p.visuallyImpaired ? (hi ? ', केवल दृष्टिबाधित परीक्षार्थियों के लिए' : ', visually impaired candidates only') : ''))}">
+          <a class="source-test-paper" data-paper-id="${esc(p.id)}" data-paper-code="${esc(p.paperCode)}"${p.course ? ` data-course="${esc(p.course)}"` : ''} href="${esc(p.file)}" target="_blank" rel="noopener noreferrer" aria-label="${esc((hi ? 'मूल प्रश्नपत्र ' : 'Original test paper ') + (p.course ? courseName(p.course) + ', ' : '') + p.paperCode + ', ' + (hi ? 'सीरीज़ ' : 'series ') + p.series + (p.course ? (hi ? ', सेट ' : ', Set ') + p.set : '') + (p.footerCode ? (hi ? ', फ़ुटर ' : ', footer ') + p.footerCode : '') + (p.imageOnly ? (hi ? ', स्कैन PDF' : ', scanned PDF') : '') + (p.printedPages && p.printedPages !== p.pages ? (hi ? ', PDF में ' + p.pages + ' पृष्ठ; मुखपृष्ठ पर ' + p.printedPages + ' मुद्रित पृष्ठ' : ', ' + p.pages + ' PDF pages; cover says ' + p.printedPages + ' printed pages') : '') + (p.visuallyImpaired ? (hi ? ', केवल दृष्टिबाधित परीक्षार्थियों के लिए' : ', visually impaired candidates only') : ''))}">
             <span class="source-paper-code">${icon('book')} ${esc(p.paperCode)}</span>
             <span class="source-paper-meta">${p.course ? `${hi ? 'सेट' : 'Set'} ${p.set} · ` : ''}${p.footerCode ? `${hi ? 'फ़ुटर' : 'Footer'} ${esc(p.footerCode)} · ` : ''}${p.pages} ${hi ? 'PDF पृष्ठ' : 'PDF pages'} · ${p.marks} ${hi ? 'अंक' : 'marks'}${p.course ? (hi ? ' · ' + (p.duration === '120 minutes' ? '2 घंटे' : '3 घंटे') : ' · ' + (p.duration === '120 minutes' ? '2 hours' : '3 hours')) : ''}${p.imageOnly ? (hi ? ' · स्कैन PDF' : ' · Scanned PDF') : ''}${p.printedPages && p.printedPages !== p.pages ? (hi ? ' · मुखपृष्ठ पर ' + p.printedPages + ' मुद्रित पृष्ठ' : ' · cover says ' + p.printedPages + ' printed pages') : ''}${p.visuallyImpaired ? ` · <strong>${hi ? 'केवल दृष्टिबाधित परीक्षार्थियों के लिए' : 'Visually impaired candidates only'}</strong>` : ''}</span>
           </a>`).join('');
-        return `<div class="source-paper-group"><${heading}>${hi ? 'सीरीज़' : 'Series'} ${esc(label)}</${heading}><div class="source-paper-links">${links}</div></div>`;
+        return `<div class="source-paper-group" data-series="${esc(label)}"><${heading}>${hi ? 'सीरीज़' : 'Series'} ${esc(label)}</${heading}><div class="source-paper-links">${links}</div></div>`;
       }).join('');
     }
     const groups = isEnglish
@@ -4571,8 +4571,13 @@ window.UP = window.UP || {};
       : renderSeries(rows, 'h3');
     return `<section class="card supplied-test-papers" id="original-test-papers" aria-labelledby="supplied-test-papers-heading">
       <div class="card-body"><h2 id="supplied-test-papers-heading">${hi ? 'मूल प्रश्नपत्र PDF' : 'Original test-paper PDFs'}</h2>
-        <p class="hint">${hi ? 'अपलोड किए गए मूल PDF · प्रश्न और उत्तर खोजने योग्य डेटाबेस में नहीं जोड़े गए हैं। समान कोड वाले अलग प्रश्नपत्रों को सीरीज़ से पहचानें। वर्ष सत्यापित नहीं है। नीचे के फ़िल्टर केवल खोजने योग्य प्रश्न-बैंक पर लागू होते हैं।' : 'Original supplied PDFs · questions and answers have not been added to the searchable bank. Use the series to distinguish papers with the same code. Years have not been verified. The filters below apply only to the searchable question bank.'}</p>
+        <p class="hint">${hi ? 'अपलोड किए गए मूल PDF · प्रश्न और उत्तर खोजने योग्य डेटाबेस में नहीं जोड़े गए हैं। समान कोड वाले अलग प्रश्नपत्रों को सीरीज़ से पहचानें। वर्ष सत्यापित नहीं है। वर्ष, अध्याय और कठिनाई फ़िल्टर केवल खोजने योग्य प्रश्न-बैंक पर लागू होते हैं।' : 'Original supplied PDFs · questions and answers have not been added to the searchable bank. Use the series to distinguish papers with the same code. Years have not been verified. Year, chapter and difficulty filters apply only to the searchable question bank.'}</p>
         ${isEnglish ? `<p class="hint">${hi ? 'कोर और इलेक्टिव अलग दिखाए हैं। मूल प्रश्नपत्र अंग्रेज़ी में हैं; आधिकारिक उत्तर-कुंजी नहीं दी गई। ऑफ़लाइन उपयोग के लिए PDF डाउनलोड करें।' : 'Core and Elective are listed separately. The originals are in English; no official answer key was supplied. Download PDFs for offline use.'}</p>` : ''}
+        ${isEnglish ? `<div class="source-paper-filter">
+          <label for="english-paper-filter">${hi ? 'कोड या सीरीज़ से PDF खोजें' : 'Find a PDF by paper code or series'}</label>
+          <input type="search" id="english-paper-filter" data-action="sourcePaperFilter" aria-describedby="english-paper-filter-status" placeholder="${hi ? 'जैसे 1/2/1 या FH1EG/2' : 'e.g. 1/2/1 or FH1EG/2'}" autocomplete="off" spellcheck="false">
+          <p id="english-paper-filter-status" role="status" aria-live="polite">${hi ? `${rows.length} में से ${rows.length} PDF दिख रहे हैं` : `Showing ${rows.length} of ${rows.length} PDFs`}</p>
+        </div>` : ''}
         ${groups}
       </div></section>`;
   }
@@ -5322,6 +5327,34 @@ window.UP = window.UP || {};
 
   let searchTimer, bookTimer;
   document.addEventListener('input', function (e) {
+    const sourceFilter = e.target.closest('[data-action="sourcePaperFilter"]');
+    if (sourceFilter) {
+      // This filters only supplied PDF metadata, not the searchable question bank.
+      const section = sourceFilter.closest('#original-test-papers');
+      if (!section) return;
+      const normalize = value => String(value || '').toLocaleLowerCase().replace(/[\s/_-]+/g, '');
+      const query = normalize(sourceFilter.value);
+      let total = 0, visible = 0;
+      section.querySelectorAll('.source-course-group').forEach(course => {
+        let inCourse = 0;
+        course.querySelectorAll('.source-paper-group').forEach(group => {
+          let inSeries = 0;
+          const series = normalize(group.dataset.series);
+          group.querySelectorAll('.source-test-paper').forEach(link => {
+            const match = !query || series.includes(query) || normalize(link.dataset.paperCode).includes(query);
+            link.hidden = !match; total++;
+            if (match) { visible++; inSeries++; inCourse++; }
+          });
+          group.hidden = !inSeries;
+        });
+        course.hidden = !inCourse;
+      });
+      const status = section.querySelector('#english-paper-filter-status');
+      if (status) status.textContent = S.lang === 'hi'
+        ? `${total} में से ${visible} PDF दिख रहे हैं`
+        : `Showing ${visible} of ${total} PDFs`;
+      return;
+    }
     const bs = e.target.closest('[data-action="bookSearch"]');
     if (bs) {
       clearTimeout(bookTimer);
