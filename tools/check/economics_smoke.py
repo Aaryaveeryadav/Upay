@@ -155,7 +155,9 @@ def main():
         page.reload(wait_until='networkidle', timeout=60000)
         page.wait_for_function('window.UP && UP.S && UP.S.board === "mp" && UP.S.subject === "economics"')
         page.locator('#topbar select[data-key="cls"]').select_option('10')
-        page.wait_for_function('UP.S.cls === 10 && UP.S.subject === "maths"')
+        # State can update before the asynchronously rerendered selector.
+        page.wait_for_function('''UP.S.cls === 10 && UP.S.subject === "maths" &&
+            !document.querySelector('#topbar select[data-key="subject"] option[value="economics"]')''')
         assert page.locator('#topbar select[data-key="subject"] option[value="economics"]').count() == 0
         goto_hash(page, '#/books', '.page-head')
         assert page.locator('.econ-source-link').count() == 0
