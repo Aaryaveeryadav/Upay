@@ -38,7 +38,7 @@
 
   /* --- CRITICAL CORE: required before app.js boots --- */
   const CRITICAL_CORE = [
-    'assets/js/data-extra.js?v=26z',
+    'assets/js/data-extra.js?v=26aa',
     'assets/js/data/chapters1.js',
     'assets/js/data/chapters2.js',
     'assets/js/data/pyq.js',
@@ -47,16 +47,16 @@
     'assets/js/data/chapters12-maths.js',   // Class 12 Maths KB + PYQ seed (must load AFTER pyq.js which resets UP.pyq)
     'assets/js/data/chapters12-applied-maths.js',  // Class 12 Applied Maths KB + PYQ seed
     'assets/js/data/chapters12-accountancy.js', // Class 12 Accountancy + Computerised Accounting chapter maps
-    'assets/js/data/economics12.js?v=26z', // Class 12 Economics guides, including deep links
-    'assets/js/data/economics-sources.js?v=26z', // the original Economics PDF catalogue
-    'assets/js/data/english12.js?v=26z', // Class 12 English reading notes and direct links
-    'assets/js/data/english12-sources.js?v=26z', // supplied English PDFs; not a question bank
-    'assets/js/data/class12-original-test-papers.js?v=26z', // supplied Economics, Biology and English papers, source only
+    'assets/js/data/economics12.js?v=26aa', // Class 12 Economics guides, including deep links
+    'assets/js/data/economics-sources.js?v=26aa', // the original Economics PDF catalogue
+    'assets/js/data/english12.js?v=26aa', // Class 12 English reading notes and direct links
+    'assets/js/data/english12-sources.js?v=26aa', // supplied English PDFs; not a question bank
+    'assets/js/data/class12-original-test-papers.js?v=26aa', // supplied Economics, Biology and English papers, source only
     'assets/js/data/pyq-cbse2025-cls12.js', // CBSE 2025 (series 65/) Class 12 Maths PYQs
-    'assets/js/data/pyq-accountancy-2023-2026-extracted.js?v=26z', // 34 source-tagged Accountancy papers, loaded into both Class 12 tracks
-    'assets/js/data/accountancy-original-papers.js?v=26z', // source-only PDFs, not searchable questions
+    'assets/js/data/pyq-accountancy-2023-2026-extracted.js?v=26aa', // 34 source-tagged Accountancy papers, loaded into both Class 12 tracks
+    'assets/js/data/accountancy-original-papers.js?v=26aa', // source-only PDFs, not searchable questions
     'assets/js/data/mcq-keyed.js',
-    'assets/js/approach-enrich.js?v=26z',
+    'assets/js/approach-enrich.js?v=26aa',
       'assets/js/maths-solvers.js',  // attaches three solution methods to every PYQ (all classes/subjects)
     'assets/js/data/figures-c12.js',
       'assets/js/physics-solvers.js',
@@ -234,7 +234,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26z');
+    return loadScript('assets/js/app.js?v=26aa');
   }
 
   function loadPostPaint() {

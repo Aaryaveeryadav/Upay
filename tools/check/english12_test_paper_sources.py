@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check 91 supplied Class 12 English Core/Elective source-only PDFs.
+"""Check 101 supplied Class 12 English Core/Elective source-only PDFs.
 
 Checks course, series, set, marks, page counts, identity, SHA-256, source text
 and original uploads. Eighteen Core PDFs are image-only. Tesseract checks useful
@@ -47,6 +47,18 @@ for group in range(1,6):
     for setno in (1,2,3):
         name=f'1-{group}-{setno} '+('(English Core)' if group in (2,5) else 'ENGLISH (Core)')+'.pdf'
         EXPECTED[name]=('core',f'1/{group}/{setno}',f'FH1EG/{group}',setno,16 if group in (2,5) else 19,80,13,180,False)
+for setno in (1,2,3):
+    name=f'1-6-{setno} English Core.pdf' if setno in (1,2) else '1-6-3 ENGLISH CORE.pdf'
+    EXPECTED[name]=('core',f'1/6/{setno}','A6BAB/C',setno,7,40,6,120,False)
+EXPECTED.update({
+    'English_Elective.pdf':('elective','28/7','S7PQR',4,15,80,13,180,False),
+    'English_Elective-2.pdf':('elective','28','Q3SPR',4,16,80,13,180,False),
+    'English_Elective-3.pdf':('elective','28/S','WXYZ/S',4,15,80,13,180,False),
+    '28 -S - English Elective.pdf':('elective','28/S','&RQPS/S',4,19,80,13,180,False),
+    '28_English_Elective-2.pdf':('elective','28','&RQPS',4,19,80,13,180,False),
+    '28_C ENGLISH ELECTIVE.pdf':('elective','28','FH1EG/C',4,15,80,13,180,False),
+    '28_English Elective.pdf':('elective','28','A1BAB',4,7,40,8,120,False),
+})
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -69,15 +81,15 @@ def main():
     args=parser.parse_args()
     text=(ROOT/'assets/js/data/class12-original-test-papers.js').read_text()
     rows=[r for r in json.loads(text.split('UP.class12OriginalTestPapers = ',1)[1].strip()[:-1]) if r['subject']=='english']
-    assert len(rows)==len(EXPECTED)==91 and {r['originalFile'] for r in rows}==set(EXPECTED)
-    assert len({r['id'] for r in rows})==len({r['file'] for r in rows})==len({r['sha256'] for r in rows})==91
-    assert Counter(r['course'] for r in rows)=={'core':90,'elective':1}
-    assert Counter(r['marks'] for r in rows)=={40:15,80:76}
+    assert len(rows)==len(EXPECTED)==101 and {r['originalFile'] for r in rows}==set(EXPECTED)
+    assert len({r['id'] for r in rows})==len({r['file'] for r in rows})==len({r['sha256'] for r in rows})==101
+    assert Counter(r['course'] for r in rows)=={'core':93,'elective':8}
+    assert Counter(r['marks'] for r in rows)=={40:19,80:82}
     assert sum(bool(r.get('imageOnly')) for r in rows)==18
     assert {r['originalFile'] for r in rows if r.get('printedPages')==7}=={f'1-5-{i} English Core.pdf' for i in (1,2,3)}
     assert {r['originalFile'] for r in rows if r.get('printedPages')==23}=={f'230{g}-{i}_1-{g}-{i}_English (Core).pdf' for g in (1,2) for i in (1,2,3)}
-    assert {r['originalFile'] for r in rows if r.get('printedPages')==15}==({f'1-{g}-{i}_English Core.pdf' for g in (1,2) for i in (1,2,3)} | {f'1_{g}_{i}_English Core.pdf' for g in (4,5) for i in (1,2,3)} | {f'1-{g}-{i} (English Core).pdf' for g in (2,5) for i in (1,2,3)})
-    assert sum(bool(r.get('footerCode')) for r in rows)==24
+    assert {r['originalFile'] for r in rows if r.get('printedPages')==15}==({f'1-{g}-{i}_English Core.pdf' for g in (1,2) for i in (1,2,3)} | {f'1_{g}_{i}_English Core.pdf' for g in (4,5) for i in (1,2,3)} | {f'1-{g}-{i} (English Core).pdf' for g in (2,5) for i in (1,2,3)} | {'English_Elective-2.pdf'})
+    assert sum(bool(r.get('footerCode')) for r in rows)==25
     ocr=shutil.which('tesseract')
     for r in rows:
         name=r['originalFile'];course,code,series,setno,pages,marks,questions,minutes,scan=EXPECTED[name]
@@ -132,19 +144,33 @@ def main():
                 if r.get('printedPages'):
                     assert re.search(rf"\b{r['printedPages']}\s+printed\s+pages\b",first,re.I),(name,'printed pages')
             if r.get('footerCode') and not scan:
-                assert r['footerCode'] in first and r['footerCode'] in doc[-1].get_text(),(name,'footer code')
+                if name=='English_Elective-2.pdf':
+                    # Its footer is visually 2457; the embedded text layer incorrectly extracts 666.
+                    assert r['footerCode']=='2457'
+                    if ocr:
+                        assert '2457' in ocr_region(doc[0],ocr,(.105,.94,.19,.975)),(name,'cover footer OCR')
+                        assert '2457' in ocr_region(doc[-1],ocr,(.105,.94,.19,.975)),(name,'last footer OCR')
+                else:
+                    assert r['footerCode'] in first and r['footerCode'] in doc[-1].get_text(),(name,'footer code')
                 assert re.search(r'(?m)^\s*13\.',doc[-2].get_text()),(name,'question 13')
-            if series in ('S7PQR','Q3SPR','S4PRQ','S5RPQ','WXYZ/S','4YWZX','ZYWX5','W6YXZ','ZX7YW','QS1PR/1','SRQP2/2','S3QRP/3','FH1EG/C','&RQPS/S','FH1EG/1','FH1EG/3','FH1EG/4'):
+            if series in ('S7PQR','Q3SPR','S4PRQ','S5RPQ','WXYZ/S','4YWZX','ZYWX5','W6YXZ','ZX7YW','QS1PR/1','SRQP2/2','S3QRP/3','FH1EG/C','&RQPS/S','FH1EG/1','FH1EG/3','FH1EG/4') and name not in ('English_Elective-2.pdf','28 -S - English Elective.pdf'):
                 assert re.search(r'(?m)^\s*13\.',doc[-1].get_text()),(name,'final question')
+            if name=='28 -S - English Elective.pdf':
+                assert re.search(r'(?m)^\s*13\.',doc[-2].get_text()),(name,'question 13 starts on page 18')
+            if series=='A6BAB/C':
+                assert re.search(r'(?m)^\s*6\.',doc[-1].get_text()),(name,'final question')
         if args.uploads:
             assert (args.uploads/name).is_file() and digest(args.uploads/name)==r['sha256'],name
         print('PASS',name,course,series,code,pages,'PDF pages; SHA-256 matches',flush=True)
-    for group,count in ((1,5),(2,5),(3,4),(4,5),(5,5),(7,2),('S',2)):
+    for group,count in ((1,5),(2,5),(3,4),(4,5),(5,5),(6,2),(7,2),('S',2)):
         for setno in (1,2,3):
             same=[r for r in rows if r['paperCode']==f'1/{group}/{setno}']
             assert len(same)==count and len({r['series'] for r in same})==count and len({r['sha256'] for r in same})==count
-    print('PASS 90 Core + 1 Elective; repeated codes separated by series; 18 image-only scans')
-    print('PASS three 8-page PDFs say 7 printed pages; six 24-page PDFs say 23; eighteen 16-page PDFs say 15')
+    for code,count in (('28',5),('28/S',2),('28/7',1)):
+        same=[r for r in rows if r['course']=='elective' and r['paperCode']==code]
+        assert len(same)==count and len({r['series'] for r in same})==count
+    print('PASS 93 Core + 8 Elective; repeated codes separated by series; 18 image-only scans')
+    print('PASS three 8-page PDFs say 7 printed pages; six 24-page PDFs say 23; nineteen 16-page PDFs say 15')
     if not ocr:print('WARNING: scanned-cover OCR skipped; inspect those covers separately.')
     print('Scanned cover series/codes were visually checked; exam years, answers and full contents are not certified.')
 
