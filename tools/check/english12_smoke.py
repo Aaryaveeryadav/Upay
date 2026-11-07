@@ -165,7 +165,7 @@ def main():
         assert 'English Core and Elective papers' in page.locator('#view').inner_text()
         assert 'no official answer key was supplied' in page.locator('#view').inner_text()
         assert page.locator('.q-card.pyq').count()==0
-        assert page.locator('.source-test-paper').count()==19
+        assert page.locator('.source-test-paper').count()==37
         nav(page,'#/test','.page-head')
         page.wait_for_function('document.querySelector("#view")?.textContent.includes("No questions for these filters")')
         nav(page,'#/search?q=Lencho','#qSearchInput')
@@ -175,7 +175,7 @@ def main():
         nav(page,'#/','.hero')
         assert 'Lencho' not in page.locator('#view').inner_text()
         assert 'The Last Lesson' in page.locator('#view').inner_text()
-        print('PASS 19 source-only papers and no Class 10 or invented searchable questions or mock paper in Class 12 English',flush=True)
+        print('PASS 37 source-only papers and no Class 10 or invented searchable questions or mock paper in Class 12 English',flush=True)
 
         nav(page,'#/ask?q=Why%20does%20Franz%20value%20his%20language%3F','#answerMount')
         page.get_by_text('AI solution unavailable.').wait_for(timeout=20000)

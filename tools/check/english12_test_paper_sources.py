@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check 19 supplied Class 12 English Core/Elective source-only PDFs.
+"""Check 37 supplied Class 12 English Core/Elective source-only PDFs.
 
 Checks course, series, set, marks, page counts, identity, SHA-256, source text
 and original uploads. Nine Core PDFs are image-only. Tesseract checks useful
@@ -25,6 +25,14 @@ for group in (1,2,3,4,5,7):
         name=f'1-{group}-{setno} English Core.pdf' if group!=7 else f'1-7-{setno}.pdf'
         EXPECTED[name]=('core',f'1/{group}/{setno}',SERIES[group],setno,19 if group==7 else 7 if group in (2,4) else 8,80 if group==7 else 40,13 if group==7 else 6,180 if group==7 else 120,group in (1,3,5))
 EXPECTED['28_ENGLISH_Elective.pdf']=('elective','28','FH1EG',4,15,80,13,180,False)
+for group,series in ((3,'Q3SPR'),(4,'S4PRQ'),(5,'S5RPQ')):
+    for setno in (1,2,3):
+        EXPECTED[f'1-{group}-{setno}_Eng_lish Core.pdf']=('core',f'1/{group}/{setno}',series,setno,19,80,13,180,False)
+for group,series in ((1,'QR1SP'),(2,'S2RPQ')):
+    for setno in (1,2,3):
+        EXPECTED[f'230{group}-{setno}_1-{group}-{setno}_English (Core).pdf']=('core',f'1/{group}/{setno}',series,setno,24,80,13,180,False)
+for setno in (1,2,3):
+    EXPECTED[f'1-S-{setno}_English Core.pdf']=('core',f'1/S/{setno}','WXYZ/S',setno,19,80,13,180,False)
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -40,12 +48,14 @@ def main():
     args=parser.parse_args()
     text=(ROOT/'assets/js/data/class12-original-test-papers.js').read_text()
     rows=[r for r in json.loads(text.split('UP.class12OriginalTestPapers = ',1)[1].strip()[:-1]) if r['subject']=='english']
-    assert len(rows)==len(EXPECTED)==19 and {r['originalFile'] for r in rows}==set(EXPECTED)
-    assert len({r['id'] for r in rows})==len({r['file'] for r in rows})==len({r['sha256'] for r in rows})==19
-    assert Counter(r['course'] for r in rows)=={'core':18,'elective':1}
-    assert Counter(r['marks'] for r in rows)=={40:15,80:4}
+    assert len(rows)==len(EXPECTED)==37 and {r['originalFile'] for r in rows}==set(EXPECTED)
+    assert len({r['id'] for r in rows})==len({r['file'] for r in rows})==len({r['sha256'] for r in rows})==37
+    assert Counter(r['course'] for r in rows)=={'core':36,'elective':1}
+    assert Counter(r['marks'] for r in rows)=={40:15,80:22}
     assert sum(bool(r.get('imageOnly')) for r in rows)==9
-    assert {r['paperCode'] for r in rows if r.get('printedPages')}=={'1/5/1','1/5/2','1/5/3'}
+    assert {r['originalFile'] for r in rows if r.get('printedPages')==7}=={f'1-5-{i} English Core.pdf' for i in (1,2,3)}
+    assert {r['originalFile'] for r in rows if r.get('printedPages')==23}=={f'230{g}-{i}_1-{g}-{i}_English (Core).pdf' for g in (1,2) for i in (1,2,3)}
+    assert sum(bool(r.get('footerCode')) for r in rows)==6
     ocr=shutil.which('tesseract')
     for r in rows:
         name=r['originalFile'];course,code,series,setno,pages,marks,questions,minutes,scan=EXPECTED[name]
@@ -72,15 +82,23 @@ def main():
                     assert re.search(rf'\bSET(?:\s*No\.)?\s*[-~:]?\s*{setno}\b',first,re.I),(name,'set OCR')
                 else:
                     assert code in first and series in first,(name,'code/series')
-                    assert re.search(rf'\bSET\s*[-~:]?\s*{setno}\b',first,re.I),(name,'set')
+                    assert re.search(rf'\bSET\s*[-~:–—]?\s*{setno}\b',first,re.I),(name,'set')
                 if r.get('printedPages'):
                     assert re.search(rf"\b{r['printedPages']}\s+printed\s+pages\b",first,re.I),(name,'printed pages')
-            if series=='S7PQR':
-                assert re.search(r'(?m)^13\.',doc[-1].get_text()),(name,'final question')
+            if r.get('footerCode'):
+                assert r['footerCode'] in first and r['footerCode'] in doc[-1].get_text(),(name,'footer code')
+                assert re.search(r'(?m)^\s*13\.',doc[-2].get_text()),(name,'question 13')
+            if series in ('S7PQR','Q3SPR','S4PRQ','S5RPQ','WXYZ/S'):
+                assert re.search(r'(?m)^\s*13\.',doc[-1].get_text()),(name,'final question')
         if args.uploads:
             assert (args.uploads/name).is_file() and digest(args.uploads/name)==r['sha256'],name
         print('PASS',name,course,series,code,pages,'PDF pages; SHA-256 matches',flush=True)
-    print('PASS 18 Core + 1 Elective; 9 image-only scans; three covers say 7 printed pages for 8-page PDFs')
+    for group in (1,2,3,4,5):
+        for setno in (1,2,3):
+            same=[r for r in rows if r['paperCode']==f'1/{group}/{setno}']
+            assert len(same)==2 and len({r['series'] for r in same})==2 and len({r['sha256'] for r in same})==2
+    print('PASS 36 Core + 1 Elective; repeated codes separated by series; 9 image-only scans')
+    print('PASS three 8-page PDFs say 7 printed pages and six 24-page PDFs say 23')
     if not ocr:print('WARNING: scanned-cover OCR skipped; inspect those covers separately.')
     print('Scanned cover series/codes were visually checked; exam years, answers and full contents are not certified.')
 
