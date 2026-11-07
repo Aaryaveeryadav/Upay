@@ -22,11 +22,13 @@
     },
     {
       "src": "^/assets/sanskrit/papers/Sanskrit\\.pdf$",
-      "dest": "/assets/sanskrit/papers/Sanskrit-variant-A.pdf"
+      "dest": "/assets/sanskrit/papers/Sanskrit-variant-A.pdf",
+      "caseSensitive": true
     },
     {
       "src": "^/assets/sanskrit/papers/52_SANSKRIT\\.pdf$",
-      "dest": "/assets/sanskrit/papers/52-SANSKRIT-set-4.pdf"
+      "dest": "/assets/sanskrit/papers/52-SANSKRIT-set-4.pdf",
+      "caseSensitive": true
     },
     {
       "handle": "filesystem"

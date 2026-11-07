@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Test portable Sanskrit paper names and unchanged bytes on the local server.
+"""Test portable Sanskrit paper names and unchanged bytes on a local or deployed server.
 
 The two case-colliding old names are mapped by server.js and vercel.json; the
 other case-distinct papers must continue to resolve to their own original bytes.
@@ -33,7 +33,7 @@ def main():
     assert 'Sanskrit-variant-A.pdf' in files and '52-SANSKRIT-set-4.pdf' in files
     routes=json.loads((ROOT/'vercel.json').read_text())['routes']
     for old,new in [('Sanskrit.pdf','Sanskrit-variant-A.pdf'),('52_SANSKRIT.pdf','52-SANSKRIT-set-4.pdf')]:
-        assert any(r.get('src') == '^'+PREFIX+old.replace('.pdf',r'\.pdf')+'$' and r.get('dest')==PREFIX+new for r in routes)
+        assert any(r.get('src') == '^'+PREFIX+old.replace('.pdf',r'\.pdf')+'$' and r.get('dest')==PREFIX+new and r.get('caseSensitive') is True for r in routes)
     for name,wanted in EXPECTED.items():
         with urlopen(BASE+PREFIX+name,timeout=30) as response:
             assert response.status==200 and response.headers.get_content_type()=='application/pdf',name
@@ -54,6 +54,6 @@ def main():
         ctx.close();browser.close()
     print('PASS nine portable, case-distinct Sanskrit source links')
     print('PASS both legacy URLs and their case-distinct neighbours return the original SHA-256 bytes')
-    print('PASS Vercel config contains matching exact legacy rewrites (not a deployed Vercel test)')
+    print('PASS Vercel config requires case-sensitive legacy rewrites; HTTP hashes verified at',BASE)
 
 if __name__=='__main__':main()
