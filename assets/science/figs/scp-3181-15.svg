@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-size: 12px; font-weight: bold; }
+    .line { stroke: #000; stroke-width: 1.6; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+    .kidney { fill: none; stroke: #000; stroke-width: 1.6; stroke-linejoin: round; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff"/>
+
+  <!-- Aorta (Red/Left in diagram, center-right anatomically) -->
+  <path class="line" d="M190 20 L190 200 M175 40 L160 55 M175 75 L155 90 M190 140 L215 155 M190 170 L215 185"/>
+
+  <!-- Vena Cava (Blue/Right in diagram, center-left anatomically) -->
+  <path class="line" d="M210 20 L210 200 M225 45 L240 60 M225 80 L245 95 M210 135 C190 135 180 145 160 145 M210 165 C190 165 185 175 165 175"/>
+
+  <!-- Left Kidney (Right side of drawing) -->
+  <path class="kidney" d="M 245,65 
+           C 285,60 305,90 305,120 
+           C 305,150 285,180 245,175 
+           C 230,173 225,150 225,120 
+           C 225,90 230,67 245,65 Z"/>
+
+  <!-- Right Kidney (Left side of drawing) -->
+  <path class="kidney" d="M 155,65 
+           C 115,60 95,90 95,120 
+           C 95,150 115,180 155,175 
+           C 170,173 175,150 175,120 
+           C 175,90 170,67 155,65 Z"/>
+
+  <!-- Renal Artery / Vein connections to kidneys -->
+  <!-- Right Kidney vessels -->
+  <path class="line" d="M175 110 L155 110 M175 130 L155 130"/>
+  <!-- Left Kidney vessels -->
+  <path class="line" d="M225 110 L245 110 M225 130 L245 130"/>
+
+  <!-- Ureters -->
+  <path class="line" d="M155 175 C150 210 175 220 185 240"/>
+  <path class="line" d="M245 175 C250 210 225 220 215 240"/>
+
+  <!-- Urinary Bladder -->
+  <path class="line" d="M185 240 C185 255 215 255 215 240 Z"/>
+
+  <!-- Labels and Leader Lines -->
+  <!-- Structure P (Renal Artery / Blood entering kidney) -->
+  <line x1="130" y1="90" x2="65" y2="70" class="line"/>
+  <text class="label" x="35" y="68">P</text>
+
+  <!-- Structure Q (Ureter / Urine leaving kidney) -->
+  <line x1="140" y1="195" x2="65" y2="180" class="line"/>
+  <text class="label" x="35" y="178">Q</text>
+
+  <!-- Additional labels for clarity -->
+  <text x="315" y="125">Kidney</text>
+  <text x="210" y="15">Aorta / Vena Cava</text>
+  <text x="182" y="258">Urinary Bladder</text>
+
+</svg>

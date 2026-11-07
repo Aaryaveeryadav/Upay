@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 12px; fill: #000; }
+    .label { font-size: 11px; text-anchor: middle; }
+    .bold { font-weight: bold; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- ==================== DIAGRAM (i) ==================== -->
+  <g transform="translate(70, 40)">
+    <!-- Title / Label -->
+    <text x="50" y="-15" class="bold label">(i)</text>
+
+    <!-- Magnetic Field Lines (Horizontal Right) -->
+    <g stroke="#000" stroke-width="1.2" fill="none">
+      <path d="M-10 20 L110 20" marker-end="url(#arrow)" />
+      <path d="M-10 60 L110 60" marker-end="url(#arrow)" />
+      <path d="M-10 100 L110 100" marker-end="url(#arrow)" />
+    </g>
+    <text x="100" y="12" class="label">B</text>
+
+    <!-- Conductor carrying current upwards -->
+    <line x1="50" y1="120" x2="50" y2="0" stroke="#000" stroke-width="2.5" />
+    <text x="50" y="-3" class="label">I</text>
+
+    <!-- Arrow for Current (Up) -->
+    <polygon points="50,-5 46,5 54,5" fill="#000" />
+
+    <!-- Force label -->
+    <text x="80" y="65" class="bold">F</text>
+    <path d="M 55 60 L 75 60" stroke="#000" stroke-width="1.6" marker-end="url(#arrow)" />
+
+    <!-- Axis / Angle indicator if needed, keep clean -->
+    <text x="50" y="145" class="label">Conductor in B-field</text>
+  </g>
+
+  <!-- ==================== DIAGRAM (ii) ==================== -->
+  <!-- Electron beam cases -->
+  <g transform="translate(260, 40)">
+    <text x="60" y="-15" class="bold label">(ii)</text>
+
+    <!-- Case A: Parallel to B -->
+    <g transform="translate(0, 10)">
+      <text x="-35" y="30" class="bold">A</text>
+      <!-- B field (Right) -->
+      <g stroke="#000" stroke-width="1.2">
+        <line x1="0" y1="25" x2="110" y2="25" />
+        <line x1="0" y1="35" x2="110" y2="35" />
+      </g>
+      <text x="100" y="18" class="label">B</text>
+
+      <!-- Electron / Velocity parallel to B -->
+      <circle cx="30" cy="30" r="4" fill="#000" />
+      <text x="30" y="18" class="label">e⁻</text>
+      <!-- Velocity arrow -->
+      <line x1="30" y1="30" x2="70" y2="30" stroke="#000" stroke-width="1.8" />
+      <polygon points="73,30 67,27 67,33" fill="#000" />
+      <text x="75" y="24" class="label">v</text>
+
+      <text x="60" y="60" class="label">v || B (F = 0)</text>
+    </g>
+
+    <!-- Case B: Perpendicular to B -->
+    <g transform="translate(0, 95)">
+      <text x="-35" y="30" class="bold">B</text>
+      <!-- B field (Right) -->
+      <g stroke="#000" stroke-width="1.2">
+        <line x1="0" y1="25" x2="110" y2="25" />
+        <line x1="0" y1="35" x2="110" y2="35" />
+      </g>
+      <text x="100" y="18" class="label">B</text>
+
+      <!-- Electron / Velocity perpendicular to B -->
+      <circle cx="50" cy="65" r="4" fill="#000" />
+      <text x="38" y="68" class="label">e⁻</text>
+      <!-- Velocity arrow (Upwards) -->
+      <line x1="50" y1="65" x2="50" y2="15" stroke="#000" stroke-width="1.8" />
+      <polygon points="50,12 47,18 53,18" fill="#000" />
+      <text x="62" y="35" class="label">v</text>
+
+      <text x="60" y="90" class="label">v ⊥ B (F = max)</text>
+    </g>
+  </g>
+
+  <!-- Arrow Marker Definition -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 2 L 8 5 L 0 8 z" fill="#000" />
+    </marker>
+  </defs>
+</svg>

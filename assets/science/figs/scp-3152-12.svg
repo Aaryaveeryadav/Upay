@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- White background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Global styles -->
+  <style>
+    line, path, rect {
+      stroke: #000000;
+      stroke-width: 1.6;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    text {
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      fill: #000000;
+    }
+    .label-text {
+      font-size: 12px;
+    }
+  </style>
+
+  <!-- UPPER EPIDERMIS & CUTICLE -->
+  <!-- Upper Cuticle -->
+  <path d="M 50,40 Q 200,32 350,40" />
+  <!-- Upper Epidermis Cells -->
+  <path d="M 50,48 Q 200,40 350,48" />
+  <line x1="80" y1="40" x2="80" y2="48" />
+  <line x1="110" y1="40" x2="110" y2="48" />
+  <line x1="140" y1="40" x2="140" y2="48" />
+  <line x1="170" y1="40" x2="170" y2="48" />
+  <line x1="200" y1="40" x2="200" y2="48" />
+  <line x1="230" y1="40" x2="230" y2="48" />
+  <line x1="260" y1="40" x2="260" y2="48" />
+  <line x1="290" y1="40" x2="290" y2="48" />
+  <line x1="320" y1="40" x2="320" y2="48" />
+
+  <!-- PALISADE MESOPHYLL (Columnar cells with chloroplast dots) -->
+  <!-- Cell 1 -->
+  <rect x="65" y="48" width="22" height="55" rx="5" />
+  <circle cx="72" cy="58" r="2.5" fill="#000" /><circle cx="79" cy="72" r="2.5" fill="#000" /><circle cx="72" cy="88" r="2.5" fill="#000" />
+  <!-- Cell 2 -->
+  <rect x="89" y="48" width="24" height="60" rx="5" />
+  <circle cx="98" cy="62" r="2.5" fill="#000" /><circle cx="103" cy="80" r="2.5" fill="#000" /><circle cx="95" cy="98" r="2.5" fill="#000" />
+  <!-- Cell 3 -->
+  <rect x="115" y="48" width="22" height="55" rx="5" />
+  <circle cx="122" cy="60" r="2.5" fill="#000" /><circle cx="130" cy="75" r="2.5" fill="#000" /><circle cx="124" cy="90" r="2.5" fill="#000" />
+  <!-- Cell 4 -->
+  <rect x="139" y="48" width="25" height="58" rx="5" />
+  <circle cx="148" cy="65" r="2.5" fill="#000" /><circle cx="155" cy="82" r="2.5" fill="#000" /><circle cx="145" cy="95" r="2.5" fill="#000" />
+  <!-- Cell 5 -->
+  <rect x="166" y="48" width="23" height="55" rx="5" />
+  <circle cx="174" cy="58" r="2.5" fill="#000" /><circle cx="181" cy="74" r="2.5" fill="#000" /><circle cx="173" cy="90" r="2.5" fill="#000" />
+  <!-- Cell 6 -->
+  <rect x="191" y="48" width="22" height="52" rx="5" />
+  <circle cx="198" cy="60" r="2.5" fill="#000" /><circle cx="206" cy="75" r="2.5" fill="#000" />
+  <!-- Cell 7 -->
+  <rect x="215" y="48" width="24" height="55" rx="5" />
+  <circle cx="224" cy="62" r="2.5" fill="#000" /><circle cx="230" cy="78" r="2.5" fill="#000" /><circle cx="222" cy="90" r="2.5" fill="#000" />
+  <!-- Cell 8 -->
+  <rect x="241" y="48" width="22" height="58" rx="5" />
+  <circle cx="248" cy="60" r="2.5" fill="#000" /><circle cx="256" cy="76" r="2.5" fill="#000" /><circle cx="250" cy="95" r="2.5" fill="#000" />
+  <!-- Cell 9 -->
+  <rect x="265" y="48" width="25" height="54" rx="5" />
+  <circle cx="274" cy="58" r="2.5" fill="#000" /><circle cx="282" cy="75" r="2.5" fill="#000" />
+  <!-- Cell 10 -->
+  <rect x="292" y="48" width="22" height="52" rx="5" />
+  <circle cx="299" cy="60" r="2.5" fill="#000" /><circle cx="307" cy="75" r="2.5" fill="#000" />
+  <!-- Cell 11 -->
+  <rect x="316" y="48" width="20" height="50" rx="4" />
+  <circle cx="323" cy="60" r="2.5" fill="#000" /><circle cx="328" cy="74" r="2.5" fill="#000" />
+
+  <!-- SPONGY MESOPHYLL (Loosely packed rounded cells with air spaces) -->
+  <!-- Row 1 -->
+  <circle cx="75" cy="120" r="11" /> <circle cx="100" cy="118" r="10" /> <circle cx="135" cy="122" r="12" />
+  <circle cx="165" cy="118" r="11" /> <circle cx="250" cy="120" r="10" /> <circle cx="285" cy="118" r="12" /> <circle cx="320" cy="120" r="10" />
+  <!-- Chloroplast dots in spongy layer -->
+  <circle cx="72" cy="117" r="2" fill="#000" /> <circle cx="103" cy="122" r="2" fill="#000" />
+  <circle cx="132" cy="119" r="2" fill="#000" /> <circle cx="168" cy="121" r="2" fill="#000" />
+  <circle cx="247" cy="117" r="2" fill="#000" /> <circle cx="288" cy="121" r="2" fill="#000" />
+
+  <!-- Row 2 -->
+  <circle cx="62" cy="142" r="10" /> <circle cx="88" cy="145" r="12" /> <circle cx="120" cy="142" r="10" />
+  <circle cx="270" cy="145" r="11" /> <circle cx="305" cy="142" r="12" /> <circle cx="335" cy="145" r="10" />
+  <circle cx="85" cy="142" r="2" fill="#000" /> <circle cx="122" cy="145" r="2" fill="#000" />
+  <circle cx="273" cy="142" r="2" fill="#000" /> <circle cx="302" cy="145" r="2" fill="#000" />
+
+  <!-- VASCULAR BUNDLE (Vein in center) -->
+  <!-- Bundle Sheath -->
+  <ellipse cx="205" cy="138" rx="42" ry="26" />
+  <!-- Xylem vessels (top inside bundle - large open circles) -->
+  <circle cx="185" cy="130" r="6" />
+  <circle cx="200" cy="125" r="7" />
+  <circle cx="215" cy="128" r="6" />
+  <circle cx="192" cy="140" r="5" />
+  <circle cx="208" cy="138" r="5" />
+  <!-- Phloem cells (bottom inside bundle - smaller angular cells) -->
+  <path d="M 180,148 L 195,148 L 190,158 L 175,155 Z" />
+  <path d="M 197,148 L 212,148 L 210,158 L 195,158 Z" />
+  <path d="M 214,148 L 228,155 L 222,160 L 210,158 Z" />
+
+  <!-- LOWER EPIDERMIS & STOMATA -->
+  <!-- Lower Epidermis Cells -->
+  <path d="M 50,185 Q 200,192 350,185" />
+  <line x1="80" y1="185" x2="80" y2="192" />
+  <line x1="110" y1="185" x2="110" y2="192" />
+  <line x1="140" y1="185" x2="140" y2="192" />
+  <line x1="170" y1="185" x2="170" y2="192" />
+  <line x1="230" y1="185" x2="230" y2="192" />
+  <line x1="260" y1="185" x2="260" y2="192" />
+  <line x1="290" y1="185" x2="290" y2="192" />
+  <line x1="320" y1="185" x2="320" y2="192" />
+
+  <!-- Lower Cuticle -->
+  <path d="M 50,192 Q 200,200 350,192" />
+
+  <!-- Stoma Complex (Guard cells and stomatal pore) -->
+  <!-- Left Guard Cell -->
+  <path d="M 190,185 C 182,185 182,192 190,192 C 196,192 196,185 190,185 Z" />
+  <circle cx="187" cy="188" r="1.5" fill="#000" />
+  <!-- Right Guard Cell -->
+  <path d="M 205,185 C 213,185 213,192 205,192 C 199,192 199,185 205,185 Z" />
+  <circle cx="208" cy="188" r="1.5" fill="#000" />
+  <!-- Sub-stomatal cavity (air space above stoma) -->
+  <path d="M 185,165 Q 197,175 210,165" stroke-dasharray="3,3" />
+
+  <!-- LABELS & POINTER LINES -->
+  
+  <!-- Pointer for 'P' (Guard Cell or Stoma) pointing to the guard cell -->
+  <line x1="155" y1="188" x2="110" y2="188" />
+  <text x="93" y="192" class="label-text">P</text>
+
+  <!-- Other informative labels -->
+  <!-- Upper epidermis -->
+  <line x1="75" y1="44" x2="40" y2="25" />
+  <text x="35" y="22" text-anchor="end" class="label-text">Upper epidermis</text>
+
+  <!-- Palisade mesophyll -->
+  <line x1="140" y1="70" x2="70" y2="20" stroke-dasharray="2,2" /> <!-- Just keeping clean lines -->
+  <text x="40" y="75" text-anchor="end" class="label-text">Palisade mesophyll</text>
+  <line x1="135" y1="75" x2="45" y2="75" />
+
+  <!-- Vascular bundle -->
+  <line x1="247" y1="135" x2="330" y2="110" />
+  <text x="335" y="107" class="label-text">Vascular bundle</text>
+
+  <!-- Spongy mesophyll -->
+  <line x1="290" y1="138" x2="330" y2="150" />
+  <text x="335" y="155" class="label-text">Spongy mesophyll</text>
+
+  <!-- Lower epidermis -->
+  <line x1="290" y1="188" x2="330" y2="195" />
+  <text x="335" y="199" class="label-text">Lower epidermis</text>
+
+</svg>

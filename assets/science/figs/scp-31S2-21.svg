@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-size: 12px; font-weight: bold; }
+    .bold { font-weight: bold; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Beaker -->
+  <path d="M 120 150 L 120 220 C 120 230, 130 235, 140 235 L 220 235 C 230 235, 240 230, 240 220 L 240 150 Z" fill="none" stroke="#000000" stroke-width="1.6" />
+  <!-- Beaker Rim -->
+  <ellipse cx="180" cy="150" rx="60" ry="8" fill="none" stroke="#000000" stroke-width="1.6" />
+
+  <!-- Solution inside beaker -->
+  <path d="M 123 175 Q 180 180, 237 175 L 239 220 C 239 228, 230 232, 220 232 L 140 232 C 130 232, 121 228, 121 220 Z" fill="#f0f0f0" stroke="none" />
+  <!-- Solution surface line -->
+  <path d="M 123 175 C 150 180, 210 180, 237 175" fill="none" stroke="#000000" stroke-width="1.0" stroke-dasharray="3,3" />
+
+  <!-- Rubber Cork -->
+  <rect x="155" y="85" width="50" height="25" rx="3" ry="3" fill="#ffffff" stroke="#000000" stroke-width="1.6" />
+
+  <!-- Iron/Graphite Nails -->
+  <line x1="165" y1="110" x2="165" y2="190" stroke="#000000" stroke-width="1.6" />
+  <line x1="195" y1="110" x2="195" y2="190" stroke="#000000" stroke-width="1.6" />
+
+  <!-- Connecting Wires -->
+  <!-- Left wire from nail to battery -->
+  <path d="M 165 110 L 165 60 L 70 60 L 70 110" fill="none" stroke="#000000" stroke-width="1.6" />
+  <!-- Right wire from nail to bulb -->
+  <path d="M 195 110 L 195 40 L 285 40 L 285 75" fill="none" stroke="#000000" stroke-width="1.6" />
+  <!-- Wire from bulb to switch -->
+  <path d="M 285 125 L 285 160 L 225 160" fill="none" stroke="#000000" stroke-width="1.6" />
+  <!-- Wire from switch to battery -->
+  <path d="M 155 160 L 70 160 L 70 130" fill="none" stroke="#000000" stroke-width="1.6" />
+
+  <!-- 6V Battery -->
+  <g transform="translate(60, 110)">
+    <line x1="0" y1="0" x2="20" y2="0" stroke="#000000" stroke-width="1.6" />
+    <line x1="5" y1="6" x2="15" y2="6" stroke="#000000" stroke-width="1.6" />
+    <line x1="0" y1="12" x2="20" y2="12" stroke="#000000" stroke-width="1.6" />
+    <line x1="5" y1="18" x2="15" y2="18" stroke="#000000" stroke-width="1.6" />
+    <text x="25" y="4">+</text>
+    <text x="25" y="18">-</text>
+  </g>
+
+  <!-- Electric Bulb -->
+  <g transform="translate(265, 75)">
+    <circle cx="20" cy="25" r="20" fill="none" stroke="#000000" stroke-width="1.6" />
+    <!-- Filament -->
+    <path d="M 12 35 L 16 25 L 20 28 L 24 25 L 28 35" fill="none" stroke="#000000" stroke-width="1.6" />
+    <!-- Base of bulb -->
+    <rect x="14" y="43" width="12" height="7" fill="none" stroke="#000000" stroke-width="1.6" />
+    <line x1="14" y1="47" x2="26" y2="47" stroke="#000000" stroke-width="1.0" />
+  </g>
+
+  <!-- Switch -->
+  <g transform="translate(155, 150)">
+    <circle cx="0" cy="10" r="3" fill="#000000" />
+    <circle cx="70" cy="10" r="3" fill="#000000" />
+    <line x1="3" y1="10" x2="55" y2="2" stroke="#000000" stroke-width="1.6" />
+  </g>
+
+  <!-- Labels -->
+  <text x="135" y="210" class="label">Beaker</text>
+  <text x="245" y="200" class="label">Dilute salt solution /</text>
+  <text x="245" y="215" class="label">Lemon juice</text>
+  <text x="130" y="75" class="label">Rubber cork</text>
+  <text x="198" y="145" class="label">Nail</text>
+  <text x="300" y="105" class="label">Bulb</text>
+  <text x="180" y="145" class="label">Switch</text>
+  <text x="35" y="125" class="label">6V Battery</text>
+
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-size: 11px; font-weight: bold; }
+    .box { fill: none; stroke: #000; stroke-width: 1.6; }
+    .line { fill: none; stroke: #000; stroke-width: 1.6; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Title / Context -->
+  <text x="110" y="25" class="label">Transport and Exchange of Gases in Heart</text>
+
+  <!-- Lungs Box (Top Center) -->
+  <rect x="150" y="45" width="100" height="35" rx="5" class="box" />
+  <text x="163" y="67">Lung capillaries</text>
+
+  <!-- Heart Box (Middle, split into Left and Right or just a general diagram) -->
+  <!-- We'll represent the schematic as requested: A, B, C flow boxes -->
+  <rect x="50" y="140" width="80" height="40" rx="5" class="box" />
+  <text x="85" y="165" class="label">A</text>
+
+  <rect x="160" y="140" width="80" height="40" rx="5" class="box" />
+  <text x="195" y="165" class="label">B</text>
+
+  <rect x="270" y="140" width="80" height="40" rx="5" class="box" />
+  <text x="305" y="165" class="label">C</text>
+
+  <!-- Body Organs / Tissues Box (Bottom Center) -->
+  <rect x="150" y="210" width="100" height="35" rx="5" class="box" />
+  <text x="163" y="232">Body capillaries</text>
+
+  <!-- Arrows / Flow Lines -->
+  <!-- Lungs to C (or similar schematic flow) -->
+  <path d="M 220 80 L 220 110 L 310 110 L 310 140" class="line" />
+  <polygon points="310,136 306,128 314,128" fill="#000" />
+
+  <!-- From C to Body / A -->
+  <path d="M 310 180 L 310 195 L 230 195 L 230 210" class="line" />
+  <polygon points="230,206 226,198 234,198" fill="#000" />
+
+  <!-- From Body to B -->
+  <path d="M 170 210 L 170 195 L 200 195 L 200 180" class="line" />
+  <polygon points="200,184 196,192 204,192" fill="#000" />
+
+  <!-- From B to A -->
+  <path d="M 160 160 L 130 160" class="line" />
+  <polygon points="134,164 142,160 134,156" fill="#000" />
+
+  <!-- From A to Lungs -->
+  <path d="M 90 140 L 90 110 L 180 110 L 180 80" class="line" />
+  <polygon points="180,84 176,92 184,92" fill="#000" />
+
+</svg>

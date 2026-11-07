@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- Styles for textbook illustration: thin black lines on white background, no gradients -->
+  <style>
+    line, path, rect, ellipse, polyline {
+      fill: none;
+      stroke: #000000;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .filled {
+      fill: #ffffff;
+    }
+    text {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+      fill: #000000;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" class="filled" stroke="none"/>
+
+  <!-- Aorta (Left side in diagram, person's right) -->
+  <path d="M 190 20 C 190 10, 210 10, 210 20 L 210 200 C 210 210, 190 210, 190 200 Z" />
+
+  <!-- Vena Cava (Right side in diagram, person's left) -->
+  <path d="M 215 20 C 215 10, 235 10, 235 20 L 235 200 C 235 210, 215 210, 215 200 Z" />
+
+  <!-- Left Kidney (Right side of diagram) -->
+  <path d="M 245 60 C 290 50, 310 90, 310 130 C 310 170, 290 210, 245 200 C 230 180, 230 80, 245 60 Z" class="filled" />
+
+  <!-- Right Kidney (Left side of diagram) -->
+  <path d="M 175 60 C 130 50, 110 90, 110 130 C 110 170, 130 210, 175 200 C 190 180, 190 80, 175 60 Z" class="filled" />
+
+  <!-- Renal Artery branches -->
+  <!-- To left kidney -->
+  <path d="M 210 95 L 245 95" />
+  <!-- To right kidney -->
+  <path d="M 190 95 L 155 95" />
+
+  <!-- Renal Vein branches -->
+  <!-- From left kidney -->
+  <path d="M 235 115 L 255 115" />
+  <!-- From right kidney -->
+  <path d="M 215 115 L 165 115" />
+
+  <!-- Ureter Left (Structure P / Q context) -->
+  <path d="M 245 150 C 245 170, 230 190, 220 225" />
+
+  <!-- Ureter Right -->
+  <path d="M 175 150 C 175 170, 190 190, 200 225" />
+
+  <!-- Urinary Bladder -->
+  <path d="M 185 225 C 185 215, 235 215, 235 225 C 240 245, 230 255, 210 255 C 190 255, 180 245, 185 225 Z" class="filled" />
+
+  <!-- Urethra -->
+  <path d="M 207 255 L 207 270" />
+
+  <!-- Leader Lines and Labels corresponding to P and Q -->
+  <!-- Label for Structure P (e.g., Renal artery / blood entering kidney or Ureter - standard CBSE diagram labels P as Renal Artery and Q as Renal Vein, or vice-versa based on tables showing urea/glucose. Table I: P has glucose (0.10) and amino acids (0.06), meaning P is Renal Artery. Table II: Q has 0 glucose, 0 amino acids, higher urea (1.00), meaning Q is Ureter or Renal Vein. Typically P=Renal Artery, Q=Ureter) -->
+  
+  <line x1="140" y1="95" x2="80" y2="70" />
+  <text x="50" y="67">P</text>
+
+  <line x1="230" y1="180" x2="90" y2="150" />
+  <text x="75" y="147">Q</text>
+
+  <!-- Optional descriptive text if helpful, but minimal per instructions -->
+  <text x="175" y="278" text-anchor="middle" font-size="10">Human Excretory System</text>
+</svg>

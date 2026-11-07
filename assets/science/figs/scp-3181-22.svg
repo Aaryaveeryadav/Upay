@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: #000; }
+    .title { font-weight: bold; font-size: 15px; }
+    .small { font-size: 12px; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Title -->
+  <text x="30" y="35" class="title">CBSE Class 10 Chemistry - Redox Reaction</text>
+
+  <!-- Chemical Equation Box -->
+  <rect x="30" y="55" width="340" height="50" fill="none" stroke="#000" stroke-width="1.6" rx="4" />
+  <text x="65" y="85" font-family="monospace" font-size="16">MnO₂ + 4HCl → MnCl₂ + Cl₂ + 2H₂O</text>
+
+  <!-- Statements Section Header -->
+  <text x="30" y="125" class="title">Statements:</text>
+
+  <!-- Statements -->
+  <text x="45" y="148">(i) MnO₂ is getting reduced.</text>
+  <text x="45" y="170">(ii) HCl is getting oxidised.</text>
+  <text x="45" y="192">(iii) MnO₂ acts as an oxidising agent.</text>
+  <text x="45" y="214">(iv) MnO₂ acts as a reducing agent.</text>
+
+  <!-- Correct Option Box / Footer -->
+  <rect x="30" y="226" width="340" height="24" fill="none" stroke="#000" stroke-width="1.6" rx="3" />
+  <text x="40" y="243" class="small">Correct Answer: (A) (i), (ii) and (iii)</text>
+</svg>

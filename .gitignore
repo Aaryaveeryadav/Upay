@@ -1,0 +1,31 @@
+# Private local-server state and unpublished uploads
+/data/
+/uploads/
+/solutions/
+
+# Credentials, deployment metadata, archives and machine-local settings
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*.zip
+*.tar
+*.tar.*
+*.7z
+*.rar
+/.vercel/
+/.gh-auth/
+
+# Generated output and local caches
+node_modules/
+__pycache__/
+*.py[cod]
+.cache/
+.next/
+dist/
+build/
+coverage/
+*.log
+.DS_Store

@@ -1,0 +1,103 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 10px; fill: black; }
+    .label { font-size: 11px; font-weight: bold; }
+    .axis { stroke: #666; stroke-dasharray: 4,4; stroke-width: 1; }
+    .ray { fill: none; stroke: black; stroke-width: 1.2; }
+    .ray-ext { fill: none; stroke: #555; stroke-dasharray: 3,3; stroke-width: 1.2; }
+    .lens { fill: #eef; stroke: black; stroke-width: 1.4; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="white"/>
+
+  <!-- ==================== DIAGRAM 1: DEFECT (Hypermetropia) ==================== -->
+  
+  <!-- Title / Label -->
+  <text x="100" y="20" text-anchor="middle" class="label">(a) Hypermetropic Eye</text>
+
+  <!-- Eyeball Outline -->
+  <circle cx="100" cy="95" r="40" fill="none" stroke="black" stroke-width="1.6"/>
+  
+  <!-- Cornea / Eye lens -->
+  <path d="M 62 80 Q 70 95 62 110" fill="none" stroke="black" stroke-width="1.6"/>
+  <ellipse cx="80" cy="95" rx="8" ry="18" class="lens"/>
+
+  <!-- Retina -->
+  <path d="M 135 70 Q 145 95 135 120" fill="none" stroke="black" stroke-width="2"/>
+
+  <!-- Principal Axis -->
+  <line x1="20" y1="95" x2="180" y2="95" class="axis"/>
+
+  <!-- Object at Near Point N (25 cm normal, but person's near point is 1m / further out) -->
+  <!-- Let's show rays coming from a closer point N (e.g. 25cm equivalent) focusing behind retina -->
+  <circle cx="30" cy="95" r="2" fill="black"/>
+  <text x="30" y="110" text-anchor="middle">N</text>
+
+  <!-- Rays for Defect -->
+  <!-- From N (30,95) to lens (80, 77) and (80, 113) -->
+  <path d="M 30 95 L 80 78" class="ray"/>
+  <path d="M 30 95 L 80 112" class="ray"/>
+  
+  <!-- Refracted rays converging behind retina -->
+  <path d="M 80 78 L 155 102" class="ray"/>
+  <path d="M 80 112 L 155 88" class="ray"/>
+
+  <!-- Virtual meeting point behind retina -->
+  <circle cx="155" cy="95" r="2" fill="none" stroke="black"/>
+  <text x="135" y="138">Focus behind retina</text>
+
+
+  <!-- ==================== DIAGRAM 2: CORRECTION ==================== -->
+
+  <!-- Title / Label -->
+  <text x="300" y="20" text-anchor="middle" class="label">(b) Correction using Convex Lens</text>
+
+  <!-- Eyeball Outline -->
+  <mark/>
+  <circle cx="300" cy="95" r="40" fill="none" stroke="black" stroke-width="1.6"/>
+  
+  <!-- Cornea / Eye lens -->
+  <path d="M 262 80 Q 270 95 262 110" fill="none" stroke="black" stroke-width="1.6"/>
+  <ellipse cx="280" cy="95" rx="8" ry="18" class="lens"/>
+
+  <!-- Retina -->
+  <path d="M 335 70 Q 345 95 335 120" fill="none" stroke="black" stroke-width="2"/>
+
+  <!-- Principal Axis -->
+  <line x1="200" y1="95" x2="380" y2="95" class="axis"/>
+
+  <!-- Spectacle Lens (Convex) in front of eye -->
+  <path d="M 230 75 Q 236 95 230 115" fill="#eef" stroke="black" stroke-width="1.4"/>
+  <path d="M 230 75 Q 224 95 230 115" fill="#eef" stroke="black" stroke-width="1.4"/>
+  <text x="220" y="130" text-anchor="middle">Convex</text>
+  <text x="220" y="141" text-anchor="middle">lens</text>
+
+  <!-- Object at Near point N' -->
+  <circle cx="170" cy="95" r="2" fill="black"/>
+  <text x="170" y="110" text-anchor="middle">N'</text>
+
+  <!-- Rays for Correction -->
+  <!-- Ray from N' to Spectacle Lens -->
+  <path d="M 170 95 L 230 83" class="ray"/>
+  <path d="M 170 95 L 230 107" class="ray"/>
+
+  <!-- Extension backward to virtual object N -->
+  <path d="M 230 83 L 200 89" class="ray-ext"/>
+  <path d="M 230 107 L 200 101" class="ray-ext"/>
+
+  <!-- Refracted rays from spectacle lens to eye lens -->
+  <path d="M 230 83 L 280 84" class="ray"/>
+  <path d="M 230 107 L 280 106" class="ray"/>
+
+  <!-- Final refraction onto retina -->
+  <path d="M 280 84 L 340 95" class="ray"/>
+  <path d="M 280 106 L 340 95" class="ray"/>
+
+
+  <!-- ==================== GENERAL LABELS / FOOTER ==================== -->
+  <text x="200" y="185" text-anchor="middle" class="label">Defect: Hypermetropia (Farsightedness)</text>
+  <text x="200" y="205" text-anchor="middle">Reason: Light rays from a nearby object are focused at a point behind the retina.</text>
+  <text x="200" y="222" text-anchor="middle">Correction: A convex lens of appropriate power converges the rays onto the retina.</text>
+
+</svg>

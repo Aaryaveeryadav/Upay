@@ -1,0 +1,90 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    line, path, rect, circle {
+      fill: none;
+      stroke: #000000;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    text {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      fill: #000000;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+    .bold { font-weight: bold; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" stroke="none"/>
+
+  <!-- AC Source / Mains Supply -->
+  <path d="M 40,130 L 70,130" />
+  <circle cx="55" cy="130" r="15" />
+  <text x="55" y="130" class="bold">~</text>
+  <text x="55" y="105">220 V</text>
+
+  <!-- Main Live and Neutral Rails -->
+  <!-- Live (top) -->
+  <path d="M 70,70 L 360,70" />
+  <!-- Neutral (bottom) -->
+  <path d="M 70,190 L 360,190" />
+
+  <!-- Fuse F1 on Live wire -->
+  <rect x="95" y="62" width="25" height="16" />
+  <path d="M 95,70 L 120,70" />
+  <text x="107.5" y="52" class="bold">F1</text>
+
+  <!-- Fuse F2 on Branch or Main -->
+  <rect x="235" y="62" width="25" height="16" />
+  <path d="M 235,70 L 260,70" />
+  <text x="247.5" y="52" class="bold">F2</text>
+
+  <!-- Key K1 -->
+  <path d="M 145,70 L 155,70" />
+  <circle cx="145" cy="70" r="2.5" fill="#000" />
+  <circle cx="165" cy="70" r="2.5" fill="#000" />
+  <path d="M 147,70 L 163,58" />
+  <text x="155" y="45" class="bold">K1</text>
+
+  <!-- Branch 1: Bulb L (and others implied, represented as one bulb loop) -->
+  <path d="M 180,70 L 180,110" />
+  <path d="M 220,110 L 220,70" />
+  <!-- Bulb L symbol -->
+  <circle cx="200" cy="110" r="14" />
+  <path d="M 190,120 L 210,100 M 190,100 L 210,120" />
+  <text x="172" y="110" class="bold">L</text>
+  <text x="200" y="138">10 W</text>
+
+  <!-- Key K2 -->
+  <path d="M 285,70 L 295,70" />
+  <circle cx="285" cy="70" r="2.5" fill="#000" />
+  <circle cx="305" cy="70" r="2.5" fill="#000" />
+  <path d="M 287,70 L 303,58" />
+  <text x="295" y="45" class="bold">K2</text>
+
+  <!-- Branch 2: Bulb A / Fan -->
+  <path d="M 320,70 L 320,110" />
+  <path d="M 360,110 L 360,70" />
+  <!-- Bulb A symbol -->
+  <circle cx="340" cy="110" r="14" />
+  <path d="M 330,120 L 350,100 M 330,100 L 350,120" />
+  <text x="312" y="110" class="bold">A</text>
+  <text x="340" y="138">60 W</text>
+
+  <!-- Connections down to Neutral -->
+  <path d="M 180,110 L 180,190" />
+  <path d="M 220,110 L 220,190" />
+  <path d="M 320,110 L 320,190" />
+  <path d="M 360,110 L 360,190" />
+
+  <!-- Complete circuit wiring paths to rails -->
+  <!-- Already drawn straight lines for rails acting as buses -->
+
+  <!-- Labels for Mains -->
+  <text x="55" y="210">Neutral</text>
+  <text x="55" y="50">Live</text>
+
+</svg>

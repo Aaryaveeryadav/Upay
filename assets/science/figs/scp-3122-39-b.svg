@@ -1,0 +1,68 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-size: 12px; font-weight: bold; }
+    .line { fill: none; stroke: #000; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Circuit Diagram for Oersted's Experiment (Question b i I) -->
+  
+  <!-- Thick Copper Wire XY (Horizontal) -->
+  <line x1="120" y1="80" x2="280" y2="80" class="line" stroke-width="3" />
+  
+  <!-- Connecting Wires -->
+  <line x1="120" y1="80" x2="80" y2="80" class="line" />
+  <line x1="80" y1="80" x2="80" y2="120" class="line" />
+  
+  <line x1="280" y1="80" x2="320" y2="80" class="line" />
+  <line x1="320" y1="80" x2="320" y2="170" class="line" />
+  <line x1="320" y1="170" x2="260" y2="170" class="line" />
+
+  <!-- Battery B -->
+  <line x1="260" y1="160" x2="260" y2="180" class="line" />
+  <line x1="252" y1="164" x2="252" y2="176" class="line" stroke-width="2.5" />
+  <line x1="260" y1="156" x2="260" y2="184" class="line" />
+  <line x1="252" y1="156" x2="252" y2="184" class="line" stroke-width="2.5" />
+  
+  <line x1="252" y1="170" x2="230" y2="170" class="line" />
+
+  <!-- Key K -->
+  <line x1="230" y1="170" x2="200" y2="170" class="line" />
+  <circle cx="195" cy="170" r="3" class="line" />
+  <circle cx="175" cy="170" r="3" class="line" />
+  <line x1="192" y1="167" x2="178" y2="167" class="line" /> <!-- Switch open/closed representation -->
+  <line x1="175" y1="170" x2="80" y2="170" class="line" />
+  
+  <!-- Resistance R -->
+  <path d="M 70 145 L 90 145 L 85 140 L 95 135 L 85 130 L 95 125 L 85 120 L 90 115 L 70 115" class="line" />
+  <line x1="80" y1="170" x2="80" y2="145" class="line" />
+  <line x1="80" y1="115" x2="80" y2="80" class="line" />
+
+  <!-- Magnetic Compass placed *directly below* the wire XY -->
+  <circle cx="200" cy="120" r="22" class="line" />
+  <!-- Compass Needle -->
+  <polygon points="200,102 196,120 200,116" fill="#000" />
+  <polygon points="200,138 196,120 200,124" fill="#fff" stroke="#000" stroke-width="1" />
+  <polygon points="200,102 204,120 200,116" fill="#000" />
+  <polygon points="200,138 204,120 200,124" fill="#fff" stroke="#000" stroke-width="1" />
+  <circle cx="200" cy="120" r="2" fill="#000" />
+
+  <!-- Labels -->
+  <text x="195" y="70" class="label">X</text>
+  <text x="285" y="70" class="label">Y</text>
+  <text x="270" y="150" class="label">B</text>
+  <text x="200" y="190" class="label">K</text>
+  <text x="55" y="145" class="label">R</text>
+  
+  <!-- Compass label or caption context -->
+  <text x="170" y="225" font-size="10">Magnetic Compass</text>
+  <text x="135" y="40" class="label">Thick Copper Wire</text>
+
+  <!-- Current direction arrows -->
+  <path d="M 170 80 L 165 75 M 170 80 L 165 85" class="line" />
+  <text x="165" y="98" font-size="10">I</text>
+
+</svg>

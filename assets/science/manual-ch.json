@@ -1,0 +1,50 @@
+{
+  "_note": "Exercise questions for the two chapters supplied as compressed scans. Tesseract reads the body text cleanly but loses the question numbers, the running head and (in ch04) the section heading, so their exercises are transcribed here by hand from the page images and merged into the bank by tools/build-science-questions.py. Only the EXERCISE is transcribed -- no body text, no diagrams.",
+  "4": {
+    "en": "Carbon and its Compounds",
+    "exercises": [
+      {
+        "no": 1,
+        "en": "Ethane, with the molecular formula C2H6 has",
+        "opts": [
+          { "en": "6 covalent bonds.", "hi": "" },
+          { "en": "7 covalent bonds.", "hi": "" },
+          { "en": "8 covalent bonds.", "hi": "" },
+          { "en": "9 covalent bonds.", "hi": "" }
+        ],
+        "ansLetter": "b"
+      },
+      {
+        "no": 2,
+        "en": "Butanone is a four-carbon compound with the functional group",
+        "opts": [
+          { "en": "carboxylic acid.", "hi": "" },
+          { "en": "aldehyde.", "hi": "" },
+          { "en": "ketone.", "hi": "" },
+          { "en": "alcohol.", "hi": "" }
+        ],
+        "ansLetter": "c"
+      },
+      {
+        "no": 3,
+        "en": "While cooking, if the bottom of the vessel is getting blackened on the outside, it means that",
+        "opts": [
+          { "en": "the food is not cooked completely.", "hi": "" },
+          { "en": "the fuel is not burning completely.", "hi": "" },
+          { "en": "the fuel is wet.", "hi": "" },
+          { "en": "the fuel is burning completely.", "hi": "" }
+        ],
+        "ansLetter": "b"
+      }
+    ]
+  },
+  "8": {
+    "en": "Heredity",
+    "exercises": [
+      { "no": 1, "en": "How do Mendel's experiments show that traits may be dominant or recessive?" },
+      { "no": 2, "en": "How do Mendel's experiments show that traits are inherited independently?" },
+      { "no": 3, "en": "A man with blood group A marries a woman with blood group O and their daughter has blood group O. Is this information enough to tell you which of the traits - blood group A or O - is dominant? Why or why not?" },
+      { "no": 4, "en": "How is the sex of the child determined in human beings?" }
+    ]
+  }
+}

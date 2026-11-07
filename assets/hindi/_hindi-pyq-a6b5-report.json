@@ -1,0 +1,35 @@
+{
+ "rows": 265,
+ "mcq": 48,
+ "bymarks": {
+  "3": 29,
+  "2": 78,
+  "5": 54,
+  "1": 104
+ },
+ "bycourse": {
+  "A-lit": 55,
+  "A-26": 156,
+  "B-lit": 54
+ },
+ "files": [
+  {
+   "file": "3-6-1 Hindi-A.pdf",
+   "code": "3alit/6/1",
+   "rows": 24,
+   "mcq": 0
+  },
+  {
+   "file": "3-6-2 Hindi-A.pdf",
+   "code": "3alit/6/2",
+   "rows": 24,
+   "mcq": 0
+  },
+  {
+   "file": "3-6-3 Hindi-A.pdf",
+   "code": "3alit/6/3",
+   "rows": 13,
+   "mcq": 0
+  }
+ ]
+}

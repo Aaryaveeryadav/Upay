@@ -1,0 +1,50 @@
+{
+ "rows": 56,
+ "mcq": 15,
+ "bymarks": {
+  "1": 34,
+  "2": 17,
+  "5": 5
+ },
+ "bycourse": {
+  "A": 56
+ },
+ "files": [
+  {
+   "file": "3-7-1_Hindi Coursse A_E2_26.pdf",
+   "code": "3n/7/1",
+   "rows": 18,
+   "mcq": 4
+  },
+  {
+   "file": "3-7-2_Hindi Coursse A_E2_26.pdf",
+   "code": "3n/7/2",
+   "rows": 11,
+   "mcq": 4
+  },
+  {
+   "file": "3-7-3_Hindi Coursse A_E2_26.pdf",
+   "code": "3n/7/3",
+   "rows": 12,
+   "mcq": 6
+  },
+  {
+   "file": "3-8-1_Hindi Coursse A_E2_26.pdf",
+   "code": "3n/8/1",
+   "rows": 26,
+   "mcq": 1
+  },
+  {
+   "file": "3-8-2_Hindi Coursse A_E2_26.pdf",
+   "code": "3n/8/2",
+   "rows": 25,
+   "mcq": 2
+  },
+  {
+   "file": "3-8-3_Hindi Coursse A_E2_26.pdf",
+   "code": "3n/8/3",
+   "rows": 24,
+   "mcq": 3
+  }
+ ]
+}

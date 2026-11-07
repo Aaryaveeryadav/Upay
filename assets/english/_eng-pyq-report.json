@@ -1,0 +1,113 @@
+{
+ "rows": 872,
+ "mcq": 26,
+ "bymarks": {
+  "1": 164,
+  "3": 547,
+  "5": 161
+ },
+ "bycourse": {
+  "ENG-LL-26-U": 165,
+  "ENG-LL-26-R": 66,
+  "ENG-LL-26-P": 32,
+  "ENG-LL-26-V": 66,
+  "ENG-LL-24": 21,
+  "ENG-LL-26": 414,
+  "ENG-COMM": 32,
+  "ENG-LL-S": 33,
+  "ENG-LL-C": 33,
+  "ENG-COMM-26": 10
+ },
+ "files": [
+  {
+   "file": "2-1-1 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 26,
+   "mcq": 0
+  },
+  {
+   "file": "2-1-2 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 26,
+   "mcq": 0
+  },
+  {
+   "file": "2-1-3 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 26,
+   "mcq": 0
+  },
+  {
+   "file": "2-2-1 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 27,
+   "mcq": 1
+  },
+  {
+   "file": "2-2-2 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 27,
+   "mcq": 1
+  },
+  {
+   "file": "2-2-3 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 32,
+   "mcq": 1
+  },
+  {
+   "file": "2-4-1 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 20,
+   "mcq": 0
+  },
+  {
+   "file": "2-4-2 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 23,
+   "mcq": 0
+  },
+  {
+   "file": "2-4-3 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 22,
+   "mcq": 0
+  },
+  {
+   "file": "2-5-1 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 11,
+   "mcq": 0
+  },
+  {
+   "file": "2-5-2 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 13,
+   "mcq": 0
+  },
+  {
+   "file": "2-5-3 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 11,
+   "mcq": 0
+  },
+  {
+   "file": "2-6-1 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 25,
+   "mcq": 1
+  },
+  {
+   "file": "2-6-2 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 25,
+   "mcq": 1
+  },
+  {
+   "file": "2-6-3 ENGLISH L_L.pdf",
+   "kind": "ll2026",
+   "rows": 25,
+   "mcq": 1
+  }
+ ]
+}

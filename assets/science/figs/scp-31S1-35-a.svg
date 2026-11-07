@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-size: 11px; font-weight: bold; }
+    .line { stroke: #000; stroke-width: 1.2; fill: none; }
+    .organ { stroke: #000; stroke-width: 1.6; fill: #fff; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Simplified Human Alimentary Canal Outline (Schematic) -->
+  <!-- Mouth/Oral cavity -->
+  <path class="organ" d="M 170 30 Q 185 30 190 45 Q 185 55 170 55 Q 155 55 150 45 Q 155 30 170 30 Z" />
+  
+  <!-- Oesophagus -->
+  <path class="organ" d="M 165 55 L 165 90 L 175 90 L 175 55" />
+
+  <!-- Stomach (Part A) -->
+  <path class="organ" d="M 155 90 C 130 95 120 130 145 145 C 160 155 185 130 175 90 Z" />
+
+  <!-- Liver -->
+  <path class="organ" d="M 185 85 C 210 85 220 110 200 120 C 185 115 180 100 185 85 Z" />
+
+  <!-- Pancreas (Part B) -->
+  <path class="organ" d="M 160 148 C 175 145 190 150 185 158 C 170 162 155 155 160 148 Z" />
+
+  <!-- Small Intestine (Part C) - Coiled central mass -->
+  <path class="organ" d="M 155 145 Q 140 160 160 175 Q 180 190 165 205 Q 150 215 170 225 Q 190 220 185 200 Q 190 170 175 155 Z" />
+
+  <!-- Large Intestine - Frame around small intestine -->
+  <path class="organ" d="M 140 135 L 140 235 Q 170 245 200 235 L 200 135 Z" />
+  <path class="organ" d="M 145 145 L 195 145" stroke-dasharray="3,3" /> <!-- Internal connection hint -->
+
+  <!-- Pointer Lines and Labels -->
+  <!-- Label A (Stomach) -->
+  <line class="line" x1="135" y1="120" x2="80" y2="100" />
+  <text class="label" x="55" y="103">A</text>
+
+  <!-- Label B (Pancreas) -->
+  <line class="line" x1="172" y1="153" x2="100" y2="160" />
+  <text class="label" x="80" y="163">B</text>
+
+  <!-- Label C (Small Intestine) -->
+  <line class="line" x1="165" y1="190" x2="100" y2="210" />
+  <text class="label" x="80" y="213">C</text>
+
+  <!-- Title / Legend for context -->
+  <text x="120" y="20" font-weight="bold">Human Alimentary Canal</text>
+
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: #000; }
+    line, path { stroke: #000; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+    .label { font-size: 13px; font-weight: bold; }
+  </style>
+
+  <rect width="400" height="260" fill="#fff"/>
+
+  <!-- (i) Ethanol / Compound structure -->
+  <text x="25" y="25" class="label">(i)</text>
+  <text x="50" y="25">H   H</text>
+  <text x="50" y="45"> |   |</text>
+  <text x="50" y="65">H-C-C-O-H</text>
+  <text x="50" y="85"> |   |</text>
+  <text x="50" y="105">H   H</text>
+
+  <!-- (ii) Butane structure -->
+  <text x="210" y="25" class="label">(ii) Butane</text>
+  <text x="210" y="55">  H   H   H   H</text>
+  <text x="210" y="75">  |   |   |   |</text>
+  <text x="210" y="95">H-C - C - C - C-H</text>
+  <text x="210" y="115">  |   |   |   |</text>
+  <text x="210" y="135">  H   H   H   H</text>
+
+  <!-- (iii) Cyclohexane and Benzene -->
+  <text x="25" y="150" class="label">(iii) Cyclohexane</text>
+  
+  <!-- Cyclohexane Hexagon -->
+  <path d="M 60,185 L 90,170 L 120,185 L 120,220 L 90,235 L 60,220 Z"/>
+  <!-- Hydrogens for Cyclohexane (simplified schematic representation) -->
+  <text x="45" y="188">H</text><text x="130" y="188">H</text>
+  <text x="45" y="225">H</text><text x="130" y="225">H</text>
+  <text x="85" y="162">H</text><text x="85" y="252">H</text>
+
+  <text x="220" y="150" class="label">Benzene</text>
+  
+  <!-- Benzene Hexagon with alternating double bonds -->
+  <path d="M 255,185 L 285,170 L 315,185 L 315,220 L 285,235 L 255,220 Z"/>
+  <path d="M 261,188 L 285,175 L 309,188" />
+  <path d="M 309,217 L 285,230 L 261,217" />
+  <path d="M 258,217 L 258,188" />
+  <path d="M 312,217 L 312,188" />
+
+  <!-- Hydrogens for Benzene -->
+  <text x="240" y="188">H</text><text x="325" y="188">H</text>
+  <text x="240" y="225">H</text><text x="325" y="225">H</text>
+  <text x="280" y="162">H</text><text x="280" y="252">H</text>
+
+</svg>

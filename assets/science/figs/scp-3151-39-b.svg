@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-size: 12px; font-weight: bold; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Solenoid Body (Cylindrical dashed/shaded illusion) -->
+  <rect x="130" y="100" width="140" height="60" fill="#f2f2f2" stroke="#000" stroke-width="1.6" rx="4" ry="4" />
+
+  <!-- Solenoid Turns (Coils) -->
+  <!-- Back turns -->
+  <path d="M140,100 L140,160 M155,100 L155,160 M170,100 L170,160 M185,100 L185,160 M200,100 L200,160 M215,100 L215,160 M230,100 L230,160 M245,100 L245,160 M260,100 L260,160" stroke="#cccccc" stroke-width="1" />
+
+  <!-- Front overlapping wire loops (Coils) -->
+  <path d="
+    M135,100 C135,175 145,175 145,100
+    M150,100 C150,175 160,175 160,100
+    M165,100 C165,175 175,175 175,100
+    M180,100 C180,175 190,175 190,100
+    M195,100 C195,175 205,175 205,100
+    M210,100 C210,175 220,175 220,100
+    M225,100 C225,175 235,175 235,100
+    M240,100 C240,175 250,175 250,100
+    M255,100 C255,175 265,175 265,100" 
+    fill="none" stroke="#000" stroke-width="1.8" />
+
+  <!-- Battery / Current Source Connections -->
+  <!-- Left wire entering (Current out of page / bottom front) -->
+  <path d="M90,150 L135,150" fill="none" stroke="#000" stroke-width="1.6" />
+  <!-- Right wire exiting -->
+  <path d="M265,150 L310,150" fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Battery Symbol -->
+  <line x1="290" y1="138" x2="290" y2="162" stroke="#000" stroke-width="2" />
+  <line x1="296" y1="144" x2="296" y2="156" stroke="#000" stroke-width="1.6" />
+  <line x1="302" y1="138" x2="302" y2="162" stroke="#000" stroke-width="2" />
+  <line x1="308" y1="144" x2="308" y2="156" stroke="#000" stroke-width="1.6" />
+  <!-- Battery Leads -->
+  <line x1="280" y1="150" x2="290" y2="150" stroke="#000" stroke-width="1.6" />
+  <line x1="308" y1="150" x2="320" y2="150" stroke="#000" stroke-width="1.6" />
+
+  <!-- Switch / Key -->
+  <circle cx="80" cy="150" r="4" fill="none" stroke="#000" stroke-width="1.6" />
+  <circle cx="100" cy="150" r="4" fill="none" stroke="#000" stroke-width="1.6" />
+  <line x1="84" y1="150" x2="92" y2="138" stroke="#000" stroke-width="1.6" />
+  
+  <!-- Circuit Wires -->
+  <path d="M50,150 L76,150 M104,150 L130,150 M320,150 L340,150 L340,200 L50,200 L50,150" fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Current Direction Arrows on Wires -->
+  <!-- Bottom wire pointing left -->
+  <polygon points="190,197 180,200 190,203" fill="#000" />
+  <!-- Entering current arrow -->
+  <polygon points="115,147 105,150 115,153" fill="#000" />
+
+  <!-- Magnetic Field Lines (Inside and Outside) -->
+  <!-- Center straight line (Inside) -->
+  <path d="M90,130 L310,130" fill="none" stroke="#000" stroke-width="1.2" stroke-dasharray="6,4" />
+  <polygon points="205,127 215,130 205,133" fill="#000" />
+
+  <!-- Inner-upper field line -->
+  <path d="M110,120 C150,120 200,120 290,120" fill="none" stroke="#000" stroke-width="1.2" />
+  <polygon points="200,117 210,120 200,123" fill="#000" />
+
+  <!-- Inner-lower field line -->
+  <path d="M110,140 C150,140 200,140 290,140" fill="none" stroke="#000" stroke-width="1.2" />
+  <polygon points="200,137 210,140 200,143" fill="#000" />
+
+  <!-- Outer loop 1 (Close) -->
+  <path d="M125,130 C125,50 275,50 275,130" fill="none" stroke="#000" stroke-width="1.2" />
+  <polygon points="195,51 205,49 201,58" fill="#000" />
+
+  <!-- Outer loop 2 (Wide) -->
+  <path d="M100,130 C80,20 320,20 300,130" fill="none" stroke="#000" stroke-width="1.2" />
+  <polygon points="195,22 205,20 201,29" fill="#000" />
+
+  <!-- Outer loop bottom 1 (Close) -->
+  <path d="M125,130 C125,210 275,210 275,130" fill="none" stroke="#000" stroke-width="1.2" />
+  <polygon points="205,209 195,211 199,202" fill="#000" />
+
+  <!-- Outer loop bottom 2 (Wide) -->
+  <path d="M100,130 C80,240 320,240 300,130" fill="none" stroke="#000" stroke-width="1.2" />
+  <polygon points="205,238 195,240 199,231" fill="#000" />
+
+  <!-- Labels -->
+  <text x="180" y="134" class="label">N</text>
+  <text x="215" y="134" class="label">S</text>
+  <text x="175" y="85" class="label">Solenoid</text>
+  <text x="325" y="145">+</text>
+  <text x="270" y="145">-</text>
+  <text x="65" y="142">K</text>
+</svg>

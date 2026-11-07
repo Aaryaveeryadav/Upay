@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- White background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Bar Magnet -->
+  <g transform="translate(40, 90)">
+    <rect x="0" y="0" width="80" height="40" fill="#ffffff" stroke="#000000" stroke-width="1.6"/>
+    <!-- Center dividing line for poles -->
+    <line x1="40" y1="0" x2="40" y2="40" stroke="#000000" stroke-width="1.6"/>
+    <text x="20" y="26" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">N</text>
+    <text x="60" y="26" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">S</text>
+    <!-- Motion arrow -->
+    <line x1="-25" y1="20" x2="-5" y2="20" stroke="#000000" stroke-width="1.6" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- Arrowhead marker definition (using lines for standalone compliance, or standard marker) -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 2 L 10 5 L 0 8 z" fill="#000000"/>
+    </marker>
+  </defs>
+
+  <!-- Solenoid / Coil AB -->
+  <g transform="translate(150, 80)">
+    <!-- Back loops (drawn lighter or dashed? Textbook style: just overlapping ellipses/curves) -->
+    <!-- Let's draw standard textbook schematic coils: diagonal loops -->
+    
+    <!-- Cylinder body (hidden behind loops, or just loops) -->
+    
+    <!-- Loop 1 (leftmost) -->
+    <ellipse cx="0" cy="20" rx="8" ry="25" fill="#ffffff" stroke="#000000" stroke-width="1.6"/>
+    
+    <!-- Loop 2 -->
+    <path d="M 0,-5 C 10,-5 15,0 15,20 C 15,40 10,45 0,45" fill="none" stroke="#000000" stroke-width="1.6"/>
+    <ellipse cx="15" cy="20" rx="8" ry="25" fill="#ffffff" stroke="#000000" stroke-width="1.6"/>
+
+    <!-- Loop 3 -->
+    <path d="M 15,-5 C 25,-5 30,0 30,20 C 30,40 25,45 15,45" fill="none" stroke="#000000" stroke-width="1.6"/>
+    <ellipse cx="30" cy="20" rx="8" ry="25" fill="#ffffff" stroke="#000000" stroke-width="1.6"/>
+
+    <!-- Loop 4 -->
+    <path d="M 30,-5 C 40,-5 45,0 45,20 C 45,40 40,45 30,45" fill="none" stroke="#000000" stroke-width="1.6"/>
+    <ellipse cx="45" cy="20" rx="8" ry="25" fill="#ffffff" stroke="#000000" stroke-width="1.6"/>
+
+    <!-- Loop 5 (rightmost) -->
+    <path d="M 45,-5 C 55,-5 60,0 60,20 C 60,40 55,45 45,45" fill="none" stroke="#000000" stroke-width="1.6"/>
+    <ellipse cx="60" cy="20" rx="8" ry="25" fill="#ffffff" stroke="#000000" stroke-width="1.6"/>
+
+    <!-- Terminals A and B -->
+    <!-- Top wire from A (left front) -->
+    <path d="M -8,20 C -8,5 -8,-15 -20,-15 L -75,-15" fill="none" stroke="#000000" stroke-width="1.6"/>
+    <!-- Bottom wire from B (right front) -->
+    <path d="M 60,45 C 60,65 60,85 100,85 L 140,85" fill="none" stroke="#000000" stroke-width="1.6"/>
+    
+    <!-- Labels A and B -->
+    <text x="-15" y="32" font-family="Arial, sans-serif" font-size="14" font-weight="bold">A</text>
+    <text x="68" y="32" font-family="Arial, sans-serif" font-size="14" font-weight="bold">B</text>
+  </g>
+
+  <!-- Connecting Wires to Galvanometer -->
+  <!-- Top wire extension to galvanometer -->
+  <line x1="75" y1="65" x2="260" y2="65" stroke="#000000" stroke-width="1.6"/>
+  
+  <!-- Galvanometer -->
+  <g transform="translate(260, 115)">
+    <!-- Circular body -->
+    <circle cx="0" cy="0" r="30" fill="#ffffff" stroke="#000000" stroke-width="1.6"/>
+    <!-- Scale markings -->
+    <line x1="0" y1="-22" x2="0" y2="-26" stroke="#000000" stroke-width="1.6"/>
+    <line x1="-15" y1="-18" x2="-18" y2="-21" stroke="#000000" stroke-width="1.6"/>
+    <line x1="15" y1="-18" x2="18" y2="-21" stroke="#000000" stroke-width="1.6"/>
+    <line x1="-22" y1="0" x2="-26" y2="0" stroke="#000000" stroke-width="1.6"/>
+    <line x1="22" y1="0" x2="26" y2="0" stroke="#000000" stroke-width="1.6"/>
+    
+    <!-- Needle -->
+    <line x1="0" y1="15" x2="10" y2="-12" stroke="#000000" stroke-width="1.6"/>
+    <!-- Zero center tick -->
+    <text x="-4" y="10" font-family="Arial, sans-serif" font-size="12" font-weight="bold">0</text>
+    
+    <!-- Terminals / connection points -->
+    <circle cx="0" cy="-30" r="3" fill="#000000"/>
+    <circle cx="0" cy="30" r="3" fill="#000000"/>
+  </g>
+
+  <!-- Bottom wire completion -->
+  <line x1="250" y1="165" x2="260" y2="145" stroke="#000000" stroke-width="1.6"/>
+  <line x1="210" y1="165" x2="250" y2="165" stroke="#000000" stroke-width="1.6"/>
+
+</svg>

@@ -1,0 +1,38 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .line { stroke: #000; stroke-width: 1.6; fill: none; }
+    .dashed { stroke: #000; stroke-width: 1.6; fill: none; stroke-dasharray: 4,4; }
+    .text { font-family: sans-serif; font-size: 14px; fill: #000; }
+    .bold { font-weight: bold; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Title / Context -->
+  <text x="30" y="30" class="text bold">CBSE Class 10 - Biology / Environment Diagram</text>
+  <text x="30" y="55" class="text">Schematic representation of Environment and Waste Management</text>
+
+  <!-- Central box representing Ecosystem / Environment -->
+  <rect x="70" y="80" width="260" height="140" rx="10" class="line" />
+  
+  <!-- Internal components / conceptual nodes -->
+  <circle cx="130" cy="125" r="25" class="line" />
+  <text x="110" y="130" class="text" font-size="11">Biotic</text>
+
+  <circle cx="270" cy="125" r="25" class="line" />
+  <text x="245" y="130" class="text" font-size="11">Abiotic</text>
+
+  <!-- Flow / Interaction lines -->
+  <path d="M 155 125 L 245 125" class="dashed" />
+  
+  <text x="175" y="115" class="text" font-size="10">Interaction</text>
+
+  <!-- Waste management node at the bottom -->
+  <rect x="135" y="170" width="130" height="35" rx="5" class="line" />
+  <text x="145" y="192" class="text" font-size="12">Organic Farming</text>
+
+  <!-- Connecting to ecosystem -->
+  <path d="M 200 170 L 200 150" class="line" />
+
+</svg>

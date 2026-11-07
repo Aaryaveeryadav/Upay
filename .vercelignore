@@ -1,0 +1,15 @@
+# Never upload private local runtime data, credentials, user uploads or archives.
+data/**
+uploads/**
+solutions/**
+tools/**
+*.zip
+*.key
+.env*
+server.js
+*.bat
+*.sh
+
+# Private handoff notes and local-server-only files are not deployment assets.
+*.md
+/corrupt_gate.js

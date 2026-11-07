@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-size: 12px; font-weight: bold; }
+    .draw { fill: none; stroke: #000; stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+    .nucleus { fill: #000; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Figure A: Binary Fission in Amoeba -->
+  <g transform="translate(10, 10)">
+    <!-- Stage 1: Amoeba elongating with dividing nucleus -->
+    <path class="draw" d="M 40 45 C 20 45, 10 75, 30 95 C 45 110, 75 110, 90 95 C 110 75, 100 45, 80 45 Z" />
+    <!-- Pseudopodia -->
+    <path class="draw" d="M 25 55 L 10 50 L 22 68 M 85 55 L 100 50 L 88 68 M 35 102 L 25 115 L 45 108 M 75 102 L 85 115 L 65 108" />
+    <!-- Dividing Nucleus (dumbbell shaped) -->
+    <path class="draw" d="M 45 70 C 42 65, 52 65, 55 70 C 58 75, 68 75, 65 70 C 62 65, 52 65, 45 70 Z" />
+    <circle cx="48" cy="69" r="3" class="nucleus" />
+    <circle cx="62" cy="69" r="3" class="nucleus" />
+    
+    <!-- Constriction indicating fission -->
+    <path class="draw" d="M 52 50 C 60 70, 60 75, 52 90" />
+    <path class="draw" d="M 58 50 C 50 70, 50 75, 58 90" />
+
+    <!-- Stage 2: Two smaller daughter cells forming -->
+    <g transform="translate(110, 0)">
+      <!-- First daughter amoeba -->
+      <path class="draw" d="M 35 30 C 20 30, 15 50, 30 65 C 40 75, 60 75, 70 65 C 85 50, 80 30, 65 30 Z" />
+      <path class="draw" d="M 20 38 L 8 32 L 20 48 M 75 38 L 87 32 L 75 48" />
+      <circle cx="50" cy="48" r="4" class="nucleus" />
+
+      <!-- Second daughter amoeba -->
+      <path class="draw" d="M 35 95 C 20 95, 15 115, 30 130 C 40 140, 60 140, 70 130 C 85 115, 80 95, 65 95 Z" />
+      <path class="draw" d="M 20 103 L 8 98 L 20 113 M 75 103 L 87 98 L 75 113" />
+      <circle cx="50" cy="113" r="4" class="nucleus" />
+    </g>
+
+    <!-- Labels for A -->
+    <text x="50" y="170" text-anchor="middle" class="label">(a) Binary Fission in Amoeba</text>
+  </g>
+
+  <!-- Figure B: Budding in Yeast -->
+  <g transform="translate(240, 10)">
+    <!-- Parent Yeast Cell -->
+    <ellipse cx="60" cy="85" rx="35" ry="45" class="draw" />
+    <!-- Nucleus of parent -->
+    <circle cx="65" cy="95" r="4" class="nucleus" />
+
+    <!-- Bud forming -->
+    <circle cx="60" cy="30" r="18" class="draw" />
+    <!-- Nucleus migrating/dividing into bud -->
+    <circle cx="60" cy="28" r="2.5" class="nucleus" />
+
+    <!-- Vacuoles (internal details for realism) -->
+    <circle cx="45" cy="75" r="6" class="draw" />
+    <circle cx="75" cy="65" r="5" class="draw" />
+
+    <!-- Labels for B -->
+    <text x="60" y="170" text-anchor="middle" class="label">(b) Budding in Yeast</text>
+  </g>
+
+  <!-- Overall Process indication / structural dividing line if needed (omitted for clean look) -->
+</svg>

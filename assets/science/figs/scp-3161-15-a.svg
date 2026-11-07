@@ -1,0 +1,75 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    line, path, rect, ellipse {
+      fill: none;
+      stroke: #000;
+      stroke-width: 1.6;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+    text {
+      font-family: sans-serif;
+      font-size: 12px;
+      fill: #000;
+    }
+  </style>
+
+  <!-- Non-conducting cylindrical roll (core) -->
+  <rect x="120" y="90" width="160" height="80" rx="10" ry="10" fill="#fff" />
+  
+  <!-- Coil 1 (Left, 100 turns representation) -->
+  <path d="M 140 90 Q 130 130 140 170" />
+  <path d="M 148 90 Q 138 130 148 170" />
+  <path d="M 156 90 Q 146 130 156 170" />
+  <path d="M 164 90 Q 154 130 164 170" />
+  <path d="M 172 90 Q 162 130 172 170" />
+  <path d="M 180 90 Q 170 130 180 170" />
+  
+  <!-- Coil 2 (Right, 50 turns representation) -->
+  <path d="M 220 90 Q 210 130 220 170" />
+  <path d="M 230 90 Q 220 130 230 170" />
+  <path d="M 240 90 Q 230 130 240 170" />
+  <path d="M 250 90 Q 240 130 250 170" />
+
+  <!-- Circuit for Coil 1 (Battery + Plug Key) -->
+  <!-- Top wire from Coil 1 -->
+  <path d="M 145 90 L 145 50 L 80 50" />
+  <!-- Bottom wire from Coil 1 -->
+  <path d="M 175 170 L 175 210 L 80 210" />
+  
+  <!-- Battery symbol in bottom wire -->
+  <line x1="100" y1="200" x2="100" y2="220" />
+  <line x1="108" y1="194" x2="108" y2="226" />
+  <line x1="116" y1="200" x2="116" y2="220" />
+  <line x1="124" y1="194" x2="124" y2="226" />
+  
+  <!-- Connecting lines to battery -->
+  <line x1="80" y1="210" x2="100" y2="210" />
+  <line x1="124" y1="210" x2="150" y2="210" /> <!-- adjusted to meet wire -->
+
+  <!-- Plug Key in top wire -->
+  <line x1="95" y1="50" x2="110" y2="50" />
+  <circle cx="117" cy="50" r="3" />
+  <line x1="124" y1="50" x2="140" y2="50" />
+  <!-- Switch plug (open state) -->
+  <path d="M 112 40 L 122 25" />
+
+  <!-- Circuit for Coil 2 (Galvanometer) -->
+  <!-- Top wire from Coil 2 -->
+  <path d="M 225 90 L 225 50 L 320 50 L 320 100" />
+  <!-- Bottom wire from Coil 2 -->
+  <path d="M 245 170 L 245 210 L 320 210 L 320 160" />
+
+  <!-- Galvanometer (Circle with 'G') -->
+  <circle cx="320" cy="130" r="18" fill="#fff" />
+  <text x="315" y="135" font-weight="bold">G</text>
+  <!-- Needle inside galvanometer -->
+  <line x1="320" y1="130" x2="313" y2="118" />
+
+  <!-- Labels -->
+  <text x="142" y="82">Coil-1</text>
+  <text x="220" y="82">Coil-2</text>
+  <text x="190" y="185">Roll</text>
+  <text x="105" y="38">K</text>
+  <text x="105" y="240">Battery</text>
+</svg>

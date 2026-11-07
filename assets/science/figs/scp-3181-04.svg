@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; text-anchor: middle; }
+    .arrow { fill: none; stroke: #000; stroke-width: 1.6; marker-end: url(#arrowhead); }
+    .box { fill: #fff; stroke: #000; stroke-width: 1.6; rx: 4; ry: 4; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#000" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Title / Question context -->
+  <text x="200" y="25" font-size="12" font-weight="bold">Food Chain in an Ecosystem</text>
+
+  <!-- Food Chain Elements (Left to Right Flow) -->
+  <!-- 1. Sun / Energy Source (Optional context, but standard food chain starts with Producer) -->
+  <!-- Producer: Grass -->
+  <rect x="25" y="110" width="65" height="40" class="box" />
+  <text x="57" y="135">Grass</text>
+
+  <!-- Arrow 1 -->
+  <line x1="90" y1="130" x2="115" y2="130" class="arrow" />
+
+  <!-- Primary Consumer: Goat / Insect / Deer -->
+  <rect x="120" y="110" width="65" height="40" class="box" />
+  <text x="152" y="135">Deer</text>
+
+  <!-- Arrow 2 -->
+  <line x1="185" y1="130" x2="210" y2="130" class="arrow" />
+
+  <!-- Secondary Consumer: Lion / Tiger / Wolf -->
+  <rect x="215" y="110" width="65" height="40" class="box" />
+  <text x="247" y="135">Tiger</text>
+
+  <!-- Arrow 3 -->
+  <line x1="280" y1="130" x2="305" y2="130" class="arrow" />
+
+  <!-- Tertiary Consumer / Apex -->
+  <!-- Alternatively, keep it a standard 3-trophic chain. Let's do 4 steps: Grass -> Insect -> Frog -> Snake -> Eagle -->
+  <!-- Let's redraw for a classic 4-step clear textbook chain: Plant -> Herbivore -> Carnivore -> Top Carnivore -->
+  
+  <!-- Clearing previous and drawing standard 4-step chain -->
+  <rect x="0" y="0" width="400" height="260" fill="#ffffff" />
+  <text x="200" y="30" font-size="12" font-weight="bold">Correct Food Chain:</text>
+
+  <!-- Step 1: Producer -->
+  <rect x="20" y="100" width="65" height="45" class="box" />
+  <text x="52" y="121" font-weight="bold">Plants</text>
+  <text x="52" y="134" font-size="9">(Producer)</text>
+
+  <line x1="85" y1="122" x2="110" y2="122" class="arrow" />
+
+  <!-- Step 2: Herbivore -->
+  <rect x="115" y="100" width="65" height="45" class="box" />
+  <text x="147" y="121" font-weight="bold">Deer</text>
+  <text x="147" y="134" font-size="9">(Herbivore)</text>
+
+  <line x1="180" y1="122" x2="205" y2="122" class="arrow" />
+
+  <!-- Step 3: Carnivore -->
+  <rect x="210" y="100" width="65" height="45" class="box" />
+  <text x="242" y="121" font-weight="bold">Tiger</text>
+  <text x="242" y="134" font-size="9">(Carnivore)</text>
+
+  <line x1="275" y1="122" x2="300" y2="122" class="arrow" />
+
+  <!-- Step 4: Decomposer / Energy flow note or 4th trophic level -->
+  <rect x="305" y="100" width="75" height="45" class="box" />
+  <text x="342" y="121" font-weight="bold">Vulture</text>
+  <text x="342" y="134" font-size="9">(Top Carnivore)</text>
+
+  <!-- Energy flow description at bottom -->
+  <text x="200" y="190" font-size="11">Energy flows in a unidirectional manner through these trophic levels.</text>
+
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- White background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Interface line separating Medium A and Medium B -->
+  <!-- Let interface be a horizontal line at y = 140 -->
+  <line x1="40" y1="140" x2="360" y2="140" stroke="#000000" stroke-width="1.6" />
+
+  <!-- Medium labels -->
+  <text x="70" y="70" font-family="Arial, sans-serif" font-size="16" fill="#000000">Medium A</text>
+  <text x="70" y="210" font-family="Arial, sans-serif" font-size="16" fill="#000000">Medium B</text>
+
+  <!-- Normal line (perpendicular to interface at point of incidence x=200, y=140) -->
+  <line x1="200" y1="40" x2="200" y2="230" stroke="#000000" stroke-width="1.2" stroke-dasharray="5,5" />
+
+  <!-- Incident ray (from top-left to interface) -->
+  <!-- Angle of incidence: let's make it around 45 degrees -->
+  <line x1="100" y1="50" x2="200" y2="140" stroke="#000000" stroke-width="1.6" />
+  <!-- Arrow on incident ray -->
+  <polygon points="145,92 153,97 148,104" fill="#000000" />
+
+  <!-- Refracted ray (bending towards normal, e.g., denser medium B) -->
+  <!-- Angle of refraction: smaller, say around 25 degrees -> dx = 42, dy = 90 -->
+  <line x1="200" y1="140" x2="242" y2="230" stroke="#000000" stroke-width="1.6" />
+  <!-- Arrow on refracted ray -->
+  <polygon points="223,180 224,189 216,186" fill="#000000" />
+
+  <!-- Labels for rays and normal if needed contextually, keeping it clean as per typical CBSE figures -->
+  <text x="120" y="65" font-family="Arial, sans-serif" font-size="14" fill="#000000">Ray of light</text>
+</svg>

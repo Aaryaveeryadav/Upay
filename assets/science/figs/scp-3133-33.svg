@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-style: italic; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff"/>
+
+  <!-- Glass Slab (Transparent light grey fill for textbook clarity) -->
+  <rect x="130" y="60" width="140" height="140" fill="#f0f0f0" stroke="#000000" stroke-width="1.6"/>
+
+  <!-- Normal 1 (Top interface) -->
+  <line x1="160" y1="20" x2="160" y2="100" stroke="#555555" stroke-width="1" stroke-dasharray="4,4"/>
+  
+  <!-- Normal 2 (Bottom interface) -->
+  <line x1="240" y1="160" x2="240" y2="240" stroke="#555555" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Incident Ray -->
+  <line x1="80" y1="40" x2="160" y2="60" stroke="#000000" stroke-width="1.6"/>
+  <!-- Incident Ray Arrow -->
+  <polygon points="125,48 118,50 121,54" fill="#000000"/>
+
+  <!-- Refracted Ray -->
+  <line x1="160" y1="60" x2="240" y2="200" stroke="#000000" stroke-width="1.6"/>
+  <!-- Refracted Ray Arrow -->
+  <polygon points="196,120 190,125 195,128" fill="#000000"/>
+
+  <!-- Emergent Ray -->
+  <line x1="240" y1="200" x2="320" y2="220" stroke="#000000" stroke-width="1.6"/>
+  <!-- Emergent Ray Arrow -->
+  <polygon points="285,210 279,212 282,216" fill="#000000"/>
+
+  <!-- Lateral Shift / Extended Incident Ray (Dotted) -->
+  <line x1="160" y1="60" x2="293" y2="213" stroke="#555555" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Angle Arcs -->
+  <!-- Angle of incidence i -->
+  <path d="M 150,45 A 20,20 0 0,1 160,40" fill="none" stroke="#000000" stroke-width="1.2"/>
+  <!-- Angle of refraction r -->
+  <path d="M 160,80 A 20,20 0 0,1 174,74" fill="none" stroke="#000000" stroke-width="1.2"/>
+  <!-- Angle of emergence e -->
+  <path d="M 230,220 A 20,20 0 0,1 240,200" fill="none" stroke="#000000" stroke-width="1.2"/>
+
+  <!-- Labels -->
+  <text x="142" y="42" class="label">i</text>
+  <text x="178" y="78" class="label">r</text>
+  <text x="222" y="215" class="label">e</text>
+
+  <text x="175" y="135" class="label">Glass slab</text>
+  <text x="170" y="30">Normal</text>
+  <text x="250" y="235">Normal</text>
+
+  <text x="70" y="30">Incident ray</text>
+  <text x="290" y="238">Emergent ray</text>
+  
+  <text x="60" y="110">Air</text>
+  <text x="60" y="130">Glass</text>
+  <text x="60" y="210">Air</text>
+</svg>

@@ -1,0 +1,64 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-style: italic; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff"/>
+
+  <!-- Principal Axis -->
+  <line x1="30" y1="160" x2="380" y2="160" stroke="#000000" stroke-width="1.2"/>
+
+  <!-- Concave Mirror -->
+  <!-- Center of curvature at C(200, 160), Radius = 100, Aperture from y=80 to y=240 -->
+  <path d="M 200 80 A 100 100 0 0 0 200 240" fill="none" stroke="#000000" stroke-width="2"/>
+  <!-- Mirror hatching on the right (back) side -->
+  <path d="M 202 83 L 210 78 M 206 93 L 214 88 M 209 103 L 217 98 M 211 113 L 219 108 M 212 123 L 220 118 M 212 133 L 220 128 M 212 143 L 220 138 M 212 153 L 220 148 M 211 163 L 219 158 M 209 173 L 217 168 M 206 183 L 214 178 M 202 193 L 210 188 M 198 203 L 206 198 M 193 213 L 201 208 M 188 223 L 196 218 M 182 233 L 190 228" stroke="#000000" stroke-width="0.8"/>
+
+  <!-- Points: Pole P(200,160), Focus F(130,160), Center C(60,160) -->
+  <!-- Focal length f = 70px, R = 140px -->
+  <circle cx="200" cy="160" r="2" fill="#000000"/>
+  <circle cx="130" cy="160" r="2" fill="#000000"/>
+  <circle cx="60" cy="160" r="2" fill="#000000"/>
+
+  <text x="197" y="175">P</text>
+  <text x="127" y="175">F</text>
+  <text x="57" y="175">C</text>
+
+  <!-- Object AB between P and F, say at x = 100 -->
+  <!-- Object height = 30px -> A(100, 160), B(100, 130) -->
+  <line x1="100" y1="160" x2="100" y2="132" stroke="#000000" stroke-width="1.8"/>
+  <polygon points="100,128 97,136 103,136" fill="#000000"/>
+  <text x="85" y="148" class="label">Object</text>
+  <text x="104" y="148">A</text>
+  <text x="104" y="126">B</text>
+
+  <!-- Ray 1: Parallel to principal axis from B(100, 130) to mirror at (191, 88), reflects through F(130, 160) -->
+  <line x1="100" y1="130" x2="191.1" y2="88.2" stroke="#000000" stroke-width="1.3"/>
+  <polyline points="182,90 191.1,88.2 188,97" fill="none" stroke="#000000" stroke-width="1.3"/>
+  <!-- Reflected ray passing through F -->
+  <line x1="191.1" y1="88.2" x2="60" y2="221" stroke="#000000" stroke-width="1.3"/>
+  <polyline points="120,157 125,152 119,150" fill="none" stroke="#000000" stroke-width="1.3"/>
+
+  <!-- Virtual extension of Ray 1 -->
+  <line x1="191.1" y1="88.2" x2="310" y2="28" stroke="#000000" stroke-width="1.1" stroke-dasharray="4,4"/>
+
+  <!-- Ray 2: Passing through C(60, 160) towards mirror at (191, 231.5) -->
+  <line x1="100" y1="130" x2="191.5" y2="231.5" stroke="#000000" stroke-width="1.3"/>
+  <polyline points="140,175 145,178 141,183" fill="none" stroke="#000000" stroke-width="1.3"/>
+  <!-- Reflected back along same path -->
+  <line x1="191.5" y1="231.5" x2="130" y2="160" stroke="#000000" stroke-width="1.3"/>
+
+  <!-- Virtual extension of Ray 2 -->
+  <line x1="191.5" y1="231.5" x2="310" y2="92" stroke="#000000" stroke-width="1.1" stroke-dasharray="4,4"/>
+
+  <!-- Image A'B' behind the mirror -->
+  <!-- Intersection of virtual extensions: A' at x=310, y=160; B' at x=310, y=40 (magnified) -->
+  <line x1="310" y1="160" x2="310" y2="46" stroke="#000000" stroke-width="1.3" stroke-dasharray="3,3"/>
+  <polygon points="310,40 307,48 313,48" fill="#000000"/>
+  <text x="317" y="105" class="label">Image</text>
+  <text x="315" y="156">A'</text>
+  <text x="315" y="44">B'</text>
+
+</svg>

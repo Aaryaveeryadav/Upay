@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: #000; }
+    .label { font-size: 15px; font-weight: bold; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Reflecting Surface (Mirror) -->
+  <line x1="100" y1="180" x2="300" y2="180" stroke="#000" stroke-width="2" />
+  
+  <!-- Hatching for Mirror -->
+  <line x1="110" y1="185" x2="100" y2="195" stroke="#000" stroke-width="1.2" />
+  <line x1="130" y1="185" x2="120" y2="195" stroke="#000" stroke-width="1.2" />
+  <line x1="150" y1="185" x2="140" y2="195" stroke="#000" stroke-width="1.2" />
+  <line x1="170" y1="185" x2="160" y2="195" stroke="#000" stroke-width="1.2" />
+  <line x1="190" y1="185" x2="180" y2="195" stroke="#000" stroke-width="1.2" />
+  <line x1="210" y1="185" x2="200" y2="195" stroke="#000" stroke-width="1.2" />
+  <line x1="230" y1="185" x2="220" y2="195" stroke="#000" stroke-width="1.2" />
+  <line x1="250" y1="185" x2="240" y2="195" stroke="#000" stroke-width="1.2" />
+  <line x1="270" y1="185" x2="260" y2="195" stroke="#000" stroke-width="1.2" />
+  <line x1="290" y1="185" x2="280" y2="195" stroke="#000" stroke-width="1.2" />
+
+  <!-- Normal Line (Perpendicular) -->
+  <line x1="200" y1="60" x2="200" y2="180" stroke="#000" stroke-width="1.2" stroke-dasharray="5,5" />
+
+  <!-- Incident Ray -->
+  <line x1="130" y1="90" x2="200" y2="180" stroke="#000" stroke-width="1.6" />
+  <!-- Arrow on Incident Ray -->
+  <polygon points="158,122 163,133 150,128" fill="#000" />
+
+  <!-- Reflected Ray -->
+  <line x1="200" y1="180" x2="270" y2="90" stroke="#000" stroke-width="1.6" />
+  <!-- Arrow on Reflected Ray -->
+  <polygon points="242,128 237,133 242,122" fill="#000" />
+
+  <!-- Angle Arcs -->
+  <!-- Angle of incidence (between normal and incident ray) -->
+  <path d="M 200,135 A 45,45 0 0,0 171,142" fill="none" stroke="#000" stroke-width="1.2" />
+  <!-- Angle of reflection (between normal and reflected ray) -->
+  <path d="M 229,142 A 45,45 0 0,0 200,135" fill="none" stroke="#000" stroke-width="1.2" />
+
+  <!-- Labels -->
+  <text x="175" y="130" class="label">40°</text>
+  <text x="203" y="130" class="label">40°</text>
+  <text x="193" y="52" class="label">N</text>
+  <text x="280" y="85" class="label">I</text>
+  <text x="115" y="85" class="label">A</text>
+  <text x="195" y="200" class="label">O</text>
+  <text x="285" y="195" class="label">M</text>
+  <text x="100" y="195" class="label">M'</text>
+</svg>

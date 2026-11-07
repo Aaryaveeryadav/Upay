@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: black; }
+    .label { font-size: 12px; font-weight: bold; }
+    .ray-r { stroke: #d00; stroke-width: 1.5; fill: none; }
+    .ray-v { stroke: #40c; stroke-width: 1.5; fill: none; }
+    .white-beam { stroke: black; stroke-width: 1.5; fill: none; }
+    .prism { fill: none; stroke: black; stroke-width: 1.6; stroke-linejoin: round; }
+    .screen { stroke: black; stroke-width: 2.5; stroke-linecap: round; }
+    .construction { stroke: black; stroke-width: 0.8; stroke-dasharray: 4,3; fill: none; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="white" />
+
+  <!-- Glass Prism ABC -->
+  <!-- A at top, B at bottom-left, C at bottom-right -->
+  <polygon points="150,50 90,190 210,190" class="prism" />
+  
+  <!-- Prism vertex labels -->
+  <text x="145" y="42" class="label">A</text>
+  <text x="75" y="198" class="label">B</text>
+  <text x="215" y="198" class="label">C</text>
+
+  <!-- Screen DE -->
+  <line x1="310" y1="100" x2="310" y2="210" class="screen" />
+  <text x="318" y="105" class="label">D</text>
+  <text x="318" y="208" class="label">E</text>
+
+  <!-- Incident White Light Beam PQ -->
+  <line x1="50" y1="130" x2="120" y2="130" class="white-beam" />
+  <!-- Arrow on incident ray -->
+  <polygon points="90,126 102,130 90,134" fill="black" />
+  <text x="55" y="122" class="label">P</text>
+  <text x="105" y="122" class="label">Q</text>
+
+  <!-- Refracted rays inside prism (approximate middle path) -->
+  <line x1="120" y1="130" x2="165" y2="148" class="white-beam" />
+
+  <!-- Emergent dispersed rays hitting the screen -->
+  <!-- Red ray (least deviation, top on screen) -->
+  <line x1="165" y1="148" x2="310" y2="120" class="ray-r" />
+  <text x="315" y="124" class="text" fill="#d00">Red</text>
+
+  <!-- Violet ray (most deviation, bottom on screen) -->
+  <line x1="165" y1="148" x2="310" y2="190" class="ray-v" />
+  <text x="315" y="194" class="text" fill="#40c">Violet</text>
+
+  <!-- Spectrum band representation (subtle lines) -->
+  <line x1="165" y1="148" x2="310" y2="135" class="construction" />
+  <line x1="165" y1="148" x2="310" y2="150" class="construction" />
+  <line x1="165" y1="148" x2="310" y2="165" class="construction" />
+  <line x1="165" y1="148" x2="310" y2="178" class="construction" />
+
+</svg>

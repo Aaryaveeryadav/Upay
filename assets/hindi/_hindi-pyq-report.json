@@ -1,0 +1,119 @@
+{
+ "rows": 191,
+ "mcq": 81,
+ "bymarks": {
+  "1": 144,
+  "2": 38,
+  "5": 9
+ },
+ "files": [
+  {
+   "file": "3-1-1_Hindi Course A.pdf",
+   "code": "3/1/1",
+   "rows": 15,
+   "mcq": 7
+  },
+  {
+   "file": "3-1-2_Hindi Course A.pdf",
+   "code": "3/1/2",
+   "rows": 19,
+   "mcq": 6
+  },
+  {
+   "file": "3-1-3_Hindi Course A.pdf",
+   "code": "3/1/3",
+   "rows": 13,
+   "mcq": 5
+  },
+  {
+   "file": "3-2-1_Hindi Course A.pdf",
+   "code": "3/2/1",
+   "rows": 18,
+   "mcq": 11
+  },
+  {
+   "file": "3-2-2_Hindi Course A.pdf",
+   "code": "3/2/2",
+   "rows": 17,
+   "mcq": 9
+  },
+  {
+   "file": "3-2-3_Hindi Course A.pdf",
+   "code": "3/2/3",
+   "rows": 16,
+   "mcq": 9
+  },
+  {
+   "file": "3-3-1_Hindi Course A.pdf",
+   "code": "3/3/1",
+   "rows": 12,
+   "mcq": 6
+  },
+  {
+   "file": "3-3-2_Hindi Course A.pdf",
+   "code": "3/3/2",
+   "rows": 12,
+   "mcq": 7
+  },
+  {
+   "file": "3-3-3_Hindi Course A.pdf",
+   "code": "3/3/3",
+   "rows": 16,
+   "mcq": 8
+  },
+  {
+   "file": "3-4-1_Hindi Course A.pdf",
+   "code": "3/4/1",
+   "rows": 16,
+   "mcq": 2
+  },
+  {
+   "file": "3-4-2_Hindi Course A.pdf",
+   "code": "3/4/2",
+   "rows": 23,
+   "mcq": 3
+  },
+  {
+   "file": "3-4-3_Hindi Course A.pdf",
+   "code": "3/4/3",
+   "rows": 21,
+   "mcq": 3
+  },
+  {
+   "file": "3-5-1_Hindi Course A.pdf",
+   "code": "3/5/1",
+   "rows": 24,
+   "mcq": 2
+  },
+  {
+   "file": "3-5-2_Hindi Course A.pdf",
+   "code": "3/5/2",
+   "rows": 16,
+   "mcq": 3
+  },
+  {
+   "file": "3-5-3_Hindi Course A.pdf",
+   "code": "3/5/3",
+   "rows": 23,
+   "mcq": 0
+  },
+  {
+   "file": "3-6-1_Hindi Course A.pdf",
+   "code": "3/6/1",
+   "rows": 17,
+   "mcq": 3
+  },
+  {
+   "file": "3-6-2_Hindi Course A.pdf",
+   "code": "3/6/2",
+   "rows": 26,
+   "mcq": 3
+  },
+  {
+   "file": "3-6-3_Hindi Course A.pdf",
+   "code": "3/6/3",
+   "rows": 26,
+   "mcq": 1
+  }
+ ]
+}

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: black; }
+    .label { font-style: italic; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="white" />
+
+  <!-- Interface between Medium 1 and Medium 2 -->
+  <!-- Medium 1 (Top), Medium 2 (Bottom) -->
+  <line x1="40" y1="130" x2="360" y2="130" stroke="black" stroke-width="1.6" />
+
+  <!-- Normal line (perpendicular to interface) -->
+  <line x1="200" y1="30" x2="200" y2="230" stroke="black" stroke-width="1" stroke-dasharray="5,5" />
+
+  <!-- Incident ray -->
+  <line x1="100" y1="50" x2="200" y2="130" stroke="black" stroke-width="1.6" />
+  <!-- Arrow on incident ray -->
+  <polygon points="145,86 153,93 140,99" fill="black" />
+
+  <!-- Refracted ray -->
+  <line x1="200" y1="130" x2="260" y2="210" stroke="black" stroke-width="1.6" />
+  <!-- Arrow on refracted ray -->
+  <polygon points="234,174 243,178 231,189" fill="black" />
+
+  <!-- Medium labels -->
+  <text x="60" y="70">Medium 1</text>
+  <text x="60" y="190">Medium 2</text>
+  
+  <text x="310" y="115">Refractive index</text>
+  <text x="310" y="132"><tspan class="label">n</tspan><tspan font-size="10" baseline-shift="sub">21</tspan> = 3</text>
+
+  <!-- Angle of incidence (i) arc and label -->
+  <!-- From normal (x=200, y=130 upwards) to incident ray (towards x=100, y=50) -->
+  <path d="M 200 100 A 30 30 0 0 0 177 106" fill="none" stroke="black" stroke-width="1.2" />
+  <text x="170" y="95" class="label">i</text>
+
+  <!-- Angle of refraction (r) arc and label -->
+  <!-- From normal (x=200, y=130 downwards) to refracted ray (towards x=260, y=210) -->
+  <path d="M 200 160 A 30 30 0 0 0 223 167" fill="none" stroke="black" stroke-width="1.2" />
+  <text x="215" y="185" class="label">r</text>
+
+  <!-- Ray labels -->
+  <text x="110" y="45">Incident ray</text>
+  <text x="245" y="215">Refracted ray</text>
+  <text x="180" y="245">Normal</text>
+</svg>

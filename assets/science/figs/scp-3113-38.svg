@@ -1,0 +1,74 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <!-- White Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Styles -->
+  <style>
+    .line { fill: none; stroke: #000000; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .ray { fill: none; stroke: #000000; stroke-width: 1.2; stroke-linecap: round; }
+    .extension { fill: none; stroke: #000000; stroke-width: 1.2; stroke-dasharray: 4,3; }
+    .label { font-family: Arial, sans-serif; font-size: 11px; fill: #000000; }
+    .title { font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; fill: #000000; }
+  </style>
+
+  <!-- Title / Header -->
+  <text x="200" y="20" text-anchor="middle" class="title">Correction of Hypermetropia (Farsightedness)</text>
+
+  <!-- Eye Outline (Hypermetropic eye with corrective lens) -->
+  <!-- Cornea bulge -->
+  <path d="M 210,105 Q 200,130 210,155" class="line" />
+  <!-- Eyeball sphere -->
+  <path d="M 210,105 C 240,80 320,80 350,105 C 375,125 375,135 350,155 C 320,180 240,180 210,155" class="line" />
+  
+  <!-- Crystalline Lens -->
+  <path d="M 245,118 Q 255,130 245,142 Q 255,130 245,118" class="line" />
+
+  <!-- Retina (Back of eye) -->
+  <path d="M 345,110 C 352,130 352,130 345,150" class="line" />
+
+  <!-- Corrective Convex Lens placed in front of eye -->
+  <path d="M 150,110 Q 158,130 150,150 Q 158,130 150,110" class="line" />
+  <line x1="150" y1="105" x2="150" y2="155" class="line" />
+
+  <!-- Principal Axis -->
+  <line x1="30" y1="130" x2="380" y2="130" stroke="#000000" stroke-width="0.8" stroke-dasharray="6,4" />
+
+  <!-- Object Point N' (Virtual Near Point for Hypermetropic Eye) -->
+  <circle cx="100" cy="130" r="2.5" fill="#000000" />
+  <text x="100" y="145" text-anchor="middle" class="label">N'</text>
+
+  <!-- Near Point of Normal Eye (N) -->
+  <circle cx="70" cy="130" r="2.5" fill="#000000" />
+  <text x="70" y="145" text-anchor="middle" class="label">N</text>
+
+  <!-- Light Rays from N' -->
+  <!-- Ray 1: Upper ray -->
+  <line x1="100" y1="130" x2="148" y2="115" class="ray" />
+  <line x1="152" y1="115" x2="248" y2="124" class="ray" />
+  <line x1="252" y1="124" x2="348" y2="130" class="ray" />
+
+  <!-- Ray 2: Lower ray -->
+  <line x1="100" y1="130" x2="148" y2="145" class="ray" />
+  <line x1="152" y1="145" x2="248" y2="136" class="ray" />
+  <line x1="252" y1="136" x2="348" y2="130" class="ray" />
+
+  <!-- Incident rays coming from Normal Near Point N to Lens -->
+  <line x1="70" y1="130" x2="148" y2="115" class="extension" />
+  <line x1="70" y1="130" x2="148" y2="145" class="extension" />
+
+  <!-- Arrow heads for rays -->
+  <!-- Incident to lens -->
+  <polygon points="125,123 120,121 121,126" fill="#000000" />
+  <polygon points="125,137 121,134 120,139" fill="#000000" />
+  
+  <!-- Inside eye -->
+  <polygon points="200,123 195,121 196,126" fill="#000000" />
+  <polygon points="200,137 196,134 195,139" fill="#000000" />
+
+  <!-- Labels -->
+  <text x="150" y="95" text-anchor="middle" class="label">Convex lens</text>
+  <text x="350" y="170" text-anchor="middle" class="label">Retina</text>
+
+  <!-- Indicator for light path -->
+  <text x="210" y="215" text-anchor="middle" class="label">Image is formed on the retina after correction</text>
+</svg>

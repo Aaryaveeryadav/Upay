@@ -1,0 +1,50 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: #000; }
+    .bold { font-weight: bold; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Straight current-carrying wire AB -->
+  <line x1="200" y1="20" x2="200" y2="240" stroke="#000000" stroke-width="2.5" />
+  
+  <!-- Current direction arrow pointing upwards -->
+  <polygon points="200,50 195,65 205,65" fill="#000000" />
+  
+  <!-- Wire labels -->
+  <text x="212" y="35" class="bold">A</text>
+  <text x="212" y="235" class="bold">B</text>
+  <text x="175" y="145" class="bold">I</text>
+
+  <!-- Concentric magnetic field circles centered on the wire (x = 200) -->
+  <!-- Innermost circle (Point X) -->
+  <circle cx="200" cy="130" r="30" fill="none" stroke="#000000" stroke-width="1.6" stroke-dasharray="5,3" />
+  <!-- Middle circle (Point Y) -->
+  <circle cx="200" cy="130" r="60" fill="none" stroke="#000000" stroke-width="1.6" stroke-dasharray="5,3" />
+  <!-- Outermost circle (Point Z) -->
+  <circle cx="200" cy="130" r="90" fill="none" stroke="#000000" stroke-width="1.6" stroke-dasharray="5,3" />
+
+  <!-- Points X, Y, Z on the magnetic field lines -->
+  <!-- Point X on r = 30 (Right side: 230, 130) -->
+  <circle cx="230" cy="130" r="3.5" fill="#000000" />
+  <text x="238" y="134" class="bold">X</text>
+
+  <!-- Point Y on r = 60 (Right side: 260, 130) -->
+  <circle cx="260" cy="130" r="3.5" fill="#000000" />
+  <text x="268" y="134" class="bold">Y</text>
+
+  <!-- Point Z on r = 90 (Right side: 290, 130) -->
+  <circle cx="290" cy="130" r="3.5" fill="#000000" />
+  <text x="298" y="134" class="bold">Z</text>
+
+  <!-- Direction arrows on magnetic field circles (anticlockwise or clockwise, typical schematic) -->
+  <!-- Arrow on innermost circle (top: 200, 100) -->
+  <polygon points="200,100 195,108 205,108" fill="#000000" />
+  <!-- Arrow on middle circle (top: 200, 70) -->
+  <polygon points="200,70 195,78 205,78" fill="#000000" />
+  <!-- Arrow on outermost circle (top: 200, 40) -->
+  <polygon points="200,40 195,48 205,48" fill="#000000" />
+
+</svg>

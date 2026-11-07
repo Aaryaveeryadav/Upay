@@ -1,0 +1,102 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-size: 10px; font-weight: bold; }
+    .title { font-size: 12px; font-weight: bold; text-anchor: middle; }
+    .structure { stroke: #000; stroke-width: 1.6; fill: none; }
+    .node { fill: #000; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Layout Divider -->
+  <line x1="200" y1="10" x2="200" y2="250" stroke="#ccc" stroke-width="0.8" stroke-dasharray="4,4" />
+
+  <!-- ==================== (I) CYCLOHEXANE ==================== -->
+  <text x="100" y="25" class="title">(I) Cyclohexane (C₆H₁₂)</text>
+  
+  <g class="structure" transform="translate(100, 95)">
+    <!-- Hexagon vertices relative to center (0,0): r = 50 -->
+    <!-- Top-Left (-25, -43.3), Top-Right (25, -43.3), Right (50, 0), Bottom-Right (25, 43.3), Bottom-Left (-25, 43.3), Left (-50, 0) -->
+    <polygon points="-25,-43.3 25,-43.3 50,0 25,43.3 -25,43.3 -50,0" />
+    
+    <!-- Hydrogens & Bonds -->
+    <!-- Top-Left -->
+    <line x1="-25" y1="-43.3" x2="-40" y2="-70" />
+    <line x1="-25" y1="-43.3" x2="-5" y2="-70" />
+    <text x="-48" y="-73">H</text><text x="-4" y="-73">H</text>
+
+    <!-- Top-Right -->
+    <line x1="25" y1="-43.3" x2="5" y2="-70" />
+    <line x1="25" y1="-43.3" x2="40" y2="-70" />
+    <text x="2" y="-73">H</text><text x="36" y="-73">H</text>
+
+    <!-- Right -->
+    <line x1="50" y1="0" x2="80" y2="-15" />
+    <line x1="50" y1="0" x2="80" y2="15" />
+    <text x="83" y="-12">H</text><text x="83" y="18">H</text>
+
+    <!-- Bottom-Right -->
+    <line x1="25" y1="43.3" x2="5" y2="70" />
+    <line x1="25" y1="43.3" x2="40" y2="70" />
+    <text x="2" y="79">H</text><text x="36" y="79">H</text>
+
+    <!-- Bottom-Left -->
+    <line x1="-25" y1="43.3" x2="-40" y2="70" />
+    <line x1="-25" y1="43.3" x2="-5" y2="70" />
+    <text x="-48" y="79">H</text><text x="-4" y="79">H</text>
+
+    <!-- Left -->
+    <line x1="-50" y1="0" x2="-80" y2="-15" />
+    <line x1="-50" y1="0" x2="-80" y2="15" />
+    <text x="-92" y="-12">H</text><text x="-92" y="18">H</text>
+  </g>
+  
+  <text x="100" y="175" text-anchor="middle" class="label">Saturated (All single bonds)</text>
+
+
+  <!-- ==================== (II) BENZENE ==================== -->
+  <text x="300" y="25" class="title">(II) Benzene (C₆H₆)</text>
+
+  <g class="structure" transform="translate(300, 95)">
+    <!-- Outer Hexagon -->
+    <polygon points="-25,-43.3 25,-43.3 50,0 25,43.3 -25,43.3 -50,0" />
+    
+    <!-- Inner Ring (Alternate / Delocalized representation) -->
+    <polygon points="-15,-26 15,-26 30,0 15,26 -15,26 -30,0" stroke-dasharray="3,3" />
+
+    <!-- Hydrogens & Bonds -->
+    <!-- Top-Left -->
+    <line x1="-25" y1="-43.3" x2="-45" y2="-75" />
+    <text x="-49" y="-78">H</text>
+
+    <!-- Top-Right -->
+    <line x1="25" y1="-43.3" x2="45" y2="-75" />
+    <text x="41" y="-78">H</text>
+
+    <!-- Right -->
+    <line x1="50" y1="0" x2="85" y2="0" />
+    <text x="88" y="4">H</text>
+
+    <!-- Bottom-Right -->
+    <line x1="25" y1="43.3" x2="45" y2="75" />
+    <text x="41" y="85">H</text>
+
+    <!-- Bottom-Left -->
+    <line x1="-25" y1="43.3" x2="-45" y2="75" />
+    <text x="-49" y="85">H</text>
+
+    <!-- Left -->
+    <line x1="-50" y1="0" x2="-85" y2="0" />
+    <text x="-96" y="4">H</text>
+  </g>
+
+  <text x="300" y="175" text-anchor="middle" class="label" fill="#c00">Unsaturated (Alternate double bonds)</text>
+
+  <!-- Footer note connecting to question context -->
+  <rect x="40" y="205" width="320" height="35" rx="4" fill="#f9f9f9" stroke="#ccc" />
+  <text x="200" y="222" text-anchor="middle" class="label">Conclusion: Benzene is Unsaturated</text>
+  <text x="200" y="235" text-anchor="middle" font-size="9.5" fill="#444">(due to the presence of alternate double bonds)</text>
+
+</svg>

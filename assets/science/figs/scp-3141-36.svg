@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-style: italic; }
+  </style>
+
+  <!-- Water droplet (circular outline) -->
+  <circle cx="200" cy="130" r="70" fill="none" stroke="#000" stroke-width="1.6"/>
+
+  <!-- Sun rays entering from the left -->
+  <!-- Upper ray (Red) entering -->
+  <line x1="80" y1="90" x2="148" y2="76" stroke="#000" stroke-width="1.6"/>
+  <!-- Lower ray (Violet) entering -->
+  <line x1="80" y1="170" x2="135" y2="153" stroke="#000" stroke-width="1.6"/>
+
+  <!-- Internal reflection paths -->
+  <!-- Red path inside: from 148,76 to 240,165 -->
+  <line x1="148" y1="76" x2="240" y2="165" stroke="#000" stroke-width="1.6"/>
+  <!-- Violet path inside: from 135,153 to 220,80 -->
+  <line x1="135" y1="153" x2="220" y2="80" stroke="#000" stroke-width="1.6"/>
+
+  <!-- Rays emerging out (dispersed) -->
+  <!-- Violet ray exiting downwards to the left -->
+  <line x1="220" y1="80" x2="130" y2="25" stroke="#000" stroke-width="1.6"/>
+  <!-- Red ray exiting downwards to the left -->
+  <line x1="240" y1="165" x2="140" y2="220" stroke="#000" stroke-width="1.6"/>
+
+  <!-- Arrowheads for sunlight -->
+  <polygon points="110,83 118,87 112,91" fill="#000"/>
+  <polygon points="105,163 113,167 107,171" fill="#000"/>
+
+  <!-- Arrowheads for emerging rays -->
+  <polygon points="175,52 170,44 167,53" fill="#000"/>
+  <polygon points="190,193 186,201 195,198" fill="#000"/>
+
+  <!-- Labels -->
+  <text x="50" y="85">Sunlight</text>
+  <text x="50" y="180">Sunlight</text>
+  
+  <text x="235" y="45" class="label">Violet</text>
+  <text x="235" y="225" class="label">Red</text>
+
+  <text x="210" y="134" class="label">Water droplet</text>
+</svg>

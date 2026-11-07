@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    line, polyline, path { stroke: #000000; stroke-width: 1.6; fill: none; }
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: #000000; }
+    .normal { stroke-dasharray: 5,5; }
+    .ray { marker-end: url(#arrow); }
+  </style>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#000000" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Mirror (Horizontal surface) -->
+  <line x1="50" y1="200" x2="350" y2="200" />
+  <!-- Hatching for mirror -->
+  <line x1="80" y1="200" x2="65" y2="215" />
+  <line x1="120" y1="200" x2="105" y2="215" />
+  <line x1="160" y1="200" x2="145" y2="215" />
+  <line x1="200" y1="200" x2="185" y2="215" />
+  <line x1="240" y1="200" x2="225" y2="215" />
+  <line x1="280" y1="200" x2="265" y2="215" />
+  <line x1="320" y1="200" x2="305" y2="215" />
+
+  <!-- Normal (Perpendicular line) -->
+  <line class="normal" x1="200" y1="50" x2="200" y2="200" />
+  <text x="208" y="70">N</text>
+
+  <!-- Incident Ray -->
+  <!-- Angle of 40 degrees with the mirror means angle with normal is 50 degrees, let's draw standard clear rays -->
+  <line class="ray" x1="100" y1="90" x2="200" y2="200" />
+  <text x="135" y="130">A</text>
+
+  <!-- Reflected Ray -->
+  <line class="ray" x1="200" y1="200" x2="300" y2="90" />
+  <text x="260" y="130">B</text>
+
+  <!-- Point of incidence -->
+  <text x="205" y="215">O</text>
+
+  <!-- Angle arcs & labels -->
+  <!-- Incident angle (i) between normal and incident ray -->
+  <path d="M 180 160 A 30 30 0 0 1 200 170" />
+  <text x="175" y="155">i</text>
+
+  <!-- Reflection angle (r) between normal and reflected ray -->
+  <path d="M 200 170 A 30 30 0 0 1 220 160" />
+  <text x="215" y="155">r</text>
+
+  <!-- Angle with surface indicator (just to match typical CBSE diagrams where 30 or 40 might be given, let's keep standard i and r) -->
+</svg>

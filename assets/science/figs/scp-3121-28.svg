@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      fill: #000;
+    }
+    .label-title {
+      font-weight: bold;
+      font-size: 12px;
+      text-anchor: middle;
+    }
+    .line {
+      stroke: #000;
+      stroke-width: 1.6;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .dashed {
+      stroke-dasharray: 4,4;
+    }
+    .liquid {
+      fill: #e6f2ff;
+    }
+    .electrode {
+      fill: #444;
+      stroke: #000;
+      stroke-width: 1.6;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Title -->
+  <text x="200" y="22" class="label-title">Chlor-alkali Process (Electrolysis of Brine)</text>
+
+  <!-- Electrolytic Cell Container (U-shape/Beaker) -->
+  <path d="M 130,70 L 130,190 Q 130,210 150,210 L 210,210 Q 230,210 230,190 L 230,70" class="line" />
+  
+  <!-- Brine Solution Level -->
+  <path d="M 131,100 L 229,100" class="line liquid" />
+  <rect x="131" y="100" width="98" height="109" class="liquid" />
+
+  <!-- Inverted Test Tube Left (Anode - Gas X) -->
+  <path d="M 140,40 L 140,120 Q 140,125 145,125 L 175,125 Q 180,125 180,120 L 180,40 Z" class="line" />
+  <!-- Gas X bubble space -->
+  <path d="M 141,45 L 179,45 L 179,124 L 141,124 Z" fill="#fff" />
+
+  <!-- Inverted Test Tube Right (Cathode - Gas Y) -->
+  <path d="M 180,40 L 180,120 Q 180,125 185,125 L 215,125 Q 220,125 220,120 L 220,40 Z" class="line" />
+  <!-- Gas Y bubble space -->
+  <path d="M 181,60 L 219,60 L 219,124 L 181,124 Z" fill="#fff" />
+
+  <!-- Electrodes (Carbon/Platinum strips inside tubes) -->
+  <rect x="157" y="110" width="6" height="50" class="electrode" />
+  <rect x="197" y="110" width="6" height="50" class="electrode" />
+
+  <!-- Wires/Power Supply connection -->
+  <path d="M 160,110 L 160,85 L 185,85 L 200,85 L 200,110" class="line" />
+  <circle cx="180" cy="85" r="8" fill="#fff" class="line" />
+  <text x="177" y="89">DC</text>
+
+  <!-- Labels for Gases and Products -->
+  <!-- Gas X (Anode) -->
+  <line x1="160" y1="45" x2="90" y2="45" class="line" />
+  <text x="50" y="48">Gas 'X' (Cl₂)</text>
+  <text x="45" y="62" fill="#555" font-size="9px">(Disinfects water)</text>
+
+  <!-- Gas Y (Cathode) -->
+  <line x1="200" y1="60" x2="280" y2="60" class="line" />
+  <text x="290" y="63">Gas 'Y' (H₂)</text>
+  <text x="290" y="77" fill="#555" font-size="9px">(Burns with pop)</text>
+
+  <!-- Solution Z -->
+  <line x1="230" y1="160" x2="290" y2="160" class="line" />
+  <text x="295" y="163">Substance 'Z'</text>
+  <text x="295" y="177" fill="#555" font-size="9px">(NaOH solution)</text>
+
+  <!-- Brine Input -->
+  <line x1="130" y1="110" x2="60" y2="110" class="line" />
+  <text x="15" y="113">Brine Solution</text>
+  <text x="15" y="127" fill="#555" font-size="9px">(NaCl + H₂O)</text>
+
+  <!-- Base annotations / reactions summary -->
+  <text x="200" y="240" class="label-title" font-weight="normal" font-size="10px">
+    2NaCl (aq) + 2H₂O (l) → 2NaOH (aq) + Cl₂ (g) + H₂ (g)
+  </text>
+</svg>

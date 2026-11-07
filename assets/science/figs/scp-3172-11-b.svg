@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- Styles for textbook illustration: thin black lines, white background, no gradients -->
+  <style>
+    line, path, ellipse, circle {
+      fill: none;
+      stroke: #000000;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .stipple {
+      fill: #000000;
+      stroke: none;
+    }
+    text {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+      fill: #000000;
+    }
+    .label-line {
+      stroke: #000000;
+      stroke-width: 1;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" stroke="none"/>
+
+  <!-- ================= FLOWER STRUCTURE ================= -->
+
+  <!-- Receptacle and Pedicel (Stem base) -->
+  <path d="M 180,210 Q 180,235 185,255" />
+  <path d="M 220,210 Q 220,235 215,255" />
+  <path d="M 185,210 Q 200,205 215,210" />
+
+  <!-- Sepals -->
+  <!-- Left Sepal -->
+  <path d="M 180,210 Q 130,215 110,190 Q 140,200 175,205" />
+  <!-- Right Sepal -->
+  <path d="M 220,210 Q 270,215 290,190 Q 260,200 225,205" />
+
+  <!-- Petals (Corolla) -->
+  <!-- Left Petal -->
+  <path d="M 185,200 Q 110,180 80,110 Q 70,70 100,50 Q 130,60 175,130" />
+  <!-- Right Petal -->
+  <path d="M 215,200 Q 290,180 320,110 Q 330,70 300,50 Q 270,60 225,130" />
+  <!-- Back/Inner Petal hint -->
+  <path d="M 190,120 Q 200,70 200,50 Q 200,70 210,120" />
+
+  <!-- Male Reproductive Organs (Stamens: Filament + Anther) -->
+  <!-- Left Stamen -->
+  <path d="M 170,160 Q 150,110 140,95" />
+  <ellipse cx="138" cy="90" rx="5" ry="3" transform="rotate(-30 138 90)" />
+  <ellipse cx="142" cy="93" rx="5" ry="3" transform="rotate(-30 142 93)" />
+
+  <!-- Right Stamen -->
+  <path d="M 230,160 Q 250,110 260,95" />
+  <ellipse cx="262" cy="90" rx="5" ry="3" transform="rotate(30 262 90)" />
+  <ellipse cx="258" cy="93" rx="5" ry="3" transform="rotate(30 258 93)" />
+
+  <!-- Female Reproductive Organ (Pistil / Carpel: Stigma, Style, Ovary) -->
+  <!-- Ovary walls (Longitudinal section) -->
+  <path d="M 185,160 C 175,180 175,200 200,205 C 225,200 225,180 215,160" />
+  <!-- Style -->
+  <path d="M 197,160 L 197,95" />
+  <path d="M 203,160 L 203,95" />
+  <!-- Stigma (Lobed top) -->
+  <path d="M 190,95 C 190,85 200,85 200,95 C 200,85 210,85 210,95 C 215,92 220,95 215,100 C 205,102 195,102 185,100 C 180,95 185,92 190,95 Z" />
+
+  <!-- Ovary interior: Ovules -->
+  <circle cx="192" cy="185" r="5" />
+  <circle cx="208" cy="185" r="5" />
+  <circle cx="192" cy="170" r="4" />
+  <circle cx="208" cy="170" r="4" />
+  <!-- Placenta attachment lines -->
+  <line x1="200" y1="165" x2="200" y2="200" />
+
+  <!-- ================= LABELS & LEADER LINES ================= -->
+
+  <!-- Stigma Label -->
+  <text x="35" y="65">Stigma</text>
+  <line class="label-line" x1="75" y1="62" x2="192" y2="90" />
+
+  <!-- Petal Label -->
+  <text x="35" y="115">Petal</text>
+  <line class="label-line" x1="70" y1="112" x2="105" y2="105" />
+
+  <!-- Ovary Label -->
+  <text x="35" y="185">Ovary</text>
+  <line class="label-line" x1="75" y1="182" x2="178" y2="182" />
+
+  <!-- Sepal Label -->
+  <text x="35" y="225">Sepal</text>
+  <line class="label-line" x1="75" y1="222" x2="100" y2="200" />
+
+</svg>

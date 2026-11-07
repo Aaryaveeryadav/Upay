@@ -1,0 +1,37 @@
+{
+ "rows": 34,
+ "bybook": {
+  "eco": 9,
+  "civ": 25
+ },
+ "files": [
+  {
+   "file": "jess201.pdf",
+   "book": "eco",
+   "ch": 1,
+   "rows": 9,
+   "lang": "en"
+  },
+  {
+   "file": "jess402.pdf",
+   "book": "civ",
+   "ch": 2,
+   "rows": 9,
+   "lang": "en"
+  },
+  {
+   "file": "jess404.pdf",
+   "book": "civ",
+   "ch": 4,
+   "rows": 9,
+   "lang": "en"
+  },
+  {
+   "file": "jess405.pdf",
+   "book": "civ",
+   "ch": 5,
+   "rows": 7,
+   "lang": "en"
+  }
+ ]
+}

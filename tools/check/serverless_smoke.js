@@ -1,0 +1,123 @@
+'use strict';
+// Mocked serverless contract/auth test. No real users, network, or API keys.
+const assert = require('assert');
+const { Readable } = require('stream');
+process.env.UPAY_AI_ALLOWED_USERS = 'allowed-test-user,allowed-test-user-2';
+// Prefer the new public key over a stale legacy env override; both are fixtures.
+process.env.SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_test_fixture';
+process.env.SUPABASE_ANON_KEY = 'legacy_test_fixture';
+const lib = require('../../lib/gemini.js');
+let providerCalls = 0, lastPrompt = '', replyText = '';
+lib.callGeminiResilient = async function (prompt, keys, model, image) {
+  providerCalls++;
+  lastPrompt = prompt;
+  if (image) return { text: 'Read a question from the photo', model: 'mock-model' };
+  return { text: replyText, model: 'mock-model' };
+};
+const authMe = require('../../api/auth/me.js');
+const localLogin = require('../../api/auth/login.js');
+const telemetry = require('../../api/tel.js');
+const solve = require('../../api/ai/solve.js');
+const readImage = require('../../api/ai/read-image.js');
+global.fetch = async function (_url, options) {
+  assert.equal(options.headers.apikey, 'sb_publishable_test_fixture', 'use the publishable override for provider token verification');
+  const token = String(options.headers.authorization || '').replace(/^Bearer /, '');
+  if (token === 'unavailable') throw new Error('mock offline');
+  if (token === 'invalid') return { ok: false, status: 401 };
+  if (token === 'other') return { ok: true, status: 200, json: async () => ({ id: 'other-user', email:'other@example.test' }) };
+  if (token === 'valid') return { ok: true, status: 200, json: async () => ({ id:'allowed-test-user', email:'student@example.test', user_metadata:{role:'admin'} }) };
+  if (token === 'valid-two') return { ok: true, status: 200, json: async () => ({ id:'allowed-test-user-2', email:'second@example.test' }) };
+  return { ok: false, status: 401 };
+};
+function res() {
+  return {
+    headers:{}, code:0, body:null,
+    setHeader(k,v){ this.headers[k.toLowerCase()] = v; return this; },
+    status(n){ this.code=n; return this; },
+    send(value){ try { this.body = JSON.parse(value); } catch (_) { this.body=value; } return this; },
+    json(value){ this.body=value; return this; }
+  };
+}
+async function invoke(handler, { method='GET', token='', body }={}) {
+  const req = { method, headers: token ? { authorization: 'Bearer ' + token } : {}, body };
+  const r = res(); await handler(req,r); return r;
+}
+async function main() {
+  for (const method of ['POST','OPTIONS']) {
+    const tel = await invoke(telemetry,{method,body:{e:'route'}});
+    assert.equal(tel.code,204); assert.equal(tel.headers['cache-control'],'no-store');
+  }
+  const telGet = await invoke(telemetry); assert.equal(telGet.code,405);
+  const unavailableLogin = await invoke(localLogin,{method:'POST',body:{user:'test',pass:'test'}});
+  assert.equal(unavailableLogin.code,401); assert.ok(unavailableLogin.body.error); assert.ok(!unavailableLogin.body.user);
+  assert.equal((await invoke(localLogin)).code,405);
+  let r = await invoke(authMe);
+  assert.equal(r.code,200); assert.equal(r.body.user.role,'student'); assert.equal(r.body.user.user,'guest');
+  r = await invoke(authMe,{token:'invalid'}); assert.equal(r.code,401);
+  r = await invoke(authMe,{token:'unavailable'}); assert.equal(r.code,503);
+  r = await invoke(authMe,{token:'valid'}); assert.equal(r.code,200); assert.equal(r.body.user.role,'student');
+  for (const [token, status] of [['',401],['invalid',401],['other',403],['unavailable',503]]) {
+    r = await invoke(solve,{method:'POST', token, body:{question:'test question'}});
+    assert.equal(r.code,status); assert.equal(providerCalls,0);
+    r = await invoke(readImage,{method:'POST', token, body:{data:'abc',mime:'image/png'}});
+    assert.equal(r.code,status); assert.equal(providerCalls,0);
+  }
+  replyText = JSON.stringify({ question_understood:'Capital accounts', answer:'Debit X', summary:'An accounting entry',
+    approaches:[{name:'Journal', tag:'Entry', steps:[{t:'Record entry',m:'Debit X'}]}], check:'Review the entry',
+    diagram:{type:'solid'} });
+  r = await invoke(solve,{method:'POST', token:'valid', body:{question:'Record a partnership entry', subject:'accountancy', cls:12}});
+  assert.equal(r.code,200); assert.equal(r.body.result,'Debit X'); assert.equal(r.body.questionUnderstood,'Capital accounts');
+  assert.equal(r.body.check.state,'unchecked'); assert.equal(r.body.diagram,null);
+  assert.match(lastPrompt,/Class 12 Accountancy/); assert.doesNotMatch(lastPrompt,/Class 10 Mathematics/);
+  r = await invoke(solve,{method:'POST', token:'valid', body:{question:'Which spreadsheet formula applies?', subject:'computerized-accounting', cls:12}});
+  assert.equal(r.code,200); assert.match(lastPrompt,/Computerised Accounting/);
+  const beforeEconomics = providerCalls;
+  const economicsQuestion = {question:'Explain the difference between GDP and NDP', subject:'economics', cls:12, lang:'en'};
+  r = await invoke(solve,{method:'POST', token:'valid', body:economicsQuestion});
+  assert.equal(r.code,200); assert.match(lastPrompt,/Economics teacher answering a Class 12/);
+  assert.match(lastPrompt,/Do not claim to have read or quoted a textbook/);
+  assert.equal(r.body.check.state,'unchecked'); assert.equal(r.body.diagram,null);
+  r = await invoke(solve,{method:'POST', token:'valid', body:economicsQuestion});
+  assert.equal(r.code,200); assert.notEqual(r.body.cached,true); assert.equal(providerCalls,beforeEconomics+2);
+  const beforeEnglish12 = providerCalls;
+  replyText = JSON.stringify({ question_understood:'An English question', answer:'A sample literary explanation.', summary:'A mock response.',
+    approaches:[{name:'Interpretation', steps:[{t:'Consider the evidence in the passage.'}]}], check:'Check the book', diagram:{type:'solid'} });
+  const english12Question = {question:'How does Franz view his last lesson?', subject:'english', cls:12, lang:'en'};
+  for (let i=0; i<2; i++) {
+    r = await invoke(solve,{method:'POST', token:'valid', body:english12Question});
+    assert.equal(r.code,200); assert.equal(r.body.result,'A sample literary explanation.');
+    assert.match(lastPrompt,/English literature and language teacher answering a Class 12/);
+    assert.match(lastPrompt,/PDFs are not automatically supplied/);
+    assert.match(lastPrompt,/Do not invent quotations/);
+    assert.equal(r.body.check.state,'unchecked'); assert.equal(r.body.diagram,null); assert.notEqual(r.body.cached,true);
+  }
+  assert.equal(providerCalls,beforeEnglish12+2);
+  r = await invoke(solve,{method:'POST', token:'valid', body:{question:'Describe electromagnetic induction', subject:'physics', cls:12}});
+  assert.equal(r.code,200); assert.match(lastPrompt,/Science teacher/);
+  const beforeCache = providerCalls;
+  const privateQuestion = {question:'Owner-isolation fixture question', subject:'physics', cls:12, lang:'en'};
+  r = await invoke(solve,{method:'POST', token:'valid', body:privateQuestion});
+  assert.equal(r.code,200); assert.equal(providerCalls,beforeCache+1); assert.notEqual(r.body.cached,true);
+  r = await invoke(solve,{method:'POST', token:'valid', body:privateQuestion});
+  assert.equal(r.code,200); assert.equal(r.body.cached,true); assert.equal(providerCalls,beforeCache+1);
+  r = await invoke(solve,{method:'POST', token:'valid-two', body:privateQuestion});
+  assert.equal(r.code,200); assert.notEqual(r.body.cached,true); assert.equal(providerCalls,beforeCache+2);
+  r = await invoke(solve,{method:'POST', token:'valid-two', body:{...privateQuestion,lang:'hi'}});
+  assert.equal(r.code,200); assert.notEqual(r.body.cached,true); assert.equal(providerCalls,beforeCache+3);
+  r = await invoke(readImage,{method:'POST',token:'valid',body:{}}); assert.equal(r.code,400);
+  r = await invoke(readImage,{method:'POST',token:'valid',body:{data:'a'.repeat(240),mime:'image/png'}});
+  assert.equal(r.code,200); assert.equal(r.body.question,'Read a question from the photo');
+  r = await invoke(readImage,{method:'POST',token:'valid',body:{data:'a'.repeat(240),mime:'text/html'}});
+  assert.equal(r.code,400);
+  r = await invoke(readImage,{method:'POST',token:'valid',body:{data:'X'.repeat(4*1024*1024),mime:'image/png'}});
+  assert.equal(r.code,400);
+  replyText = 'not JSON';
+  r = await invoke(solve,{method:'POST',token:'valid',body:JSON.stringify({question:'different test input',subject:'accountancy',cls:12})});
+  assert.equal(r.code,502);
+  const stream = Readable.from([Buffer.from('{"one":1}')]);
+  assert.deepEqual(await lib.readBody(stream), {one:1});
+  assert.deepEqual(await lib.readBody({body:Buffer.from('{"two":2}')}), {two:2});
+  await assert.rejects(lib.readBody({body:'{bad json'}));
+  console.log('Mocked serverless auth, paid-AI allowlist, owner-scoped cache, response shape, image reading and body parsing: PASS');
+}
+main().catch(err => { console.error(err); process.exitCode=1; });

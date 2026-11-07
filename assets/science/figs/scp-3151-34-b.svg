@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- White background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Principal Axis -->
+  <line x1="20" y1="140" x2="380" y2="140" stroke="#000000" stroke-width="1.2" stroke-dasharray="6,4" />
+
+  <!-- Eyeball Outline -->
+  <path d="M 280,90 C 330,90 350,115 350,140 C 350,165 330,190 280,190" fill="none" stroke="#000000" stroke-width="1.6" />
+  <!-- Cornea bulge -->
+  <path d="M 280,90 C 270,115 270,165 280,190" fill="none" stroke="#000000" stroke-width="1.6" />
+
+  <!-- Eye Lens -->
+  <path d="M 295,115 C 305,140 305,140 295,165 C 305,140 305,140 295,115 Z" fill="none" stroke="#000000" stroke-width="1.6" />
+
+  <!-- Retina -->
+  <path d="M 335,108 C 345,125 345,155 335,172" fill="none" stroke="#000000" stroke-width="2.5" />
+
+  <!-- Corrective Lens (Convex) in front of the eye -->
+  <path d="M 230,110 C 238,140 238,140 230,170 C 222,140 222,140 230,110 Z" fill="none" stroke="#000000" stroke-width="1.6" />
+  <!-- Lens holder line -->
+  <line x1="230" y1="95" x2="230" y2="185" stroke="#000000" stroke-width="1" />
+
+  <!-- Object (Arrow at near point N, 1m represented schematically) -->
+  <line x1="80" y1="140" x2="80" y2="105" stroke="#000000" stroke-width="1.6" />
+  <polygon points="80,100 76,110 84,110" fill="#000000" />
+  <text x="80" y="156" font-family="sans-serif" font-size="12" text-anchor="middle">N</text>
+
+  <!-- Virtual Image position (I) -->
+  <line x1="140" y1="140" x2="140" y2="90" stroke="#000000" stroke-width="1" stroke-dasharray="3,3" />
+  <polygon points="140,84 136,94 144,94" fill="#000000" />
+  <text x="140" y="156" font-family="sans-serif" font-size="12" text-anchor="middle">I</text>
+
+  <!-- Ray 1: From Object to Corrective Lens, then refracted towards eye lens, then to retina -->
+  <!-- Incident ray (diverging from object to lens) -->
+  <line x1="80" y1="105" x2="230" y2="118" stroke="#000000" stroke-width="1.6" />
+  <!-- Refracted ray through corrective lens (bending less, aiming as if from virtual image I) -->
+  <line x1="230" y1="118" x2="300" y2="132" stroke="#000000" stroke-width="1.6" />
+  <!-- Refracted through eye lens to retina -->
+  <line x1="300" y1="132" x2="338" y2="147" stroke="#000000" stroke-width="1.6" />
+
+  <!-- Ray 2: Lower ray -->
+  <!-- Incident ray -->
+  <line x1="80" y1="105" x2="230" y2="162" stroke="#000000" stroke-width="1.6" />
+  <!-- Refracted through corrective lens -->
+  <line x1="230" y1="162" x2="300" y2="148" stroke="#000000" stroke-width="1.6" />
+  <!-- Refracted through eye lens to retina -->
+  <line x1="300" y1="148" x2="338" y2="133" stroke="#000000" stroke-width="1.6" />
+
+  <!-- Virtual extensions for ray paths behind corrective lens -->
+  <line x1="140" y1="90" x2="230" y2="118" stroke="#000000" stroke-width="1" stroke-dasharray="4,4" />
+  <line x1="140" y1="90" x2="230" y2="162" stroke="#000000" stroke-width="1" stroke-dasharray="4,4" />
+
+  <!-- Arrowheads for rays -->
+  <polygon points="170,111 163,107 165,115" fill="#000000" />
+  <polygon points="170,138 165,145 173,144" fill="#000000" />
+  <polygon points="265,124 258,122 262,129" fill="#000000" />
+  <polygon points="265,155 262,148 258,155" fill="#000000" />
+
+  <!-- Labels -->
+  <text x="230" y="205" font-family="sans-serif" font-size="11" text-anchor="middle">Convex lens</text>
+  <text x="340" y="80" font-family="sans-serif" font-size="11" text-anchor="middle">Retina</text>
+</svg>

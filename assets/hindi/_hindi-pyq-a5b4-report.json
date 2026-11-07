@@ -1,0 +1,113 @@
+{
+ "rows": 652,
+ "mcq": 139,
+ "bymarks": {
+  "1": 323,
+  "2": 186,
+  "3": 57,
+  "5": 86
+ },
+ "bycourse": {
+  "B-26-V2": 97,
+  "B-26-U": 141,
+  "B-supp2": 26,
+  "B-lit": 184,
+  "B-comp": 24,
+  "A-supp2": 31,
+  "B-26-R": 65,
+  "B-26-P": 31,
+  "B-26-Q": 53
+ },
+ "files": [
+  {
+   "file": "4_1_1 Hindi B.pdf",
+   "code": "4b26v2/1/1",
+   "rows": 24,
+   "mcq": 3
+  },
+  {
+   "file": "4_1_2 Hindi B.pdf",
+   "code": "4b26v2/1/2",
+   "rows": 24,
+   "mcq": 1
+  },
+  {
+   "file": "4_1_3 Hindi B.pdf",
+   "code": "4b26v2/1/3",
+   "rows": 26,
+   "mcq": 3
+  },
+  {
+   "file": "4_2_1 Hindi B.pdf",
+   "code": "4b26v2/2/1",
+   "rows": 11,
+   "mcq": 4
+  },
+  {
+   "file": "4_2_2 Hindi B.pdf",
+   "code": "4b26v2/2/2",
+   "rows": 9,
+   "mcq": 3
+  },
+  {
+   "file": "4_2_3 Hindi B.pdf",
+   "code": "4b26v2/2/3",
+   "rows": 7,
+   "mcq": 3
+  },
+  {
+   "file": "4_3_1 Hindi B.pdf",
+   "code": "4b26/3/1",
+   "rows": 26,
+   "mcq": 2
+  },
+  {
+   "file": "4_3_2 Hindi B.pdf",
+   "code": "4b26/3/2",
+   "rows": 30,
+   "mcq": 2
+  },
+  {
+   "file": "4_3_3 Hindi B.pdf",
+   "code": "4b26/3/3",
+   "rows": 34,
+   "mcq": 3
+  },
+  {
+   "file": "4_4_1 Hindi B.pdf",
+   "code": "4b26v2/4/1",
+   "rows": 18,
+   "mcq": 5
+  },
+  {
+   "file": "4_4_2 Hindi B.pdf",
+   "code": "4b26v2/4/2",
+   "rows": 16,
+   "mcq": 3
+  },
+  {
+   "file": "4_4_3 Hindi B.pdf",
+   "code": "4b26v2/4/3",
+   "rows": 22,
+   "mcq": 2
+  },
+  {
+   "file": "4_5_1 Hindi B.pdf",
+   "code": "4b26v2/5/1",
+   "rows": 15,
+   "mcq": 3
+  },
+  {
+   "file": "4_5_2 Hindi B.pdf",
+   "code": "4b26v2/5/2",
+   "rows": 9,
+   "mcq": 1
+  },
+  {
+   "file": "4_5_3 Hindi B.pdf",
+   "code": "4b26v2/5/3",
+   "rows": 10,
+   "mcq": 1
+  }
+ ]
+}

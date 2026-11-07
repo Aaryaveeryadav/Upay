@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-size: 10px; font-style: italic; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff"/>
+
+  <!-- TITLE / CONTEXT -->
+  <text x="200" y="20" text-anchor="middle" font-weight="bold">Magnetic Field Lines of a Straight Current-Carrying Conductor</text>
+
+  <!-- STRAIGHT CONDUCTOR (Vertical wire passing through plane) -->
+  <!-- We will show a 3D-ish perspective or top-down cross section combined with 3D wire.
+       Standard textbook diagram: Vertical wire passing through a horizontal card. -->
+  
+  <!-- Horizontal Card (Perspective projection) -->
+  <polygon points="60,160 170,120 340,160 230,200" fill="#fcfcfc" stroke="#000000" stroke-width="1.2"/>
+
+  <!-- Vertical Wire -->
+  <line x1="200" y1="40" x2="200" y2="220" stroke="#000000" stroke-width="2.2"/>
+
+  <!-- Current Direction Arrows on Wire -->
+  <polygon points="200,70 196,80 204,80" fill="#000"/>
+  <polygon points="200,180 196,190 204,190" fill="#000"/>
+
+  <!-- Concentric Circles representing Magnetic Field Lines on the card / around wire -->
+  <!-- Ellipses for 3D perspective -->
+  <ellipse cx="200" cy="160" rx="20" ry="8" fill="none" stroke="#000000" stroke-width="1.4"/>
+  <ellipse cx="200" cy="160" rx="45" ry="18" fill="none" stroke="#000000" stroke-width="1.4"/>
+  <ellipse cx="200" cy="160" rx="75" ry="30" fill="none" stroke="#000000" stroke-width="1.4"/>
+  <ellipse cx="200" cy="160" rx="105" ry="42" fill="none" stroke="#000000" stroke-width="1.4"/>
+
+  <!-- Direction Arrows on Field Lines (Right-hand thumb rule: counter-clockwise when viewed from top) -->
+  <!-- Arrow on innermost ellipse (top/front) -->
+  <polygon points="190,153 184,158 193,161" fill="#000"/>
+  <!-- Arrow on 2nd ellipse -->
+  <polygon points="170,147 162,151 172,155" fill="#000"/>
+  <!-- Arrow on 3rd ellipse -->
+  <polygon points="140,140 132,143 143,148" fill="#000"/>
+  <!-- Arrow on 4th ellipse -->
+  <polygon points="110,132 102,135 113,140" fill="#000"/>
+
+  <!-- Compass showing direction (optional, but standard) -->
+  <circle cx="280" cy="138" rx="0" ry="0"/> <!-- anchor -->
+  <path d="M 275,135 L 290,130 L 285,142 Z" fill="none" stroke="#000" stroke-width="1"/>
+  <text x="275" y="125" class="label">Compass</text>
+
+  <!-- LABELS -->
+  <text x="208" y="55" font-weight="bold">I</text>
+  <text x="208" y="55" class="label"> (Current)</text>
+  
+  <text x="250" y="215" class="label">Cardboard</text>
+  <text x="310" y="115">Magnetic field</text>
+  <text x="310" y="128">lines (Concentric</text>
+  <text x="310" y="141">circles)</text>
+
+  <!-- Pointer line for magnetic field line -->
+  <line x1="305" y1="125" x2="270" y2="130" stroke="#000" stroke-width="0.8" stroke-dasharray="2,2"/>
+
+  <!-- Pointer line for wire -->
+  <line x1="160" y1="70" x2="195" y2="70" stroke="#000" stroke-width="0.8"/>
+  <text x="110" y="73" class="label">Straight wire</text>
+
+</svg>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- White Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Glass Prism (Equilateral Triangle) -->
+  <!-- Vertices: A(200, 50), B(120, 190), C(280, 190) -->
+  <polygon points="200,50 120,190 280,190" fill="none" stroke="#000000" stroke-width="1.6" stroke-linejoin="round" />
+
+  <!-- Light Ray Components -->
+  <!-- Incident Ray (P to Q) -->
+  <line x1="70" y1="130" x2="151.4" y2="130" stroke="#000000" stroke-width="1.6" />
+  <polygon points="120,126 130,130 120,134" fill="#000000" /> <!-- Arrow on incident ray -->
+
+  <!-- Refracted Ray inside prism (Q to R) -->
+  <line x1="151.4" y1="130" x2="225" y2="165" stroke="#000000" stroke-width="1.6" />
+  <polygon points="190,147 197,152 189,155" fill="#000000" /> <!-- Arrow on refracted ray -->
+
+<div>
+  <!-- Emergent Ray (R to S) -->
+  <line x1="225" y1="165" x2="310" y2="115" stroke="#000000" stroke-width="1.6" />
+  <polygon points="275,135 282,139 274,142" fill="#000000" /> <!-- Arrow on emergent ray -->
+</div>
+
+  <!-- Normal 1 at Entry Point Q (151.4, 130) -->
+  <!-- Surface AB goes from (200,50) to (120,190), slope is -1.75. Normal slope is 0.57 -->
+  <line x1="131.4" y1="95" x2="171.4" y2="165" stroke="#000000" stroke-width="1" stroke-dasharray="4,4" />
+
+  <!-- Normal 2 at Exit Point R (225, 165) -->
+  <!-- Surface AC goes from (200,50) to (280,190), slope is 1.75. Normal slope is -0.57 -->
+  <line x1="195" y1="147.5" x2="255" y2="182.5" stroke="#000000" stroke-width="1" stroke-dasharray="4,4" />
+
+  <!-- Labels -->
+  <!-- Prism vertices -->
+  <text x="195" y="42" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">A</text>
+  <text x="105" y="195" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">B</text>
+  <text x="295" y="195" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">C</text>
+
+  <!-- Ray labels -->
+  <text x="60" y="123" font-family="Arial, sans-serif" font-size="12">P</text>
+  <text x="145" y="122" font-family="Arial, sans-serif" font-size="12">Q</text>
+  <text x="230" y="178" font-family="Arial, sans-serif" font-size="12">R</text>
+  <text x="318" y="112" font-family="Arial, sans-serif" font-size="12">S</text>
+</svg>

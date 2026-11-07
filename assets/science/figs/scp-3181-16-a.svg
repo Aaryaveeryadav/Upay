@@ -1,0 +1,84 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    line, path, ellipse, circle {
+      fill: none;
+      stroke: #000;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .solid { fill: #000; }
+    text {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      fill: #000;
+    }
+    .title {
+      font-size: 12px;
+      font-weight: bold;
+      text-anchor: middle;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Title -->
+  <text x="200" y="20" class="title">Germination of Pollen on Stigma</text>
+
+  <!-- Stigma and Style (Pistil) -->
+  <path d="M 160,50 C 160,30 240,30 240,50 C 240,70 210,80 200,120 C 195,140 195,160 195,180" />
+  <path d="M 175,55 C 180,45 220,45 225,55 C 220,65 180,65 175,55" />
+
+  <!-- Ovary Wall -->
+  <path d="M 150,140 C 120,150 120,210 160,230 C 180,240 220,240 240,230 C 280,210 280,150 250,140" />
+
+  <!-- Ovule inside Ovary -->
+  <path d="M 170,210 C 160,180 180,160 200,160 C 220,160 240,180 230,210 C 220,225 180,225 170,210" />
+  <!-- Embryo Sac inside Ovule -->
+  <ellipse cx="200" cy="195" rx="12" ry="20" stroke-dasharray="3,3" />
+
+  <!-- Egg Cell (Female germ cell) -->
+  <circle cx="200" cy="207" r="4" class="solid" />
+
+  <!-- Pollen Grain on Stigma -->
+  <circle cx="185" cy="40" r="10" />
+  <circle cx="185" cy="40" r="2" class="solid" />
+
+  <!-- Pollen Tube growing down through style into ovary and micropyle -->
+  <path d="M 188,48 C 190,70 195,100 197,130 C 198,160 198,175 200,190" />
+  
+  <!-- Male Germ Cells inside Pollen Tube -->
+  <circle cx="196" cy="140" r="2.5" class="solid" />
+  <circle cx="198" cy="155" r="2.5" class="solid" />
+
+  <!-- Labels and Leader Lines -->
+  <!-- Stigma -->
+  <line x1="220" y1="45" x2="270" y2="40" />
+  <text x="275" y="44">Stigma</text>
+
+  <!-- Pollen grain -->
+  <line x1="175" y1="33" x2="110" y2="25" />
+  <text x="50" y="28">Pollen grain</text>
+
+  <!-- Pollen tube -->
+  <line x1="192" y1="100" x2="110" y2="90" />
+  <text x="40" y="94">Pollen tube</text>
+
+  <!-- Style -->
+  <line x1="210" y1="95" x2="270" y2="90" />
+  <text x="275" y="94">Style</text>
+
+  <!-- Ovary -->
+  <path d="M 265,170 L 285,170" />
+  <text x="290" y="174">Ovary</text>
+
+  <!-- Female germ cell (Egg) -->
+  <line x1="204" y1="207" x2="270" y2="220" />
+  <text x="275" y="224">Female germ cell</text>
+
+  <!-- Male germ cell -->
+  <line x1="196" y1="140" x2="110" y2="140" />
+  <text x="20" y="144">Male germ cell</text>
+
+</svg>

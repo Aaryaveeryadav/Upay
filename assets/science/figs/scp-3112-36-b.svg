@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- White background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Ray Diagram for a Convex Mirror forming a virtual, erect, and diminished image -->
+  <!-- Principal Axis -->
+  <line x1="20" y1="130" x2="250" y2="130" stroke="#000000" stroke-width="1.2" />
+
+  <!-- Convex Mirror (Arc facing right) -->
+  <path d="M 170 80 Q 185 130 170 180" fill="none" stroke="#000000" stroke-width="2.2" />
+  <!-- Hatching for back of mirror -->
+  <line x1="174" y1="87" x2="167" y2="92" stroke="#000000" stroke-width="1" />
+  <line x1="177" y1="102" x2="170" y2="107" stroke="#000000" stroke-width="1" />
+  <line x1="179" y1="117" x2="172" y2="122" stroke="#000000" stroke-width="1" />
+  <line x1="179" y1="132" x2="172" y2="137" stroke="#000000" stroke-width="1" />
+  <line x1="177" y1="147" x2="170" y2="152" stroke="#000000" stroke-width="1" />
+  <line x1="174" y1="162" x2="167" y2="167" stroke="#000000" stroke-width="1" />
+
+  <!-- Pole (P), Focus (F), Center of Curvature (C) -->
+  <circle cx="178" cy="130" r="2" fill="#000000" />
+  <circle cx="130" cy="130" r="2" fill="#000000" />
+  <circle cx="82" cy="130" r="2" fill="#000000" />
+
+  <!-- Object AB -->
+  <line x1="80" y1="95" x2="80" y2="130" stroke="#000000" stroke-width="2" />
+  <polygon points="80,91 76,98 84,98" fill="#000000" />
+
+  <!-- Image A'B' -->
+  <line x1="145" y1="108" x2="145" y2="130" stroke="#000000" stroke-width="2" stroke-dasharray="3,3" />
+  <polygon points="145,105 142,111 148,111" fill="#000000" />
+
+  <!-- Incident Ray 1 (Parallel to principal axis) -->
+  <line x1="80" y1="95" x2="175" y2="95" stroke="#000000" stroke-width="1.2" />
+  <!-- Reflected Ray 1 (Diverging as if from F) -->
+  <line x1="175" y1="95" x2="220" y2="72" stroke="#000000" stroke-width="1.2" />
+  <!-- Virtual extension of Reflected Ray 1 -->
+  <line x1="175" y1="95" x2="130" y2="130" stroke="#000000" stroke-width="1" stroke-dasharray="3,3" />
+
+  <!-- Incident Ray 2 (Towards Center of Curvature C) -->
+  <line x1="80" y1="95" x2="175" y2="130" stroke="#000000" stroke-width="1.2" />
+  <!-- Reflected Ray 2 (Retraces path back) -->
+  <line x1="175" y1="130" x2="120" y2="130" stroke="#000000" stroke-width="1.2" />
+
+  <!-- Labels -->
+  <text x="75" y="87" font-family="sans-serif" font-size="11">A</text>
+  <text x="75" y="142" font-family="sans-serif" font-size="11">B</text>
+  <text x="141" y="100" font-family="sans-serif" font-size="11">A'</text>
+  <text x="148" y="142" font-family="sans-serif" font-size="11">B'</text>
+  <text x="175" y="145" font-family="sans-serif" font-size="11">P</text>
+  <text x="127" y="145" font-family="sans-serif" font-size="11">F</text>
+  <text x="79" y="145" font-family="sans-serif" font-size="11">C</text>
+
+  <!-- Magnetic Field Right-Hand Rule context / Ampere's Right Hand Thumb Rule (Straight vs Circular) -->
+  <!-- Straight Conductor & Magnetic Field Lines -->
+  <line x1="310" y1="60" x2="310" y2="200" stroke="#000000" stroke-width="2" />
+  <text x="317" y="70" font-family="sans-serif" font-size="11">I</text>
+  <!-- Current arrow -->
+  <polygon points="310,80 306,90 314,90" fill="#000005" />
+
+  <!-- Concentric circles for magnetic field -->
+  <ellipse cx="310" cy="110" rx="20" ry="10" fill="none" stroke="#000000" stroke-width="1.2" />
+  <polygon points="291,113 296,107 296,115" fill="#000000" />
+
+  <ellipse cx="310" cy="150" rx="35" ry="16" fill="none" stroke="#000000" stroke-width="1.2" />
+  <polygon points="277,155 284,150 282,158" fill="#000000" />
+
+  <ellipse cx="310" cy="190" rx="50" ry="22" fill="none" stroke="#000000" stroke-width="1.2" />
+  <polygon points="262,197 270,192 268,200" fill="#000000" />
+
+  <!-- Labels for Magnetic Field -->
+  <text x="330" y="195" font-family="sans-serif" font-size="10">Magnetic</text>
+  <text x="330" y="207" font-family="sans-serif" font-size="10">Field (B)</text>
+</svg>

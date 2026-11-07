@@ -1,0 +1,56 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 13px; fill: #000; }
+    .label { font-size: 14px; font-weight: bold; }
+    .line { stroke: #000; stroke-width: 1.6; fill: none; }
+    .glass { stroke: #000; stroke-width: 1.6; fill: none; }
+    .liquid { stroke: #000; stroke-width: 1.2; fill: #e6f2ff; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- === EXPERIMENTAL SETUP (I): Respiration in Germinating Seeds === -->
+  <!-- Figure Label -->
+  <text x="75" y="30" class="label" text-anchor="middle">(I)</text>
+
+  <!-- Conical Flask -->
+  <path class="glass" d="M 50,110 L 40,210 Q 40,225 55,225 L 95,225 Q 110,225 110,210 L 100,110 Z" />
+  
+  <!-- One-holed Rubber Cork -->
+  <rect x="60" y="100" width="30" height="12" rx="2" fill="#d9d9d9" stroke="#000" stroke-width="1.6" />
+
+  <!-- Delivery Tube -->
+  <path class="line" d="M 75,100 L 75,70 L 160,70 L 160,190" />
+
+  <!-- Germinating Seeds at bottom -->
+  <circle cx="65" cy="210" r="5" fill="#fff" stroke="#000" stroke-width="1.2" />
+  <circle cx="85" cy="215" r="5" fill="#fff" stroke="#000" stroke-width="1.2" />
+  <circle cx="75" cy="205" r="5" fill="#fff" stroke="#000" stroke-width="1.2" />
+  <circle cx="90" cy="200" r="5" fill="#fff" stroke="#000" stroke-width="1.2" />
+  <circle cx="60" cy="200" r="5" fill="#fff" stroke="#000" stroke-width="1.2" />
+
+  <!-- Small tube with KOH inside flask -->
+  <rect x="70" y="170" width="10" height="30" class="glass" fill="#fff" />
+
+  <!-- === EXPERIMENTAL SETUP (II): U-shaped delivery tube in beaker -->
+  <!-- Figure Label -->
+  <text x="295" y="30" class="label" text-anchor="middle">(II)</text>
+
+  <!-- Beaker -->
+  <path class="glass" d="M 240,160 L 240,230 Q 240,240 250,240 L 330,240 Q 340,240 340,230 L 340,160" />
+  
+  <!-- Water in Beaker -->
+  <path d="M 241,175 L 339,175 L 339,230 Q 339,238 330,238 L 250,238 Q 241,238 241,230 Z" class="liquid" />
+
+  <!-- U-bend of delivery tube dipping in water -->
+  <!-- Connecting from setup (I) imaginary line: x=160,y=190 -->
+  <path class="line" d="M 160,190 L 260,190 Q 285,190 285,215 L 285,225" />
+
+  <!-- Water level inside the delivery tube (rising) -->
+  <line x1="285" y1="205" x2="285" y2="218" stroke="#0055ff" stroke-width="2.5" />
+
+  <!-- Arrow indicating rise in water level -->
+  <path d="M 305,215 L 315,205 L 325,215 M 315,205 L 315,225" class="line" />
+
+</svg>

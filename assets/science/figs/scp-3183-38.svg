@@ -1,0 +1,85 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    line, polyline, path, circle, rect {
+      fill: none;
+      stroke: #000000;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    text {
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      fill: #000000;
+    }
+  </style>
+
+  <!-- White background -->
+  <rect width="400" height="260" fill="#FFFFFF" stroke="none"/>
+
+  <!-- Main Circuit Loop (Rectangle: x=70 to 330, y=50 to 210) -->
+  <line x1="120" y1="50" x2="280" y2="50" />
+  <line x1="330" y1="100" x2="330" y2="210" />
+  <line x1="70" y1="210" x2="260" y2="210" />
+  <line x1="70" y1="50" x2="70" y2="100" />
+  <line x1="70" y1="140" x2="70" y2="210" />
+
+  <!-- Battery (Four cells in series on top branch: x from 120 to 280, y=50) -->
+  <!-- Cell 1 -->
+  <line x1="120" y1="42" x2="120" y2="58" />
+  <line x1="128" y1="46" x2="128" y2="54" />
+  <!-- Cell 2 -->
+  <line x1="136" y1="42" x2="136" y2="58" />
+  <line x1="144" y1="46" x2="144" y2="54" />
+  <line x1="120" y1="50" x2="136" y2="50" />
+  <!-- Cell 3 -->
+  <line x1="152" y1="42" x2="152" y2="58" />
+  <line x1="160" y1="46" x2="160" y2="54" />
+  <line x1="144" y1="50" x2="152" y2="50" />
+  <!-- Cell 4 -->
+  <line x1="168" y1="42" x2="168" y2="58" />
+  <line x1="176" y1="46" x2="176" y2="54" />
+  <line x1="160" y1="50" x2="168" y2="50" />
+  <line x1="176" y1="50" x2="280" y2="50" />
+  <!-- Battery connecting wires -->
+  <line x1="100" y1="50" x2="120" y2="50" />
+  <!-- Plus/Minus labels -->
+  <text x="105" y="42">+</text>
+  <text x="182" y="42">-</text>
+
+  <!-- Plug Key (on top right: x around 290-310, y=50) -->
+  <line x1="280" y1="50" x2="295" y2="50" />
+  <circle cx="295" cy="50" r="3" />
+  <line x1="315" y1="50" x2="330" y2="50" />
+  <circle cx="315" cy="50" r="3" />
+  <!-- Open key bridge -->
+  <path d="M 297 45 Q 305 35 313 45" />
+
+  <!-- Ammeter (Right vertical branch: x=330, y around 140-170) -->
+  <line x1="330" y1="50" x2="330" y2="135" />
+  <circle cx="330" cy="155" r="18" />
+  <text x="326" y="160" font-weight="bold">A</text>
+  <line x1="330" y1="175" x2="330" y2="210" />
+
+  <!-- Resistor / Resistance Wire AB (Bottom branch: x from 130 to 230, y=210) -->
+  <line x1="70" y1="210" x2="150" y2="210" />
+  <!-- Zigzag resistor (AB) -->
+  <polyline points="150,210 156,203 168,217 180,203 192,217 204,203 216,217 222,210" />
+  <line x1="222" y1="210" x2="330" y2="210" />
+  <!-- A and B terminals -->
+  <circle cx="150" cy="210" r="3" fill="#000" />
+  <circle cx="222" cy="210" r="3" fill="#000" />
+  <text x="146" y="230">A</text>
+  <text x="218" y="230">B</text>
+
+  <!-- Voltmeter (Parallel branch across AB: from x=130 to 242, dropped down to y=250) -->
+  <line x1="130" y1="210" x2="130" y2="250" />
+  <line x1="130" y1="250" x2="178" y2="250" />
+  <circle cx="196" cy="250" r="18" />
+  <text x="192" y="255" font-weight="bold">V</text>
+  <line x1="214" y1="250" x2="242" y2="250" />
+  <line x1="242" y1="250" x2="242" y2="210" />
+  <line x1="130" y1="210" x2="150" y2="210" />
+  <line x1="222" y1="210" x2="242" y2="210" />
+
+</svg>

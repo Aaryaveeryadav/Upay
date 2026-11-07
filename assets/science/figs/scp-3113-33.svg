@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: black; }
+    .label { font-style: italic; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="white" />
+
+  <!-- Principal Axis -->
+  <line x1="20" y1="150" x2="380" y2="150" stroke="black" stroke-width="1.2" />
+  
+  <!-- Optical Center (O) -->
+  <circle cx="200" cy="150" r="2" fill="black" />
+
+  <!-- Convex Lens (Center at x=200, y=150) -->
+  <!-- Lens outline -->
+  <path d="M 200,90 Q 215,150 200,210 Q 185,150 200,90" fill="none" stroke="black" stroke-width="1.6" />
+  
+  <!-- Lens arrows -->
+  <path d="M 194,94 L 200,90 L 206,94 M 194,206 L 200,210 L 206,206" fill="none" stroke="black" stroke-width="1.2" />
+
+  <!-- Focus and 2F points -->
+  <!-- F1 (Left) at x=140 -->
+  <circle cx="140" cy="150" r="1.5" fill="black" />
+  <text x="136" y="165">F₁</text>
+
+  <!-- 2F1 (Left) at x=80 -->
+  <circle cx="80" cy="150" r="1.5" fill="black" />
+  <text x="73" y="165">2F₁</text>
+
+  <!-- F2 (Right) at x=260 -->
+  <circle cx="260" cy="150" r="1.5" fill="black" />
+  <text x="256" y="165">F₂</text>
+
+  <!-- 2F2 (Right) at x=320 -->
+  <circle cx="320" cy="150" r="1.5" fill="black" />
+  <text x="313" y="165">2F₂</text>
+
+  <!-- Object (AB) placed between O (200) and F1 (140), e.g., at x=170 -->
+  <!-- Height = -30px (from y=150 to y=120) -->
+  <line x1="170" y1="150" x2="170" y2="120" stroke="black" stroke-width="1.8" />
+  <!-- Arrowhead for Object -->
+  <polygon points="170,116 167,122 173,122" fill="black" />
+  <text x="166" y="145" class="label">A</text>
+  <text x="166" y="113" class="label">B</text>
+
+  <!-- Image (A'B') formed virtually on the same side, at x=110, y=90 -->
+  <!-- Height = -60px (from y=150 to y=90) to show magnification +2 -->
+  <line x1="110" y1="150" x2="110" y2="90" stroke="black" stroke-width="1.2" stroke-dasharray="4,4" />
+  <!-- Arrowhead for Image -->
+  <polygon points="110,84 107,92 113,92" fill="black" />
+  <text x="104" y="145" class="label">A'</text>
+  <text x="103" y="87" class="label">B'</text>
+
+  <!-- Ray 1: Parallel to principal axis, passes through F2 -->
+  <!-- Incident ray: from B(170,120) to lens at (200, 120) -->
+  <line x1="170" y1="120" x2="200" y2="120" stroke="black" stroke-width="1.2" />
+  <polygon points="188,118 188,122 194,120" fill="black" />
+  <!-- Refracted ray: from (200,120) passing through F2(260,150) extended backwards to (110, 90) -->
+  <line x1="200" y1="120" x2="330" y2="185" stroke="black" stroke-width="1.2" />
+  <polygon points="270,155 264,153 267,158" fill="black" />
+  <!-- Virtual extension of Refracted ray backwards to Image B'(110,90) -->
+  <line x1="200" y1="120" x2="110" y2="90" stroke="black" stroke-width="1" stroke-dasharray="3,3" />
+
+  <!-- Ray 2: Passing through Optical Center (O), goes undeviated -->
+  <!-- Incident ray from B(170,120) through O(200,150) extended -->
+  <line x1="170" y1="120" x2="230" y2="180" stroke="black" stroke-width="1.2" />
+  <polygon points="190,140 184,139 187,144" fill="black" />
+  <!-- Virtual extension backwards to Image B'(110,90) -->
+  <line x1="200" y1="150" x2="110" y2="90" stroke="black" stroke-width="1" stroke-dasharray="3,3" />
+
+  <!-- Labels for points/lines -->
+  <text x="195" y="162">O</text>
+  <text x="365" y="142">Principal axis</text>
+</svg>

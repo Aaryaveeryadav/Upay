@@ -1,0 +1,76 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: #000000; }
+    .label { font-size: 15px; font-weight: bold; }
+    .sub { font-size: 11px; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Conductor A -->
+  <!-- Cylinder body -->
+  <rect x="50" y="50" width="80" height="40" fill="#ffffff" stroke="#000000" stroke-width="1.6" rx="0" ry="0" />
+  <!-- Left ellipse -->
+  <ellipse cx="50" cy="70" rx="8" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.6" />
+  <!-- Right ellipse -->
+  <ellipse cx="130" cy="70" rx="8" ry="20" fill="#ffffff" stroke="#000000" stroke-width="1.6" />
+
+  <!-- Conductor B -->
+  <!-- Cylinder body -->
+  <rect x="220" y="35" width="140" height="70" fill="#ffffff" stroke="#000000" stroke-width="1.6" />
+  <!-- Left ellipse -->
+  <ellipse cx="220" cy="70" rx="14" ry="35" fill="#ffffff" stroke="#000000" stroke-width="1.6" />
+  <!-- Right ellipse -->
+  <ellipse cx="360" cy="70" rx="14" ry="35" fill="#ffffff" stroke="#000000" stroke-width="1.6" />
+
+  <!-- Conductor C -->
+  <!-- Cylinder body -->
+  <rect x="60" y="170" width="120" height="50" fill="#ffffff" stroke="#000000" stroke-width="1.6" />
+  <!-- Left ellipse -->
+  <ellipse cx="60" cy="195" rx="10" ry="25" fill="#ffffff" stroke="#000000" stroke-width="1.6" />
+  <!-- Right ellipse -->
+  <ellipse cx="180" cy="195" rx="10" ry="25" fill="#ffffff" stroke="#000000" stroke-width="1.6" />
+
+  <!-- Dimension lines and labels for A -->
+  <!-- Length L -->
+  <line x1="50" y1="105" x2="130" y2="105" stroke="#000000" stroke-width="1" stroke-dasharray="3,3" />
+  <line x1="50" y1="101" x2="50" y2="109" stroke="#000000" stroke-width="1" />
+  <line x1="130" y1="101" x2="130" y2="109" stroke="#000000" stroke-width="1" />
+  <text x="85" y="120" text-anchor="middle">l</text>
+
+  <!-- Area A -->
+  <text x="145" y="65">A</text>
+
+  <!-- Conductor Label A -->
+  <text class="label" x="80" y="30">A<tspan class="sub" dy="4">A</tspan></text>
+
+
+  <!-- Dimension lines and labels for B -->
+  <!-- Length l/2 -->
+  <line x1="220" y1="120" x2="360" y2="120" stroke="#000000" stroke-width="1" stroke-dasharray="3,3" />
+  <line x1="220" y1="116" x2="220" y2="124" stroke="#000000" stroke-width="1" />
+  <line x1="360" y1="116" x2="360" y2="124" stroke="#000000" stroke-width="1" />
+  <text x="290" y="135" text-anchor="middle">l/2</text>
+
+  <!-- Area 2A -->
+  <text x="378" y="65">2A</text>
+
+  <!-- Conductor Label B -->
+  <text class="label" x="280" y="20">B<tspan class="sub" dy="4">B</tspan></text>
+
+
+  <!-- Dimension lines and labels for C -->
+  <!-- Length 2l -->
+  <line x1="60" y1="235" x2="180" y2="235" stroke="#000000" stroke-width="1" stroke-dasharray="3,3" />
+  <line x1="60" y1="231" x2="60" y2="239" stroke="#000000" stroke-width="1" />
+  <line x1="180" y1="231" x2="180" y2="239" stroke="#000000" stroke-width="1" />
+  <text x="120" y="252" text-anchor="middle">2l</text>
+
+  <!-- Area A/2 -->
+  <text x="193" y="190">A/2</text>
+
+  <!-- Conductor Label C -->
+  <text class="label" x="110" y="155">C<tspan class="sub" dy="4">C</tspan></text>
+
+</svg>

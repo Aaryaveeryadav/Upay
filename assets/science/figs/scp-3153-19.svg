@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Burner Base -->
+  <path d="M 60,230 L 140,230 L 120,180 L 80,180 Z" fill="none" stroke="#000000" stroke-width="1.6" stroke-linejoin="round" />
+  <!-- Burner Barrel -->
+  <rect x="90" y="120" width="20" height="60" fill="none" stroke="#000000" stroke-width="1.6" />
+  <!-- Flame / Ignition Area -->
+  <path d="M 100,120 Q 95,95 85,80 Q 70,60 100,30 Q 130,60 115,80 Q 105,95 100,120 Z" fill="none" stroke="#000000" stroke-width="1.6" stroke-linejoin="round" />
+  
+  <!-- Dazzling flame rays / sparkles -->
+  <line x1="75" y1="65" x2="60" y2="55" stroke="#000000" stroke-width="1.6" stroke-linecap="round" />
+  <line x1="125" y1="65" x2="140" y2="55" stroke="#000000" stroke-width="1.6" stroke-linecap="round" />
+  <line x1="100" y1="45" x2="100" y2="30" stroke="#000000" stroke-width="1.6" stroke-linecap="round" />
+  <line x1="85" y1="85" x2="70" y2="90" stroke="#000000" stroke-width="1.6" stroke-linecap="round" />
+  <line x1="115" y1="85" x2="130" y2="90" stroke="#000000" stroke-width="1.6" stroke-linecap="round" />
+
+  <!-- Tongs holding Magnesium Ribbon -->
+  <!-- Tong arm 1 -->
+  <path d="M 160,110 L 115,75" fill="none" stroke="#000000" stroke-width="1.6" stroke-linecap="round" />
+  <!-- Tong arm 2 -->
+  <path d="M 175,130 L 120,85" fill="none" stroke="#000000" stroke-width="1.6" stroke-linecap="round" />
+  <!-- Pivot -->
+  <circle cx="180" cy="125" r="4" fill="none" stroke="#000000" stroke-width="1.6" />
+  <!-- Handles -->
+  <path d="M 180,125 L 220,150" fill="none" stroke="#000000" stroke-width="1.6" stroke-linecap="round" />
+  <path d="M 180,125 L 210,165" fill="none" stroke="#000000" stroke-width="1.6" stroke-linecap="round" />
+
+  <!-- Magnesium Ribbon (being held into the flame) -->
+  <path d="M 115,75 Q 135,70 160,80" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- Watch Glass below -->
+  <path d="M 230,195 Q 280,225 330,195" fill="none" stroke="#000000" stroke-width="1.6" stroke-linecap="round" />
+  <!-- Watch glass base support -->
+  <line x1="265" y1="216" x2="295" y2="216" stroke="#000000" stroke-width="1.6" stroke-linecap="round" />
+  <line x1="280" y1="216" x2="280" y2="225" stroke="#000000" stroke-width="1.6" stroke-linecap="round" />
+
+  <!-- White powder / ash on watch glass -->
+  <path d="M 265,202 Q 280,195 295,202 Q 300,207 275,208 Z" fill="none" stroke="#000000" stroke-width="1.6" stroke-linejoin="round" />
+  
+  <!-- Dotted arrow from flame/ribbon to watch glass (falling ash) -->
+  <path d="M 140,95 Q 200,150 250,190" fill="none" stroke="#000000" stroke-width="1.6" stroke-dasharray="4,4" />
+  <polygon points="253,186 257,194 246,192" fill="#000000" />
+
+  <!-- Labels -->
+  <text x="50" y="35" font-family="sans-serif" font-size="12" fill="#000000">Magnesium ribbon</text>
+  <path d="M 85,60 L 55,40" fill="none" stroke="#000000" stroke-width="1" />
+
+  <text x="210" y="65" font-family="sans-serif" font-size="12" fill="#000000">Burning with dazzling</text>
+  <text x="210" y="80" font-family="sans-serif" font-size="12" fill="#000000">white flame</text>
+  <path d="M 125,60 L 205,70" fill="none" stroke="#000000" stroke-width="1" />
+
+  <text x="230" y="150" font-family="sans-serif" font-size="12" fill="#000000">Watch glass</text>
+  <path d="M 280,198 L 260,155" fill="none" stroke="#000000" stroke-width="1" />
+
+  <text x="280" y="245" font-family="sans-serif" font-size="12" fill="#000000">White powder (MgO)</text>
+  <path d="M 280,210 L 280,232" fill="none" stroke="#000000" stroke-width="1" />
+</svg>

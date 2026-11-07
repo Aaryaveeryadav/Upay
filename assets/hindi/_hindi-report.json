@@ -1,0 +1,423 @@
+{
+ "rows": 241,
+ "per_chapter": {
+  "hind10-kr01": 3,
+  "hind10-kr03": 4,
+  "hind10-kr05": 1,
+  "hind10-ks01": 6,
+  "hind10-ks02": 3,
+  "hind10-ks04": 4,
+  "hind10-ks05": 6,
+  "hind10-ks06": 4,
+  "hind10-ks09": 2,
+  "hind10-ks10": 3,
+  "hind10-ks11": 12,
+  "hind10-ks12": 7,
+  "hind10-ks14": 3,
+  "hind10-ks16": 4,
+  "hind10-ks17": 4,
+  "hind10-sp01": 12,
+  "hind10-sp02": 6,
+  "hind10-sp04": 6,
+  "hind10-sp05": 12,
+  "hind10-sp07": 9,
+  "hind10-sp08": 6,
+  "hind10-sp09": 7,
+  "hind10-sp10": 14,
+  "hind10-sp11": 14,
+  "hind10-sp12": 13,
+  "hind10-sp13": 22,
+  "hind10-sp15": 12,
+  "hind10-sp16": 10,
+  "hind10-sp17": 7,
+  "hind10-sy01": 7,
+  "hind10-sy02": 11,
+  "hind10-sy03": 7
+ },
+ "files": [
+  {
+   "file": "jhkr101.pdf",
+   "chapters": [
+    {
+     "b": "kr",
+     "n": 1,
+     "s": 1,
+     "e": 9,
+     "rows": 3
+    }
+   ]
+  },
+  {
+   "file": "jhkr102.pdf",
+   "chapters": [
+    {
+     "b": "kr",
+     "n": 3,
+     "s": 1,
+     "e": 14,
+     "rows": 4
+    }
+   ]
+  },
+  {
+   "file": "jhkr103.pdf",
+   "chapters": [
+    {
+     "b": "kr",
+     "n": 5,
+     "s": 1,
+     "e": 5,
+     "rows": 1
+    }
+   ]
+  },
+  {
+   "file": "jhks101.pdf",
+   "chapters": [
+    {
+     "b": "ks",
+     "n": 1,
+     "s": 3,
+     "e": 9,
+     "rows": 6
+    }
+   ]
+  },
+  {
+   "file": "jhks102.pdf",
+   "chapters": [
+    {
+     "b": "ks",
+     "n": 2,
+     "s": 1,
+     "e": 7,
+     "rows": 3
+    }
+   ]
+  },
+  {
+   "file": "jhks103.pdf",
+   "chapters": [
+    {
+     "b": "ks",
+     "n": 4,
+     "s": 1,
+     "e": 5,
+     "rows": 4
+    }
+   ]
+  },
+  {
+   "file": "jhks104.pdf",
+   "chapters": [
+    {
+     "b": "ks",
+     "n": 5,
+     "s": 1,
+     "e": 6,
+     "rows": 6
+    }
+   ]
+  },
+  {
+   "file": "jhks105.pdf",
+   "chapters": [
+    {
+     "b": "ks",
+     "n": 6,
+     "s": 1,
+     "e": 7,
+     "rows": 4
+    }
+   ]
+  },
+  {
+   "file": "jhks106.pdf",
+   "chapters": [
+    {
+     "b": "ks",
+     "n": 9,
+     "s": 1,
+     "e": 8,
+     "rows": 2
+    }
+   ]
+  },
+  {
+   "file": "jhks107.pdf",
+   "chapters": [
+    {
+     "b": "ks",
+     "n": 10,
+     "s": 1,
+     "e": 9,
+     "rows": 3
+    }
+   ]
+  },
+  {
+   "file": "jhks108.pdf",
+   "chapters": [
+    {
+     "b": "ks",
+     "n": 11,
+     "s": 1,
+     "e": 9,
+     "rows": 12
+    }
+   ]
+  },
+  {
+   "file": "jhks109.pdf",
+   "chapters": [
+    {
+     "b": "ks",
+     "n": 12,
+     "s": 1,
+     "e": 6,
+     "rows": 7
+    }
+   ]
+  },
+  {
+   "file": "jhks110.pdf",
+   "chapters": [
+    {
+     "b": "ks",
+     "n": 14,
+     "s": 1,
+     "e": 12,
+     "rows": 3
+    }
+   ]
+  },
+  {
+   "file": "jhks111.pdf",
+   "chapters": [
+    {
+     "b": "ks",
+     "n": 16,
+     "s": 1,
+     "e": 12,
+     "rows": 4
+    }
+   ]
+  },
+  {
+   "file": "jhks112.pdf",
+   "chapters": [
+    {
+     "b": "ks",
+     "n": 17,
+     "s": 1,
+     "e": 8,
+     "rows": 4
+    }
+   ]
+  },
+  {
+   "file": "jhsp101.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 1,
+     "s": 3,
+     "e": 7,
+     "rows": 12
+    }
+   ]
+  },
+  {
+   "file": "jhsp102.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 2,
+     "s": 1,
+     "e": 5,
+     "rows": 6
+    }
+   ]
+  },
+  {
+   "file": "jhsp103.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 4,
+     "s": 1,
+     "e": 7,
+     "rows": 6
+    }
+   ]
+  },
+  {
+   "file": "jhsp104.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 5,
+     "s": 1,
+     "e": 6,
+     "rows": 12
+    }
+   ]
+  },
+  {
+   "file": "jhsp105.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 7,
+     "s": 1,
+     "e": 5,
+     "rows": 9
+    }
+   ]
+  },
+  {
+   "file": "jhsp106.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 8,
+     "s": 1,
+     "e": 5,
+     "rows": 6
+    }
+   ]
+  },
+  {
+   "file": "jhsp107.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 9,
+     "s": 1,
+     "e": 5,
+     "rows": 7
+    }
+   ]
+  },
+  {
+   "file": "jhsp108.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 10,
+     "s": 3,
+     "e": 17,
+     "rows": 14
+    }
+   ]
+  },
+  {
+   "file": "jhsp109.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 11,
+     "s": 1,
+     "e": 9,
+     "rows": 14
+    }
+   ]
+  },
+  {
+   "file": "jhsp110.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 12,
+     "s": 1,
+     "e": 12,
+     "rows": 13
+    }
+   ]
+  },
+  {
+   "file": "jhsp111.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 13,
+     "s": 1,
+     "e": 10,
+     "rows": 22
+    }
+   ]
+  },
+  {
+   "file": "jhsp112.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 15,
+     "s": 1,
+     "e": 8,
+     "rows": 12
+    }
+   ]
+  },
+  {
+   "file": "jhsp113.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 16,
+     "s": 1,
+     "e": 10,
+     "rows": 10
+    }
+   ]
+  },
+  {
+   "file": "jhsp114.pdf",
+   "chapters": [
+    {
+     "b": "sp",
+     "n": 17,
+     "s": 1,
+     "e": 10,
+     "rows": 7
+    }
+   ]
+  },
+  {
+   "file": "jhsy101.pdf",
+   "chapters": [
+    {
+     "b": "sy",
+     "n": 1,
+     "s": 1,
+     "e": 19,
+     "rows": 7
+    }
+   ]
+  },
+  {
+   "file": "jhsy102.pdf",
+   "chapters": [
+    {
+     "b": "sy",
+     "n": 2,
+     "s": 1,
+     "e": 12,
+     "rows": 11
+    }
+   ]
+  },
+  {
+   "file": "jhsy103.pdf",
+   "chapters": [
+    {
+     "b": "sy",
+     "n": 3,
+     "s": 1,
+     "e": 13,
+     "rows": 7
+    }
+   ]
+  }
+ ]
+}

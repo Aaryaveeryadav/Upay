@@ -1,0 +1,53 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-size: 12px; font-weight: bold; }
+    .line { stroke: #000; stroke-width: 1.6; fill: none; }
+    .kidney { stroke: #000; stroke-width: 1.6; fill: none; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Aorta (Left side, viewer's left) -->
+  <path class="line" d="M 185 30 L 185 170" />
+  <!-- Vena Cava (Right side, viewer's left relative to aorta) -->
+  <path class="line" d="M 215 30 L 215 170" />
+
+  <!-- Left Kidney (Right side of diagram) -->
+  <path class="kidney" d="M 260 70 C 240 70 230 90 230 110 C 230 140 245 160 265 160 C 290 160 310 140 310 110 C 310 85 285 70 260 70 Z" />
+  <!-- Left Renal Artery & Vein -->
+  <path class="line" d="M 215 105 L 232 105" />
+  <path class="line" d="M 215 118 L 232 118" />
+
+  <!-- Right Kidney (Left side of diagram) -->
+  <path class="kidney" d="M 140 70 C 160 70 170 90 170 110 C 170 140 155 160 135 160 C 110 160 90 140 90 110 C 90 85 115 70 140 70 Z" />
+  <!-- Right Renal Artery & Vein -->
+  <path class="line" d="M 185 105 L 168 105" />
+  <path class="line" d="M 185 118 L 168 118" />
+
+  <!-- Ureters -->
+  <path class="line" d="M 145 155 C 145 180 170 190 185 210" />
+  <path class="line" d="M 255 155 C 255 180 230 190 215 210" />
+
+  <!-- Urinary Bladder -->
+  <path class="line" d="M 180 210 C 170 210 165 225 165 235 C 165 245 235 245 235 235 C 235 225 230 210 220 210 Z" />
+
+  <!-- Urethra -->
+  <path class="line" d="M 195 245 L 195 255" />
+  <path class="line" d="M 205 245 L 205 255" />
+
+  <!-- Labels and Leaders -->
+  <!-- Structure P (Renal Artery pointing to right renal artery branch) -->
+  <text x="50" y="80" class="label">P</text>
+  <path class="line" d="M 65 76 L 105 100" />
+
+  <!-- Structure Q (Ureter pointing to left ureter) -->
+  <text x="315" y="195" class="label">Q</text>
+  <path class="line" d="M 310 190 L 260 180" />
+
+  <!-- Additional labels for clarity (optional, keeping clean) -->
+  <text x="175" y="20" class="label">Aorta</text>
+  <path class="line" d="M 185 23 L 185 30" />
+
+</svg>

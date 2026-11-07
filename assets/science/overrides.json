@@ -1,0 +1,14 @@
+{
+  "_note": "Manual corrections for questions whose printed layout defeats the PDF extractor (usually a page break inside an option run). Keyed by chapter id then PRINTED question number, matching the answer key. The builder prefers these over anything it parsed.",
+  "1": {
+    "2": {
+      "opts": [
+        { "en": "combination reaction.", "hi": "" },
+        { "en": "double displacement reaction.", "hi": "" },
+        { "en": "decomposition reaction.", "hi": "" },
+        { "en": "displacement reaction.", "hi": "" }
+      ],
+      "ansLetter": "d"
+    }
+  }
+}

@@ -1,0 +1,55 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: #000; }
+    .label { font-size: 12px; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Coil AB -->
+  <!-- Back loops -->
+  <path d="M 160,80 Q 180,70 200,80 Q 220,90 240,80" fill="none" stroke="#000" stroke-width="1.6" />
+  <path d="M 160,100 Q 180,90 200,100 Q 220,110 240,100" fill="none" stroke="#000" stroke-width="1.6" />
+  <path d="M 160,120 Q 180,110 200,120 Q 220,130 240,120" fill="none" stroke="#000" stroke-width="1.6" />
+  <path d="M 160,140 Q 180,130 200,140 Q 220,150 240,140" fill="none" stroke="#000" stroke-width="1.6" />
+  <path d="M 160,160 Q 180,150 200,160 Q 220,170 240,160" fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Front loops (overlapping illusion) -->
+  <path d="M 240,80 Q 220,90 200,80 Q 180,70 160,80" fill="none" stroke="#000" stroke-width="1.6" />
+  <path d="M 240,100 Q 220,110 200,100 Q 180,90 160,100" fill="none" stroke="#000" stroke-width="1.6" />
+  <path d="M 240,120 Q 220,130 200,120 Q 180,110 160,120" fill="none" stroke="#000" stroke-width="1.6" />
+  <path d="M 240,140 Q 220,150 200,140 Q 180,130 160,140" fill="none" stroke="#000" stroke-width="1.6" />
+  <path d="M 240,160 Q 220,170 200,160 Q 180,150 160,160" fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Cylinder base representing the coil form (light outline or implicit) -->
+  
+  <!-- Coil terminals A and B -->
+  <path d="M 160,80 L 130,80 L 130,190 L 165,190" fill="none" stroke="#000" stroke-width="1.6" />
+  <path d="M 240,160 L 270,160 L 270,190 L 235,190" fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Bar Magnet -->
+  <rect x="30" y="100" width="90" height="40" fill="#fff" stroke="#000" stroke-width="1.6" />
+  <!-- Magnet Poles -->
+  <line x1="75" y1="100" x2="75" y2="140" stroke="#000" stroke-width="1.6" />
+  <text x="48" y="125" font-weight="bold">N</text>
+  <text x="98" y="125" font-weight="bold">S</text>
+
+  <!-- Motion Arrow for Magnet -->
+  <line x1="20" y1="75" x2="55" y2="75" stroke="#000" stroke-width="1.6" />
+  <polygon points="55,70 65,75 55,80" fill="#000" />
+
+  <!-- Galvanometer -->
+  <circle cx="200" cy="190" r="25" fill="#fff" stroke="#000" stroke-width="1.6" />
+  <!-- Galvanometer Scale / Needle -->
+  <line x1="200" y1="210" x2="200" y2="175" stroke="#000" stroke-width="1.6" />
+  <!-- Needle pointer slightly deflected to show principle -->
+  <line x1="200" y1="190" x2="188" y2="178" stroke="#000" stroke-width="1.6" />
+  <polygon points="186,176 192,176 190,182" fill="#000" />
+  <text x="195" y="165" class="label">G</text>
+
+  <!-- Labels for Coil Ends -->
+  <text x="145" y="70" class="label" font-weight="bold">A</text>
+  <text x="252" y="152" class="label" font-weight="bold">B</text>
+
+</svg>

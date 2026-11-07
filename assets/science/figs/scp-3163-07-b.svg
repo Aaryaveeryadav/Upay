@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: #000; }
+    .label { font-size: 13px; font-weight: bold; }
+  </style>
+
+  <!-- White background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Magnetic field concentric circles -->
+  <!-- Center at (200, 130) -->
+  <circle cx="200" cy="130" r="30" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="4,4" />
+  <circle cx="200" cy="130" r="60" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="6,4" />
+  <circle cx="200" cy="130" r="90" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="8,5" />
+
+  <!-- Direction arrows on field lines (middle circle r=60) -->
+  <!-- Top: pointing left -->
+  <polygon points="140,126 148,122 148,130" fill="#000000" />
+  <!-- Bottom: pointing right -->
+  <polygon points="260,134 252,138 252,130" fill="#000000" />
+
+  <!-- Straight Conductor (Vertical wire) passing through cardboard plane -->
+  <line x1="200" y1="15" x2="200" y2="245" stroke="#000000" stroke-width="3" />
+
+  <!-- Cardboard representation (Perspective parallelogram) -->
+  <polygon points="110,160 170,100 290,100 230,160" fill="#f8f8f8" stroke="#000000" stroke-width="1.5" />
+
+  <!-- Redraw wire segment in front of cardboard if needed, but simple vertical line works with clear intersection -->
+  
+  <!-- Current direction arrows on the wire -->
+  <!-- Upper arrow -->
+  <polygon points="200,45 196,55 204,55" fill="#000000" />
+  <!-- Lower arrow -->
+  <polygon points="200,205 196,215 204,215" fill="#000000" />
+
+  <!-- Labels -->
+  <text x="210" y="45" class="label">I</text>
+  <text x="210" y="225" class="label">I</text>
+  
+  <text x="240" y="115" class="label">Cardboard</text>
+  <text x="300" y="85" class="label">Magnetic field</text>
+  <text x="300" y="102" class="label">lines</text>
+  
+  <!-- Leader line for magnetic field label -->
+  <line x1="290" y1="95" x2="270" y2="95" stroke="#000000" stroke-width="1" />
+
+  <text x="45" y="145" class="label">Straight current-</text>
+  <text x="45" y="162" class="label">carrying conductor</text>
+  <!-- Leader line to conductor -->
+  <line x1="155" y1="155" x2="185" y2="155" stroke="#000000" stroke-width="1" />
+
+</svg>

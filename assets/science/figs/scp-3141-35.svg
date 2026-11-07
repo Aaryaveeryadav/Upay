@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- White background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Styles for textbook-style thin black lines and clear typography -->
+  <style>
+    line, path, polyline { stroke: #000000; stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    text { font-family: Arial, Helvetica, sans-serif; font-size: 13px; fill: #000000; }
+    .dashed { stroke-dasharray: 4, 4; }
+    .label { font-size: 14px; font-weight: bold; }
+    .sub { font-size: 11px; }
+  </style>
+
+  <!-- === DIAGRAM: Three parallel media layers (A, B, C) === -->
+
+  <!-- Interfaces (horizontal separation lines) -->
+  <line x1="40" y1="90" x2="360" y2="90" />
+  <line x1="40" y1="170" x2="360" y2="170" />
+
+  <!-- Normal lines (dashed perpendiculars) -->
+  <!-- Top interface normal at x = 200 -->
+  <line x1="200" y1="50" x2="200" y2="130" class="dashed" />
+  <!-- Bottom interface normal at x = 200 -->
+  <line x1="200" y1="130" x2="200" y2="210" class="dashed" />
+
+  <!-- Light Ray -->
+  <!-- Incident ray in Medium A -->
+  <line x1="140" y1="50" x2="200" y2="90" />
+  <!-- Refracted ray in Medium B -->
+  <line x1="200" y1="90" x2="170" y2="170" />
+  <!-- Emergent ray in Medium C (Refractive index of C equals A, so ray is parallel to incident ray) -->
+  <line x1="170" y1="170" x2="230" y2="210" />
+
+  <!-- Arrowheads on ray -->
+  <!-- Incident ray arrow -->
+  <polygon points="168,69 173,66 170,72" fill="#000000" stroke="none" />
+  <!-- Refracted ray arrow -->
+  <polygon points="183,133 188,133 184,139" fill="#000000" stroke="none" />
+  <!-- Emergent ray arrow -->
+  <polygon points="204,193 209,193 205,199" fill="#000000" stroke="none" />
+
+  <!-- Medium Labels -->
+  <text x="60" y="73" class="label">Medium A</text>
+  <text x="60" y="135" class="label">Medium B</text>
+  <text x="60" y="195" class="label">Medium C</text>
+
+  <!-- Optional subtle indicator for parallel incident/emergent (shows n_A = n_C) -->
+  <line x1="230" y1="210" x2="260" y2="230" class="dashed" />
+  <line x1="140" y1="50" x2="110" y2="30" class="dashed" />
+
+</svg>

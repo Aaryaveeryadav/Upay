@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "framework": null,
+  "buildCommand": null,
+  "installCommand": null,
+  "outputDirectory": null,
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 60
+    }
+  },
+  "routes": [
+    {
+      "src": "^/(?:lib|tools|data|uploads|solutions|\\.vercel)(?:/.*)?$",
+      "status": 404,
+      "dest": "/index.html"
+    },
+    {
+      "src": "^/(?:package(?:-lock)?\\.json|vercel\\.json|\\.env(?:\\..*)?)$",
+      "status": 404,
+      "dest": "/index.html"
+    },
+    {
+      "src": "^/assets/sanskrit/papers/Sanskrit\\.pdf$",
+      "dest": "/assets/sanskrit/papers/Sanskrit-variant-A.pdf"
+    },
+    {
+      "src": "^/assets/sanskrit/papers/52_SANSKRIT\\.pdf$",
+      "dest": "/assets/sanskrit/papers/52-SANSKRIT-set-4.pdf"
+    },
+    {
+      "handle": "filesystem"
+    }
+  ]
+}

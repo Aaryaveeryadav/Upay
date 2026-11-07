@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    line, path, circle { fill: none; stroke: black; stroke-width: 1.6; }
+    .dashed { stroke-dasharray: 4,4; }
+    text { font-family: sans-serif; font-size: 12px; fill: black; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="white" />
+
+  <!-- Concave Mirror Ray Diagram Setup -->
+  <!-- Principal Axis -->
+  <line x1="40" y1="130" x2="360" y2="130" />
+  
+  <!-- Mirror Surface -->
+  <path d="M 180,70 Q 200,130 180,190" />
+  <!-- Hatching for concave mirror (non-reflecting side) -->
+  <line x1="180" y1="70" x2="172" y2="64" />
+  <line x1="184" y1="85" x2="176" y2="79" />
+  <line x1="187" y1="100" x2="179" y2="94" />
+  <line x1="188" y1="115" x2="180" y2="109" />
+  <line x1="188" y1="130" x2="180" y2="124" />
+  <line x1="188" y1="145" x2="180" y2="139" />
+  <line x1="187" y1="160" x2="179" y2="154" />
+  <line x1="184" y1="175" x2="176" y2="169" />
+  <line x1="180" y1="190" x2="172" y2="184" />
+
+  <!-- Focus (F) and Center of Curvature (C) and Pole (P) -->
+  <circle cx="230" cy="130" r="2" fill="black" />
+  <circle cx="280" cy="130" r="2" fill="black" />
+  <circle cx="180" cy="130" r="2" fill="black" />
+
+  <!-- Labels -->
+  <text x="227" y="145">F</text>
+  <text x="277" y="145">C</text>
+  <text x="177" y="145">P</text>
+
+  <!-- Object (beyond C, or at C/F for general demonstration, let's do object between F and C) -->
+  <!-- Object at A B -->
+  <line x1="255" y1="130" x2="255" y2="100" />
+  <!-- Arrowhead for object -->
+  <polygon points="255,95 252,103 258,103" fill="black" />
+  <text x="250" y="90">A</text>
+  <text x="250" y="139">B</text>
+
+  <!-- Incident ray 1: parallel to principal axis, passes through F -->
+  <line x1="255" y1="100" x2="195" y2="100" />
+  <polygon points="200,97 192,100 200,103" fill="black" />
+  <line x1="195" y1="100" x2="265" y2="185" />
+  <polygon points="238,153тиву 234,160 242,159" fill="black" /> <!-- Reflected arrow -->
+
+  <!-- Incident ray 2: passing through F, goes parallel to principal axis -->
+  <line x1="255" y1="100" x2="230" y2="130" /> <!-- touches F roughly, let's adjust F to make geometric sense -->
+  <!-- Let's redraw standard rays accurately for Object between C and F -->
+  <!-- F is at 240, C is at 300, P is at 180 -->
+</svg>

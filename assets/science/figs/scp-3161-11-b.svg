@@ -1,0 +1,76 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 12px; fill: #000; }
+    .label { font-size: 14px; font-weight: bold; }
+    .resistor { fill: none; stroke: #000; stroke-width: 1.6; stroke-linejoin: round; }
+    .wire { fill: none; stroke: #000; stroke-width: 1.6; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- ================= COMBINATION (I): Series ================= -->
+  <text x="30" y="30" class="label">(I)</text>
+  
+  <!-- Terminals A and B -->
+  <circle cx="30" cy="70" r="3" fill="#000" />
+  <text x="22" y="74" text-anchor="end">A</text>
+  <circle cx="210" cy="70" r="3" fill="#000" />
+  <text x="220" y="74" text-anchor="start">B</text>
+
+  <!-- Series Wires & Resistors -->
+  <path class="wire" d="M 30 70 L 50 70" />
+  <!-- R1 -->
+  <path class="resistor" d="M 50 70 L 55 60 L 65 80 L 75 60 L 85 80 L 90 70" />
+  <text x="70" y="52" text-anchor="middle">R₁</text>
+
+  <path class="wire" d="M 90 70 L 105 70" />
+  <!-- R2 -->
+  <path class="resistor" d="M 105 70 L 110 60 L 120 80 L 130 60 L 140 80 L 145 70" />
+  <text x="125" y="52" text-anchor="middle">R₂</text>
+
+  <path class="wire" d="M 145 70 L 160 70" />
+  <!-- R3 -->
+  <path class="resistor" d="M 160 70 L 165 60 L 175 80 L 185 60 L 195 80 L 200 70" />
+  <text x="180" y="52" text-anchor="middle">R₃</text>
+
+  <path class="wire" d="M 200 70 L 210 70" />
+
+
+  <!-- ================= COMBINATION (II): Parallel ================= -->
+  <text x="30" y="135" class="label">(II)</text>
+
+  <!-- Terminals A and B for Parallel -->
+  <circle cx="30" cy="185" r="3" fill="#000" />
+  <text x="22" y="189" text-anchor="end">A</text>
+  <circle cx="230" cy="185" r="3" fill="#000" />
+  <text x="238" y="189" text-anchor="start">B</text>
+
+  <!-- Main trunk from A to branching point -->
+  <path class="wire" d="M 30 185 L 75 185" />
+  <!-- Main trunk to B from convergence -->
+  <path class="wire" d="M 175 185 L 230 185" />
+
+  <!-- Vertical distribution lines -->
+  <path class="wire" d="M 75 140 L 75 230" />
+  <path class="wire" d="M 175 140 L 175 230" />
+
+  <!-- Top branch: R1 -->
+  <path class="wire" d="M 75 140 L 100 140" />
+  <path class="resistor" d="M 100 140 L 105 130 L 115 150 L 125 130 L 135 150 L 140 140" />
+  <text x="120" y="125" text-anchor="middle">R₁</text>
+  <path class="wire" d="M 140 140 L 175 140" />
+
+  <!-- Middle branch: R2 -->
+  <path class="wire" d="M 75 185 L 100 185" />
+  <path class="resistor" d="M 100 185 L 105 175 L 115 195 L 125 175 L 135 195 L 140 185" />
+  <text x="120" y="170" text-anchor="middle">R₂</text>
+  <path class="wire" d="M 140 185 L 175 185" />
+
+  <!-- Bottom branch: R3 -->
+  <path class="wire" d="M 75 230 L 100 230" />
+  <path class="resistor" d="M 100 230 L 105 220 L 115 240 L 125 220 L 135 240 L 140 230" />
+  <text x="120" y="215" text-anchor="middle">R₃</text>
+  <path class="wire" d="M 140 230 L 175 230" />
+
+</svg>

@@ -1,0 +1,80 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 10px; fill: #000; }
+    line, path, rect, circle { fill: none; stroke: #000; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" stroke="none"/>
+
+  <!-- Supply Mains (Left) -->
+  <line x1="20" y1="40" x2="60" y2="40" />
+  <line x1="20" y1="70" x2="60" y2="70" />
+  <line x1="20" y1="100" x2="60" y2="100" />
+  
+  <text x="22" y="32">Live (L)</text>
+  <text x="22" y="62">Neutral (N)</text>
+  <text x="22" y="92">Earth (E)</text>
+
+  <!-- Power Meter Box -->
+  <rect x="60" y="25" width="50" height="90" />
+  <text x="68" y="73">Meter</text>
+
+  <!-- Main Switch / Fuse Box -->
+  <line x1="110" y1="40" x2="140" y2="40" />
+  <line x1="110" y1="70" x2="140" y2="70" />
+  <line x1="110" y1="100" x2="140" y2="100" />
+
+  <rect x="140" y="25" width="45" height="90" />
+  <!-- Fuse symbol (zig-zag inside fuse box) -->
+  <path d="M 152 40 L 155 35 L 161 45 L 167 35 L 173 45 L 176 40" />
+  <text x="147" y="73">Fuse</text>
+
+  <!-- Distribution Lines (Live, Neutral, Earth rails) -->
+  <line x1="185" y1="40" x2="370" y2="40" />
+  <line x1="185" y1="70" x2="370" y2="70" />
+  <line x1="185" y1="100" x2="370" y2="100" />
+
+  <!-- Branch 1: Light Point (Parallel connection) -->
+  <!-- Tappings from Live & Neutral -->
+  <line x1="230" y1="40" x2="230" y2="140" />
+  <line x1="270" y1="70" x2="270" y2="140" />
+  
+  <!-- Switch for Light -->
+  <line x1="230" y1="140" x2="245" y2="140" />
+  <line x1="245" y1="140" x2="255" y2="130" /> <!-- Open switch -->
+  <line x1="255" y1="140" x2="270" y2="140" />
+  
+  <!-- Bulb (Light Point) -->
+  <line x1="270" y1="140" x2="295" y2="140" />
+  <circle cx="295" cy="140" r="15" />
+  <path d="M 285 130 L 305 150 M 285 150 L 305 130" />
+  <line x1="295" y1="155" x2="295" y2="180" />
+  <line x1="295" y1="180" x2="270" y2="180" />
+  <line x1="270" y1="180" x2="270" y2="70" />
+
+  <text x="275" y="205">Light Point</text>
+
+  <!-- Branch 2: Power Plug (Parallel connection with Earth) -->
+  <!-- Tappings from Live, Neutral, Earth -->
+  <line x1="330" y1="40" x2="330" y2="210" />
+  <line x1="360" y1="70" x2="360" y2="210" />
+  <line x1="300" y1="100" x2="300" y2="230" />
+
+  <!-- Socket outline representing appliance / power plug -->
+  <rect x="315" y="210" width="60" height="40" />
+  
+  <!-- Socket holes / connections -->
+  <circle cx="330" cy="223" r="3" />
+  <circle cx="360" cy="223" r="3" />
+  <circle cx="345" cy="237" r="3" /> <!-- Earth pin at top center of socket -->
+
+  <!-- Connectors to socket -->
+  <line x1="330" y1="210" x2="330" y2="220" />
+  <line x1="360" y1="210" x2="360" y2="220" />
+  <line x1="300" y1="230" x2="345" y2="230" />
+  <line x1="345" y1="230" x2="345" y2="234" />
+
+  <text x="318" y="260">Power Plug</text>
+
+</svg>

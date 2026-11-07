@@ -1,0 +1,110 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-style: italic; }
+    .axis { stroke: #000; stroke-width: 1.2; fill: none; }
+    .ray { stroke: #000; stroke-width: 1.4; fill: none; }
+    .ray-dash { stroke: #000; stroke-width: 1.2; stroke-dasharray: 4,4; fill: none; }
+    .lens { stroke: #000; stroke-width: 1.6; fill: #e8f4f8; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff"/>
+
+  <!-- Principal Axis -->
+  <line x1="20" y1="150" x2="380" y2="150" class="axis"/>
+  
+  <!-- Arrows on Principal Axis -->
+  <polyline points="370,146 380,150 370,154" fill="none" class="axis"/>
+
+  <!-- Optical Center (O) -->
+  <circle cx="200" cy="150" r="2"/>
+
+  <!-- Convex Lens -->
+  <!-- Center is at x=200, y=150. Height = 80 (y: 110 to 190), thickness at center = 10 -->
+  <path d="M 200,110 C 205,125 205,175 200,190 C 195,175 195,125 200,110 Z" class="lens"/>
+
+  <!-- Focal Points and 2F Points -->
+  <!-- Given: u = -30 cm, v = 150 cm -> 1/f = 1/v - 1/u = 1/150 - 1/(-30) = 1/150 + 5/150 = 6/150 = 1/25 -->
+  <!-- So f = 25 cm. Let scale be 1 cm = 3 pixels. -->
+  <!-- f = 25 cm -> 75 px. 2f = 50 cm -> 150 px. u = 30 cm -> 90 px. v = 150 cm -> 450 px (too wide for 400px viewBox). -->
+  <!-- Wait, viewBox is width 400. Center is 200. Max x is 380, min x is 20. -->
+  <!-- Let's adjust scale for diagrammatic representation (schematic, not strictly to scale, but maintaining correct relative positions). -->
+  <!-- Let O = 200. F1 = 140 (-60px, representing 25cm), 2F1 = 80 (-120px, representing 50cm). -->
+  <!-- u = -30cm -> Let object be at x = 110 (distance = 90px, just beyond F1). -->
+  <!-- v = 150cm -> Let image be at x = 320 (distance = 120px on the other side, real, inverted, magnified). -->
+  <!-- Let's mark F and 2F properly: F1 at 140, 2F1 at 80. F2 at 260, 2F2 at 320. -->
+  <!-- Object at u = -30cm -> x = 110. Height = 30px (y: 150 to 120). -->
+  <!-- Image at v = 150cm -> x = 320 (at 2F2 position for visual balance, or beyond). Height = -150px? No, magnification m = v/u = 150 / (-30) = -5. -->
+  <!-- If object height is 25px, image height is -125px (extends below axis from y=150 to y=275, which goes off the 260 canvas). -->
+  <!-- Let's adjust schematic vertical scale so it fits nicely within y: 30 to 240. -->
+  <!-- Object height = 30px (y: 150 down to 120, wait, pointing up: y: 150 to 120). -->
+  <!-- Magnification = -5 means image height = 5 * 30 = 150px, pointing down (y: 150 to 300 - too long). -->
+  <!-- Let's use object height = 15px (y: 150 to 135). Then image height = 5 * 15 = 75px (y: 150 to 225). This fits well! -->
+
+  <!-- Frequencies / Points positions -->
+  <!-- O = 200 -->
+  <!-- F1 = 140 (f = 60 px) -->
+  <!-- 2F1 = 80 -->
+  <!-- F2 = 260 -->
+  <!-- 2F2 = 320 -->
+  <!-- Object u = 110 (distance 90 px from O, between F1 and 2F1) -->
+  <!-- Image v = 320 (distance 120 px from O, at 2F2 for neatness, representing large v) -->
+
+  <!-- Focal points & 2F labels/ticks -->
+  <line x1="80" y1="146" x2="80" y2="154" stroke="#000"/>
+  <text x="75" y="168">2F</text>
+  <text x="79" y="142" class="label">1</text>
+
+  <line x1="140" y1="146" x2="140" y2="154" stroke="#000"/>
+  <text x="137" y="168">F</text>
+  <text x="143" y="142" class="label">1</text>
+
+  <line x1="260" y1="146" x2="260" y2="154" stroke="#000"/>
+  <text x="257" y="168">F</text>
+  <text x="263" y="142" class="label">2</text>
+
+  <line x1="320" y1="146" x2="320" y2="154" stroke="#000"/>
+  <text x="314" y="168">2F</text>
+  <text x="328" y="142" class="label">2</text>
+
+  <!-- Object at u = -30cm (x = 110) -->
+  <line x1="110" y1="150" x2="110" y2="120" class="ray"/>
+  <polyline points="106,126 110,120 114,126" fill="none" class="ray"/>
+  <text x="105" y="113" class="label">Object</text>
+
+  <!-- Image at v = 150cm (x = 320, inverted, y: 150 to 225) -->
+  <line x1="320" y1="150" x2="320" y2="225" class="ray"/>
+  <polyline points="316,219 320,225 324,219" fill="none" class="ray"/>
+  <text x="330" y="228" class="label">Image</text>
+
+  <!-- Rays -->
+  <!-- Ray 1: Parallel to principal axis from object tip (110, 120) to lens (200, 120), then refracting through F2 (260, 150) -->
+  <line x1="110" y1="120" x2="200" y2="120" class="ray"/>
+  <line x1="200" y1="120" x2="360" y2="220" class="ray"/>
+  <!-- arrowhead on refracted ray -->
+  <polyline points="285,170 292,171 287,177" fill="none" class="ray"/>
+
+  <!-- Ray 2: Passing through optical center (200, 150) -->
+  <line x1="110" y1="120" x2="320" y2="225" class="ray"/>
+  <!-- arrowhead on central ray -->
+  <polyline points="230,165 235,172 240,166" fill="none" class="ray"/>
+
+  <!-- Ray 3: Passing through F1 (140, 150) to lens, then parallel -->
+  <!-- Object tip (110, 120) through F1 (140, 150) to lens at y where x=200 -->
+  <!-- Equation of line from (110, 120) to (140, 150): slope = (150-120)/(140-110) = 30/30 = 1 -->
+  <!-- At lens x = 200, y = 150 + (200-140)*1 = 210 -->
+  <line x1="110" y1="120" x2="200" y2="210" class="ray"/>
+  <line x1="200" y1="210" x2="360" y2="210" class="ray"/>
+  <!-- arrowhead on refracted ray 3 -->
+  <polyline points="280,206 288,210 280,214" fill="none" class="ray"/>
+
+  <!-- Labels for points -->
+  <text x="195" y="165">O</text>
+  <text x="370" y="142">X'</text>
+  <text x="15" y="142">X</text>
+
+  <!-- Dimensions / Labels u and v if needed, standard CBSE doesn't strictly require unless specified, but u and v are given -->
+  <text x="145" y="245" class="label">u = –30 cm</text>
+  <text x="280" y="245" class="label">v = 150 cm</text>
+</svg>

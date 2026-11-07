@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      fill: #000;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Main Circuit Loop -->
+  <rect x="60" y="50" width="280" height="160" fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Battery (12V) on the left vertical wire (x=60, y from 50 to 210, center y=130) -->
+  <g transform="translate(60, 130)">
+    <!-- Break the wire for battery -->
+    <line x1="0" y1="-30" x2="0" y2="-15" stroke="#fff" stroke-width="4" />
+    <line x1="0" y1="15" x2="0" y2="30" stroke="#fff" stroke-width="4" />
+    
+    <!-- Long bar (positive) -->
+    <line x1="-10" y1="-15" x2="10" y2="-15" stroke="#000" stroke-width="2" />
+    <!-- Short thick bar (negative) -->
+    <line x1="-6" y1="-5" x2="6" y2="-5" stroke="#000" stroke-width="4" />
+    <!-- Long bar -->
+    <line x1="-10" y1="5" x2="10" y2="5" stroke="#000" stroke-width="2" />
+    <!-- Short thick bar -->
+    <line x1="-6" y1="15" x2="6" y2="15" stroke="#000" stroke-width="4" />
+
+    <!-- Connecting stubs -->
+    <line x1="0" y1="-30" x2="0" y2="-15" stroke="#000" stroke-width="1.6" />
+    <line x1="0" y1="15" x2="0" y2="30" stroke="#000" stroke-width="1.6" />
+    
+    <!-- Battery Label -->
+    <text x="-35" y="5" text-anchor="middle">12V</text>
+  </g>
+
+  <!-- Ammeter 'P' in series on the top wire (y=50, x from 60 to 340, center x=200) -->
+  <g transform="translate(200, 50)">
+    <!-- Break the wire for Ammeter -->
+    <line x1="-20" y1="0" x2="20" y2="0" stroke="#fff" stroke-width="4" />
+    <!-- Circle -->
+    <circle cx="0" cy="0" r="16" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <!-- Letter A inside -->
+    <text x="0" y="5" text-anchor="middle" font-size="16">A</text>
+    <!-- Label P above -->
+    <text x="0" y="-22" text-anchor="middle" font-weight="bold">P</text>
+  </g>
+
+  <!-- Resistor (12 Ω) on the right vertical wire (x=340, y from 50 to 210, center y=130) -->
+  <g transform="translate(340, 130)">
+    <!-- Break the wire for resistor -->
+    <line x1="0" y1="-30" x2="0" y2="-25" stroke="#fff" stroke-width="4" />
+    <line x1="0" y1="25" x2="0" y2="30" stroke="#fff" stroke-width="4" />
+
+    <!-- Zigzag resistor symbol -->
+    <path d="M 0,-25 
+             L 10,-20 
+             L -10,-10 
+             L 10,0 
+             L -10,10 
+             L 10,20 
+             L 0,25" 
+          fill="none" stroke="#000" stroke-width="1.6" />
+
+    <!-- Resistor Value Label -->
+    <text x="25" y="5" text-anchor="start">12 Ω</text>
+  </g>
+
+  <!-- Voltmeter 'Q' in parallel across the resistor -->
+  <g transform="translate(340, 130)">
+    <!-- Extended wire right to Voltmeter branch -->
+    <path d="M 0,-50 H 380 V 130 H 356" fill="none" stroke="#000" stroke-width="1.6" />
+    <path d="M 0,50 H 380 V 130 H 356" fill="none" stroke="#000" stroke-width="1.6" />
+    
+    <!-- Wait, let's keep it simpler and cleaner using local coordinate translation for voltmeter Q -->
+  </g>
+
+  <!-- Redrawing Voltmeter Q cleanly -->
+  <g>
+    <!-- Top branch to voltmeter -->
+    <line x1="340" y1="50" x2="380" y2="50" stroke="#000" stroke-width="1.6" />
+    <line x1="380" y1="50" x2="380" y2="105" stroke="#000" stroke-width="1.6" />
+
+    <!-- Voltmeter circle -->
+    <circle cx="380" cy="130" r="16" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="380" y="135" text-anchor="middle" font-size="16">V</text>
+    <text x="410" y="135" text-anchor="start" font-weight="bold">Q</text>
+
+    <!-- Bottom branch to voltmeter -->
+    <line x1="380" y1="155" x2="380" y2="210" stroke="#000" stroke-width="1.6" />
+    <line x1="340" y1="210" x2="380" y2="210" stroke="#000" stroke-width="1.6" />
+  </g>
+
+  <!-- Switch / Plug key on bottom wire (y=210, x=200) -->
+  <g transform="translate(200, 210)">
+    <line x1="-20" y1="0" x2="-10" y2="0" stroke="#000" stroke-width="1.6" />
+    <line x1="10" y1="0" x2="20" y2="0" stroke="#000" stroke-width="1.6" />
+    <!-- Open switch terminals -->
+    <circle cx="-10" cy="0" r="2.5" fill="#000" />
+    <circle cx="10" cy="0" r="2.5" fill="#000" />
+    <!-- Switch arm (open) -->
+    <line x1="-10" y1="0" x2="0" y2="-12" stroke="#000" stroke-width="1.6" />
+  </g>
+
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text {
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      fill: #000;
+    }
+    .label {
+      font-size: 14px;
+      font-weight: bold;
+      text-anchor: middle;
+    }
+    .organism-label {
+      font-size: 14px;
+      text-anchor: middle;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- ==================== ORGANISM (a): Amoeba ==================== -->
+  <g transform="translate(100, 100)">
+    <!-- Irregular Amoeba shape with pseudopodia -->
+    <path d="M -35,-15 C -45,-30 -25,-45 0,-40 C 25,-45 40,-30 45,-10 C 55,10 40,30 20,40 C 0,45 -20,35 -35,20 C -50,5 -25,0 -35,-15 Z" 
+          fill="none" stroke="#000000" stroke-width="1.6" />
+    
+    <!-- Nucleus -->
+    <circle cx="5" cy="0" r="7" fill="none" stroke="#000000" stroke-width="1.6" />
+    <circle cx="5" cy="0" r="1.5" fill="#000000" />
+
+    <!-- Food vacuole / internal details -->
+    <circle cx="-15" cy="15" r="5" fill="none" stroke="#000000" stroke-width="1.2" />
+    <circle cx="20" cy="-15" r="4" fill="none" stroke="#000000" stroke-width="1.2" />
+
+    <!-- Labels -->
+    <text x="0" y="70" class="organism-label">(a)</text>
+  </g>
+
+
+  <!-- ==================== ORGANISM (b): Paramecium ==================== -->
+  <g transform="translate(300, 100)">
+    <!-- Slipper-shaped Paramecium -->
+    <path d="M 0,-55 C 25,-55 35,-20 25,20 C 15,55 -15,55 -25,20 C -35,-20 -25,-55 0,-55 Z" 
+          fill="none" stroke="#000000" stroke-width="1.6" />
+
+    <!-- Oral groove / indentation -->
+    <path d="M -15,-30 C -25,-10 -25,10 -10,25" 
+          fill="none" stroke="#000000" stroke-width="1.2" />
+
+    <!-- Cilia (strokes around the perimeter) -->
+    <path d="
+      M 0,-55 l 2,-6  M 10,-52 l 5,-5  M 20,-45 l 6,-3  M 28,-35 l 7,-2  
+      M 32,-20 l 7,0   M 32,-5 l 7,1    M 29,10 l 6,3    M 23,25 l 6,5  
+      M 13,38 l 4,6    M 0,48 l 2,7     M -13,48 l -2,7  M -23,38 l -5,6 
+      M -29,25 l -6,5  M -32,10 l -7,2  M -32,-5 l -7,0  M -28,-20 l -7,-2
+      M -20,-35 l -6,-3 M -10,-48 l -4,-5 M -3,-54 l -2,-6
+    " stroke="#000000" stroke-width="1.2" stroke-linecap="round" />
+
+    <!-- Micronucleus and Macronucleus -->
+    <ellipse cx="2" cy="-5" rx="5" ry="8" fill="none" stroke="#000000" stroke-width="1.4" />
+    <circle cx="-5" cy="8" r="2.5" fill="none" stroke="#000000" stroke-width="1.2" />
+
+    <!-- Labels -->
+    <text x="0" y="70" class="organism-label">(b)</text>
+  </g>
+
+
+  <!-- ==================== PROCESS ARROWS & OVERALL LABELS ==================== -->
+  <g transform="translate(200, 100)">
+    <!-- Fission / Division representation arrows -->
+    <path d="M -50,-65 Q 0,-85 50,-65" fill="none" stroke="#000000" stroke-width="1.2" stroke-dasharray="3,3" />
+    <path d="M -50,-55 L -45,-60 L -53,-60" fill="none" stroke="#000000" stroke-width="1.2" />
+  </g>
+
+  <!-- Title / Figure caption -->
+  <text x="200" y="215" class="label">Binary Fission in Amoeba (a) and Paramecium (b)</text>
+
+</svg>

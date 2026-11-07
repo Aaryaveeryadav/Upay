@@ -1,0 +1,129 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 11px; fill: #000; }
+    .label { font-size: 12px; font-weight: bold; }
+    .axis-label { font-size: 12px; }
+    .grid { stroke: #e0e0e0; stroke-width: 0.8; stroke-dasharray: 3,3; }
+    .graph-line { stroke: #000; stroke-width: 2; fill: none; }
+    .schematic { stroke: #000; stroke-width: 1.6; fill: none; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- ==================== PART (i): V-I GRAPH ==================== -->
+  <g transform="translate(20, 15)">
+    <!-- Title -->
+    <text x="65" y="10" class="label">(i) V-I Graph for Nichrome Wire</text>
+
+    <!-- Axes -->
+    <line x1="40" y1="180" x2="180" y2="180" stroke="#000" stroke-width="1.6" />
+    <line x1="40" y1="180" x2="40" y2="30" stroke="#000" stroke-width="1.6" />
+
+    <!-- Arrowheads -->
+    <polygon points="180,176 188,180 180,184" fill="#000" />
+    <polygon points="36,30 40,22 44,30" fill="#000" />
+
+    <!-- Axis Labels -->
+    <text x="160" y="200" class="axis-label">I (A)</text>
+    <text x="10" y="35" class="axis-label">V (V)</text>
+
+    <!-- Grid / Points (plotting V vs I: e.g., (0.5, 2), (1.0, 4), (1.5, 6)) -->
+    <!-- Scale: I-axis: 40px = 0.5 A (max 2.0A at 160px), V-axis: 30px = 1.0 V (max 6V at 180px) -->
+    <!-- Let's map: I in A -> x = 40 + I * 60. (0 -> 40, 0.5 -> 70, 1.0 -> 100, 1.5 -> 130, 2.0 -> 160) -->
+    <!-- Let's map: V in V -> y = 180 - V * 25. (0 -> 180, 2 -> 130, 4 -> 80, 6 -> 30) -->
+    
+    <!-- Grid lines for points (1.0V, 0.3A or similar standard textbook values) -->
+    <!-- Let's use points: (0.2, 1), (0.4, 2), (0.6, 3) -> R = 5 ohms -->
+    <!-- Scale: I: 1.0A = 100px. x = 40 + I * 100 -->
+    <!-- Scale: V: 1.0V = 25px. y = 180 - V * 25 -->
+    
+    <!-- Dashed construction lines for point (0.4 A, 2.0 V) -->
+    <line x1="80" y1="180" x2="80" y2="130" class="grid" />
+    <line x1="40" y1="130" x2="80" y2="130" class="grid" />
+
+    <!-- Dashed construction lines for point (0.8 A, 4.0 V) -->
+    <line x1="120" y1="180" x2="120" y2="80" class="grid" />
+    <line x1="40" y1="80" x2="120" y2="80" class="grid" />
+
+    <!-- Graph Line -->
+    <line x1="40" y1="180" x2="150" y2="52.5" class="graph-line" />
+
+    <!-- Points on graph -->
+    <circle cx="80" cy="130" r="3" fill="#000" />
+    <circle cx="120" cy="80" r="3" fill="#000" />
+
+    <!-- Tick labels X -->
+    <text x="75" y="193">0.4</text>
+    <text x="115" y="193">0.8</text>
+    <line x1="80" y1="177" x2="80" y2="183" stroke="#000" stroke-width="1.6" />
+    <line x1="120" y1="177" x2="120" y2="183" stroke="#000" stroke-width="1.6" />
+
+    <!-- Tick labels Y -->
+    <text x="20" y="134">2.0</text>
+    <text x="20" y="84">4.0</text>
+    <line x1="37" y1="130" x2="43" y2="130" stroke="#000" stroke-width="1.6" />
+    <line x1="37" y1="80" x2="43" y2="80" stroke="#000" stroke-width="1.6" />
+    
+    <text x="35" y="193">0</text>
+  </g>
+
+  <!-- Divider line -->
+  <line x1="210" y1="20" x2="210" y2="240" stroke="#ccc" stroke-width="1" stroke-dasharray="4,4" />
+
+  <!-- ==================== PART (ii): CIRCUIT DIAGRAM ==================== -->
+  <g transform="translate(225, 15)">
+    <!-- Title -->
+    <text x="25" y="10" class="label">(ii) Circuit Diagram</text>
+
+    <!-- Circuit wires & components (simple series-parallel or bridge combination typical of CBSE) -->
+    <!-- Let's draw a battery on left, and a combination of resistors (e.g., parallel pair in series with another) -->
+    
+    <!-- Battery (Left vertical) -->
+    <line x1="30" y1="90" x2="30" y2="150" class="schematic" />
+    <!-- Long bar (+), short thick bar (-) -->
+    <line x1="20" y1="105" x2="40" y2="105" class="schematic" stroke-width="2.5" />
+    <line x1="24" y1="115" x2="36" y2="115" class="schematic" stroke-width="2.5" />
+    <line x1="20" y1="125" x2="40" y2="125" class="schematic" stroke-width="2.5" />
+    <line x1="24" y1="135" x2="36" y2="135" class="schematic" stroke-width="2.5" />
+    <text x="5" y="112">+</text>
+    <text x="6" y="135">-</text>
+    <text x="12" y="165">6V</text>
+
+    <!-- Top wire from battery to resistors -->
+    <line x1="30" y1="90" x2="80" y2="90" class="schematic" />
+    <line x1="80" y1="90" x2="140" y2="90" class="schematic" />
+
+    <!-- Resistor R1 (top branch or initial series) -->
+    <!-- Zigzag for R1 -->
+    <path d="M 80,90 L 85,85 L 95,95 L 105,85 L 115,95 L 125,85 L 135,95 L 140,90" class="schematic" />
+    <text x="95" y="77">5 $\Omega$</text>
+
+    <!-- Parallel combination R2 and R3 -->
+    <line x1="140" y1="90" x2="160" y2="90" class="schematic" />
+    <line x1="160" y1="90" x2="160" y2="60" class="schematic" />
+    <line x1="160" y1="90" x2="160" y2="120" class="schematic" />
+
+    <!-- Resistor R2 (top parallel) -->
+    <path d="M 160,60 L 165,55 L 175,65 L 185,55 L 195,65 L 205,55 L 215,65 L 220,60" class="schematic" />
+    <text x="180" y="48">10 $\Omega$</text>
+
+    <!-- Resistor R3 (bottom parallel) -->
+    <path d="M 160,120 L 165,115 L 175,125 L 185,115 L 195,125 L 205,115 L 215,125 L 220,120" class="schematic" />
+    <text x="180" y="142">10 $\Omega$</text>
+
+    <line x1="220" y1="60" x2="240" y2="60" class="schematic" />
+    <line x1="220" y1="120" x2="240" y2="120" class="schematic" />
+    <line x1="240" y1="60" x2="240" y2="90" class="schematic" />
+    <line x1="240" y1="120" x2="240" y2="90" class="schematic" />
+
+    <!-- Return wire from parallel block to bottom rail -->
+    <line x1="240" y1="90" x2="260" y2="90" class="schematic" />
+    <line x1="260" y1="90" x2="260" y2="150" class="schematic" />
+    <line x1="260" y1="150" x2="30" y2="150" class="schematic" />
+
+    <!-- Ammeter / Switch optional, keep clean -->
+    <circle cx="140" cy="150" r="8" class="schematic" />
+    <text x="137" y="154">K</text>
+  </g>
+</svg>

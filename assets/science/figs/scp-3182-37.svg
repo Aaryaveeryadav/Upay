@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- Styles -->
+  <style>
+    text { font-family: sans-serif; font-size: 11px; fill: black; }
+    .label { font-size: 10px; }
+    .ray { fill: none; stroke: black; stroke-width: 1.2; }
+    .extension { fill: none; stroke: black; stroke-width: 1; stroke-dasharray: 3,3; }
+    .outline { fill: #f9f9f9; stroke: black; stroke-width: 1.6; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="white" />
+
+  <!-- Eyeball Outline -->
+  <!-- Center at (220, 130), radius x = 45, radius y = 40 -->
+  <path d="M 175 130 C 175 107, 195 90, 220 90 C 245 90, 265 107, 265 130 C 265 153, 245 170, 220 170 C 195 170, 175 153, 175 130 Z" class="outline" />
+  
+  <!-- Cornea bulge -->
+  <path d="M 175 110 C 170 120, 170 140, 175 150" fill="none" stroke="black" stroke-width="1.6" />
+
+  <!-- Eye Lens -->
+  <path d="M 195 112 C 200 130, 200 130, 195 148 C 197 148, 197 112, 195 112 Z" fill="#e6e6e6" stroke="black" stroke-width="1.2" />
+
+  <!-- Retina -->
+  <path d="M 257 105 C 262 118, 262 142, 257 155" fill="none" stroke="black" stroke-width="2.5" />
+
+  <!-- Object at N (Near point for defective eye = 50cm, represented further out than normal 25cm) -->
+  <!-- Object position: x = 80, y = 130 to 150 -->
+  <line x1="80" y1="110" x2="80" y2="150" stroke="black" stroke-width="2" />
+  <polygon points="80,105 77,112 83,112" fill="black" />
+  <text x="75" y="100" class="label">N'</text>
+  <text x="65" y="165" class="label">(50 cm)</text>
+
+  <!-- Ray 1: Top ray from object -->
+  <!-- Object tip at (80, 110), enters lens at (195, 115), refracts to focus behind retina at (275, 130) -->
+  <line x1="80" y1="110" x2="195" y2="115" class="ray" />
+  <line x1="195" y1="115" x2="275" y2="130" class="ray" />
+  <!-- Extension inside eye to show where it would meet retina -->
+  <line x1="195" y1="115" x2="260" y2="128" class="extension" />
+
+  <!-- Ray 2: Bottom ray from object -->
+  <!-- Object base at (80, 150), enters lens at (195, 145), refracts to focus behind retina at (275, 130) -->
+  <line x1="80" y1="150" x2="195" y2="145" class="ray" />
+  <line x1="195" y1="145" x2="275" y2="130" class="ray" />
+  <!-- Extension inside eye -->
+  <line x1="195" y1="145" x2="260" y2="132" class="extension" />
+
+  <!-- Ray 3: Axial ray (center) -->
+  <line x1="80" y1="130" x2="275" y2="130" class="ray" />
+
+  <!-- Focus point behind retina -->
+  <circle cx="275" cy="130" r="2" fill="black" />
+  <text x="270" y="145" class="label">F</text>
+
+  <!-- Labels -->
+  <text x="200" y="185" class="label">Retina</text>
+  <!-- Leader line for retina -->
+  <line x1="230" y1="170" x2="230" y2="178" stroke="black" stroke-width="0.8" />
+
+  <!-- Title / Caption -->
+  <text x="110" y="215" font-weight="bold">Hypermetropia (Farsightedness)</text>
+  <text x="85" y="235">Rays from a near object (N') are focused behind the retina.</text>
+
+</svg>

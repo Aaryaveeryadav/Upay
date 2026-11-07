@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: sans-serif; font-size: 12px; fill: #000; }
+    .label { font-style: italic; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff"/>
+
+  <!-- Solenoid Body (Cylindrical coils) -->
+  <g fill="none" stroke="#000" stroke-width="1.6">
+    <!-- Back loops (drawn lighter or dashed? textbook style uses thin solid lines for back, or just continuous oval segments) -->
+    <!-- Let's draw standard textbook solenoid coils -->
+    
+    <!-- Cylinder outline background (hidden mostly by coils, but good for reference) -->
+    
+    <!-- Coils: repeating ellipses/arcs -->
+    <!-- Coil 1 -->
+    <path d="M 80,100 C 70,100 65,110 65,120 C 65,130 70,140 80,140" />
+    <path d="M 80,100 C 90,100 95,110 95,120 C 95,130 90,140 80,140" stroke-dasharray="3,3"/>
+
+    <!-- Coil 2 -->
+    <path d="M 110,100 C 100,100 95,110 95,120 C 95,130 100,140 110,140" />
+    <path d="M 110,100 C 120,100 125,110 125,120 C 125,130 120,140 110,140" stroke-dasharray="3,3"/>
+
+    <!-- Coil 3 -->
+    <path d="M 140,100 C 130,100 125,110 125,120 C 125,130 130,140 140,140" />
+    <path d="M 140,100 C 150,100 155,110 155,120 C 155,130 150,140 140,140" stroke-dasharray="3,3"/>
+
+    <!-- Coil 4 -->
+    <path d="M 170,100 C 160,100 155,110 155,120 C 155,130 160,140 170,140" />
+    <path d="M 170,100 C 180,100 185,110 185,120 C 185,130 180,140 170,140" stroke-dasharray="3,3"/>
+
+    <!-- Coil 5 -->
+    <path d="M 200,100 C 190,100 185,110 185,120 C 185,130 190,140 200,140" />
+    <path d="M 200,100 C 210,100 215,110 215,120 C 215,130 210,140 200,140" stroke-dasharray="3,3"/>
+
+    <!-- Coil 6 -->
+    <path d="M 230,100 C 220,100 215,110 215,120 C 215,130 220,140 230,140" />
+    <path d="M 230,100 C 240,100 245,110 245,120 C 245,130 240,140 230,140" stroke-dasharray="3,3"/>
+
+    <!-- Coil 7 -->
+    <path d="M 260,100 C 250,100 245,110 245,120 C 245,130 250,140 260,140" />
+    <path d="M 260,100 C 270,100 275,110 275,120 C 275,130 270,140 260,140" stroke-dasharray="3,3"/>
+
+    <!-- Connecting lines on top and bottom -->
+    <line x1="80" y1="100" x2="260" y2="100" />
+    <line x1="80" y1="140" x2="260" y2="140" />
+
+    <!-- Battery / DC Source connections -->
+    <path d="M 65,120 L 40,120 L 40,170 L 115,170" />
+    <path d="M 275,120 L 300,120 L 300,170 L 225,170" />
+    
+    <!-- Battery symbol at bottom -->
+    <line x1="145" y1="162" x2="145" y2="178" />
+    <line x1="155" y1="166" x2="155" y2="174" />
+    <line x1="165" y1="162" x2="165" y2="178" />
+    <line x1="175" y1="166" x2="175" y2="174" />
+    
+    <!-- Current direction arrows on wires -->
+    <!-- Top wire (entering/leaving) -->
+    <polygon points="120,97 130,100 120,103" fill="#000" />
+    <polygon points="210,97 220,100 210,103" fill="#000" />
+  </g>
+
+  <!-- Magnetic Field Lines (Loops exiting N, entering S) -->
+  <g fill="none" stroke="#000" stroke-width="1.2">
+    <!-- Inner straight-ish field lines -->
+    <path d="M 90,120 Q 170,120 250,120" stroke-dasharray="4,4"/>
+    
+    <!-- Loop 1 (Outer) -->
+    <path d="M 150,100 C 150,30 200,20 250,50 C 280,70 290,95 275,110" />
+    <path d="M 150,140 C 150,210 200,220 250,190 C 280,170 290,145 275,130" />
+    <!-- Arrow on top outer field line -->
+    <polygon points="205,42 215,48 203,53" fill="#000" />
+
+    <!-- Loop 2 (Middle) -->
+    <path d="M 130,100 C 130,55 170,45 220,70 C 245,85 255,100 245,115" />
+    <path d="M 130,140 C 130,185 170,195 220,170 C 245,155 255,140 245,125" />
+    <!-- Arrow -->
+    <polygon points="180,60 190,65 178,71" fill="#000" />
+
+    <!-- Left side return paths (from S to N outside) -->
+    <path d="M 190,100 C 190,30 140,20 90,50 C 60,70 50,95 65,110" />
+    <path d="M 190,140 C 190,210 140,220 90,190 C 60,170 50,145 65,130" />
+    <polygon points="135,42 125,48 137,53" fill="#000" />
+
+    <path d="M 210,100 C 210,55 170,45 120,70 C 95,85 85,100 95,115" />
+    <path d="M 210,140 C 210,185 170,195 120,170 C 95,155 85,140 95,125" />
+    <polygon points="160,60 150,65 162,71" fill="#000" />
+  </g>
+
+  <!-- Poles Indication -->
+  <text x="50" y="124" font-weight="bold">S</text>
+  <text x="285" y="124" font-weight="bold">N</text>
+
+  <!-- Points A, B, C -->
+  <!-- A: Inside near center -->
+  <circle cx="170" cy="120" r="3" fill="#000" />
+  <text x="166" y="110">A</text>
+
+  <!-- B: Inside near end (right) -->
+  <circle cx="245" cy="120" r="3" fill="#000" />
+  <text x="241" y="110">B</text>
+
+  <!-- C: Outside -->
+  <circle cx="330" cy="80" r="3" fill="#000" />
+  <text x="326" y="70">C</text>
+
+</svg>

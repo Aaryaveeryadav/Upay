@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Medium Separation Line (Interface) -->
+  <line x1="40" y1="130" x2="360" y2="130" stroke="#000000" stroke-width="1.6" />
+
+  <!-- Normal Line -->
+  <line x1="200" y1="30" x2="200" y2="230" stroke="#000000" stroke-width="1.0" stroke-dasharray="4,4" />
+
+  <!-- Incident Ray -->
+  <line x1="113" y1="43" x2="200" y2="130" stroke="#000000" stroke-width="1.6" />
+  <!-- Incident Arrowhead -->
+  <polygon points="145,70 157,73 150,85" fill="#000000" />
+
+  <!-- Refracted Ray -->
+  <line x1="200" y1="130" x2="250" y2="217" stroke="#000000" stroke-width="1.6" />
+  <!-- Refracted Arrowhead -->
+  <polygon points="230,183 238,193 226,193" fill="#000000" />
+
+  <!-- Angle Arcs -->
+  <!-- Incident Angle i (60 deg approx) -->
+  <path d="M 200,95 A 35,35 0 0,0 176,104" fill="none" stroke="#000000" stroke-width="1.2" />
+  <!-- Refracted Angle r (30 deg approx) -->
+  <path d="M 220,165 A 35,35 0 0,0 200,165" fill="none" stroke="#000000" stroke-width="1.2" />
+
+  <!-- Labels -->
+  <!-- Medium 1 -->
+  <text x="60" y="70" font-family="Arial, sans-serif" font-size="14" fill="#000000">Medium 1</text>
+  
+  <!-- Medium 2 -->
+  <text x="60" y="190" font-family="Arial, sans-serif" font-size="14" fill="#000000">Medium 2</text>
+
+  <!-- Angle Labels -->
+  <text x="175" y="85" font-family="Arial, sans-serif" font-size="14" fill="#000000">60°</text>
+  <text x="215" y="158" font-family="Arial, sans-serif" font-size="14" fill="#000000">30°</text>
+</svg>

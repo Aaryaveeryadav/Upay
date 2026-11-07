@@ -1,0 +1,37 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: black; }
+    .bold { font-weight: bold; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="white" />
+
+  <!-- Title / Heading -->
+  <text x="50" y="30" class="bold">Monohybrid Cross ($F_2$ Generation Flow Chart)</text>
+
+  <!-- Flow Chart Structure -->
+  <!-- Parents -->
+  <rect x="150" y="50" width="100" height="30" fill="none" stroke="black" stroke-width="1.6" />
+  <text x="172" y="70">Tt × tt</text>
+  <text x="80" y="70">Parents:</text>
+
+  <!-- Arrow down -->
+  <line x1="200" y1="80" x2="200" y2="105" stroke="black" stroke-width="1.6" />
+  <polygon points="195,105 205,105 200,113" fill="black" />
+
+  <!-- F1 Generation -->
+  <rect x="120" y="115" width="160" height="30" fill="none" stroke="black" stroke-width="1.6" />
+  <text x="132" y="135">Offspring ($F_1$): Tt, tt</text>
+  <text x="50" y="135">Cross ($F_1$):</text>
+
+  <!-- Arrow down -->
+  <line x1="200" y1="145" x2="200" y2="170" stroke="black" stroke-width="1.6" />
+  <polygon points="195,170 205,170 200,178" fill="black" />
+
+  <!-- F2 Generation Result Box -->
+  <rect x="70" y="185" width="260" height="45" fill="none" stroke="black" stroke-width="1.6" />
+  <text x="80" y="205" class="bold">$F_2$ Generation Genotypic Ratio:</text>
+  <text x="110" y="223">Tt (Tall) : tt (Short) = 1 : 1</text>
+
+</svg>

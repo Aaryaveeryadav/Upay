@@ -1,0 +1,124 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 10px; fill: #000; }
+    .label { font-size: 11px; font-weight: bold; }
+    .bold { font-weight: bold; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- ==================== PART 1: MICELLE STRUCTURE (Left) ==================== -->
+  
+  <g transform="translate(15, 15)">
+    <!-- Title / Label -->
+    <text x="75" y="15" text-anchor="middle" class="label">Cleansing Action of Soap (Micelle)</text>
+
+    <!-- Dirt particle (center) -->
+    <circle cx="80" cy="110" r="22" fill="#d0d0d0" stroke="#000" stroke-width="1.6" stroke-dasharray="3,3" />
+    <text x="80" y="113" text-anchor="middle" font-size="9" class="bold">Dirt</text>
+
+    <!-- Surfactant molecules surrounding dirt -->
+    <!-- Helper macro positions for radial tails (hydrophobic) and heads (hydrophilic) -->
+    
+    <!-- Top group -->
+    <path d="M 80,88 L 80,68" stroke="#000" stroke-width="1.6" fill="none" />
+    <circle cx="80" cy="63" r="6" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="80" y="66" text-anchor="middle" font-size="7">-</text>
+
+    <path d="M 65,90 L 52,74" stroke="#000" stroke-width="1.6" fill="none" />
+    <circle cx="48" cy="69" r="6" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="48" y="72" text-anchor="middle" font-size="7">-</text>
+
+    <path d="M 95,90 L 108,74" stroke="#000" stroke-width="1.6" fill="none" />
+    <circle cx="112" cy="69" r="6" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="112" y="72" text-anchor="middle" font-size="7">-</text>
+
+    <!-- Left/Right groups -->
+    <path d="M 58,110 L 38,110" stroke="#000" stroke-width="1.6" fill="none" />
+    <circle cx="32" cy="110" r="6" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="32" y="113" text-anchor="middle" font-size="7">-</text>
+
+    <path d="M 102,110 L 122,110" stroke="#000" stroke-width="1.6" fill="none" />
+    <circle cx="128" cy="110" r="6" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="128" y="113" text-anchor="middle" font-size="7">-</text>
+
+    <!-- Bottom group -->
+    <path d="M 80,132 L 80,152" stroke="#000" stroke-width="1.6" fill="none" />
+    <circle cx="80" cy="157" r="6" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="80" y="160" text-anchor="middle" font-size="7">-</text>
+
+    <path d="M 65,130 L 52,146" stroke="#000" stroke-width="1.6" fill="none" />
+    <circle cx="48" cy="151" r="6" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="48" y="154" text-anchor="middle" font-size="7">-</text>
+
+    <path d="M 95,130 L 108,146" stroke="#000" stroke-width="1.6" fill="none" />
+    <circle cx="112" cy="151" r="6" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="112" y="154" text-anchor="middle" font-size="7">-</text>
+
+    <path d="M 50,110 L 32,95" stroke="#000" stroke-width="0" /> <!-- spacer -->
+
+    <!-- Diagonal extras -->
+    <path d="M 60,95 L 44,85" stroke="#000" stroke-width="1.6" fill="none" />
+    <circle cx="39" cy="81" r="6" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="39" y="84" text-anchor="middle" font-size="7">-</text>
+
+    <path d="M 100,95 L 116,85" stroke="#000" stroke-width="1.6" fill="none" />
+    <circle cx="121" cy="81" r="6" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="121" y="84" text-anchor="middle" font-size="7">-</text>
+
+    <path d="M 60,125 L 44,135" stroke="#000" stroke-width="1.6" fill="none" />
+    <circle cx="39" cy="139" r="6" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="39" y="142" text-anchor="middle" font-size="7">-</text>
+
+    <path d="M 100,125 L 116,135" stroke="#000" stroke-width="1.6" fill="none" />
+    <circle cx="121" cy="139" r="6" fill="#fff" stroke="#000" stroke-width="1.6" />
+    <text x="121" y="142" text-anchor="middle" font-size="7">-</text>
+
+    <!-- Labels with pointers -->
+    <!-- Hydrophilic head pointer -->
+    <line x1="28" y1="69" x2="5" y2="45" stroke="#000" stroke-width="1" />
+    <text x="2" y="38" font-size="9">Ionic end</text>
+    <text x="2" y="48" font-size="9">(Hydrophilic)</text>
+
+    <!-- Hydrophobic tail pointer -->
+    <line x1="72" y1="95" x2="40" y2="190" stroke="#000" stroke-width="1" />
+    <text x="25" y="202" font-size="9">Carbon chain</text>
+    <text x="25" y="212" font-size="9">(Hydrophobic)</text>
+  </g>
+
+  <!-- Divider line -->
+  <line x1="175" y1="20" x2="175" y2="240" stroke="#ccc" stroke-width="1" stroke-dasharray="4,4" />
+
+  <!-- ==================== PART 2: CHEMICAL PREPARATION (Right) ==================== -->
+
+  <g transform="translate(190, 15)">
+    <!-- Title / Label -->
+    <text x="100" y="15" text-anchor="middle" class="label">Preparation of Soap (Saponification)</text>
+
+    <!-- Reaction Box / Text -->
+    <text x="10" y="55" class="bold">Fat / Oil + Sodium Hydroxide</text>
+    <text x="50" y="70" font-size="10">(Ester)</text>
+    <text x="138" y="55" class="bold">(NaOH)</text>
+
+    <!-- Yield arrow -->
+    <line x1="30" y1="85" x2="170" y2="85" stroke="#000" stroke-width="1.6" />
+    <polygon points="165,81 175,85 165,89" fill="#000" />
+    <text x="90" y="80" text-anchor="middle" font-size="9">Heat</text>
+
+    <text x="55" y="110" class="bold">Soap + Glycerol</text>
+    <text x="35" y="125" font-size="10">(Sodium salt</text>
+    <text x="35" y="137" font-size="10">of fatty acid)</text>
+
+    <!-- Detailed Chemical Equation Block -->
+    <rect x="5" y="160" width="190" height="85" fill="#fcfcfc" stroke="#000" stroke-width="1" />
+    <text x="12" y="175" class="bold">Chemical Equation:</text>
+    <text x="12" y="195" font-size="9">C<tspan dy="3" font-size="7">3</tspan><tspan dy="-3">H<tspan dy="3" font-size="7">5</tspan><tspan dy="-3">(OOCC<tspan dy="3" font-size="7">17</tspan><tspan dy="-3">H<tspan dy="3" font-size="7">35</tspan><tspan dy="-3">)<tspan dy="3" font-size="7">3</tspan><tspan dy="-3"> + 3NaOH</tspan></tspan></tspan></tspan></tspan></text>
+    <line x1="30" y1="205" x2="170" y2="205" stroke="#000" stroke-width="1" />
+    <polygon points="165,202 173,205 165,208" fill="#000" />
+    <text x="12" y="224" font-size="9">3C<tspan dy="3" font-size="7">17</tspan><tspan dy="-3">H<tspan dy="3" font-size="7">35</tspan><tspan dy="-3">COONa + C<tspan dy="3" font-size="7">3</tspan><tspan dy="-3">H<tspan dy="3" font-size="7">5</tspan><tspan dy="-3">(OH)<tspan dy="3" font-size="7">3</tspan></tspan></tspan></tspan></tspan></text>
+    <text x="125" y="238" font-size="8" font-style="italic">(Glycerol)</text>
+    <text x="15" y="238" font-size="8" font-style="italic">(Soap)</text>
+  </g>
+
+</svg>

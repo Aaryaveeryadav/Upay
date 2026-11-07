@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      fill: #000;
+    }
+    .label-title {
+      font-weight: bold;
+      font-size: 12px;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Pyramid Levels (Bottom to Top) -->
+  <!-- Level 4: Top Carnivore (Smallest, top) -->
+  <polygon points="170,30 230,30 215,70 185,70" fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Level 3: Carnivore -->
+  <polygon points="155,70 245,70 230,110 170,110" fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Level 2: Herbivore -->
+  <polygon points="140,110 260,110 245,150 155,150" fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Level 1: Producer (Largest, bottom) -->
+  <polygon points="125,150 275,150 260,190 140,190" fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Horizontal Divider Lines inside Pyramid -->
+  <line x1="185" y1="70" x2="215" y2="70" stroke="#000" stroke-width="1.6" />
+  <line x1="170" y1="110" x2="230" y2="110" stroke="#000" stroke-width="1.6" />
+  <line x1="155" y1="150" x2="245" y2="150" stroke="#000" stroke-width="1.6" />
+
+  <!-- Right Side Labels & Arrows -->
+  <line x1="200" y1="50" x2="290" y2="50" stroke="#000" stroke-width="1.2" />
+  <text x="295" y="45" class="label-title">T4: Top Carnivore</text>
+  <text x="295" y="58">(Maximum chemicals)</text>
+
+  <line x1="208" y1="90" x2="290" y2="90" stroke="#000" stroke-width="1.2" />
+  <text x="295" y="94">T3: Carnivore</text>
+
+  <line x1="200" y1="130" x2="290" y2="130" stroke="#000" stroke-width="1.2" />
+  <text x="295" y="134">T2: Herbivore</text>
+
+  <line x1="200" y1="170" x2="290" y2="170" stroke="#000" stroke-width="1.2" />
+  <text x="295" y="174">T1: Producer</text>
+
+  <!-- Left Side Biomagnification Indicator -->
+  <line x1="110" y1="40" x2="110" y2="180" stroke="#000" stroke-width="1.6" />
+  <!-- Arrow head for indicator -->
+  <polygon points="106,45 110,30 114,45" fill="#000" />
+  <text x="35" y="105" transform="rotate(-90 35 105)" text-anchor="middle" class="label-title">Increasing Concentration</text>
+
+  <!-- Figure Title / Caption -->
+  <text x="200" y="225" text-anchor="middle" class="label-title">Figure: Ecological Pyramid of Biomagnification</text>
+</svg>

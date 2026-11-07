@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="100%">
+  <style>
+    text {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      fill: #000000;
+    }
+    .label {
+      font-size: 11px;
+      font-style: italic;
+    }
+    .bold {
+      font-weight: bold;
+    }
+    .line {
+      stroke: #000000;
+      stroke-width: 1.6;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .solid-fill {
+      fill: #000000;
+    }
+    .white-fill {
+      fill: #ffffff;
+    }
+    .liquid {
+      fill: #e6e6e6;
+    }
+    .bubble {
+      fill: #ffffff;
+      stroke: #000000;
+      stroke-width: 1.0;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Stand / Base -->
+  <path d="M 60 230 L 140 230" class="line" />
+  <path d="M 100 230 L 100 120" class="line" />
+  
+  <!-- Boss head / Clamp -->
+  <rect x="90" y="110" width="20" height="25" class="white-fill line" />
+  <path d="M 110 122.5 L 145 122.5" class="line" />
+
+  <!-- Test Tube -->
+  <!-- Tilted test tube held by clamp, containing acid and zinc granules -->
+  <g transform="rotate(-15, 175, 140)">
+    <!-- Acid liquid inside tube (lower part) -->
+    <path d="M 140 160 L 140 195 A 17.5 17.5 0 0 0 175 212.5 A 17.5 17.5 0 0 0 210 195 L 210 160 Z" class="liquid" />
+    
+    <!-- Zinc granules at the bottom -->
+    <path d="M 155 200 L 162 195 L 168 202 L 175 197 L 182 201 L 188 196 L 195 200 Z" class="solid-fill" />
+    
+    <!-- Gas bubbles rising -->
+    <circle cx="165" cy="180" r="2.5" class="bubble" />
+    <circle cx="185" cy="165" r="2.0" class="bubble" />
+    <circle cx="170" cy="150" r="3.0" class="bubble" />
+    <circle cx="180" cy="135" r="2.5" class="bubble" />
+    <circle cx="175" cy="115" r="3.0" class="bubble" />
+    <circle cx="178" cy="95" r="2.0" class="bubble" />
+
+    <!-- Test tube body -->
+    <!-- Open end at top-right (approx 175, 60), closed rounded bottom at bottom-left (approx 175, 212.5) -->
+    <!-- Width of tube is 35 (radius 17.5) -->
+    <path d="M 140 80 L 140 195 A 17.5 17.5 0 0 0 175 212.5 A 17.5 17.5 0 0 0 210 195 L 210 80" class="line white-fill" />
+    <!-- Tube lip -->
+    <path d="M 136 80 L 214 80" class="line" />
+    <path d="M 136 76 L 214 76" class="line" />
+
+    <!-- Cork / Rubber Bung with Delivery Tube -->
+    <path d="M 144 80 L 206 80 L 200 95 L 150 95 Z" class="white-fill line" />
+  </g>
+
+  <!-- Delivery Tube (Glass tube bent) -->
+  <!-- Starts from bung around (approx 185, 100 in global coords, let's trace precisely) -->
+  <path d="M 215 95 
+           Q 245 95 245 120 
+           L 245 180 
+           Q 245 200 265 200 
+           L 290 200" class="line" />
+  <!-- Inner line for glass tube thickness -->
+  <path d="M 215 99 
+           Q 241 99 241 120 
+           L 241 180 
+           Q 241 196 265 196 
+           L 290 196" class="line" />
+
+  <!-- Trough / Container for soap solution -->
+  <rect x="260" y="160" width="90" height="70" rx="4" ry="4" class="white-fill line" />
+  <!-- Soap solution level -->
+  <path d="M 261 185 L 349 185" class="line" />
+  <rect x="261" y="185" width="88" height="44" rx="2" ry="2" class="liquid" />
+
+  <!-- Delivery tube end inside soap solution -->
+  <!-- The end is at 290, 200 -->
+
+  <!-- Bubbles coming out of delivery tube -->
+  <circle cx="305" cy="180" r="5" class="bubble" />
+  <circle cx="315" cy="165" r="7" class="bubble" />
+  <circle cx="330" cy="150" r="10" class="bubble" />
+  <circle cx="315" cy="135" r="8" class="bubble" />
+  <circle cx="325" cy="120" r="11" class="bubble" />
+
+  <!-- Labels and pointers -->
+  <!-- Stand -->
+  <text x="35" y="180">Stand</text>
+  <path d="M 68 180 L 95 180" class="line" />
+
+  <!-- Delivery tube -->
+  <text x="210" y="55">Delivery tube</text>
+  <path d="M 245 75 Q 245 60 235 60" class="line" />
+
+  <!-- Test tube -->
+  <text x="80" y="80">Test tube</text>
+  <path d="M 135 85 L 150 95" class="line" />
+
+  <!-- Acid and Zinc granules -->
+  <text x="50" y="130">Dilute sulphuric acid</text>
+  <text x="50" y="143">+ Zinc granules</text>
+  <path d="M 155 145 L 175 160" class="line" />
+
+  <!-- Soap bubble -->
+  <text x="340" y="105">Soap bubble</text>
+  <text x="340" y="118">filled with gas</text>
+  <path d="M 335 120 L 328 125" class="line" />
+
+  <!-- Soap solution -->
+  <text x="260" y="248">Soap solution</text>
+  <path d="M 290 229 L 290 238" class="line" />
+
+  <!-- Burner / Candle (Optional in some textbook diagrams, but let's keep it clean as standard NCERT Fig 2.3) -->
+  <!-- NCERT Class 10 Science, Chapter 2, Figure 2.3: Reaction of zinc granules with dilute sulphuric acid and testing hydrogen gas by burning -->
+  <!-- Let's add the burning of hydrogen gas with a pop sound, or just bubbles? Standard figure has a burning candle near the escaping gas, or just soap bubbles. Let's add the burning candle for completeness if it's the standard test. Actually, standard Fig 2.3 shows burning of hydrogen gas with a pop sound. Let's add the burning candle. -->
+  
+  <g transform="translate(30, 0)">
+    <!-- Candle / Candle stick -->
+    <rect x="315" y="135" width="12" height="35" class="white-fill line" />
+    <ellipse cx="321" cy="135" rx="6" ry="2" class="white-fill line" />
+    <!-- Wick -->
+    <path d="M 321 133 L 321 128" class="line" />
+    <!-- Flame -->
+    <path d="M 321 125 Q 328 115 321 100 Q 314 115 321 125 Z" fill="#ffffff" class="line" />
+    <!-- Flame label -->
+    <text x="335" y="112">Burning of</text>
+    <text x="335" y="125">hydrogen gas</text>
+    <path d="M 328 115 L 333 115" class="line" />
+  </g>
+
+</svg>

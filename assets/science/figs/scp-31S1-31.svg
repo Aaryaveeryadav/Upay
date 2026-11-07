@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 12px; fill: #000; }
+    .label { font-size: 13px; font-weight: bold; }
+    .wire { stroke: #000; stroke-width: 1.6; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+    .component { stroke: #000; stroke-width: 1.6; fill: #fff; stroke-linejoin: round; stroke-linecap: round; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Main Circuit Wires -->
+  <path class="wire" d="M 60 130 L 100 130" />
+  <path class="wire" d="M 120 130 L 140 130" />
+  <!-- Parallel network branch 1 -->
+  <path class="wire" d="M 140 130 L 160 130 L 160 80 L 180 80" />
+  <path class="wire" d="M 220 80 L 240 80 L 240 130 L 260 130" />
+  <!-- Parallel network branch 2 -->
+  <path class="wire" d="M 160 130 L 180 130" />
+  <path class="wire" d="M 220 130 L 240 130" />
+  <!-- Parallel network branch 3 -->
+  <path class="wire" d="M 160 130 L 160 180 L 180 180" />
+  <path class="wire" d="M 220 180 L 240 180 L 240 130" />
+  
+  <!-- Continue circuit to right and bottom -->
+  <path class="wire" d="M 260 130 L 320 130" />
+  <path class="wire" d="M 320 130 L 320 210 L 80 210 L 80 130" />
+  <path class="wire" d="M 80 130 L 100 130" />
+
+  <!-- Ammeter (A) in series on the left branch -->
+  <circle class="component" cx="110" cy="130" r="10" />
+  <text x="106" y="134">A</text>
+
+  <!-- Voltmeter (V) connected across parallel combination (140 to 260) -->
+  <path class="wire" d="M 140 50 L 260 50" />
+  <path class="wire" d="M 140 130 L 140 50" />
+  <path class="wire" d="M 260 130 L 260 50" />
+  <circle class="component" cx="200" cy="50" r="12" />
+  <text x="195" y="54">V</text>
+
+  <!-- Resistor 1 (Top) -->
+  <path class="component" d="M 180 80 L 185 75 L 191 85 L 197 75 L 203 85 L 209 75 L 215 85 L 220 80" />
+  <text x="190" y="70" class="label">R₁</text>
+
+  <!-- Resistor 2 (Middle) -->
+  <path class="component" d="M 180 130 L 185 125 L 191 135 L 197 125 L 203 135 L 209 125 L 215 135 L 220 130" />
+  <text x="190" y="120" class="label">R₂</text>
+
+  <!-- Resistor 3 (Bottom) -->
+  <path class="component" d="M 180 180 L 185 175 L 191 185 L 197 175 L 203 185 L 209 175 L 215 185 L 220 180" />
+  <text x="190" y="170" class="label">R₃</text>
+
+  <!-- Cell / Battery at the bottom wire -->
+  <g transform="translate(190, 210)">
+    <line class="wire" x1="-20" y1="0" x2="-10" y2="0" />
+    <line class="component" x1="-10" y1="-12" x2="-10" y2="12" stroke-width="2.4" />
+    <line class="wire" x1="-10" y1="0" x2="-4" y2="0" />
+    <line class="component" x1="-4" y1="-7" x2="-4" y2="7" stroke-width="1.6" />
+    <line class="wire" x1="-4" y1="0" x2="4" y2="0" />
+    <line class="component" x1="4" y1="-12" x2="4" y2="12" stroke-width="2.4" />
+    <line class="wire" x1="4" y1="0" x2="10" y2="0" />
+    <line class="component" x1="10" y1="-7" x2="10" y2="7" stroke-width="1.6" />
+    <line class="wire" x1="10" y1="0" x2="20" y2="0" />
+    <text x="-14" y="-16" class="label">+</text>
+    <text x="6" y="-16" class="label">-</text>
+  </g>
+  <text x="220" y="214">6 V</text>
+
+  <!-- Plug Key (closed) on the left wire -->
+  <g transform="translate(60, 130)">
+    <circle class="component" cx="-5" cy="0" r="3" />
+    <circle class="component" cx="5" cy="0" r="3" />
+    <line class="component" x1="-5" y1="0" x2="5" y2="0" stroke-width="2" />
+    <text x="-5" y="-12" class="label">K</text>
+  </g>
+</svg>

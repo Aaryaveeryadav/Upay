@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: #000; }
+    .label { font-size: 13px; font-style: italic; }
+    .bold { font-weight: bold; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Main Circuit Wires -->
+  <line x1="60" y1="130" x2="120" y2="130" stroke="#000" stroke-width="1.6" />
+  <line x1="280" y1="130" x2="340" y2="130" stroke="#000" stroke-width="1.6" />
+  
+  <!-- Top rail (parallel connection) -->
+  <line x1="120" y1="80" x2="280" y2="80" stroke="#000" stroke-width="1.6" />
+  <!-- Bottom rail (parallel connection) -->
+  <line x1="120" y1="180" x2="280" y2="180" stroke="#000" stroke-width="1.6" />
+
+  <!-- Vertical drops to parallel branches -->
+  <!-- Branch 1 (R1) -->
+  <line x1="150" y1="80" x2="150" y2="110" stroke="#000" stroke-width="1.6" />
+  <line x1="150" y1="150" x2="150" y2="180" stroke="#000" stroke-width="1.6" />
+
+  <!-- Branch 2 (R2) -->
+  <line x1="200" y1="80" x2="200" y2="110" stroke="#000" stroke-width="1.6" />
+  <line x1="200" y1="150" x2="200" y2="180" stroke="#000" stroke-width="1.6" />
+
+  <!-- Branch 3 (R3) -->
+  <line x1="250" y1="80" x2="250" y2="110" stroke="#000" stroke-width="1.6" />
+  <line x1="250" y1="150" x2="250" y2="180" stroke="#000" stroke-width="1.6" />
+
+  <!-- Resistor R1 (zig-zag between 110 and 150) -->
+  <path d="M 150 110 L 144 113 L 156 119 L 144 125 L 156 131 L 144 137 L 156 143 L 150 150" 
+        fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Resistor R2 -->
+  <path d="M 200 110 L 194 113 L 206 119 L 194 125 L 206 131 L 194 137 L 206 143 L 200 150" 
+        fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Resistor R3 -->
+  <path d="M 250 110 L 244 113 L 256 119 L 244 125 L 256 131 L 244 137 L 256 143 L 250 150" 
+        fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Battery on the left (connected across 60,130) -->
+  <!-- Wires to battery -->
+  <line x1="60" y1="130" x2="60" y2="100" stroke="#000" stroke-width="1.6" />
+  <line x1="60" y1="130" x2="60" y2="160" stroke="#000" stroke-width="1.6" />
+  
+  <!-- Battery symbol: long thin positive line, short thick negative line -->
+  <line x1="45" y1="100" x2="75" y2="100" stroke="#000" stroke-width="2.5" />
+  <line x1="52" y1="108" x2="68" y2="108" stroke="#000" stroke-width="2.5" />
+  <line x1="45" y1="116" x2="75" y2="116" stroke="#000" stroke-width="2.5" />
+  <line x1="52" y1="124" x2="68" y2="124" stroke="#000" stroke-width="2.5" />
+
+  <!-- Connecting back to bottom rail from battery -->
+  <line x1="60" y1="124" x2="60" y2="130" stroke="#000" stroke-width="1.6" />
+  
+  <!-- Let's redraw battery cleanly centered vertically around y=130 -->
+  <!-- Clear previous battery lines and draw standard cell/battery -->
+  <rect x="40" y="105" width="40" height="50" fill="#fff" /> <!-- coverup -->
+  
+  <line x1="60" y1="95" x2="60" y2="110" stroke="#000" stroke-width="1.6" />
+  <!-- Long plate (+) -->
+  <line x1="48" y1="110" x2="72" y2="110" stroke="#000" stroke-width="2.5" />
+  <!-- Short plate (-) -->
+  <line x1="54" y1="120" x2="66" y2="120" stroke="#000" stroke-width="2.5" />
+  <!-- Long plate (+) -->
+  <line x1="48" y1="130" x2="72" y2="130" stroke="#000" stroke-width="2.5" />
+  <!-- Short plate (-) -->
+  <line x1="54" y1="140" x2="66" y2="140" stroke="#000" stroke-width="2.5" />
+  
+  <line x1="60" y1="140" x2="60" y2="155" stroke="#000" stroke-width="1.6" />
+  <line x1="60" y1="95" x2="120" y2="95" stroke="#000" stroke-width="1.6" />
+  <line x1="120" y1="95" x2="120" y2="80" stroke="#000" stroke-width="1.6" />
+  
+  <line x1="60" y1="155" x2="120" y2="155" stroke="#000" stroke-width="1.6" />
+  <line x1="120" y1="155" x2="120" y2="180" stroke="#000" stroke-width="1.6" />
+
+  <!-- Fix main loop connections neatly -->
+  <rect x="50" y="70" width="300" height="130" fill="none" stroke="#fff" stroke-width="4" />
+  
+  <!-- Redraw clean external loop -->
+  <!-- Top wire from battery to parallel junction -->
+  <path d="M 60 110 L 60 70 L 120 70" fill="none" stroke="#000" stroke-width="1.6" />
+  <!-- Bottom wire from battery to parallel junction -->
+  <path d="M 60 140 L 60 190 L 120 190" fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Adjust parallel rails to match junction y=70 and y=190 -->
+  <line x1="120" y1="70" x2="280" y2="70" stroke="#000" stroke-width="1.6" />
+  <line x1="120" y1="190" x2="280" y2="190" stroke="#000" stroke-width="1.6" />
+
+  <!-- Vertical drops -->
+  <line x1="150" y1="70" x2="150" y2="100" stroke="#000" stroke-width="1.6" />
+  <line x1="150" y1="160" x2="150" y2="190" stroke="#000" stroke-width="1.6" />
+
+  <line x1="200" y1="70" x2="200" y2="100" stroke="#000" stroke-width="1.6" />
+  <line x1="200" y1="160" x2="200" y2="190" stroke="#000" stroke-width="1.6" />
+
+  <line x1="250" y1="70" x2="250" y2="100" stroke="#000" stroke-width="1.6" />
+  <line x1="250" y1="160" x2="250" y2="190" stroke="#000" stroke-width="1.6" />
+
+  <!-- Resistors positioned between 100 and 160 -->
+  <path d="M 150 100 L 144 104 L 156 111 L 144 118 L 156 125 L 144 132 L 156 139 L 144 146 L 156 153 L 150 160" 
+        fill="none" stroke="#000" stroke-width="1.6" />
+  <path d="M 200 100 L 194 104 L 206 111 L 194 118 L 206 125 L 194 132 L 206 139 L 194 146 L 206 153 L 200 160" 
+        fill="none" stroke="#000" stroke-width="1.6" />
+  <path d="M 250 100 L 244 104 L 256 111 L 244 118 L 256 125 L 244 132 L 256 139 L 244 146 L 256 153 L 250 160" 
+        fill="none" stroke="#000" stroke-width="1.6" />
+
+  <!-- Battery labels -->
+  <text x="35" y="115" class="bold">+</text>
+  <text x="38" y="139" class="bold">-</text>
+  <text x="56" y="85" class="bold">V</text>
+
+  <!-- Resistor Labels -->
+  <text x="162" y="134" class="label">R</text>
+  <text x="171" y="138" style="font-size: 10px;">1</text>
+
+  <text x="212" y="134" class="label">R</text>
+  <text x="221" y="138" style="font-size: 10px;">2</text>
+
+  <text x="262" y="134" class="label">R</text>
+  <text x="271" y="138" style="font-size: 10px;">3</text>
+
+  <!-- Current indicators (optional context, keeping schematic clean) -->
+  <line x1="90" y1="70" x2="100" y2="65" stroke="#000" stroke-width="1.6" />
+  <line x1="90" y1="70" x2="100" y2="75" stroke="#000" stroke-width="1.6" />
+  <text x="85" y="62" class="bold">I</text>
+
+</svg>

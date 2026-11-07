@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+  <!-- Styles for standard textbook schematic -->
+  <style>
+    line, polyline, path, circle, rect {
+      fill: none;
+      stroke: #000000;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    text {
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      fill: #000000;
+    }
+    .label-bold {
+      font-weight: bold;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" stroke="none"/>
+
+  <!-- Circuit Outer Wire Loop -->
+  <!-- Top wire with Switch -->
+  <line x1="80" y1="50" x2="160" y2="50" />
+  <line x1="220" y1="50" x2="320" y2="50" />
+  
+  <!-- Right wire with Ammeter -->
+  <line x1="320" y1="50" x2="320" y2="100" />
+  <line x1="320" y1="140" x2="320" y2="210" />
+
+  <!-- Bottom wire with Battery and Voltmeter connection points -->
+  <line x1="320" y1="210" x2="250" y2="210" />
+  <line x1="190" y1="210" x2="80" y2="210" />
+
+  <!-- Left wire -->
+  <line x1="80" y1="210" x2="80" y2="155" />
+  <line x1="80" y1="105" x2="80" y2="50" />
+
+  <!-- Plug Key (Open Switch) -->
+  <circle cx="175" cy="50" r="4" />
+  <circle cx="205" cy="50" r="4" />
+  <line x1="160" y1="50" x2="171" y2="50" />
+  <line x1="209" y1="50" x2="220" y2="50" />
+  <!-- Switch arm open -->
+  <polyline points="175,50 160,30" />
+
+  <!-- Ammeter (A) in series on the right -->
+  <circle cx="320" cy="120" r="20" />
+  <text x="316" y="125" class="label-bold">A</text>
+
+  <!-- DC Battery (Cell) at the bottom -->
+  <line x1="190" y1="200" x2="190" y2="220" />
+  <line x1="200" y1="194" x2="200" y2="226" />
+  <line x1="210" y1="200" x2="210" y2="220" />
+  <line x1="220" y1="194" x2="220" y2="226" />
+  <!-- Battery connecting leads -->
+  <line x1="190" y1="210" x2="160" y2="210" />
+  <line x1="220" y1="210" x2="250" y2="210" />
+  <!-- Battery labels -->
+  <text x="178" y="198" class="label-bold">+</text>
+  <text x="228" y="198" class="label-bold">-</text>
+  <text x="201" y="242" font-size="11">6V</text>
+
+  <!-- Parallel Resistor Network (Branching from Left vertical wire) -->
+  <!-- Junctions -->
+  <circle cx="80" cy="105" r="2.5" fill="#000000" />
+  <circle cx="80" cy="155" r="2.5" fill="#000000" />
+
+  <!-- Resistor R1 (Top branch) -->
+  <path d="M 80,105 L 110,105 L 115,97 L 125,113 L 135,97 L 145,113 L 155,97 L 165,113 L 175,97 L 185,113 L 190,105 L 240,105" />
+  
+  <!-- Resistor R2 (Bottom branch) -->
+  <path d="M 80,155 L 110,155 L 115,147 L 125,163 L 135,147 L 145,163 L 155,147 L 165,163 L 175,147 L 185,163 L 190,155 L 240,155" />
+
+  <!-- Wires connecting parallel block back to main right circuit (at y=130) -->
+  <line x1="240" y1="105" x2="270" y2="105" />
+  <line x1="240" y1="155" x2="270" y2="155" />
+  <line x1="270" y1="105" x2="270" y2="155" />
+  <line x1="270" y1="130" x2="320" y2="130" /> <!-- wait, ammeter is at 100-140, let's connect cleanly to 320,130 -->
+
+  <!-- Component Labels -->
+  <text x="135" y="90" class="label-bold">R₁ = 10 Ω</text>
+  <text x="135" y="178" class="label-bold">R₂ = 20 Ω</text>
+  <text x="187" y="42" class="label-bold">K</text>
+</svg>

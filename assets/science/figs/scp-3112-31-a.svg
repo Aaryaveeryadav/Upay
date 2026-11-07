@@ -1,0 +1,60 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: #000; }
+    .bold { font-weight: bold; }
+    .label { font-size: 12px; text-anchor: middle; }
+    .arrow { fill: none; stroke: #000; stroke-width: 1.6; marker-end: url(#arrowhead); }
+    .box { fill: #fff; stroke: #000; stroke-width: 1.6; rx: 6; ry: 6; }
+    .dashed { stroke-dasharray: 4,4; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="7" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#000" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#fff" />
+
+  <!-- Title / Context -->
+  <text x="200" y="28" class="bold" text-anchor="middle">Food Chain: Plants → Deer → Lion</text>
+
+  <!-- First Trophic Level -->
+  <rect x="40" y="60" width="80" height="40" class="box" />
+  <text x="80" y="85" class="label bold">Plants</text>
+  <text x="80" y="115" class="label">(1st Trophic Level)</text>
+
+  <!-- Arrow 1 -->
+  <line x1="120" y1="80" x2="160" y2="80" class="arrow" />
+
+  <!-- Second Trophic Level (Strikethrough / Removed) -->
+  <rect x="160" y="60" width="80" height="40" class="box dashed" />
+  <text x="200" y="85" class="label" fill="#666">Deer</text>
+  <text x="200" y="115" class="label" fill="#666">(2nd Trophic)</text>
+  <!-- Red/Dark Cross for removal -->
+  <line x1="165" y1="65" x2="235" y2="95" stroke="#000" stroke-width="1.6" />
+  <line x1="235" y1="65" x2="165" y2="95" stroke="#000" stroke-width="1.6" />
+
+  <!-- Arrow 2 -->
+  <line x1="240" y1="80" x2="280" y2="80" class="arrow" />
+
+  <!-- Third Trophic Level -->
+  <rect x="280" y="60" width="80" height="40" class="box" />
+  <text x="320" y="85" class="label bold">Lion</text>
+  <text x="320" y="115" class="label">(3rd Trophic Level)</text>
+
+  <!-- Explanatory annotations / Impact summary -->
+  <line x1="40" y1="140" x2="360" y2="140" stroke="#ccc" stroke-width="1" />
+  
+  <text x="50" y="165" class="bold" font-size="13">Impact in Food Chain:</text>
+  <text x="50" y="185" font-size="12">1. 1st Level (Plants): Population increases</text>
+  <text x="50" y="205" font-size="12">   (lack of herbivores).</text>
+  <text x="50" y="225" font-size="12">2. 3rd Level (Lion): Population starves</text>
+  <text x="50" y="245" font-size="12">   and dies/migrates due to no food.</text>
+
+  <text x="235" y="165" class="bold" font-size="13">In a Food Web:</text>
+  <text x="235" y="185" font-size="12">Impact on 3rd level may</text>
+  <text x="235" y="205" font-size="12">be less severe if alternative</text>
+  <text x="235" y="225" font-size="12">prey options are available.</text>
+</svg>

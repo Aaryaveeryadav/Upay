@@ -1,0 +1,13 @@
+{
+  "name": "upay",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Upay — study app and admin portal for selected Classes 10–12",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "reset-admin": "node tools/reset-admin.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {}
+}

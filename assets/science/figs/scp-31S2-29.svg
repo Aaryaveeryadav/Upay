@@ -1,0 +1,39 @@
+<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: Arial, sans-serif; font-size: 14px; fill: #000; }
+    .label { font-size: 15px; font-weight: bold; }
+    .line { stroke: #000; stroke-width: 1.6; fill: none; }
+  </style>
+
+  <!-- Background -->
+  <rect width="400" height="260" fill="#ffffff" />
+
+  <!-- Brain Outline (Schematic Sagittal Section) -->
+  <!-- Cerebrum (Main body) -->
+  <path class="line" d="M 120,60 C 130,40 180,30 220,40 C 260,50 300,70 310,100 C 320,130 300,160 270,180 C 250,190 230,195 210,190 C 190,185 180,170 170,170 C 150,170 130,195 100,195 C 80,195 70,185 70,160 C 70,140 85,130 95,110 C 105,90 110,75 120,60 Z" />
+
+  <!-- Cerebrum internal folds (sulci/gyri simplification) -->
+  <path class="line" d="M 120,70 C 150,60 190,60 230,70" />
+  <path class="line" d="M 130,95 C 170,85 220,95 270,110" />
+  <path class="line" d="M 110,130 C 160,120 210,130 250,145" />
+
+  <!-- Cerebellum ('Y') -->
+  <path class="line" d="M 210,175 C 230,175 260,180 275,195 C 290,210 270,230 240,230 C 210,230 190,210 200,190 Z" />
+  <!-- Cerebellum internal arbor vitae pattern -->
+  <path class="line" d="M 220,195 C 230,200 240,200 250,210" />
+  <path class="line" d="M 235,190 C 235,205 240,215 255,220" />
+
+  <!-- Medulla / Brain Stem ('X') -->
+  <path class="line" d="M 170,170 C 170,190 165,210 160,235 L 190,235 C 195,210 200,190 210,175 Z" />
+
+  <!-- Pointer lines and labels -->
+  <!-- Label X (Medulla/Brain Stem) -->
+  <line x1="168" y1="205" x2="60" y2="205" class="line" />
+  <text x="40" y="210" class="label">X</text>
+
+  <!-- Label Y (Cerebellum) -->
+  <line x1="240" y1="205" x2="340" y2="205" class="line" />
+  <text x="350" y="210" class="label">Y</text>
+
+  <!-- Additional pointer to cerebrum just for context if needed, but question only asks X and Y -->
+</svg>
