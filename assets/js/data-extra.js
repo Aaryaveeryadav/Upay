@@ -6,7 +6,7 @@ window.UP = window.UP || {};
 UP.classes = [
   { id: 10, en: "Class 10", hi: "कक्षा 10", subjects: ["maths", "science", "social", "hindi", "english", "sanskrit"] },
   { id: 11, en: "Class 11", hi: "कक्षा 11", subjects: ["maths", "physics", "chemistry", "biology"] },
-  { id: 12, en: "Class 12", hi: "कक्षा 12", subjects: ["maths", "applied-maths", "physics", "chemistry", "biology", "accountancy", "computerized-accounting", "economics", "english"] }
+  { id: 12, en: "Class 12", hi: "कक्षा 12", subjects: ["maths", "applied-maths", "physics", "chemistry", "biology", "accountancy", "computerized-accounting", "economics", "business-studies", "english"] }
 ];
 
 UP.subjects = {
@@ -22,7 +22,8 @@ UP.subjects = {
   biology: { en: "Biology", hi: "जीव विज्ञान", icon: "leaf" },
   accountancy: { en: "Accountancy", hi: "लेखाशास्त्र", icon: "calc" },
   "computerized-accounting": { en: "Computerized Accounting · Option II", hi: "कम्प्यूटरीकृत लेखांकन · विकल्प II", icon: "laptop" },
-  economics: { en: "Economics", hi: "अर्थशास्त्र", icon: "globe" }
+  economics: { en: "Economics", hi: "अर्थशास्त्र", icon: "globe" },
+  "business-studies": { en: "Business Studies", hi: "व्यवसाय अध्ययन", icon: "book" }
 };
 
 UP.boards = [
@@ -332,6 +333,9 @@ UP.catalogue = function (cls, subject) {
   }
   if (+cls === 12 && String(subject) === 'computerized-accounting') {
     return (UP.course12computerized || []).map(c => Object.assign({}, c, { className: 12, subject: 'computerized-accounting' }));
+  }
+  if (+cls === 12 && String(subject) === 'business-studies') {
+    return (UP.course12business || []);
   }
   if (+cls === 12 && String(subject) === 'economics') {
     return (UP.course12economics || []).map(c => Object.assign({}, c, { className: 12, subject: 'economics' }));
