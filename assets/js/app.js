@@ -1259,11 +1259,16 @@ window.UP = window.UP || {};
         <p style="margin:0;font-size:12.5px;color:var(--ink-400)">${esc(P({en:ch.enDesc||'',hi:ch.hiDesc||''}))}</p>
       </div>`;
     }
-    if (businessTrack() && ch.outline) {
-      return `<a class="card ch-card" href="#/chapter/${ch.id}" data-chapter-id="${ch.id}">
-        <div class="ch-top"><span class="ch-num">${String(ch.displayNo).padStart(2,'0')}</span><div>
-        <div class="ch-title">${esc(ch.en)}</div><div class="ch-sub">${esc(ch.enDesc.slice(0,92))}…</div></div></div>
-        <div class="ch-foot"><span class="tag">English outline</span><span class="tag cream">CBSE unit ${ch.displayNo}</span><span class="arrow">${icon('arrow')}</span></div></a>`;
+    /* Any chapter carrying an `outline` (Business Studies units, and Class 12
+       Chemistry units once chemistry-outlines.js attaches them) shows the full
+       outline summary directly on the card, not a truncated enDesc. */
+    if (ch.outline) {
+      const unitNo = ch.displayNo != null ? ch.displayNo : (typeof ch.id === 'number' && ch.id > 700 ? ch.id - 700 : ch.id);
+      return `<a class="card ch-card outline-card" href="#/chapter/${ch.id}" data-chapter-id="${ch.id}">
+        <div class="ch-top"><span class="ch-num">${String(unitNo).padStart(2,'0')}</span><div>
+        <div class="ch-title">${esc(ch.outline.title)}</div></div></div>
+        <p class="ch-outline-summary">${esc(ch.outline.summary)}</p>
+        <div class="ch-foot"><span class="tag">English outline</span><span class="tag cream">CBSE unit ${esc(unitNo)}</span><span class="arrow">${icon('arrow')}</span></div></a>`;
     }
     if (english12Track() && ch.sourceId) {
       return `<a class="card ch-card english12-chapter-card" href="#/chapter/${ch.id}" data-chapter-id="${ch.id}">
@@ -2246,8 +2251,13 @@ window.UP = window.UP || {};
     const isEconomics = economicsTrack();
     const isEnglish12 = english12Track();
     const isBusiness = businessTrack();
+    const isChemistry = +S.cls === 12 && S.subject === 'chemistry';
     const syllabusLead = isBusiness
       ? (S.board === 'cbse' ? '12 English unit outlines mapped to CBSE 2026–27: 11 from your supplied chapters and Financial Markets from the CBSE syllabus. Project work is not covered.' : 'These outlines are mapped only to CBSE 2026–27. Select CBSE to see them; other boards have not been verified.')
+      : isChemistry
+      ? (S.lang === 'hi'
+        ? 'कक्षा 12 रसायन विज्ञान की 10 इकाई-रूपरेखाएँ, CBSE 2026–27 पाठ्यक्रम (विषय 043) से मैप; आपकी दी गई NCERT पुनर्मुद्रण अध्याय-PDF पर आधारित। प्रायोगिक कार्य, परियोजना और चार प्रारूपिक-मूल्यांकन इकाइयाँ शामिल नहीं हैं। CBSE द्वारा प्रमाणित नहीं।'
+        : 'Ten unit outlines mapped to the CBSE 2026–27 Chemistry syllabus (subject 043), based on the supplied NCERT reprint chapter PDFs. Practicals, project work and the four formative-only topics are not covered. Not certified by CBSE.')
       : isEnglish12
       ? (S.lang === 'hi'
         ? 'दी गई पुस्तकों के 40 पाठ-चयन, मूल PDF और अध्ययन संकेत। अपने बोर्ड और वर्ष का पाठ्यक्रम अलग से जाँचें।'
@@ -2316,7 +2326,7 @@ window.UP = window.UP || {};
             </div>
           </a>`).join('')}
       </div>` : ''}
-    ${isBusiness ? `<div class="callout tip" style="margin-top:20px"><div>English outlines only; no full chapter text, questions or official answer key. Mapped to the CBSE syllabus, not certified by CBSE. <a class="link" href="https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/BusinessStudies_SecP2_2026-27.pdf">CBSE syllabus</a>.</div></div>` : (!isMaths10 || isAccountancy) ? `<div class="callout tip" style="margin-top:20px">${icon('info')}<div>${isEnglish12
+    ${isBusiness ? `<div class="callout tip" style="margin-top:20px"><div>English outlines only; no full chapter text, questions or official answer key. Mapped to the CBSE syllabus, not certified by CBSE. <a class="link" href="https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/BusinessStudies_SecP2_2026-27.pdf">CBSE syllabus</a>.</div></div>` : isChemistry ? `<div class="callout tip" style="margin-top:20px"><div>English outlines only; no full chapter text or official answer key. Mapped to the CBSE 2026–27 Chemistry syllabus (subject 043), not certified by CBSE. The formative-only topics (Surface Chemistry; General Principles and Processes of Isolation of Elements; Polymers; Chemistry in Everyday Life) and the practical syllabus are not covered. <a class="link" href="https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/Chemistry_SecP2_2026-27.pdf">CBSE syllabus</a>.</div></div>` : (!isMaths10 || isAccountancy) ? `<div class="callout tip" style="margin-top:20px">${icon('info')}<div>${isEnglish12
       ? (S.lang === 'hi' ? 'अध्यायों के स्वयं-जाँच प्रश्न उपाय ने बनाए हैं; वे बोर्ड प्रश्न या आधिकारिक उत्तर-कुंजी नहीं हैं। मूल पाठ और पुस्तक के अभ्यास PDF में हैं।' : 'The chapter review prompts were written by Upay; they are not board questions or an official answer key. The original text and textbook exercises are in the PDFs.')
       : isEconomics
       ? (S.lang === 'hi'
@@ -2363,16 +2373,28 @@ window.UP = window.UP || {};
       <a class="btn btn-ghost btn-sm" href="#/ask?q=${encodeURIComponent('Help me understand ' + ch.en + '.')}" >${icon('sparkle')} ${hi ? 'प्रश्न पूछें' : 'Ask about this reading'}</a>
     </div>`;
   }
+  /* Shared outline panel for Business Studies and Chemistry chapter views:
+     sections, objectives, key terms, source and (for Chemistry) the selected
+     source-crop figure. Title and ~300-character summary live in the hero. */
+  function renderOutlinePanel(ch) {
+    const n = ch.outline; if (!n) return '';
+    const list = items => items.map(item => `<li>${esc(item)}</li>`).join('');
+    const figure = n.image
+      ? `<figure><img loading="lazy" src="/${esc(n.image)}" alt="${esc(n.figure || n.title)}"><figcaption>NCERT figure ${esc(n.fig || '')} · ${esc(n.figure || '')} · PDF page ${esc(n.page)} · source crop, not AI-drawn</figcaption></figure>`
+      : '';
+    return `
+      <div class="callout tip" style="margin-top:16px"><div>Mapped to CBSE 2026–27, not certified by CBSE. Outline only — not a full chapter, not an answer key.${n.id === 'lebs203' ? ' The applicable syllabus names the Consumer Protection Act, 2019, not the outdated 1986 reference in the staged source summary.' : ''}</div></div>
+      <section class="card outline-panel" style="margin-top:16px"><h2>Sections</h2><ul>${list(n.sections)}</ul>
+      <h2>Objectives</h2><ul>${list(n.objectives)}</ul><h2>Key terms</h2><p>${esc(n.terms.join(' · '))}</p>
+      <p class="muted">Source: ${n.source_url ? `<a href="${esc(n.source_url)}">${esc(n.source)}</a>` : esc(n.source) + '. The source PDF is not provided on the site.'}</p>${figure}</section>`;
+  }
   function viewBusinessChapter(ch) {
     const n = ch.outline;
-    const list = items => items.map(item => `<li>${esc(item)}</li>`).join('');
     return `<a class="link" href="#/syllabus">← Chapters</a>
       <section class="detail-hero" style="margin-top:12px"><div class="meta-row"><span class="tag">CBSE unit ${ch.displayNo}</span><span class="tag cream">English outline</span></div>
       <h1>${esc(n.title)}</h1><p>${esc(n.summary)}</p></section>
-      <div class="callout tip" style="margin-top:16px"><div>Mapped to CBSE 2026–27, not certified by CBSE. Outline only; not a full chapter or official answer key.${n.id === 'lebs203' ? ' The applicable syllabus names the Consumer Protection Act, 2019, not the outdated 1986 reference in the staged source summary.' : ''}</div></div>
-      <section class="card" style="margin-top:16px"><h2>Sections</h2><ul>${list(n.sections)}</ul>
-      <h2>Objectives</h2><ul>${list(n.objectives)}</ul><h2>Key terms</h2><p>${esc(n.terms.join(' · '))}</p>
-      <p class="muted">Source: ${n.source_url ? `<a href="${esc(n.source_url)}">${esc(n.source)}</a>` : esc(n.source) + ". The source PDF is not provided on the site."}</p></section>`;
+      ${renderOutlinePanel(ch)}
+      <div class="setup-actions" style="margin-top:16px"><a class="btn btn-ghost btn-sm" href="/assets/notes/index.html#${esc(n.id)}">${icon('book')} Full outline library</a></div>`;
   }
   function viewChapter(id, params) {
     if (businessTrack() && S.board !== 'cbse') return `<div class="empty"><h3>CBSE outlines only</h3><p>Select CBSE to view these chapters.</p><a class="link" href="#/syllabus">Chapters</a></div>`;
@@ -2384,6 +2406,22 @@ window.UP = window.UP || {};
       : chapterById(id);
     if (!ch) return `<div class="empty">${icon('warn')}<h3>${t('noMatch')}</h3><p><a href="#/syllabus">${t('nav_syllabus')}</a></p></div>`;
     if (businessTrack()) return viewBusinessChapter(ch);
+    const isChemistryOutline = +S.cls === 12 && S.subject === 'chemistry' && ch.outline;
+    if (isChemistryOutline) {
+      const n = ch.outline;
+      return `<a class="link" href="#/syllabus" style="font-size:13px">← ${t('nav_syllabus')}</a>
+      <section class="detail-hero" style="margin-top:12px">
+        <div class="meta-row"><span class="tag">${S.lang === 'hi' ? 'इकाई' : 'Unit'} ${esc(ch.displayNo)} · ${esc(n.marks)} ${t('marks')}</span><span class="tag cream">English outline</span><span class="tag grey">CBSE 2026–27 · 043</span></div>
+        <h1>${esc(n.title)}</h1>
+        <p>${esc(n.summary)}</p>
+        <div class="pill-row">${n.terms.slice(0, 6).map(k => `<span class="pill">${esc(k)}</span>`).join('')}</div>
+      </section>
+      ${renderOutlinePanel(ch)}
+      <div class="setup-actions" style="margin-top:16px">
+        <a class="btn btn-ghost btn-sm" href="/assets/notes/index.html#${esc(n.id)}">${icon('book')} ${S.lang === 'hi' ? 'पूरा रूपरेखा-पुस्तकालय' : 'Full outline library'}</a>
+        <a class="btn btn-ghost btn-sm" href="#/pyq">${icon('clock')} ${S.lang === 'hi' ? 'रसायन विज्ञान के पुराने प्रश्नपत्र' : 'Past-year chemistry papers'}</a>
+      </div>`;
+    }
     if (english12Track()) return viewEnglish12Chapter(ch);
     const tab = params.tab || 'concepts';
     const isAccountancyChapter = accountancyTrack();
@@ -2418,8 +2456,9 @@ window.UP = window.UP || {};
           </div>
         </article>`;
       }
+      const isNcertExtract = /^NCERT\b/i.test(String(p.src || ''));
       return `<article class="pyq-item">
-        <div class="pmeta"><span class="tag">${esc(p.board)} ${esc(p.year)}</span><span class="tag grey">${p.marks} ${t('marks')}</span></div>
+        <div class="pmeta"><span class="tag">${isNcertExtract ? 'NCERT · practice, not board-verified' : `${esc(p.board)} ${esc(p.year)}`}</span><span class="tag grey">${p.marks} ${t('marks')}</span></div>
         <div class="pbody"><div class="pq">${rich(text)}</div><div class="pactions">
           <button class="btn btn-primary btn-sm" data-action="solvePyq" data-q="${esc(text)}">${icon('sparkle')} ${t('solveThis')}</button>
           <button class="btn btn-ghost btn-sm" data-action="savePyq" data-q="${esc(text)}">${icon('save')} ${t('save')}</button>
@@ -4856,7 +4895,10 @@ window.UP = window.UP || {};
       out += '<div class="q-top">';
       out += '<span class="q-no">' + esc(badge || q.q) + '</span>';
       out += '<div class="q-meta">';
-      out += '<span class="tag">' + esc(board === 'cbse' ? 'CBSE' : boardName) + ' ' + esc(q.y) + '</span>';
+      const isNcertExtract = !q.paperCode && /^NCERT\b/i.test(String(q.src || ''));
+      /* Auto-extracted textbook exercise questions are labelled as practice,
+         not as board questions — the board’s own 2025 tag would misstate them. */
+      out += '<span class="tag' + (isNcertExtract ? ' grey' : '') + '">' + esc(isNcertExtract ? 'NCERT · practice, not board-verified' : (board === 'cbse' ? 'CBSE' : boardName) + ' ' + q.y) + '</span>';
       if (q.paperCode) {
         const paperMeta = [q.paperCode, q.session].filter(Boolean).join(' · ');
         out += '<span class="tag grey">' + esc(paperMeta) + '</span>';

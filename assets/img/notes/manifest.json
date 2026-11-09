@@ -1,186 +1,1446 @@
 {
-  "version": 1,
-  "description": "Selected source-PDF figure crops, one per chapter; not an exhaustive figure inventory. No AI-drawn figures in these batches.",
-  "images": [
-    {
-      "path": "assets/img/notes/d5e4465b33a0aaceaa154ae7724d5da6bd3d8ed9184c3db3b6a03f2196896fe3.png",
-      "sha256": "d5e4465b33a0aaceaa154ae7724d5da6bd3d8ed9184c3db3b6a03f2196896fe3",
-      "origin": "source-pdf-crop",
-      "ai_drawn": false,
-      "source_file": "lech101.pdf",
-      "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
-      "pdf_page": 7,
-      "figure": "1.1",
-      "caption": "Effect of pressure on gas solubility",
-      "crop_points": [
-        40,
-        232,
-        340,
-        370
-      ],
-      "edit": "none"
-    },
-    {
-      "path": "assets/img/notes/123b55cbe332997e9a8460bcabcbfd04d399f94ad24729292da24d4f494e077d.png",
-      "sha256": "123b55cbe332997e9a8460bcabcbfd04d399f94ad24729292da24d4f494e077d",
-      "origin": "source-pdf-crop",
-      "ai_drawn": false,
-      "source_file": "lech102.pdf",
-      "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
-      "pdf_page": 2,
-      "figure": "2.1",
-      "caption": "Daniell cell",
-      "crop_points": [
-        65,
-        102,
-        300,
-        326
-      ],
-      "edit": "Unrelated partial equation masked in white"
-    },
-    {
-      "path": "assets/img/notes/5a27578c7eb1fc0d58078685aec38ec5fa5d91654c9857eb24e3636d1f7c3d31.png",
-      "sha256": "5a27578c7eb1fc0d58078685aec38ec5fa5d91654c9857eb24e3636d1f7c3d31",
-      "origin": "source-pdf-crop",
-      "ai_drawn": false,
-      "source_file": "lech103.pdf",
-      "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
-      "pdf_page": 3,
-      "figure": "3.1",
-      "caption": "Instantaneous and average rates of a reaction",
-      "crop_points": [
-        40,
-        201,
-        520,
-        411
-      ],
-      "edit": "none"
-    },
-    {
-      "path": "assets/img/notes/8904e40143a37fee1e21ee23290c72231bcc8477f665913e96a62c44b4eb2903.png",
-      "sha256": "8904e40143a37fee1e21ee23290c72231bcc8477f665913e96a62c44b4eb2903",
-      "origin": "source-pdf-crop",
-      "ai_drawn": false,
-      "source_file": "lech104.pdf",
-      "source_sha256": "4f33bf2825d1d693b78ae52c13002f45bce3881a3934790eaf34133b6ccb8972",
-      "pdf_page": 4,
-      "figure": "4.1",
-      "caption": "Trends in melting points of transition elements",
-      "crop_points": [
-        60,
-        445,
-        289,
-        675
-      ],
-      "edit": "none"
-    },
-    {
-      "path": "assets/img/notes/e562f63b7fc394896e8bdb4155918e13f8d5a29a45afa0443c4c9b5b7a6473b7.png",
-      "sha256": "e562f63b7fc394896e8bdb4155918e13f8d5a29a45afa0443c4c9b5b7a6473b7",
-      "origin": "source-pdf-crop",
-      "ai_drawn": false,
-      "source_file": "lech105.pdf",
-      "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
-      "pdf_page": 5,
-      "figure": "5.1",
-      "caption": "Shapes of coordination polyhedra",
-      "crop_points": [
-        58,
-        305,
-        525,
-        408
-      ],
-      "edit": "none"
-    },
-    {
-      "path": "assets/img/notes/8617b8df918c524483379f50c7c9d4e75e27fbee6f5ec6387d0f14f73aefa0aa.png",
-      "sha256": "8617b8df918c524483379f50c7c9d4e75e27fbee6f5ec6387d0f14f73aefa0aa",
-      "origin": "source-pdf-crop",
-      "ai_drawn": false,
-      "source_file": "lech201.pdf",
-      "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
-      "pdf_page": 10,
-      "figure": "6.1",
-      "caption": "Boiling points of some alkyl halides",
-      "crop_points": [
-        200,
-        290,
-        490,
-        463
-      ],
-      "edit": "none"
-    },
-    {
-      "path": "assets/img/notes/c7847c9c6553a491cf952455b307d07ae4e7d1356c62a8a0b03e072fb30635a9.png",
-      "sha256": "c7847c9c6553a491cf952455b307d07ae4e7d1356c62a8a0b03e072fb30635a9",
-      "origin": "source-pdf-crop",
-      "ai_drawn": false,
-      "source_file": "lech202.pdf",
-      "source_sha256": "e7aedb4059f435db596bd76015684fa1186be8d6bee4ee4a6c3f2e81f58585be",
-      "pdf_page": 6,
-      "figure": "7.1",
-      "caption": "Structures of methanol, phenol and methoxymethane",
-      "crop_points": [
-        190,
-        594,
-        500,
-        678
-      ],
-      "edit": "none"
-    },
-    {
-      "path": "assets/img/notes/e300b4b5642287d5ef11b0a1adb68ea4dd0b8e6309dcde3bdc710b7473ca80b0.png",
-      "sha256": "e300b4b5642287d5ef11b0a1adb68ea4dd0b8e6309dcde3bdc710b7473ca80b0",
-      "origin": "source-pdf-crop",
-      "ai_drawn": false,
-      "source_file": "lech203.pdf",
-      "source_sha256": "23067221e09a8a61873f3a3a587a2ecb15d3104aeea00914dbc15111e772154e",
-      "pdf_page": 5,
-      "figure": "8.1",
-      "caption": "Orbital diagram for the formation of the carbonyl group",
-      "crop_points": [
-        100,
-        166,
-        520,
-        264
-      ],
-      "edit": "none"
-    },
-    {
-      "path": "assets/img/notes/f2d9036a03fff69967e453d91df2de3f431fd32fdb87d52a9a1c3d16401e98ad.png",
-      "sha256": "f2d9036a03fff69967e453d91df2de3f431fd32fdb87d52a9a1c3d16401e98ad",
-      "origin": "source-pdf-crop",
-      "ai_drawn": false,
-      "source_file": "lech204.pdf",
-      "source_sha256": "a267ffea998fb68174c2abc87f79a71e646e93460efa73bbe15796a995cea29a",
-      "pdf_page": 2,
-      "figure": "9.1",
-      "caption": "Pyramidal shape of trimethylamine",
-      "crop_points": [
-        225,
-        95,
-        460,
-        295
-      ],
-      "edit": "none"
-    },
-    {
-      "path": "assets/img/notes/1e6561da4bfe50c211d36c3941b0df3ff6373d986c5d737b6972b12dafa88934.png",
-      "sha256": "1e6561da4bfe50c211d36c3941b0df3ff6373d986c5d737b6972b12dafa88934",
-      "origin": "source-pdf-crop",
-      "ai_drawn": false,
-      "source_file": "lech205.pdf",
-      "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
-      "pdf_page": 18,
-      "figure": "10.5",
-      "caption": "Structure of a nucleoside and a nucleotide",
-      "crop_points": [
-        190,
-        445,
-        525,
-        571
-      ],
-      "edit": "none"
-    }
-  ]
+ "version": 1,
+ "description": "Source-PDF crops of the numbered figures in the supplied NCERT Class 12 Chemistry reprint PDFs; no AI-drawn figures. One crop per figure; each visually verified against the source page.",
+ "images": [
+  {
+   "path": "assets/img/notes/d5e4465b33a0aaceaa154ae7724d5da6bd3d8ed9184c3db3b6a03f2196896fe3.png",
+   "sha256": "d5e4465b33a0aaceaa154ae7724d5da6bd3d8ed9184c3db3b6a03f2196896fe3",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech101.pdf",
+   "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+   "pdf_page": 7,
+   "figure": "1.1",
+   "caption": "Effect of pressure on gas solubility",
+   "crop_points": [
+    40,
+    232,
+    340,
+    370
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/123b55cbe332997e9a8460bcabcbfd04d399f94ad24729292da24d4f494e077d.png",
+   "sha256": "123b55cbe332997e9a8460bcabcbfd04d399f94ad24729292da24d4f494e077d",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 2,
+   "figure": "2.1",
+   "caption": "Daniell cell",
+   "crop_points": [
+    65,
+    102,
+    300,
+    326
+   ],
+   "edit": "Unrelated partial equation masked in white"
+  },
+  {
+   "path": "assets/img/notes/5a27578c7eb1fc0d58078685aec38ec5fa5d91654c9857eb24e3636d1f7c3d31.png",
+   "sha256": "5a27578c7eb1fc0d58078685aec38ec5fa5d91654c9857eb24e3636d1f7c3d31",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech103.pdf",
+   "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+   "pdf_page": 3,
+   "figure": "3.1",
+   "caption": "Instantaneous and average rates of a reaction",
+   "crop_points": [
+    40,
+    201,
+    520,
+    411
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/8904e40143a37fee1e21ee23290c72231bcc8477f665913e96a62c44b4eb2903.png",
+   "sha256": "8904e40143a37fee1e21ee23290c72231bcc8477f665913e96a62c44b4eb2903",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech104.pdf",
+   "source_sha256": "4f33bf2825d1d693b78ae52c13002f45bce3881a3934790eaf34133b6ccb8972",
+   "pdf_page": 4,
+   "figure": "4.1",
+   "caption": "Trends in melting points of transition elements",
+   "crop_points": [
+    60,
+    445,
+    289,
+    675
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/e562f63b7fc394896e8bdb4155918e13f8d5a29a45afa0443c4c9b5b7a6473b7.png",
+   "sha256": "e562f63b7fc394896e8bdb4155918e13f8d5a29a45afa0443c4c9b5b7a6473b7",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 5,
+   "figure": "5.1",
+   "caption": "Shapes of coordination polyhedra",
+   "crop_points": [
+    58,
+    305,
+    525,
+    408
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/8617b8df918c524483379f50c7c9d4e75e27fbee6f5ec6387d0f14f73aefa0aa.png",
+   "sha256": "8617b8df918c524483379f50c7c9d4e75e27fbee6f5ec6387d0f14f73aefa0aa",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 10,
+   "figure": "6.1",
+   "caption": "Boiling points of some alkyl halides",
+   "crop_points": [
+    200,
+    290,
+    490,
+    463
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/c7847c9c6553a491cf952455b307d07ae4e7d1356c62a8a0b03e072fb30635a9.png",
+   "sha256": "c7847c9c6553a491cf952455b307d07ae4e7d1356c62a8a0b03e072fb30635a9",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech202.pdf",
+   "source_sha256": "e7aedb4059f435db596bd76015684fa1186be8d6bee4ee4a6c3f2e81f58585be",
+   "pdf_page": 6,
+   "figure": "7.1",
+   "caption": "Structures of methanol, phenol and methoxymethane",
+   "crop_points": [
+    190,
+    594,
+    500,
+    678
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/e300b4b5642287d5ef11b0a1adb68ea4dd0b8e6309dcde3bdc710b7473ca80b0.png",
+   "sha256": "e300b4b5642287d5ef11b0a1adb68ea4dd0b8e6309dcde3bdc710b7473ca80b0",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech203.pdf",
+   "source_sha256": "23067221e09a8a61873f3a3a587a2ecb15d3104aeea00914dbc15111e772154e",
+   "pdf_page": 5,
+   "figure": "8.1",
+   "caption": "Orbital diagram for the formation of the carbonyl group",
+   "crop_points": [
+    100,
+    166,
+    520,
+    264
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/f2d9036a03fff69967e453d91df2de3f431fd32fdb87d52a9a1c3d16401e98ad.png",
+   "sha256": "f2d9036a03fff69967e453d91df2de3f431fd32fdb87d52a9a1c3d16401e98ad",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech204.pdf",
+   "source_sha256": "a267ffea998fb68174c2abc87f79a71e646e93460efa73bbe15796a995cea29a",
+   "pdf_page": 2,
+   "figure": "9.1",
+   "caption": "Pyramidal shape of trimethylamine",
+   "crop_points": [
+    225,
+    95,
+    460,
+    295
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/1e6561da4bfe50c211d36c3941b0df3ff6373d986c5d737b6972b12dafa88934.png",
+   "sha256": "1e6561da4bfe50c211d36c3941b0df3ff6373d986c5d737b6972b12dafa88934",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 18,
+   "figure": "10.5",
+   "caption": "Structure of a nucleoside and a nucleotide",
+   "crop_points": [
+    190,
+    445,
+    525,
+    571
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/e17c816e6c8195abba40fda951e5763cebbfc82cc217bacb3eaa868781bf0671.png",
+   "sha256": "e17c816e6c8195abba40fda951e5763cebbfc82cc217bacb3eaa868781bf0671",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech101.pdf",
+   "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+   "pdf_page": 7,
+   "figure": "1.2",
+   "caption": "Experimental results for",
+   "crop_points": [
+    35,
+    451,
+    229,
+    639
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/d1bfadd198112f505bebf19b8ce2b3e17eec0f07cac1c70afe0d7f1ee29859e0.png",
+   "sha256": "d1bfadd198112f505bebf19b8ce2b3e17eec0f07cac1c70afe0d7f1ee29859e0",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech101.pdf",
+   "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+   "pdf_page": 10,
+   "figure": "1.3",
+   "caption": "The plot of vapour pressure and mole",
+   "crop_points": [
+    92,
+    419,
+    282,
+    597
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/050db8d8600002aa71d9ac581d0c30517de080599dc8f8f6950b7439cdb6a2d2.png",
+   "sha256": "050db8d8600002aa71d9ac581d0c30517de080599dc8f8f6950b7439cdb6a2d2",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech101.pdf",
+   "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+   "pdf_page": 12,
+   "figure": "1.4",
+   "caption": "Decrease in the vapour pressure of the",
+   "crop_points": [
+    83,
+    292,
+    282,
+    442
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/8c557ecbafce67b3db70153b843be223146e91c246fae3b379aaf2fed4435f31.png",
+   "sha256": "8c557ecbafce67b3db70153b843be223146e91c246fae3b379aaf2fed4435f31",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech101.pdf",
+   "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+   "pdf_page": 13,
+   "figure": "1.5",
+   "caption": "If a solution obeys Raoult's law for all concentrations, its vapour pressure would vary linearly from zero to the vapour pressure of the pure solvent.",
+   "crop_points": [
+    148,
+    58,
+    293,
+    223
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/e2bf65f30b3cbc903167af48ebcb5461b052693ece5138abfa25320f11561bb5.png",
+   "sha256": "e2bf65f30b3cbc903167af48ebcb5461b052693ece5138abfa25320f11561bb5",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech101.pdf",
+   "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+   "pdf_page": 14,
+   "figure": "1.6",
+   "caption": "The vapour pressures of two component systems as a function of composition (a) a solution that shows positive deviation from Raoult's law and (b) a solution that shows negative",
+   "crop_points": [
+    182,
+    56,
+    524,
+    258
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/df5895b626da1cd4b21c6dfb68b4042822a7147dec9f232527df9015d32ddf1d.png",
+   "sha256": "df5895b626da1cd4b21c6dfb68b4042822a7147dec9f232527df9015d32ddf1d",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech101.pdf",
+   "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+   "pdf_page": 17,
+   "figure": "1.7",
+   "caption": "The vapour pressure curve for",
+   "crop_points": [
+    26,
+    54,
+    245,
+    240
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/eaf02310a89430b379e4d11fd23e79997d18b2a7c16b419b3d958f548bfcd3aa.png",
+   "sha256": "eaf02310a89430b379e4d11fd23e79997d18b2a7c16b419b3d958f548bfcd3aa",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech101.pdf",
+   "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+   "pdf_page": 18,
+   "figure": "1.8",
+   "caption": "Diagram showing DTf, depression",
+   "crop_points": [
+    54,
+    342,
+    266,
+    547
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/67891367d39880ffb7c98a952d0ab6557a010a6c00c1d7db990c04682e5b8bab.png",
+   "sha256": "67891367d39880ffb7c98a952d0ab6557a010a6c00c1d7db990c04682e5b8bab",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech101.pdf",
+   "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+   "pdf_page": 20,
+   "figure": "1.9",
+   "caption": "Level of solution rises in the thistle funnel due to osmosis of solvent.",
+   "crop_points": [
+    167,
+    525,
+    384,
+    706
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/ff1d5644d27483b4b264b301fdedc01c66740256a3e1e29f9c80af9934ea1aa4.png",
+   "sha256": "ff1d5644d27483b4b264b301fdedc01c66740256a3e1e29f9c80af9934ea1aa4",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech101.pdf",
+   "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+   "pdf_page": 21,
+   "figure": "1.10",
+   "caption": "The excess pressure equal to the",
+   "crop_points": [
+    36,
+    323,
+    272,
+    470
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/fdc48a20ab7d0d883f7dd626cfc5322dde2d1ae26a7aba5d224a25380aebf4ae.png",
+   "sha256": "fdc48a20ab7d0d883f7dd626cfc5322dde2d1ae26a7aba5d224a25380aebf4ae",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech101.pdf",
+   "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+   "pdf_page": 23,
+   "figure": "1.11",
+   "caption": "Reverse osmosis occurs when a",
+   "crop_points": [
+    30,
+    235,
+    270,
+    369
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/752cfa9ee2d2c8327d6dc1383ec1853fb7020fd2e047ba8acdc1e682279108cc.png",
+   "sha256": "752cfa9ee2d2c8327d6dc1383ec1853fb7020fd2e047ba8acdc1e682279108cc",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 2,
+   "figure": "2.2a",
+   "caption": "Sub-figure (a): Eext < 1.1 V — electrons flow from the Zn rod to the Cu rod; Zn dissolves at the anode and copper deposits at the cathode.",
+   "crop_points": [
+    55,
+    366,
+    245,
+    522
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/2a8de7bfe613d9418737eff95a0e13c653901c24d811ca806bcf5e5093250794.png",
+   "sha256": "2a8de7bfe613d9418737eff95a0e13c653901c24d811ca806bcf5e5093250794",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 2,
+   "figure": "2.2b",
+   "caption": "Sub-figure (b): Eext = 1.1 V — no flow of electrons or current; no chemical reaction.",
+   "crop_points": [
+    278,
+    366,
+    440,
+    522
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/e3c107a4edbf67586cbcb6f39ee2039f7335e43b1b4ab5f2a91a5b20eb2b9a83.png",
+   "sha256": "e3c107a4edbf67586cbcb6f39ee2039f7335e43b1b4ab5f2a91a5b20eb2b9a83",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 2,
+   "figure": "2.2c",
+   "caption": "Sub-figure (c): Eext > 1.1 V — electrons flow from Cu to Zn; zinc deposits at the zinc electrode and copper dissolves at the copper electrode.",
+   "crop_points": [
+    270,
+    524,
+    423,
+    666
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/9e61bea38ff806aeddaad94585e8281c09ed5c2aec287483dafa041aeefee368.png",
+   "sha256": "9e61bea38ff806aeddaad94585e8281c09ed5c2aec287483dafa041aeefee368",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 4,
+   "figure": "2.3",
+   "caption": "Standard Hydrogen Electrode (SHE).",
+   "crop_points": [
+    60,
+    480,
+    276,
+    681
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/93c7938f8eb61622339c9d9f311f8349fdee02fac4f827f93f7387d1e0d0bf3f.png",
+   "sha256": "93c7938f8eb61622339c9d9f311f8349fdee02fac4f827f93f7387d1e0d0bf3f",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 13,
+   "figure": "2.4",
+   "caption": "Two different types of conductivity cells.",
+   "crop_points": [
+    150,
+    440,
+    520,
+    582
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/b49f1b7fcf25d512b9445f764bb38fff7bf624aebf9eb7725c4ddaa0a5f1ca4f.png",
+   "sha256": "b49f1b7fcf25d512b9445f764bb38fff7bf624aebf9eb7725c4ddaa0a5f1ca4f",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 14,
+   "figure": "2.5",
+   "caption": "Arrangement for measurement of",
+   "crop_points": [
+    73,
+    366,
+    239,
+    541
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/39c142848716c76c43644face61931388f85bf751c78f0aa79a5bf24b6e7f4ee.png",
+   "sha256": "39c142848716c76c43644face61931388f85bf751c78f0aa79a5bf24b6e7f4ee",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 17,
+   "figure": "2.6",
+   "caption": "Molar conductivity versus c½ for acetic",
+   "crop_points": [
+    36,
+    228,
+    295,
+    474
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/738af4f24ca3641491f371dbba202f6ef87734ff828537eecae8d60b9eacbba3.png",
+   "sha256": "738af4f24ca3641491f371dbba202f6ef87734ff828537eecae8d60b9eacbba3",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 18,
+   "figure": "2.7",
+   "caption": "Variation of Lm against c½.",
+   "crop_points": [
+    187,
+    418,
+    450,
+    653
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/449ea096823f35cf5cf69d6de797423d8f575c754a2d71783a2efff0f9adfa2b.png",
+   "sha256": "449ea096823f35cf5cf69d6de797423d8f575c754a2d71783a2efff0f9adfa2b",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 24,
+   "figure": "2.8",
+   "caption": "A commercial dry cell",
+   "crop_points": [
+    75,
+    400,
+    199,
+    640
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/f1664ab1719e384bfc5e273d9b54e3a8fb19b36919300aa97c8d1473220aa7f7.png",
+   "sha256": "f1664ab1719e384bfc5e273d9b54e3a8fb19b36919300aa97c8d1473220aa7f7",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 25,
+   "figure": "2.9",
+   "caption": "Commonly used mercury cell. The reducing agent is zinc and the oxidising agent is mercury (II) oxide.",
+   "crop_points": [
+    138,
+    58,
+    312,
+    208
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/24f21a26ec7f24f728a92e47d3fde80eb88e00e41bda26eef925adcdd51b74c1.png",
+   "sha256": "24f21a26ec7f24f728a92e47d3fde80eb88e00e41bda26eef925adcdd51b74c1",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 25,
+   "figure": "2.10",
+   "caption": "The Lead storage battery.",
+   "crop_points": [
+    176,
+    455,
+    497,
+    677
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/6ae90e1a6de9a8b0c08c935e3bed9c9617e365405669086b111687294a9953aa.png",
+   "sha256": "6ae90e1a6de9a8b0c08c935e3bed9c9617e365405669086b111687294a9953aa",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 26,
+   "figure": "2.11",
+   "caption": "A rechargeable nickel-cadmium cell in a jelly roll arrangement and separated by a layer soaked in moist sodium or potassium hydroxide.",
+   "crop_points": [
+    174,
+    49,
+    296,
+    215
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/f960c6a09a4a797724f4fd2e71d3d786072aa4db25591d75507b011f0230f2d0.png",
+   "sha256": "f960c6a09a4a797724f4fd2e71d3d786072aa4db25591d75507b011f0230f2d0",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 26,
+   "figure": "2.12",
+   "caption": "Fuel cell using H2 and O2 produces electricity.",
+   "crop_points": [
+    67,
+    381,
+    326,
+    564
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/41e8942587e324c573a7a02a77567f0e00073a9d8d7798ef4649c480f0a7ffa2.png",
+   "sha256": "41e8942587e324c573a7a02a77567f0e00073a9d8d7798ef4649c480f0a7ffa2",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech102.pdf",
+   "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+   "pdf_page": 27,
+   "figure": "2.13",
+   "caption": "Corrosion of iron in atmosphere",
+   "crop_points": [
+    35,
+    196,
+    236,
+    302
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/cd761c737828484703c53cdb4300223c8dd322f14f439ac16125bcc0b74b048d.png",
+   "sha256": "cd761c737828484703c53cdb4300223c8dd322f14f439ac16125bcc0b74b048d",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech103.pdf",
+   "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+   "pdf_page": 4,
+   "figure": "3.2",
+   "caption": "Instantaneous rate of hydrolysis of butyl chloride(C4H9Cl)",
+   "crop_points": [
+    170,
+    486,
+    492,
+    635
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/191201aa478b20009c3b307c893c93341e32a5fcd62c58cfa2f4267a8daedfb1.png",
+   "sha256": "191201aa478b20009c3b307c893c93341e32a5fcd62c58cfa2f4267a8daedfb1",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech103.pdf",
+   "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+   "pdf_page": 12,
+   "figure": "3.3",
+   "caption": "Variation in the concentration",
+   "crop_points": [
+    56,
+    58,
+    265,
+    248
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/3bc7a49d026fd674414b1a675c73e69c4768165a3c2081a6f4b2d5979ff240c4.png",
+   "sha256": "3bc7a49d026fd674414b1a675c73e69c4768165a3c2081a6f4b2d5979ff240c4",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech103.pdf",
+   "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+   "pdf_page": 14,
+   "figure": "3.4",
+   "caption": "A plot between ln[R] and t",
+   "crop_points": [
+    77,
+    72,
+    265,
+    237
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/6a272a4cae25c6f92872e608413fc42d94e1ec3f7754eef520a4bd05909a030d.png",
+   "sha256": "6a272a4cae25c6f92872e608413fc42d94e1ec3f7754eef520a4bd05909a030d",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech103.pdf",
+   "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+   "pdf_page": 14,
+   "figure": "3.5",
+   "caption": "Plot of log [R]0/[R] vs time for a",
+   "crop_points": [
+    316,
+    84,
+    500,
+    241
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/d997d879bc111d10cef8f85c800068ce51b971351af6ee119cee4518279e99ff.png",
+   "sha256": "d997d879bc111d10cef8f85c800068ce51b971351af6ee119cee4518279e99ff",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech103.pdf",
+   "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+   "pdf_page": 19,
+   "figure": "3.6",
+   "caption": "Formation of HI through",
+   "crop_points": [
+    348,
+    146,
+    512,
+    205
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/7f2b5bd338801f1e2027c1725ccf1a53e59dfbd26ecfdd1027d1854d1f3d7e85.png",
+   "sha256": "7f2b5bd338801f1e2027c1725ccf1a53e59dfbd26ecfdd1027d1854d1f3d7e85",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech103.pdf",
+   "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+   "pdf_page": 19,
+   "figure": "3.7",
+   "caption": "is obtained by plotting potential energy vs reaction coordinate. Reaction coordinate represents the profile of energy change when reactants change into products.",
+   "crop_points": [
+    278,
+    271,
+    510,
+    428
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/92f67ba6cd1f4588e999e4c5f59c82609bacdf53649ddaad3251b6d1be327364.png",
+   "sha256": "92f67ba6cd1f4588e999e4c5f59c82609bacdf53649ddaad3251b6d1be327364",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech103.pdf",
+   "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+   "pdf_page": 19,
+   "figure": "3.8",
+   "caption": "Distribution curve showing energies",
+   "crop_points": [
+    262,
+    519,
+    525,
+    665
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/8bbd151a2df7dcaaafd2859b65a4cc71238a65c0be879a9bcce3cdbc74ce18f1.png",
+   "sha256": "8bbd151a2df7dcaaafd2859b65a4cc71238a65c0be879a9bcce3cdbc74ce18f1",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech103.pdf",
+   "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+   "pdf_page": 20,
+   "figure": "3.9",
+   "caption": "Distribution curve showing temperature",
+   "crop_points": [
+    54,
+    57,
+    338,
+    200
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/90e48dc5a2777b86310b35c924f45d03b9c49a05c1ae5c4fa27481a9ee52550e.png",
+   "sha256": "90e48dc5a2777b86310b35c924f45d03b9c49a05c1ae5c4fa27481a9ee52550e",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech103.pdf",
+   "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+   "pdf_page": 20,
+   "figure": "3.10",
+   "caption": "A plot between ln k and 1/T",
+   "crop_points": [
+    62,
+    458,
+    258,
+    657
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/7bb9cac79fb8a515802ea346a0c4b5f851842c963c492edfb2d7b5f38ce8bd92.png",
+   "sha256": "7bb9cac79fb8a515802ea346a0c4b5f851842c963c492edfb2d7b5f38ce8bd92",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech103.pdf",
+   "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+   "pdf_page": 22,
+   "figure": "3.11",
+   "caption": "Effect of catalyst on activation",
+   "crop_points": [
+    56,
+    395,
+    286,
+    516
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/9126e8c55ac660a887abf122cd0d20a8b1a899fdabb8d86ce7c796e0864e6f6b.png",
+   "sha256": "9126e8c55ac660a887abf122cd0d20a8b1a899fdabb8d86ce7c796e0864e6f6b",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech103.pdf",
+   "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+   "pdf_page": 23,
+   "figure": "3.12",
+   "caption": "The proper orientation of reactant molecules lead to bond formation whereas improper orientation makes them simply bounce back and no products are formed.",
+   "crop_points": [
+    238,
+    370,
+    522,
+    470
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/985e53e0ac8de692a6767b51dfd100d198cbde115def60bce166db8151b2f39c.png",
+   "sha256": "985e53e0ac8de692a6767b51dfd100d198cbde115def60bce166db8151b2f39c",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech104.pdf",
+   "source_sha256": "4f33bf2825d1d693b78ae52c13002f45bce3881a3934790eaf34133b6ccb8972",
+   "pdf_page": 5,
+   "figure": "4.2",
+   "caption": "Trends in enthalpies of atomisation of transition elements",
+   "crop_points": [
+    183,
+    212,
+    513,
+    466
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/405a7ade47e1f8bf06f9b1aecce1395d21f93c13223780615048b13f30bd41ae.png",
+   "sha256": "405a7ade47e1f8bf06f9b1aecce1395d21f93c13223780615048b13f30bd41ae",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech104.pdf",
+   "source_sha256": "4f33bf2825d1d693b78ae52c13002f45bce3881a3934790eaf34133b6ccb8972",
+   "pdf_page": 6,
+   "figure": "4.3",
+   "caption": "Trends in atomic radii of",
+   "crop_points": [
+    70,
+    126,
+    280,
+    303
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/ab625c4941fc34f81e006b1993e1f8100abcda4e8e9ef140819bcb8363f26bd3.png",
+   "sha256": "ab625c4941fc34f81e006b1993e1f8100abcda4e8e9ef140819bcb8363f26bd3",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech104.pdf",
+   "source_sha256": "4f33bf2825d1d693b78ae52c13002f45bce3881a3934790eaf34133b6ccb8972",
+   "pdf_page": 10,
+   "figure": "4.4",
+   "caption": "Observed and calculated values for the standard",
+   "crop_points": [
+    159,
+    184,
+    464,
+    431
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/904a5a874c594d5ee335fba1b45019b3fab6463718398ac356c6c537b0ad868a.png",
+   "sha256": "904a5a874c594d5ee335fba1b45019b3fab6463718398ac356c6c537b0ad868a",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech104.pdf",
+   "source_sha256": "4f33bf2825d1d693b78ae52c13002f45bce3881a3934790eaf34133b6ccb8972",
+   "pdf_page": 15,
+   "figure": "4.5",
+   "caption": "Colours of some of the first row transition metal ions in aqueous solutions. From left to right: V4+,V3+,Mn2+,Fe3+,Co2+,Ni2+and Cu2+ .",
+   "crop_points": [
+    296,
+    192,
+    524,
+    294
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/04e843b71f1949b54b93e221d6eacdc6ffdaf93b35b44927c890ad5f68746f5b.png",
+   "sha256": "04e843b71f1949b54b93e221d6eacdc6ffdaf93b35b44927c890ad5f68746f5b",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech104.pdf",
+   "source_sha256": "4f33bf2825d1d693b78ae52c13002f45bce3881a3934790eaf34133b6ccb8972",
+   "pdf_page": 21,
+   "figure": "4.6",
+   "caption": "Trends in ionic radii of lanthanoids",
+   "crop_points": [
+    89,
+    210,
+    257,
+    408
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/c8f4fd3bb15627bed538556bd8db92ade30a811c2d3c0a61015f8092809453e8.png",
+   "sha256": "c8f4fd3bb15627bed538556bd8db92ade30a811c2d3c0a61015f8092809453e8",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech104.pdf",
+   "source_sha256": "4f33bf2825d1d693b78ae52c13002f45bce3881a3934790eaf34133b6ccb8972",
+   "pdf_page": 23,
+   "figure": "4.7",
+   "caption": "Chemical reactions of the lanthanoids.",
+   "crop_points": [
+    56,
+    67,
+    282,
+    248
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/68c3cf6a522a72591bfb09d8519af63a64f1717e92bc13d8202ab1073a25b095.png",
+   "sha256": "68c3cf6a522a72591bfb09d8519af63a64f1717e92bc13d8202ab1073a25b095",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 8,
+   "figure": "5.2",
+   "caption": "Geometrical isomers (cis and trans)",
+   "crop_points": [
+    34,
+    481,
+    239,
+    544
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/f8b83d1ed8aa3515df4cd28cab787a435554cb35817d62f0acb5b0e1db0b36f0.png",
+   "sha256": "f8b83d1ed8aa3515df4cd28cab787a435554cb35817d62f0acb5b0e1db0b36f0",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 8,
+   "figure": "5.3",
+   "caption": "Geometrical isomers (cis and trans)",
+   "crop_points": [
+    40,
+    570,
+    275,
+    673
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/b8874d7750d5cd395b99e35951a47367026b13bea8ea0898d944716a7ede739e.png",
+   "sha256": "b8874d7750d5cd395b99e35951a47367026b13bea8ea0898d944716a7ede739e",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 9,
+   "figure": "5.4",
+   "caption": "Geometrical isomers (cis and trans)",
+   "crop_points": [
+    82,
+    58,
+    317,
+    148
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/d49cfa0c098aa5906e2bc278fd609547e8ba304eec7ec1450b2d39e5ca3fdec0.png",
+   "sha256": "d49cfa0c098aa5906e2bc278fd609547e8ba304eec7ec1450b2d39e5ca3fdec0",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 9,
+   "figure": "5.5",
+   "caption": "The facial (fac) and meridional (mer) isomers of [Co(NH3)3(NO2)3]",
+   "crop_points": [
+    170,
+    186,
+    352,
+    295
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/37604530fdd300bf62d52c81d1ae53ddf0e905559e0acc5953b8d5ebe6e47627.png",
+   "sha256": "37604530fdd300bf62d52c81d1ae53ddf0e905559e0acc5953b8d5ebe6e47627",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 9,
+   "figure": "5.6",
+   "caption": "Optical isomers (d and l) of [Co(en)3] 3+",
+   "crop_points": [
+    50,
+    422,
+    335,
+    553
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/86e245724e6f97eb0f1aa014ff9488b933da2a5d869e523e71c1d25f369124b2.png",
+   "sha256": "86e245724e6f97eb0f1aa014ff9488b933da2a5d869e523e71c1d25f369124b2",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 9,
+   "figure": "5.7",
+   "caption": "Optical isomers (d and l) of cis- [PtCl2(en)2]2+",
+   "crop_points": [
+    136,
+    585,
+    408,
+    704
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/25b5b8d3b413d4f5fce70668055d6098520f3f653479b2e4d8a54a4b5abdbb7d.png",
+   "sha256": "25b5b8d3b413d4f5fce70668055d6098520f3f653479b2e4d8a54a4b5abdbb7d",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 15,
+   "figure": "5.8",
+   "caption": "d orbital splitting in an octahedral crystal field",
+   "crop_points": [
+    36,
+    59,
+    378,
+    297
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/28799d3ea8e15445e5d877eb326a18db0a5cd439b815b5967b339e3f3212fef8.png",
+   "sha256": "28799d3ea8e15445e5d877eb326a18db0a5cd439b815b5967b339e3f3212fef8",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 16,
+   "figure": "5.9",
+   "caption": "d orbital splitting in a tetrahedral",
+   "crop_points": [
+    40,
+    82,
+    286,
+    223
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/42dc76b9c6de6a4174979be8233220ab714910fe18e6b0815a1e829a7d681314.png",
+   "sha256": "42dc76b9c6de6a4174979be8233220ab714910fe18e6b0815a1e829a7d681314",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 17,
+   "figure": "5.10",
+   "caption": "Transition of an electron in",
+   "crop_points": [
+    52,
+    48,
+    362,
+    188
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/4ed518200469e47fedab1df8317b0a9fa57d9a562278e672051f46f471e37588.png",
+   "sha256": "4ed518200469e47fedab1df8317b0a9fa57d9a562278e672051f46f471e37588",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 17,
+   "figure": "5.11",
+   "caption": "Aqueous solutions of complexes of nickel(II) with an increasing number of ethane-1, 2-diamine ligands.",
+   "crop_points": [
+    190,
+    385,
+    545,
+    571
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/afdd49d34b0b9e3060c13ed71105d3617fc4096eeddecd04642d80f03a404a97.png",
+   "sha256": "afdd49d34b0b9e3060c13ed71105d3617fc4096eeddecd04642d80f03a404a97",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 18,
+   "figure": "5.12",
+   "caption": "(a) Ruby: this gemstone was found in",
+   "crop_points": [
+    255,
+    62,
+    510,
+    141
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/65da86980ec79f6d00831491eba119ffed04efc1c8b5af5805a10c4a6b8ea7f6.png",
+   "sha256": "65da86980ec79f6d00831491eba119ffed04efc1c8b5af5805a10c4a6b8ea7f6",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 19,
+   "figure": "5.13",
+   "caption": "Structures of some representative homoleptic metal carbonyls.",
+   "crop_points": [
+    175,
+    62,
+    525,
+    248
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/4c6386cb543ba41537018b8c74b0267a6d827e5d3c733cb12c865f5fcc2c5204.png",
+   "sha256": "4c6386cb543ba41537018b8c74b0267a6d827e5d3c733cb12c865f5fcc2c5204",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 19,
+   "figure": "5.14",
+   "caption": "Example of synergic bonding",
+   "crop_points": [
+    55,
+    272,
+    282,
+    356
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/cc2f9e67bed94af245e5f25de982cc579b7a9dbf89dc07abd137b0ff516375b2.png",
+   "sha256": "cc2f9e67bed94af245e5f25de982cc579b7a9dbf89dc07abd137b0ff516375b2",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 13,
+   "figure": "6.2",
+   "caption": "Red ball represents the incoming hydroxide ion and green ball represents the outgoing halide ion",
+   "crop_points": [
+    116,
+    528,
+    522,
+    586
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/760213d3aa27c12db793cc618e543d1e8cad18bbf47cb548d22e33ebddd96857.png",
+   "sha256": "760213d3aa27c12db793cc618e543d1e8cad18bbf47cb548d22e33ebddd96857",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 15,
+   "figure": "6.3",
+   "caption": "Steric effects in SN2 reaction. The relative rate of SN2 reaction is given in parenthesis",
+   "crop_points": [
+    46,
+    94,
+    520,
+    248
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/f9533454d3e5747bf4907b1fb78f861ba04133114b78157208ed8824badddc45.png",
+   "sha256": "f9533454d3e5747bf4907b1fb78f861ba04133114b78157208ed8824badddc45",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 18,
+   "figure": "6.4",
+   "caption": "Some common examples of chiral and achiral objects a single asymmetric carbon atom. Let us consider two simple molecules propan-2-ol (Fig.6.5) and butan-2-ol (Fig.6.6)",
+   "crop_points": [
+    51,
+    206,
+    300,
+    436
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/97cd372ea0f83410d34c71ccc13f0af583960c6d3e8756f4ba3b9162fce36791.png",
+   "sha256": "97cd372ea0f83410d34c71ccc13f0af583960c6d3e8756f4ba3b9162fce36791",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 18,
+   "figure": "6.5",
+   "caption": "B is mirror image of A; B is rotated by 180o and C is obtained; C is superimposable on A.",
+   "crop_points": [
+    218,
+    483,
+    520,
+    608
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/b3627e00225ddf2b667719c34a70c5bcf04504a2aa8e490fc088e1e4812468e9.png",
+   "sha256": "b3627e00225ddf2b667719c34a70c5bcf04504a2aa8e490fc088e1e4812468e9",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 19,
+   "figure": "6.6",
+   "caption": "E is mirror image of D; E is rotated by 180o to get F and F is non superimposable on its mirror image D.",
+   "crop_points": [
+    190,
+    30,
+    520,
+    179
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/561ae14a47123951d4949f3d89166d6709bc9fb1c1b8792a9a11deb134fdb482.png",
+   "sha256": "561ae14a47123951d4949f3d89166d6709bc9fb1c1b8792a9a11deb134fdb482",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 19,
+   "figure": "6.7",
+   "caption": "A chiral molecule and its mirror image",
+   "crop_points": [
+    47,
+    209,
+    188,
+    288
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/24c201070c09e0ec5d6436b8a5453b85ef6fd1f58a5ffc2a935268e2acbecda2.png",
+   "sha256": "24c201070c09e0ec5d6436b8a5453b85ef6fd1f58a5ffc2a935268e2acbecda2",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech203.pdf",
+   "source_sha256": "23067221e09a8a61873f3a3a587a2ecb15d3104aeea00914dbc15111e772154e",
+   "pdf_page": 10,
+   "figure": "8.2a",
+   "caption": "Nucleophilic attack on carbonyl carbon (Fig. 8.2, part 1): the nucleophile attacks the planar, sp2-hybridised carbonyl carbon from a direction perpendicular to its plane; step 1 is slow.",
+   "crop_points": [
+    55,
+    200,
+    175,
+    338
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/2bbeceed56f1deef12a4697799e91b5da03380e8e7e84d795f6315e389e74499.png",
+   "sha256": "2bbeceed56f1deef12a4697799e91b5da03380e8e7e84d795f6315e389e74499",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech203.pdf",
+   "source_sha256": "23067221e09a8a61873f3a3a587a2ecb15d3104aeea00914dbc15111e772154e",
+   "pdf_page": 10,
+   "figure": "8.2b",
+   "caption": "Nucleophilic attack on carbonyl carbon (Fig. 8.2, part 2): the tetrahedral alkoxide intermediate captures H+ (step 2, fast) to give the addition product.",
+   "crop_points": [
+    55,
+    344,
+    385,
+    424
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/20ff35eb54828684f1ff650fb2d371d086c9a8e66a276aa7b4f08159fc02b8fa.png",
+   "sha256": "20ff35eb54828684f1ff650fb2d371d086c9a8e66a276aa7b4f08159fc02b8fa",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech204.pdf",
+   "source_sha256": "a267ffea998fb68174c2abc87f79a71e646e93460efa73bbe15796a995cea29a",
+   "pdf_page": 8,
+   "figure": "9.2",
+   "caption": "Intermolecular hydrogen bonding in primary amines",
+   "crop_points": [
+    200,
+    110,
+    425,
+    215
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/a249a154f7dc514f800218fa3f1e2816a83da6e623a3a6f13a472f10e35b7526.png",
+   "sha256": "a249a154f7dc514f800218fa3f1e2816a83da6e623a3a6f13a472f10e35b7526",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 13,
+   "figure": "10.1a",
+   "caption": "alpha-Helix structure of proteins (Fig. 10.1, part 1): rod and hand screwed into a right-handed helix with ribbon strands.",
+   "crop_points": [
+    40,
+    127,
+    120,
+    402
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/eb7931c921e0fe2fb74414b66e84e4c9fe1af89344b92d5a3be77dae33531869.png",
+   "sha256": "eb7931c921e0fe2fb74414b66e84e4c9fe1af89344b92d5a3be77dae33531869",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 13,
+   "figure": "10.1b",
+   "caption": "alpha-Helix structure of proteins (Fig. 10.1, part 2): hydrogen-bonded helical ladder between N-H and C=O groups of the peptide backbone.",
+   "crop_points": [
+    145,
+    176,
+    226,
+    397
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/c0d9266d0f8fc3f1fe1857446b7d57ae8b9ddafe74e9c2d481b40a14f08003de.png",
+   "sha256": "c0d9266d0f8fc3f1fe1857446b7d57ae8b9ddafe74e9c2d481b40a14f08003de",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 13,
+   "figure": "10.2",
+   "caption": "b-Pleated sheet structure of",
+   "crop_points": [
+    60,
+    462,
+    240,
+    610
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/ed254b1c6d3bda8f72ec2b34a3f5be3d3ba4ae63a062583537c214cfe300787c.png",
+   "sha256": "ed254b1c6d3bda8f72ec2b34a3f5be3d3ba4ae63a062583537c214cfe300787c",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 14,
+   "figure": "10.3",
+   "caption": "Diagrammatic representation of protein structure (two sub-units",
+   "crop_points": [
+    60,
+    118,
+    545,
+    306
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/860be68416b39db52432eaf9cfe1833d7b1db3895593d0a34809a665fd728366.png",
+   "sha256": "860be68416b39db52432eaf9cfe1833d7b1db3895593d0a34809a665fd728366",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 14,
+   "figure": "10.4",
+   "caption": "Primary, secondary, tertiary and quaternary structures of haemoglobin",
+   "crop_points": [
+    158,
+    355,
+    530,
+    606
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/d54c31eb9206130ca40399be2a036060316d0b3f601f507cd2ccc7f346304dc0.png",
+   "sha256": "d54c31eb9206130ca40399be2a036060316d0b3f601f507cd2ccc7f346304dc0",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 19,
+   "figure": "10.6",
+   "caption": "Formation of a dinucleotide",
+   "crop_points": [
+    55,
+    58,
+    500,
+    300
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/d67208cbff809e0b736e842bef7f1872406d6914312639121f83025f0995eea2.png",
+   "sha256": "d67208cbff809e0b736e842bef7f1872406d6914312639121f83025f0995eea2",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 19,
+   "figure": "10.7",
+   "caption": "Double strand helix structure for DNA",
+   "crop_points": [
+    61,
+    329,
+    160,
+    629
+   ],
+   "edit": "none"
+  }
+ ]
 }

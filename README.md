@@ -85,39 +85,69 @@ The source-integrity checks accept an optional `--uploads DIRECTORY` to compare 
 ## CBSE Class 12 English study outlines (2026–27)
 
 The home page links to **Business Studies** and **Chemistry (units 1–10)** under
-[Study outlines](assets/notes/index.html). All ten CBSE Chemistry chapter pages also link directly to their English outlines.
-Business Studies is now available in the Class 12 subject selector and has 12
-unit outlines: 11 from the previously staged NCERT material and Financial
-Markets from the CBSE syllabus, not an uploaded textbook chapter. There is no
-Business Studies question bank. The ten supplied Chemistry chapters have
-outlines. Business Studies project work and Chemistry practicals/project work
-are not covered. The two Chemistry answer appendices
+[Study outlines](assets/notes/index.html). Business Studies is available in the
+Class 12 subject selector and has 12 unit outlines: 11 from the previously staged
+NCERT material and Financial Markets from the CBSE syllabus, not an uploaded
+textbook chapter. There is no Business Studies question bank. The ten supplied
+Chemistry chapters have outlines. Business Studies project work and Chemistry
+practicals/project work are not covered. The two Chemistry answer appendices
 were identified but their answers are deliberately excluded.
 
-Topics were checked against the published CBSE 2026–27 syllabuses for
+In the app, both subjects now show each chapter’s **full outline summary
+directly on the syllabus cards**, and the chapter views show the title, the
+~300-character summary, Sections, Objectives, Key terms, the source (and, for
+Chemistry, the selected source-crop figure) inline — no need to open the
+standalone outline library. Chemistry chapter pages carry the CBSE 2026–27
+unit marks (subject 043; total 70) from the published syllabus, wired in by
+`tools/curate/build-chemistry-outlines.py` (`assets/js/data/chemistry-outlines.js`).
+The standalone outline library (`assets/notes/index.html`) carries the same
+content plus explicit per-subject **Sources and gaps** panels.
+
+Both subjects were checked against the published CBSE 2026–27 syllabuses for
 [Business Studies](https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/BusinessStudies_SecP2_2026-27.pdf)
-and [Chemistry](https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/Chemistry_SecP2_2026-27.pdf).
-This is syllabus mapping by Upay, not certification by CBSE or a claim that the
-outlines exhaust every examinable topic. The staged Consumer Protection summary
-conflicted with the source introduction: the syllabus specifies the **Consumer
-Protection Act, 2019**, whose [section 107](https://www.indiacode.nic.in/bitstream/123456789/15256/1/eng201935.pdf)
+(subject 054: Part A units 1–8, 50 marks; Part B units 9–12, 30 marks; Part C
+project work 20 marks) and
+[Chemistry](https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/Chemistry_SecP2_2026-27.pdf)
+(subject 043: units 1–10 with marks 7/9/7/7/7/6/6/8/6/7 = 70; the formative-only
+topics — Surface Chemistry; General Principles and Processes of Isolation of
+Elements; Polymers; Chemistry in Everyday Life — are not included as such, and
+the practical syllabus is not covered). The PDFs were read on 2026-11-09. This
+is syllabus mapping by Upay, not certification by CBSE or a claim that the
+outlines exhaust every examinable topic. Sources and gaps are listed on the
+[outline page](assets/notes/index.html): eleven Business Studies chapter PDFs
+plus a syllabus-derived Financial Markets unit; ten Chemistry reprint PDFs, with
+two answer appendices deliberately excluded; no question bank; project work and
+practicals not covered. The staged Consumer Protection summary conflicted with
+the source introduction: the syllabus specifies the **Consumer Protection Act,
+2019**, whose [section 107](https://www.indiacode.nic.in/bitstream/123456789/15256/1/eng201935.pdf)
 repeals the 1986 Act subject to savings. The conflicting excerpt is not used.
-No AI questions are added; any future AI-generated questions must be marked
-**“practice, not board-verified”**.
+No AI-generated questions have been added; any future AI-generated questions
+must be marked **“practice, not board-verified”**. The machine-extracted NCERT
+exercise questions shown in the Past Years view are labelled **“NCERT ·
+practice, not board-verified”** — they are textbook exercises, not board
+questions, and carry print artefacts from extraction.
 
 `assets/img/notes/manifest.json` records hashes, source, PDF page, crop, edits,
 and AI-origin status for ten visually reviewed source figures (one per chapter). The figures
 are a representative selection, **not an exhaustive inventory**; some NCERT
 figures are vectors, so image-object extraction alone misses them. No AI-drawn
 figures were added. Review reuse rights before a public deployment. The twelve
-uploaded source PDFs are retained in ignored `uploads/chemistry-pending/` and
-`uploads/chemistry-batch-2/` and are not served by the site: the figure
-inventories and batch reviews are incomplete. Only delete each batch in the
-same turn that completes and checks it. The source ledgers are
-`assets/notes/chemistry-batch.json` and `assets/notes/chemistry-batch-2.json`.
+source PDFs were never committed to Git — they live(d) in the ignored
+`uploads/chemistry-pending/` and `uploads/chemistry-batch-2/` folders, so a
+fresh checkout does not contain them. To finish the figure inventory they must
+be re-supplied (six at a time): batch 1 is `lech101.pdf`, `lech102.pdf`,
+`lech103.pdf`, `lech104.pdf`, `lech1an.pdf`, `lech2an.pdf`; batch 2 is
+`lech105.pdf`, `lech201.pdf`, `lech202.pdf`, `lech203.pdf`, `lech204.pdf` and
+`lech205.pdf`. Extraction and batch review must complete — and the ledger hashes
+in `assets/notes/chemistry-batch.json` and `assets/notes/chemistry-batch-2.json`
+must match — before each batch’s PDFs are deleted, in the same turn. The
+figure-inventory work is therefore pending those re-uploads; the existing ten
+crops are verified against the manifest (10/10 SHA-256 match).
 
 Regenerate the HTML from the checked data with
-`python3 tools/curate/render-outline-page.py`, and regenerate the Business Studies subject data with `python3 tools/curate/build-business-track.py`. Run
+`python3 tools/curate/render-outline-page.py`; regenerate the Business Studies subject data with
+`python3 tools/curate/build-business-track.py`; and regenerate the Chemistry outline attach with
+`python3 tools/curate/build-chemistry-outlines.py` (idempotent). Run
 `python3 tools/check/outline_notes.py` for structural, provenance and link
 checks. With PyMuPDF and Pillow installed and the originals available, run
 `python3 tools/check/outline_notes.py uploads/chemistry-pending uploads/chemistry-batch-2` and

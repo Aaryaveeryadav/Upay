@@ -125,6 +125,7 @@
     ],
     chemistry: [
       'assets/js/data/chemistry12.js',
+      'assets/js/data/chemistry-outlines.js', // CBSE 2026–27 outline view per unit, attached to each chemistry chapter
       'assets/js/data/pyq-chemistry-2022.js?v=25e',
       'assets/js/data/pyq-chemistry-2023.js?v=25e',
       'assets/js/data/pyq-chemistry-2025.js?v=25e'

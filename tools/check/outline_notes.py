@@ -28,13 +28,29 @@ for chapter in bs:
 consumer = next(c for c in bs if c['id'] == 'lebs203')
 assert '2019' in consumer['summary'] and '1986' not in consumer['summary']
 images = manifest['images']
-assert len(images) == 10 and len({x['sha256'] for x in images}) == len(images)
+assert len(images) == 80 and len({x['sha256'] for x in images}) == len(images)
 for item in images:
     path = root / item['path']
     assert path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == item['sha256']
     assert path.name == item['sha256'] + '.png'
     assert item['origin'] == 'source-pdf-crop' and item['ai_drawn'] is False
-    assert any(c.get('image') == item['path'] and c['sha256'] == item['source_sha256'] for c in chem)
+    assert any(c['sha256'] == item['source_sha256'] for c in chem)
+counts = {}
+for item in images:
+    counts[item['source_file']] = counts.get(item['source_file'], 0) + 1
+assert counts == {'lech101.pdf': 11, 'lech102.pdf': 15, 'lech103.pdf': 12, 'lech104.pdf': 7, 'lech105.pdf': 14, 'lech201.pdf': 7, 'lech202.pdf': 1, 'lech203.pdf': 3, 'lech204.pdf': 2, 'lech205.pdf': 8}, counts
+# Chemistry outline attach (generated) must track outlines.json and the 2026-27 unit marks
+chem_js = (root/'assets/js/data/chemistry-outlines.js').read_text()
+payload, rest = chem_js.split('var data = ', 1)
+attached = json.loads(rest[:rest.index(';\n')])
+assert set(attached) == {str(700 + i) for i in range(1, 11)}
+UNIT_MARKS = {1: 7, 2: 9, 3: 7, 4: 7, 5: 7, 6: 6, 7: 6, 8: 8, 9: 6, 10: 7}
+for cid, outline in attached.items():
+    unit = int(cid) - 700
+    assert outline['unit'] == unit and outline['marks'] == UNIT_MARKS[unit]
+    src = next(c for c in chem if c['id'] == outline['id'])
+    assert outline['summary'] == src['summary'] and outline['sections'] == src['sections'] and outline['terms'] == src['terms']
+assert sum(outline['marks'] for outline in attached.values()) == 70
 class Page(HTMLParser):
     def __init__(self): super().__init__(); self.ids=set(); self.img=[]
     def handle_starttag(self, tag, attrs):
@@ -51,12 +67,19 @@ if len(sys.argv)>1:
     directories=[Path(arg) for arg in sys.argv[1:]]; norm=lambda s: re.sub(r'[^a-z0-9]', '', s.lower())
     def source(name):
         return next((d/name for d in directories if (d/name).is_file()), None)
+    deleted={r['source_file'] for r in ledger['sources'] + ledger2['sources'] if str(r.get('disposition','')).startswith('deleted')}
     for record in ledger['sources'] + ledger2['sources']:
-        f=source(record['source_file']); assert f is not None, record['source_file']; assert hashlib.sha256(f.read_bytes()).hexdigest() == record['sha256']
+        name=record['source_file']
+        if name in deleted:
+            print('skip (deleted after verification):', name); continue
+        f=source(name); assert f is not None, name; assert hashlib.sha256(f.read_bytes()).hexdigest() == record['sha256']
         doc=pymupdf.open(f); assert len(doc)==record['pages']
         assert sum(bool(p.get_text().strip()) for p in doc)==record['text_nonempty_pages']
     for c in chem:
-        doc=pymupdf.open(source(c['source'])); text=norm(' '.join(p.get_text() for p in doc))
+        src=source(c['source'])
+        if src is None and c['source'] in deleted:
+            print('skip key-terms (deleted after verification):', c['source']); continue
+        doc=pymupdf.open(src); text=norm(' '.join(p.get_text() for p in doc))
         assert norm(c['title']) in text, c['id']
         assert all(norm(t) in text for t in c['terms']), c['id']
     print('PASS: PDF hashes, counts and Chemistry key terms match sources')

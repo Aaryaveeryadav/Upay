@@ -361,6 +361,15 @@ figure.card blockquote::before{content:'“';position:absolute;left:-2px;top:-14
 .ch-foot .tag{background:var(--cream-100);border:1px solid var(--line);padding:2px 8px;border-radius:99px;color:var(--ink-500)}
 .ch-foot .arrow{margin-left:auto;color:var(--sky-600);opacity:0;transform:translateX(-4px);transition:.2s}
 .ch-card:hover .ch-foot .arrow{opacity:1;transform:none}
+.ch-outline-summary{font-size:12.8px;line-height:1.5;color:var(--ink-600);margin:2px 0 0}
+.outline-card .ch-foot{margin-top:auto}
+.outline-panel h2{font-size:15px;margin:18px 0 8px;color:var(--ink-800)}
+.outline-panel h2:first-child{margin-top:0}
+.outline-panel ul{margin:0;padding-left:20px}
+.outline-panel li{margin:3px 0;font-size:13.6px;color:var(--ink-700)}
+.outline-panel figure{margin:18px 0 0;border-top:1px solid var(--line);padding-top:12px}
+.outline-panel img{display:block;max-width:100%;max-height:300px;object-fit:contain;object-position:left}
+.outline-panel figcaption{font-size:12px;color:var(--ink-500);margin-top:6px}
 
 /* stats strip */
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm)}
