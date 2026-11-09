@@ -1052,14 +1052,67 @@ function firstJSON(s) {
   throw new Error('unbalanced JSON in the model reply');
 }
 
+
+/* ---------------- security headers ----------------
+   Sent on every response: pages, assets and API alike.
+
+   The Content-Security-Policy is deliberately built from the real surface of
+   this app, not from a template:
+     - script-src allows inline script because index.html carries a small inline
+       bootstrap (the Supabase loader). The strict nonce would require templating
+       index.html on every request; the app has no third-party script injection
+       and escapes all question text through esc().
+     - style-src allows 'unsafe-inline' because the renderer emits 261 inline
+       style attributes. Removing that would need a full CSS refactor.
+     - img-src allows data: because 33 figure diagrams are inlined as data URIs.
+     - connect-src covers this origin plus the Supabase project the browser SDK
+       talks to directly.
+     - frame-ancestors 'none' plus X-Frame-Options stops the app being framed,
+       which would otherwise let another site overlay the sign-in form.
+   The inline `onload` attribute on the Devanagari font <link> is permitted by
+   'unsafe-inline' in script-src; without it the font never swaps in. */
+const CSP = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' https://fonts.gstatic.com data:",
+  "img-src 'self' data: blob:",
+  "media-src 'self' data: blob:",
+  "connect-src 'self' https://fynlvbtefmawisauzitu.supabase.co wss://fynlvbtefmawisauzitu.supabase.co",
+  "worker-src 'self' blob:",
+  "manifest-src 'self'"
+  /* No upgrade-insecure-requests here on purpose: this server is routinely
+     reached over plain HTTP on a school LAN, where that directive would rewrite
+     every subresource to https and break the page. Vercel is HTTPS-only and
+     sends it in vercel.json instead. */
+].join('; ');
+
+function applySecurityHeaders(req, res) {
+  res.setHeader('content-security-policy', CSP);
+  res.setHeader('x-frame-options', 'DENY');
+  res.setHeader('x-content-type-options', 'nosniff');
+  res.setHeader('referrer-policy', 'same-origin');
+  res.setHeader('permissions-policy', 'camera=(self), microphone=(), geolocation=(), payment=(), usb=()');
+  res.setHeader('cross-origin-opener-policy', 'same-origin');
+  res.setHeader('cross-origin-resource-policy', 'same-origin');
+  /* HSTS only over TLS: sending it on plain http to localhost would pin the
+     developer's browser to https://localhost and break the dev server. */
+  if (req.headers['x-forwarded-proto'] === 'https' || req.socket.encrypted) {
+    res.setHeader('strict-transport-security', 'max-age=31536000; includeSubDomains');
+  }
+}
+
 /* ---------------- routes ---------------- */
 const handleRequest = async function (req, res) {
   const u = url.parse(req.url, true);
   const p = u.pathname;
 
   /* security headers */
-  res.setHeader('x-content-type-options', 'nosniff');
-  res.setHeader('referrer-policy', 'same-origin');
+  applySecurityHeaders(req, res);
 
   /* The portal pages are opened two ways: served by this server, or opened as
      plain files from the app root on another port.  In the second case every

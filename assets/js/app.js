@@ -6,27 +6,42 @@ window.UP = window.UP || {};
   const S = {};
   const store = {
     get(k, d) { try { const v = localStorage.getItem('upay.' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+    /* Typed read. Storage is attacker-controllable: another script on the
+       origin, a restored backup, or the student opening the console can put
+       any JSON there. Without this, a stored object where an array belongs
+       took the whole Home or Saved view down with
+       "S.saved.filter is not a function". Returning the default instead
+       keeps the app usable and simply discards the unusable value. */
+    getTyped(k, d, type) {
+      const v = store.get(k, d);
+      if (v === null || v === undefined) return d;
+      if (type === 'array') return Array.isArray(v) ? v : d;
+      if (type === 'object') return (typeof v === 'object' && !Array.isArray(v)) ? v : d;
+      if (type === 'string') return typeof v === 'string' ? v : d;
+      if (type === 'number') return (typeof v === 'number' && isFinite(v)) ? v : d;
+      return v;
+    },
     set(k, v) { try { localStorage.setItem('upay.' + k, JSON.stringify(v)); } catch (e) { } },
     remove(k) { try { localStorage.removeItem('upay.' + k); } catch(e){} }
   };
 
-  S.lang = store.get('lang', 'en');
-  S.cls = store.get('cls', 10);
-  S.subject = store.get('subject', 'maths');
-  S.board = store.get('board', 'cbse');
+  S.lang = store.getTyped('lang', 'en', 'string');
+  S.cls = store.getTyped('cls', 10, 'number');
+  S.subject = store.getTyped('subject', 'maths', 'string');
+  S.board = store.getTyped('board', 'cbse', 'string');
   S.chapterId = null;
   S.answer = null;
   S.aiAnswer = null; S.aiState = null; S.aiQuestion = null; S.aiScope = null; S.aiNote = ''; S.aiRetry = false;
   S.photoState = null; S.photoNote = ''; S.photoPreview = null;
   S.savedKey = 'saved'; // legacy/guest list remains on this device
-  S.saved = store.get(S.savedKey, []);
-  S.savedTags = store.get('savedTags', ['important', 'revisit', 'exam']);
-  S.savedFolder = store.get('savedFolder', 'all');
-  S.recent = store.get('recent', []);   // last 12 asked questions
-  S.progress = store.get('progress', { daily: {} });   // date -> count
+  S.saved = store.getTyped(S.savedKey, [], 'array');
+  S.savedTags = store.getTyped('savedTags', ['important', 'revisit', 'exam'], 'array');
+  S.savedFolder = store.getTyped('savedFolder', 'all', 'string');
+  S.recent = store.getTyped('recent', [], 'array');   // last 12 asked questions
+  S.progress = store.getTyped('progress', { daily: {} }, 'object');   // date -> count
   S.mastery = {}; // loaded per owner, board, class and subject below
-  S.dailySet = store.get('dailySet', null);
-  S.mockTest = store.get('mockTest', null);
+  S.dailySet = store.getTyped('dailySet', null, 'object');
+  S.mockTest = store.getTyped('mockTest', null, 'object');
   function clearMockTest() {
     S.mockTest = null;
     store.remove(mockStoreKey());

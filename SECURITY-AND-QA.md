@@ -32,6 +32,62 @@ Updated 7 November 2026. Changes in this workspace do not automatically fix an e
 - Current 26ab includes 40 supplied Class 12 English original textbook selections: 13 Flamingo, six Vistas and 21 Kaleidoscope PDFs. Integrity checks match each uploaded PDF and its hash, page count, title/author and section, including three multi-work files and section introductions. Browser checks exercise section grouping, downloads, study prompts, English/Hindi, scope persistence, search, layout and service-worker PDF bypass. Mock-provider tests exercise English-specific prompts and explicitly unchecked AI responses. The five supplied Kaleidoscope selections not listed in CBSE 2026–27 Elective are marked; Elective fiction novels and official answer keys were not supplied. These checks are targeted and do not certify every literary interpretation or full course coverage.
 - The 101 supplied Class 12 English test papers are source-only: 93 Core and eight Elective. Eighteen Core PDFs are image-only; three have eight PDF pages while their covers say seven printed pages, six have 24 PDF pages while their covers say 23 printed pages, and nineteen have 16 PDF pages while their covers say 15 printed pages (their last page shows a footer and non-question marks but no question content). Repeated codes are separated by series. The scanned covers were visually inspected as well as OCR-checked because OCR can misread code and series digits. SHA-256 checks match all originals and browser tests check course/series separation, the separate code/series filter, PDF downloads, labels, board/subject scope and cache bypass. Questions have not been imported, exam years are unverified and no official keys were supplied; these tests do not certify the full papers or answers.
 
+## Security headers (9 November 2026)
+
+Every response from `server.js` and from the Vercel deployment now carries a
+consistent header set, added by `applySecurityHeaders()` and mirrored in
+`vercel.json`: `Content-Security-Policy`, `X-Frame-Options: DENY`,
+`X-Content-Type-Options: nosniff`, `Referrer-Policy: same-origin`,
+`Permissions-Policy`, `Cross-Origin-Opener-Policy`, `Cross-Origin-Resource-Policy`
+and, over TLS only, `Strict-Transport-Security`.
+
+The CSP was derived from this app's actual surface rather than pasted from a
+template. Two allowances are deliberate and documented in the code:
+
+- `script-src 'unsafe-inline'` — `index.html` carries a small inline Supabase
+  bootstrap. A nonce would mean templating `index.html` per request.
+- `style-src 'unsafe-inline'` — the renderer emits 261 inline `style` attributes;
+  removing the allowance needs a CSS refactor, not a header change.
+
+`img-src data:` is required by the 33 inlined figure diagrams, and `connect-src`
+is limited to this origin plus the one Supabase project the browser SDK talks to.
+`upgrade-insecure-requests` is sent by Vercel but deliberately **not** by the
+local server, which is routinely reached over plain HTTP on a school LAN.
+
+A tampered or corrupt `localStorage` entry can no longer break the app. Stored
+values are read through a type-guarded `store.getTyped()`, so a stored object
+where an array belongs returns the default instead of taking the Home or Saved
+view down with `S.saved.filter is not a function`. Seven corruption shapes are
+tested, including invalid JSON and deeply nested values.
+
+### What was verified
+
+`python3 tools/check/security_headers.py` (server running) checks:
+7 required headers on pages and API alike; the framing, object-src, base-uri and
+form-action directives; CORS echoing only our own origin and refusing
+`evil.example.com`, `attacker.test` and `null`; 7 API endpoints refusing
+unauthenticated callers, including a forged admin bearer token; 11 private-path
+and traversal probes returning 400/404; a credential-pattern scan over 614
+tracked files; and `vercel.json` carrying the same 8 headers as the server.
+
+Browser-side checks ran against the live local server through jsdom:
+6 XSS payloads in the `?q=` path and across 7 storage-backed surfaces produced
+0 handlers, 0 `javascript:` URLs and 0 alerts (payloads are escaped into text);
+7 `localStorage` corruption cases each rendered with 0 errors; the CSP produced
+0 violations on boot; and 100 route renders across 20 class/subject/language
+combinations produced 0 errors.
+
+### Limits of this claim
+
+This is not a third-party penetration test and does not establish that the site
+is immune to attack. Git history contains no credential pattern and no private
+runtime file is tracked, but **the previously exposed legacy Supabase
+service-role key and any old Gemini keys remain compromised until they are
+rotated in the provider dashboards** — no header or code change here revokes
+them, and item 1 above is still outstanding. The paid-AI allowlist and durable
+rate limiting described above are still required before public launch. Tests are
+targeted, not exhaustive.
+
 
 ## Sanskrit legacy links on Vercel
 
