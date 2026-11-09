@@ -15,6 +15,18 @@ import unicodedata
 import pymupdf
 
 ROOT = Path(__file__).resolve().parents[2]
+SUMMARY_JS = ROOT / 'assets/js/data/chapter-summary.js'
+
+
+def _load_summaries():
+    import json
+    src = SUMMARY_JS.read_text(encoding='utf-8')
+    body = src[src.index('UP.chapterSummary'):]
+    body = body[body.index('=') + 1:].rstrip().rstrip(';')
+    return json.loads(body)
+
+
+SUMMARIES = _load_summaries()
 # Independent mapping reviewed against the supplied PDFs; filename, title,
 # author, book, section, section number, chapter ID.
 EXPECTED = [
@@ -109,15 +121,27 @@ def main():
         assert chapter['enDesc'].strip() and chapter['hiDesc'].strip()
         assert len(chapter['focus']) == len(chapter['review']) == 2
         assert all(bilingual(v) for v in chapter['focus'] + chapter['review'])
+        # The chapter PDFs have been removed and replaced by extracted text
+        # (see tools/extract/build-chapter-text.py). The catalogue entry and the
+        # extraction must still agree, so verify the text instead of the bytes.
+        # If an original PDF is still present (e.g. a --uploads copy), check it.
+        extracted = SUMMARIES.get(source['id'])
+        assert extracted is not None, (name, 'no extracted chapter text')
+        assert extracted.get('available') is not False, (name, 'extraction failed')
+        assert extracted['book'] == book and extracted['section'] == section, name
+        assert extracted['chapter'] == n and extracted['chapterId'] == chapter_id, name
+        assert extracted['words'] > 40, (name, 'extraction too short', extracted['words'])
+        assert extracted['lead'].strip(), (name, 'no lead text')
         path = ROOT / source['file'].lstrip('/')
-        assert path.is_file() and not path.is_symlink() and path.resolve().is_relative_to(ROOT.resolve())
-        assert path.read_bytes()[:5] == b'%PDF-' and path.stat().st_size == source['bytes']
-        assert digest(path) == source['sha256'], name
-        with pymupdf.open(path) as doc:
-            assert len(doc) == source['pages'] and len(doc) > 0
-            head = normal(' '.join(p.get_text() for p in list(doc)[:3]))
-            assert normal(title) in head, (name,'title')
-            assert normal(author) in head, (name,'author')
+        if path.is_file():
+            assert not path.is_symlink() and path.resolve().is_relative_to(ROOT.resolve())
+            assert path.read_bytes()[:5] == b'%PDF-' and path.stat().st_size == source['bytes']
+            assert digest(path) == source['sha256'], name
+            with pymupdf.open(path) as doc:
+                assert len(doc) == source['pages'] and len(doc) > 0
+                head = normal(' '.join(p.get_text() for p in list(doc)[:3]))
+                assert normal(title) in head, (name,'title')
+                assert normal(author) in head, (name,'author')
             text = '\n'.join(p.get_text() for p in doc)
             mark = '2026-27' if 'Reprint 2026-27' in text else None
             assert source['reprint'] == mark, (name,'reprint')

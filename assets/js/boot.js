@@ -47,15 +47,18 @@
     'assets/js/data/chapters12-maths.js',   // Class 12 Maths KB + PYQ seed (must load AFTER pyq.js which resets UP.pyq)
     'assets/js/data/chapters12-applied-maths.js',  // Class 12 Applied Maths KB + PYQ seed
     'assets/js/data/chapters12-accountancy.js', // Class 12 Accountancy + Computerised Accounting chapter maps
+    'assets/js/data/accountancy-chapters.js?v=26ab', // extracted NCERT outline: objectives and numbered sections
     'assets/js/data/economics12.js?v=26ab', // Class 12 Economics guides, including deep links
     'assets/js/data/economics-sources.js?v=26ab', // the original Economics PDF catalogue
     'assets/js/data/english12.js?v=26ab', // Class 12 English reading notes and direct links
-    'assets/js/data/english12-sources.js?v=26ab', // supplied English PDFs; not a question bank
+    'assets/js/data/english12-sources.js?v=26ab', // original chapter PDFs (removed; kept as provenance)
+    'assets/js/data/chapter-summary.js?v=26ab', // extracted Class 12 chapter study summaries
     'assets/js/data/class12-original-test-papers.js?v=26ab', // supplied Economics, Biology and English papers, source only
     'assets/js/data/pyq-cbse2025-cls12.js', // CBSE 2025 (series 65/) Class 12 Maths PYQs
     'assets/js/data/pyq-accountancy-2023-2026-extracted.js?v=26ab', // 34 source-tagged Accountancy papers, loaded into both Class 12 tracks
     'assets/js/data/accountancy-original-papers.js?v=26ab', // source-only PDFs, not searchable questions
     'assets/js/data/mcq-keyed.js',
+    'assets/js/data/question-overrides.js', // question-bank curation, applied once packs are in
     'assets/js/approach-enrich.js?v=26ab',
       'assets/js/maths-solvers.js',  // attaches three solution methods to every PYQ (all classes/subjects)
     'assets/js/data/figures-c12.js',
@@ -214,6 +217,59 @@
       });
     }
     // pyq-old, if loaded, folds via UP.pyq = UP.pyq.concat(...) at end of that file
+    applyCuration();
+  }
+
+  /* Question-bank curation.
+     The source data files are left untouched; assets/js/data/question-overrides.js
+     carries the corrections computed by tools/curate/build-curation.js. Entries
+     that hold no question are held back, duplicate ids are given fresh names so
+     no content is lost, and print debris is stripped from the text. Applied once
+     per record, so repeated calls after each pack load are safe. */
+  function applyCuration() {
+    const ov = UP.questionOverrides;
+    if (!ov || !UP.pyq || !UP.pyq.length) return;
+    const dropSet = new Set((ov.drop || []).concat(ov.duplicates || []));
+    const renames = ov.renames || {};
+    const patched = ov.patched || {};
+    const taken = new Set();
+    const out = [];
+
+    for (let i = 0; i < UP.pyq.length; i++) {
+      const q = UP.pyq[i];
+      if (!q || typeof q !== 'object') continue;
+
+      if (q.__curated) {
+        taken.add(q.id);
+        out.push(q);
+        continue;
+      }
+      if (dropSet.has(q.id)) continue;
+      q.__curated = true;
+
+      const fix = patched[q.id];
+      if (fix) {
+        if (fix.en !== undefined) q.en = fix.en;
+        if (fix.hi !== undefined) q.hi = fix.hi;
+      }
+
+      if (taken.has(q.id)) {
+        const candidates = renames[q.id] || [];
+        let fresh = null;
+        for (let c = 0; c < candidates.length; c++) {
+          if (!taken.has(candidates[c])) { fresh = candidates[c]; break; }
+        }
+        for (let n = 2; !fresh; n++) {
+          const alt = q.id + '-d' + n;
+          if (!taken.has(alt)) fresh = alt;
+        }
+        q.id = fresh;
+      }
+
+      taken.add(q.id);
+      out.push(q);
+    }
+    UP.pyq = out;
   }
 
   function splitExerciseQs(raw) {
