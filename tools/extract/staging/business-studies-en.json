@@ -1,0 +1,747 @@
+{
+  "subject": "Business Studies",
+  "language": "en",
+  "status": "source-derived candidates; not reviewed or board-verified; not student-facing",
+  "chapters": {
+    "lebs101": {
+      "source": "lebs101.pdf",
+      "sha256": "4dd5f7b4bd8c3076adaee5789325069700d60f20b1c0f9c3655ad7ccb7caa7e5",
+      "pages": 29,
+      "title": "Nature and Significance of Management",
+      "sections": [
+        {
+          "title": "Concept",
+          "page": 4
+        },
+        {
+          "title": "Characteristics of Management",
+          "page": 5
+        },
+        {
+          "title": "Objectives of Management",
+          "page": 9
+        },
+        {
+          "title": "Importance of Management",
+          "page": 11
+        },
+        {
+          "title": "Nature of Management",
+          "page": 12
+        },
+        {
+          "title": "Management as an Art",
+          "page": 12
+        },
+        {
+          "title": "Management as a Science",
+          "page": 13
+        },
+        {
+          "title": "Management as a Profession",
+          "page": 16
+        },
+        {
+          "title": "Levels of Management",
+          "page": 17
+        },
+        {
+          "title": "Functions of Management",
+          "page": 19
+        },
+        {
+          "title": "Coordination — The Essence of Management",
+          "page": 21
+        },
+        {
+          "title": "Characteristics of Coordination",
+          "page": 22
+        },
+        {
+          "title": "Importance of Coordination",
+          "page": 23
+        }
+      ],
+      "objectives": [
+        "Describe the characteristics of management and its importance in an organisation.",
+        "Explain the nature of management as an art, science and profession.",
+        "Explain the functions of management.",
+        "Appreciate the nature and importance of coordination."
+      ],
+      "summary_excerpt": "Management is the process of planning, organising, staffing, directing and controlling the enterprise resources efficiently and effectively for achieving the goals of the organisation.",
+      "summary_page": 26,
+      "key_terms": [
+        "Management",
+        "Efficiency",
+        "Effectiveness",
+        "Planning",
+        "Organising",
+        "Staffing",
+        "Directing",
+        "Controlling",
+        "Coordination"
+      ]
+    },
+    "lebs102": {
+      "source": "lebs102.pdf",
+      "sha256": "92c022591af2be22e0a423475da4459c9eb2bc8ff7f412827a0dbffb86f5a050",
+      "pages": 39,
+      "title": "Principles of Management",
+      "sections": [
+        {
+          "title": "Principles of Management: The Concept",
+          "page": 3
+        },
+        {
+          "title": "Nature of Principles of Management",
+          "page": 4
+        },
+        {
+          "title": "Significance of Principles of Management",
+          "page": 8
+        },
+        {
+          "title": "Taylor’s Scientific Management",
+          "page": 10
+        },
+        {
+          "title": "Principles of Scientific Management",
+          "page": 13
+        },
+        {
+          "title": "Techniques of Scientific Management",
+          "page": 18
+        },
+        {
+          "title": "Fayol’s Principles of Management",
+          "page": 23
+        },
+        {
+          "title": "Fayol Versus Taylor — A Comparison",
+          "page": 33
+        }
+      ],
+      "objectives": [
+        "State the meaning, nature and significance of principles of management.",
+        "Explain Taylor’s principles and techniques of Scientific Management.",
+        "Explain Fayol’s principles of management."
+      ],
+      "summary_excerpt": "Principles of management are general guidelines, which can be used for conduct in work places under certain situations.",
+      "summary_page": 35,
+      "key_terms": [
+        "Functional Foremanship",
+        "Time Study",
+        "Motion Study",
+        "Fatigue Study",
+        "Method Study",
+        "Mental Revolution",
+        "Unity of Command",
+        "Unity of Direction",
+        "Scalar Chain"
+      ]
+    },
+    "lebs103": {
+      "source": "lebs103.pdf",
+      "sha256": "7402fe9aa74689a96914fece63f8535023617683388c2f1a250f0596b3a9e064",
+      "pages": 22,
+      "title": "Business Environment",
+      "sections": [
+        {
+          "title": "Meaning of Business Environment",
+          "page": 2
+        },
+        {
+          "title": "Importance of Business Environment",
+          "page": 4
+        },
+        {
+          "title": "Dimensions of Business Environment",
+          "page": 6
+        },
+        {
+          "title": "Economic Environment in India",
+          "page": 13
+        }
+      ],
+      "objectives": [
+        "Explain the meaning of business environment.",
+        "Discuss the importance of business environment.",
+        "Describe the various elements of business environment.",
+        "Examine the economic environment in India and the impact of Government policies on business and industry."
+      ],
+      "summary_excerpt": "The term business environment means the totality of all individuals, institutions and other forces that are outside a business but that potentially affect its performance.",
+      "summary_page": 19,
+      "key_terms": [
+        "Business environment",
+        "Opportunities",
+        "Threats",
+        "Economic Environment",
+        "Political environment",
+        "Social environment",
+        "Technological environment",
+        "Legal environment",
+        "Liberalisation",
+        "Privatisation",
+        "Globalisation"
+      ]
+    },
+    "lebs104": {
+      "source": "lebs104.pdf",
+      "sha256": "98696984995ac5fb70bb21ef5015f2647fa9c1dafa65b7790aa4cc0333d75c82",
+      "pages": 18,
+      "title": "Planning",
+      "sections": [
+        {
+          "title": "Concept",
+          "page": 2
+        },
+        {
+          "title": "Importance of Planning",
+          "page": 3
+        },
+        {
+          "title": "Features of Planning",
+          "page": 5
+        },
+        {
+          "title": "Limitations of Planning",
+          "page": 7
+        },
+        {
+          "title": "Planning Process",
+          "page": 8
+        },
+        {
+          "title": "Types of Plans",
+          "page": 11
+        }
+      ],
+      "objectives": [
+        "State the meaning of planning.",
+        "Describe the features and importance of planning.",
+        "Explain the limitations of planning.",
+        "Analyse the steps in the planning process.",
+        "Identity the different types of plans."
+      ],
+      "summary_excerpt": "Planning is deciding in advance what to do and how to do.",
+      "summary_page": 15,
+      "key_terms": [
+        "Planning",
+        "Objectives",
+        "Goals",
+        "Decisions",
+        "Standards",
+        "Controlling",
+        "Premises",
+        "Assumptions",
+        "Alternatives",
+        "Strategy",
+        "Policy",
+        "Procedure",
+        "Rule",
+        "Programme",
+        "Budget"
+      ]
+    },
+    "lebs105": {
+      "source": "lebs105.pdf",
+      "sha256": "7cd6d31631994f439b5d347adf65ea0bc24c6a299ff73896addfad03c30c2145",
+      "pages": 30,
+      "title": "Organising",
+      "sections": [
+        {
+          "title": "Meaning",
+          "page": 2
+        },
+        {
+          "title": "Steps in the Process of Organising",
+          "page": 3
+        },
+        {
+          "title": "Importance of Organising",
+          "page": 4
+        },
+        {
+          "title": "Organisation Structure",
+          "page": 6
+        },
+        {
+          "title": "Types of Organisation Structures",
+          "page": 7
+        },
+        {
+          "title": "Formal and Informal Organisation",
+          "page": 13
+        },
+        {
+          "title": "Informal Organisation",
+          "page": 15
+        },
+        {
+          "title": "Delegation",
+          "page": 17
+        },
+        {
+          "title": "Importance of Delegation",
+          "page": 20
+        },
+        {
+          "title": "Decentralisation",
+          "page": 22
+        }
+      ],
+      "objectives": [
+        "Explain the concept of organising.",
+        "Explain the process of organising.",
+        "Describe the importance of organising.",
+        "Explain the meaning, advantages and disadvantages of functional organisation.",
+        "Explain the meaning, advantages and disadvantages of divisional organisation.",
+        "Explain the meaning, advantages and disadvantages of formal and informal organisation.",
+        "Distinguish between formal and informal organisation.",
+        "Explain the concept of delegation and decentralisation.",
+        "Describe the importance of delegation and decentralisation.",
+        "Distinguish between delegation and decentralisation."
+      ],
+      "summary_excerpt": "Organising is the process of defining and grouping activities and establishing authority relationships among them.",
+      "summary_page": 27,
+      "key_terms": [
+        "Organising",
+        "Organisational structure",
+        "Departmentalisation",
+        "Delegation",
+        "Authority",
+        "Responsibility",
+        "Accountability",
+        "Functional structure",
+        "Divisional structure",
+        "Formal organisation",
+        "Informal organisation",
+        "Span of management",
+        "Centralisation",
+        "Decentralisation"
+      ]
+    },
+    "lebs106": {
+      "source": "lebs106.pdf",
+      "sha256": "96d48f828d84bc7ec07e111ca7a68ec855d5071b6ed7cf7ab951740e62b23970",
+      "pages": 30,
+      "title": "Staffing",
+      "sections": [
+        {
+          "title": "Meaning",
+          "page": 2
+        },
+        {
+          "title": "Importance of Staffing",
+          "page": 2
+        },
+        {
+          "title": "Evolution of Human Resource Management",
+          "page": 5
+        },
+        {
+          "title": "Staffing Process",
+          "page": 5
+        },
+        {
+          "title": "Recruitment",
+          "page": 10
+        },
+        {
+          "title": "Selection",
+          "page": 16
+        },
+        {
+          "title": "Training and Development",
+          "page": 21
+        },
+        {
+          "title": "Training Methods",
+          "page": 23
+        },
+        {
+          "title": "On the Job Methods",
+          "page": 23
+        },
+        {
+          "title": "Off the Job Methods",
+          "page": 24
+        }
+      ],
+      "objectives": [
+        "define staffing.",
+        "establish its relationship with Human Resource Management.",
+        "state the need and importance of staffing.",
+        "describe the steps in the staffing process.",
+        "state the meaning of recruitment and selection.",
+        "identify important sources of recruitment.",
+        "describe the steps in the selection process.",
+        "appreciate the need of training and development.",
+        "explain various on the job and off the job methods of training."
+      ],
+      "summary_excerpt": "Staffing has been described as the managerial function of filling and keeping filled, the positions in an organisation structure.",
+      "summary_page": 25,
+      "key_terms": [
+        "Staffing",
+        "Personnel Management",
+        "Human Resource Management",
+        "Recruitment",
+        "Selection",
+        "Training",
+        "Development",
+        "Performance Appraisal",
+        "Assessment Tests"
+      ]
+    },
+    "lebs107": {
+      "source": "lebs107.pdf",
+      "sha256": "64d3468ab4013752040834ff7b718915a1683bfae1b218ac2ba5791c8857645b",
+      "pages": 32,
+      "title": "Directing",
+      "sections": [
+        {
+          "title": "Meaning",
+          "page": 2
+        },
+        {
+          "title": "Importance of Directing",
+          "page": 3
+        },
+        {
+          "title": "Principles of Directing",
+          "page": 4
+        },
+        {
+          "title": "Elements of Direction",
+          "page": 5
+        },
+        {
+          "title": "Supervision",
+          "page": 5
+        },
+        {
+          "title": "Motivation",
+          "page": 7
+        },
+        {
+          "title": "Leadership",
+          "page": 16
+        },
+        {
+          "title": "Communication",
+          "page": 19
+        },
+        {
+          "title": "Formal and Informal Communciation",
+          "page": 23
+        }
+      ],
+      "objectives": [
+        "Explain the concept of directing and its importance in business organisations.",
+        "Understand the principles guiding directing process.",
+        "Explain the meaning of supervision and its importance.",
+        "Explain the meaning of motivation and its importance in business management.",
+        "Understand and explain Maslow’s theory of hierarchy of needs and its application to motivation of employees in an organisation.",
+        "Explain the financial and non-financial incentives through which managers motivate their employees.",
+        "Explain the concept of leadership and its importance in management.",
+        "Describe the qualities of a good leader.",
+        "Explain about formal and informal communications in the organisations.",
+        "Identify various barriers to effective communications and measures to overcome these barriers in the organisations."
+      ],
+      "summary_excerpt": "Directing is a complex managerial function consisting of all the activities that are designed to encourage subordinates to work effectively.",
+      "summary_page": 30,
+      "key_terms": [
+        "Directing",
+        "Supervision",
+        "Motives",
+        "Motivation",
+        "Incentives",
+        "Self actualisation",
+        "Leadership",
+        "Communication",
+        "Encoding",
+        "Decoding",
+        "Feedback",
+        "Formal communication",
+        "Informal communication"
+      ]
+    },
+    "lebs108": {
+      "source": "lebs108.pdf",
+      "sha256": "16e4751fcdf1fbd8de8c3386743baad13b299c9c5b094efceef6f5019dfdc4d3",
+      "pages": 14,
+      "title": "Controlling",
+      "sections": [
+        {
+          "title": "Meaning of Controlling",
+          "page": 1
+        },
+        {
+          "title": "Importance of Controlling",
+          "page": 2
+        },
+        {
+          "title": "Limitations of Controlling",
+          "page": 3
+        },
+        {
+          "title": "Relationship between Planning and Controlling",
+          "page": 5
+        },
+        {
+          "title": "Controlling Process",
+          "page": 5
+        }
+      ],
+      "objectives": [
+        "Explain the meaning of controlling.",
+        "State the importance of controlling.",
+        "Describe the relationship between planning and controlling.",
+        "Explain the steps in the process of controlling.",
+        "Describe the techniques of controlling."
+      ],
+      "summary_excerpt": "Controlling is the process of ensuring that actual activities conform to planned activities.",
+      "summary_page": 10,
+      "key_terms": [
+        "Controlling",
+        "Critical point control",
+        "Management by exception",
+        "Breakeven analysis",
+        "Budgetary control",
+        "Return on investment",
+        "Ratio analysis",
+        "Responsibility accounting",
+        "Management audit",
+        "PERT and CPM"
+      ]
+    },
+    "lebs201": {
+      "source": "lebs201.pdf",
+      "sha256": "a8aa2e458ce523f6f94d0ceb3d5e409d06a06e5e035c5e071f79fafa06d1c6f1",
+      "pages": 27,
+      "title": "Financial Management",
+      "sections": [
+        {
+          "title": "Meaning of Business Finance",
+          "page": 2
+        },
+        {
+          "title": "Financial Management",
+          "page": 2
+        },
+        {
+          "title": "Objectives",
+          "page": 3
+        },
+        {
+          "title": "Financial Decisions",
+          "page": 4
+        },
+        {
+          "title": "Financial Planning",
+          "page": 10
+        },
+        {
+          "title": "Capital Structure",
+          "page": 12
+        },
+        {
+          "title": "Fixed and Working Capital",
+          "page": 18
+        },
+        {
+          "title": "Working Capital",
+          "page": 20
+        },
+        {
+          "title": "Factors Affecting the Working Capital Requirements",
+          "page": 21
+        }
+      ],
+      "objectives": [
+        "explain the meaning of business finance.",
+        "describe financial management.",
+        "explain the role of financial management in our enterprise.",
+        "discuss objectives of financial management and how they could be achieved.",
+        "explain the meaning and importance of financial planning.",
+        "state the meaning of capital structure.",
+        "analyse the factors affecting the choice of an appropriate capital structure.",
+        "state meaning of fixed capital and working capital.",
+        "analyse the factors affecting the requirement of fixed and working capital."
+      ],
+      "summary_excerpt": "Financial Management is concerned with optimal procurement as well as usage of finance.",
+      "summary_page": 23,
+      "key_terms": [
+        "Financial Management",
+        "Wealth Maximisation",
+        "Investment Decision",
+        "Financing Decision",
+        "Dividend Decision",
+        "Capital Budgeting",
+        "Working Capital",
+        "Financial Planning",
+        "Capital Structure",
+        "Trading on Equity"
+      ]
+    },
+    "lebs202": {
+      "source": "lebs202.pdf",
+      "sha256": "a6948c5ba999fe551f04fa84c173c833023133d40e21a35ae42565217b2ced54",
+      "pages": 47,
+      "title": "Marketing",
+      "sections": [
+        {
+          "title": "Marketing Management",
+          "page": 5
+        },
+        {
+          "title": "Marketing Management Philosophies",
+          "page": 7
+        },
+        {
+          "title": "Functions of Marketing",
+          "page": 10
+        },
+        {
+          "title": "Marketing Mix",
+          "page": 13
+        },
+        {
+          "title": "Products",
+          "page": 15
+        },
+        {
+          "title": "Consumer Products",
+          "page": 16
+        },
+        {
+          "title": "Durability of Products",
+          "page": 17
+        },
+        {
+          "title": "Industrial Products",
+          "page": 18
+        },
+        {
+          "title": "Branding",
+          "page": 20
+        },
+        {
+          "title": "Packaging",
+          "page": 21
+        },
+        {
+          "title": "Pricing",
+          "page": 25
+        },
+        {
+          "title": "Physical Distribution",
+          "page": 28
+        },
+        {
+          "title": "Promotion",
+          "page": 30
+        },
+        {
+          "title": "Promotion Mix",
+          "page": 30
+        },
+        {
+          "title": "Advertising",
+          "page": 31
+        },
+        {
+          "title": "Personal Selling",
+          "page": 33
+        },
+        {
+          "title": "Sales Promotion",
+          "page": 36
+        },
+        {
+          "title": "Public Relations",
+          "page": 38
+        }
+      ],
+      "objectives": [
+        "explain the meaning of ‘marketing’.",
+        "distinguish between ‘marketing’ and ‘selling’.",
+        "list out important functions of marketing.",
+        "examine the role of marketing in the development of an economy in a firm, to the society and to consumers.",
+        "explain the elements of marketing-mix.",
+        "classify products into different categories.",
+        "analyse the factors affecting price of a product.",
+        "list out the types of channels of distribution.",
+        "explain the major tools of promotion, viz. advertising, personal selling, sales promotion and publicity."
+      ],
+      "summary_excerpt": "the term marketing has been described as performance of business activities that direct the flow of goods and services from producers to consumers.",
+      "summary_page": 42,
+      "key_terms": [
+        "Marketing",
+        "Labelling",
+        "Marketing Management",
+        "Marketing Mix",
+        "Channels of Distribution",
+        "Physical Distribution",
+        "Publicity",
+        "Consumer Product",
+        "Sales Promotion",
+        "Promotion Mix",
+        "Personal Selling",
+        "Public relations",
+        "Brand"
+      ]
+    },
+    "lebs203": {
+      "source": "lebs203.pdf",
+      "sha256": "0823655909a5f2eb4808f5a3b5191774b5d17e1c2a3a9e7ad95df6d26fc35420",
+      "pages": 16,
+      "title": "Consumer Protection",
+      "sections": [
+        {
+          "title": "Importance of Consumer Protection",
+          "page": 2
+        },
+        {
+          "title": "The Consumer Protection Act, 2019",
+          "page": 5
+        },
+        {
+          "title": "Who is a Consumer?",
+          "page": 5
+        },
+        {
+          "title": "Consumer Rights",
+          "page": 6
+        },
+        {
+          "title": "Consumer Responsibilities",
+          "page": 8
+        },
+        {
+          "title": "Ways and Means of Consumer Protection",
+          "page": 9
+        },
+        {
+          "title": "Redressal Agencies Under the Consumer Protection Act",
+          "page": 11
+        }
+      ],
+      "objectives": [
+        "state the importance of consumer protection.",
+        "briefly explain legal framework for consumer protection in India.",
+        "describe consumer rights in India.",
+        "briefly describe the ways and means of consumer protection."
+      ],
+      "summary_excerpt": "From the point of consumers, consumer protection is important because consumers are ignorant, unorganised and exploited by sellers.",
+      "summary_page": 14,
+      "key_terms": [
+        "Consumer protection",
+        "Consumer Rights",
+        "Consumer Responsibilities",
+        "Redressal mechanism",
+        "Mediation"
+      ]
+    }
+  }
+}
