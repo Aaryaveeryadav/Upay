@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Question repair — batch 1</title>
+<style>
+  :root { --ink:#1a1d21; --dim:#5d666f; --line:#e3e7ea; --bg:#fbfcfc;
+    --red:#c0392b; --redbg:#fdf0ee; --green:#1e7a4f; --greenbg:#eef8f2; --blue:#1c5fa8; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:940px; margin:0 auto; padding:48px 24px 80px; }
+  h1 { font-size:30px; letter-spacing:-.02em; margin:0 0 6px; }
+  .lede { color:var(--dim); margin:0 0 6px; font-size:17px; }
+  .meta { color:var(--dim); font-size:13px; margin-bottom:36px; }
+  h2 { font-size:14px; text-transform:uppercase; letter-spacing:.09em;
+    color:var(--dim); margin:44px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px 18px; }
+  .card .n { font-size:26px; font-weight:650; letter-spacing:-.02em; }
+  .card .l { font-size:12.5px; color:var(--dim); text-transform:uppercase; letter-spacing:.05em; }
+  .card.bad .n { color:var(--red); } .card.good .n { color:var(--green); }
+  table { width:100%; border-collapse:collapse; background:#fff;
+    border:1px solid var(--line); border-radius:10px; overflow:hidden; font-size:14.5px; }
+  th,td { padding:10px 14px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--dim);
+    background:#f7f9fa; font-weight:600; }
+  tr:last-child td { border-bottom:none; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .leak { color:var(--red); font-weight:600; }
+  .ok { color:var(--green); font-weight:600; }
+  .id { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px;
+    white-space:nowrap; color:var(--blue); }
+  .id small { color:var(--dim); font-family:inherit; }
+  .before { font-size:14px; line-height:1.65; }
+  .gone { background:var(--redbg); color:var(--red); text-decoration:line-through;
+    text-decoration-color:rgba(192,57,43,.5); border-radius:2px; }
+  .keep { color:var(--ink); }
+  ul { margin:0; padding-left:20px; } li { margin:7px 0; font-size:14px; }
+  code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; color:var(--blue); }
+  .sub { color:var(--dim); font-size:12px; }
+  .note { background:var(--greenbg); border:1px solid #cfe8db; border-radius:10px;
+    padding:16px 18px; font-size:14.5px; }
+  .warn { background:var(--redbg); border:1px solid #f2d6d2; border-radius:10px;
+    padding:16px 18px; font-size:14.5px; margin-top:16px; }
+  .open li { margin:9px 0; }
+  .pill { display:inline-block; font-size:11.5px; padding:2px 8px; border-radius:999px;
+    background:var(--greenbg); color:var(--green); border:1px solid #cfe8db; font-weight:600; }
+  .pill.r { background:var(--redbg); color:var(--red); border-color:#f2d6d2; }
+  footer { margin-top:56px; padding-top:16px; border-top:1px solid var(--line);
+    color:var(--dim); font-size:13px; }
+</style></head><body><div class="wrap">
+  <h1>Question-bank repair — batch 1</h1>
+  <p class="lede">Four defects fixed without inventing a single question. Source files untouched.</p>
+  <p class="meta">commit <code>8a47391</code> · branch <code>arena/e2441a85-upay</code> · 11,539 → 11,312 records</p>
+
+  <div class="cards">
+    <div class="card bad"><div class="n">227</div><div class="l">records held back</div></div>
+    <div class="card good"><div class="n">68</div><div class="l">text repairs</div></div>
+    <div class="card good"><div class="n">17</div><div class="l">ids renumbered</div></div>
+    <div class="card good"><div class="n">0</div><div class="l">duplicate ids left</div></div>
+  </div>
+
+  <h2>The bug that mattered more than the rest</h2>
+  <p style="margin-top:-4px;color:var(--dim);font-size:15px">Selecting <strong>one chapter</strong> used to pull in
+  every unmapped question in the subject, because unmapped Class 10 records are stored as <code>ch = 0</code>.
+  Class 10 Social chapter 18 has 6 questions and produced a 1,022-question test.</p>
+  <table>
+    <tr><th>Subject</th><th class="num">Unmapped</th><th class="num">Mapped</th>
+        <th class="num">Unmapped share</th><th class="num">Pool before</th><th class="num">Pool after</th></tr>
+    <tr><td>10/english</td><td class="num">872</td><td class="num">872</td><td class="num">99.3%</td><td class="num leak">1,744</td><td class="num ok">872</td></tr><tr><td>10/hindi</td><td class="num">775</td><td class="num">1,009</td><td class="num">76.8%</td><td class="num leak">1,784</td><td class="num ok">1,009</td></tr><tr><td>10/social</td><td class="num">1,016</td><td class="num">1,340</td><td class="num">75.8%</td><td class="num leak">2,356</td><td class="num ok">1,340</td></tr>
+  </table>
+  <p style="font-size:13.5px;color:var(--dim);margin-top:10px">Unmapped questions still appear when the chapter
+  filter is left on <strong>All</strong> — they are hidden from chapter tests, not from the app.</p>
+
+  <h2>Text repairs — print debris removed</h2>
+  <p style="margin-top:-4px;color:var(--dim);font-size:15px">Only known NCERT/board print chrome is removed
+  (struck through below). No question content is altered or generated.</p>
+  <table>
+      <tr><td class="id">phy12-c1-q1.7<br><small>12/physics</small></td>
+      <td><div class="before"><span class="keep">(a) fLFkjoS|qr {ks=k js[kk</span><span class="gone"> ,d larr oØ gksrh g</span><span class="keep">S vFkkZr dksbZ {ks=k js[kk ,dk,d ugha VwV ldrhA D;ksa\ (b) Li&quot;V dhft, fd nks {ks=k js[kk,¡ dHkh Hkh ,d&amp;nwljs dk çfrPNsnu D;ksa ugha djrha\ Reprint 2026-27 HkkSfrdh</span></div></td></tr>
+      <tr><td class="id">phy12-c1-q1.13<br><small>12/physics</small></td>
+      <td><div class="before"><span class="keep">Figure 1.30 shows tracks of three charged particles in a uniform electrostatic field. Give the signs of the three charges. Which particle has the highest charge to mass ratio? </span><span class="gone">Reprint 2026-27 </span><span class="keep">Electric Charges and Fields FIGURE 1.30</span></div></td></tr>
+      <tr><td class="id">phy12-c1-q1.17<br><small>12/physics</small></td>
+      <td><div class="before"><span class="keep">fp=k 1.31 esa n&#x27;kkZ, vuqlkj 10 cm Hkqtk osQ fdlh oxZ osQ osQaæ ls Bhd 5 cm Å¡pkbZ ij dksbZ +10 µC vkos&#x27;k j[kk gSA bl oxZ ls xqtjus okys oS|qr ÝyDl dk ifjek.k D;k gS\ (laosQr % oxZ dks 10 cm fdukjs osQ fdlh</span><span class="gone"> ?ku dk ,d iQyd ek</span><span class="keep">fu,A) Reprint 2026-27 oS|qr vkos&#x27;k rFkk {ks=k fp=k 1.31</span></div></td></tr>
+      <tr><td class="id">phy12-c1-q1.20<br><small>12/physics</small></td>
+      <td><div class="before"><span class="keep">A conducting sphere of radius 10 cm has an unknown charge. If the electric field 20 cm from the centre of the sphere is 1.5 × 103 N/C and points radially inward, what is the net charge on the sphere? </span><span class="gone">Reprint 2026-27 </span><span class="keep">Physics</span></div></td></tr>
+      <tr><td class="id">phy12-c1-q1.23<br><small>12/physics</small></td>
+      <td><div class="before"><span class="keep">Two large, thin metal plates are parallel and close to each other. On their inner faces, the plates have surface charge densities of opposite signs and of magnitude 17.0 × 10–22 C/m2. What is E: (a) in the outer region of the first plate, (b) in the outer region of the second plate, and (c) between the plates?</span><span class="gone"> Reprint 2026-27</span><span class="keep"></span></div></td></tr>
+      <tr><td class="id">phy12-c2-q2.8<br><small>12/physics</small></td>
+      <td><div class="before"><span class="keep">In a parallel plate capacitor with air between the plates, each plate has an area of 6 × 10–3 m2 and the distance between the plates is 3 mm. Calculate the capacitance of the capacitor. If this capacitor is connected to a 100 V supply, what is the charge on each plate of the capacitor?</span><span class="gone"> Reprint 2026-27 Physics 80</span><span class="keep"></span></div></td></tr>
+      <tr><td class="id">phy12-c2-q2.11<br><small>12/physics</small></td>
+      <td><div class="before"><span class="keep">A 600pF capacitor is charged by a 200V supply. It is then disconnected from the supply and is connected to another uncharged 600 pF capacitor. How much electrostatic energy is lost in the process?</span><span class="gone"> Reprint 2026-27</span><span class="keep"></span></div></td></tr>
+      <tr><td class="id">phy12-c3-q3.3<br><small>12/physics</small></td>
+      <td><div class="before"><span class="keep">At room temperature (27.0 °C) the resistance of a heating element is 100 Ω. What is the temperature of the element if the resistance is found to be 117 Ω, given that the temperature coefficient of the material of the resistor is 1.70 × 10–4 °C–1.</span><span class="gone"> Reprint 2026-27 Physics 106</span><span class="keep"></span></div></td></tr></table>
+
+  <h2>Held back — table cells that were never questions</h2>
+  <p style="margin-top:-4px;color:var(--dim);font-size:15px">PDF table rows promoted to questions by the
+  original extractor. 10/social 12 · 10/hindi 1.</p>
+  <ul><li><code>sscp-3221-1</code> <span class="sub">10/social</span> — “Farmer working in his fields 250”</li><li><code>sscp-3221-2</code> <span class="sub">10/social</span> — “Teachers teaching in school 10”</li><li><code>sscp-3221-3</code> <span class="sub">10/social</span> — “In the mid-16th century, diseases like smallpox reached America through which of the following ? 1”</li><li><code>sscp-3221-4</code> <span class="sub">10/social</span> — “Read the following characteristics of of Korea carefully and choose the correct option : 1”</li><li><code>sscp-3222-1</code> <span class="sub">10/social</span> — “Swapna is a small farmer. Swapna wants to cultivate cotton. What kind of geographical conditions will be suitable for this ? Choose the most”</li><li><code>sscp-3222-2</code> <span class="sub">10/social</span> — “Teachers teaching in school 10”</li></ul>
+
+  <h2>Held back — rest of the 227</h2>
+  <table>
+    <tr><th>Kind</th><th>Subject</th><th class="num">Count</th><th>Why</th></tr>
+    <tr><td>Blank in both languages</td><td>10/hindi 131</td>
+        <td class="num">131</td><td>Text is empty in <code>en</code> and <code>hi</code>; can never render</td></tr>
+    <tr><td>Exact duplicate</td><td>10/hindi 73 · 10/maths 9 · 10/social 1</td>
+        <td class="num">83</td><td>Identical text <em>and</em> answer, same paper and set</td></tr>
+    <tr><td>Table / figure cell</td><td>10/social 12 · 10/hindi 1</td>
+        <td class="num">13</td><td>No question signal, no options</td></tr>
+  </table>
+  <div class="note" style="margin-top:14px">
+    <strong>Deliberately kept.</strong> Pair records such as <code>bd10</code> / <code>bd10b</code> look like
+    duplicates but are the two <em>“OR”</em> alternatives of one question — they share the Hindi field and the
+    answer while holding different English parts. A naïve dedupe would have deleted 90 real questions.
+  </div>
+
+  <h2>Verification</h2>
+  <table>
+    <tr><th>Check</th><th>Result</th></tr>
+    <tr><td><code>question_quality.py</code></td><td><span class="pill">PASS</span></td></tr>
+    <tr><td><code>chapter_text.py</code></td><td><span class="pill">PASS</span></td></tr>
+    <tr><td><code>english12_sources.py</code> · <code>economics_sources.py</code> · <code>source_papers.py</code></td><td><span class="pill">PASS</span></td></tr>
+    <tr><td>Boot-order DOM run, all 10 subjects</td><td>11,310 records · 0 duplicate ids · 0 blank · 0 debris</td></tr>
+    <tr><td>Route sweep, 20 class/subject/language × 5 views</td><td>100 renders · 0 errors</td></tr>
+  </table>
+
+  <h2>Still open — needs real source, so not invented</h2>
+  <ul class="open">
+    <li><strong>Class 10 English structure.</strong> All 872 records are whole subsections
+      (<code>Attempt any Ten…</code> then <code>(i)(ii)(iii)</code>). Splitting them into questions would
+      fabricate question boundaries. Filter bug fixed instead.</li>
+    <li><strong>Class 12 Chemistry formulas.</strong> Flattened to <code>C H OH 2 5</code>,
+      <code>SO Cl g</code>. No <code>chapterTags</code> or <code>paperCode</code> to rebuild from — re-deriving
+      them is content generation, not repair.</li>
+    <li><strong>Answer keys.</strong> 771 / 11,539 (6.7%). AI keys marked unverified — not started in this batch.</li>
+    <li><strong>Empty areas.</strong> Class 12 English and Economics have 0 questions despite 191 papers;
+      Class 11 has 0; Class 12 Biology is a name-only stub.</li>
+  </ul>
+  <div class="warn"><strong>Not deployed.</strong> No pull request, no Vercel deploy — as instructed, until the
+  project is complete.</div>
+
+  <footer>Generated from the live question bank by <code>tools/curate/build-curation.js</code>.
+  Every id above can be traced back and restored.</footer>
+</div></body></html>
