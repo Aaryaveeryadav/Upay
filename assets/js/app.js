@@ -1087,6 +1087,12 @@ window.UP = window.UP || {};
     const specific = (scopedExamples[+S.cls] || {})[S.subject];
     const samples = specific ? specific.map(en => ({ en, hi: en })) : (subjectSamples[S.subject] || [{ en: 'Type a question from your selected subject.', hi: 'अपने चुने हुए विषय का प्रश्न लिखिए।' }]);
     return `
+    <section class="card callout tip" style="margin:0 0 18px"><div>
+      <b>CBSE Class 12 · English outlines</b><br>
+      <a class="link" href="/assets/notes/index.html#business">Business Studies</a> ·
+      <a class="link" href="/assets/notes/index.html#chemistry">Chemistry (units 1–4)</a>
+      <span class="muted"> — syllabus-mapped study outlines; coverage is incomplete.</span>
+    </div></section>
     <section class="hero">
       <div class="hero-grid">
         <div>
@@ -2543,6 +2549,8 @@ window.UP = window.UP || {};
       <div class="pill-row">${(ch.keywords?.en || []).slice(0, 6).map((k, i) => `<span class="pill">${esc(S.lang === 'hi' ? ((ch.keywords.hi || [])[i] || k) : k)}</span>`).join('')}</div>
     </section>
     ${isEconomicsChapter || isEnglish12Chapter ? renderChapterText(ch, 'outline') : ''}
+    ${S.board === 'cbse' && +S.cls === 12 && S.subject === 'chemistry' && +ch.id >= 701 && +ch.id <= 704
+      ? `<p class="callout tip"><a class="link" href="/assets/notes/index.html#lech10${+ch.id - 700}">CBSE 2026–27 English outline and selected figure →</a></p>` : ''}
     <div class="tabs">
       ${tabs.map(([k, label]) => `<button data-action="tab" data-tab="${k}" class="${tab === k ? 'on' : ''}">${label}</button>`).join('')}
     </div>

@@ -1,0 +1,54 @@
+{
+  "batch": "NCERT Chemistry reprint 2026\u201327, six supplied PDFs",
+  "status": "partial: four chapters outlined and one selected figure per chapter; full figure inventory not checked",
+  "sources": [
+    {
+      "source_file": "lech101.pdf",
+      "sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+      "pages": 30,
+      "text_nonempty_pages": 30,
+      "classification": "chapter",
+      "disposition": "retained pending complete image inventory and batch review"
+    },
+    {
+      "source_file": "lech102.pdf",
+      "sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+      "pages": 30,
+      "text_nonempty_pages": 30,
+      "classification": "chapter",
+      "disposition": "retained pending complete image inventory and batch review"
+    },
+    {
+      "source_file": "lech103.pdf",
+      "sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+      "pages": 28,
+      "text_nonempty_pages": 28,
+      "classification": "chapter",
+      "disposition": "retained pending complete image inventory and batch review"
+    },
+    {
+      "source_file": "lech104.pdf",
+      "sha256": "4f33bf2825d1d693b78ae52c13002f45bce3881a3934790eaf34133b6ccb8972",
+      "pages": 29,
+      "text_nonempty_pages": 29,
+      "classification": "chapter",
+      "disposition": "retained pending complete image inventory and batch review"
+    },
+    {
+      "source_file": "lech1an.pdf",
+      "sha256": "b3c1e256b4fca5e45f13b2dca59fd80e0ee4ffd85e4645d01e13a76f66b388ae",
+      "pages": 5,
+      "text_nonempty_pages": 5,
+      "classification": "answer appendix (excluded from outlines)",
+      "disposition": "retained pending complete image inventory and batch review"
+    },
+    {
+      "source_file": "lech2an.pdf",
+      "sha256": "e6bc2fc93811b71b60ef94f3e7ef17170cd03186f257b992b0211d0529ef9ec3",
+      "pages": 6,
+      "text_nonempty_pages": 6,
+      "classification": "answer appendix (excluded from outlines)",
+      "disposition": "retained pending complete image inventory and batch review"
+    }
+  ]
+}

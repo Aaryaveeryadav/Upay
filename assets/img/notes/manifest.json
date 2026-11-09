@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "description": "Selected source-PDF figure crops, not an exhaustive figure inventory. No AI-drawn figures in this batch.",
+  "images": [
+    {
+      "path": "assets/img/notes/d5e4465b33a0aaceaa154ae7724d5da6bd3d8ed9184c3db3b6a03f2196896fe3.png",
+      "sha256": "d5e4465b33a0aaceaa154ae7724d5da6bd3d8ed9184c3db3b6a03f2196896fe3",
+      "origin": "source-pdf-crop",
+      "ai_drawn": false,
+      "source_file": "lech101.pdf",
+      "source_sha256": "99d19dbb008280c361496c6e184be91b214d70fb40837749c692c8c52add341f",
+      "pdf_page": 7,
+      "figure": "1.1",
+      "caption": "Effect of pressure on gas solubility",
+      "crop_points": [
+        40,
+        232,
+        340,
+        370
+      ],
+      "edit": "none"
+    },
+    {
+      "path": "assets/img/notes/123b55cbe332997e9a8460bcabcbfd04d399f94ad24729292da24d4f494e077d.png",
+      "sha256": "123b55cbe332997e9a8460bcabcbfd04d399f94ad24729292da24d4f494e077d",
+      "origin": "source-pdf-crop",
+      "ai_drawn": false,
+      "source_file": "lech102.pdf",
+      "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
+      "pdf_page": 2,
+      "figure": "2.1",
+      "caption": "Daniell cell",
+      "crop_points": [
+        65,
+        102,
+        300,
+        326
+      ],
+      "edit": "Unrelated partial equation masked in white"
+    },
+    {
+      "path": "assets/img/notes/5a27578c7eb1fc0d58078685aec38ec5fa5d91654c9857eb24e3636d1f7c3d31.png",
+      "sha256": "5a27578c7eb1fc0d58078685aec38ec5fa5d91654c9857eb24e3636d1f7c3d31",
+      "origin": "source-pdf-crop",
+      "ai_drawn": false,
+      "source_file": "lech103.pdf",
+      "source_sha256": "7c822864c114aa805cc63b1e44a028d16d0d4704afc3ad304d4dc4054945f320",
+      "pdf_page": 3,
+      "figure": "3.1",
+      "caption": "Instantaneous and average rates of a reaction",
+      "crop_points": [
+        40,
+        201,
+        520,
+        411
+      ],
+      "edit": "none"
+    },
+    {
+      "path": "assets/img/notes/8904e40143a37fee1e21ee23290c72231bcc8477f665913e96a62c44b4eb2903.png",
+      "sha256": "8904e40143a37fee1e21ee23290c72231bcc8477f665913e96a62c44b4eb2903",
+      "origin": "source-pdf-crop",
+      "ai_drawn": false,
+      "source_file": "lech104.pdf",
+      "source_sha256": "4f33bf2825d1d693b78ae52c13002f45bce3881a3934790eaf34133b6ccb8972",
+      "pdf_page": 4,
+      "figure": "4.1",
+      "caption": "Trends in melting points of transition elements",
+      "crop_points": [
+        60,
+        445,
+        289,
+        675
+      ],
+      "edit": "none"
+    }
+  ]
+}

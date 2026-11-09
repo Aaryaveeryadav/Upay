@@ -1,27 +1,27 @@
-# Business Studies English — source-checked outline staging
+# Business Studies English — source-derived outline staging
 
-`business-studies-en.json` contains short outlines extracted from the eleven
-uploaded NCERT chapter PDFs, with source SHA-256 hashes and 1-based PDF page
-references. The source headings were checked against the PDF layout, and the
-objectives, excerpts, selected key terms and headings were checked against the
-extracted text before deletion. This is **not** independently board-verified and
-is not loaded by the app; do not publish it as verified notes without current
-board-syllabus and source review.
+`business-studies-en.json` preserves the eleven source-checked candidate
+outlines from the supplied NCERT chapter PDFs, with SHA-256 hashes and 1-based
+PDF page references. The original candidates are not directly published.
+A selected and edited version is in `assets/notes/outlines.json`, mapped to the
+CBSE 2026–27 Business Studies syllabus and displayed in the outline library.
+The public notes are not CBSE-certified and do not cover Financial Markets or
+project work. Some syllabus topics were added as headings even when the staged
+principal-heading selection did not contain them.
 
-- Section lists cover principal headings, not every subheading. Some wording or
-  spelling reflects the original PDF (including its typographical errors).
-- Objectives are from the first-page lists. Summaries are brief verbatim textbook
-  excerpts, not AI-authored notes, and can be shorter than 300 characters. The
-  key terms are a selection, not necessarily the complete lists.
-- `lebs203` discusses the Consumer Protection Act 2019 in its introduction but
-  refers to the 1986 Act in its summary. Resolve the source's inconsistency
-  against current authoritative material before publishing legal information.
-- No full chapter prose or AI-generated questions are included. Any future AI
-  questions must be labelled “practice, not board-verified”.
+The candidate `lebs203` source introduction discusses the Consumer Protection
+Act, 2019 but its summary refers to the 1986 Act. The student-facing summary
+was rewritten to use the 2019 Act; CBSE's current syllabus specifies that Act,
+and section 107 repeals the 1986 Act subject to savings. The original candidate
+remains here for provenance and must not be used unchanged as current law.
 
-To rebuild, install `pypdf` and run
+No full chapter prose or AI-generated questions are included. Any future
+AI-generated questions must be labelled “practice, not board-verified”.
+
+To rebuild the candidates, install `pypdf` and run
 `python3 tools/extract/build-business-studies-candidates.py --pdf-dir DIR`.
-Before deleting the sources, run
-`python3 tools/check/business_studies_candidates.py DIR`. Without `DIR`, the
-check validates the staged file's structure only. Delete re-uploaded sources in
-the same turn after extraction and checks, per project rules.
+Before deleting re-uploaded sources, run
+`python3 tools/check/business_studies_candidates.py DIR` and review the
+outputs against the sources and current syllabus. Without `DIR`, that check
+validates structure only. Delete re-uploaded sources in the same turn only
+after extraction and checks, per project rules.
