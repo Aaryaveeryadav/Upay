@@ -919,6 +919,528 @@
     248
    ],
    "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/68c3cf6a522a72591bfb09d8519af63a64f1717e92bc13d8202ab1073a25b095.png",
+   "sha256": "68c3cf6a522a72591bfb09d8519af63a64f1717e92bc13d8202ab1073a25b095",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 8,
+   "figure": "5.2",
+   "caption": "Geometrical isomers (cis and trans)",
+   "crop_points": [
+    34,
+    481,
+    239,
+    544
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/f8b83d1ed8aa3515df4cd28cab787a435554cb35817d62f0acb5b0e1db0b36f0.png",
+   "sha256": "f8b83d1ed8aa3515df4cd28cab787a435554cb35817d62f0acb5b0e1db0b36f0",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 8,
+   "figure": "5.3",
+   "caption": "Geometrical isomers (cis and trans)",
+   "crop_points": [
+    40,
+    570,
+    275,
+    673
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/b8874d7750d5cd395b99e35951a47367026b13bea8ea0898d944716a7ede739e.png",
+   "sha256": "b8874d7750d5cd395b99e35951a47367026b13bea8ea0898d944716a7ede739e",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 9,
+   "figure": "5.4",
+   "caption": "Geometrical isomers (cis and trans)",
+   "crop_points": [
+    82,
+    58,
+    317,
+    148
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/d49cfa0c098aa5906e2bc278fd609547e8ba304eec7ec1450b2d39e5ca3fdec0.png",
+   "sha256": "d49cfa0c098aa5906e2bc278fd609547e8ba304eec7ec1450b2d39e5ca3fdec0",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 9,
+   "figure": "5.5",
+   "caption": "The facial (fac) and meridional (mer) isomers of [Co(NH3)3(NO2)3]",
+   "crop_points": [
+    170,
+    186,
+    352,
+    295
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/37604530fdd300bf62d52c81d1ae53ddf0e905559e0acc5953b8d5ebe6e47627.png",
+   "sha256": "37604530fdd300bf62d52c81d1ae53ddf0e905559e0acc5953b8d5ebe6e47627",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 9,
+   "figure": "5.6",
+   "caption": "Optical isomers (d and l) of [Co(en)3] 3+",
+   "crop_points": [
+    50,
+    422,
+    335,
+    553
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/86e245724e6f97eb0f1aa014ff9488b933da2a5d869e523e71c1d25f369124b2.png",
+   "sha256": "86e245724e6f97eb0f1aa014ff9488b933da2a5d869e523e71c1d25f369124b2",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 9,
+   "figure": "5.7",
+   "caption": "Optical isomers (d and l) of cis- [PtCl2(en)2]2+",
+   "crop_points": [
+    136,
+    585,
+    408,
+    704
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/25b5b8d3b413d4f5fce70668055d6098520f3f653479b2e4d8a54a4b5abdbb7d.png",
+   "sha256": "25b5b8d3b413d4f5fce70668055d6098520f3f653479b2e4d8a54a4b5abdbb7d",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 15,
+   "figure": "5.8",
+   "caption": "d orbital splitting in an octahedral crystal field",
+   "crop_points": [
+    36,
+    59,
+    378,
+    297
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/28799d3ea8e15445e5d877eb326a18db0a5cd439b815b5967b339e3f3212fef8.png",
+   "sha256": "28799d3ea8e15445e5d877eb326a18db0a5cd439b815b5967b339e3f3212fef8",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 16,
+   "figure": "5.9",
+   "caption": "d orbital splitting in a tetrahedral",
+   "crop_points": [
+    40,
+    82,
+    286,
+    223
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/42dc76b9c6de6a4174979be8233220ab714910fe18e6b0815a1e829a7d681314.png",
+   "sha256": "42dc76b9c6de6a4174979be8233220ab714910fe18e6b0815a1e829a7d681314",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 17,
+   "figure": "5.10",
+   "caption": "Transition of an electron in",
+   "crop_points": [
+    52,
+    48,
+    362,
+    188
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/4ed518200469e47fedab1df8317b0a9fa57d9a562278e672051f46f471e37588.png",
+   "sha256": "4ed518200469e47fedab1df8317b0a9fa57d9a562278e672051f46f471e37588",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 17,
+   "figure": "5.11",
+   "caption": "Aqueous solutions of complexes of nickel(II) with an increasing number of ethane-1, 2-diamine ligands.",
+   "crop_points": [
+    190,
+    385,
+    545,
+    571
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/afdd49d34b0b9e3060c13ed71105d3617fc4096eeddecd04642d80f03a404a97.png",
+   "sha256": "afdd49d34b0b9e3060c13ed71105d3617fc4096eeddecd04642d80f03a404a97",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 18,
+   "figure": "5.12",
+   "caption": "(a) Ruby: this gemstone was found in",
+   "crop_points": [
+    255,
+    62,
+    510,
+    141
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/65da86980ec79f6d00831491eba119ffed04efc1c8b5af5805a10c4a6b8ea7f6.png",
+   "sha256": "65da86980ec79f6d00831491eba119ffed04efc1c8b5af5805a10c4a6b8ea7f6",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 19,
+   "figure": "5.13",
+   "caption": "Structures of some representative homoleptic metal carbonyls.",
+   "crop_points": [
+    175,
+    62,
+    525,
+    248
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/4c6386cb543ba41537018b8c74b0267a6d827e5d3c733cb12c865f5fcc2c5204.png",
+   "sha256": "4c6386cb543ba41537018b8c74b0267a6d827e5d3c733cb12c865f5fcc2c5204",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech105.pdf",
+   "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pdf_page": 19,
+   "figure": "5.14",
+   "caption": "Example of synergic bonding",
+   "crop_points": [
+    55,
+    272,
+    282,
+    356
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/cc2f9e67bed94af245e5f25de982cc579b7a9dbf89dc07abd137b0ff516375b2.png",
+   "sha256": "cc2f9e67bed94af245e5f25de982cc579b7a9dbf89dc07abd137b0ff516375b2",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 13,
+   "figure": "6.2",
+   "caption": "Red ball represents the incoming hydroxide ion and green ball represents the outgoing halide ion",
+   "crop_points": [
+    116,
+    528,
+    522,
+    586
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/760213d3aa27c12db793cc618e543d1e8cad18bbf47cb548d22e33ebddd96857.png",
+   "sha256": "760213d3aa27c12db793cc618e543d1e8cad18bbf47cb548d22e33ebddd96857",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 15,
+   "figure": "6.3",
+   "caption": "Steric effects in SN2 reaction. The relative rate of SN2 reaction is given in parenthesis",
+   "crop_points": [
+    46,
+    94,
+    520,
+    248
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/f9533454d3e5747bf4907b1fb78f861ba04133114b78157208ed8824badddc45.png",
+   "sha256": "f9533454d3e5747bf4907b1fb78f861ba04133114b78157208ed8824badddc45",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 18,
+   "figure": "6.4",
+   "caption": "Some common examples of chiral and achiral objects a single asymmetric carbon atom. Let us consider two simple molecules propan-2-ol (Fig.6.5) and butan-2-ol (Fig.6.6)",
+   "crop_points": [
+    51,
+    206,
+    300,
+    436
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/97cd372ea0f83410d34c71ccc13f0af583960c6d3e8756f4ba3b9162fce36791.png",
+   "sha256": "97cd372ea0f83410d34c71ccc13f0af583960c6d3e8756f4ba3b9162fce36791",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 18,
+   "figure": "6.5",
+   "caption": "B is mirror image of A; B is rotated by 180o and C is obtained; C is superimposable on A.",
+   "crop_points": [
+    218,
+    483,
+    520,
+    608
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/b3627e00225ddf2b667719c34a70c5bcf04504a2aa8e490fc088e1e4812468e9.png",
+   "sha256": "b3627e00225ddf2b667719c34a70c5bcf04504a2aa8e490fc088e1e4812468e9",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 19,
+   "figure": "6.6",
+   "caption": "E is mirror image of D; E is rotated by 180o to get F and F is non superimposable on its mirror image D.",
+   "crop_points": [
+    190,
+    30,
+    520,
+    179
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/561ae14a47123951d4949f3d89166d6709bc9fb1c1b8792a9a11deb134fdb482.png",
+   "sha256": "561ae14a47123951d4949f3d89166d6709bc9fb1c1b8792a9a11deb134fdb482",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech201.pdf",
+   "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pdf_page": 19,
+   "figure": "6.7",
+   "caption": "A chiral molecule and its mirror image",
+   "crop_points": [
+    47,
+    209,
+    188,
+    288
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/24c201070c09e0ec5d6436b8a5453b85ef6fd1f58a5ffc2a935268e2acbecda2.png",
+   "sha256": "24c201070c09e0ec5d6436b8a5453b85ef6fd1f58a5ffc2a935268e2acbecda2",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech203.pdf",
+   "source_sha256": "23067221e09a8a61873f3a3a587a2ecb15d3104aeea00914dbc15111e772154e",
+   "pdf_page": 10,
+   "figure": "8.2a",
+   "caption": "Nucleophilic attack on carbonyl carbon (Fig. 8.2, part 1): the nucleophile attacks the planar, sp2-hybridised carbonyl carbon from a direction perpendicular to its plane; step 1 is slow.",
+   "crop_points": [
+    55,
+    200,
+    175,
+    338
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/2bbeceed56f1deef12a4697799e91b5da03380e8e7e84d795f6315e389e74499.png",
+   "sha256": "2bbeceed56f1deef12a4697799e91b5da03380e8e7e84d795f6315e389e74499",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech203.pdf",
+   "source_sha256": "23067221e09a8a61873f3a3a587a2ecb15d3104aeea00914dbc15111e772154e",
+   "pdf_page": 10,
+   "figure": "8.2b",
+   "caption": "Nucleophilic attack on carbonyl carbon (Fig. 8.2, part 2): the tetrahedral alkoxide intermediate captures H+ (step 2, fast) to give the addition product.",
+   "crop_points": [
+    55,
+    344,
+    385,
+    424
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/20ff35eb54828684f1ff650fb2d371d086c9a8e66a276aa7b4f08159fc02b8fa.png",
+   "sha256": "20ff35eb54828684f1ff650fb2d371d086c9a8e66a276aa7b4f08159fc02b8fa",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech204.pdf",
+   "source_sha256": "a267ffea998fb68174c2abc87f79a71e646e93460efa73bbe15796a995cea29a",
+   "pdf_page": 8,
+   "figure": "9.2",
+   "caption": "Intermolecular hydrogen bonding in primary amines",
+   "crop_points": [
+    200,
+    110,
+    425,
+    215
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/a249a154f7dc514f800218fa3f1e2816a83da6e623a3a6f13a472f10e35b7526.png",
+   "sha256": "a249a154f7dc514f800218fa3f1e2816a83da6e623a3a6f13a472f10e35b7526",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 13,
+   "figure": "10.1a",
+   "caption": "alpha-Helix structure of proteins (Fig. 10.1, part 1): rod and hand screwed into a right-handed helix with ribbon strands.",
+   "crop_points": [
+    40,
+    127,
+    120,
+    402
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/eb7931c921e0fe2fb74414b66e84e4c9fe1af89344b92d5a3be77dae33531869.png",
+   "sha256": "eb7931c921e0fe2fb74414b66e84e4c9fe1af89344b92d5a3be77dae33531869",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 13,
+   "figure": "10.1b",
+   "caption": "alpha-Helix structure of proteins (Fig. 10.1, part 2): hydrogen-bonded helical ladder between N-H and C=O groups of the peptide backbone.",
+   "crop_points": [
+    145,
+    176,
+    226,
+    397
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/c0d9266d0f8fc3f1fe1857446b7d57ae8b9ddafe74e9c2d481b40a14f08003de.png",
+   "sha256": "c0d9266d0f8fc3f1fe1857446b7d57ae8b9ddafe74e9c2d481b40a14f08003de",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 13,
+   "figure": "10.2",
+   "caption": "b-Pleated sheet structure of",
+   "crop_points": [
+    60,
+    462,
+    240,
+    610
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/ed254b1c6d3bda8f72ec2b34a3f5be3d3ba4ae63a062583537c214cfe300787c.png",
+   "sha256": "ed254b1c6d3bda8f72ec2b34a3f5be3d3ba4ae63a062583537c214cfe300787c",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 14,
+   "figure": "10.3",
+   "caption": "Diagrammatic representation of protein structure (two sub-units",
+   "crop_points": [
+    60,
+    118,
+    545,
+    306
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/860be68416b39db52432eaf9cfe1833d7b1db3895593d0a34809a665fd728366.png",
+   "sha256": "860be68416b39db52432eaf9cfe1833d7b1db3895593d0a34809a665fd728366",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 14,
+   "figure": "10.4",
+   "caption": "Primary, secondary, tertiary and quaternary structures of haemoglobin",
+   "crop_points": [
+    158,
+    355,
+    530,
+    606
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/d54c31eb9206130ca40399be2a036060316d0b3f601f507cd2ccc7f346304dc0.png",
+   "sha256": "d54c31eb9206130ca40399be2a036060316d0b3f601f507cd2ccc7f346304dc0",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 19,
+   "figure": "10.6",
+   "caption": "Formation of a dinucleotide",
+   "crop_points": [
+    55,
+    58,
+    500,
+    300
+   ],
+   "edit": "manual crop (visual verification)"
+  },
+  {
+   "path": "assets/img/notes/d67208cbff809e0b736e842bef7f1872406d6914312639121f83025f0995eea2.png",
+   "sha256": "d67208cbff809e0b736e842bef7f1872406d6914312639121f83025f0995eea2",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lech205.pdf",
+   "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pdf_page": 19,
+   "figure": "10.7",
+   "caption": "Double strand helix structure for DNA",
+   "crop_points": [
+    61,
+    329,
+    160,
+    629
+   ],
+   "edit": "none"
   }
  ]
 }

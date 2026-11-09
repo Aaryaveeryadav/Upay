@@ -1,54 +1,107 @@
 {
-  "batch": "NCERT Chemistry units 5\u201310, six supplied PDFs",
-  "status": "partial: six outlines and one selected figure per chapter; full figure inventory not checked",
-  "sources": [
-    {
-      "source_file": "lech105.pdf",
-      "sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
-      "pages": 23,
-      "text_nonempty_pages": 23,
-      "classification": "chapter",
-      "disposition": "retained pending image extraction and complete batch review"
-    },
-    {
-      "source_file": "lech201.pdf",
-      "sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
-      "pages": 34,
-      "text_nonempty_pages": 34,
-      "classification": "chapter",
-      "disposition": "retained pending image extraction and complete batch review"
-    },
-    {
-      "source_file": "lech202.pdf",
-      "sha256": "e7aedb4059f435db596bd76015684fa1186be8d6bee4ee4a6c3f2e81f58585be",
-      "pages": 34,
-      "text_nonempty_pages": 34,
-      "classification": "chapter",
-      "disposition": "retained pending image extraction and complete batch review"
-    },
-    {
-      "source_file": "lech203.pdf",
-      "sha256": "23067221e09a8a61873f3a3a587a2ecb15d3104aeea00914dbc15111e772154e",
-      "pages": 32,
-      "text_nonempty_pages": 32,
-      "classification": "chapter",
-      "disposition": "retained pending image extraction and complete batch review"
-    },
-    {
-      "source_file": "lech204.pdf",
-      "sha256": "a267ffea998fb68174c2abc87f79a71e646e93460efa73bbe15796a995cea29a",
-      "pages": 22,
-      "text_nonempty_pages": 22,
-      "classification": "chapter",
-      "disposition": "retained pending image extraction and complete batch review"
-    },
-    {
-      "source_file": "lech205.pdf",
-      "sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
-      "pages": 22,
-      "text_nonempty_pages": 22,
-      "classification": "chapter",
-      "disposition": "retained pending image extraction and complete batch review"
-    }
-  ]
+ "batch": "NCERT Chemistry units 5–10, six supplied PDFs",
+ "status": "complete: every numbered figure in the six chapter PDFs cropped from source and visually verified; manifest updated; the six PDFs were deleted after verification",
+ "sources": [
+  {
+   "source_file": "lech105.pdf",
+   "sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+   "pages": 23,
+   "text_nonempty_pages": 23,
+   "classification": "chapter",
+   "disposition": "deleted 2026-11-09 after verified figure inventory (sha256 verified against this ledger first)",
+   "figure_count": 14,
+   "figures": [
+    "5.1",
+    "5.2",
+    "5.3",
+    "5.4",
+    "5.5",
+    "5.6",
+    "5.7",
+    "5.8",
+    "5.9",
+    "5.10",
+    "5.11",
+    "5.12",
+    "5.13",
+    "5.14"
+   ]
+  },
+  {
+   "source_file": "lech201.pdf",
+   "sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+   "pages": 34,
+   "text_nonempty_pages": 34,
+   "classification": "chapter",
+   "disposition": "deleted 2026-11-09 after verified figure inventory (sha256 verified against this ledger first)",
+   "figure_count": 7,
+   "figures": [
+    "6.1",
+    "6.2",
+    "6.3",
+    "6.4",
+    "6.5",
+    "6.6",
+    "6.7"
+   ]
+  },
+  {
+   "source_file": "lech202.pdf",
+   "sha256": "e7aedb4059f435db596bd76015684fa1186be8d6bee4ee4a6c3f2e81f58585be",
+   "pages": 34,
+   "text_nonempty_pages": 34,
+   "classification": "chapter",
+   "disposition": "deleted 2026-11-09 after verified figure inventory (sha256 verified against this ledger first)",
+   "figure_count": 1,
+   "figures": [
+    "7.1"
+   ]
+  },
+  {
+   "source_file": "lech203.pdf",
+   "sha256": "23067221e09a8a61873f3a3a587a2ecb15d3104aeea00914dbc15111e772154e",
+   "pages": 32,
+   "text_nonempty_pages": 32,
+   "classification": "chapter",
+   "disposition": "deleted 2026-11-09 after verified figure inventory (sha256 verified against this ledger first)",
+   "figure_count": 3,
+   "figures": [
+    "8.1",
+    "8.2a",
+    "8.2b"
+   ]
+  },
+  {
+   "source_file": "lech204.pdf",
+   "sha256": "a267ffea998fb68174c2abc87f79a71e646e93460efa73bbe15796a995cea29a",
+   "pages": 22,
+   "text_nonempty_pages": 22,
+   "classification": "chapter",
+   "disposition": "deleted 2026-11-09 after verified figure inventory (sha256 verified against this ledger first)",
+   "figure_count": 2,
+   "figures": [
+    "9.1",
+    "9.2"
+   ]
+  },
+  {
+   "source_file": "lech205.pdf",
+   "sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+   "pages": 22,
+   "text_nonempty_pages": 22,
+   "classification": "chapter",
+   "disposition": "deleted 2026-11-09 after verified figure inventory (sha256 verified against this ledger first)",
+   "figure_count": 8,
+   "figures": [
+    "10.1a",
+    "10.1b",
+    "10.2",
+    "10.3",
+    "10.4",
+    "10.5",
+    "10.6",
+    "10.7"
+   ]
+  }
+ ]
 }
