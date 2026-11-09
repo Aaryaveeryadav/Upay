@@ -3885,10 +3885,13 @@ window.UP = window.UP || {};
     const sourceBank = accountancyTrack();
     let pool = myBank();
     if (S.test.chapters && S.test.chapters.length) {
-      // Selected chapters filter: include matching ch, plus any q with ch=null so
-      // literature/grammar items that aren't mapped to a specific chapter still show
-      // up in mixed-chapter practice (papers are a cross-chapter mix anyway).
-      pool = pool.filter(q => q.ch == null || q.ch === 0 || S.test.chapters.some(id => qHasChapter(q, id)));
+      // Selected chapters filter. Only questions mapped to one of the chosen
+      // chapters belong here. Unmapped questions (ch null/0) are *not* folded in:
+      // they used to be, which meant that picking a single chapter pulled in every
+      // unmapped question in the subject -- 99% of Class 10 English and about
+      // three quarters of Class 10 Hindi and Social Science. Those items still
+      // appear when the chapter filter is left at "All".
+      pool = pool.filter(q => S.test.chapters.some(id => qHasChapter(q, id)));
     }
     // An empty selected chapter must stay empty; do not borrow other chapters.
     if (!sourceBank) {
