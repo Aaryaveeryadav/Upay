@@ -41,11 +41,19 @@ with sync_playwright() as p:
         page.locator('#view select[data-key="subject"]').select_option('chemistry')
         page.wait_for_function("() => document.querySelector('#view').innerText.includes('Biomolecules')")
         page.locator('a[href="#/chapter/710"]').first.click()
-        page.get_by_role('link',name='CBSE 2026–27 English outline and selected figure →').click()
+        page.get_by_role('heading', name='Biomolecules', exact=True).wait_for()
+        view_text = page.locator('#view').inner_text()
+        assert 'Sections' in view_text and 'Objectives' in view_text and 'Nucleic acids' in view_text
+        assert 'not certified by CBSE' in view_text
+        assert 'source crop, not AI-drawn' in view_text
+        # summary is shown directly on the chapter page and on the syllabus card
+        assert 'Biomolecules support the structure' in view_text
+        page.get_by_role('link', name='Full outline library').click()
+        page.wait_for_url('**/assets/notes/index.html#lech205')
         assert page.locator('#lech205 img').count()==1
         page.locator('#lech205 img').scroll_into_view_if_needed()
         page.wait_for_function("() => { const e=document.querySelector('#lech205 img'); return e.complete && e.naturalWidth>0; }")
         assert not errors, errors
-        print('PASS',width,'business selector, syllabus-sourced unit, law, reload, board isolation and chemistry link')
+        print('PASS',width,'business selector, syllabus-sourced unit, law, reload, board isolation and chemistry inline outline panel')
         ctx.close()
     browser.close()

@@ -35,6 +35,18 @@ for item in images:
     assert path.name == item['sha256'] + '.png'
     assert item['origin'] == 'source-pdf-crop' and item['ai_drawn'] is False
     assert any(c.get('image') == item['path'] and c['sha256'] == item['source_sha256'] for c in chem)
+# Chemistry outline attach (generated) must track outlines.json and the 2026-27 unit marks
+chem_js = (root/'assets/js/data/chemistry-outlines.js').read_text()
+payload, rest = chem_js.split('var data = ', 1)
+attached = json.loads(rest[:rest.index(';\n')])
+assert set(attached) == {str(700 + i) for i in range(1, 11)}
+UNIT_MARKS = {1: 7, 2: 9, 3: 7, 4: 7, 5: 7, 6: 6, 7: 6, 8: 8, 9: 6, 10: 7}
+for cid, outline in attached.items():
+    unit = int(cid) - 700
+    assert outline['unit'] == unit and outline['marks'] == UNIT_MARKS[unit]
+    src = next(c for c in chem if c['id'] == outline['id'])
+    assert outline['summary'] == src['summary'] and outline['sections'] == src['sections'] and outline['terms'] == src['terms']
+assert sum(outline['marks'] for outline in attached.values()) == 70
 class Page(HTMLParser):
     def __init__(self): super().__init__(); self.ids=set(); self.img=[]
     def handle_starttag(self, tag, attrs):
