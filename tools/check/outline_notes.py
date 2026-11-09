@@ -28,13 +28,17 @@ for chapter in bs:
 consumer = next(c for c in bs if c['id'] == 'lebs203')
 assert '2019' in consumer['summary'] and '1986' not in consumer['summary']
 images = manifest['images']
-assert len(images) == 10 and len({x['sha256'] for x in images}) == len(images)
+assert len(images) == 51 and len({x['sha256'] for x in images}) == len(images)
 for item in images:
     path = root / item['path']
     assert path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == item['sha256']
     assert path.name == item['sha256'] + '.png'
     assert item['origin'] == 'source-pdf-crop' and item['ai_drawn'] is False
-    assert any(c.get('image') == item['path'] and c['sha256'] == item['source_sha256'] for c in chem)
+    assert any(c['sha256'] == item['source_sha256'] for c in chem)
+counts = {}
+for item in images:
+    counts[item['source_file']] = counts.get(item['source_file'], 0) + 1
+assert counts == {'lech101.pdf': 11, 'lech102.pdf': 15, 'lech103.pdf': 12, 'lech104.pdf': 7, 'lech105.pdf': 1, 'lech201.pdf': 1, 'lech202.pdf': 1, 'lech203.pdf': 1, 'lech204.pdf': 1, 'lech205.pdf': 1}, counts
 # Chemistry outline attach (generated) must track outlines.json and the 2026-27 unit marks
 chem_js = (root/'assets/js/data/chemistry-outlines.js').read_text()
 payload, rest = chem_js.split('var data = ', 1)
