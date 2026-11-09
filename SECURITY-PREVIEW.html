@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Security posture</title>
+<style>
+  :root { --ink:#1a1d21; --dim:#5d666f; --line:#e3e7ea; --bg:#fbfcfc;
+    --red:#c0392b; --green:#1e7a4f; --greenbg:#eef8f2; --blue:#1c5fa8; --amber:#8a5a00; --amberbg:#fdf6e7; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:960px; margin:0 auto; padding:48px 24px 80px; }
+  h1 { font-size:30px; letter-spacing:-.02em; margin:0 0 6px; }
+  .lede { color:var(--dim); margin:0 0 6px; font-size:17px; }
+  .meta { color:var(--dim); font-size:13px; margin-bottom:36px; }
+  h2 { font-size:14px; text-transform:uppercase; letter-spacing:.09em; color:var(--dim);
+    margin:44px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px 18px; }
+  .card .n { font-size:26px; font-weight:650; letter-spacing:-.02em; color:var(--green); }
+  .card .l { font-size:12.5px; color:var(--dim); text-transform:uppercase; letter-spacing:.05em; }
+  table { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line);
+    border-radius:10px; overflow:hidden; font-size:14.5px; }
+  th,td { padding:10px 14px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--dim);
+    background:#f7f9fa; font-weight:600; }
+  tr:last-child td { border-bottom:none; }
+  code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; color:var(--blue); }
+  .dim { color:var(--dim); font-size:13.5px; }
+  .ok { color:var(--green); font-weight:600; }
+  .num { text-align:right; font-variant-numeric:tabular-nums; }
+  .pill { display:inline-block; font-size:11.5px; padding:2px 8px; border-radius:999px;
+    background:var(--greenbg); color:var(--green); border:1px solid #cfe8db; font-weight:600; }
+  .pill.n { background:var(--amberbg); color:var(--amber); border-color:#f0e2c4; }
+  .note { border-radius:10px; padding:16px 18px; font-size:14.5px; margin-top:16px;
+    background:var(--greenbg); border:1px solid #cfe8db; }
+  .warn { border-radius:10px; padding:16px 18px; font-size:14.5px; margin-top:16px;
+    background:var(--amberbg); border:1px solid #f0e2c4; }
+  .bad { border-radius:10px; padding:16px 18px; font-size:14.5px; margin-top:16px;
+    background:#fdf0ee; border:1px solid #f2d6d2; }
+  ul { margin:8px 0 0; padding-left:20px; } li { margin:7px 0; font-size:14px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:760px) { .two { grid-template-columns:1fr; } }
+  footer { margin-top:56px; padding-top:16px; border-top:1px solid var(--line);
+    color:var(--dim); font-size:13px; }
+</style></head><body><div class="wrap">
+  <h1>Security posture</h1>
+  <p class="lede">Headers on every response, and the tests that back the claim.</p>
+  <p class="meta">commit <code>eb95d18</code> · branch <code>arena/e2441a85-upay</code> · not deployed</p>
+
+  <div class="cards">
+    <div class="card"><div class="n">8</div><div class="l">headers, pages + API</div></div>
+    <div class="card"><div class="n">0</div><div class="l">CSP violations</div></div>
+    <div class="card"><div class="n">0</div><div class="l">XSS payloads executed</div></div>
+    <div class="card"><div class="n">0</div><div class="l">secrets in 614 files</div></div>
+  </div>
+
+  <h2>Response headers</h2>
+  <p class="dim" style="margin-top:-4px">Before this change the local server sent 2 headers and
+  <code>vercel.json</code> sent none — the deployed site had no CSP and could be framed.</p>
+  <table><tr><th>Header</th><th>Status</th><th>Why it is there</th></tr><tr><td><code>Content-Security-Policy</code></td><td><span class="pill">sent</span></td><td class="dim">Blocks injected scripts, framing and foreign origins. Derived from this app&#x27;s real surface.</td></tr><tr><td><code>X-Frame-Options</code></td><td><span class="pill">sent</span></td><td class="dim">DENY — stops another site framing the app and overlaying the sign-in form.</td></tr><tr><td><code>X-Content-Type-Options</code></td><td><span class="pill">sent</span></td><td class="dim">nosniff — stops an uploaded file being read as HTML or JS.</td></tr><tr><td><code>Referrer-Policy</code></td><td><span class="pill">sent</span></td><td class="dim">same-origin — leaks no URLs to third parties.</td></tr><tr><td><code>Permissions-Policy</code></td><td><span class="pill">sent</span></td><td class="dim">Camera for the photo-solve flow only; microphone, location, payment and USB off.</td></tr><tr><td><code>Cross-Origin-Opener-Policy</code></td><td><span class="pill">sent</span></td><td class="dim">same-origin — isolates the window from cross-site openers.</td></tr><tr><td><code>Cross-Origin-Resource-Policy</code></td><td><span class="pill">sent</span></td><td class="dim">same-origin — other sites cannot embed our assets.</td></tr><tr><td><code>Strict-Transport-Security</code></td><td><span class="pill n">TLS only</span></td><td class="dim">HTTPS only. Sent by Vercel; skipped on local plain-HTTP LAN use.</td></tr></table>
+
+  <h2>What the CSP had to allow</h2>
+  <p class="dim" style="margin-top:-4px">Derived from the app's real surface, not a template. Each allowance
+  is a documented cost, not an oversight.</p>
+  <table>
+    <tr><th>Allowance</th><th class="num">Count</th><th>Reason</th></tr>
+    <tr><td><code>script-src 'unsafe-inline'</code></td><td class="num">1</td>
+        <td class="dim">inline Supabase bootstrap in <code>index.html</code>; a nonce means templating it per request</td></tr>
+    <tr><td><code>style-src 'unsafe-inline'</code></td><td class="num">261</td>
+        <td class="dim">inline <code>style</code> attributes in the renderer</td></tr>
+    <tr><td><code>img-src data:</code></td><td class="num">33</td>
+        <td class="dim">figure diagrams inlined as data URIs</td></tr>
+    <tr><td><code>connect-src</code></td><td class="num">2</td>
+        <td class="dim">this origin plus one Supabase project — nothing else</td></tr>
+  </table>
+  <div class="note"><strong>The distinction that matters:</strong> <code>upgrade-insecure-requests</code>
+  is sent by Vercel, where everything is HTTPS, but <strong>not</strong> by the local server. On a school LAN
+  reached over plain HTTP that directive rewrites every subresource to https and breaks the page. Sending the
+  same CSP everywhere would have looked tidy and broken the offline use case.</div>
+
+  <h2>API refuses unauthenticated callers</h2>
+  <table><tr><th>Endpoint</th><th>Method</th><th class="num">Without a session</th></tr><tr><td><code>/api/content</code></td><td class="dim">GET</td><td class="num ok">401</td></tr><tr><td><code>/api/auth/me</code></td><td class="dim">GET</td><td class="num ok">401</td></tr><tr><td><code>/api/ai/cache</code></td><td class="dim">GET</td><td class="num ok">401</td></tr><tr><td><code>/api/ai/solve</code></td><td class="dim">POST</td><td class="num ok">403</td></tr><tr><td><code>/api/ai/read-image</code></td><td class="dim">POST</td><td class="num ok">403</td></tr><tr><td><code>/api/admin/key</code></td><td class="dim">GET</td><td class="num ok">403</td></tr><tr><td><code>/api/admin/key</code></td><td class="dim">POST</td><td class="num ok">403</td></tr></table>
+  <div class="note">A forged admin bearer token was also rejected (403).</div>
+
+  <div class="two">
+    <div>
+      <h2>Static serving</h2>
+      <table><tr><th>Path probed</th><th class="num">Result</th></tr><tr><td><code>/data/db.json</code></td><td class="num ok">refused</td></tr><tr><td><code>/server.js</code></td><td class="num ok">refused</td></tr><tr><td><code>/package.json</code></td><td class="num ok">refused</td></tr><tr><td><code>/vercel.json</code></td><td class="num ok">refused</td></tr><tr><td><code>/tools/check/security_headers.py</code></td><td class="num ok">refused</td></tr><tr><td><code>/lib/supabase-auth.js</code></td><td class="num ok">refused</td></tr><tr><td><code>/.env</code></td><td class="num ok">refused</td></tr><tr><td><code>/.git/config</code></td><td class="num ok">refused</td></tr><tr><td><code>/assets/../data/db.json</code></td><td class="num ok">refused</td></tr><tr><td><code>/assets/../../data/db.json</code></td><td class="num ok">refused</td></tr><tr><td><code>/assets/%2e%2e/data/db.json</code></td><td class="num ok">refused</td></tr></table>
+      <div class="note">Directory URLs return the app shell, not a file listing.</div>
+    </div>
+    <div>
+      <h2>XSS payloads</h2>
+      <table><tr><th>Payload</th><th>Result</th><th>How it appears</th></tr><tr><td><code>&lt;img src=x onerror=alert(1)&gt;</code></td><td class="ok">escaped</td><td class="dim">shown as text</td></tr><tr><td><code>&quot;&gt;&lt;script&gt;alert(2)&lt;/script&gt;</code></td><td class="ok">escaped</td><td class="dim">shown as text</td></tr><tr><td><code>&#x27;&gt;&lt;svg onload=alert(3)&gt;</code></td><td class="ok">escaped</td><td class="dim">shown as text</td></tr><tr><td><code>&lt;iframe src=&quot;javascript:alert(4)&quot;&gt;</code></td><td class="ok">escaped</td><td class="dim">shown as text</td></tr><tr><td><code>javascript:alert(5)</code></td><td class="ok">escaped</td><td class="dim">shown as text</td></tr><tr><td><code>&lt;a href=&quot;javascript:alert(6)&quot;&gt;x&lt;/a&gt;</code></td><td class="ok">escaped</td><td class="dim">shown as text</td></tr></table>
+      <div class="note">Tested in the <code>?q=</code> path and across 7 storage-backed surfaces.
+      0 handlers, 0 <code>javascript:</code> URLs, 0 alerts.</div>
+    </div>
+  </div>
+
+  <h2>A real bug the audit found</h2>
+  <p class="dim" style="margin-top:-4px">Not an exploit — a denial of service a student could cause
+  themselves, or hit after restoring a backup.</p>
+  <table>
+    <tr><th>Tampered <code>localStorage</code> shape</th><th>Before</th><th>After</th></tr>
+    <tr><td>object where an array belongs</td>
+        <td class="bad" style="margin:0;padding:8px 10px"><code>S.saved.filter is not a function</code> — Home and Saved white-screen, and stay broken</td>
+        <td class="ok">renders, default used</td></tr>
+    <tr><td colspan="3" class="dim">Fixed by reading stored values through a type-guarded
+    <code>store.getTyped()</code>. All 7 corruption shapes now render with 0 errors:</td></tr>
+  </table>
+  <table style="margin-top:10px"><tr><th>Corruption shape</th><th>Result</th></tr><tr><td>object where array</td><td class="ok">renders, 0 errors</td></tr><tr><td>string where array</td><td class="ok">renders, 0 errors</td></tr><tr><td>number where array</td><td class="ok">renders, 0 errors</td></tr><tr><td>null everything</td><td class="ok">renders, 0 errors</td></tr><tr><td>wrong types all</td><td class="ok">renders, 0 errors</td></tr><tr><td>invalid JSON</td><td class="ok">renders, 0 errors</td></tr><tr><td>huge nesting</td><td class="ok">renders, 0 errors</td></tr></table>
+
+  <h2>Still open — and this is the important part</h2>
+  <div class="bad">
+    <strong>The site is hardened, but the site is not yet secure, and no header can make it so.</strong>
+    <ul>
+      <li><strong>An exposed legacy Supabase service-role key is still live.</strong> Code changes here do
+      not revoke it. It must be deactivated in the Supabase dashboard and its JWT signing secret rotated.</li>
+      <li><strong>Old Gemini keys must be treated as compromised</strong> and revoked in Google AI Studio.</li>
+      <li><strong>No durable rate limiting</strong> on paid AI. The current throttle is in-memory and does not
+      survive a restart or span instances.</li>
+      <li><strong>No <code>UPAY_AI_ALLOWED_USERS</code> allowlist at deployment.</strong> Any auto-confirmed
+      sign-up can currently reach the paid provider key.</li>
+    </ul>
+  </div>
+  <p class="dim" style="margin-top:14px">These are dashboard and policy actions, not code. They are listed as
+  items 1–6 in <code>SECURITY-AND-QA.md</code>. Also note the CSP relies on
+  <code>'unsafe-inline'</code> for scripts, so it raises the cost of an injection rather than eliminating it —
+  the real defence is that every question field passes through <code>esc()</code>, which the payload tests above
+  confirm.</p>
+
+  <footer>This is a targeted audit, not a third-party penetration test. It does not establish that the site
+  is immune to attack; it establishes that the listed defects are fixed and the listed probes fail.</footer>
+</div></body></html>
