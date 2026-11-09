@@ -7,24 +7,34 @@ root = Path(__file__).resolve().parents[2]
 notes = json.loads((root/'assets/notes/outlines.json').read_text())
 manifest = json.loads((root/'assets/img/notes/manifest.json').read_text())
 ledger = json.loads((root/'assets/notes/chemistry-batch.json').read_text())
+ledger2 = json.loads((root/'assets/notes/chemistry-batch-2.json').read_text())
 bs, chem = notes['business_studies'], notes['chemistry']
-assert len(bs) == 11 and [c['id'] for c in chem] == ['lech101','lech102','lech103','lech104']
+assert len(bs) == 12 and [c['id'] for c in chem] == ['lech101','lech102','lech103','lech104','lech105','lech201','lech202','lech203','lech204','lech205']
+assert {x['source_file'] for x in ledger2['sources']} == {'lech105.pdf'} | {f'lech20{i}.pdf' for i in range(1,6)}
 assert {x['source_file'] for x in ledger['sources']} == {f'lech10{i}.pdf' for i in range(1,5)} | {'lech1an.pdf','lech2an.pdf'}
 for c in bs + chem:
     assert c['title'] and c['sections'] and c['objectives'] and c['terms']
     assert 150 <= len(c['summary']) <= 320
-    assert len(c['sha256']) == 64
+    if c['id'] == 'cbse-business-unit10':
+        assert c['source_url'].startswith('https://cbseacademic.nic.in/')
+    else:
+        assert len(c['sha256']) == 64
     assert not re.search(r'Reprint|NOT TO BE REPUBLISHED', c['summary'], re.I)
+staged=json.loads((root/'tools/extract/staging/business-studies-en.json').read_text())['chapters']
+for chapter in bs:
+    if chapter['id'] in staged:
+        assert chapter['sha256'] == staged[chapter['id']]['sha256']
+        assert chapter['source'] == staged[chapter['id']]['source']
 consumer = next(c for c in bs if c['id'] == 'lebs203')
 assert '2019' in consumer['summary'] and '1986' not in consumer['summary']
 images = manifest['images']
-assert len(images) == 4 and len({x['sha256'] for x in images}) == len(images)
+assert len(images) == 10 and len({x['sha256'] for x in images}) == len(images)
 for item in images:
     path = root / item['path']
     assert path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == item['sha256']
     assert path.name == item['sha256'] + '.png'
     assert item['origin'] == 'source-pdf-crop' and item['ai_drawn'] is False
-    assert any(c['image'] == item['path'] and c['sha256'] == item['source_sha256'] for c in chem)
+    assert any(c.get('image') == item['path'] and c['sha256'] == item['source_sha256'] for c in chem)
 class Page(HTMLParser):
     def __init__(self): super().__init__(); self.ids=set(); self.img=[]
     def handle_starttag(self, tag, attrs):
@@ -38,13 +48,16 @@ assert 'practice, not board-verified' in html and 'not certified by CBSE' in htm
 assert '/assets/notes/index.html#business' in (root/'assets/js/app.js').read_text()
 if len(sys.argv)>1:
     import pymupdf
-    directory=Path(sys.argv[1]); norm=lambda s: re.sub(r'[^a-z0-9]', '', s.lower())
-    for record in ledger['sources']:
-        f=directory/record['source_file']; assert hashlib.sha256(f.read_bytes()).hexdigest() == record['sha256']
+    directories=[Path(arg) for arg in sys.argv[1:]]; norm=lambda s: re.sub(r'[^a-z0-9]', '', s.lower())
+    def source(name):
+        return next((d/name for d in directories if (d/name).is_file()), None)
+    for record in ledger['sources'] + ledger2['sources']:
+        f=source(record['source_file']); assert f is not None, record['source_file']; assert hashlib.sha256(f.read_bytes()).hexdigest() == record['sha256']
         doc=pymupdf.open(f); assert len(doc)==record['pages']
         assert sum(bool(p.get_text().strip()) for p in doc)==record['text_nonempty_pages']
     for c in chem:
-        doc=pymupdf.open(directory/c['source']); text=norm(' '.join(p.get_text() for p in doc))
+        doc=pymupdf.open(source(c['source'])); text=norm(' '.join(p.get_text() for p in doc))
+        assert norm(c['title']) in text, c['id']
         assert all(norm(t) in text for t in c['terms']), c['id']
     print('PASS: PDF hashes, counts and Chemistry key terms match sources')
 print('PASS: outline structure, legal safeguard, image provenance, hashes and page links')

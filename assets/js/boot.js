@@ -38,7 +38,7 @@
 
   /* --- CRITICAL CORE: required before app.js boots --- */
   const CRITICAL_CORE = [
-    'assets/js/data-extra.js?v=26ab',
+    'assets/js/data-extra.js?v=26ad',
     'assets/js/data/chapters1.js',
     'assets/js/data/chapters2.js',
     'assets/js/data/pyq.js',
@@ -48,6 +48,7 @@
     'assets/js/data/chapters12-applied-maths.js',  // Class 12 Applied Maths KB + PYQ seed
     'assets/js/data/chapters12-accountancy.js', // Class 12 Accountancy + Computerised Accounting chapter maps
     'assets/js/data/accountancy-chapters.js?v=26ab', // extracted NCERT outline: objectives and numbered sections
+    'assets/js/data/business-studies12.js?v=26ad', // CBSE English outlines
     'assets/js/data/economics12.js?v=26ab', // Class 12 Economics guides, including deep links
     'assets/js/data/economics-sources.js?v=26ab', // the original Economics PDF catalogue
     'assets/js/data/english12.js?v=26ab', // Class 12 English reading notes and direct links
@@ -135,6 +136,7 @@
     // Loaded in CRITICAL_CORE because their chapter maps and PYQ bank are a
     // self-contained app feature; these empty packs make saved subjects valid
     // for the boot-time subject check and the standard switchSubject path.
+    'business-studies': [], // outline data is in the critical core
     accountancy: [],
     'computerized-accounting': []
   };
@@ -290,7 +292,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26ac');
+    return loadScript('assets/js/app.js?v=26ad');
   }
 
   function loadPostPaint() {

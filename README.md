@@ -84,14 +84,14 @@ The source-integrity checks accept an optional `--uploads DIRECTORY` to compare 
 
 ## CBSE Class 12 English study outlines (2026–27)
 
-The home page links to **Business Studies** and **Chemistry (units 1–4)** under
-[Study outlines](assets/notes/index.html). The first four CBSE Chemistry chapter
-pages also link directly to their English outlines. This is a separate, partial
-outline library, not a new Business Studies subject selector or question bank.
-It contains 11 Business Studies outlines based on the previously staged NCERT
-material and four Chemistry outlines from the supplied chapters. Financial
-Markets, Business Studies project work, Chemistry units 5–10 and Chemistry
-practicals/project work are not covered. The two Chemistry answer appendices
+The home page links to **Business Studies** and **Chemistry (units 1–10)** under
+[Study outlines](assets/notes/index.html). All ten CBSE Chemistry chapter pages also link directly to their English outlines.
+Business Studies is now available in the Class 12 subject selector and has 12
+unit outlines: 11 from the previously staged NCERT material and Financial
+Markets from the CBSE syllabus, not an uploaded textbook chapter. There is no
+Business Studies question bank. The ten supplied Chemistry chapters have
+outlines. Business Studies project work and Chemistry practicals/project work
+are not covered. The two Chemistry answer appendices
 were identified but their answers are deliberately excluded.
 
 Topics were checked against the published CBSE 2026–27 syllabuses for
@@ -106,20 +106,21 @@ No AI questions are added; any future AI-generated questions must be marked
 **“practice, not board-verified”**.
 
 `assets/img/notes/manifest.json` records hashes, source, PDF page, crop, edits,
-and AI-origin status for four visually reviewed source figures. The figures
+and AI-origin status for ten visually reviewed source figures (one per chapter). The figures
 are a representative selection, **not an exhaustive inventory**; some NCERT
 figures are vectors, so image-object extraction alone misses them. No AI-drawn
-figures were added. Review reuse rights before a public deployment. The six
+figures were added. Review reuse rights before a public deployment. The twelve
 uploaded source PDFs are retained in ignored `uploads/chemistry-pending/` and
-not served by the site: the figure inventory and batch review are incomplete.
-Only delete them in the same turn that completes and checks the batch. The
-source ledger is `assets/notes/chemistry-batch.json`.
+`uploads/chemistry-batch-2/` and are not served by the site: the figure
+inventories and batch reviews are incomplete. Only delete each batch in the
+same turn that completes and checks it. The source ledgers are
+`assets/notes/chemistry-batch.json` and `assets/notes/chemistry-batch-2.json`.
 
 Regenerate the HTML from the checked data with
-`python3 tools/curate/render-outline-page.py`. Run
+`python3 tools/curate/render-outline-page.py`, and regenerate the Business Studies subject data with `python3 tools/curate/build-business-track.py`. Run
 `python3 tools/check/outline_notes.py` for structural, provenance and link
 checks. With PyMuPDF and Pillow installed and the originals available, run
-`python3 tools/check/outline_notes.py uploads/chemistry-pending` and
-`python3 tools/extract/check-chemistry-crops.py uploads/chemistry-pending` for
+`python3 tools/check/outline_notes.py uploads/chemistry-pending uploads/chemistry-batch-2` and
+`python3 tools/extract/check-chemistry-crops.py uploads/chemistry-pending uploads/chemistry-batch-2` for
 source hashes, counts, Chemistry key-term and crop checks. These checks do not
 replace a complete visual/source review or a board’s endorsement.

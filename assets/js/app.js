@@ -620,11 +620,13 @@ window.UP = window.UP || {};
      the question views are untouched; only the chapter list follows the board. */
   function isRbse() { return S.board === 'rajasthan' && +S.cls === 10 && S.subject === 'maths'; }
   function catalogue() {
+    if (businessTrack() && S.board !== 'cbse') return [];
     if (isRbse() && UP.rbseChapters) return UP.rbseChapters.chapters;
     return UP.catalogue(S.cls, S.subject);
   }
   function chapterById(id, cls, subject) {
     const rb = (isRbse() && UP.rbseChapters) ? UP.rbseChapters.chapters : null;
+    if ((subject || S.subject) === 'business-studies' && S.board !== 'cbse') return null;
     const list = rb || UP.catalogue(cls || S.cls, subject || S.subject);
     // A stale or manually typed chapter ID must not open a different class or
     // subject under the currently selected scope.
@@ -653,7 +655,8 @@ window.UP = window.UP || {};
   }
   function economicsTrack() { return +S.cls === 12 && S.subject === 'economics'; }
   function english12Track() { return +S.cls === 12 && S.subject === 'english'; }
-  function needsAIOnly() { return accountancyTrack() || economicsTrack() || english12Track(); }
+  function businessTrack() { return +S.cls === 12 && S.subject === 'business-studies'; }
+  function needsAIOnly() { return accountancyTrack() || economicsTrack() || english12Track() || businessTrack(); }
 
   const ENGLISH12_GROUPS = [
     ['flamingo', 'prose'], ['flamingo', 'poetry'], ['vistas', 'readings'],
@@ -1090,7 +1093,7 @@ window.UP = window.UP || {};
     <section class="card callout tip" style="margin:0 0 18px"><div>
       <b>CBSE Class 12 · English outlines</b><br>
       <a class="link" href="/assets/notes/index.html#business">Business Studies</a> ·
-      <a class="link" href="/assets/notes/index.html#chemistry">Chemistry (units 1–4)</a>
+      <a class="link" href="/assets/notes/index.html#chemistry">Chemistry (units 1–10)</a>
       <span class="muted"> — syllabus-mapped study outlines; coverage is incomplete.</span>
     </div></section>
     <section class="hero">
@@ -1098,7 +1101,7 @@ window.UP = window.UP || {};
         <div>
           <span class="eyebrow"><span class="dot"></span>${t('heroEyebrow')}</span>
           <h1>${t('heroTitle1')}<br><em>${t('heroTitle2')}</em> ${t('heroTitle3')}</h1>
-          <p class="lead">${english12Track() ? (S.lang === 'hi'
+          <p class="lead">${businessTrack() ? 'Explore 12 English CBSE 2026–27 unit outlines. Eleven are based on your supplied chapters; Financial Markets is sourced from the CBSE syllabus. No full text or question bank is included.' : english12Track() ? (S.lang === 'hi'
             ? 'Flamingo, Vistas और Kaleidoscope की दी गई अंग्रेज़ी PDF, अध्ययन संकेत और स्वयं-जाँच प्रश्न पढ़ें। अपने बोर्ड और पाठ्यक्रम की सूची अलग से जाँचें।'
             : 'Explore the supplied Flamingo, Vistas and Kaleidoscope PDFs, reading notes and review questions. Check your board and course list separately.') : economicsTrack() ? (S.lang === 'hi'
             ? 'समष्टि और व्यष्टि अर्थशास्त्र के अध्याय, संक्षिप्त अध्ययन सामग्री, अभ्यास और आपकी मूल पुस्तक PDF पढ़ें। एआई की उपलब्धता खाते पर निर्भर है; उत्तर पुस्तक से जाँचें।'
@@ -1150,7 +1153,7 @@ window.UP = window.UP || {};
           <div class="card-float" style="padding:14px">
             <div class="mini-label">${S.lang === 'hi' ? 'साथ में' : 'ALSO INCLUDED'}</div>
             <div style="font-size:13px;color:var(--ink-700);margin-top:6px;line-height:1.6">
-              ${english12Track() ? (S.lang === 'hi' ? '📖 दी गई मूल अंग्रेज़ी PDF<br>📝 अध्ययन संकेत और स्वयं-जाँच<br>🧭 अलग Core और Elective पुस्तकें' : '📖 supplied original English PDFs<br>📝 reading notes and review prompts<br>🧭 separate Core and Elective books') : economicsTrack() ? (S.lang === 'hi' ? '📖 मूल PDF और अध्ययन सामग्री<br>📝 समझ जाँचने के प्रश्न<br>📄 मूल प्रश्नपत्र PDF' : '📖 original PDFs and study guides<br>📝 review checks<br>📄 original test papers') : `${S.subject === 'maths' ? (S.lang === 'hi' ? '📐 परवलय का चित्र' : '📐 a drawn diagram') : (S.lang === 'hi' ? '📖 पाठ + सारांश' : '📖 chapter text + summary')}<br>
+              ${businessTrack() ? '📖 English outlines<br>🧭 CBSE syllabus mapping<br>📌 No question bank yet' : english12Track() ? (S.lang === 'hi' ? '📖 दी गई मूल अंग्रेज़ी PDF<br>📝 अध्ययन संकेत और स्वयं-जाँच<br>🧭 अलग Core और Elective पुस्तकें' : '📖 supplied original English PDFs<br>📝 reading notes and review prompts<br>🧭 separate Core and Elective books') : economicsTrack() ? (S.lang === 'hi' ? '📖 मूल PDF और अध्ययन सामग्री<br>📝 समझ जाँचने के प्रश्न<br>📄 मूल प्रश्नपत्र PDF' : '📖 original PDFs and study guides<br>📝 review checks<br>📄 original test papers') : `${S.subject === 'maths' ? (S.lang === 'hi' ? '📐 परवलय का चित्र' : '📐 a drawn diagram') : (S.lang === 'hi' ? '📖 पाठ + सारांश' : '📖 chapter text + summary')}<br>
               ${S.lang === 'hi' ? '🤖 कई व्याख्या शैलियाँ' : '🤖 multiple explanation styles'}<br>
               ${S.lang === 'hi' ? '✅ बोर्ड प्रश्नों का अभ्यास' : '✅ board-question practice'}`}
             </div>
@@ -1256,6 +1259,12 @@ window.UP = window.UP || {};
         <p style="margin:0;font-size:12.5px;color:var(--ink-400)">${esc(P({en:ch.enDesc||'',hi:ch.hiDesc||''}))}</p>
       </div>`;
     }
+    if (businessTrack() && ch.outline) {
+      return `<a class="card ch-card" href="#/chapter/${ch.id}" data-chapter-id="${ch.id}">
+        <div class="ch-top"><span class="ch-num">${String(ch.displayNo).padStart(2,'0')}</span><div>
+        <div class="ch-title">${esc(ch.en)}</div><div class="ch-sub">${esc(ch.enDesc.slice(0,92))}…</div></div></div>
+        <div class="ch-foot"><span class="tag">English outline</span><span class="tag cream">CBSE unit ${ch.displayNo}</span><span class="arrow">${icon('arrow')}</span></div></a>`;
+    }
     if (english12Track() && ch.sourceId) {
       return `<a class="card ch-card english12-chapter-card" href="#/chapter/${ch.id}" data-chapter-id="${ch.id}">
         <div class="ch-top"><span class="ch-num">${String(ch.n).padStart(2, '0')}</span><div>
@@ -1351,7 +1360,10 @@ window.UP = window.UP || {};
     const chaps = list.map(c => `<option value="${c.id}">${english12Track() ? esc(P(c.bookTitle)) + ' · ' + esc(P(c.sectionTitle)) + ' ' + c.n : String(c.id).padStart(2, '0')} · ${esc(P({ en: c.en, hi: c.hi }))}</option>`).join('');
     const subjSamples = (samples[S.cls] && samples[S.cls][S.subject]) || null;
     const smp = subjSamples || (S.cls === 10 && samples[10][S.subject]) || [];
-    const blurb = english12Track() ? {
+    const blurb = businessTrack() ? {
+      en: '<b>Business Studies:</b> English outlines are in Chapters. AI and a question bank are not enabled for this subject.',
+      hi: '<b>व्यवसाय अध्ययन:</b> अंग्रेज़ी रूपरेखा अध्यायों में है। इस विषय के लिए AI और प्रश्न बैंक उपलब्ध नहीं हैं।'
+    } : english12Track() ? {
       en: '<b>English:</b> Reading notes and the supplied PDFs are in Chapters and Books &amp; sources. AI requires an enabled account and does not automatically see these PDFs. Give it the relevant passage if needed, and check its answer against the book.',
       hi: '<b>अंग्रेज़ी:</b> अध्ययन संकेत और दी गई PDF, अध्याय तथा पुस्तकें व स्रोत में हैं। एआई के लिए सक्षम खाता आवश्यक है; वह PDF स्वतः नहीं देखता। ज़रूरत हो तो संबंधित अंश दें और उत्तर पुस्तक से जाँचें।'
     } : economicsTrack() ? {
@@ -1414,7 +1426,7 @@ window.UP = window.UP || {};
         ${icon('bulb')}
         <div style="font-size:12.9px">
           ${S.lang === 'hi' ? blurb.hi : blurb.en}
-          ${(economicsTrack() || english12Track()) ? '' : `<br>${S.lang === 'hi'
+          ${(economicsTrack() || english12Track() || businessTrack()) ? '' : `<br>${S.lang === 'hi'
                ? 'किसी भी प्रश्न, श्लोक, पद या व्याकरण-बिंदु के लिए उसका सीधा पाठ लिखिए अथवा अध्याय/विषय का नाम लिखिए — उसकी पूरी अवधारणा-सामग्री मिलेगी।'
                : 'Type any question, verse, or grammar point directly, or write a chapter / topic name for its full concept sheet.'}`}
         </div>
@@ -1589,6 +1601,7 @@ window.UP = window.UP || {};
         m.insertBefore(d, m.firstChild);
       }
     };
+    if (businessTrack()) { goLocal('Business Studies AI is not enabled; use the supplied outlines.', false); return; }
     // "taking a moment" nudge — after 6s swap the spinner text
     let slowTimer = setTimeout(() => {
       const m = mount();
@@ -2232,7 +2245,10 @@ window.UP = window.UP || {};
     const isAccountancy = accountancyTrack();
     const isEconomics = economicsTrack();
     const isEnglish12 = english12Track();
-    const syllabusLead = isEnglish12
+    const isBusiness = businessTrack();
+    const syllabusLead = isBusiness
+      ? (S.board === 'cbse' ? '12 English unit outlines mapped to CBSE 2026–27: 11 from your supplied chapters and Financial Markets from the CBSE syllabus. Project work is not covered.' : 'These outlines are mapped only to CBSE 2026–27. Select CBSE to see them; other boards have not been verified.')
+      : isEnglish12
       ? (S.lang === 'hi'
         ? 'दी गई पुस्तकों के 40 पाठ-चयन, मूल PDF और अध्ययन संकेत। अपने बोर्ड और वर्ष का पाठ्यक्रम अलग से जाँचें।'
         : 'Forty supplied reading selections with original PDFs and study prompts. Check your board and year separately.')
@@ -2257,7 +2273,7 @@ window.UP = window.UP || {};
       <div class="search-input">${icon('search')}<input type="search" placeholder="${t('search')}" value="${esc(params.q || '')}" data-action="search"></div>
       <span class="tag grey">${filtered.length} ${isEnglish12 ? (S.lang === 'hi' ? 'पाठ-चयन' : 'selections') : (S.lang === 'hi' ? 'अध्याय' : 'chapters')}</span>
     </div>
-    ${!filtered.length ? `<div class="empty">${icon('search')}<h3>${t('noMatch')}</h3><p>${isEnglish12 ? (S.lang === 'hi' ? 'नाम, लेखक या पुस्तक खोजें।' : 'Search by title, author or book.') : (S.lang === 'hi' ? 'अन्य शब्द आज़माइए, जैसे "त्रिभुज" या "probability"।' : 'Try another keyword, such as “triangle” or “probability”.')}</p></div>` : ''}
+    ${!filtered.length && !(isBusiness && S.board !== 'cbse') ? `<div class="empty">${icon('search')}<h3>${t('noMatch')}</h3><p>${isEnglish12 ? (S.lang === 'hi' ? 'नाम, लेखक या पुस्तक खोजें।' : 'Search by title, author or book.') : (S.lang === 'hi' ? 'अन्य शब्द आज़माइए, जैसे "त्रिभुज" या "probability"।' : 'Try another keyword, such as “triangle” or “probability”.')}</p></div>` : ''}
     ${isEnglish12 ? `
       ${english12CoverageNote()}
       <p><a class="btn btn-ghost btn-sm econ-browse-link" href="#/books">${icon('library')} ${S.lang === 'hi' ? 'सभी मूल पुस्तक PDF देखें' : 'Browse original book PDFs'}</a> <a class="btn btn-ghost btn-sm econ-browse-link" href="#/pyq">${icon('book')} ${S.lang === 'hi' ? 'मूल प्रश्नपत्र PDF देखें' : 'Browse original test papers'}</a></p>
@@ -2300,7 +2316,7 @@ window.UP = window.UP || {};
             </div>
           </a>`).join('')}
       </div>` : ''}
-    ${(!isMaths10 || isAccountancy) ? `<div class="callout tip" style="margin-top:20px">${icon('info')}<div>${isEnglish12
+    ${isBusiness ? `<div class="callout tip" style="margin-top:20px"><div>English outlines only; no full chapter text, questions or official answer key. Mapped to the CBSE syllabus, not certified by CBSE. <a class="link" href="https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/BusinessStudies_SecP2_2026-27.pdf">CBSE syllabus</a>.</div></div>` : (!isMaths10 || isAccountancy) ? `<div class="callout tip" style="margin-top:20px">${icon('info')}<div>${isEnglish12
       ? (S.lang === 'hi' ? 'अध्यायों के स्वयं-जाँच प्रश्न उपाय ने बनाए हैं; वे बोर्ड प्रश्न या आधिकारिक उत्तर-कुंजी नहीं हैं। मूल पाठ और पुस्तक के अभ्यास PDF में हैं।' : 'The chapter review prompts were written by Upay; they are not board questions or an official answer key. The original text and textbook exercises are in the PDFs.')
       : isEconomics
       ? (S.lang === 'hi'
@@ -2347,7 +2363,19 @@ window.UP = window.UP || {};
       <a class="btn btn-ghost btn-sm" href="#/ask?q=${encodeURIComponent('Help me understand ' + ch.en + '.')}" >${icon('sparkle')} ${hi ? 'प्रश्न पूछें' : 'Ask about this reading'}</a>
     </div>`;
   }
+  function viewBusinessChapter(ch) {
+    const n = ch.outline;
+    const list = items => items.map(item => `<li>${esc(item)}</li>`).join('');
+    return `<a class="link" href="#/syllabus">← Chapters</a>
+      <section class="detail-hero" style="margin-top:12px"><div class="meta-row"><span class="tag">CBSE unit ${ch.displayNo}</span><span class="tag cream">English outline</span></div>
+      <h1>${esc(n.title)}</h1><p>${esc(n.summary)}</p></section>
+      <div class="callout tip" style="margin-top:16px"><div>Mapped to CBSE 2026–27, not certified by CBSE. Outline only; not a full chapter or official answer key.${n.id === 'lebs203' ? ' The applicable syllabus names the Consumer Protection Act, 2019, not the outdated 1986 reference in the staged source summary.' : ''}</div></div>
+      <section class="card" style="margin-top:16px"><h2>Sections</h2><ul>${list(n.sections)}</ul>
+      <h2>Objectives</h2><ul>${list(n.objectives)}</ul><h2>Key terms</h2><p>${esc(n.terms.join(' · '))}</p>
+      <p class="muted">Source: ${n.source_url ? `<a href="${esc(n.source_url)}">${esc(n.source)}</a>` : esc(n.source) + ". The source PDF is not provided on the site."}</p></section>`;
+  }
   function viewChapter(id, params) {
+    if (businessTrack() && S.board !== 'cbse') return `<div class="empty"><h3>CBSE outlines only</h3><p>Select CBSE to view these chapters.</p><a class="link" href="#/syllabus">Chapters</a></div>`;
     /* A book-search hit points at the NCERT textbook, whose chapter numbers are
        not the RBSE book's.  Without this the label said "Ch. 7 Coordinate
        Geometry" and the link opened RBSE 7 Trigonometric Identities. */
@@ -2355,6 +2383,7 @@ window.UP = window.UP || {};
       ? (UP.catalogue(S.cls, S.subject).find(c => String(c.id) === String(id)) || chapterById(id))
       : chapterById(id);
     if (!ch) return `<div class="empty">${icon('warn')}<h3>${t('noMatch')}</h3><p><a href="#/syllabus">${t('nav_syllabus')}</a></p></div>`;
+    if (businessTrack()) return viewBusinessChapter(ch);
     if (english12Track()) return viewEnglish12Chapter(ch);
     const tab = params.tab || 'concepts';
     const isAccountancyChapter = accountancyTrack();
@@ -2549,8 +2578,8 @@ window.UP = window.UP || {};
       <div class="pill-row">${(ch.keywords?.en || []).slice(0, 6).map((k, i) => `<span class="pill">${esc(S.lang === 'hi' ? ((ch.keywords.hi || [])[i] || k) : k)}</span>`).join('')}</div>
     </section>
     ${isEconomicsChapter || isEnglish12Chapter ? renderChapterText(ch, 'outline') : ''}
-    ${S.board === 'cbse' && +S.cls === 12 && S.subject === 'chemistry' && +ch.id >= 701 && +ch.id <= 704
-      ? `<p class="callout tip"><a class="link" href="/assets/notes/index.html#lech10${+ch.id - 700}">CBSE 2026–27 English outline and selected figure →</a></p>` : ''}
+    ${S.board === 'cbse' && +S.cls === 12 && S.subject === 'chemistry' && +ch.id >= 701 && +ch.id <= 710
+      ? `<p class="callout tip"><a class="link" href="/assets/notes/index.html#${+ch.id <= 705 ? 'lech10' + (+ch.id - 700) : 'lech20' + (+ch.id - 705)}">CBSE 2026–27 English outline and selected figure →</a></p>` : ''}
     <div class="tabs">
       ${tabs.map(([k, label]) => `<button data-action="tab" data-tab="${k}" class="${tab === k ? 'on' : ''}">${label}</button>`).join('')}
     </div>
@@ -2957,6 +2986,7 @@ window.UP = window.UP || {};
   }
 
   function viewBooks(params) {
+    if (businessTrack()) return `<header class="page-head"><h1>Business Studies sources</h1><p>11 supplied chapter outlines and one CBSE-syllabus Financial Markets outline are available. Source PDFs are not published; project work is not covered.</p><a class="btn btn-primary" href="#/syllabus">Browse outlines</a></header>`;
     if (english12Track()) return viewEnglish12Books();
     if (economicsTrack()) return viewEconomicsBooks();
     params = params || {};
@@ -6566,7 +6596,7 @@ viewChapter = function(id, params){
   const html=__orig_viewChapter(id, params);
   try { if(id) prefetchChapter(id); } catch(e){}
   // The English reading view already links to its tailored printable review.
-  if (english12Track()) return html;
+  if (english12Track() || businessTrack()) return html;
   return html.replace(/(<\/section>)/, `<div style="margin-top:8px"><a class="btn btn-sm btn-ghost" href="#/cheatsheet/${id}">${icon('book')} ${S.lang==='hi'?'चीट शीट':'Cheatsheet'}</a></div></section>`);
 };
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Re-render the four selected figure crops; compare them with the manifest.
+"""Re-render the selected figure crops; compare them with the manifest.
 
 Requires pymupdf and Pillow. Checks PDF identity and crop output, not whether
 all relevant figures in the batch have been found. PDF coordinates are points.
@@ -9,10 +9,11 @@ from pathlib import Path
 import pymupdf
 from PIL import Image, ImageDraw
 root=Path(__file__).resolve().parents[2]
-parser=argparse.ArgumentParser(); parser.add_argument('pdf_dir',type=Path); args=parser.parse_args()
+parser=argparse.ArgumentParser(); parser.add_argument('pdf_dirs',type=Path,nargs='+'); args=parser.parse_args()
 manifest=json.loads((root/'assets/img/notes/manifest.json').read_text())
 for item in manifest['images']:
-    pdf=args.pdf_dir/item['source_file']
+    pdf=next((d/item['source_file'] for d in args.pdf_dirs if (d/item['source_file']).is_file()), None)
+    assert pdf is not None, item['source_file']
     assert hashlib.sha256(pdf.read_bytes()).hexdigest()==item['source_sha256']
     doc=pymupdf.open(pdf); page=doc[item['pdf_page']-1]
     pix=page.get_pixmap(matrix=pymupdf.Matrix(2,2),clip=pymupdf.Rect(item['crop_points']),alpha=False)
@@ -22,4 +23,4 @@ for item in manifest['images']:
         ImageDraw.Draw(image).rectangle((250,0,470,29),fill='white')
     out=io.BytesIO(); image.save(out,format='PNG',optimize=True)
     assert hashlib.sha256(out.getvalue()).hexdigest()==item['sha256'], item['path']
-print('PASS: source hashes and four selected crop bytes match manifest')
+print('PASS: source hashes and selected crop bytes match manifest')

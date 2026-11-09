@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Selected source-PDF figure crops, not an exhaustive figure inventory. No AI-drawn figures in this batch.",
+  "description": "Selected source-PDF figure crops, one per chapter; not an exhaustive figure inventory. No AI-drawn figures in these batches.",
   "images": [
     {
       "path": "assets/img/notes/d5e4465b33a0aaceaa154ae7724d5da6bd3d8ed9184c3db3b6a03f2196896fe3.png",
@@ -71,6 +71,114 @@
         445,
         289,
         675
+      ],
+      "edit": "none"
+    },
+    {
+      "path": "assets/img/notes/e562f63b7fc394896e8bdb4155918e13f8d5a29a45afa0443c4c9b5b7a6473b7.png",
+      "sha256": "e562f63b7fc394896e8bdb4155918e13f8d5a29a45afa0443c4c9b5b7a6473b7",
+      "origin": "source-pdf-crop",
+      "ai_drawn": false,
+      "source_file": "lech105.pdf",
+      "source_sha256": "9cca0d995461bb4ba9e02dd4c40b9c3ba40fccfdc132f4a8a0959a82cea209b3",
+      "pdf_page": 5,
+      "figure": "5.1",
+      "caption": "Shapes of coordination polyhedra",
+      "crop_points": [
+        58,
+        305,
+        525,
+        408
+      ],
+      "edit": "none"
+    },
+    {
+      "path": "assets/img/notes/8617b8df918c524483379f50c7c9d4e75e27fbee6f5ec6387d0f14f73aefa0aa.png",
+      "sha256": "8617b8df918c524483379f50c7c9d4e75e27fbee6f5ec6387d0f14f73aefa0aa",
+      "origin": "source-pdf-crop",
+      "ai_drawn": false,
+      "source_file": "lech201.pdf",
+      "source_sha256": "faca920f61f7ac668957201f3a8093d204f6364949f4e1ad733af6b01cc4cb17",
+      "pdf_page": 10,
+      "figure": "6.1",
+      "caption": "Boiling points of some alkyl halides",
+      "crop_points": [
+        200,
+        290,
+        490,
+        463
+      ],
+      "edit": "none"
+    },
+    {
+      "path": "assets/img/notes/c7847c9c6553a491cf952455b307d07ae4e7d1356c62a8a0b03e072fb30635a9.png",
+      "sha256": "c7847c9c6553a491cf952455b307d07ae4e7d1356c62a8a0b03e072fb30635a9",
+      "origin": "source-pdf-crop",
+      "ai_drawn": false,
+      "source_file": "lech202.pdf",
+      "source_sha256": "e7aedb4059f435db596bd76015684fa1186be8d6bee4ee4a6c3f2e81f58585be",
+      "pdf_page": 6,
+      "figure": "7.1",
+      "caption": "Structures of methanol, phenol and methoxymethane",
+      "crop_points": [
+        190,
+        594,
+        500,
+        678
+      ],
+      "edit": "none"
+    },
+    {
+      "path": "assets/img/notes/e300b4b5642287d5ef11b0a1adb68ea4dd0b8e6309dcde3bdc710b7473ca80b0.png",
+      "sha256": "e300b4b5642287d5ef11b0a1adb68ea4dd0b8e6309dcde3bdc710b7473ca80b0",
+      "origin": "source-pdf-crop",
+      "ai_drawn": false,
+      "source_file": "lech203.pdf",
+      "source_sha256": "23067221e09a8a61873f3a3a587a2ecb15d3104aeea00914dbc15111e772154e",
+      "pdf_page": 5,
+      "figure": "8.1",
+      "caption": "Orbital diagram for the formation of the carbonyl group",
+      "crop_points": [
+        100,
+        166,
+        520,
+        264
+      ],
+      "edit": "none"
+    },
+    {
+      "path": "assets/img/notes/f2d9036a03fff69967e453d91df2de3f431fd32fdb87d52a9a1c3d16401e98ad.png",
+      "sha256": "f2d9036a03fff69967e453d91df2de3f431fd32fdb87d52a9a1c3d16401e98ad",
+      "origin": "source-pdf-crop",
+      "ai_drawn": false,
+      "source_file": "lech204.pdf",
+      "source_sha256": "a267ffea998fb68174c2abc87f79a71e646e93460efa73bbe15796a995cea29a",
+      "pdf_page": 2,
+      "figure": "9.1",
+      "caption": "Pyramidal shape of trimethylamine",
+      "crop_points": [
+        225,
+        95,
+        460,
+        295
+      ],
+      "edit": "none"
+    },
+    {
+      "path": "assets/img/notes/1e6561da4bfe50c211d36c3941b0df3ff6373d986c5d737b6972b12dafa88934.png",
+      "sha256": "1e6561da4bfe50c211d36c3941b0df3ff6373d986c5d737b6972b12dafa88934",
+      "origin": "source-pdf-crop",
+      "ai_drawn": false,
+      "source_file": "lech205.pdf",
+      "source_sha256": "a6e215335dff95dfc4023bfbf1a994cbca7b35890ab75952a6cc1c390ba9c072",
+      "pdf_page": 18,
+      "figure": "10.5",
+      "caption": "Structure of a nucleoside and a nucleotide",
+      "crop_points": [
+        190,
+        445,
+        525,
+        571
       ],
       "edit": "none"
     }

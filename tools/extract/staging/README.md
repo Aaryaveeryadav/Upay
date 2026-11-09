@@ -5,8 +5,9 @@ outlines from the supplied NCERT chapter PDFs, with SHA-256 hashes and 1-based
 PDF page references. The original candidates are not directly published.
 A selected and edited version is in `assets/notes/outlines.json`, mapped to the
 CBSE 2026–27 Business Studies syllabus and displayed in the outline library.
-The public notes are not CBSE-certified and do not cover Financial Markets or
-project work. Some syllabus topics were added as headings even when the staged
+The public notes are not CBSE-certified. Financial Markets was not in the supplied
+chapters; a separate syllabus-derived outline covers that unit. Project work
+is not covered. Some syllabus topics were added as headings even when the staged
 principal-heading selection did not contain them.
 
 The candidate `lebs203` source introduction discusses the Consumer Protection
