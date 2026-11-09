@@ -2473,7 +2473,36 @@ window.UP = window.UP || {};
 
     let body = '';
     if (tab === 'concepts') {
-      body = `<ul class="kb-list">${(ch.concepts || []).map(c => `<li><span class="bul"></span><div><b>${esc(P(c.t))}</b><br>${rich(P(c.b))}</div></li>`).join('')}</ul>`;
+      /* Class 12 Accountancy chapters carry a real outline extracted from the
+         NCERT chapter PDFs: what you should be able to do, then the numbered
+         sections with their opening sentences. Before this, the tab repeated
+         the one-line description under a "PYQ coverage" heading. */
+      const notes = (isAccountancyChapter && UP.accountancyNotes)
+        ? (UP.accountancyNotes[String(ch.id)] || UP.accountancyNotes[ch.id]) : null;
+      if (notes && (notes.objectives.length || notes.sections.length)) {
+        const objs = notes.objectives.length ? `
+          <section class="note-block">
+            <h3>${S.lang === 'hi' ? 'इस अध्याय के बाद आप कर सकेंगे' : 'After this chapter you should be able to'}</h3>
+            <ul class="obj-list">${notes.objectives.map(o => `<li>${esc(o)}</li>`).join('')}</ul>
+          </section>` : '';
+        const secs = notes.sections.length ? `
+          <section class="note-block">
+            <h3>${S.lang === 'hi' ? 'अध्याय की रूपरेखा' : 'What the chapter covers'}
+              <span class="tag grey">${notes.sections.length} ${S.lang === 'hi' ? 'भाग' : 'sections'}</span></h3>
+            <ol class="sec-list">${notes.sections.map(s => `
+              <li>
+                <div class="sec-head"><span class="sec-no">${esc(s.n)}</span> ${esc(s.t)}</div>
+                <p class="sec-body">${esc(s.b)}</p>
+              </li>`).join('')}</ol>
+          </section>` : '';
+        body = `<div class="chapter-notes">${objs}${secs}
+          <p class="muted" style="font-size:12.5px;margin-top:18px">${S.lang === 'hi'
+            ? `NCERT पाठ ${esc(notes.source)} से निकाली गई रूपरेखा (${notes.pages} पृष्ठ)। यह पूरा अध्याय नहीं है।`
+            : `Outline extracted from NCERT ${esc(notes.source)} (${notes.pages} pages). This is a study outline, not the full chapter.`}</p>
+        </div>`;
+      } else {
+        body = `<ul class="kb-list">${(ch.concepts || []).map(c => `<li><span class="bul"></span><div><b>${esc(P(c.t))}</b><br>${rich(P(c.b))}</div></li>`).join('')}</ul>`;
+      }
     } else if (tab === 'formulas') {
       body = `<div class="grid grid-2">${(ch.formulas || []).map(f => `
         <div class="formula-card">

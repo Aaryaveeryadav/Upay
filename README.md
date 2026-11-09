@@ -61,6 +61,7 @@ python3 tools/check/source_papers_smoke.py
 python3 tools/check/economics_sources.py
 python3 tools/check/chapter_text.py
 python3 tools/check/question_quality.py
+python3 tools/check/accountancy_notes.py
 python3 tools/check/security_headers.py
 python3 tools/check/economics_smoke.py
 python3 tools/check/english12_sources.py

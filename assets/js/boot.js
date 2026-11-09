@@ -47,6 +47,7 @@
     'assets/js/data/chapters12-maths.js',   // Class 12 Maths KB + PYQ seed (must load AFTER pyq.js which resets UP.pyq)
     'assets/js/data/chapters12-applied-maths.js',  // Class 12 Applied Maths KB + PYQ seed
     'assets/js/data/chapters12-accountancy.js', // Class 12 Accountancy + Computerised Accounting chapter maps
+    'assets/js/data/accountancy-chapters.js?v=26ab', // extracted NCERT outline: objectives and numbered sections
     'assets/js/data/economics12.js?v=26ab', // Class 12 Economics guides, including deep links
     'assets/js/data/economics-sources.js?v=26ab', // the original Economics PDF catalogue
     'assets/js/data/english12.js?v=26ab', // Class 12 English reading notes and direct links
