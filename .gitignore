@@ -29,3 +29,7 @@ build/
 coverage/
 *.log
 .DS_Store
+
+# Chapter-text extraction cache: 1.2 MB of paragraph JSON, regenerable from the
+# data files and not needed at runtime. Keep it locally to rebuild without PDFs.
+tools/extract/.chapter-text-cache.json

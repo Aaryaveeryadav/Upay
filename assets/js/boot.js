@@ -50,7 +50,8 @@
     'assets/js/data/economics12.js?v=26ab', // Class 12 Economics guides, including deep links
     'assets/js/data/economics-sources.js?v=26ab', // the original Economics PDF catalogue
     'assets/js/data/english12.js?v=26ab', // Class 12 English reading notes and direct links
-    'assets/js/data/english12-sources.js?v=26ab', // supplied English PDFs; not a question bank
+    'assets/js/data/english12-sources.js?v=26ab', // original chapter PDFs (removed; kept as provenance)
+    'assets/js/data/chapter-summary.js?v=26ab', // extracted Class 12 chapter study summaries
     'assets/js/data/class12-original-test-papers.js?v=26ab', // supplied Economics, Biology and English papers, source only
     'assets/js/data/pyq-cbse2025-cls12.js', // CBSE 2025 (series 65/) Class 12 Maths PYQs
     'assets/js/data/pyq-accountancy-2023-2026-extracted.js?v=26ab', // 34 source-tagged Accountancy papers, loaded into both Class 12 tracks

@@ -12,6 +12,18 @@ from pathlib import Path
 import pymupdf
 
 ROOT = Path(__file__).resolve().parents[2]
+SUMMARY_JS = ROOT / 'assets/js/data/chapter-summary.js'
+
+
+def _load_summaries():
+    import json
+    src = SUMMARY_JS.read_text(encoding='utf-8')
+    body = src[src.index('UP.chapterSummary'):]
+    body = body[body.index('=') + 1:].rstrip().rstrip(';')
+    return json.loads(body)
+
+
+SUMMARIES = _load_summaries()
 MANIFEST = ROOT / 'assets/js/data/economics-sources.js'
 EXPECTED = {
     **{f'leec10{i}.pdf': ('macro', i, 'en', 'chapter') for i in range(1, 7)},
@@ -56,11 +68,20 @@ def main():
         assert row['id'] == f'{book}-{chapter or "glossary"}-{lang}'
         assert row['file'] == f'/assets/books/economics/{book}/{name}'
         path = ROOT / row['file'].lstrip('/')
-        assert path.is_file() and not path.is_symlink() and path.resolve().is_relative_to(ROOT.resolve()), path
-        assert path.read_bytes()[:5] == b'%PDF-' and path.stat().st_size == row['bytes']
-        assert digest(path) == row['sha256'], name
-        with pymupdf.open(path) as doc:
-            assert len(doc) == row['pages'] and len(doc) > 0, name
+        # English chapter PDFs were removed in favour of extracted text; the
+        # Hindi ones could not be extracted (legacy KrutiDev encoding) and were
+        # deliberately kept. Either way, the manifest row must be consistent.
+        if path.is_file():
+            assert not path.is_symlink() and path.resolve().is_relative_to(ROOT.resolve()), path
+            assert path.read_bytes()[:5] == b'%PDF-' and path.stat().st_size == row['bytes']
+            assert digest(path) == row['sha256'], name
+            with pymupdf.open(path) as doc:
+                assert len(doc) == row['pages'] and len(doc) > 0, name
+        else:
+            extracted = SUMMARIES.get(row['id'])
+            assert extracted is not None, (name, 'neither PDF nor extracted text')
+            assert extracted.get('available') is not False, (name, 'extraction failed')
+            assert extracted['words'] > 40, (name, 'extraction too short')
         if args.uploads:
             original = args.uploads / name
             assert original.is_file() and digest(original) == row['sha256'], name

@@ -639,14 +639,7 @@ window.UP = window.UP || {};
   function economicsTrack() { return +S.cls === 12 && S.subject === 'economics'; }
   function english12Track() { return +S.cls === 12 && S.subject === 'english'; }
   function needsAIOnly() { return accountancyTrack() || economicsTrack() || english12Track(); }
-  function economicsSourceLink(source, chapter) {
-    const lang = source.lang === 'hi' ? 'हिंदी' : 'English';
-    const description = chapter
-      ? `${P(chapter.bookTitle)}, ${S.lang === 'hi' ? 'अध्याय' : 'Chapter'} ${chapter.n}: ${P({en:chapter.en,hi:chapter.hi})}`
-      : (S.lang === 'hi' ? 'व्यष्टि अर्थशास्त्र शब्दावली' : 'Microeconomics glossary');
-    const label = `${S.lang === 'hi' ? 'PDF खोलें' : 'Open PDF'}: ${description}, ${lang}`;
-    return `<a class="btn btn-ghost btn-sm econ-source-link" href="${esc(source.file)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(label)}" title="${esc(source.originalFile)}">${esc(lang)} PDF <span aria-hidden="true">↗</span></a>`;
-  }
+
   const ENGLISH12_GROUPS = [
     ['flamingo', 'prose'], ['flamingo', 'poetry'], ['vistas', 'readings'],
     ['kaleidoscope', 'short-stories'], ['kaleidoscope', 'poetry'],
@@ -655,11 +648,131 @@ window.UP = window.UP || {};
   function english12Source(ch) {
     return (UP.english12Sources || []).find(s => ch && s.id === ch.sourceId && s.chapterId === ch.id) || null;
   }
+
+  /* ------------------------------------------------------------------
+     Extracted chapter text.
+
+     The original Class 12 chapter PDFs have been removed; each one was
+     replaced with text extracted by tools/extract/build-chapter-text.py.
+     UP.chapterSummary is a lean outline (critical core);
+     UP.chapterFullText is the whole cleaned chapter, loaded on demand.
+     Keyed by sourceId, which both economics12.js and english12.js set.
+     ------------------------------------------------------------------ */
+  function chapterSourceId(ch) {
+    if (!ch) return '';
+    if (ch.sourceId) return ch.sourceId;              // English sets this directly
+    if (ch.book && ch.n != null) {                    // Economics: book + chapter no.
+      const lang = S.lang === 'hi' ? 'hi' : 'en';     // Hindi PDFs were not extractable,
+      const key = ch.book + '-' + ch.n + '-' + lang;  // so Hindi falls back to English
+      if ((UP.chapterSummary || {})[key]) return key;
+      const en = ch.book + '-' + ch.n + '-en';
+      if ((UP.chapterSummary || {})[en]) return en;
+    }
+    return '';
+  }
+  function chapterTextFor(ch) {
+    if (!ch) return null;
+    const id = chapterSourceId(ch);
+    if (!id) return null;
+    return (UP.chapterSummary || {})[id] || null;
+  }
+  function chapterTextUsable(ch) {
+    const t = chapterTextFor(ch);
+    if (!t || t.available === false) return false;
+    return !!(t.lead || (t.sections && t.sections.length) || (t.paras || 0) > 0);
+  }
+
+  function chapterTextBadge(ch) {
+    const t = chapterTextFor(ch);
+    if (!t) return '';
+    const hi = S.lang === 'hi';
+    if (t.available === false) {
+      return `<span class="tag grey">${hi ? 'पाठ उपलब्ध नहीं' : 'Chapter text unavailable'}</span>`;
+    }
+    return `<span class="tag grey">${t.words.toLocaleString()} ${hi ? 'शब्द' : 'words'} · ${t.readMin} ${hi ? 'मिनट' : 'min read'}</span>`;
+  }
+
+  /* Full-chapter reader. Pulls the lazy full-text bundle on first use. */
+  let _fullTextPromise = null;
+  function loadFullText() {
+    if (UP.chapterFullText) return Promise.resolve(UP.chapterFullText);
+    if (_fullTextPromise) return _fullTextPromise;
+    _fullTextPromise = new Promise(resolve => {
+      const s = document.createElement('script');
+      s.src = 'assets/js/data/chapter-fulltext.js?v=26ab';
+      s.async = true;
+      s.onload = () => resolve(UP.chapterFullText || {});
+      s.onerror = () => resolve({});
+      document.head.appendChild(s);
+    });
+    return _fullTextPromise;
+  }
+
+  function renderChapterText(ch, mode) {
+    const hi = S.lang === 'hi';
+    const t = chapterTextFor(ch);
+    if (!t) return '';
+    if (t.available === false) {
+      return `<div class="callout warn"><div>${icon('info')} <b>${hi ? 'पाठ उपलब्ध नहीं' : 'Chapter text unavailable'}</b><br>
+        ${hi ? 'इस अध्याय की मूल PDF पुरानी (KrutiDev) फ़ॉन्ट एन्कोडिंग में थी, इसलिए पाठ निकाला नहीं जा सका। इसे दोबारा यूनिकोड PDF के रूप में अपलोड करें।'
+             : 'This chapter’s original PDF used a legacy (KrutiDev) font encoding, so the text could not be extracted. Re-upload it as a Unicode PDF.'}</div></div>`;
+    }
+
+    const usableSections = (t.sections || []).filter(s => s.t);
+    const outline = usableSections.length
+      ? `<ol class="chapter-outline">${usableSections.map(s => `<li><b>${esc(s.t)}</b>${s.g ? `<span>${esc(s.g)}</span>` : ''}</li>`).join('')}</ol>`
+      : '';
+
+    const keyList = (t.key || []).length
+      ? `<div class="chapter-key"><h3>${hi ? 'ध्यान देने योग्य शब्द' : 'Expressions to notice'}</h3>
+         <div class="pill-row">${t.key.map(k => `<span class="pill">${esc(k)}</span>`).join('')}</div></div>`
+      : '';
+
+    if (mode === 'outline') {
+      return `<section class="card flat chapter-text">
+        <div class="section-head"><div><h2>${hi ? 'अध्याय सारांश' : 'Chapter summary'}</h2>
+          <p>${hi ? 'मूल अध्याय PDF से निकाला गया पाठ' : 'Extracted from the original chapter PDF'}</p></div></div>
+        ${t.lead ? `<p class="chapter-lead">${esc(t.lead)}</p>` : ''}
+        ${outline}
+        ${keyList}
+        <div class="chapter-text-actions">
+          <button class="btn btn-sm btn-primary" data-action="readFullChapter" data-ch="${esc(chapterSourceId(ch))}">
+            ${icon('book')} ${hi ? 'पूरा अध्याय पढ़ें' : 'Read the full chapter'} (${t.readMin} ${hi ? 'मिनट' : 'min'})
+          </button>
+          <span class="english12-extra-label">${hi ? 'स्रोत का मूल पाठ; शब्दशः सत्यापित नहीं' : 'Verbatim source text; not independently proof-read'}</span>
+        </div>
+      </section>`;
+    }
+
+    // full mode
+    const full = (UP.chapterFullText || {})[chapterSourceId(ch)];
+    if (!full || !full.paras) {
+      return `<section class="card flat chapter-text"><p class="muted">${hi ? 'पूरा पाठ लोड हो रहा है…' : 'Loading the full chapter…'}</p></section>`;
+    }
+    return `<section class="card flat chapter-text chapter-text-full">
+      <div class="section-head"><div><h2>${hi ? 'पूरा अध्याय' : 'Full chapter'}</h2>
+        <p>${t.words.toLocaleString()} ${hi ? 'शब्द' : 'words'} · ${hi ? 'स्रोत' : 'source'}: ${esc(full.book || '')} ${full.chapter ? '· ' + (hi ? 'अध्याय' : 'Chapter') + ' ' + full.chapter : ''}</p></div></div>
+      ${full.paras.map(p => `<p>${esc(p)}</p>`).join('')}
+      <div class="chapter-text-actions"><a class="btn btn-sm btn-ghost" href="#/chapter/${ch.id}">${hi ? 'सारांश पर लौटें' : 'Back to summary'}</a></div>
+    </section>`;
+  }
+
+  /* Replaces the old "Open PDF" buttons. */
+  function chapterReadLink(ch) {
+    const hi = S.lang === 'hi';
+    const source = (ch && ch.sourceId) ? (UP.english12Sources || []).concat(UP.economicsSources || [])
+      .find(s => s.id === ch.sourceId) : null;
+    if (!chapterTextUsable(ch)) {
+      return `<span class="english12-extra-label">${hi ? 'अध्याय पाठ उपलब्ध नहीं' : 'Chapter text unavailable'}</span>`;
+    }
+    const t = chapterTextFor(ch);
+    return `<button class="btn btn-ghost btn-sm" data-action="readFullChapter" data-ch="${esc(chapterSourceId(ch))}">
+      ${hi ? 'अध्याय पढ़ें' : 'Read chapter'} <span aria-hidden="true">→</span></button>
+      <span class="english12-extra-label">${t.words.toLocaleString()} ${hi ? 'शब्द' : 'words'}</span>`;
+  }
+
   function english12SourceLink(ch) {
-    const source = english12Source(ch);
-    if (!source) return `<span class="english12-extra-label">${S.lang === 'hi' ? 'स्रोत PDF उपलब्ध नहीं' : 'Source PDF unavailable'}</span>`;
-    const label = `${S.lang === 'hi' ? 'अंग्रेज़ी PDF खोलें' : 'Open English PDF'}: ${P(ch.bookTitle)}, ${ch.en}`;
-    return `<a class="btn btn-ghost btn-sm english12-source-link" href="${esc(source.file)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(label)}" title="${esc(source.originalFile)}">${S.lang === 'hi' ? 'अंग्रेज़ी PDF' : 'English PDF'} <span aria-hidden="true">↗</span></a>`;
+    return chapterReadLink(ch);
   }
   function english12CourseCaution(ch) {
     if (S.board !== 'cbse' || ch.cbse2026ElectiveListed !== false) return '';
@@ -2189,17 +2302,12 @@ window.UP = window.UP || {};
     <a class="link" href="#/syllabus" style="font-size:13px">← ${t('nav_syllabus')}</a>
     <section class="detail-hero" style="margin-top:12px">
       <div class="meta-row"><span class="tag">${esc(P(ch.bookTitle))}</span><span class="tag cream">${esc(P(ch.sectionTitle))} ${ch.n}</span>
-        ${source ? `<span class="tag grey">${source.pages} ${hi ? 'PDF पृष्ठ' : 'PDF pages'}</span>${source.reprint ? `<span class="tag grey">${hi ? 'पुनर्मुद्रण' : 'Reprint'} ${esc(source.reprint)}</span>` : ''}` : ''}</div>
+        ${chapterTextBadge(ch)}${source && source.reprint ? `<span class="tag grey">${hi ? 'पुनर्मुद्रण' : 'Reprint'} ${esc(source.reprint)}</span>` : ''}</div>
       <h1>${esc(P({en:ch.en,hi:ch.hi}))}</h1>
       <p>${hi ? 'रचनाकार' : 'Author'}: ${esc(ch.author)}</p>
       ${english12CourseCaution(ch)}
     </section>
-    <section class="card flat english12-chapter-source" aria-labelledby="english12-source-heading">
-      <div><h2 id="english12-source-heading">${hi ? 'आपकी मूल अध्याय PDF' : 'Your original reading PDF'}</h2>
-        <p>${hi ? 'पूरा दिया गया पाठ और पुस्तक के अभ्यास मूल अंग्रेज़ी PDF में हैं। ऑनलाइन खोलें या ऑफ़लाइन के लिए डाउनलोड करें।' : 'The supplied text and textbook exercises are in the original English PDF. Open online or download for offline use.'}</p>
-        ${ch.sourceNote ? `<p class="english12-extra-label">${esc(P(ch.sourceNote))}</p>` : ''}
-      </div><div class="english12-source-actions">${english12SourceLink(ch)}</div>
-    </section>
+    ${renderChapterText(ch, 'outline')}
     <div class="grid grid-2 english12-study-grid">
       <section class="card flat english12-study-card" aria-labelledby="english12-focus-heading">
         <h2 id="english12-focus-heading">${hi ? 'पढ़ते समय ध्यान दें' : 'Reading focus'}</h2>
@@ -2230,8 +2338,7 @@ window.UP = window.UP || {};
     const tab = params.tab || 'concepts';
     const isAccountancyChapter = accountancyTrack();
     const isEconomicsChapter = economicsTrack();
-    const economicsSources = isEconomicsChapter
-      ? (UP.economicsSources || []).filter(s => s.kind === 'chapter' && s.book === ch.book && s.chapter === ch.n) : [];
+    const isEnglish12Chapter = false;   // routed to viewEnglish12Chapter above
     const allChapterPyqs = chapterBankQuestions(ch);
     const chapterPyqs = isAccountancyChapter ? allChapterPyqs.slice(0, 12) : allChapterPyqs;
     const tabs = isEconomicsChapter
@@ -2391,13 +2498,7 @@ window.UP = window.UP || {};
       <p>${esc(P({ en: ch.enDesc || '', hi: ch.hiDesc || '' }))}</p>
       <div class="pill-row">${(ch.keywords?.en || []).slice(0, 6).map((k, i) => `<span class="pill">${esc(S.lang === 'hi' ? ((ch.keywords.hi || [])[i] || k) : k)}</span>`).join('')}</div>
     </section>
-    ${isEconomicsChapter ? `<section class="card flat econ-chapter-sources" aria-labelledby="econ-chapter-sources-heading">
-      <div><h2 id="econ-chapter-sources-heading">${S.lang === 'hi' ? 'इस अध्याय की मूल PDF' : 'Original chapter PDFs'}</h2>
-        <p>${S.lang === 'hi' ? 'पूरा पाठ, चित्र और पुस्तक के अभ्यास मूल PDF में पढ़ें। ऑनलाइन खोलें या ऑफ़लाइन के लिए डाउनलोड करें।' : 'Read the full text, diagrams and textbook exercises in the source PDF. Open online or download for offline use.'}</p>
-        ${!economicsSources.some(s => s.lang === 'hi') ? `<p class="econ-missing">${S.lang === 'hi' ? 'इस अध्याय की हिंदी PDF नहीं दी गई है; हिंदी अध्ययन सामग्री नीचे उपलब्ध है।' : 'Hindi PDF not supplied for this chapter; a Hindi study guide is available below.'}</p>` : ''}
-      </div>
-      <div class="econ-source-actions">${economicsSources.map(s => economicsSourceLink(s, ch)).join('')}</div>
-    </section>` : ''}
+    ${isEconomicsChapter || isEnglish12Chapter ? renderChapterText(ch, 'outline') : ''}
     <div class="tabs">
       ${tabs.map(([k, label]) => `<button data-action="tab" data-tab="${k}" class="${tab === k ? 'on' : ''}">${label}</button>`).join('')}
     </div>
@@ -2761,13 +2862,13 @@ window.UP = window.UP || {};
               <p>${hi ? 'अध्याय मार्गदर्शिका और मूल फ़ाइलें' : 'Chapter guide and source files'}</p>
               ${!files.some(s => s.lang === 'hi') ? `<span class="econ-missing">${hi ? 'हिंदी PDF नहीं दी गई' : 'Hindi PDF not supplied'}</span>` : ''}
             </div></div>
-            <div class="econ-source-actions">${files.map(s => economicsSourceLink(s, ch)).join('')}</div>
+            <div class="english12-source-actions">${chapterReadLink(ch)}</div>
           </article>`;
         }).join('')}
         ${glossary.length ? `<article class="card flat econ-source-row" data-book="${esc(book)}" data-kind="glossary">
           <div class="econ-source-main"><span class="ch-num">A–Z</span><div><h3>${hi ? 'शब्दावली' : 'Glossary'}</h3>
           <p>${hi ? 'पुस्तक से मूल शब्दावली' : 'Original textbook glossary'}</p></div></div>
-          <div class="econ-source-actions">${glossary.map(s => economicsSourceLink(s, null)).join('')}</div>
+          <div class="econ-source-actions"><span class="english12-extra-label">${hi ? 'पाठ उपलब्ध नहीं' : 'Text unavailable'}</span></div>
         </article>` : ''}</div>
       </section>`;
     }).join('')}`;
@@ -2793,7 +2894,7 @@ window.UP = window.UP || {};
           return `<article class="card flat english12-source-row" data-chapter-id="${ch.id}" data-book="${book}" data-section="${section}">
             <div class="english12-source-main"><span class="ch-num">${String(ch.n).padStart(2, '0')}</span><div>
               <h3><a href="#/chapter/${ch.id}">${esc(P({en:ch.en,hi:ch.hi}))}</a></h3>
-              <p>${esc(ch.author)}${source ? ` · ${source.pages} ${hi ? 'PDF पृष्ठ' : 'PDF pages'}${source.reprint ? ` · ${hi ? 'पुनर्मुद्रण' : 'Reprint'} ${esc(source.reprint)}` : ''}` : ''}</p>
+              <p>${esc(ch.author)}${source && source.reprint ? ` · ${hi ? 'पुनर्मुद्रण' : 'Reprint'} ${esc(source.reprint)}` : ''}${chapterTextFor(ch) && chapterTextFor(ch).available !== false ? ` · ${chapterTextFor(ch).words.toLocaleString()} ${hi ? 'शब्द' : 'words'}` : ''}</p>
               ${ch.sourceNote ? `<span class="english12-extra-label">${esc(P(ch.sourceNote))}</span>` : ''}
               ${english12CourseCaution(ch)}
             </div></div><div class="english12-source-actions">${english12SourceLink(ch)}</div>
@@ -5200,6 +5301,31 @@ window.UP = window.UP || {};
       return;
     }
     if (action === 'print') { window.print(); return; }
+    if (action === 'readFullChapter') {
+      const sid = tgt.dataset.ch;
+      if (!sid) return;
+      const ch = (UP.catalogue(S.cls, S.subject) || []).find(c => chapterSourceId(c) === sid) || { sourceId: sid, id: sid };
+      // Render the loading state, then swap in the text once the bundle lands.
+      if (!UP.chapterFullText) {
+        const host = tgt.closest('.card') || document.getElementById('view');
+        if (host) host.insertAdjacentHTML('beforeend',
+          `<section class="card flat chapter-text"><p class="muted">${S.lang === 'hi' ? 'पूरा पाठ लोड हो रहा है…' : 'Loading the full chapter…'}</p></section>`);
+      }
+      loadFullText().then(() => {
+        const mount = document.getElementById('chapterFull');
+        if (mount) { mount.innerHTML = renderChapterText(ch, 'full'); }
+        else {
+          const host = document.getElementById('view') || document.body;
+          const wrap = document.createElement('div');
+          wrap.id = 'chapterFull';
+          wrap.innerHTML = renderChapterText(ch, 'full');
+          host.appendChild(wrap);
+        }
+        const w = document.getElementById('chapterFull');
+        if (w && typeof w.scrollIntoView === 'function') w.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      return;
+    }
     if (action === 'shareImage') { e.preventDefault(); shareAnswerAsImage(); return; }
     if (action === 'voiceInput') { e.preventDefault(); startVoiceInput(); return; }
     if (action === 'cameraOCR') { e.preventDefault(); triggerCameraOCR(); return; }
