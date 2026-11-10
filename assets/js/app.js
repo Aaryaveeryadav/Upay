@@ -2385,6 +2385,9 @@ window.UP = window.UP || {};
   /* Shared outline panel for Business Studies and Chemistry chapter views:
      sections, objectives, key terms, source and (for Chemistry) the selected
      source-crop figure. Title and ~300-character summary live in the hero. */
+  /* CBSE paper code per subject, used on the outline chapter header. */
+  const OUTLINE_PAPER_CODE = { chemistry: '043', biology: '044', physics: '042' };
+
   function renderOutlinePanel(ch) {
     const n = ch.outline; if (!n) return '';
     const list = items => items.map(item => `<li>${esc(item)}</li>`).join('');
@@ -2399,7 +2402,9 @@ window.UP = window.UP || {};
       <p class="muted">${n.figures.length} numbered figure${n.figures.length === 1 ? '' : 's'} cropped from the supplied NCERT reprint and checked against the page; each crop is the figure alone. Reproduced for study use, not AI-drawn.</p>
       <div class="sci-figgrid">${n.figures.map(f => `<figure><img loading="lazy" src="/${esc(f.path)}" alt="NCERT figure ${esc(f.fig)}"><figcaption>NCERT figure ${esc(f.fig)} · ${esc(f.caption)} · PDF page ${esc(f.page)} · source crop, not AI-drawn</figcaption></figure>`).join('')}</div>`
         : `<h2>Figures from the source PDF</h2>
-      <p class="muted">No figures are inventoried for this chapter: the supplied reprint is an image-only scan with no text layer, so its captions could not be read from the PDF and nothing was cropped rather than guessing. See the <a class="link" href="/assets/notes/index.html#figures-bio">figure inventory</a> for the chapters that are covered.</p>`)
+      <p class="muted">${ch.subject === 'biology'
+        ? `No figures are inventoried for this chapter: the supplied reprint is an image-only scan with no text layer, so its captions could not be read from the PDF and nothing was cropped rather than guessing. See the <a class="link" href="/assets/notes/index.html#figures-bio">figure inventory</a> for the chapters that are covered.`
+        : 'No source figures are inventoried for this chapter yet, so nothing is shown rather than an image drawn or guessed.'}</p>`)
       : '';
     return `
       <div class="callout tip" style="margin-top:16px"><div>Mapped to CBSE 2026–27, not certified by CBSE. Outline only — not a full chapter, not an answer key.${n.id === 'lebs203' ? ' The applicable syllabus names the Consumer Protection Act, 2019, not the outdated 1986 reference in the staged source summary.' : ''}</div></div>
@@ -2441,16 +2446,20 @@ window.UP = window.UP || {};
         <a class="btn btn-ghost btn-sm" href="#/pyq">${icon('clock')} ${S.lang === 'hi' ? 'रसायन विज्ञान के पुराने प्रश्नपत्र' : 'Past-year chemistry papers'}</a>
       </div>`;
     }
-    const isBiologyOutline = +S.cls === 12 && S.subject === 'biology' && ch.outline;
-    if (isBiologyOutline) {
+    /* Biology and Physics share this view: any chapter carrying an outline
+       (and a figures array, for subjects with a figure inventory) renders here.
+       Physics needs no code change once its outline pack attaches n.outline. */
+    const isSciOutline = +S.cls === 12 && (S.subject === 'biology' || S.subject === 'physics') && ch.outline;
+    if (isSciOutline) {
       const n = ch.outline;
       const hi = S.lang === 'hi';
+      const paperCode = OUTLINE_PAPER_CODE[S.subject] || OUTLINE_PAPER_CODE.biology;
       return `<a class="link" href="#/syllabus" style="font-size:13px">← ${t('nav_syllabus')}</a>
       <section class="detail-hero" style="margin-top:12px">
         <div class="meta-row">
           <span class="tag">${hi ? 'अध्याय' : 'Chapter'} ${esc(ch.displayNo)}</span>
           <span class="tag cream">${esc(n.unit_title)} · ${esc(n.marks)} ${t('marks')} (${hi ? 'इकाई' : 'unit'})</span>
-          <span class="tag grey">CBSE 2026–27 · 044</span>
+          <span class="tag grey">CBSE 2026–27 · ${paperCode}</span>
         </div>
         <h1>${esc(n.title)}</h1>
         <p>${esc(n.summary)}</p>
@@ -2459,7 +2468,7 @@ window.UP = window.UP || {};
       ${renderOutlinePanel(ch)}
       <div class="setup-actions" style="margin-top:16px">
         <a class="btn btn-ghost btn-sm" href="/assets/notes/index.html#${esc(n.id)}">${icon('book')} ${hi ? 'पूरा रूपरेखा-पुस्तकालय' : 'Full outline library'}</a>
-        <a class="btn btn-ghost btn-sm" href="/assets/notes/index.html#figures-bio">${icon('leaf')} ${hi ? 'सभी चित्र' : 'All source figures'}</a>
+        ${S.subject === 'biology' ? `<a class="btn btn-ghost btn-sm" href="/assets/notes/index.html#figures-bio">${icon('leaf')} ${hi ? 'सभी चित्र' : 'All source figures'}</a>` : ''}
         <a class="btn btn-ghost btn-sm" href="#/ask?q=${encodeURIComponent('Help me understand ' + n.title + '.')}">${icon('sparkle')} ${hi ? 'प्रश्न पूछें' : 'Ask about this chapter'}</a>
       </div>`;
     }
