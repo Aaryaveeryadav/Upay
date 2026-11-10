@@ -71,6 +71,33 @@ for cid, outline in attached.items():
     src = next(c for c in chem if c['id'] == outline['id'])
     assert outline['summary'] == src['summary'] and outline['sections'] == src['sections'] and outline['terms'] == src['terms']
 assert sum(outline['marks'] for outline in attached.values()) == 70
+# --- Biology: chapter outlines, their generated pack, and the figure mapping ---
+bio_out = notes['biology']
+BIO_UNITS = {6: 16, 7: 20, 8: 12, 9: 12, 10: 10}
+assert len(bio_out) == 13 and [c['id'] for c in bio_out] == ['lebio8%02d' % i for i in range(1, 14)]
+assert [c['chapter'] for c in bio_out] == list(range(1, 14))
+for c in bio_out:
+    assert c['title'] and 150 <= len(c['summary']) <= 320
+    assert len(c['sections']) >= 6 and len(c['objectives']) == 3 and len(c['terms']) >= 8
+    assert c['marks'] == BIO_UNITS[c['unit']] and 6 <= c['unit'] <= 10
+    assert not re.search(r'Reprint|NOT TO BE REPUBLISHED', c['summary'] + ' '.join(c['sections']), re.I)
+assert sum(BIO_UNITS.values()) == 70
+bio_js = (root/'assets/js/data/biology-outlines.js').read_text()
+bio_payload, bio_rest = bio_js.split('var data = ', 1)
+bio_attached = json.loads(bio_rest[:bio_rest.index(';\n')])
+assert sorted(int(k) for k in bio_attached) == list(range(1, 14))
+assert sum(len(v['figures']) for v in bio_attached.values()) == 59
+for cid, outline in bio_attached.items():
+    src = bio_out[int(cid) - 1]
+    assert outline['id'] == src['id'] and outline['summary'] == src['summary']
+    assert outline['sections'] == src['sections'] and outline['terms'] == src['terms']
+    assert outline['marks'] == BIO_UNITS[outline['unit']]
+    for fig in outline['figures']:
+        assert fig['fig'].split(':')[0].split('.')[0] == cid, (cid, fig['fig'])
+        assert any(x['sha256'] == fig['sha256'] and x['figure'] == fig['fig'] and x['source_file'].startswith('lebo') for x in manifest['images']), fig
+assert (root/'assets/js/data/biology-outlines.js').read_text() == bio_js
+assert 'assets/js/data/biology-outlines.js' in (root/'assets/js/boot.js').read_text()
+assert 'UP.biology12' in (root/'assets/js/data-extra.js').read_text()
 class Page(HTMLParser):
     def __init__(self): super().__init__(); self.ids=set(); self.img=[]
     def handle_starttag(self, tag, attrs):
@@ -78,7 +105,7 @@ class Page(HTMLParser):
         if 'id' in a: self.ids.add(a['id'])
         if tag == 'img': self.img.append(a.get('src'))
 page=Page(); html=(root/'assets/notes/index.html').read_text(); page.feed(html)
-assert all(c['id'] in page.ids for c in bs+chem)
+assert all(c['id'] in page.ids for c in bs+chem+bio_out)
 assert set(page.img) == {'/'+x['path'] for x in images}
 assert 'practice, not board-verified' in html and 'not certified by CBSE' in html
 assert '/assets/notes/index.html#business' in (root/'assets/js/app.js').read_text()
