@@ -1,0 +1,3 @@
+﻿id,chapter,type,marks,from,year,paper,q_no,question,option_a,option_b,option_c,option_d,answer,difficulty,hindi_question,hindi_option_a,hindi_option_b,hindi_option_c,hindi_option_d,figure_file,figure_page
+example-mcq,11,mcq,1,board-paper,2025,55/5/1,7,Light of which of the following colours will have the maximum energy in a photon associated with it?,Red light,Yellow light,Green light,Blue light,D,1,,,,,,,
+example-numerical,1,short,,ncert,,,1.1,What is the force between two small charged spheres having charges of 2 × 10⁻⁷ C and 3 × 10⁻⁷ C placed 30 cm apart in air?,,,,,6 × 10⁻³ N (repulsive),,,,,,,,
