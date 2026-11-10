@@ -98,6 +98,32 @@ for cid, outline in bio_attached.items():
 assert (root/'assets/js/data/biology-outlines.js').read_text() == bio_js
 assert 'assets/js/data/biology-outlines.js' in (root/'assets/js/boot.js').read_text()
 assert 'UP.biology12' in (root/'assets/js/data-extra.js').read_text()
+# --- Physics: chapter outlines and their generated pack (no unit marks) ---
+phy_out = notes['physics']
+PHY_UNITS = {1: 1, 2: 1, 3: 2, 4: 3, 5: 3, 6: 4, 7: 4, 8: 5, 9: 6, 10: 6, 11: 7, 12: 8, 13: 8, 14: 9}
+assert len(phy_out) == 14 and [c['id'] for c in phy_out] == ['lephy12%02d' % i for i in range(1, 15)]
+assert [c['chapter'] for c in phy_out] == list(range(1, 15))
+for c in phy_out:
+    assert c['title'] and 150 <= len(c['summary']) <= 320
+    assert 6 <= len(c['sections']) <= 10 and len(c['objectives']) == 3 and 8 <= len(c['terms']) <= 16
+    assert len(set(c['terms'])) == len(c['terms'])
+    assert c['unit'] == PHY_UNITS[c['chapter']] and 1 <= c['unit'] <= 9
+    # Physics claims no unit marks: the published 042 unit rows do not sum to 70.
+    assert 'marks' not in c
+    assert not re.search(r'Reprint|NOT TO BE REPUBLISHED', c['summary'] + ' '.join(c['sections']), re.I)
+phy_js = (root/'assets/js/data/physics-outlines.js').read_text()
+phy_payload, phy_rest = phy_js.split('var data = ', 1)
+phy_attached = json.loads(phy_rest[:phy_rest.index(';\n')])
+assert sorted(int(k) for k in phy_attached) == list(range(1, 15))
+for cid, outline in phy_attached.items():
+    src = phy_out[int(cid) - 1]
+    assert outline['id'] == src['id'] and outline['summary'] == src['summary']
+    assert outline['sections'] == src['sections'] and outline['objectives'] == src['objectives']
+    assert outline['terms'] == src['terms'] and outline['unit'] == src['unit']
+    assert 'marks' not in outline and 'figures' not in outline
+assert (root/'assets/js/data/physics-outlines.js').read_text() == phy_js
+assert 'assets/js/data/physics-outlines.js' in (root/'assets/js/boot.js').read_text()
+assert 'UP.physics12' in (root/'assets/js/data-extra.js').read_text()
 class Page(HTMLParser):
     def __init__(self): super().__init__(); self.ids=set(); self.img=[]
     def handle_starttag(self, tag, attrs):
@@ -105,7 +131,7 @@ class Page(HTMLParser):
         if 'id' in a: self.ids.add(a['id'])
         if tag == 'img': self.img.append(a.get('src'))
 page=Page(); html=(root/'assets/notes/index.html').read_text(); page.feed(html)
-assert all(c['id'] in page.ids for c in bs+chem+bio_out)
+assert all(c['id'] in page.ids for c in bs+chem+bio_out+phy_out)
 assert set(page.img) == {'/'+x['path'] for x in images}
 assert 'practice, not board-verified' in html and 'not certified by CBSE' in html
 assert '/assets/notes/index.html#business' in (root/'assets/js/app.js').read_text()
