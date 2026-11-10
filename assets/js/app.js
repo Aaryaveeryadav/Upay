@@ -645,7 +645,7 @@ window.UP = window.UP || {};
     const text = P({ en: q && q.en || '', hi: q && q.hi || '' });
     // Preserve source-verified Accountancy text exactly: the legacy Hindi OCR
     // cleaner can strip legitimate numeric runs and spreadsheet formulas.
-    return q && q.paperCode ? text : cleanQText(text);
+    return q && (q.paperCode || q.cleanText) ? text : cleanQText(text);
   }
   UP.qChapterIds = qChapterIds;
   UP.qHasChapter = qHasChapter;
@@ -2468,7 +2468,7 @@ window.UP = window.UP || {};
       ${renderOutlinePanel(ch)}
       <div class="setup-actions" style="margin-top:16px">
         <a class="btn btn-ghost btn-sm" href="/assets/notes/index.html#${esc(n.id)}">${icon('book')} ${hi ? 'पूरा रूपरेखा-पुस्तकालय' : 'Full outline library'}</a>
-        ${S.subject === 'biology' ? `<a class="btn btn-ghost btn-sm" href="/assets/notes/index.html#figures-bio">${icon('leaf')} ${hi ? 'सभी चित्र' : 'All source figures'}</a>` : ''}
+        ${['biology', 'physics'].includes(S.subject) ? `<a class="btn btn-ghost btn-sm" href="/assets/notes/index.html#figures-${S.subject === 'physics' ? 'phy' : 'bio'}">${icon('leaf')} ${hi ? 'सभी चित्र' : 'All source figures'}</a>` : ''}
         <a class="btn btn-ghost btn-sm" href="#/ask?q=${encodeURIComponent('Help me understand ' + n.title + '.')}">${icon('sparkle')} ${hi ? 'प्रश्न पूछें' : 'Ask about this chapter'}</a>
       </div>`;
     }
@@ -4464,7 +4464,7 @@ window.UP = window.UP || {};
     s = s.replace(/00\s*शब्दों/g, 'लगभग 100 शब्दों');
     // 4) Set-code / roll-no remnants
     s = s.replace(/[134][/\u2215][/\\2S]?\s*\d+\s+\d{4,5}\b/g, ' ');
-    s = s.replace(/\b\d{4,5}\b(?!\s*(सेमी|मीटर|cm|m|रु|Rs))/g, ' ');
+    // Standalone numbers can be real physical quantities (1000 W, 2025 Hz).
     s = s.replace(/\b\d\s*[/।|\]]\s*अथवा/g, 'अथवा');
     s = s.replace(/\b\d+\]\s*(?=अथवा|आप|सिद्ध|निम्न|सिद्ध)/g, ' ');
     s = s.replace(/[Pp]\.?\s*[Tt]\.?\s*[Oo]\.?/g, ' ');

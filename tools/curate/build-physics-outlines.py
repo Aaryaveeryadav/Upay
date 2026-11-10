@@ -32,7 +32,22 @@ for c in physics:
     assert 8 <= len(c['terms']) <= 16, c['id']
     assert 'marks' not in c, 'physics carries no unit marks; see the module docstring'
 
-payload = {str(c['chapter']): c for c in physics}
+manifest = json.loads((root / 'assets/img/notes/manifest.json').read_text())
+figures = {}
+for item in manifest['images']:
+    if not item['source_file'].startswith('leph'):
+        continue
+    chapter = int(item['figure'].split('.')[0])
+    figures.setdefault(chapter, []).append({
+        'fig': item['figure'], 'path': item['path'], 'caption': item['caption'],
+        'page': item['pdf_page'], 'sha256': item['sha256'],
+    })
+payload = {}
+for c in physics:
+    record = dict(c)
+    record['figures'] = sorted(figures.get(c['chapter'], []),
+                               key=lambda f: int(f['fig'].split('.')[1]))
+    payload[str(c['chapter'])] = record
 
 js = (
     "/* Generated from assets/notes/outlines.json; English outlines only.\n"
