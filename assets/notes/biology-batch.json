@@ -1,6 +1,6 @@
 {
  "batch": "NCERT Biology reprint (Class 12), thirteen supplied PDFs \u2014 eight with a text layer, five image-only scans",
- "status": "figures extracted and visually verified for the eight text-layer chapters; source PDFs retained until the batch checks pass",
+ "status": "complete: every numbered figure in the eight text-layer chapters cropped from source and visually verified; manifest holds 59 new crops; the eight PDFs were deleted after verification. The five image-only scans stay excluded and their files are left in place because no caption could be taken from them.",
  "date": "2026-11-10",
  "method": "crops measured from PDF geometry (caption text rects plus art/cluster rects), rendered at 150 dpi, and each one inspected on PIL contact sheets; printed captions read from PDF text only, never from pixels",
  "crops": [
@@ -1156,7 +1156,7 @@
    "text_nonempty_pages": 10,
    "classification": "chapter",
    "chapter_title": "Chapter 3 \u00b7 Reproductive Health",
-   "disposition": "retained pending verified figure inventory",
+   "disposition": "deleted 2026-11-10 after verified figure inventory (sha256 re-verified against this ledger first)",
    "figure_count": 6,
    "figures": [
     "3.1a",
@@ -1185,7 +1185,7 @@
    "text_nonempty_pages": 31,
    "classification": "chapter",
    "chapter_title": "Chapter 5 \u00b7 Molecular Basis of Inheritance",
-   "disposition": "retained pending verified figure inventory",
+   "disposition": "deleted 2026-11-10 after verified figure inventory (sha256 re-verified against this ledger first)",
    "figure_count": 17,
    "figures": [
     "5.1",
@@ -1225,7 +1225,7 @@
    "text_nonempty_pages": 22,
    "classification": "chapter",
    "chapter_title": "Chapter 7 \u00b7 Human Health and Disease",
-   "disposition": "retained pending verified figure inventory",
+   "disposition": "deleted 2026-11-10 after verified figure inventory (sha256 re-verified against this ledger first)",
    "figure_count": 11,
    "figures": [
     "7.1",
@@ -1259,7 +1259,7 @@
    "text_nonempty_pages": 16,
    "classification": "chapter",
    "chapter_title": "Chapter 9 \u00b7 Biotechnology: Principles and Processes",
-   "disposition": "retained pending verified figure inventory",
+   "disposition": "deleted 2026-11-10 after verified figure inventory (sha256 re-verified against this ledger first)",
    "figure_count": 8,
    "figures": [
     "9.1",
@@ -1279,7 +1279,7 @@
    "text_nonempty_pages": 11,
    "classification": "chapter",
    "chapter_title": "Chapter 10 \u00b7 Biotechnology and its Applications",
-   "disposition": "retained pending verified figure inventory",
+   "disposition": "deleted 2026-11-10 after verified figure inventory (sha256 re-verified against this ledger first)",
    "figure_count": 3,
    "figures": [
     "10.1",
@@ -1294,7 +1294,7 @@
    "text_nonempty_pages": 17,
    "classification": "chapter",
    "chapter_title": "Chapter 11 \u00b7 Organisms and Populations",
-   "disposition": "retained pending verified figure inventory",
+   "disposition": "deleted 2026-11-10 after verified figure inventory (sha256 re-verified against this ledger first)",
    "figure_count": 5,
    "figures": [
     "11.1",
@@ -1311,7 +1311,7 @@
    "text_nonempty_pages": 11,
    "classification": "chapter",
    "chapter_title": "Chapter 12 \u00b7 Ecosystem",
-   "disposition": "retained pending verified figure inventory",
+   "disposition": "deleted 2026-11-10 after verified figure inventory (sha256 re-verified against this ledger first)",
    "figure_count": 7,
    "figures": [
     "12.1",
@@ -1330,7 +1330,7 @@
    "text_nonempty_pages": 13,
    "classification": "chapter",
    "chapter_title": "Chapter 13 \u00b7 Biodiversity and Conservation",
-   "disposition": "retained pending verified figure inventory",
+   "disposition": "deleted 2026-11-10 after verified figure inventory (sha256 re-verified against this ledger first)",
    "figure_count": 2,
    "figures": [
     "13.1",
