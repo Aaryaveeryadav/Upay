@@ -1094,6 +1094,7 @@ window.UP = window.UP || {};
       <b>CBSE Class 12 · English outlines</b><br>
       <a class="link" href="/assets/notes/index.html#business">Business Studies</a> ·
       <a class="link" href="/assets/notes/index.html#chemistry">Chemistry (units 1–10)</a> ·
+      <a class="link" href="/assets/notes/index.html#biology">Biology (13 chapters)</a> ·
       <a class="link" href="/assets/notes/index.html#figures-bio">Biology figures</a>
       <span class="muted"> — syllabus-mapped study outlines; coverage is incomplete.</span>
     </div></section>
@@ -1265,11 +1266,18 @@ window.UP = window.UP || {};
        outline summary directly on the card, not a truncated enDesc. */
     if (ch.outline) {
       const unitNo = ch.displayNo != null ? ch.displayNo : (typeof ch.id === 'number' && ch.id > 700 ? ch.id - 700 : ch.id);
+      /* Biology numbers its cards by NCERT chapter, not by unit: one CBSE unit
+         covers two or three chapters, so the badge names the unit and its marks
+         instead of calling chapter 5 "CBSE unit 5". */
+      const bioCard = ch.outline.unit_title;
+      const footBadge = bioCard
+        ? `${esc(bioCard)} · ${esc(ch.outline.marks)} ${t('marks')} (unit)`
+        : `CBSE unit ${esc(unitNo)}`;
       return `<a class="card ch-card outline-card" href="#/chapter/${ch.id}" data-chapter-id="${ch.id}">
         <div class="ch-top"><span class="ch-num">${String(unitNo).padStart(2,'0')}</span><div>
         <div class="ch-title">${esc(ch.outline.title)}</div></div></div>
         <p class="ch-outline-summary">${esc(ch.outline.summary)}</p>
-        <div class="ch-foot"><span class="tag">English outline</span><span class="tag cream">CBSE unit ${esc(unitNo)}</span><span class="arrow">${icon('arrow')}</span></div></a>`;
+        <div class="ch-foot"><span class="tag">English outline</span><span class="tag cream">${footBadge}</span><span class="arrow">${icon('arrow')}</span></div></a>`;
     }
     if (english12Track() && ch.sourceId) {
       return `<a class="card ch-card english12-chapter-card" href="#/chapter/${ch.id}" data-chapter-id="${ch.id}">
@@ -2383,11 +2391,21 @@ window.UP = window.UP || {};
     const figure = n.image
       ? `<figure><img loading="lazy" src="/${esc(n.image)}" alt="${esc(n.figure || n.title)}"><figcaption>NCERT figure ${esc(n.fig || '')} · ${esc(n.figure || '')} · PDF page ${esc(n.page)} · source crop, not AI-drawn</figcaption></figure>`
       : '';
+    /* Biology carries the whole verified set for the chapter; Chemistry and
+       Business Studies keep the single selected figure above. */
+    const figureBlock = Array.isArray(n.figures)
+      ? (n.figures.length
+        ? `<h2>Figures from the source PDF</h2>
+      <p class="muted">${n.figures.length} numbered figure${n.figures.length === 1 ? '' : 's'} cropped from the supplied NCERT reprint and checked against the page; each crop is the figure alone. Reproduced for study use, not AI-drawn.</p>
+      <div class="sci-figgrid">${n.figures.map(f => `<figure><img loading="lazy" src="/${esc(f.path)}" alt="NCERT figure ${esc(f.fig)}"><figcaption>NCERT figure ${esc(f.fig)} · ${esc(f.caption)} · PDF page ${esc(f.page)} · source crop, not AI-drawn</figcaption></figure>`).join('')}</div>`
+        : `<h2>Figures from the source PDF</h2>
+      <p class="muted">No figures are inventoried for this chapter: the supplied reprint is an image-only scan with no text layer, so its captions could not be read from the PDF and nothing was cropped rather than guessing. See the <a class="link" href="/assets/notes/index.html#figures-bio">figure inventory</a> for the chapters that are covered.</p>`)
+      : '';
     return `
       <div class="callout tip" style="margin-top:16px"><div>Mapped to CBSE 2026–27, not certified by CBSE. Outline only — not a full chapter, not an answer key.${n.id === 'lebs203' ? ' The applicable syllabus names the Consumer Protection Act, 2019, not the outdated 1986 reference in the staged source summary.' : ''}</div></div>
       <section class="card outline-panel" style="margin-top:16px"><h2>Sections</h2><ul>${list(n.sections)}</ul>
       <h2>Objectives</h2><ul>${list(n.objectives)}</ul><h2>Key terms</h2><p>${esc(n.terms.join(' · '))}</p>
-      <p class="muted">Source: ${n.source_url ? `<a href="${esc(n.source_url)}">${esc(n.source)}</a>` : esc(n.source) + '. The source PDF is not provided on the site.'}</p>${figure}</section>`;
+      <p class="muted">Source: ${n.source_url ? `<a href="${esc(n.source_url)}">${esc(n.source)}</a>` : esc(n.source) + '. The source PDF is not provided on the site.'}</p>${figure}${figureBlock}</section>`;
   }
   function viewBusinessChapter(ch) {
     const n = ch.outline;
@@ -2421,6 +2439,28 @@ window.UP = window.UP || {};
       <div class="setup-actions" style="margin-top:16px">
         <a class="btn btn-ghost btn-sm" href="/assets/notes/index.html#${esc(n.id)}">${icon('book')} ${S.lang === 'hi' ? 'पूरा रूपरेखा-पुस्तकालय' : 'Full outline library'}</a>
         <a class="btn btn-ghost btn-sm" href="#/pyq">${icon('clock')} ${S.lang === 'hi' ? 'रसायन विज्ञान के पुराने प्रश्नपत्र' : 'Past-year chemistry papers'}</a>
+      </div>`;
+    }
+    const isBiologyOutline = +S.cls === 12 && S.subject === 'biology' && ch.outline;
+    if (isBiologyOutline) {
+      const n = ch.outline;
+      const hi = S.lang === 'hi';
+      return `<a class="link" href="#/syllabus" style="font-size:13px">← ${t('nav_syllabus')}</a>
+      <section class="detail-hero" style="margin-top:12px">
+        <div class="meta-row">
+          <span class="tag">${hi ? 'अध्याय' : 'Chapter'} ${esc(ch.displayNo)}</span>
+          <span class="tag cream">${esc(n.unit_title)} · ${esc(n.marks)} ${t('marks')} (${hi ? 'इकाई' : 'unit'})</span>
+          <span class="tag grey">CBSE 2026–27 · 044</span>
+        </div>
+        <h1>${esc(n.title)}</h1>
+        <p>${esc(n.summary)}</p>
+        <div class="pill-row">${n.terms.slice(0, 6).map(k => `<span class="pill">${esc(k)}</span>`).join('')}</div>
+      </section>
+      ${renderOutlinePanel(ch)}
+      <div class="setup-actions" style="margin-top:16px">
+        <a class="btn btn-ghost btn-sm" href="/assets/notes/index.html#${esc(n.id)}">${icon('book')} ${hi ? 'पूरा रूपरेखा-पुस्तकालय' : 'Full outline library'}</a>
+        <a class="btn btn-ghost btn-sm" href="/assets/notes/index.html#figures-bio">${icon('leaf')} ${hi ? 'सभी चित्र' : 'All source figures'}</a>
+        <a class="btn btn-ghost btn-sm" href="#/ask?q=${encodeURIComponent('Help me understand ' + n.title + '.')}">${icon('sparkle')} ${hi ? 'प्रश्न पूछें' : 'Ask about this chapter'}</a>
       </div>`;
     }
     if (english12Track()) return viewEnglish12Chapter(ch);
