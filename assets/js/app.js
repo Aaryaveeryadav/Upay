@@ -1093,7 +1093,8 @@ window.UP = window.UP || {};
     <section class="card callout tip" style="margin:0 0 18px"><div>
       <b>CBSE Class 12 · English outlines</b><br>
       <a class="link" href="/assets/notes/index.html#business">Business Studies</a> ·
-      <a class="link" href="/assets/notes/index.html#chemistry">Chemistry (units 1–10)</a>
+      <a class="link" href="/assets/notes/index.html#chemistry">Chemistry (units 1–10)</a> ·
+      <a class="link" href="/assets/notes/index.html#figures-bio">Biology figures</a>
       <span class="muted"> — syllabus-mapped study outlines; coverage is incomplete.</span>
     </div></section>
     <section class="hero">

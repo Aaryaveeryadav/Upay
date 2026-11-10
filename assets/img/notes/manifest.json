@@ -371,7 +371,7 @@
    "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
    "pdf_page": 2,
    "figure": "2.2a",
-   "caption": "Sub-figure (a): Eext < 1.1 V — electrons flow from the Zn rod to the Cu rod; Zn dissolves at the anode and copper deposits at the cathode.",
+   "caption": "Sub-figure (a): Eext < 1.1 V \u2014 electrons flow from the Zn rod to the Cu rod; Zn dissolves at the anode and copper deposits at the cathode.",
    "crop_points": [
     55,
     366,
@@ -389,7 +389,7 @@
    "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
    "pdf_page": 2,
    "figure": "2.2b",
-   "caption": "Sub-figure (b): Eext = 1.1 V — no flow of electrons or current; no chemical reaction.",
+   "caption": "Sub-figure (b): Eext = 1.1 V \u2014 no flow of electrons or current; no chemical reaction.",
    "crop_points": [
     278,
     366,
@@ -407,7 +407,7 @@
    "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
    "pdf_page": 2,
    "figure": "2.2c",
-   "caption": "Sub-figure (c): Eext > 1.1 V — electrons flow from Cu to Zn; zinc deposits at the zinc electrode and copper dissolves at the copper electrode.",
+   "caption": "Sub-figure (c): Eext > 1.1 V \u2014 electrons flow from Cu to Zn; zinc deposits at the zinc electrode and copper dissolves at the copper electrode.",
    "crop_points": [
     270,
     524,
@@ -479,7 +479,7 @@
    "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
    "pdf_page": 17,
    "figure": "2.6",
-   "caption": "Molar conductivity versus c½ for acetic",
+   "caption": "Molar conductivity versus c\u00bd for acetic",
    "crop_points": [
     36,
     228,
@@ -497,7 +497,7 @@
    "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
    "pdf_page": 18,
    "figure": "2.7",
-   "caption": "Variation of Lm against c½.",
+   "caption": "Variation of Lm against c\u00bd.",
    "crop_points": [
     187,
     418,
@@ -1439,6 +1439,1068 @@
     329,
     160,
     629
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/63214b42d0a7dd305973b8db7fb6ba7fdbb58e3fbfcdb240341c87f9324c9358.png",
+   "sha256": "63214b42d0a7dd305973b8db7fb6ba7fdbb58e3fbfcdb240341c87f9324c9358",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo103.pdf",
+   "source_sha256": "ef03cc524d286eb3ffc225a00422ce28f3fe18ab8e622424f0b1c748b45bf9f3",
+   "pdf_page": 4,
+   "figure": "3.1a",
+   "caption": "Condom for male",
+   "crop_points": [
+    53,
+    162,
+    220,
+    204
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/47f36f66d3678f4580946659fcaa627eb4a2afac19b9daf89411f1f727e877a7.png",
+   "sha256": "47f36f66d3678f4580946659fcaa627eb4a2afac19b9daf89411f1f727e877a7",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo103.pdf",
+   "source_sha256": "ef03cc524d286eb3ffc225a00422ce28f3fe18ab8e622424f0b1c748b45bf9f3",
+   "pdf_page": 4,
+   "figure": "3.1b",
+   "caption": "Condom for female",
+   "crop_points": [
+    54,
+    238,
+    229,
+    330
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/086ce020c5132c0f027476fe07a204b9e6a83cb47dc47536a5170f3e1f63ed4e.png",
+   "sha256": "086ce020c5132c0f027476fe07a204b9e6a83cb47dc47536a5170f3e1f63ed4e",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo103.pdf",
+   "source_sha256": "ef03cc524d286eb3ffc225a00422ce28f3fe18ab8e622424f0b1c748b45bf9f3",
+   "pdf_page": 4,
+   "figure": "3.2",
+   "caption": "Copper T (CuT)",
+   "crop_points": [
+    53,
+    376,
+    229,
+    582
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/0d672505dea50824e983cb8c0a6d06c30de489d79f8856c9d0068a292b9d42da.png",
+   "sha256": "0d672505dea50824e983cb8c0a6d06c30de489d79f8856c9d0068a292b9d42da",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo103.pdf",
+   "source_sha256": "ef03cc524d286eb3ffc225a00422ce28f3fe18ab8e622424f0b1c748b45bf9f3",
+   "pdf_page": 5,
+   "figure": "3.3",
+   "caption": "Implants",
+   "crop_points": [
+    339,
+    80,
+    515,
+    210
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/b2ebec30c1f3bb4fa7245831570b24ba561356a14ba1faf7e3c351a32041cb4d.png",
+   "sha256": "b2ebec30c1f3bb4fa7245831570b24ba561356a14ba1faf7e3c351a32041cb4d",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo103.pdf",
+   "source_sha256": "ef03cc524d286eb3ffc225a00422ce28f3fe18ab8e622424f0b1c748b45bf9f3",
+   "pdf_page": 5,
+   "figure": "3.4a",
+   "caption": "Vasectomy",
+   "crop_points": [
+    30,
+    466,
+    275,
+    684
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/b3bce4a8bb917ea8bc8284dcbe5f27eff48b6dd3aedbcc7a04d8d0d99494d29a.png",
+   "sha256": "b3bce4a8bb917ea8bc8284dcbe5f27eff48b6dd3aedbcc7a04d8d0d99494d29a",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo103.pdf",
+   "source_sha256": "ef03cc524d286eb3ffc225a00422ce28f3fe18ab8e622424f0b1c748b45bf9f3",
+   "pdf_page": 5,
+   "figure": "3.4b",
+   "caption": "Tubectomy",
+   "crop_points": [
+    256,
+    467,
+    471,
+    691
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/7ff40a46825c9cea6fcc626f0996d133249210156c2ff0bef12a59ca3bc5a631.png",
+   "sha256": "7ff40a46825c9cea6fcc626f0996d133249210156c2ff0bef12a59ca3bc5a631",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 2,
+   "figure": "5.1",
+   "caption": "A Polynucleotide chain",
+   "crop_points": [
+    114,
+    577,
+    532,
+    681
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/95c99950ee4c09fa3a7eecb1f8a731b44c9583a4afdcee6ce90a2e031121d074.png",
+   "sha256": "95c99950ee4c09fa3a7eecb1f8a731b44c9583a4afdcee6ce90a2e031121d074",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 4,
+   "figure": "5.2",
+   "caption": "Double stranded polynucleotide chain",
+   "crop_points": [
+    104,
+    87,
+    518,
+    278
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/bd6a54e32d4ff13d8377a7da256ef0cac3f3c788ee6c99cf0c82e9201827c9ab.png",
+   "sha256": "bd6a54e32d4ff13d8377a7da256ef0cac3f3c788ee6c99cf0c82e9201827c9ab",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 4,
+   "figure": "5.3",
+   "caption": "DNA double helix",
+   "crop_points": [
+    47,
+    317,
+    312,
+    580
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/9f6af9215bbacb2f99177b3092b972fe923db6e7a645cd0bf6792270b52d68bb.png",
+   "sha256": "9f6af9215bbacb2f99177b3092b972fe923db6e7a645cd0bf6792270b52d68bb",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 5,
+   "figure": "5.4a",
+   "caption": "a Nucleosome",
+   "crop_points": [
+    304,
+    120,
+    513,
+    315
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/f629d73e3acb37660900a17a4ddb0322a1cadec55de06d0c4220b2849fe0548a.png",
+   "sha256": "f629d73e3acb37660900a17a4ddb0322a1cadec55de06d0c4220b2849fe0548a",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 5,
+   "figure": "5.4b",
+   "caption": "b EM picture - \u2018Beads-on-String\u2019",
+   "crop_points": [
+    301,
+    339,
+    516,
+    488
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/8407166c8d7ffe4c43e00eb0dc7e21c09f1703c3dac5e1a4158e0f8c78d9b4d6.png",
+   "sha256": "8407166c8d7ffe4c43e00eb0dc7e21c09f1703c3dac5e1a4158e0f8c78d9b4d6",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 8,
+   "figure": "5.5",
+   "caption": "The Hershey-Chase experiment",
+   "crop_points": [
+    131,
+    244,
+    532,
+    577
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/831a04b4965c3b68d43114534e4a08f80f06c64ef71603978d084989fc4db2c5.png",
+   "sha256": "831a04b4965c3b68d43114534e4a08f80f06c64ef71603978d084989fc4db2c5",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 10,
+   "figure": "5.6",
+   "caption": "Watson-Crick model for semiconservative DNA replication",
+   "crop_points": [
+    67,
+    272,
+    248,
+    562
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/ee0d6c08628cc7641d785ffe6956c2d0ac39db37fae22882c9d15e71e65b5c04.png",
+   "sha256": "ee0d6c08628cc7641d785ffe6956c2d0ac39db37fae22882c9d15e71e65b5c04",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 11,
+   "figure": "5.7",
+   "caption": "Meselson and Stahl\u2019s Experiment",
+   "crop_points": [
+    54,
+    406,
+    498,
+    602
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/3a0a8baa34326eb3ac1e6bbeafe84cf0cf6790eb89fb88cabdc0644f126f8a19.png",
+   "sha256": "3a0a8baa34326eb3ac1e6bbeafe84cf0cf6790eb89fb88cabdc0644f126f8a19",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 13,
+   "figure": "5.8",
+   "caption": "Replicating Fork",
+   "crop_points": [
+    302,
+    81,
+    515,
+    312
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/776a141f426fe0adc17eb3abe19f1047777f4090a826813129ae16adc0967c5a.png",
+   "sha256": "776a141f426fe0adc17eb3abe19f1047777f4090a826813129ae16adc0967c5a",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 14,
+   "figure": "5.9",
+   "caption": "Schematic structure of a transcription unit",
+   "crop_points": [
+    83,
+    319,
+    493,
+    409
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/64583552a7e2e167b2b78662f480b180a3e4ac5806bb519490cdb6c1d828be01.png",
+   "sha256": "64583552a7e2e167b2b78662f480b180a3e4ac5806bb519490cdb6c1d828be01",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 15,
+   "figure": "5.10",
+   "caption": "Process of Transcription in Bacteria",
+   "crop_points": [
+    58,
+    456,
+    383,
+    672
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/96aa4fbfb667519c4869de4528ec1a31507b89b519d5b2b0a8e3b00045984c71.png",
+   "sha256": "96aa4fbfb667519c4869de4528ec1a31507b89b519d5b2b0a8e3b00045984c71",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 16,
+   "figure": "5.11",
+   "caption": "Process of Transcription in Eukaryotes",
+   "crop_points": [
+    143,
+    404,
+    534,
+    673
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/7d42de5c19f63bf4efa02e7b3475db62fd5f0ecea2da0a8fbd3d1fc2c405cbde.png",
+   "sha256": "7d42de5c19f63bf4efa02e7b3475db62fd5f0ecea2da0a8fbd3d1fc2c405cbde",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 20,
+   "figure": "5.12",
+   "caption": "tRNA - the adapter molecule",
+   "crop_points": [
+    110,
+    298,
+    429,
+    441
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/e1130e1465a8b57f59bcf757fbef8012082e5620539402467a361cbc5621262b.png",
+   "sha256": "e1130e1465a8b57f59bcf757fbef8012082e5620539402467a361cbc5621262b",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 21,
+   "figure": "5.13",
+   "caption": "Translation",
+   "crop_points": [
+    238,
+    82,
+    517,
+    265
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/025fab32df8fe31695b120defa23a2e62eb74c1030689dbbd92e2e1fc33f44bf.png",
+   "sha256": "025fab32df8fe31695b120defa23a2e62eb74c1030689dbbd92e2e1fc33f44bf",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 23,
+   "figure": "5.14",
+   "caption": "The lac Operon",
+   "crop_points": [
+    75,
+    85,
+    465,
+    352
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/4e49e6732971bc04161b7a6f788b70a1cb186796255a40e2f25835210a1d0f20.png",
+   "sha256": "4e49e6732971bc04161b7a6f788b70a1cb186796255a40e2f25835210a1d0f20",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 25,
+   "figure": "5.15",
+   "caption": "A representative diagram of human genome project",
+   "crop_points": [
+    277,
+    460,
+    476,
+    675
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/21be3e9f6a360fadca509c29142a688684f2579b135837ffa280642d34a6531f.png",
+   "sha256": "21be3e9f6a360fadca509c29142a688684f2579b135837ffa280642d34a6531f",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo105.pdf",
+   "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
+   "pdf_page": 29,
+   "figure": "5.16",
+   "caption": "Schematic representation of DNA fingerprinting : Few representative chromosomes have been shown to contain different copy number of VNTR. For the sake of",
+   "crop_points": [
+    56,
+    81,
+    494,
+    503
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/3c565279cd9b3e2722d4a56668fdf0331c7f908e7394f5737a58c20f3944419d.png",
+   "sha256": "3c565279cd9b3e2722d4a56668fdf0331c7f908e7394f5737a58c20f3944419d",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo107.pdf",
+   "source_sha256": "afb1c7c2f7699e0572e09e9ee3279f4e61100ba0b117b3f34b9d1ac10bdeae75",
+   "pdf_page": 6,
+   "figure": "7.1",
+   "caption": "Stages in the life cycle of Plasmodium",
+   "crop_points": [
+    53,
+    84,
+    534,
+    608
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/d99bcd9f7975fcdc7acca45851bb0f22a079326b33d52ecb5d6ffd96cd351550.png",
+   "sha256": "d99bcd9f7975fcdc7acca45851bb0f22a079326b33d52ecb5d6ffd96cd351550",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo107.pdf",
+   "source_sha256": "afb1c7c2f7699e0572e09e9ee3279f4e61100ba0b117b3f34b9d1ac10bdeae75",
+   "pdf_page": 7,
+   "figure": "7.2",
+   "caption": "Diagram showing inflammation in one of the lower limbs due to elephantiasis",
+   "crop_points": [
+    320,
+    80,
+    515,
+    403
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/9fcf91f9e549ac6ad528fddd7182594a9f8cfd0d26a0ef7c7226e1521948196d.png",
+   "sha256": "9fcf91f9e549ac6ad528fddd7182594a9f8cfd0d26a0ef7c7226e1521948196d",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo107.pdf",
+   "source_sha256": "afb1c7c2f7699e0572e09e9ee3279f4e61100ba0b117b3f34b9d1ac10bdeae75",
+   "pdf_page": 7,
+   "figure": "7.3",
+   "caption": "Diagram showing ringworm affected area of the skin",
+   "crop_points": [
+    267,
+    415,
+    516,
+    562
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/252ceebc08e93be04d1ff11cb86f76b2b3bbf2388d09520d94a097151c247b36.png",
+   "sha256": "252ceebc08e93be04d1ff11cb86f76b2b3bbf2388d09520d94a097151c247b36",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo107.pdf",
+   "source_sha256": "afb1c7c2f7699e0572e09e9ee3279f4e61100ba0b117b3f34b9d1ac10bdeae75",
+   "pdf_page": 9,
+   "figure": "7.4",
+   "caption": "Structure of an antibody molecule",
+   "crop_points": [
+    213,
+    289,
+    524,
+    523
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/78d83e3c4aaff496dfe1d2929b091873afaa2e0f4a2016b5781796c033ed84ca.png",
+   "sha256": "78d83e3c4aaff496dfe1d2929b091873afaa2e0f4a2016b5781796c033ed84ca",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo107.pdf",
+   "source_sha256": "afb1c7c2f7699e0572e09e9ee3279f4e61100ba0b117b3f34b9d1ac10bdeae75",
+   "pdf_page": 12,
+   "figure": "7.5",
+   "caption": "Diagrammatic representation of Lymph nodes",
+   "crop_points": [
+    26,
+    82,
+    205,
+    289
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/08e8891c75c52d5ddf4a717294b28774e36a7fc2008b674ff98c6d7aac2e15af.png",
+   "sha256": "08e8891c75c52d5ddf4a717294b28774e36a7fc2008b674ff98c6d7aac2e15af",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo107.pdf",
+   "source_sha256": "afb1c7c2f7699e0572e09e9ee3279f4e61100ba0b117b3f34b9d1ac10bdeae75",
+   "pdf_page": 13,
+   "figure": "7.6",
+   "caption": "Replication of retrovirus",
+   "crop_points": [
+    123,
+    112,
+    424,
+    528
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/25d2ce842e6afdcc6b960362e00a3617f8c53eb240a5899c1aec1d3fd6c1c31a.png",
+   "sha256": "25d2ce842e6afdcc6b960362e00a3617f8c53eb240a5899c1aec1d3fd6c1c31a",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo107.pdf",
+   "source_sha256": "afb1c7c2f7699e0572e09e9ee3279f4e61100ba0b117b3f34b9d1ac10bdeae75",
+   "pdf_page": 16,
+   "figure": "7.7",
+   "caption": "Chemical structure of Morphine",
+   "crop_points": [
+    123,
+    546,
+    296,
+    694
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/8a55d487ad424e3bff8b825bbd86dc6233721ef0b78b6941cca26abcca2ee1da.png",
+   "sha256": "8a55d487ad424e3bff8b825bbd86dc6233721ef0b78b6941cca26abcca2ee1da",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo107.pdf",
+   "source_sha256": "afb1c7c2f7699e0572e09e9ee3279f4e61100ba0b117b3f34b9d1ac10bdeae75",
+   "pdf_page": 16,
+   "figure": "7.8",
+   "caption": "Opium poppy",
+   "crop_points": [
+    363,
+    538,
+    504,
+    695
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/b0e507926fcade421eebb4f9ec14ee8138c271c7696f738f51cafe336f977381.png",
+   "sha256": "b0e507926fcade421eebb4f9ec14ee8138c271c7696f738f51cafe336f977381",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo107.pdf",
+   "source_sha256": "afb1c7c2f7699e0572e09e9ee3279f4e61100ba0b117b3f34b9d1ac10bdeae75",
+   "pdf_page": 17,
+   "figure": "7.9",
+   "caption": "Skeletal structure of cannabinoid molecule",
+   "crop_points": [
+    51,
+    216,
+    264,
+    360
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/75802bbb955f60d40631b58b5ff2c0d7532e9fe9f7ca12e665757a281cd56fda.png",
+   "sha256": "75802bbb955f60d40631b58b5ff2c0d7532e9fe9f7ca12e665757a281cd56fda",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo107.pdf",
+   "source_sha256": "afb1c7c2f7699e0572e09e9ee3279f4e61100ba0b117b3f34b9d1ac10bdeae75",
+   "pdf_page": 17,
+   "figure": "7.10",
+   "caption": "Leaves of Cannabis sativa",
+   "crop_points": [
+    342,
+    207,
+    471,
+    364
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/d337eadbcec0feaeba68efd818e240fa64c7192cff7018eba5f6d07561ab1864.png",
+   "sha256": "d337eadbcec0feaeba68efd818e240fa64c7192cff7018eba5f6d07561ab1864",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo107.pdf",
+   "source_sha256": "afb1c7c2f7699e0572e09e9ee3279f4e61100ba0b117b3f34b9d1ac10bdeae75",
+   "pdf_page": 17,
+   "figure": "7.11",
+   "caption": "Flowering branch of Datura",
+   "crop_points": [
+    328,
+    393,
+    513,
+    583
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/8500de678771b1d0de6b24f43287224448692bd71c7314758ad70c84ab0ca943.png",
+   "sha256": "8500de678771b1d0de6b24f43287224448692bd71c7314758ad70c84ab0ca943",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo109.pdf",
+   "source_sha256": "c30b908dca8e7166e9830ca48c376a4f0b21d63a8e05bf601a150da031c13122",
+   "pdf_page": 6,
+   "figure": "9.1",
+   "caption": "Steps in formation of recombinant DNA by action of restriction endonuclease enzyme - EcoRI",
+   "crop_points": [
+    141,
+    287,
+    472,
+    566
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/51c6d192532878ce028105881a48a4082e8ce0c9fe2d3c60716f5a3b15186b3a.png",
+   "sha256": "51c6d192532878ce028105881a48a4082e8ce0c9fe2d3c60716f5a3b15186b3a",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo109.pdf",
+   "source_sha256": "c30b908dca8e7166e9830ca48c376a4f0b21d63a8e05bf601a150da031c13122",
+   "pdf_page": 7,
+   "figure": "9.2",
+   "caption": "Diagrammatic representation of recombinant DNA technology",
+   "crop_points": [
+    63,
+    357,
+    380,
+    689
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/8236369c787597135c3f4875b5fe4a125540a0f0660a138f11f715cc1239ae33.png",
+   "sha256": "8236369c787597135c3f4875b5fe4a125540a0f0660a138f11f715cc1239ae33",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo109.pdf",
+   "source_sha256": "c30b908dca8e7166e9830ca48c376a4f0b21d63a8e05bf601a150da031c13122",
+   "pdf_page": 8,
+   "figure": "9.3",
+   "caption": "A typical agarose gel electrophoresis showing migration of undigested (lane 1) and digested set of DNA fragments (lane 2 to 4)",
+   "crop_points": [
+    77,
+    305,
+    288,
+    416
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/abb4dcffd73a289296e05d0d80839a3a269f2c33ac74a36d4a056c4ba5fe8056.png",
+   "sha256": "abb4dcffd73a289296e05d0d80839a3a269f2c33ac74a36d4a056c4ba5fe8056",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo109.pdf",
+   "source_sha256": "c30b908dca8e7166e9830ca48c376a4f0b21d63a8e05bf601a150da031c13122",
+   "pdf_page": 9,
+   "figure": "9.4",
+   "caption": "E. coli cloning vector pBR322 showing restriction sites (Hind III, EcoR I, BamH I, Sal I, Pvu II, Pst I, Cla I), ori and antibiotic resistance genes (ampR and tetR). rop codes for the proteins involved in the replication of the plasmid",
+   "crop_points": [
+    307,
+    331,
+    498,
+    499
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/ac720552d5bc865beaa55159aadff30a42d56bd741a30db658a252fc638273f9.png",
+   "sha256": "ac720552d5bc865beaa55159aadff30a42d56bd741a30db658a252fc638273f9",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo109.pdf",
+   "source_sha256": "c30b908dca8e7166e9830ca48c376a4f0b21d63a8e05bf601a150da031c13122",
+   "pdf_page": 11,
+   "figure": "9.5",
+   "caption": "DNA that separates out can be removed by spooling",
+   "crop_points": [
+    369,
+    293,
+    519,
+    573
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/afde018d624b62206c72c2d2a566cf0c2b970422ebd12407114c5f579169bc94.png",
+   "sha256": "afde018d624b62206c72c2d2a566cf0c2b970422ebd12407114c5f579169bc94",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo109.pdf",
+   "source_sha256": "c30b908dca8e7166e9830ca48c376a4f0b21d63a8e05bf601a150da031c13122",
+   "pdf_page": 12,
+   "figure": "9.6",
+   "caption": "Polymerase chain reaction (PCR) : Each cycle has three steps: (i) Denaturation; (ii) Primer annealing; and (iii) Extension of primers",
+   "crop_points": [
+    92,
+    305,
+    533,
+    661
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/4eadd1518b783c858662d5c4ee458ef62d5ba2815d6615cb0d03321d58131c2c.png",
+   "sha256": "4eadd1518b783c858662d5c4ee458ef62d5ba2815d6615cb0d03321d58131c2c",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo109.pdf",
+   "source_sha256": "c30b908dca8e7166e9830ca48c376a4f0b21d63a8e05bf601a150da031c13122",
+   "pdf_page": 14,
+   "figure": "9.7a",
+   "caption": "Simple stirred-tank bioreactor; (b) Sparged stirred-tank bioreactor through which sterile air bubbles are sparged",
+   "crop_points": [
+    70,
+    289,
+    251,
+    452
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/aa6ffe4602dac2ad7d0f89615ea4350bb0ea9b2d58e7c2c0ee89feabb13743b5.png",
+   "sha256": "aa6ffe4602dac2ad7d0f89615ea4350bb0ea9b2d58e7c2c0ee89feabb13743b5",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo109.pdf",
+   "source_sha256": "c30b908dca8e7166e9830ca48c376a4f0b21d63a8e05bf601a150da031c13122",
+   "pdf_page": 14,
+   "figure": "9.7b",
+   "caption": "Simple stirred-tank bioreactor; (b) Sparged stirred-tank bioreactor through which sterile air bubbles are sparged",
+   "crop_points": [
+    279,
+    292,
+    514,
+    455
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/503308d533919558ea138b73eb593c3217428d457469b2b1093810241c393bc5.png",
+   "sha256": "503308d533919558ea138b73eb593c3217428d457469b2b1093810241c393bc5",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo110.pdf",
+   "source_sha256": "4da2923c699b97a1930ae6b1072bf75fb5b0429d724ead7ba06510f98730b826",
+   "pdf_page": 4,
+   "figure": "10.1",
+   "caption": "Cotton boll: (a) destroyed by bollworms; (b) a fully mature cotton boll",
+   "crop_points": [
+    187,
+    187,
+    508,
+    403
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/f33f9a5d6c03d8d93d1ab36978836d973b5e1536654a8314f6868b569d6b61d2.png",
+   "sha256": "f33f9a5d6c03d8d93d1ab36978836d973b5e1536654a8314f6868b569d6b61d2",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo110.pdf",
+   "source_sha256": "4da2923c699b97a1930ae6b1072bf75fb5b0429d724ead7ba06510f98730b826",
+   "pdf_page": 5,
+   "figure": "10.2",
+   "caption": "Host plant-generated dsRNA triggers protection against nematode infestation: (a) Roots of a typical control plants; (b) transgenic plant roots 5 days after deliberate infection of nematode but protected through novel mechanism",
+   "crop_points": [
+    92,
+    75,
+    458,
+    266
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/a8f07d26a5a36b7beebc28ec00c258fe01d5b967783acba30c496b14aa982014.png",
+   "sha256": "a8f07d26a5a36b7beebc28ec00c258fe01d5b967783acba30c496b14aa982014",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo110.pdf",
+   "source_sha256": "4da2923c699b97a1930ae6b1072bf75fb5b0429d724ead7ba06510f98730b826",
+   "pdf_page": 6,
+   "figure": "10.3",
+   "caption": "Maturation of pro-insulin into insulin (simplified)",
+   "crop_points": [
+    54,
+    81,
+    240,
+    232
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/254167137fce66e689591d505e638de3df091f980b0250b7db8b61868a26612e.png",
+   "sha256": "254167137fce66e689591d505e638de3df091f980b0250b7db8b61868a26612e",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo111.pdf",
+   "source_sha256": "5b483a3ee69f88ae67b43daa8095e5e5ba6278bb1f288fb1cdcd3b02f461276f",
+   "pdf_page": 5,
+   "figure": "11.1",
+   "caption": "Representation of age pyramids for human population",
+   "crop_points": [
+    97,
+    82,
+    532,
+    177
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/fa5c33805acbc7a56fcf128a92a472582de97947d9191b2863901e02b0c1ee9a.png",
+   "sha256": "fa5c33805acbc7a56fcf128a92a472582de97947d9191b2863901e02b0c1ee9a",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo111.pdf",
+   "source_sha256": "5b483a3ee69f88ae67b43daa8095e5e5ba6278bb1f288fb1cdcd3b02f461276f",
+   "pdf_page": 6,
+   "figure": "11.2",
+   "caption": "(printed caption carries no descriptive text)",
+   "crop_points": [
+    37,
+    255,
+    528,
+    563
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/a5fbe06194ba3a4f8e0b9cb83daf52c8e98f66f4e471cdcda58669d4b381935c.png",
+   "sha256": "a5fbe06194ba3a4f8e0b9cb83daf52c8e98f66f4e471cdcda58669d4b381935c",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo111.pdf",
+   "source_sha256": "5b483a3ee69f88ae67b43daa8095e5e5ba6278bb1f288fb1cdcd3b02f461276f",
+   "pdf_page": 7,
+   "figure": "11.3",
+   "caption": "Population growth curve",
+   "crop_points": [
+    52,
+    359,
+    273,
+    612
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/2e2bbf89d65e53e6c305548f1a36bd15fa04289300e74a62f5f12c2394abf584.png",
+   "sha256": "2e2bbf89d65e53e6c305548f1a36bd15fa04289300e74a62f5f12c2394abf584",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo111.pdf",
+   "source_sha256": "5b483a3ee69f88ae67b43daa8095e5e5ba6278bb1f288fb1cdcd3b02f461276f",
+   "pdf_page": 14,
+   "figure": "11.4",
+   "caption": "Mutual relationship between fig tree and wasp: (a) Fig flower is pollinated by wasp; (b) Wasp laying eggs in a fig fruit",
+   "crop_points": [
+    33,
+    368,
+    481,
+    546
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/8b0e64f732feaea41fb60b79811acc78afa37356721a188d970c0930868dcf11.png",
+   "sha256": "8b0e64f732feaea41fb60b79811acc78afa37356721a188d970c0930868dcf11",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo111.pdf",
+   "source_sha256": "5b483a3ee69f88ae67b43daa8095e5e5ba6278bb1f288fb1cdcd3b02f461276f",
+   "pdf_page": 15,
+   "figure": "11.5",
+   "caption": "Showing bee-a pollinator on orchid flower",
+   "crop_points": [
+    50,
+    330,
+    253,
+    546
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/732766cfae355c2dfff467c7ef963154be470633cdd93ca00ab3ac0c3a2acb88.png",
+   "sha256": "732766cfae355c2dfff467c7ef963154be470633cdd93ca00ab3ac0c3a2acb88",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo112.pdf",
+   "source_sha256": "6d73b01f7ad5492d08a67b695ae8c05230631f20b1b40c791ab7435b39d0e59e",
+   "pdf_page": 4,
+   "figure": "12.1",
+   "caption": "Diagrammatic representation of decomposition cycle in a terrestrial ecosystem",
+   "crop_points": [
+    37,
+    81,
+    555,
+    473
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/e486e6ecda7fcd0fc857f2380ed8b3cd6677d55019ca2b3b34b12b342343174e.png",
+   "sha256": "e486e6ecda7fcd0fc857f2380ed8b3cd6677d55019ca2b3b34b12b342343174e",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo112.pdf",
+   "source_sha256": "6d73b01f7ad5492d08a67b695ae8c05230631f20b1b40c791ab7435b39d0e59e",
+   "pdf_page": 6,
+   "figure": "12.2",
+   "caption": "Diagrammatic representation of trophic levels in an ecosystem",
+   "crop_points": [
+    117,
+    399,
+    548,
+    675
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/9f70c89c4522cc8c8817e49dc7e864354a4f9ceccde157a701fb32d5cbc9c7c5.png",
+   "sha256": "9f70c89c4522cc8c8817e49dc7e864354a4f9ceccde157a701fb32d5cbc9c7c5",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo112.pdf",
+   "source_sha256": "6d73b01f7ad5492d08a67b695ae8c05230631f20b1b40c791ab7435b39d0e59e",
+   "pdf_page": 7,
+   "figure": "12.3",
+   "caption": "Energy flow through different trophic levels",
+   "crop_points": [
+    19,
+    334,
+    518,
+    601
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/8ce7c715ecb15627c7e3064c3eaac732b944936082e928d5cc475cc0c974cfa8.png",
+   "sha256": "8ce7c715ecb15627c7e3064c3eaac732b944936082e928d5cc475cc0c974cfa8",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo112.pdf",
+   "source_sha256": "6d73b01f7ad5492d08a67b695ae8c05230631f20b1b40c791ab7435b39d0e59e",
+   "pdf_page": 8,
+   "figure": "12.4a",
+   "caption": "Pyramid of numbers in a grassland ecosystem. Only three top-carnivores are supported in an ecosystem based on production of nearly 6 millions plants",
+   "crop_points": [
+    92,
+    179,
+    503,
+    347
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/88fed702f136cb22c8d2f95ab4c99f1933d44098519a15be908e602cd26753fd.png",
+   "sha256": "88fed702f136cb22c8d2f95ab4c99f1933d44098519a15be908e602cd26753fd",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo112.pdf",
+   "source_sha256": "6d73b01f7ad5492d08a67b695ae8c05230631f20b1b40c791ab7435b39d0e59e",
+   "pdf_page": 8,
+   "figure": "12.4b",
+   "caption": "Pyramid of biomass shows a sharp decrease in biomass at higher trophic levels",
+   "crop_points": [
+    102,
+    377,
+    508,
+    557
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/6e310cc00b63e8d331543979734997ccf24ee9912211e5c3c34255ab691fe9bc.png",
+   "sha256": "6e310cc00b63e8d331543979734997ccf24ee9912211e5c3c34255ab691fe9bc",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo112.pdf",
+   "source_sha256": "6d73b01f7ad5492d08a67b695ae8c05230631f20b1b40c791ab7435b39d0e59e",
+   "pdf_page": 8,
+   "figure": "12.4c",
+   "caption": "Inverted pyramid of biomass-small standing crop of phytoplankton supports large standing crop of zooplankton",
+   "crop_points": [
+    197,
+    589,
+    433,
+    675
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/81e8e701178da317afc5d0dd1ae68f6e4c1f215be047c53e6aa1ae65c7a21d3b.png",
+   "sha256": "81e8e701178da317afc5d0dd1ae68f6e4c1f215be047c53e6aa1ae65c7a21d3b",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo112.pdf",
+   "source_sha256": "6d73b01f7ad5492d08a67b695ae8c05230631f20b1b40c791ab7435b39d0e59e",
+   "pdf_page": 9,
+   "figure": "12.4d",
+   "caption": "An ideal pyramid of energy. Observe that primary producers convert only 1% of the energy in the sunlight available to them into NPP",
+   "crop_points": [
+    107,
+    87,
+    388,
+    248
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/aebdbedf457c2ab7844c92c299daf6f4f62c39c499625726eb447f3a3bf47824.png",
+   "sha256": "aebdbedf457c2ab7844c92c299daf6f4f62c39c499625726eb447f3a3bf47824",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo113.pdf",
+   "source_sha256": "d4587f07dd122d19493a66fb2aae6f11ae02ef9124dea92634b524f078f20faa",
+   "pdf_page": 3,
+   "figure": "13.1",
+   "caption": "Representing global biodiversity: proportionate number of species of major taxa of plants, invertebrates and vertebrates",
+   "crop_points": [
+    157,
+    243,
+    525,
+    575
+   ],
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/edf1d69bba55c0f3579eabcaba7b1ad464bc89f0cbd68d2ddc554184cd39ae94.png",
+   "sha256": "edf1d69bba55c0f3579eabcaba7b1ad464bc89f0cbd68d2ddc554184cd39ae94",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_file": "lebo113.pdf",
+   "source_sha256": "d4587f07dd122d19493a66fb2aae6f11ae02ef9124dea92634b524f078f20faa",
+   "pdf_page": 5,
+   "figure": "13.2",
+   "caption": "Showing species area relationship. Note that on log scale the relationship becomes linear",
+   "crop_points": [
+    54,
+    239,
+    329,
+    505
    ],
    "edit": "none"
   }
