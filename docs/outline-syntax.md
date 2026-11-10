@@ -91,7 +91,7 @@ One record per chapter, kept in `assets/notes/outlines.json` under a new key
 | `chapter` | number | 1–14. **Must match the chapter number inside `id`.** |
 | `unit` | number | NCERT unit number (Physics: 1–9). |
 | `unit_title` | string | Unit name, shown on the chapter header and on the syllabus card. |
-| `marks` | number | The **unit's** theory marks from the published CBSE 042 breakdown — never a per-chapter guess. Chapters sharing a unit repeat the same number; all units together must total 70. |
+| `marks` | number | Optional. The **unit's** theory marks from the published CBSE breakdown — never a per-chapter guess. Chapters sharing a unit repeat the same number; all units together must total 70. **Physics omits it** (see below). |
 | `source` | string | `NCERT Class 12 Physics, chapter N`. |
 
 Optional field, used only when a subject has a verified figure inventory:
@@ -101,6 +101,13 @@ Optional field, used only when a subject has a verified figure inventory:
   { "fig": "1.3", "path": "assets/img/notes/<sha256>.png", "caption": "…", "page": 4, "sha256": "…" }
 ]
 ```
+
+Physics ships without `marks`. The unit rows in the copies of the CBSE 042
+course structure that were available do not add up to the stated theory total
+of 70, so its chapter pages and syllabus cards print the unit name and the paper
+code and claim no weightage — a made-up number would be worse than none. The
+header renders `Electrostatics` instead of `Electrostatics · 16 marks (unit)`
+because the template only adds the mark when `n.marks` exists.
 
 `figures` is **never written by hand** — Biology's build script fills it from
 `assets/img/notes/manifest.json`. No Physics crops exist, so leave it out
@@ -118,7 +125,17 @@ in chapter order. Nothing else in that file changes.
 
 ### 3.2 The build script
 
-Copy `tools/curate/build-biology-outlines.py` — it is the template — and change
+Physics already has one: `tools/curate/build-physics-outlines.py`, which reads
+`outlines.json['physics']`, checks the shape and writes
+`assets/js/data/physics-outlines.js`, attaching each record to the chapter whose
+id is `600 + chapter`. Run it after any edit to the outlines:
+
+```bash
+python3 tools/curate/build-physics-outlines.py
+```
+
+For another subject, copy `tools/curate/build-biology-outlines.py` (it also
+joins the figure manifest) or the physics one (outlines only) and change
 three things:
 
 ```diff
@@ -179,10 +196,18 @@ outline reaches the page with no change to `data-extra.js`.
 `biology` **and** `physics`; the header paper code comes from
 `OUTLINE_PAPER_CODE` (`043` chemistry, `044` biology, `042` physics). A subject
 with no figure inventory simply shows no figures section and no "All source
-figures" button. **No app.js edit is needed to add Physics.**
+figures" button. **No app.js edit was needed to add Physics** — attaching
+`n.outline` in its pack is the whole change.
 
 The syllabus card picks the outline up automatically (`chCard()` prints the
-summary and badges it `${unit_title} · ${marks} marks (unit)`).
+summary and badges it with `unit_title`, adding `· N marks (unit)` only when the
+record carries `marks`).
+
+The notes library needs one more thing: an anchor per record, or the chapter
+page's "Full outline library" button lands nowhere. Physics and Biology both
+have a section in `assets/notes/index.html` (`<h2 id="physics">`, then one
+`<article id="lephy12NN">` per chapter); the checker asserts every outline id is
+a page id.
 
 ---
 
