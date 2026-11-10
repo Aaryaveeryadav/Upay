@@ -134,6 +134,12 @@ page=Page(); html=(root/'assets/notes/index.html').read_text(); page.feed(html)
 assert all(c['id'] in page.ids for c in bs+chem+bio_out+phy_out)
 assert set(page.img) == {'/'+x['path'] for x in images}
 assert 'practice, not board-verified' in html and 'not certified by CBSE' in html
+# Headings and eyebrows name the chapter or unit; a supplied PDF filename is
+# provenance and belongs in the sources prose, not in a label.
+for _m in re.finditer(r'<(h[1-4]|div class="eyebrow")[^>]*>(.*?)</\1>', html, re.S):
+    assert '.pdf' not in _m.group(2), 'filename in a heading: %r' % _m.group(2)[:80]
+assert '<h3>Chapter 3 · Reproductive Health</h3>' in html
+assert '<h3>Unit 1 · Solutions</h3>' in html
 assert '/assets/notes/index.html#business' in (root/'assets/js/app.js').read_text()
 if len(sys.argv)>1:
     import pymupdf
