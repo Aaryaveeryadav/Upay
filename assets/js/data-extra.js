@@ -373,6 +373,9 @@ UP.catalogue = function (cls, subject) {
       formulas: [], pyqs: [], plan: [], keywords: { en: [r[0]], hi: [r[1]] }
     }));
   }
+  /* Class 12 Biology: biology-outlines.js replaces the three-field stub rows with
+     real chapter objects carrying the outline and the verified figure crops. */
+  if (+cls === 12 && subject === 'biology' && window.UP && UP.biology12) return UP.biology12;
   if (+cls === 12 && subject && UP.sci12[subject]) {
     return UP.sci12[subject].map((r, i) => ({
       id: i + 1, subject, en: r[0], hi: r[1], enDesc: r[2], hiDesc: r[2], weight: 4, demand: 'outline',

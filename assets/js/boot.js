@@ -131,7 +131,7 @@
       'assets/js/data/pyq-chemistry-2025.js?v=25e'
     ],
     biology: [
-      // placeholder: will load biology12.js once provided
+      'assets/js/data/biology-outlines.js' // CBSE 2026–27 outline view + verified source-crop figures per chapter
     ],
     economics: [], // guide and source catalogue are loaded in CRITICAL_CORE
     // Loaded in CRITICAL_CORE because their chapter maps and PYQ bank are a
