@@ -38,7 +38,7 @@
 
   /* --- CRITICAL CORE: required before app.js boots --- */
   const CRITICAL_CORE = [
-    'assets/js/data-extra.js?v=26ae',
+    'assets/js/data-extra.js?v=26af',
     'assets/js/data/chapters1.js',
     'assets/js/data/chapters2.js',
     'assets/js/data/pyq.js',
@@ -48,7 +48,7 @@
     'assets/js/data/chapters12-applied-maths.js',  // Class 12 Applied Maths KB + PYQ seed
     'assets/js/data/chapters12-accountancy.js', // Class 12 Accountancy + Computerised Accounting chapter maps
     'assets/js/data/accountancy-chapters.js?v=26ab', // extracted NCERT outline: objectives and numbered sections
-    'assets/js/data/business-studies12.js?v=26ae', // CBSE English outlines
+    'assets/js/data/business-studies12.js?v=26af', // CBSE English outlines
     'assets/js/data/economics12.js?v=26ab', // Class 12 Economics guides, including deep links
     'assets/js/data/economics-sources.js?v=26ab', // the original Economics PDF catalogue
     'assets/js/data/english12.js?v=26ab', // Class 12 English reading notes and direct links
@@ -294,7 +294,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26ae');
+    return loadScript('assets/js/app.js?v=26af');
   }
 
   function loadPostPaint() {
