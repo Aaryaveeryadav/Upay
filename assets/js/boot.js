@@ -121,6 +121,7 @@
     ],
     physics: [
       'assets/js/data/physics12.js',
+      'assets/js/data/physics-outlines.js', // CBSE 2026–27 outline view per chapter
       'assets/js/data/pyq-physics-2025.js'
     ],
     chemistry: [

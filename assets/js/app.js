@@ -1269,9 +1269,9 @@ window.UP = window.UP || {};
       /* Biology numbers its cards by NCERT chapter, not by unit: one CBSE unit
          covers two or three chapters, so the badge names the unit and its marks
          instead of calling chapter 5 "CBSE unit 5". */
-      const bioCard = ch.outline.unit_title;
-      const footBadge = bioCard
-        ? `${esc(bioCard)} · ${esc(ch.outline.marks)} ${t('marks')} (unit)`
+      const unitTitle = ch.outline.unit_title;
+      const footBadge = unitTitle
+        ? `${esc(unitTitle)}${ch.outline.marks ? ` · ${esc(ch.outline.marks)} ${t('marks')} (unit)` : ''}`
         : `CBSE unit ${esc(unitNo)}`;
       return `<a class="card ch-card outline-card" href="#/chapter/${ch.id}" data-chapter-id="${ch.id}">
         <div class="ch-top"><span class="ch-num">${String(unitNo).padStart(2,'0')}</span><div>
@@ -2458,7 +2458,7 @@ window.UP = window.UP || {};
       <section class="detail-hero" style="margin-top:12px">
         <div class="meta-row">
           <span class="tag">${hi ? 'अध्याय' : 'Chapter'} ${esc(ch.displayNo)}</span>
-          <span class="tag cream">${esc(n.unit_title)} · ${esc(n.marks)} ${t('marks')} (${hi ? 'इकाई' : 'unit'})</span>
+          <span class="tag cream">${esc(n.unit_title)}${n.marks ? ` · ${esc(n.marks)} ${t('marks')} (${hi ? 'इकाई' : 'unit'})` : ''}</span>
           <span class="tag grey">CBSE 2026–27 · ${paperCode}</span>
         </div>
         <h1>${esc(n.title)}</h1>
