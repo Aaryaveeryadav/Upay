@@ -9,6 +9,7 @@ manifest = json.loads((root/'assets/img/notes/manifest.json').read_text())
 ledger = json.loads((root/'assets/notes/chemistry-batch.json').read_text())
 ledger2 = json.loads((root/'assets/notes/chemistry-batch-2.json').read_text())
 bio = json.loads((root/'assets/notes/biology-batch.json').read_text())
+phy = json.loads((root/'assets/notes/physics-batch.json').read_text())
 bs, chem = notes['business_studies'], notes['chemistry']
 assert len(bs) == 12 and [c['id'] for c in chem] == ['lech101','lech102','lech103','lech104','lech105','lech201','lech202','lech203','lech204','lech205']
 assert {x['source_file'] for x in ledger2['sources']} == {'lech105.pdf'} | {f'lech20{i}.pdf' for i in range(1,6)}
@@ -39,13 +40,13 @@ for chapter in bs:
 consumer = next(c for c in bs if c['id'] == 'lebs203')
 assert '2019' in consumer['summary'] and '1986' not in consumer['summary']
 images = manifest['images']
-assert len(images) == 139 and len({x['sha256'] for x in images}) == len(images)
+assert len(images) == 139 + len(phy['crops']) and len({x['sha256'] for x in images}) == len(images)
 for item in images:
     path = root / item['path']
     assert path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == item['sha256']
     assert path.name == item['sha256'] + '.png'
     assert item['origin'] == 'source-pdf-crop' and item['ai_drawn'] is False
-    assert any(c['sha256'] == item['source_sha256'] for c in chem + bio['sources'])
+    assert any(c['sha256'] == item['source_sha256'] for c in chem + bio['sources'] + phy['sources'])
 counts = {}
 for item in images:
     counts[item['source_file']] = counts.get(item['source_file'], 0) + 1
@@ -120,7 +121,10 @@ for cid, outline in phy_attached.items():
     assert outline['id'] == src['id'] and outline['summary'] == src['summary']
     assert outline['sections'] == src['sections'] and outline['objectives'] == src['objectives']
     assert outline['terms'] == src['terms'] and outline['unit'] == src['unit']
-    assert 'marks' not in outline and 'figures' not in outline
+    assert 'marks' not in outline
+    expected = [x for x in images if x['source_file'].startswith('leph') and x['figure'].split('.')[0] == cid]
+    assert len(outline['figures']) == len(expected)
+    assert {f['sha256'] for f in outline['figures']} == {f['sha256'] for f in expected}
 assert (root/'assets/js/data/physics-outlines.js').read_text() == phy_js
 assert 'assets/js/data/physics-outlines.js' in (root/'assets/js/boot.js').read_text()
 assert 'UP.physics12' in (root/'assets/js/data-extra.js').read_text()
@@ -141,6 +145,32 @@ for _m in re.finditer(r'<(h[1-4]|div class="eyebrow")[^>]*>(.*?)</\1>', html, re
 assert '<h3>Chapter 3 · Reproductive Health</h3>' in html
 assert '<h3>Unit 1 · Solutions</h3>' in html
 assert '/assets/notes/index.html#business' in (root/'assets/js/app.js').read_text()
+# Physics ledger includes all supplied files, even chapters pending review.
+phy_images = [x for x in images if x['source_file'].startswith('leph')]
+assert len(phy_images) == len(phy['crops']) == sum(s['figure_count'] for s in phy['sources'])
+for record in phy['sources']:
+    hits = [x for x in phy_images if x['source_file'] == record['source_file']]
+    assert record['figure_count'] == len(record['figures']) == len(hits)
+    assert set(record['figures']) == {x['figure'] for x in hits}
+    assert record['text_nonempty_pages'] == record['pages']
+for crop in phy['crops']:
+    hit = by_sha[crop['sha256']]
+    for key in ('source_file', 'figure', 'pdf_page', 'caption', 'crop_points'):
+        assert hit[key] == crop[key], (key, crop)
+    assert hit['edit'] == 'none' and crop['verified'].startswith('visual inspection')
+assert 'figures-phy' in page.ids
+assert '<h3>Chapter 8 · Electromagnetic Waves</h3>' in html
+if '--physics-pdfs' in sys.argv:
+    import pymupdf
+    i = sys.argv.index('--physics-pdfs')
+    directory = Path(sys.argv[i+1]); del sys.argv[i:i+2]
+    for record in phy['sources']:
+        f = directory / record['source_file']
+        assert hashlib.sha256(f.read_bytes()).hexdigest() == record['sha256']
+        doc = pymupdf.open(f)
+        assert len(doc) == record['pages']
+        assert sum(bool(p.get_text().strip()) for p in doc) == record['text_nonempty_pages']
+    print('PASS: all 15 Physics PDF hashes and text-layer page counts')
 if len(sys.argv)>1:
     import pymupdf
     directories=[Path(arg) for arg in sys.argv[1:]]; norm=lambda s: re.sub(r'[^a-z0-9]', '', s.lower())

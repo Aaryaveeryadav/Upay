@@ -1,0 +1,281 @@
+{
+ "batch": "NCERT Class 12 Physics, fourteen chapter PDFs and answers supplement",
+ "status": "partial: chapter 8 complete; chapters 1–7 and 9–14 pending",
+ "date": "2026-11-10",
+ "method": "Direct PDF rectangle crops at 144 dpi, visually compared against rendered source pages; no edits or generated art. Empty captions mean the source prints only a figure number.",
+ "sources": [
+  {
+   "source_file": "leph101.pdf",
+   "sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "pages": 44,
+   "text_nonempty_pages": 44,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  },
+  {
+   "source_file": "leph102.pdf",
+   "sha256": "d69c4f007bde6809f6d9cd401ec8d7ccd3d775070408ccc5b4c37c444c8faf24",
+   "pages": 36,
+   "text_nonempty_pages": 36,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  },
+  {
+   "source_file": "leph103.pdf",
+   "sha256": "a00ff04c376523c1e368ee80ef8338b615afceade4f5b293d5bb5849bb3cd894",
+   "pages": 26,
+   "text_nonempty_pages": 26,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  },
+  {
+   "source_file": "leph104.pdf",
+   "sha256": "9bea19084fa95e103eb4b22a7c008248395c022e7adae04fe11a9228067b6746",
+   "pages": 29,
+   "text_nonempty_pages": 29,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  },
+  {
+   "source_file": "leph105.pdf",
+   "sha256": "7ec2926362f9193efdb93c6e2e7b3cdc0909eeed29626c00f5afdcda84b6af80",
+   "pages": 18,
+   "text_nonempty_pages": 18,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  },
+  {
+   "source_file": "leph106.pdf",
+   "sha256": "014dc9fb7804acee25838361b1a720e40e0c7ca0b0fb162adfc37706b9d1b932",
+   "pages": 23,
+   "text_nonempty_pages": 23,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  },
+  {
+   "source_file": "leph107.pdf",
+   "sha256": "0d5759d1dda452a9a553e68756d31b5a4e5df7177f4d82d678cb0d32fe3b818f",
+   "pages": 24,
+   "text_nonempty_pages": 24,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  },
+  {
+   "source_file": "leph108.pdf",
+   "sha256": "3aa3a0d342659b5ce090a76d3406d5a74eed7653f2e2ba3479f83b6008b7aea8",
+   "pages": 14,
+   "text_nonempty_pages": 14,
+   "classification": "text-layer PDF",
+   "figure_count": 6,
+   "figures": [
+    "8.1",
+    "8.2",
+    "8.3",
+    "8.4",
+    "8.5",
+    "8.6"
+   ],
+   "disposition": "retained: all six numbered figures visually verified"
+  },
+  {
+   "source_file": "leph1an.pdf",
+   "sha256": "e6ced92f5d012352642d42b7bf68a6104d91b9f7eee437e4b6d7251c42bf707c",
+   "pages": 6,
+   "text_nonempty_pages": 6,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: answers supplement, not a chapter"
+  },
+  {
+   "source_file": "leph201.pdf",
+   "sha256": "5c9570cc9f45cbe8f8d62100ccecd3370f8d8085f57041764bd1940bf467d235",
+   "pages": 34,
+   "text_nonempty_pages": 34,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  },
+  {
+   "source_file": "leph202.pdf",
+   "sha256": "315c746f4733971ab171e0cb145810ef8b5648c2604745a4fb57769f2714c91e",
+   "pages": 19,
+   "text_nonempty_pages": 19,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  },
+  {
+   "source_file": "leph203.pdf",
+   "sha256": "8b465f3a3fddc009ec98b9065014231740bd2f1c29aba6c142ceabfbb73bf764",
+   "pages": 16,
+   "text_nonempty_pages": 16,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  },
+  {
+   "source_file": "leph204.pdf",
+   "sha256": "6ddc6d11f464a9370911bdf349b46c9ba422d0f3d73ec69392d4b538e59dc31b",
+   "pages": 16,
+   "text_nonempty_pages": 16,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  },
+  {
+   "source_file": "leph205.pdf",
+   "sha256": "1f58e53087014ecb2da30275d3b240458e94c2a5d92a6910b64632261dad28b9",
+   "pages": 17,
+   "text_nonempty_pages": 17,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  },
+  {
+   "source_file": "leph206.pdf",
+   "sha256": "a7e5dc3f4128097d6200a34fa6ad43260178db4d614eced95881f220cd8f7250",
+   "pages": 21,
+   "text_nonempty_pages": 21,
+   "classification": "text-layer PDF",
+   "figure_count": 0,
+   "figures": [],
+   "disposition": "retained: awaiting figure verification"
+  }
+ ],
+ "crops": [
+  {
+   "source_file": "leph108.pdf",
+   "figure": "8.1",
+   "pdf_page": 3,
+   "caption": "A parallel plate capacitor C, as part of a circuit through which a time dependent current i (t) flows, (a) a loop of radius r, to determine magnetic field at a point P on the loop; (b) a pot-shaped surface passing through the interior between the capacitor plates with the loop shown in (a) as its rim; (c) a tiffin-shaped surface with the circular loop as its rim and a flat circular bottom S between the capacitor plates. The arrows show uniform electric field between the capacitor plates.",
+   "sha256": "409a7777e09513d945c213d3a6566872f2c83252097cb75177ba9085b960aa22",
+   "path": "assets/img/notes/409a7777e09513d945c213d3a6566872f2c83252097cb75177ba9085b960aa22.png",
+   "crop_points": [
+    422,
+    96,
+    536,
+    451
+   ],
+   "size_px": [
+    228,
+    710
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "source_file": "leph108.pdf",
+   "figure": "8.2",
+   "pdf_page": 4,
+   "caption": "(a) The electric and magnetic fields E and B between the capacitor plates, at the point M. (b) A cross sectional view of Fig. (a).",
+   "sha256": "d453b563cbfa312d9269679a49df6718087d9ecf180076f8fbeb6c4fa88ed2d4",
+   "path": "assets/img/notes/d453b563cbfa312d9269679a49df6718087d9ecf180076f8fbeb6c4fa88ed2d4.png",
+   "crop_points": [
+    80,
+    96,
+    205,
+    402
+   ],
+   "size_px": [
+    250,
+    612
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "source_file": "leph108.pdf",
+   "figure": "8.3",
+   "pdf_page": 6,
+   "caption": "A linearly polarised electromagnetic wave, propagating in the z-direction with the oscillating electric field E along the x-direction and the oscillating magnetic field B along the y-direction.",
+   "sha256": "863d45f90769f556983572ef5d1bfdd968acaf65b1a32afd1a15ce43e21dcb10",
+   "path": "assets/img/notes/863d45f90769f556983572ef5d1bfdd968acaf65b1a32afd1a15ce43e21dcb10.png",
+   "crop_points": [
+    65,
+    575,
+    382,
+    665
+   ],
+   "size_px": [
+    634,
+    180
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "source_file": "leph108.pdf",
+   "figure": "8.4",
+   "pdf_page": 9,
+   "caption": "The electromagnetic spectrum, with common names for various part of it. The various regions do not have sharply defined boundaries.",
+   "sha256": "fe713639b6ae9e20524c2a9faaaf1965063c521fd8854e49dfc50923bd52a7a9",
+   "path": "assets/img/notes/fe713639b6ae9e20524c2a9faaaf1965063c521fd8854e49dfc50923bd52a7a9.png",
+   "crop_points": [
+    57,
+    96,
+    415,
+    424
+   ],
+   "size_px": [
+    716,
+    656
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "source_file": "leph108.pdf",
+   "figure": "8.5",
+   "pdf_page": 13,
+   "caption": "",
+   "sha256": "428567025551063eeb86ff1b20cfcee92ea719b064edb2b9a4a685061c83a350",
+   "path": "assets/img/notes/428567025551063eeb86ff1b20cfcee92ea719b064edb2b9a4a685061c83a350.png",
+   "crop_points": [
+    174,
+    612,
+    309,
+    682
+   ],
+   "size_px": [
+    270,
+    140
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "source_file": "leph108.pdf",
+   "figure": "8.6",
+   "pdf_page": 14,
+   "caption": "",
+   "sha256": "aadf1bd617b2586b3dbe37bab94469c332f567a7eaf5821732ecb923a792d75c",
+   "path": "assets/img/notes/aadf1bd617b2586b3dbe37bab94469c332f567a7eaf5821732ecb923a792d75c.png",
+   "crop_points": [
+    316,
+    155,
+    428,
+    233
+   ],
+   "size_px": [
+    224,
+    156
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  }
+ ]
+}

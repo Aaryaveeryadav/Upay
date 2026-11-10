@@ -40,7 +40,8 @@ window.UP = window.UP || {};
     "chapter": 1,
     "unit": 1,
     "unit_title": "Electrostatics",
-    "source": "NCERT Class 12 Physics, chapter 1"
+    "source": "NCERT Class 12 Physics, chapter 1",
+    "figures": []
   },
   "2": {
     "id": "lephy1202",
@@ -78,12 +79,13 @@ window.UP = window.UP || {};
     "chapter": 2,
     "unit": 1,
     "unit_title": "Electrostatics",
-    "source": "NCERT Class 12 Physics, chapter 2"
+    "source": "NCERT Class 12 Physics, chapter 2",
+    "figures": []
   },
   "3": {
     "id": "lephy1203",
     "title": "Current Electricity",
-    "summary": "Current is the drift of charge through a conductor, tied to drift velocity and mobility. Ohm’s law and resistivity, including its temperature dependence, lead to cells and internal resistance, Kirchhoff’s rules, the Wheatstone bridge and the potentiometer.",
+    "summary": "Current is the drift of charge through a conductor, tied to drift velocity and mobility. Ohm’s law and resistivity, including its temperature dependence, lead to cells and internal resistance, Kirchhoff’s rules and the Wheatstone bridge.",
     "sections": [
       "Electric current and drift velocity",
       "Ohm’s law and V–I characteristics",
@@ -91,13 +93,12 @@ window.UP = window.UP || {};
       "Electrical energy and power",
       "emf, internal resistance and combination of cells",
       "Kirchhoff’s rules",
-      "Wheatstone bridge",
-      "Potentiometer"
+      "Wheatstone bridge"
     ],
     "objectives": [
       "Relate electric current to drift velocity and mobility.",
       "Apply Ohm’s law, resistivity and the temperature dependence of resistance to conductors.",
-      "Solve circuits using Kirchhoff’s rules, the Wheatstone bridge and the potentiometer."
+      "Solve circuits using Kirchhoff’s rules and the Wheatstone bridge."
     ],
     "terms": [
       "Electric current",
@@ -111,13 +112,13 @@ window.UP = window.UP || {};
       "Internal resistance",
       "Kirchhoff’s rules",
       "Wheatstone bridge",
-      "Potentiometer",
       "Superconductivity"
     ],
     "chapter": 3,
     "unit": 2,
     "unit_title": "Current Electricity",
-    "source": "NCERT Class 12 Physics, chapter 3"
+    "source": "NCERT Class 12 Physics, chapter 3",
+    "figures": []
   },
   "4": {
     "id": "lephy1204",
@@ -155,7 +156,8 @@ window.UP = window.UP || {};
     "chapter": 4,
     "unit": 3,
     "unit_title": "Magnetic Effects of Current and Magnetism",
-    "source": "NCERT Class 12 Physics, chapter 4"
+    "source": "NCERT Class 12 Physics, chapter 4",
+    "figures": []
   },
   "5": {
     "id": "lephy1205",
@@ -197,7 +199,8 @@ window.UP = window.UP || {};
     "chapter": 5,
     "unit": 3,
     "unit_title": "Magnetic Effects of Current and Magnetism",
-    "source": "NCERT Class 12 Physics, chapter 5"
+    "source": "NCERT Class 12 Physics, chapter 5",
+    "figures": []
   },
   "6": {
     "id": "lephy1206",
@@ -234,7 +237,8 @@ window.UP = window.UP || {};
     "chapter": 6,
     "unit": 4,
     "unit_title": "Electromagnetic Induction and Alternating Currents",
-    "source": "NCERT Class 12 Physics, chapter 6"
+    "source": "NCERT Class 12 Physics, chapter 6",
+    "figures": []
   },
   "7": {
     "id": "lephy1207",
@@ -273,7 +277,8 @@ window.UP = window.UP || {};
     "chapter": 7,
     "unit": 4,
     "unit_title": "Electromagnetic Induction and Alternating Currents",
-    "source": "NCERT Class 12 Physics, chapter 7"
+    "source": "NCERT Class 12 Physics, chapter 7",
+    "figures": []
   },
   "8": {
     "id": "lephy1208",
@@ -312,7 +317,51 @@ window.UP = window.UP || {};
     "chapter": 8,
     "unit": 5,
     "unit_title": "Electromagnetic Waves",
-    "source": "NCERT Class 12 Physics, chapter 8"
+    "source": "NCERT Class 12 Physics, chapter 8",
+    "figures": [
+      {
+        "fig": "8.1",
+        "path": "assets/img/notes/409a7777e09513d945c213d3a6566872f2c83252097cb75177ba9085b960aa22.png",
+        "caption": "A parallel plate capacitor C, as part of a circuit through which a time dependent current i (t) flows, (a) a loop of radius r, to determine magnetic field at a point P on the loop; (b) a pot-shaped surface passing through the interior between the capacitor plates with the loop shown in (a) as its rim; (c) a tiffin-shaped surface with the circular loop as its rim and a flat circular bottom S between the capacitor plates. The arrows show uniform electric field between the capacitor plates.",
+        "page": 3,
+        "sha256": "409a7777e09513d945c213d3a6566872f2c83252097cb75177ba9085b960aa22"
+      },
+      {
+        "fig": "8.2",
+        "path": "assets/img/notes/d453b563cbfa312d9269679a49df6718087d9ecf180076f8fbeb6c4fa88ed2d4.png",
+        "caption": "(a) The electric and magnetic fields E and B between the capacitor plates, at the point M. (b) A cross sectional view of Fig. (a).",
+        "page": 4,
+        "sha256": "d453b563cbfa312d9269679a49df6718087d9ecf180076f8fbeb6c4fa88ed2d4"
+      },
+      {
+        "fig": "8.3",
+        "path": "assets/img/notes/863d45f90769f556983572ef5d1bfdd968acaf65b1a32afd1a15ce43e21dcb10.png",
+        "caption": "A linearly polarised electromagnetic wave, propagating in the z-direction with the oscillating electric field E along the x-direction and the oscillating magnetic field B along the y-direction.",
+        "page": 6,
+        "sha256": "863d45f90769f556983572ef5d1bfdd968acaf65b1a32afd1a15ce43e21dcb10"
+      },
+      {
+        "fig": "8.4",
+        "path": "assets/img/notes/fe713639b6ae9e20524c2a9faaaf1965063c521fd8854e49dfc50923bd52a7a9.png",
+        "caption": "The electromagnetic spectrum, with common names for various part of it. The various regions do not have sharply defined boundaries.",
+        "page": 9,
+        "sha256": "fe713639b6ae9e20524c2a9faaaf1965063c521fd8854e49dfc50923bd52a7a9"
+      },
+      {
+        "fig": "8.5",
+        "path": "assets/img/notes/428567025551063eeb86ff1b20cfcee92ea719b064edb2b9a4a685061c83a350.png",
+        "caption": "",
+        "page": 13,
+        "sha256": "428567025551063eeb86ff1b20cfcee92ea719b064edb2b9a4a685061c83a350"
+      },
+      {
+        "fig": "8.6",
+        "path": "assets/img/notes/aadf1bd617b2586b3dbe37bab94469c332f567a7eaf5821732ecb923a792d75c.png",
+        "caption": "",
+        "page": 14,
+        "sha256": "aadf1bd617b2586b3dbe37bab94469c332f567a7eaf5821732ecb923a792d75c"
+      }
+    ]
   },
   "9": {
     "id": "lephy1209",
@@ -353,7 +402,8 @@ window.UP = window.UP || {};
     "chapter": 9,
     "unit": 6,
     "unit_title": "Optics",
-    "source": "NCERT Class 12 Physics, chapter 9"
+    "source": "NCERT Class 12 Physics, chapter 9",
+    "figures": []
   },
   "10": {
     "id": "lephy1210",
@@ -391,19 +441,20 @@ window.UP = window.UP || {};
     "chapter": 10,
     "unit": 6,
     "unit_title": "Optics",
-    "source": "NCERT Class 12 Physics, chapter 10"
+    "source": "NCERT Class 12 Physics, chapter 10",
+    "figures": []
   },
   "11": {
     "id": "lephy1211",
     "title": "Dual Nature of Radiation and Matter",
-    "summary": "The photoelectric effect shows light delivering energy in quanta, and the de Broglie relation extends the same idea to matter. Einstein’s photoelectric equation, stopping potential, threshold frequency and the Davisson–Germer experiment are the core.",
+    "summary": "The photoelectric effect shows light delivering energy in quanta, and the de Broglie relation extends the same idea to matter. Einstein’s equation connects stopping potential, threshold frequency and work function; photons carry energy and momentum.",
     "sections": [
       "Photoelectric effect and its experimental laws",
       "Einstein’s photoelectric equation",
       "Stopping potential and threshold frequency",
       "Photons and the momentum they carry",
       "de Broglie wavelength of matter",
-      "Davisson–Germer experiment"
+      "Electron emission and work function"
     ],
     "objectives": [
       "Explain the photoelectric effect and Einstein’s photoelectric equation.",
@@ -419,13 +470,13 @@ window.UP = window.UP || {};
       "Planck’s constant",
       "de Broglie wavelength",
       "Photocell",
-      "Davisson–Germer experiment",
       "Momentum of a photon"
     ],
     "chapter": 11,
     "unit": 7,
     "unit_title": "Dual Nature of Radiation and Matter",
-    "source": "NCERT Class 12 Physics, chapter 11"
+    "source": "NCERT Class 12 Physics, chapter 11",
+    "figures": []
   },
   "12": {
     "id": "lephy1212",
@@ -462,7 +513,8 @@ window.UP = window.UP || {};
     "chapter": 12,
     "unit": 8,
     "unit_title": "Atoms and Nuclei",
-    "source": "NCERT Class 12 Physics, chapter 12"
+    "source": "NCERT Class 12 Physics, chapter 12",
+    "figures": []
   },
   "13": {
     "id": "lephy1213",
@@ -504,7 +556,8 @@ window.UP = window.UP || {};
     "chapter": 13,
     "unit": 8,
     "unit_title": "Atoms and Nuclei",
-    "source": "NCERT Class 12 Physics, chapter 13"
+    "source": "NCERT Class 12 Physics, chapter 13",
+    "figures": []
   },
   "14": {
     "id": "lephy1214",
@@ -546,7 +599,8 @@ window.UP = window.UP || {};
     "chapter": 14,
     "unit": 9,
     "unit_title": "Electronic Devices",
-    "source": "NCERT Class 12 Physics, chapter 14"
+    "source": "NCERT Class 12 Physics, chapter 14",
+    "figures": []
   }
 };
   UP.physicsOutlines = data;

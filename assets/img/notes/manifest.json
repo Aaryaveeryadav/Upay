@@ -2503,6 +2503,114 @@
     505
    ],
    "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/409a7777e09513d945c213d3a6566872f2c83252097cb75177ba9085b960aa22.png",
+   "sha256": "409a7777e09513d945c213d3a6566872f2c83252097cb75177ba9085b960aa22",
+   "source_file": "leph108.pdf",
+   "pdf_page": 3,
+   "figure": "8.1",
+   "caption": "A parallel plate capacitor C, as part of a circuit through which a time dependent current i (t) flows, (a) a loop of radius r, to determine magnetic field at a point P on the loop; (b) a pot-shaped surface passing through the interior between the capacitor plates with the loop shown in (a) as its rim; (c) a tiffin-shaped surface with the circular loop as its rim and a flat circular bottom S between the capacitor plates. The arrows show uniform electric field between the capacitor plates.",
+   "crop_points": [
+    422,
+    96,
+    536,
+    451
+   ],
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "3aa3a0d342659b5ce090a76d3406d5a74eed7653f2e2ba3479f83b6008b7aea8",
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/d453b563cbfa312d9269679a49df6718087d9ecf180076f8fbeb6c4fa88ed2d4.png",
+   "sha256": "d453b563cbfa312d9269679a49df6718087d9ecf180076f8fbeb6c4fa88ed2d4",
+   "source_file": "leph108.pdf",
+   "pdf_page": 4,
+   "figure": "8.2",
+   "caption": "(a) The electric and magnetic fields E and B between the capacitor plates, at the point M. (b) A cross sectional view of Fig. (a).",
+   "crop_points": [
+    80,
+    96,
+    205,
+    402
+   ],
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "3aa3a0d342659b5ce090a76d3406d5a74eed7653f2e2ba3479f83b6008b7aea8",
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/863d45f90769f556983572ef5d1bfdd968acaf65b1a32afd1a15ce43e21dcb10.png",
+   "sha256": "863d45f90769f556983572ef5d1bfdd968acaf65b1a32afd1a15ce43e21dcb10",
+   "source_file": "leph108.pdf",
+   "pdf_page": 6,
+   "figure": "8.3",
+   "caption": "A linearly polarised electromagnetic wave, propagating in the z-direction with the oscillating electric field E along the x-direction and the oscillating magnetic field B along the y-direction.",
+   "crop_points": [
+    65,
+    575,
+    382,
+    665
+   ],
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "3aa3a0d342659b5ce090a76d3406d5a74eed7653f2e2ba3479f83b6008b7aea8",
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/fe713639b6ae9e20524c2a9faaaf1965063c521fd8854e49dfc50923bd52a7a9.png",
+   "sha256": "fe713639b6ae9e20524c2a9faaaf1965063c521fd8854e49dfc50923bd52a7a9",
+   "source_file": "leph108.pdf",
+   "pdf_page": 9,
+   "figure": "8.4",
+   "caption": "The electromagnetic spectrum, with common names for various part of it. The various regions do not have sharply defined boundaries.",
+   "crop_points": [
+    57,
+    96,
+    415,
+    424
+   ],
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "3aa3a0d342659b5ce090a76d3406d5a74eed7653f2e2ba3479f83b6008b7aea8",
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/428567025551063eeb86ff1b20cfcee92ea719b064edb2b9a4a685061c83a350.png",
+   "sha256": "428567025551063eeb86ff1b20cfcee92ea719b064edb2b9a4a685061c83a350",
+   "source_file": "leph108.pdf",
+   "pdf_page": 13,
+   "figure": "8.5",
+   "caption": "",
+   "crop_points": [
+    174,
+    612,
+    309,
+    682
+   ],
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "3aa3a0d342659b5ce090a76d3406d5a74eed7653f2e2ba3479f83b6008b7aea8",
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/aadf1bd617b2586b3dbe37bab94469c332f567a7eaf5821732ecb923a792d75c.png",
+   "sha256": "aadf1bd617b2586b3dbe37bab94469c332f567a7eaf5821732ecb923a792d75c",
+   "source_file": "leph108.pdf",
+   "pdf_page": 14,
+   "figure": "8.6",
+   "caption": "",
+   "crop_points": [
+    316,
+    155,
+    428,
+    233
+   ],
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "3aa3a0d342659b5ce090a76d3406d5a74eed7653f2e2ba3479f83b6008b7aea8",
+   "edit": "none"
   }
  ]
 }

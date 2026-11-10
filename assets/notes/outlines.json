@@ -1468,7 +1468,7 @@
   {
    "id": "lephy1203",
    "title": "Current Electricity",
-   "summary": "Current is the drift of charge through a conductor, tied to drift velocity and mobility. Ohm’s law and resistivity, including its temperature dependence, lead to cells and internal resistance, Kirchhoff’s rules, the Wheatstone bridge and the potentiometer.",
+   "summary": "Current is the drift of charge through a conductor, tied to drift velocity and mobility. Ohm’s law and resistivity, including its temperature dependence, lead to cells and internal resistance, Kirchhoff’s rules and the Wheatstone bridge.",
    "sections": [
     "Electric current and drift velocity",
     "Ohm’s law and V–I characteristics",
@@ -1476,13 +1476,12 @@
     "Electrical energy and power",
     "emf, internal resistance and combination of cells",
     "Kirchhoff’s rules",
-    "Wheatstone bridge",
-    "Potentiometer"
+    "Wheatstone bridge"
    ],
    "objectives": [
     "Relate electric current to drift velocity and mobility.",
     "Apply Ohm’s law, resistivity and the temperature dependence of resistance to conductors.",
-    "Solve circuits using Kirchhoff’s rules, the Wheatstone bridge and the potentiometer."
+    "Solve circuits using Kirchhoff’s rules and the Wheatstone bridge."
    ],
    "terms": [
     "Electric current",
@@ -1496,7 +1495,6 @@
     "Internal resistance",
     "Kirchhoff’s rules",
     "Wheatstone bridge",
-    "Potentiometer",
     "Superconductivity"
    ],
    "chapter": 3,
@@ -1781,14 +1779,14 @@
   {
    "id": "lephy1211",
    "title": "Dual Nature of Radiation and Matter",
-   "summary": "The photoelectric effect shows light delivering energy in quanta, and the de Broglie relation extends the same idea to matter. Einstein’s photoelectric equation, stopping potential, threshold frequency and the Davisson–Germer experiment are the core.",
+   "summary": "The photoelectric effect shows light delivering energy in quanta, and the de Broglie relation extends the same idea to matter. Einstein’s equation connects stopping potential, threshold frequency and work function; photons carry energy and momentum.",
    "sections": [
     "Photoelectric effect and its experimental laws",
     "Einstein’s photoelectric equation",
     "Stopping potential and threshold frequency",
     "Photons and the momentum they carry",
     "de Broglie wavelength of matter",
-    "Davisson–Germer experiment"
+    "Electron emission and work function"
    ],
    "objectives": [
     "Explain the photoelectric effect and Einstein’s photoelectric equation.",
@@ -1804,7 +1802,6 @@
     "Planck’s constant",
     "de Broglie wavelength",
     "Photocell",
-    "Davisson–Germer experiment",
     "Momentum of a photon"
    ],
    "chapter": 11,
