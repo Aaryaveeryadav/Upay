@@ -1,0 +1,67 @@
+{
+  "_readme": "Upay - Class 12 Physics data. Syntax: docs/physics-data-syntax.md. Send chapters, questions or both; delete what you don't use. The chapter below is the outline the site already shows for chapter 1, so you can see the bar. The two questions are real (CBSE 2025 paper 55/5/1 Q7 and NCERT Exercise 1.1) but they are examples: replace or delete every row whose id starts with example-. Check the file with: python3 tools/curate/validate-physics-data.py <file>",
+  "subject": "physics",
+  "class": 12,
+
+  "chapters": [
+    {
+      "chapter": 1,
+      "title": "Electric Charges and Fields",
+      "summary": "Static charge is described by Coulomb's law and by the field it sets up. Superposition, field lines, the electric dipole and continuous charge distributions then lead to Gauss's law, which gives the field of a long wire, an infinite sheet and a spherical shell.",
+      "sections": [
+        "Electric charge and its properties",
+        "Coulomb's law and superposition",
+        "Electric field and field lines",
+        "Electric dipole and torque on it",
+        "Continuous charge distributions",
+        "Electric flux",
+        "Gauss's law and its applications"
+      ],
+      "objectives": [
+        "State Coulomb's law and apply the superposition principle to a system of point charges.",
+        "Relate electric field, electric flux and enclosed charge through Gauss's law.",
+        "Find the field of a long straight wire, an infinite plane sheet and a thin spherical shell."
+      ],
+      "terms": [
+        "Quantisation of charge",
+        "Conservation of charge",
+        "Coulomb's law",
+        "Superposition principle",
+        "Electric field",
+        "Electric dipole",
+        "Dipole moment",
+        "Electric flux",
+        "Gauss's law",
+        "Field line",
+        "Linear charge density",
+        "Torque on a dipole"
+      ]
+    }
+  ],
+
+  "questions": [
+    {
+      "id": "example-mcq",
+      "chapter": 11,
+      "type": "mcq",
+      "marks": 1,
+      "from": "board-paper",
+      "year": 2025,
+      "paper": "55/5/1",
+      "q_no": 7,
+      "question": "Light of which of the following colours will have the maximum energy in a photon associated with it?",
+      "options": ["Red light", "Yellow light", "Green light", "Blue light"],
+      "answer": "D",
+      "difficulty": 1
+    },
+    {
+      "id": "example-numerical",
+      "chapter": 1,
+      "type": "short",
+      "from": "ncert",
+      "q_no": "1.1",
+      "question": "What is the force between two small charged spheres having charges of 2 × 10⁻⁷ C and 3 × 10⁻⁷ C placed 30 cm apart in air?",
+      "answer": "6 × 10⁻³ N (repulsive)"
+    }
+  ]
+}

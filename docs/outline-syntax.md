@@ -1,5 +1,9 @@
 # Chapter outline syntax
 
+> **Sending Physics data?** Use [`physics-data-syntax.md`](physics-data-syntax.md) —
+> the format for PDFs, questions and outlines, with templates and a checker.
+> This page explains how the outline pipeline itself is wired.
+
 How a chapter page gets real content, and the exact syntax to add a subject —
 written for **Physics** (Class 12, ids 601–614), with Biology and Chemistry as
 the two working examples.
@@ -49,31 +53,38 @@ One record per chapter, kept in `assets/notes/outlines.json` under a new key
     {
       "id": "lephy1201",
       "title": "Electric Charges and Fields",
-      "summary": "Static charge is described by Coulomb's law and by the electric field it sets up. Superposition, field lines, dipoles and continuous charge distributions lead to Gauss's law and its use for symmetric charge distributions.",
+      "summary": "Static charge is described by Coulomb's law and by the field it sets up. Superposition, field lines, the electric dipole and continuous charge distributions then lead to Gauss's law, which gives the field of a long wire, an infinite sheet and a spherical shell.",
       "sections": [
         "Electric charge and its properties",
-        "Coulomb's law",
+        "Coulomb’s law and superposition",
         "Electric field and field lines",
-        "Electric dipole",
-        "Gauss's law and its applications"
+        "Electric dipole and torque on it",
+        "Continuous charge distributions",
+        "Electric flux",
+        "Gauss’s law and its applications"
       ],
       "objectives": [
-        "State and apply Coulomb's law.",
-        "Relate field, flux and charge through Gauss's law.",
-        "Compute fields for symmetric charge distributions."
+        "State Coulomb’s law and apply the superposition principle to a system of point charges.",
+        "Relate electric field, electric flux and enclosed charge through Gauss’s law.",
+        "Find the field of a long straight wire, an infinite plane sheet and a thin spherical shell."
       ],
       "terms": [
         "Quantisation of charge",
-        "Coulomb's law",
+        "Conservation of charge",
+        "Coulomb’s law",
+        "Superposition principle",
         "Electric field",
-        "Electric dipole moment",
+        "Electric dipole",
+        "Dipole moment",
         "Electric flux",
-        "Gauss's law"
+        "Gauss’s law",
+        "Field line",
+        "Linear charge density",
+        "Torque on a dipole"
       ],
       "chapter": 1,
       "unit": 1,
       "unit_title": "Electrostatics",
-      "marks": 16,
       "source": "NCERT Class 12 Physics, chapter 1"
     }
   ]
@@ -91,7 +102,7 @@ One record per chapter, kept in `assets/notes/outlines.json` under a new key
 | `chapter` | number | 1–14. **Must match the chapter number inside `id`.** |
 | `unit` | number | NCERT unit number (Physics: 1–9). |
 | `unit_title` | string | Unit name, shown on the chapter header and on the syllabus card. |
-| `marks` | number | Optional. The **unit's** theory marks from the published CBSE breakdown — never a per-chapter guess. Chapters sharing a unit repeat the same number; all units together must total 70. **Physics omits it** (see below). |
+| `marks` | number | Biology/Chemistry only: the **unit's** theory marks from the published CBSE breakdown — never a per-chapter guess; all units together must total 70. **Physics must omit it** — `build-physics-outlines.py` rejects a record that has it (see below). |
 | `source` | string | `NCERT Class 12 Physics, chapter N`. |
 
 Optional field, used only when a subject has a verified figure inventory:
