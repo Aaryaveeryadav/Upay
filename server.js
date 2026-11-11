@@ -1164,6 +1164,9 @@ const handleRequest = async function (req, res) {
   }
 
   try {
+    if (process.env.UPAY_AI_ENABLED === 'false' && req.method === 'POST' && /^\/api\/ai\/(solve|read-image|translate)$/.test(p)) {
+      return json(res, 503, {code:'ai_disabled', error:'AI is temporarily switched off by the administrator. Study material is still available.'});
+    }
     // The linked Supabase project currently permits unverified self-signup.
     // Restrict provider-spending calls from Supabase accounts to an explicit
     // server-side allowlist. Admin-created local accounts retain their roles.
