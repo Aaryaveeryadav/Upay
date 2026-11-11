@@ -54,6 +54,10 @@ global.fetch = async function(url, opts) {
     : {question_understood:'GDP and NDP',answer:'NDP is GDP less depreciation.',summary:'Compare the two measures.',
        approaches:[{name:'Definitions',tag:'Explain',steps:[{t:'Subtract depreciation',m:'NDP = GDP - depreciation'}]}],
        check:'Review the definitions',diagram:{type:'solid'}};
+  reply.approaches.push(
+    {name:'Example',steps:[{t:'Apply the explanation to an accurate example.'}]},
+    {name:'Comparison',steps:[{t:'Compare the relevant concepts to clarify the answer.'}]}
+  );
   const payload = {candidates:[{content:{parts:[{text:JSON.stringify(reply)}]}}]};
   return {ok:true,status:200,text:async()=>JSON.stringify(payload)};
 };
@@ -103,7 +107,7 @@ def jwt(exp_offset=3600, signature='GOOD'):
 def main():
     with tempfile.TemporaryDirectory(prefix='upay-isolated-', dir=os.environ.get('UPAY_TEST_TMP') or None) as td:
         work = Path(td)
-        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
+        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
             (work / name).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / name, work / name)
         (work / 'index.html').write_text('<title>isolated test</title>')
@@ -197,7 +201,7 @@ def main():
             parts = [owner, 'solve', 'maths', 10, 'en', 'owner fixture question']
             payload = json.dumps(parts, ensure_ascii=False, separators=(',', ':')).encode()
             key = 'v2:' + hmac.new(secret, payload, hashlib.sha256).hexdigest()[:32]
-            db['aiCache'][key] = {'owner':owner, 'result':'student-only cached answer', 'approaches':[]}
+            db['aiCache'][key] = {'owner':owner, 'result':'student-only cached answer', 'policyVersion':'three-approaches-v1', 'approaches':[{'name':str(i),'steps':[{'t':str(i)}]} for i in range(3)]}
             db['aiCache']['legacy-fixture'] = {'result':'legacy private answer'}
             dbfile.write_text(json.dumps(db))
             start()

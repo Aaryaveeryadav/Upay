@@ -40,7 +40,7 @@ def free_port():
 def main():
     with tempfile.TemporaryDirectory(prefix='upay-browser-auth-', dir=os.environ.get('UPAY_TEST_TMP') or None) as td:
         work = Path(td)
-        for name in ('server.js','corrupt_gate.js','lib/supabase-public.js','lib/supabase-auth.js','lib/ai-access.js','tools/checker.js','index.html','sw.js'):
+        for name in ('server.js','corrupt_gate.js','lib/supabase-public.js','lib/supabase-auth.js','lib/ai-access.js','lib/solve-policy.js','tools/checker.js','index.html','sw.js'):
             (work / name).parent.mkdir(parents=True,exist_ok=True)
             shutil.copy2(ROOT / name,work / name)
         (work / 'assets').symlink_to(ROOT / 'assets', target_is_directory=True)

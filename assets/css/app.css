@@ -1567,3 +1567,84 @@ h1:lang(hi), h2:lang(hi), h3:lang(hi), .approach-body p:lang(hi), .snippet block
   .sec-body { font-size: 13px; }
   .sec-head { font-size: 14px; }
 }
+
+/* Home study tools: give each decision its own space, without changing actions. */
+.daily-reminder {
+  display:flex; align-items:center; gap:16px;
+  padding:20px 24px; margin-bottom:24px;
+  background:#fff8e1; border:1px solid #f3d78a;
+}
+.daily-reminder > svg { flex-shrink:0; }
+.daily-reminder b { display:block; line-height:1.5; margin-bottom:4px; }
+.study-shortcuts {
+  display:flex; flex-direction:column; gap:24px;
+  padding:28px; margin-bottom:24px;
+}
+.study-shortcuts > h2 {
+  margin:0; font-size:26px; line-height:1.3;
+}
+.study-shortcuts-actions {
+  display:flex; flex-wrap:wrap; align-items:stretch; gap:12px;
+}
+.study-shortcuts-actions .btn {
+  min-height:48px; padding:12px 20px;
+  white-space:normal; text-align:center; line-height:1.5;
+}
+.study-goal-row {
+  display:flex; align-items:center; flex-wrap:wrap; gap:16px 28px;
+  padding-top:22px; border-top:1px solid var(--line);
+}
+.study-goal-field { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
+.study-goal-field > span { font-size:14px; font-weight:600; color:var(--ink-700); }
+.study-goal-field select {
+  width:auto; min-width:150px; min-height:44px;
+  padding:9px 32px 9px 12px; border:1px solid var(--line-cool);
+  border-radius:10px; background-color:var(--surface-2); color:var(--ink-800);
+  font:inherit; cursor:pointer;
+}
+.study-goal-field select:focus-visible,
+.home-outline-links a:focus-visible {
+  outline:3px solid var(--sky-600); outline-offset:3px;
+}
+.study-goal-row > p { flex:1 1 280px; margin:0; font-size:13px; line-height:1.65; }
+.home-outline-links {
+  display:flex; flex-direction:column; gap:14px;
+  padding:22px 26px; margin-bottom:24px;
+  background:var(--cream-100); border:1px solid var(--cream-300);
+}
+.home-outline-links > h2 { margin:0; font:600 15px/1.5 var(--sans); }
+.home-outline-links nav { display:flex; flex-wrap:wrap; gap:10px; }
+.home-outline-links nav a {
+  display:inline-flex; align-items:center; min-height:40px;
+  padding:7px 12px; border:1px solid var(--cream-300); border-radius:10px;
+  background:var(--cream-50); line-height:1.5; text-decoration:none;
+}
+.home-outline-links nav a:hover { background:var(--sky-50); border-color:var(--sky-200); }
+.home-outline-links > p { margin:0; font-size:13px; line-height:1.6; }
+@media (max-width:620px) {
+  .daily-reminder { padding:16px; gap:12px; margin-bottom:18px; }
+  .study-shortcuts { padding:22px 18px; gap:20px; margin-bottom:18px; }
+  .study-shortcuts > h2 { font-size:23px; }
+  .study-shortcuts-actions { display:grid; grid-template-columns:minmax(0,1fr); gap:10px; }
+  .study-shortcuts-actions .btn { width:100%; }
+  .study-goal-row { align-items:stretch; gap:12px; padding-top:18px; }
+  .study-goal-field { width:100%; justify-content:space-between; }
+  .study-goal-row > p { flex-basis:100%; }
+  .home-outline-links { padding:20px 18px; margin-bottom:18px; }
+  .home-outline-links nav { display:grid; grid-template-columns:minmax(0,1fr); }
+}
+
+.ai-flow-nodes {
+  list-style:none; margin:0; padding:24px;
+  display:flex; flex-direction:column; align-items:center; gap:30px;
+}
+.ai-flow-nodes li {
+  position:relative; width:min(100%, 480px); box-sizing:border-box;
+  padding:14px 18px; border:1px solid var(--sky-200); border-radius:12px;
+  background:var(--sky-50); color:var(--ink-800); text-align:center;
+  line-height:1.6; overflow-wrap:anywhere;
+}
+.ai-flow-nodes li + li::before {
+  content:'↓'; position:absolute; top:-30px; left:calc(50% - 10px);
+  width:20px; height:28px; color:var(--sky-700); font-size:22px;
+}

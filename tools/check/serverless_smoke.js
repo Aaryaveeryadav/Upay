@@ -7,12 +7,17 @@ process.env.UPAY_AI_ALLOWED_USERS = 'allowed-test-user,allowed-test-user-2';
 process.env.SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_test_fixture';
 process.env.SUPABASE_ANON_KEY = 'legacy_test_fixture';
 const lib = require('../../lib/gemini.js');
-let providerCalls = 0, lastPrompt = '', replyText = '';
+let providerCalls = 0, lastPrompt = '', replyText = '', queuedReplies = [];
+const three = () => [
+  {name:'First principles', steps:[{t:'Explain the underlying principle using the supplied information.'}]},
+  {name:'Worked application', steps:[{t:'Apply the principle to a concrete example, stating its limits.'}]},
+  {name:'Comparison', steps:[{t:'Contrast the relevant concepts and explain why the distinction matters.'}]}
+];
 lib.callGeminiResilient = async function (prompt, keys, model, image) {
   providerCalls++;
   lastPrompt = prompt;
   if (image) return { text: 'Read a question from the photo', model: 'mock-model' };
-  return { text: replyText, model: 'mock-model' };
+  return { text: queuedReplies.length ? queuedReplies.shift() : replyText, model: 'mock-model' };
 };
 const authMe = require('../../api/auth/me.js');
 const localLogin = require('../../api/auth/login.js');
@@ -63,7 +68,7 @@ async function main() {
     assert.equal(r.code,status); assert.equal(providerCalls,0);
   }
   replyText = JSON.stringify({ question_understood:'Capital accounts', answer:'Debit X', summary:'An accounting entry',
-    approaches:[{name:'Journal', tag:'Entry', steps:[{t:'Record entry',m:'Debit X'}]}], check:'Review the entry',
+    approaches:three(), check:'Review the entry',
     diagram:{type:'solid'} });
   r = await invoke(solve,{method:'POST', token:'valid', body:{question:'Record a partnership entry', subject:'accountancy', cls:12}});
   assert.equal(r.code,200); assert.equal(r.body.result,'Debit X'); assert.equal(r.body.questionUnderstood,'Capital accounts');
@@ -81,7 +86,7 @@ async function main() {
   assert.equal(r.code,200); assert.notEqual(r.body.cached,true); assert.equal(providerCalls,beforeEconomics+2);
   const beforeEnglish12 = providerCalls;
   replyText = JSON.stringify({ question_understood:'An English question', answer:'A sample literary explanation.', summary:'A mock response.',
-    approaches:[{name:'Interpretation', steps:[{t:'Consider the evidence in the passage.'}]}], check:'Check the book', diagram:{type:'solid'} });
+    approaches:three(), check:'Check the book', diagram:{type:'solid'} });
   const english12Question = {question:'How does Franz view his last lesson?', subject:'english', cls:12, lang:'en'};
   for (let i=0; i<2; i++) {
     r = await invoke(solve,{method:'POST', token:'valid', body:english12Question});
@@ -104,6 +109,24 @@ async function main() {
   assert.equal(r.code,200); assert.notEqual(r.body.cached,true); assert.equal(providerCalls,beforeCache+2);
   r = await invoke(solve,{method:'POST', token:'valid-two', body:{...privateQuestion,lang:'hi'}});
   assert.equal(r.code,200); assert.notEqual(r.body.cached,true); assert.equal(providerCalls,beforeCache+3);
+  // One complete repair for a short draft, including theory and non-maths subjects.
+  const short = JSON.stringify({answer:'A theory answer', approaches:[three()[0]]});
+  const complete = JSON.stringify({answer:'A theory answer', approaches:three(),
+    diagram:{type:'flow',nodes:['Cause','Mechanism','Effect'],caption:'Cause leads to effect through a mechanism.'}});
+  for (const subject of ['maths','applied-maths','physics','chemistry','biology','accountancy','computerized-accounting','economics','english','hindi','social','business']) {
+    const before = providerCalls;
+    queuedReplies = [short, complete];
+    r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Explain a policy test '+subject,subject,cls:12,minMethods:0}});
+    assert.equal(r.code,200,subject); assert.equal(providerCalls,before+2);
+    assert.equal(r.body.approaches.length,3); assert.equal(r.body.diagram.type,'flow');
+    assert.match(lastPrompt,/at least 3 genuinely distinct/i);
+    assert.match(lastPrompt,/REPAIR:/);
+  }
+  // Repeated/renamed working is not counted; do not return a partial success.
+  queuedReplies = [short, JSON.stringify({answer:'A',approaches:[three()[0],three()[0],{...three()[0],name:'Renamed copy'}]})];
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Reject duplicate method fixture',subject:'physics'}});
+  assert.equal(r.code,502); assert.match(r.body.error,/three distinct/);
+  queuedReplies = [];
   r = await invoke(readImage,{method:'POST',token:'valid',body:{}}); assert.equal(r.code,400);
   r = await invoke(readImage,{method:'POST',token:'valid',body:{data:'a'.repeat(240),mime:'image/png'}});
   assert.equal(r.code,200); assert.equal(r.body.question,'Read a question from the photo');
