@@ -1093,26 +1093,31 @@ window.UP = window.UP || {};
     const specific = (scopedExamples[+S.cls] || {})[S.subject];
     const samples = specific ? specific.map(en => ({ en, hi: en })) : (subjectSamples[S.subject] || [{ en: 'Type a question from your selected subject.', hi: 'अपने चुने हुए विषय का प्रश्न लिखिए।' }]);
     return `
-    <section class="card" aria-label="Study shortcuts" style="margin-bottom:18px;padding:20px">
+    <section class="card study-shortcuts" aria-label="Study shortcuts">
       <h2>${S.lang === 'hi' ? 'आज की पढ़ाई' : 'Your next study step'}</h2>
-      <div class="pactions" style="display:flex;gap:10px;flex-wrap:wrap">
+      <nav class="study-shortcuts-actions" aria-label="Study actions">
         <a class="btn btn-primary" href="${resume ? '#/chapter/'+resume.id : '#/syllabus'}">${S.lang === 'hi' ? 'पढ़ाई जारी रखें' : 'Continue studying'}</a>
         <a class="btn btn-ghost" href="#/today">${S.lang === 'hi' ? 'अभ्यास और आज की पुनरावृत्ति' : 'Practise · Today’s revision'}</a>
         <a class="btn btn-ghost" href="#/mistakes">${S.lang === 'hi' ? 'गलतियाँ दोहराएँ' : 'Revise mistakes'}</a>
         <a class="btn btn-ghost" href="#/saved">${S.lang === 'hi' ? 'सहेजे प्रश्न' : 'Saved questions'}</a>
+      </nav>
+      <div class="study-goal-row">
+        <label class="study-goal-field" for="home-study-goal"><span>${S.lang === 'hi' ? 'दैनिक लक्ष्य (योजना मात्र)' : 'Daily goal (planning only)'}</span>
+          <select id="home-study-goal" data-action="study-goal" aria-label="Daily study goal" aria-describedby="home-study-goal-help">${[5,10,15].map(n=>`<option value="${n}" ${dailyGoal===n?'selected':''}>${n} questions</option>`).join('')}</select>
+        </label>
+        <p class="muted" id="home-study-goal-help">${S.lang === 'hi' ? 'अपनी सुविधा से अभ्यास करें; लक्ष्य कोई अंक नहीं है।' : 'Choose your own pace. This goal is not a score or a promise of available questions.'}</p>
       </div>
-      <label>${S.lang === 'hi' ? 'दैनिक लक्ष्य (योजना मात्र)' : 'Daily goal (planning only)'}
-        <select data-action="study-goal" aria-label="Daily study goal">${[5,10,15].map(n=>`<option value="${n}" ${dailyGoal===n?'selected':''}>${n} questions</option>`).join('')}</select>
-      </label><p class="muted">${S.lang === 'hi' ? 'अपनी सुविधा से अभ्यास करें; लक्ष्य कोई अंक नहीं है।' : 'Choose your own pace. This goal is not a score or a promise of available questions.'}</p>
     </section>
-    <section class="card callout tip" style="margin:0 0 18px"><div>
-      <b>CBSE Class 12 · English outlines</b><br>
-      <a class="link" href="/assets/notes/index.html#business">Business Studies</a> ·
-      <a class="link" href="/assets/notes/index.html#chemistry">Chemistry (units 1–10)</a> ·
-      <a class="link" href="/assets/notes/index.html#biology">Biology (13 chapters)</a> ·
-      <a class="link" href="/assets/notes/index.html#figures-bio">Biology figures</a>
-      <span class="muted"> — syllabus-mapped study outlines; coverage is incomplete.</span>
-    </div></section>
+    <section class="card home-outline-links" aria-labelledby="home-outline-title">
+      <h2 id="home-outline-title">CBSE Class 12 · English outlines</h2>
+      <nav aria-label="Class 12 outline resources">
+        <a class="link" href="/assets/notes/index.html#business">Business Studies</a>
+        <a class="link" href="/assets/notes/index.html#chemistry">Chemistry (units 1–10)</a>
+        <a class="link" href="/assets/notes/index.html#biology">Biology (13 chapters)</a>
+        <a class="link" href="/assets/notes/index.html#figures-bio">Biology figures</a>
+      </nav>
+      <p class="muted">Syllabus-mapped study outlines; coverage is incomplete.</p>
+    </section>
     <section class="hero">
       <div class="hero-grid">
         <div>
@@ -1740,7 +1745,7 @@ window.UP = window.UP || {};
   }
 
   /* the AI answer, in the same shape as a built-in one */
-  function renderAIAnswer(a) {
+  function renderAIDiagram(a) {
     const figSpec = a.diagram ? Object.assign({}, a.diagram, { caption: a.diagram.caption }) : null;
     let fig = '';
     /* Client-side safety: a "solid" diagram (cylinder/cone/sphere/...) is only
@@ -1756,7 +1761,7 @@ window.UP = window.UP || {};
       /* Maths: only draw solids when the question actually names one with
          measurements. Coordinate geometry / triangles / circles / bars are
          always fine for maths. */
-      if (subject === 'maths') {
+      if (subject === 'maths' || subject === 'applied-maths') {
         if (ty === 'solid' || ty === 'composite') {
           return /cylind|\bcone\b|hemispher|\bsphere\b|frustum|cuboid|\bcube\b|radius|height|diamet|volume|surface area/i.test(t);
         }
@@ -1767,7 +1772,7 @@ window.UP = window.UP || {};
          (pendulum/incline/pulley), and genuine plane/triangle/circle diagrams
          (ray diagrams, force triangles, lens ray tracing, etc.). Bars are
          also fine (data). Reject solids entirely. */
-      if (subject === 'science') {
+      if (['science','physics','chemistry','biology'].includes(subject)) {
         if (ty === 'solid' || ty === 'composite') return false;
         const sciAllowed = ['apparatus','beaker','test-tube','flask','burner','reaction',
                            'lens','mirror','ray','optics','circuit','pulley','pendulum',
@@ -1790,16 +1795,30 @@ window.UP = window.UP || {};
       /* Languages (Hindi/English/Sanskrit) and Social: NO diagrams at all. */
       return false;
     }
-    if (figSpec && UP.figures && UP.figures.generic && diagramIsHonestForSubject(figSpec, a.question || S.aiQuestion || '', S.subject)) {
+    // Conceptual diagrams work for theory in any subject. Render text only,
+    // never provider HTML/SVG. The arrows represent the supplied reasoning chain.
+    if (figSpec && figSpec.type === 'flow' && Array.isArray(figSpec.nodes)) {
+      const nodes = figSpec.nodes.filter(n => typeof n === 'string' && n.trim()).slice(0, 8);
+      if (nodes.length >= 2) fig = '<figure class="figure-card ai-concept-diagram">' +
+        '<div class="figure-head"><span class="mini-label">' +
+        (S.lang === 'hi' ? 'अवधारणा चित्र · एआई' : 'Concept diagram · AI-generated') + '</span></div>' +
+        '<ol class="ai-flow-nodes">' + nodes.map(n => '<li>' + esc(n.slice(0, 180)) + '</li>').join('') + '</ol>' +
+        '<figcaption>' + esc(String(figSpec.caption || '').slice(0, 600)) + '</figcaption></figure>';
+    }
+    if (!fig && figSpec && figSpec.type !== 'flow' && UP.figures && UP.figures.generic && diagramIsHonestForSubject(figSpec, a.question || S.aiQuestion || '', S.subject)) {
       try {
         const svg = UP.figures.generic(figSpec);
         if (svg) fig = '<figure class="figure-card"><div class="figure-head">' +
           '<span class="mini-label">' + (S.lang === 'hi' ? 'चित्र' : 'Diagram') + '</span>' +
-          '<span class="tag grey">' + (S.lang === 'hi' ? 'प्रश्न के निर्देशांकों से बना' : 'drawn from this question’s own coordinates') + '</span>' +
+          '<span class="tag grey">' + (S.lang === 'hi' ? 'प्रश्न के निर्देशांकों से बना' : 'AI-generated schematic · check labels and values') + '</span>' +
           '</div><div class="figure-body">' + svg + '</div>' +
           '<figcaption>' + esc(figSpec.caption || '') + '</figcaption></figure>';
       } catch (e) { fig = ''; }
     }
+    return fig;
+  }
+  function renderAIAnswer(a) {
+    const fig = renderAIDiagram(a);
     const chk = a.check || null;
     return `
     <section class="answer ai-answer">
@@ -1902,11 +1921,12 @@ window.UP = window.UP || {};
   }
 
   function renderCachedAnswer(j, qq, sol, ansBox, id) {
-    if (!j || !j.approaches || !j.approaches.length) return false;
+    if (!j || j.policyVersion !== 'three-approaches-v1' || !j.approaches || j.approaches.length < 3) return false;
     const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
       (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
       '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + mathText(j.answer || j.result) + '</div>' +
       (j.summary ? '<p class="sol-sum">' + esc(j.summary) + '</p>' : '') +
+      renderAIDiagram(Object.assign({}, j, {question:qq.en || ''})) +
       j.approaches.map((a, i) => '<div class="sol-method"><div class="sol-mname">' +
         (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i+1) + ' — ' : '') + esc(a.name) + '</div>' +
         '<ol class="sol-ol">' + (a.steps||[]).map(st => '<li>' + esc(st.t || '') +
@@ -1955,11 +1975,7 @@ window.UP = window.UP || {};
       /* imported:true turns on the corrupt gate.  Without it the server
          happily spent a model call answering a question whose fraction was
          lost in extraction -- and then showed that answer as a solution. */
-      /* topUp: a cached answer made before the three-method rule has only one
-         or two routes. One cheap call adds the missing ones; the server refuses
-         to invent a method when a question genuinely has fewer, and won't ask
-         again for a week. */
-      body: JSON.stringify({ question: ask, chapter: qq.ch, imported: true, options: hasOpts(qq) ? qq.opts.length : 0, topUp: true, subject: S.subject, cls: S.cls, lang: S.lang })
+      body: JSON.stringify({ question: ask, chapter: qq.ch, imported: true, options: hasOpts(qq) ? qq.opts.length : 0, subject: S.subject, cls: S.cls, lang: S.lang })
     }).then(r => {
       /* A non-2xx reply used to be thrown away unread (`.then(r => r.ok ? r.json()
          : null)`), so EVERY failure -- a timed-out session, the daily quota, a
@@ -2010,6 +2026,7 @@ window.UP = window.UP || {};
         (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
         '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + mathText(j.result) + '</div>' +
         (j.summary ? '<p class="sol-sum">' + esc(j.summary) + '</p>' : '') +
+      renderAIDiagram(Object.assign({}, j, {question:qq.en || ''})) +
         j.approaches.map((a, i) => '<div class="sol-method"><div class="sol-mname">' +
           (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i + 1) + ' — ' : '') + esc(a.name) + '</div>' +
           '<ol class="sol-ol">' + a.steps.map(st => '<li>' + esc(st.t) +
@@ -4647,7 +4664,10 @@ window.UP = window.UP || {};
     return `<div class="q-solution" data-solbox="${esc(q.no)}">
       <div class="sol-ans"><span>${aiProvided && (!hasAns || sourceQuestion) ? (S.lang === 'hi' ? 'AI उत्तर (असत्यापित)' : 'AI answer (unverified)') : (S.lang === 'hi' ? 'उत्तर' : 'Answer')}</span><b>${esc(ansVal)}</b></div>
       ${fig ? `<div class="figure-card test-fig">${fig.svg}<div class="figure-cap">${esc(P(fig.caption || {en:'',hi:''}))}</div></div>` : ''}
-      ${steps ? `<ol class="sol-steps">${steps}</ol>` : ''}
+      ${q.aiSolution ? renderAIDiagram(q.aiSolution) + q.aiSolution.approaches.map((a,i) =>
+        `<section class="sol-method"><h4>${i+1}. ${esc(a.name)}</h4><ol class="sol-steps">${(a.steps || []).map(st =>
+          `<li>${esc(st.t || '')}${st.m ? `<div class="st-m">${mathText(st.m)}</div>` : ''}${st.note ? `<p>${esc(st.note)}</p>` : ''}</li>`).join('')}</ol>${a.why ? `<p>${esc(a.why)}</p>` : ''}</section>`).join('')
+        : (steps ? `<ol class="sol-steps">${steps}</ol>` : '')}
       ${q.aiNote ? `<div class="callout warn" style="margin-top:10px">${esc(q.aiNote)}</div>` : ''}
       ${aiProvided ? `<div class="callout warn" style="margin-top:10px">${S.lang === 'hi' ? 'यह AI व्याख्या किसी आधिकारिक उत्तर-कुंजी से सत्यापित नहीं है।' : 'This AI explanation has not been verified against an official answer key.'}</div>` : ''}
       ${hasSteps && !sourceQuestion ? `<div class="sol-method">${icon('bulb')} ${S.lang === 'hi' ? 'अभ्यास के लिए हल।' : 'Practice solution.'}</div>` : ''}
@@ -4674,6 +4694,7 @@ window.UP = window.UP || {};
         if (!isCurrent()) return;
         if (ok && j.approaches && j.approaches.length) {
           const first = j.approaches[0];
+          q.aiSolution = Object.assign({}, j, {question:qText});
           q.aiSteps = (first.steps || []).map(s => {
             const bits = [];
             if (s.t) bits.push(s.t);
@@ -6426,7 +6447,7 @@ function todayReminder(){
   const items = buildDailySet();
   const done = (S.dailyProgress && S.dailyProgress[todayKey()]) || 0;
   if (done >= items.length) return '';
-  return `<div class="card flat daily-reminder" style="padding:14px 16px;background:#fff8e1;border:1px solid #f3d78a;display:flex;gap:12px;align-items:center">
+  return `<div class="card flat daily-reminder">
     ${icon('target')}
     <div style="flex:1">
       <b>${S.lang==='hi'?'आज का अभ्यास बाकी है':'Daily practice pending'}</b>

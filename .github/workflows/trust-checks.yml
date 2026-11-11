@@ -55,5 +55,6 @@ jobs:
           PY
           python3 tools/check/physics_outline_smoke.py
           python3 tools/check/trust_browser_smoke.py
+          python3 tools/check/solve_policy_browser.py
           python3 tools/check/ai_access_browser.py
           python3 tools/check/security_headers.py

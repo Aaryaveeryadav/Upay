@@ -1,4 +1,5 @@
 'use strict';
+const solvePolicy = require('../../lib/solve-policy.js');
 const { consumeAI } = require('../../lib/ai-usage.js');
 const { aiFailure } = require('../../lib/ai-status.js');
 const { callGeminiResilient, readBody, json, firstJSON } = require('../../lib/gemini.js');
@@ -56,7 +57,7 @@ module.exports = async function handler(req, res) {
   const isEnglish12 = subject === 'english' && cls === 12;
   const noOfficialKey = isAccountancy || isEconomics || isEnglish12;
   // Never reuse one student's potentially private prompt/answer for another.
-  const cacheKey = JSON.stringify([user.id, subject, cls, String(b.lang || 'en').slice(0, 2).toLowerCase(), question.toLowerCase()]);
+  const cacheKey = JSON.stringify([solvePolicy.VERSION, user.id, subject, cls, String(b.lang || 'en').slice(0, 2).toLowerCase(), question.toLowerCase()]);
   const cached = noOfficialKey ? null : cacheGet(cacheKey);
   if (cached && !b.refresh) return json(res, 200, Object.assign({ cached: true }, cached));
 
@@ -80,11 +81,11 @@ module.exports = async function handler(req, res) {
     ' "check":"<how to verify the answer>",',
     ' "diagram":{"type":"plane|triangle|circle|bars|solid","points":[...],"circles":[...],"segments":[...],"bars":[...],"parts":[...],"labels":[...],"caption":"..."}}',
     'Rules:',
-    '- Give 2-3 genuinely different approaches. Same working under two labels is forbidden.',
+    '- Give at least 3 genuinely different approaches. Same working under two labels is forbidden.',
     '- Every step shows real working with the question\'s own numbers.',
     '- Verify arithmetic before writing. No unique answer? Say so in "answer".',
     '- Use · for decimals, √ π θ ° ∠ △ ⇒ as needed.',
-    '- ALWAYS return an honest "diagram" — blank space teaches nothing.',
+    '- Include an honest diagram when it helps explain the question.',
     '- diagram.type="solid" ONLY for mensuration questions that actually mention a solid (cylinder/cone/hemisphere/sphere/frustum/cuboid) AND give r/h/side.',
     '  When the solid isn\'t named or numbers aren\'t given, DO NOT invent a cylinder — return diagram:null instead.',
     '- Plane geometry: use "points" + "segments" with real coordinates.',
@@ -104,7 +105,7 @@ module.exports = async function handler(req, res) {
     ' "check":"<how to verify>",',
     ' "diagram":<either null (no figure needed) OR a figure object below>}',
     'Rules:',
-    '- Give 1-3 genuinely different approaches.',
+    '- Give at least 3 genuinely different approaches.',
     '- Numericals: show every substitution with units. Balance every equation atom-by-atom.',
     '- Hindi NOT needed — English only.',
     '- Return a "diagram" ONLY when the question is about something that has a diagram:',
@@ -113,39 +114,39 @@ module.exports = async function handler(req, res) {
     '  • Mechanics: {"type":"pulley","mechanism":"incline|pendulum|pulley",...}.',
     '  • Chemistry apparatus: {"type":"apparatus","parts":[...],...}.',
     '  • Biology: {"type":"bio","kind":"leaf|cell|flower|organ",...}.',
-    '- For define/balance/explain/name/differentiate questions with no apparatus, return diagram:null.',
+    '- For theory without apparatus, use a conceptual flow diagram when helpful.',
     '- NEVER set diagram.type to "solid", "composite", "plane", "triangle", "circle", or "bars" for Chemistry or Biology.',
     '- NEVER set diagram.type to "solid" or "composite" for science — cylinders/cones are Maths mensuration shapes.'
   ];
   const socialPrompt = [
     'You are an experienced CBSE Class ' + cls + ' Social Science teacher. Answer the question asked.',
     'Reply with ONLY JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","tag":"...","steps":[{"t":"..."}],"why":"...","watch":"..."}],"check":"...","diagram":null}',
-    'Use dates and article numbers accurately. diagram must be null.'
+    'Use dates and article numbers accurately.'
   ];
   const langPrompt = [
     'You are an experienced CBSE Class ' + cls + ' ' + subject + ' teacher. Answer the literature/grammar question.',
     'Reply with ONLY JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","tag":"...","steps":[{"t":"..."}],"why":"...","watch":"..."}],"check":"...","diagram":null}',
-    'diagram must be null. Use the language the student used.'
+    'Use the language the student used.'
   ];
   const accountancyPrompt = [
     'You are a CBSE Class ' + cls + ' ' + (subject === 'computerized-accounting' ? 'Computerised Accounting' : 'Accountancy') + ' teacher.',
     'Answer only the question as printed; do not assume missing values, fabricate an official key, or silently change a date or amount.',
     'If an OR is present, handle each alternative separately and label it. If the text is incomplete, state what is missing.',
     'Show relevant accounting calculations and journal entries with clear debit and credit amounts; for spreadsheet/computer questions use the given syntax precisely.',
-    'Do not invent multiple methods or a diagram. State assumptions and uncertainty explicitly.',
+    'Do not invent facts or numerical data. State assumptions and uncertainty explicitly.',
     'Reply with ONLY JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","tag":"...","steps":[{"t":"...","m":"..."}],"why":"...","watch":"..."}],"check":"...","diagram":null}'
   ];
   const economicsPrompt = [
     'You are an Economics teacher answering a Class ' + cls + ' question.',
     'Answer only what is asked, in the language the student used. State assumptions, units, definitions and limitations where relevant; do not invent figures or an official marking scheme.',
-    'Do not claim to have read or quoted a textbook unless its text is supplied in the question. Do not invent multiple methods or diagrams.',
+    'Do not claim to have read or quoted a textbook unless its text is supplied in the question. Do not invent facts or numerical data.',
     'Reply with ONLY JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","tag":"...","steps":[{"t":"...","m":"..."}],"why":"...","watch":"..."}],"check":"...","diagram":null}'
   ];
   const english12Prompt = [
     'You are an English literature and language teacher answering a Class 12 question.',
     'Answer the question asked in the language the student used. Support interpretations with the supplied text where possible; acknowledge ambiguity.',
     'The textbook PDFs are not automatically supplied to you. Do not claim to have read, quoted or checked them unless the passage is actually in the question. If a precise extract is needed, ask the student to provide it.',
-    'Do not invent quotations, missing details, official marking schemes, multiple methods or a diagram. State uncertainty where needed.',
+    'Do not invent quotations, missing details, official marking schemes or numerical data. State uncertainty where needed.',
     'Reply with ONLY JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","tag":"...","steps":[{"t":"..."}],"why":"...","watch":"..."}],"check":"...","diagram":null}'
   ];
   let topicPrompt;
@@ -159,7 +160,7 @@ module.exports = async function handler(req, res) {
   else topicPrompt = ['Answer the supplied Class ' + cls + ' ' + subject + ' question without inventing missing information.',
     'Reply with JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","steps":[{"t":"..."}]}],"check":"...","diagram":null}'];
 
-  const prompt = topicPrompt.concat(['', 'QUESTION: ' + question]).join('\n');
+  const prompt = topicPrompt.concat([solvePolicy.instructions,'', 'QUESTION: ' + question]).join('\n');
 
   // Overall request ceiling — never let the endpoint hang past 30s total
   let timeoutId;
@@ -176,6 +177,15 @@ module.exports = async function handler(req, res) {
       callGeminiResilient(prompt, null, 'gemini-3.5-flash-lite'),
       timeoutPromise
     ]);
+    // One bounded repair call, sharing the original 30-second deadline.
+    let draft;
+    try { draft = firstJSON(out.text); } catch (_) { draft = null; }
+    if (draft && solvePolicy.distinctApproaches(draft.approaches).length < 3) {
+      out = await Promise.race([
+        callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), null, out.model),
+        timeoutPromise
+      ]);
+    }
     model = out.model;
   } catch (e) {
     const failure = aiFailure(e);
@@ -202,22 +212,22 @@ module.exports = async function handler(req, res) {
     note: String((st && st.note) || '')
   })).filter(st => st.t);
   const answer = {
-    source: 'ai', model: model,
+    source: 'ai', policyVersion: solvePolicy.VERSION, model: model,
     questionUnderstood: String(parsed.question_understood || ''),
     result: String(parsed.answer || ''), summary: String(parsed.summary || ''),
     verify: typeof parsed.check === 'string' ? parsed.check : '',
-    approaches: (Array.isArray(parsed.approaches) ? parsed.approaches : []).map(a => ({
+    approaches: solvePolicy.distinctApproaches(parsed.approaches).map(a => ({
       name: String((a && a.name) || 'Method'), tag: String((a && a.tag) || ''),
       steps: steps(a && a.steps), why: String((a && a.why) || ''), watch: String((a && a.watch) || '')
     })).filter(a => a.steps.length),
-    diagram: !noOfficialKey && parsed.diagram && typeof parsed.diagram === 'object' ? parsed.diagram : null,
+    diagram: solvePolicy.diagramForSubject(parsed.diagram, subject),
     check: { state: 'unchecked', note: noOfficialKey
       ? 'AI-generated; not checked against an official answer key.'
       : 'AI-generated; not independently checked.' },
     generatedAt: new Date().toISOString()
   };
-  if (!answer.approaches.length || !answer.result) {
-    return json(res, 502, { error: 'The AI returned no usable solution. Please try again.', fallback: true });
+  if (answer.approaches.length < 3 || !answer.result) {
+    return json(res, 502, { error: 'The AI could not provide three distinct usable approaches. Please try again.', fallback: true });
   }
   if (!noOfficialKey) cacheSet(cacheKey, answer);
   return json(res, 200, answer);

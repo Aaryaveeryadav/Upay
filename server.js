@@ -13,6 +13,7 @@
      data/secret.key  the AES key for the encrypted admin password
    ===================================================================== */
 'use strict';
+const solvePolicy = require('./lib/solve-policy.js');
 
 const http = require('http');
 const fs = require('fs');
@@ -374,78 +375,6 @@ function clientIp(req) {
 }
 
 /* ---------------- helpers ---------------- */
-/* A literal "give me 3 approaches" instruction is not enough: measured on this
-   bank the model returns ONE method for 54% of questions and two for 42%, only
-   3% reach three. Saying it again in the prompt just makes it pad -- three
-   headings, one real derivation and two restatements of it.
-   So the count is enforced here instead: if a reply comes back with fewer than
-   three methods, one extra call asks for the missing methods ONLY, told exactly
-   which methods already exist so it cannot return them again, and told to omit
-   one honestly rather than invent one. Two "methods" that are the same working
-   under different names teach a student less than one honest method.
-   Every new method is still checked against the SAME final answer, so a padded
-   or contradictory method cannot slip in. */
-async function replenishApproaches(question, answer, key, model, want, near) {
-  const have = answer.approaches.map(function (a) {
-    return '- ' + a.name + (a.tag ? ' (' + a.tag + ')' : '');
-  }).join('\n');
-  const need = want - answer.approaches.length;
-  const prompt = [
-    'You are an experienced CBSE Class 10 Mathematics teacher.',
-    'The question below has ALREADY been solved. The final answer is fixed and correct:',
-    '',
-    'QUESTION: ' + question,
-    'FINAL ANSWER: ' + answer.result,
-    '',
-    'It already has these methods:',
-    have,
-    '',
-    'A student needs ' + need + ' MORE genuinely different method(s), to reach a total of ' + want + '.',
-    'Rules:',
-    '- Each new method must be a DIFFERENT route to the answer, not a rewording of a method above.',
-    '  Acceptable: formula vs completing the square vs factorising; elimination vs substitution vs',
-    '  graph; direct similarity vs Pythagoras; arithmetic formula vs counting pattern vs sum formula.',
-    '  NOT acceptable: the same steps with different captions, or a "verification" of the result.',
-    '- Every step must carry real working with the question\'s own numbers.',
-    '- Every method MUST end at exactly the FINAL ANSWER above. If a route genuinely does not exist,',
-    '  return fewer methods and say so in "note" -- never invent a method to fill the quota.',
-    'Reply with ONLY this JSON shape:',
-    '{"approaches":[{"name":"<method name>","tag":"<when to use it>",',
-    '  "steps":[{"t":"<what to do>","m":"<the working, one line of maths>","note":"<why, optional>"}],',
-    '  "why":"<why this route works>","watch":"<the mistake students make>"}],',
-    ' "note":"<empty, or why fewer methods are mathematically honest here>"}',
-    'Use · for decimals (3·5) and √ π θ ° ∠ △ ⇒ as needed. English only.',
-    near ? ('\nFor calibration only — real CBSE questions of the same chapter (do not answer these):\n' + near) : ''
-  ].filter(Boolean).join('\n');
-  try {
-    const out = await callGeminiResilient(prompt, key, model);
-    let parsed;
-    try { parsed = firstJSON(out.text); }
-    catch (e1) { parsed = firstJSON(repairNumericDots(out.text)); }
-    const steps = (arr) => (Array.isArray(arr) ? arr : []).map(function (st) {
-      return { t: String((st && st.t) || ''), m: String((st && st.m) || ''), note: String((st && st.note) || '') };
-    }).filter(function (st) { return st.t; });
-    const norm = function (x) { return String(x || '').toLowerCase().replace(/[^a-z0-9]/g, ''); };
-    const seen = answer.approaches.map(function (a) { return norm(a.name); });
-    const extra = (Array.isArray(parsed.approaches) ? parsed.approaches : []).map(function (a) {
-      return { name: String(a.name || 'Method'), tag: String(a.tag || ''), steps: steps(a.steps),
-               why: String(a.why || ''), watch: String(a.watch || '') };
-    }).filter(function (a) {
-      if (!a.steps.length) return false;
-      /* a renamed copy of a method we already have is padding */
-      const n = norm(a.name);
-      if (seen.indexOf(n) !== -1) return false;
-      if (seen.some(function (s2) { return s2 && (s2.indexOf(n) !== -1 || n.indexOf(s2) !== -1); })) return false;
-      seen.push(n);
-      return true;
-    });
-    return { added: extra.slice(0, need), note: String(parsed.note || '') };
-  } catch (e) {
-    return { added: [], note: '', error: String(e.message || e).slice(0, 120) };
-  }
-}
-
-
 function json(res, code, obj) {
   const body = JSON.stringify(obj);
   res.writeHead(code, {
@@ -1342,9 +1271,9 @@ const handleRequest = async function (req, res) {
         const lang = String(u.query.lang || 'en').slice(0, 2).toLowerCase();
         const k = aiCacheKey(sess, 'solve', subject, cls, lang, qq);
         const hit = db.aiCache[k];
-        return json(res, 200, hit && hit.owner === owner ? { found: true, answer: Object.assign({ cached: true }, hit) } : { found: false });
+        return json(res, 200, hit && hit.policyVersion === solvePolicy.VERSION && hit.owner === owner ? { found: true, answer: Object.assign({ cached: true }, hit) } : { found: false });
       }
-      const keys = Object.keys(db.aiCache).filter(k => db.aiCache[k] && db.aiCache[k].owner === owner && db.aiCache[k].kind !== 'translation');
+      const keys = Object.keys(db.aiCache).filter(k => db.aiCache[k] && db.aiCache[k].owner === owner && db.aiCache[k].policyVersion === solvePolicy.VERSION && db.aiCache[k].kind !== 'translation');
       return json(res, 200, { count: keys.length, keys: keys });
     }
 
@@ -1826,48 +1755,8 @@ const handleRequest = async function (req, res) {
       const qLang = String(b.lang || 'en').slice(0, 2).toLowerCase();
       const cacheKey = aiCacheKey(sess, 'solve', subject, cls, qLang, question);
       // Do not reuse cached replies for subjects without an official key.
-      if (!noOfficialKey && db.aiCache[cacheKey] && db.aiCache[cacheKey].owner === aiCacheOwner(sess) && !b.refresh) {
+      if (!noOfficialKey && db.aiCache[cacheKey] && db.aiCache[cacheKey].policyVersion === solvePolicy.VERSION && db.aiCache[cacheKey].owner === aiCacheOwner(sess) && !b.refresh) {
         const hit = db.aiCache[cacheKey];
-        /* Every answer cached before the three-method rule was added has one
-           or two methods, and a cache hit never re-solves -- so those students
-           would keep seeing a single route forever. topUp upgrades such an
-           entry with ONE cheap call that asks only for the missing routes,
-           keeping the answer that was already verified. */
-        const wantTop = b.topUp === true || b.topUp === 'true';
-        /* Do not re-ask on every view of a question that genuinely has fewer
-           than three routes: the honest answer would be paid for again each
-           time. One attempt a week is enough to catch a better model. */
-        const triedRecently = hit.topUpTriedAt && (Date.now() - Date.parse(hit.topUpTriedAt)) < 7 * 864e5;
-        if (wantTop && (hit.approaches || []).length < 3 && plain.length && !triedRecently && Date.now() > keyDeadUntil) {
-          const groundIdx = (db.content.pyqIndex || []);
-          const gch = Number(b.chapter) || 0;
-          const nearTop = (gch ? groundIdx.filter(function (q) { return q.ch === gch; }) : groundIdx).slice(0, 6)
-            .map(function (q) { return '- ' + q.en; }).join('\n');
-          const box = { approaches: hit.approaches || [], result: hit.result };
-          const pad = await replenishApproaches(question, box, plain, db.settings.geminiModel, 3, nearTop);
-          if (pad.added.length) {
-            hit.approaches = box.approaches.concat(pad.added);
-            hit.methodCount = hit.approaches.length;
-            hit.toppedUpAt = now();
-            delete hit.methodsShort; delete hit.methodsNote;
-            if (hit.approaches.length < 3) {
-              hit.methodsShort = true;
-              hit.methodsNote = pad.note || ('Only ' + hit.approaches.length + ' genuinely different method'
-                + (hit.approaches.length === 1 ? '' : 's') + ' exist for this question; the others would be the same working renamed.');
-            }
-            /* only a REAL answer earns the week-long rest; a quota failure
-               must be retryable as soon as the quota resets */
-            hit.topUpTriedAt = now();
-            saveDB();
-            audit(sess.user, 'ai-topup', question.slice(0, 60) + ' [' + hit.approaches.length + ' methods]');
-          } else if (pad.note) {
-            hit.methodsShort = true; hit.methodsNote = pad.note;
-            hit.topUpTriedAt = now();
-            saveDB();
-          }
-          /* pad.error / a bare empty reply: leave topUpTriedAt unset so the
-             next visit tries again instead of freezing a stale answer */
-        }
         hit.cached = true;
         return json(res, 200, hit);
       }
@@ -1887,8 +1776,8 @@ const handleRequest = async function (req, res) {
           - For Maths we draw honest geometric/mensuration figures.
           - For Science we branch on chemistry/physics/biology context and
             draw apparatus/optics/circuits/cells/leaves instead of solids.
-          - For language/social subjects we set diagram = null so no random
-            cylinder ever leaks in again.                                                       */
+          - Conceptual flow diagrams are available for every subject; physical
+            figure types remain subject-specific.                                                       */
       const isSci = ['science', 'physics', 'chemistry', 'biology'].includes(subject);
       const isMaths = ['maths', 'applied-maths'].includes(subject);
       const isLang = subject === 'hindi' || subject === 'english' || subject === 'sanskrit';
@@ -1907,11 +1796,11 @@ const handleRequest = async function (req, res) {
         ' "check":"<how to verify the answer>",',
         ' "diagram":{"type":"plane|triangle|circle|bars|solid","points":[...],"circles":[...],"segments":[...],"bars":[...],"parts":[...],"labels":[...],"caption":"..."}}',
         'Rules:',
-        '- Give 2-3 genuinely different approaches. Same working under two labels is forbidden.',
+        '- Give at least 3 genuinely different approaches. Same working under two labels is forbidden.',
         '- Every step shows real working with the question\'s own numbers.',
         '- Verify arithmetic before writing. No unique answer? Say so in "answer".',
         '- Use · for decimals, √ π θ ° ∠ △ ⇒ as needed.',
-        '- ALWAYS return an honest "diagram" — blank space teaches nothing.',
+        '- Include an honest diagram when it helps explain the question.',
         '- diagram.type="solid" ONLY for mensuration questions that actually mention a solid (cylinder/cone/hemisphere/sphere/frustum/cuboid) AND give r/h/side.',
         '  List stacked parts bottom-first in "parts", e.g. a cone on a cylinder = [{"shape":"cylinder","r":3,"h":10},{"shape":"cone","r":3,"h":4}].',
         '  When the solid isn\'t named or numbers aren\'t given, DO NOT invent a cylinder — return diagram:null instead.',
@@ -1933,7 +1822,7 @@ const handleRequest = async function (req, res) {
         ' "check":"<how to verify>",',
         ' "diagram":<either null (no figure needed) OR a figure object below>}',
         'Rules:',
-        '- Give 1-3 genuinely different approaches. Many theory questions have one honest route; give just that.',
+        '- Give at least 3 genuinely different approaches. Many theory questions have one honest route; give just that.',
         '- Numericals: show every substitution with units. Balance every equation atom-by-atom.',
         '- Chemical equations: use → for yields, ↑/↓ for gas/precipitate when appropriate. Balance atoms on BOTH sides.',
         '- Hindi NOT needed — English only.',
@@ -1944,7 +1833,7 @@ const handleRequest = async function (req, res) {
         '  • Chemistry apparatus (test tubes / flasks / beakers / burners, e.g. electrolysis, reactions that are heated, gas collection): {"type":"apparatus","parts":[{"kind":"beaker|flask|test-tube|burner","label":"...","fillLevel":0.0-1.0,"color":"#hex"}],"caption":"..."}.',
         '    For balancing/equation questions that do NOT ask for a setup (e.g. "Balance Fe + H2O → Fe3O4 + H2" or "define X"), return {"type":"apparatus","parts":[],"caption":"Balanced equation — left = reactants, right = products"} (this draws a balance scale, not a cylinder).',
         '  • Biology diagrams (leaf / cell / flower / heart): {"type":"bio","kind":"leaf|cell|flower|organ","caption":"..."}.',
-        '- If the question is just "define X", "give reasons", "balance the equation", "name the compound", "write the word equation", "explain", "differentiate", or anything else with no apparatus/figure described, return diagram:null.',
+        '- For theory without apparatus, use a conceptual flow diagram when helpful.',
         '- NEVER set diagram.type to "solid", "composite", "plane", "triangle", "circle", or "bars" for Chemistry or Biology — those are Maths/graph shapes and WILL BE REJECTED by the client.',
         '  * "plane/triangle/circle/bars" is ONLY allowed for Physics questions where the question is explicitly about a ray diagram, a force triangle, a lens, a circuit, or a mechanics setup — in which case prefer the specialized types ("lens","mirror","circuit","pulley","pendulum") over raw points/segments.',
         '- NEVER set diagram.type to "solid" or "composite" for science — cylinders/cones/spheres are Maths mensuration shapes and have no place in a chemistry or biology answer.'
@@ -1954,14 +1843,14 @@ const handleRequest = async function (req, res) {
         'You are an experienced CBSE Class ' + cls + ' Social Science teacher (History / Geography / Civics / Economics). Answer the question asked.',
         'Reply with ONLY this JSON shape:',
         '{"question_understood":"...","answer":"<short answer>","summary":"<2 sentences>","approaches":[{"name":"<angle>","tag":"<when to use>","steps":[{"t":"<point>"}],"why":"...","watch":"..."}],"check":"...","diagram":null}',
-        'Rules: 1-3 approaches (causes / effects / constitutional article / map-location angle). Use dates and article numbers accurately. No diagrams (diagram must be null). Hindi not needed.'
+        'Rules: At least 3 approaches (causes / effects / constitutional article / map-location angle). Use dates and article numbers accurately. Use a conceptual flow diagram when helpful. Hindi not needed.'
       ];
 
       const langPrompt = [
         'You are an experienced CBSE Class ' + cls + ' ' + subject + ' teacher. Answer the literature/grammar question asked.',
         'Reply with ONLY this JSON shape:',
         '{"question_understood":"...","answer":"<short answer / भावार्थ / व्याकरण स्पष्टीकरण>","summary":"<2 sentences>","approaches":[{"name":"<विधि / angle>","tag":"<when to use>","steps":[{"t":"<point / स्पष्टीकरण>"}],"why":"...","watch":"..."}],"check":"...","diagram":null}',
-        'Rules: 1-2 approaches (सप्रसंग व्याख्या / भावार्थ / व्याकरण-विश्लेषण / सन्दर्भ-सहित-उत्तर). Hindi/Sanskrit may appear in "answer" if the question is in that language; explanations match the language the student used. No diagrams (diagram:null).'
+        'Rules: At least 3 approaches (सप्रसंग व्याख्या / भावार्थ / व्याकरण-विश्लेषण / सन्दर्भ-सहित-उत्तर). Hindi/Sanskrit may appear in "answer" if the question is in that language; explanations match the language the student used. Use a conceptual flow diagram when helpful.'
       ];
 
       const accountancyPrompt = [
@@ -1969,20 +1858,20 @@ const handleRequest = async function (req, res) {
         'Answer only the question as printed; do not assume missing values, fabricate an official key, or silently change a date or amount.',
         'If an OR is present, handle each alternative separately and label it. If the text is incomplete, state what is missing.',
         'Show relevant accounting calculations and journal entries with clear debit and credit amounts; for spreadsheet/computer questions use the given syntax precisely.',
-        'Do not invent multiple methods or a diagram. State assumptions and uncertainty explicitly.',
+        'Do not invent facts or numerical data. State assumptions and uncertainty explicitly.',
         'Reply with ONLY JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","tag":"...","steps":[{"t":"...","m":"..."}],"why":"...","watch":"..."}],"check":"...","diagram":null}'
       ];
       const economicsPrompt = [
         'You are an Economics teacher answering a Class ' + cls + ' question.',
         'Answer only what is asked, in the language the student used. State assumptions, units, definitions and limitations where relevant; do not invent figures or an official marking scheme.',
-        'Do not claim to have read or quoted a textbook unless its text is supplied in the question. Do not invent multiple methods or diagrams.',
+        'Do not claim to have read or quoted a textbook unless its text is supplied in the question. Do not invent facts or numerical data.',
         'Reply with ONLY JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","tag":"...","steps":[{"t":"...","m":"..."}],"why":"...","watch":"..."}],"check":"...","diagram":null}'
       ];
       const english12Prompt = [
         'You are an English literature and language teacher answering a Class 12 question.',
         'Answer the question asked in the language the student used. Support interpretations with the supplied text where possible; acknowledge ambiguity.',
         'The textbook PDFs are not automatically supplied to you. Do not claim to have read, quoted or checked them unless the passage is actually in the question. If a precise extract is needed, ask the student to provide it.',
-        'Do not invent quotations, missing details, official marking schemes, multiple methods or a diagram. State uncertainty where needed.',
+        'Do not invent quotations, missing details, official marking schemes or numerical data. State uncertainty where needed.',
         'Reply with ONLY JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","tag":"...","steps":[{"t":"..."}],"why":"...","watch":"..."}],"check":"...","diagram":null}'
       ];
       let topicPrompt;
@@ -1996,7 +1885,7 @@ const handleRequest = async function (req, res) {
       else topicPrompt = ['Answer the supplied Class ' + cls + ' ' + subject + ' question without inventing missing information.',
         'Reply with JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","steps":[{"t":"..."}]}],"check":"...","diagram":null}'];
 
-      const prompt = topicPrompt.concat([
+      const prompt = topicPrompt.concat([solvePolicy.instructions,
         '',
         'QUESTION: ' + question,
         near ? ('\nFor calibration — real CBSE questions of the same chapter (do not answer these):\n' + near) : ''
@@ -2005,6 +1894,11 @@ const handleRequest = async function (req, res) {
       let out;
       try {
         out = await callGeminiResilient(prompt, plain, db.settings.geminiModel);
+        let draft;
+        try { draft = firstJSON(out.text); } catch (_) { draft = null; }
+        if (draft && solvePolicy.distinctApproaches(draft.approaches).length < 3) {
+          out = await callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), plain, out.model);
+        }
       } catch (e) {
         audit(sess.user, 'solve-error', String(e.message).slice(0, 140));
         saveDB();
@@ -2062,13 +1956,13 @@ const handleRequest = async function (req, res) {
       }).filter(function (st) { return st.t; });
 
       const answer = {
-        source: 'ai',
+        source: 'ai', policyVersion: solvePolicy.VERSION,
         model: out.model,
         questionUnderstood: String(parsed.question_understood || ''),
         result: String(parsed.answer || ''),
         summary: String(parsed.summary || ''),
         verify: String(parsed.check || ''),
-        approaches: (Array.isArray(parsed.approaches) ? parsed.approaches : []).map(function (a) {
+        approaches: solvePolicy.distinctApproaches(parsed.approaches).map(function (a) {
           return {
             name: String(a.name || 'Method'),
             tag: String(a.tag || ''),
@@ -2077,33 +1971,15 @@ const handleRequest = async function (req, res) {
             watch: String(a.watch || '')
           };
         }).filter(function (a) { return a.steps.length; }),
-        diagram: (!noOfficialKey && parsed.diagram && typeof parsed.diagram === 'object') ? parsed.diagram : null
+        diagram: solvePolicy.diagramForSubject(parsed.diagram, subject)
       };
 
       if (!answer.approaches.length) return json(res, 502, { error: 'The model returned no solvable steps. Try rephrasing.', fallback: true });
 
-      /* Three methods minimum, topped up here rather than hoped for in the prompt.
-         Set minMethods:0 to switch the top-up off. */
-      // The top-up helper is mathematics-specific and assumes a fixed correct
-      // result. It must never pad or vouch for Accountancy AI answers.
-      const wantMethods = noOfficialKey ? 0 : (b.minMethods === undefined ? 3 : Math.max(0, Math.min(5, Number(b.minMethods) || 0)));
-      let moreNote = '';
-      if (wantMethods > answer.approaches.length && wantMethods > 0) {
-        const pad = await replenishApproaches(question, answer, plain, out.model, wantMethods, near);
-        if (pad.added.length) {
-          answer.approaches = answer.approaches.concat(pad.added);
-          answer.model = out.model + ' + top-up';
-        }
-        if (pad.note) moreNote = pad.note;
-      }
+      if (answer.approaches.length < 3) return json(res, 502, {
+        error: 'The AI could not provide three distinct usable approaches. Please try again.', fallback: true
+      });
       answer.methodCount = answer.approaches.length;
-      /* Honest, not silently short: say why there is no third method, and let
-         the page show it. Never assert a method exists when it does not. */
-      if (answer.approaches.length < wantMethods) {
-        answer.methodsShort = true;
-        answer.methodsNote = moreNote || ('Only ' + answer.approaches.length + ' genuinely different method'
-          + (answer.approaches.length === 1 ? '' : 's') + ' exist for this question; the others would be the same working renamed.');
-      }
 
       /* Did the model quietly REWRITE the question before answering it?
          On broken imports it says things like "assuming the printed sequence
@@ -2241,7 +2117,7 @@ const handleRequest = async function (req, res) {
           owner: aiCacheOwner(sess), at: now(), model: out.model, questionUnderstood: answer.questionUnderstood,
           result: settledByMath ? String(check.yourAnswer) : answer.result,
           summary: answer.summary, verify: answer.verify,
-          approaches: answer.approaches, diagram: answer.diagram, check: check,
+          policyVersion: solvePolicy.VERSION, approaches: answer.approaches, diagram: answer.diagram, check: check,
           methodCount: answer.approaches.length,
           methodsShort: answer.methodsShort ? true : undefined,
           methodsNote: answer.methodsNote || undefined,
