@@ -1,4 +1,6 @@
 'use strict';
+const { consumeAI } = require('../../lib/ai-usage.js');
+const { aiFailure } = require('../../lib/ai-status.js');
 const { callGeminiResilient, readBody, json, firstJSON } = require('../../lib/gemini.js');
 const { requireStudent } = require('../../lib/supabase-auth.js');
 
@@ -57,6 +59,8 @@ module.exports = async function handler(req, res) {
   const cacheKey = JSON.stringify([user.id, subject, cls, String(b.lang || 'en').slice(0, 2).toLowerCase(), question.toLowerCase()]);
   const cached = noOfficialKey ? null : cacheGet(cacheKey);
   if (cached && !b.refresh) return json(res, 200, Object.assign({ cached: true }, cached));
+
+  if (!await consumeAI(user, res)) return;
 
   const isSci = ['science', 'physics', 'chemistry', 'biology'].includes(subject);
   const isMaths = ['maths', 'applied-maths'].includes(subject);
@@ -174,15 +178,9 @@ module.exports = async function handler(req, res) {
     ]);
     model = out.model;
   } catch (e) {
-    const msg = String(e.message || e);
-    let said = 'The AI call failed: ' + msg.slice(0, 240);
-    if (e.status === 504 || /deadline|taking too long/.test(msg)) said = 'The AI is taking too long. Please try again.';
-    else if (/\b429\b/.test(msg)) said = 'The AI quota is used up for now. Please try again later.';
-    else if (/\b503\b/.test(msg)) said = 'The AI model is busy. Please try again in a few seconds.';
-    else if (/no API key/.test(msg)) said = 'No Gemini API key is configured on the server yet.';
-    const raw = String(e.raw || msg);
-    const m = raw.match(/"retryDelay"\s*:\s*"(\d+(?:\.\d+)?)s"/) || raw.match(/retry in ([\d.]+)\s*s/i);
-    return json(res, 502, { error: said, rateLimited: /\b429\b/.test(msg), retryAfter: m ? Math.ceil(Number(m[1])) : 0, fallback: true, model });
+    const failure = aiFailure(e);
+    if (failure.body.retryAfter) res.setHeader('retry-after', String(failure.body.retryAfter));
+    return json(res, failure.http, failure.body);
   } finally {
     clearTimeout(timeoutId);
   }

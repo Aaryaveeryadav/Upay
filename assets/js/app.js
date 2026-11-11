@@ -1030,6 +1030,9 @@ window.UP = window.UP || {};
   function viewHome() {
     const chapters = catalogue();
     const all = chapters.filter(ch => !ch._bookHeader);
+    const lastChapter = store.get(scopedDataKey('lastChapter'), null);
+    const resume = all.find(ch => String(ch.id) === String(lastChapter));
+    const dailyGoal = store.get(scopedDataKey('studyGoal'), 10);
     const scopedQuestionCount = (UP.pyq || []).filter(qInScope).length;
     const scopedRecent = S.recent.filter(r => r.subject === S.subject && (r.cls ? +r.cls === +S.cls : +S.cls === 10) && (r.board ? r.board === S.board : S.board === 'cbse'));
     const subjectSamples = {
@@ -1090,6 +1093,18 @@ window.UP = window.UP || {};
     const specific = (scopedExamples[+S.cls] || {})[S.subject];
     const samples = specific ? specific.map(en => ({ en, hi: en })) : (subjectSamples[S.subject] || [{ en: 'Type a question from your selected subject.', hi: 'अपने चुने हुए विषय का प्रश्न लिखिए।' }]);
     return `
+    <section class="card" aria-label="Study shortcuts" style="margin-bottom:18px;padding:20px">
+      <h2>${S.lang === 'hi' ? 'आज की पढ़ाई' : 'Your next study step'}</h2>
+      <div class="pactions" style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-primary" href="${resume ? '#/chapter/'+resume.id : '#/syllabus'}">${S.lang === 'hi' ? 'पढ़ाई जारी रखें' : 'Continue studying'}</a>
+        <a class="btn btn-ghost" href="#/today">${S.lang === 'hi' ? 'अभ्यास और आज की पुनरावृत्ति' : 'Practise · Today’s revision'}</a>
+        <a class="btn btn-ghost" href="#/mistakes">${S.lang === 'hi' ? 'गलतियाँ दोहराएँ' : 'Revise mistakes'}</a>
+        <a class="btn btn-ghost" href="#/saved">${S.lang === 'hi' ? 'सहेजे प्रश्न' : 'Saved questions'}</a>
+      </div>
+      <label>${S.lang === 'hi' ? 'दैनिक लक्ष्य (योजना मात्र)' : 'Daily goal (planning only)'}
+        <select data-action="study-goal" aria-label="Daily study goal">${[5,10,15].map(n=>`<option value="${n}" ${dailyGoal===n?'selected':''}>${n} questions</option>`).join('')}</select>
+      </label><p class="muted">${S.lang === 'hi' ? 'अपनी सुविधा से अभ्यास करें; लक्ष्य कोई अंक नहीं है।' : 'Choose your own pace. This goal is not a score or a promise of available questions.'}</p>
+    </section>
     <section class="card callout tip" style="margin:0 0 18px"><div>
       <b>CBSE Class 12 · English outlines</b><br>
       <a class="link" href="/assets/notes/index.html#business">Business Studies</a> ·
@@ -1277,7 +1292,7 @@ window.UP = window.UP || {};
         <div class="ch-top"><span class="ch-num">${String(unitNo).padStart(2,'0')}</span><div>
         <div class="ch-title">${esc(ch.outline.title)}</div></div></div>
         <p class="ch-outline-summary">${esc(ch.outline.summary)}</p>
-        <div class="ch-foot"><span class="tag">English outline</span><span class="tag cream">${footBadge}</span><span class="arrow">${icon('arrow')}</span></div></a>`;
+        <div class="ch-foot"><span class="tag">${S.lang === 'hi' ? 'केवल अंग्रेज़ी रूपरेखा' : 'Outline only · English'}</span><span class="tag grey">${(ch.outline.figures || []).length ? (ch.outline.figures.length + ' source figures available') : 'Source figures not inventoried'}</span>${ch.subject === 'physics' || S.subject === 'physics' ? '<span class="tag grey">Questions awaiting source review</span>' : ''}<span class="tag cream">${footBadge}</span><span class="arrow">${icon('arrow')}</span></div></a>`;
     }
     if (english12Track() && ch.sourceId) {
       return `<a class="card ch-card english12-chapter-card" href="#/chapter/${ch.id}" data-chapter-id="${ch.id}">
@@ -1577,9 +1592,23 @@ window.UP = window.UP || {};
       result: '', approaches: [] };
   }
 
+  function aiRetryControl() {
+    if (!S.aiRetry || ['sign_in_required','access_not_enabled','ai_disabled','provider_configuration'].includes(S.aiErrorCode)) return '';
+    return `<button class="btn btn-ghost btn-sm" data-action="retryAI">${S.lang === 'hi' ? 'फिर कोशिश करें' : 'Try again'}</button>`;
+  }
+  function aiRecovery(question) {
+    return `<div class="pactions" role="status" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" data-action="copy-ai-question">${S.lang === 'hi' ? 'प्रश्न कॉपी करें' : 'Copy question'}</button>
+      <button class="btn btn-ghost btn-sm" data-action="savePyq" data-q="${esc(question || '')}">${S.lang === 'hi' ? 'बाद के लिए सहेजें' : 'Save for later'}</button>
+      <a class="btn btn-ghost btn-sm" href="${chapterById(S.chapterId) ? '#/chapter/'+S.chapterId : '#/syllabus'}">${S.lang === 'hi' ? 'अध्ययन सामग्री खोलें' : 'Open study material'}</a>
+      ${S.aiErrorCode === 'sign_in_required' ? '<a class="btn btn-primary btn-sm" href="#/login">Sign in</a>' : ''}
+    </div>`;
+  }
+
   /* ---------------- ask the server's AI solver ---------------- */
   function aiScope() { return JSON.stringify([S.savedKey, +S.cls, S.board, S.subject]); }
   function askAI(q) {
+    S.aiErrorCode = ''; S.aiRetryAt = 0;
     const scope = aiScope();
     const isCurrent = () => S.aiQuestion === q && S.aiScope === scope && aiScope() === scope;
     const mount = () => document.getElementById('answerMount');
@@ -1608,10 +1637,8 @@ window.UP = window.UP || {};
         d.id = 'aiNote'; d.className = 'callout warn';
         d.style.marginTop = '14px';
         d.innerHTML = '<div><b>' + (S.lang === 'hi' ? 'एआई' : 'AI') + ':</b> ' +
-          esc(S.aiNote) +
-          ' <button class="btn btn-ghost btn-sm" data-action="retryAI" style="margin-left:8px">' +
-          icon('arrow') + ' ' + (S.lang === 'hi' ? 'एआई से फिर कोशिश करें' : 'Try the AI again') +
-          '</button></div>';
+          esc(S.aiNote) + aiRecovery(q) +
+          aiRetryControl() + '</div>';
         m.insertBefore(d, m.firstChild);
       }
     };
@@ -1651,9 +1678,12 @@ window.UP = window.UP || {};
           pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
           bumpProgress(S.subject);
         } else {
-          const note = (j && j.offline)
+          S.aiErrorCode = j && j.code || '';
+        S.aiRetryAt = j && Number.isFinite(j.retryAfter) && j.retryAfter > 0 ? Date.now() + j.retryAfter*1000 : 0;
+        const retryHint = j && Number.isFinite(j.retryAfter) && j.retryAfter > 0 ? ' Retry after '+Math.ceil(j.retryAfter)+' seconds.' : '';
+        const note = (j && j.offline)
             ? (S.lang === 'hi' ? 'आप ऑफ़लाइन हैं — बिल्ट-इन हल दिखाया जा रहा है' : 'You are offline — showing the built-in solver')
-            : (j && j.error) ? j.error : (S.lang === 'hi' ? 'एआई से जवाब नहीं आया' : 'The AI did not return an answer.');
+            : (j && j.error) ? j.error + retryHint : (S.lang === 'hi' ? 'एआई से जवाब नहीं आया' : 'The AI did not return an answer.');
           goLocal(note, true);
           return;
         }
@@ -2042,8 +2072,9 @@ window.UP = window.UP || {};
       return `<div class="callout warn" style="margin-top:14px">${icon('warn')}<div>
         <b>${S.lang === 'hi' ? 'एआई समाधान उपलब्ध नहीं है।' : 'AI solution unavailable.'}</b>
         ${S.lang === 'hi' ? 'इस प्रश्न का कोई सत्यापित स्थानीय हल या आधिकारिक उत्तर-कुंजी उपलब्ध नहीं है।' : 'There is no verified local solution or official answer key for this question.'}
-        ${ans.note ? `<div>${esc(ans.note)}</div>` : ''}
-        <button class="btn btn-ghost btn-sm" data-action="retryAI" style="margin-top:8px">${icon('arrow')} ${S.lang === 'hi' ? 'एआई से फिर कोशिश करें' : 'Try the AI again'}</button>
+        ${ans.note ? `<div role="status">${esc(ans.note)}</div>` : ''}
+        ${aiRecovery(ans.question)}
+        ${aiRetryControl()}
       </div></div>`;
     }
     const ch = ans.chapter ? chapterById(ans.chapter) : null;
@@ -3771,6 +3802,7 @@ window.UP = window.UP || {};
     else if (r.name === 'syllabus') html = viewSyllabus(r.params);
     else if (r.name === 'chapter') {
       S.chapterId = r.id;
+      if (chapterById(r.id)) store.set(scopedDataKey('lastChapter'), r.id);
       /* Class 10 Science has the real textbook; route to the reader. */
       html = (S.subject === 'science' && +S.cls === 10 && scienceChapter(r.id))
         ? viewScienceChapter(r.id)
@@ -4477,7 +4509,7 @@ window.UP = window.UP || {};
   function questionCard(q) {
     const a = S.answers[q.no];
     const sourceQuestion = !!(q.raw && q.raw.paperCode);
-    const graded = !sourceQuestion && !!(q.ans && String(q.ans).trim());
+    const graded = !sourceQuestion && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim());
     const diff = q.d >= 3 ? 3 : q.d >= 2 ? 2 : 1;
     const opts = hasOpts(q) ? `<div class="q-opts">${q.opts.map((o, i) => {
       const label = String.fromCharCode(65 + i);
@@ -4967,7 +4999,14 @@ window.UP = window.UP || {};
         out += '<span class="lvl lvl-' + q.d + '">' + esc(lbl) + '</span>';
       }
       out += '</div></div>';
+      out += '<div class="q-review muted">' + (q.textReview === 'source-verified' ? 'Text checked against source' : 'Text not fully source-reviewed') + ' · ' + (q.keyVerified === true ? 'Verified answer key available' : 'No independently verified answer key recorded') + '</div>';
       out += '<div class="q-text">' + esc(pyqQuestionText(q)) + '</div>';
+      if (q.optionReview === 'awaiting-source-review') out += '<p class="muted">Options missing or suspect — withheld pending source review. This question is not graded.</p>';
+      const reportURL = 'https://github.com/Aaryaveeryadav/Upay/issues/new?title=' + encodeURIComponent('Question issue: '+q.id) + '&body=' + encodeURIComponent('Question ID: '+q.id+'\nSubject: '+S.subject+'\nYear: '+(q.y||'unknown')+'\n\nDescribe the problem (do not include private account details):\n');
+      out += '<a class="link" target="_blank" rel="noopener noreferrer" href="'+esc(reportURL)+'">Report a problem (GitHub)</a>';
+      const sourceFile = String(q.sourceUrl || q.sourceFile || '');
+      if (/^\/assets\/papers\/[a-zA-Z0-9_./%()-]+\.pdf$/.test(sourceFile) && !sourceFile.includes('..')) out += ' · <a class="link" target="_blank" rel="noopener noreferrer" href="'+esc(sourceFile)+'">View source PDF</a>';
+
       if (hasOpts(q)) {
         out += '<div class="q-opts" data-quiz="' + esc(q.id) + '">';
         out += q.opts.map((o, i) => '<button type="button" class="q-opt" data-pick="' + esc(q.id) + '" data-i="' + i + '"><b>' + String.fromCharCode(65 + i) + '</b><span>' + esc(P(o)) + '</span></button>').join('');
@@ -5142,7 +5181,7 @@ window.UP = window.UP || {};
       const id = pick.dataset.pick, i = +pick.dataset.i;
       const qq = (UP.pyq || []).find(x => x.id === id);
       if (!qq || !qq.opts) return;
-      if (!String(qq.ans || '').trim()) {
+      if (qq.keyVerified === false || !String(qq.ans || '').trim()) {
         const box = pick.closest('.q-opts');
         box.querySelectorAll('[data-pick]').forEach(b => { b.classList.remove('chosen'); b.setAttribute('aria-pressed', 'false'); });
         pick.classList.add('chosen'); pick.setAttribute('aria-pressed', 'true');
@@ -5218,6 +5257,13 @@ window.UP = window.UP || {};
     }
   });
 
+  document.addEventListener('change', function(e) {
+    if (e.target.matches('[data-action="study-goal"]')) {
+      const goal = Number(e.target.value);
+      if ([5,10,15].includes(goal)) store.set(scopedDataKey('studyGoal'), goal);
+    }
+  });
+
   /* the hidden file input is not a [data-action] element, so it needs its own
      listener — a click handler above would never see it (learned the hard way) */
   document.addEventListener('change', function (e) {
@@ -5231,6 +5277,11 @@ window.UP = window.UP || {};
     const tgt = e.target.closest('[data-action]');
     if (!tgt) return;
     const action = tgt.dataset.action;
+    if (action === 'copy-ai-question') {
+      if (navigator.clipboard) navigator.clipboard.writeText(S.aiQuestion || '').then(()=>toast('Question copied'),()=>toast('Copy unavailable; select the question text instead.'));
+      else toast('Copy unavailable; select the question text instead.');
+      return;
+    }
 
     if (action === 'pickPhoto') {
       const inp = document.getElementById('photoInput');
@@ -5243,6 +5294,7 @@ window.UP = window.UP || {};
       return;
     }
     if (action === 'retryAI') {
+      if (S.aiRetryAt && Date.now() < S.aiRetryAt) { toast('Retry after '+Math.ceil((S.aiRetryAt-Date.now())/1000)+' seconds.'); return; }
       const qq = S.aiQuestion;
       if (!qq) return;
       S.aiAnswer = null; S.aiState = 'loading'; S.aiNote = ''; S.aiRetry = false;
@@ -5303,7 +5355,7 @@ window.UP = window.UP || {};
     if (action === 'test-pick') {
       const no = +tgt.dataset.q, pick = tgt.dataset.opt;
       const q = findQ(no); if (!q) return;
-      const graded = !(q.raw && q.raw.paperCode) && !!(q.ans && String(q.ans).trim());
+      const graded = !(q.raw && q.raw.paperCode) && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim());
       S.answers[no] = { pick, ok: graded ? pick === q.ans : null, shown: !!(S.answers[no] && S.answers[no].shown) };
       render(); return;
     }
