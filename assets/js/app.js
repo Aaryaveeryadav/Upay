@@ -1601,6 +1601,7 @@ window.UP = window.UP || {};
       <button class="btn btn-ghost btn-sm" data-action="copy-ai-question">${S.lang === 'hi' ? 'प्रश्न कॉपी करें' : 'Copy question'}</button>
       <button class="btn btn-ghost btn-sm" data-action="savePyq" data-q="${esc(question || '')}">${S.lang === 'hi' ? 'बाद के लिए सहेजें' : 'Save for later'}</button>
       <a class="btn btn-ghost btn-sm" href="${chapterById(S.chapterId) ? '#/chapter/'+S.chapterId : '#/syllabus'}">${S.lang === 'hi' ? 'अध्ययन सामग्री खोलें' : 'Open study material'}</a>
+      ${S.aiErrorCode === 'access_not_enabled' ? '<a class="btn btn-primary btn-sm" href="#/ai-access">Request AI access</a>' : ''}
       ${S.aiErrorCode === 'sign_in_required' ? '<a class="btn btn-primary btn-sm" href="#/login">Sign in</a>' : ''}
     </div>`;
   }
@@ -3266,6 +3267,45 @@ window.UP = window.UP || {};
     </div>`;
   }
 
+  function viewAIAccess() {
+    return `<header class="page-head"><h1>${S.lang === 'hi' ? 'एआई उपयोग की अनुमति' : 'AI access'}</h1>
+      <p>${S.lang === 'hi' ? 'अनुमति माँगें या छात्र अनुमतियाँ प्रबंधित करें। एपीआई कुंजी साझा नहीं की जाती।' : 'Request permission or manage student access. The API key is never shared with students.'}</p></header>
+      <section class="card" style="padding:20px" id="ai-access-panel" aria-live="polite">Loading access status…</section>
+      <a class="link" href="#/account">Back to account</a>`;
+  }
+  async function loadAIAccess(manage) {
+    const panel = document.getElementById('ai-access-panel');
+    if (!panel) return;
+    const owner = S.savedKey;
+    const current = () => panel.isConnected && S.savedKey === owner;
+    panel.textContent = 'Loading access status…';
+    try {
+      const r = await akFetch('/api/ai/access' + (manage ? '?manage=1' : ''));
+      if (!current()) return;
+      if (!r.ok) {
+        panel.innerHTML = '<p role="status">'+esc(r.j.error || 'Access status unavailable.')+'</p>' +
+          (r.status === 401 ? '<a class="btn btn-primary" href="#/login">Sign in</a>' : '') +
+          '<button class="btn btn-ghost" data-action="ai-access-refresh">Refresh</button>';
+        return;
+      }
+      const result = r.j.result;
+      if (manage && r.j.admin && Array.isArray(result)) {
+        panel.innerHTML = '<h2>Student AI approvals</h2><p>Approve only accounts you recognise. Daily request limits apply separately once activated. Most recent 200 requests shown.</p>' +
+          result.map(row => '<article class="card" style="padding:12px;margin-top:8px"><b>'+esc(row.email)+'</b><p>Status: '+esc(row.status)+'</p>'+ ['approve','revoke'].map(action => '<button class="btn btn-ghost btn-sm" data-action="ai-access-decide" data-id="'+esc(row.user_id)+'" data-decision="'+action+'">'+(action==='approve'?'Approve':'Revoke')+'</button>').join('')+'</article>').join('') +
+          (!result.length ? '<p>No requests yet.</p>' : '') + '<button class="btn btn-ghost" data-action="ai-access-manage">Refresh requests</button>';
+      } else {
+        const status = result && result.status || 'none';
+        panel.innerHTML = '<h2>Your AI access</h2><p>Status: <strong>'+esc(status)+'</strong></p>' +
+          (status==='none' ? '<button class="btn btn-primary" data-action="ai-access-request">Request AI access</button>' : '') +
+          (status==='pending' ? '<p>Your request is waiting for the site administrator. Sending it again will not grant access.</p>' : '') +
+          (status==='approved' ? '<a class="btn btn-primary" href="#/ask">Ask a question</a>' : '') +
+          (status==='revoked' ? '<p>Access was revoked. Contact the site administrator.</p>' : '') +
+          '<button class="btn btn-ghost" data-action="ai-access-refresh">Refresh</button>' +
+          (r.j.admin ? '<button class="btn btn-ghost" data-action="ai-access-manage">Manage student requests</button><p>Your administrator AI permission is configured separately.</p>' : '');
+      }
+    } catch (_) { if (current()) panel.textContent = 'Could not load access status. Reload this page to try again.'; }
+  }
+
   function viewAccount() {
     if (!S.user) { setTimeout(() => go('#/login'), 0); return ''; }
     const isHi = S.lang === 'hi';
@@ -3277,6 +3317,7 @@ window.UP = window.UP || {};
       <h1>${esc(S.user.name || S.user.email)}</h1>
       <p>${esc(S.user.email || '')}</p>
     </header>
+    <p><a class="btn btn-ghost" href="#/ai-access">${isHi ? 'एआई अनुमति माँगें / प्रबंधित करें' : 'Request / manage AI access'}</a></p>
     <div class="dash-grid">
       <div class="dash-stat"><div class="label">${isHi?'सहेजे प्रश्न':'Saved questions'}</div><div class="val">${savedCount}</div><div class="sub">${isHi?'जो आपने बाद के लिए रखे':'Kept for later'}</div></div>
       <div class="dash-stat"><div class="label">${isHi?'कक्षा':'Class'}</div><div class="val">${S.cls}</div><div class="sub">${esc(P(UP.subjects[S.subject]||{}))}</div></div>
@@ -3820,6 +3861,7 @@ window.UP = window.UP || {};
     else if (r.name === 'admin') html = viewAdmin();
     else if (r.name === 'login') html = viewLogin(r.params);
     else if (r.name === 'account') html = viewAccount();
+    else if (r.name === 'ai-access') html = viewAIAccess();
     else if (r.name === 'mistakes') html = viewMistakes();
     else if (r.name === 'mock') {
       // A new-test link is a one-shot action, not a reset on every rerender.
@@ -3841,6 +3883,7 @@ window.UP = window.UP || {};
     else html = viewHome();
 
     main.innerHTML = html;
+    if (r.name === 'ai-access') loadAIAccess(false);
     main.className = 'page';
     // active nav
     document.querySelectorAll('[data-nav]').forEach(a => {
@@ -5277,6 +5320,23 @@ window.UP = window.UP || {};
     const tgt = e.target.closest('[data-action]');
     if (!tgt) return;
     const action = tgt.dataset.action;
+    if (action === 'ai-access-refresh' || action === 'ai-access-manage') { loadAIAccess(action === 'ai-access-manage'); return; }
+    if (action === 'ai-access-request' || action === 'ai-access-decide') {
+      const panel = document.getElementById('ai-access-panel');
+      if (!panel || panel.dataset.busy === 'true') return;
+      const owner = S.savedKey;
+      const decision = action === 'ai-access-request' ? 'request' : tgt.dataset.decision;
+      if (action === 'ai-access-decide' && !window.confirm((decision === 'approve' ? 'Approve' : 'Revoke')+' AI access for this student?')) return;
+      panel.dataset.busy = 'true';
+      panel.querySelectorAll('button').forEach(b=>b.disabled=true);
+      akFetch('/api/ai/access',{method:'POST',body:{action:decision,userId:tgt.dataset.id}}).then(r=>{
+        if (!panel.isConnected || owner !== S.savedKey) return;
+        panel.dataset.busy = 'false';
+        if (!r.ok) { panel.textContent = r.j.error || 'Permission change failed. Reload to check the current status.'; return; }
+        loadAIAccess(action === 'ai-access-decide');
+      }).catch(()=>{ if (panel.isConnected && owner === S.savedKey) { panel.dataset.busy='false'; panel.textContent='Connection failed. Reload to check whether the change was saved.'; } });
+      return;
+    }
     if (action === 'copy-ai-question') {
       if (navigator.clipboard) navigator.clipboard.writeText(S.aiQuestion || '').then(()=>toast('Question copied'),()=>toast('Copy unavailable; select the question text instead.'));
       else toast('Copy unavailable; select the question text instead.');
