@@ -2611,6 +2611,96 @@
    "ai_drawn": false,
    "source_sha256": "3aa3a0d342659b5ce090a76d3406d5a74eed7653f2e2ba3479f83b6008b7aea8",
    "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/15686e553636a865eb7401282c6f3cecc8fae665afceda3f1d297b478dbb4ab4.png",
+   "sha256": "15686e553636a865eb7401282c6f3cecc8fae665afceda3f1d297b478dbb4ab4",
+   "source_file": "leph203.pdf",
+   "pdf_page": 4,
+   "figure": "11.1",
+   "caption": "Experimental arrangement for study of photoelectric effect.",
+   "crop_points": [
+    328,
+    488,
+    550,
+    674
+   ],
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "8b465f3a3fddc009ec98b9065014231740bd2f1c29aba6c142ceabfbb73bf764",
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/207f07016e47d9e6f7134921beebe263cbdbb74585ea8334f2e7ba1badf6e230.png",
+   "sha256": "207f07016e47d9e6f7134921beebe263cbdbb74585ea8334f2e7ba1badf6e230",
+   "source_file": "leph203.pdf",
+   "pdf_page": 5,
+   "figure": "11.2",
+   "caption": "Variation of Photoelectric current with intensity of light.",
+   "crop_points": [
+    48,
+    100,
+    212,
+    257
+   ],
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "8b465f3a3fddc009ec98b9065014231740bd2f1c29aba6c142ceabfbb73bf764",
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/af76d1ccadb8407bbaa625b0f81e272ea73becbf5ff8da3ad73161f944622b0e.png",
+   "sha256": "af76d1ccadb8407bbaa625b0f81e272ea73becbf5ff8da3ad73161f944622b0e",
+   "source_file": "leph203.pdf",
+   "pdf_page": 5,
+   "figure": "11.3",
+   "caption": "Variation of photocurrent with collector plate potential for different intensity of incident radiation.",
+   "crop_points": [
+    60,
+    490,
+    309,
+    691
+   ],
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "8b465f3a3fddc009ec98b9065014231740bd2f1c29aba6c142ceabfbb73bf764",
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/5f63603149e6c0b2564836865d9ee4481c7ae35f1ffb18dee483937b740a26f5.png",
+   "sha256": "5f63603149e6c0b2564836865d9ee4481c7ae35f1ffb18dee483937b740a26f5",
+   "source_file": "leph203.pdf",
+   "pdf_page": 6,
+   "figure": "11.4",
+   "caption": "Variation of photoelectric current with collector plate potential for different frequencies of incident radiation.",
+   "crop_points": [
+    287,
+    350,
+    526,
+    480
+   ],
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "8b465f3a3fddc009ec98b9065014231740bd2f1c29aba6c142ceabfbb73bf764",
+   "edit": "none"
+  },
+  {
+   "path": "assets/img/notes/1977d65e76555202af5d6288d027b1756d1365b5c67e2325748baac94561a23a.png",
+   "sha256": "1977d65e76555202af5d6288d027b1756d1365b5c67e2325748baac94561a23a",
+   "source_file": "leph203.pdf",
+   "pdf_page": 6,
+   "figure": "11.5",
+   "caption": "Variation of stopping potential V₀ with frequency ν of incident radiation for a given photosensitive material.",
+   "crop_points": [
+    287,
+    540,
+    526,
+    683
+   ],
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "8b465f3a3fddc009ec98b9065014231740bd2f1c29aba6c142ceabfbb73bf764",
+   "edit": "none"
   }
  ]
 }

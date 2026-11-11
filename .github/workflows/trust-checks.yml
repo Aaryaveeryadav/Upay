@@ -21,9 +21,11 @@ jobs:
       - run: python3 tools/check/outline_notes.py
       - run: node tools/check/serverless_smoke.js
       - run: node tools/check/trust_controls.js
+      - run: node tools/check/ai_access.js
       - run: python3 tools/check/backend_smoke.py
   browser:
     runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright/python:v1.58.0-noble
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -33,7 +35,8 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install playwright==1.58.0
-      - run: python3 -m playwright install --with-deps chromium
+      # The matching image already contains Chromium and OS dependencies.
+      # Avoid the failing runtime browser/apt installation step.
       - name: Physics and security browser checks
         run: |
           HOST=0.0.0.0 PORT=8004 node server.js > /tmp/upay-test-server.log 2>&1 &
@@ -52,4 +55,5 @@ jobs:
           PY
           python3 tools/check/physics_outline_smoke.py
           python3 tools/check/trust_browser_smoke.py
+          python3 tools/check/ai_access_browser.py
           python3 tools/check/security_headers.py

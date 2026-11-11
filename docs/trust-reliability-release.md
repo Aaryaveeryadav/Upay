@@ -60,8 +60,8 @@ Standalone local-server spending controls are NOT covered by this migration.
   actual board papers; the uploaded NCERT chapter PDFs are not those board papers.
 - Official answer keys, source verification, and full correct-pick render proof
   with independently verified real questions (rather than invented fixtures).
-- Source figures for chapters 1–7 and 9–14, visually checked one figure at a time.
-  Chapter 8 remains the only fully inventoried Physics chapter.
+- Source figures remaining for chapters 1–7, 9–10 and 12–14, visually checked one figure at a time.
+  Chapters 8 and 11 are fully inventoried; see physics-batch.json.
 - Full chapter-layout standardisation across all legacy subject renderers.
 - Guaranteed source links across the bank: many records lack a published path.
 - Live credential revocation evidence, provider billing alerts, SQL migration,

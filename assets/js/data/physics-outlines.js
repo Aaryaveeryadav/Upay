@@ -476,7 +476,43 @@ window.UP = window.UP || {};
     "unit": 7,
     "unit_title": "Dual Nature of Radiation and Matter",
     "source": "NCERT Class 12 Physics, chapter 11",
-    "figures": []
+    "figures": [
+      {
+        "fig": "11.1",
+        "path": "assets/img/notes/15686e553636a865eb7401282c6f3cecc8fae665afceda3f1d297b478dbb4ab4.png",
+        "caption": "Experimental arrangement for study of photoelectric effect.",
+        "page": 4,
+        "sha256": "15686e553636a865eb7401282c6f3cecc8fae665afceda3f1d297b478dbb4ab4"
+      },
+      {
+        "fig": "11.2",
+        "path": "assets/img/notes/207f07016e47d9e6f7134921beebe263cbdbb74585ea8334f2e7ba1badf6e230.png",
+        "caption": "Variation of Photoelectric current with intensity of light.",
+        "page": 5,
+        "sha256": "207f07016e47d9e6f7134921beebe263cbdbb74585ea8334f2e7ba1badf6e230"
+      },
+      {
+        "fig": "11.3",
+        "path": "assets/img/notes/af76d1ccadb8407bbaa625b0f81e272ea73becbf5ff8da3ad73161f944622b0e.png",
+        "caption": "Variation of photocurrent with collector plate potential for different intensity of incident radiation.",
+        "page": 5,
+        "sha256": "af76d1ccadb8407bbaa625b0f81e272ea73becbf5ff8da3ad73161f944622b0e"
+      },
+      {
+        "fig": "11.4",
+        "path": "assets/img/notes/5f63603149e6c0b2564836865d9ee4481c7ae35f1ffb18dee483937b740a26f5.png",
+        "caption": "Variation of photoelectric current with collector plate potential for different frequencies of incident radiation.",
+        "page": 6,
+        "sha256": "5f63603149e6c0b2564836865d9ee4481c7ae35f1ffb18dee483937b740a26f5"
+      },
+      {
+        "fig": "11.5",
+        "path": "assets/img/notes/1977d65e76555202af5d6288d027b1756d1365b5c67e2325748baac94561a23a.png",
+        "caption": "Variation of stopping potential V₀ with frequency ν of incident radiation for a given photosensitive material.",
+        "page": 6,
+        "sha256": "1977d65e76555202af5d6288d027b1756d1365b5c67e2325748baac94561a23a"
+      }
+    ]
   },
   "12": {
     "id": "lephy1212",
