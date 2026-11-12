@@ -20,6 +20,7 @@ jobs:
         run: find assets/js api lib -name '*.js' -print0 | xargs -0 -n1 node --check
       - run: python3 tools/check/outline_notes.py
       - run: node tools/check/serverless_smoke.js
+      - run: node tools/check/physics_question_quality.js
       - run: node tools/check/trust_controls.js
       - run: node tools/check/ai_access.js
       - run: python3 tools/check/backend_smoke.py
@@ -53,6 +54,7 @@ jobs:
           else:
               raise SystemExit('Server did not start')
           PY
+          UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/physics_quality_browser.py
           python3 tools/check/physics_outline_smoke.py
           python3 tools/check/trust_browser_smoke.py
           python3 tools/check/solve_policy_browser.py
