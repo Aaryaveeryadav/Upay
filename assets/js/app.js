@@ -3772,7 +3772,15 @@ window.UP = window.UP || {};
     return { name: parts[0] || 'home', id: parts[1], params };
   }
 
-  function render() {
+  function render(options) {
+    // Explanation updates replace the DOM, not the route. Keep the currently
+    // visible card anchored even if an earlier answer changes height.
+    const keepPosition = !!(options && options.preserveScroll);
+    const scrollX = window.scrollX, scrollY = window.scrollY;
+    const anchor = keepPosition && Array.from(document.querySelectorAll('.q-card[id]'))
+      .find(el => el.getBoundingClientRect().bottom > 180);
+    const anchorId = anchor && anchor.id;
+    const anchorTop = anchor && anchor.getBoundingClientRect().top;
     if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch(e) {} }
     closeSavePopover();
     const r = parseHash();
@@ -3915,8 +3923,12 @@ window.UP = window.UP || {};
       const fit = () => { ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight, 200) + 'px'; };
       ta.addEventListener('input', fit); fit();
     }
-    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
     postRenderEnhance(main);
+    if (keepPosition) {
+      const nextAnchor = anchorId && document.getElementById(anchorId);
+      const top = nextAnchor ? window.scrollY + nextAnchor.getBoundingClientRect().top - anchorTop : scrollY;
+      window.scrollTo({ left: scrollX, top, behavior: 'instant' });
+    } else window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   /* ---- post-render UX enhancements: step-reveal CTAs, diagram lightbox, kbd hint ---- */
@@ -4689,14 +4701,14 @@ window.UP = window.UP || {};
     const qText = P({en:q.en || '', hi:q.hi || ''}).trim();
     if (!qText) { q.aiNote = 'Question text is unavailable'; return; }
     const paper = S.paper, scope = aiScope();
-    const isCurrent = () => S.paper === paper && aiScope() === scope;
+    const isCurrent = () => S.paper === paper && aiScope() === scope && parseHash().name === 'test';
     q.aiLoading = true; q.aiNote = '';
     let req;
     try { req = fetch('/api/ai/solve', {
       method:'POST',
       headers:{'content-type':'application/json', authorization:'Bearer '+(localStorage.getItem('upay.token')||'')},
       body: JSON.stringify({ question: qText, chapter: q.ch||0, subject: S.subject, cls: S.cls, lang: S.lang })
-    }); } catch (e) { q.aiLoading=false; q.aiNote='Could not reach AI'; if (isCurrent()) render(); return; }
+    }); } catch (e) { q.aiLoading=false; q.aiNote='Could not reach AI'; if (isCurrent()) render({ preserveScroll: true }); return; }
     req.then(r=>r.json().then(j=>({ok:r.ok,j})))
       .then(({ok,j})=>{
         q.aiLoading=false;
@@ -4714,8 +4726,8 @@ window.UP = window.UP || {};
           q.aiAnswer = String(j.result || first.final || first.finalAnswer || first.answer || '').slice(0,400);
           // Do not inject raw SVG returned by an untrusted AI/provider.
         } else q.aiNote = (j && j.error) ? String(j.error) : 'AI unavailable for this question';
-        render();
-      }).catch(() => { q.aiLoading=false; if (isCurrent()) { q.aiNote='Network error'; render(); } });
+        render({ preserveScroll: true });
+      }).catch(() => { q.aiLoading=false; if (isCurrent()) { q.aiNote='Network error'; render({ preserveScroll: true }); } });
   }
 
   /* a figure for a generated question: reuse the answer-figure renderer by
@@ -5469,7 +5481,7 @@ window.UP = window.UP || {};
         const hasSteps = !!(q && q.steps && q.steps.length && q.steps.some(s => String(s.en||s.hi||(typeof s==='string'?s:'')).trim().length > 5));
         if (q && (!hasAns || !hasSteps)) solveTestQuestionAI(no);
       }
-      render(); return;
+      render({ preserveScroll: true }); return;
     }
     if (action === 'test-print') { window.print(); return; }
     if (action === 'menu') {
