@@ -1466,11 +1466,7 @@ window.UP = window.UP || {};
         </div>
       </div>
 
-      ${S.aiState === 'loading' ? `<div class="ai-thinking" id="aiThinking">
-        <span class="ai-dots"><span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span></span>
-        <div><b data-slow>${S.lang === 'hi' ? 'एआई आपके प्रश्न को हल कर रहा है…' : 'The AI is solving your question…'}</b>
-        <div class="muted">${S.lang === 'hi' ? 'पूरा चरण-दर-चरण हल कुछ सेकंड में आ जाएगा।' : 'Your full step-by-step answer appears in a few seconds.'}</div></div>
-      </div>` : ''}
+      ${S.aiState === 'loading' ? `<div class="ai-thinking" id="aiThinking">${loadingDots()}</div>` : ''}
       <div id="answerMount">${S.aiAnswer ? renderAIAnswer(S.aiAnswer) : (S.answer ? renderAnswer(S.answer) : emptyAsk())}</div>
     </div>`;
   }
@@ -1958,14 +1954,13 @@ window.UP = window.UP || {};
     // Check answer cache first
     // Old locally cached AI replies may have been made with a maths prompt.
     // Never reuse them as an Accountancy answer or official answer key.
-    const sourceTrack = qq.subject === 'accountancy' || qq.subject === 'computerized-accounting';
+    const sourceTrack = qq.subject === 'accountancy' || qq.subject === 'computerized-accounting' || qq.keyVerified === false;
     const cached = sourceTrack ? null : UP.answers.get(id);
     if (cached && renderCachedAnswer(cached, qq, sol, ansBox, id)) { warmNextQuestions(id); return; }
 
     const stored = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
       '<div class="sol-steps"><p>' + esc(qq.twist || '') + '</p></div>';
-    sol.innerHTML = '<div class="sol-loading"><span class="ai-dots"><span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span></span> ' +
-      (S.lang === 'hi' ? 'विस्तृत हल तैयार हो रहा है…' : 'Preparing the detailed solution…') + '</div>' + stored;
+    sol.innerHTML = '<div class="sol-loading">' + loadingDots() + '</div>' + stored;
 
     const ask = 'Solve this ' + String(S.board || 'CBSE').toUpperCase() + ' Class ' + S.cls + ' ' + S.subject + ' question completely, showing every step:\n\n' +
       pyqQuestionText(qq) + (hasOpts(qq) ? '\n\nOptions: ' + qq.opts.map((o, i) => String.fromCharCode(65 + i) + ') ' + (o.en || P(o))).join('  ') : '');
@@ -2000,7 +1995,7 @@ window.UP = window.UP || {};
         /* 401/403 = the sign-in lapsed or there is no API key. Show the LOCAL
            solver answer underneath the sign-in banner so the student still gets
            help, instead of a dead panel they cannot read. */
-        const accTrack = needsAIOnly();
+        const accTrack = needsAIOnly() || qq.keyVerified === false;
         const localAns = accTrack ? null : ((UP.answerQuestion && UP.answerQuestion(qq))
                        || (UP.fallbackAnswer && UP.fallbackAnswer(qq.en + ' ' + (qq.hi || ''), S.lang))
                        || null);
@@ -2073,6 +2068,11 @@ window.UP = window.UP || {};
         (S.lang === 'hi' ? 'हल लोड नहीं हो सका' : 'The solution could not be loaded') +
         ' — ' + esc(String((err && err.message) || err).slice(0, 120)) + '</div></div>';
     });
+  }
+
+  function loadingDots() {
+    const label = S.lang === 'hi' ? 'व्याख्या तैयार हो रही है' : 'Preparing the explanation';
+    return `<span class="ai-dots" role="status" aria-label="${label}"><span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span></span>`;
   }
 
   function emptyAsk() {
@@ -4145,7 +4145,7 @@ window.UP = window.UP || {};
   function paperFromBank(seed) {
     const LV = { 1: 'Basic', 2: 'Standard', 3: 'Hard' };
     const want = S.test.level;
-    const sourceBank = accountancyTrack();
+    const sourceBank = accountancyTrack() || (+S.cls === 12 && S.subject === 'physics');
     let pool = myBank();
     if (S.test.chapters && S.test.chapters.length) {
       // Selected chapters filter. Only questions mapped to one of the chosen
@@ -4421,6 +4421,7 @@ window.UP = window.UP || {};
     if (params && params.make === '1') { S.test.seed = 0; buildPaper(true); }
     const p = buildPaper(false);
     const isAccountancyTest = +S.cls === 12 && (S.subject === 'accountancy' || S.subject === 'computerized-accounting');
+    const isPhysicsTest = +S.cls === 12 && S.subject === 'physics';
     const totalQ = (p.sections || []).reduce((a, sec) => a + sec.questions.length, 0);
     const lvlLabel = isAccountancyTest
       ? (S.lang === 'hi' ? 'स्रोत-प्रश्न' : 'source questions')
@@ -4462,7 +4463,9 @@ window.UP = window.UP || {};
     <section class="page-head">
       <span class="eyebrow">${icon('list')} ${S.lang === 'hi' ? 'परीक्षा अभ्यास' : 'Exam practice'}</span>
       <h1>${S.lang === 'hi' ? 'अपना सैंपल पेपर बनाइए' : 'Build a sample paper'}</h1>
-      <p class="lead">${isAccountancyTest
+      <p class="lead">${isPhysicsTest
+        ? (S.lang === 'hi' ? 'आयातित प्रश्नों से स्व-अभ्यास सेट बनाएँ। क्षतिग्रस्त प्रश्न स्रोत-जाँच तक रोक दिए गए हैं; आधिकारिक उत्तर-कुंजी सत्यापित नहीं है।' : 'Build a self-practice set from imported questions. Damaged imports are withheld pending source review; official answer keys are not verified. These are not generated variants.')
+        : isAccountancyTest
         ? (S.lang === 'hi'
           ? 'अध्याय चुनिए और दिए गए CBSE प्रश्नपत्रों से स्रोत-चिह्नित प्रश्नों का अभ्यास सेट बनाइए। ये मूल प्रश्न हैं — नए अंकों से बनाए गए प्रश्न नहीं। उत्तर-कुंजी और अंक-वितरण इस बैंक में शामिल नहीं हैं।'
           : 'Choose chapters to build a practice set from the source-tagged CBSE papers. These are original questions, not newly generated variants; answer keys and marks are not included in this bank.')
@@ -4492,7 +4495,9 @@ window.UP = window.UP || {};
     <section class="paper-head card">
       <div>
         <div class="paper-title">${esc(P({ en: p.title.en, hi: p.title.hi }))}</div>
-        <div class="paper-sub">${isAccountancyTest
+        <div class="paper-sub">${isPhysicsTest
+          ? (S.lang === 'hi' ? 'यह संरचनात्मक रूप से जाँचे गए आयातित प्रश्नों का स्व-अभ्यास सेट है; आधिकारिक CBSE पैटर्न या सत्यापित उत्तर-कुंजी का दावा नहीं है।' : 'A self-practice selection of structurally screened imports, not a certified CBSE paper pattern or a verified answer key.')
+          : isAccountancyTest
           ? (S.lang === 'hi'
             ? 'यह अभ्यास सेट दिए गए मूल प्रश्नों से चुना गया है। इसे बिना अंक-भार और आधिकारिक उत्तर-कुंजी के स्व-अभ्यास हेतु उपयोग करें।'
             : 'This practice set samples the original supplied questions. Use it for self-practice; mark weightings and official answers were not included.')
@@ -4523,7 +4528,9 @@ window.UP = window.UP || {};
 
     <section class="card paper-foot">
       <b>${S.lang === 'hi' ? 'यह पेपर कैसे बना' : 'How this paper was built'}</b>
-      <p>${isAccountancyTest
+      <p>${isPhysicsTest
+        ? (S.lang === 'hi' ? 'बोर्ड और NCERT आयातों से प्रश्न चुने गए हैं। मूल पाठ और उत्तरों की स्रोत-जाँच बाकी है। AI व्याख्या आधिकारिक उत्तर-कुंजी नहीं है।' : 'Questions are selected from board and NCERT imports. Original wording and answers still require source verification. AI explanations are not an official answer key.')
+        : isAccountancyTest
         ? (S.lang === 'hi'
           ? 'प्रश्न मूल CBSE स्रोत-पत्रों से चुने गए हैं। प्रत्येक प्रश्न के साथ प्रश्नपत्र कोड, सत्र और भाग/विकल्प सुरक्षित हैं; आधिकारिक हल या अंक-योजना इस बैंक में शामिल नहीं है।'
           : 'Questions are selected from the original CBSE source papers. Paper code, session and part/option metadata are retained; official solutions and mark scheme are not included in this bank.')
@@ -4591,6 +4598,7 @@ window.UP = window.UP || {};
         <span class="q-no">${q.no}</span>
         <div class="q-meta">
           ${sourceQuestion ? `<span class="tag grey">${esc(q.raw.paperCode)} · ${esc(q.raw.session || '')} · Part ${esc(q.raw.part || '')}${q.raw.option ? ' · Option ' + esc(q.raw.option) : ''}</span>` : `<span class="lvl lvl-${diff}">${S.lang === 'hi' ? ['आसान', 'मध्यम', 'कठिन'][diff - 1] : ['easy', 'medium', 'hard'][diff - 1]}</span>`}
+          ${(q.raw || q).kind === 2 ? '<span class="tag cream">' + (S.lang === 'hi' ? 'अभिकथन–कारण' : 'Assertion–Reason') + '</span>' : ''}
           <span class="q-ch">${esc(chapterName(q.ch))}</span>
           ${q.marks != null && q.marks > 0 ? `<span class="q-marks">${q.marks} ${S.lang === 'hi' ? 'अंक' : 'mark' + (q.marks > 1 ? 's' : '')}</span>` : ''}
         </div>
@@ -4600,6 +4608,7 @@ window.UP = window.UP || {};
       </div>
       <div class="q-text">${esc(pyqQuestionText(q.raw || q))}</div>
       ${q.fig && typeof q.fig === 'string' ? (() => { const bf = boardFig(q); return bf ? `<div class="figure-card test-fig">${bf.svg}</div>` : ''; })() : ''}
+      ${S.lang === 'hi' && (q.raw || q).hindiReview ? '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>' : ''}
       ${opts}
       ${graded && a && a.ok !== null ? `<div class="q-verdict ${a.ok ? 'ok' : 'bad'}">${a.ok ? '✓ ' + (S.lang === 'hi' ? 'सही' : 'Correct') : '× ' + (S.lang === 'hi' ? 'सही उत्तर' : 'Correct answer') + ': ' + esc(String(q.ans))}</div>` : ''}
       ${a && a.shown ? solutionBlock(q) : ''}
@@ -4652,14 +4661,14 @@ window.UP = window.UP || {};
     const sourceQuestion = !!(q.raw && q.raw.paperCode);
     const autoFig = sourceQuestion ? null : autoFigureForQuestion(q);
     const fig = q.fig ? (typeof q.fig === 'string' ? boardFig(q) : figureFromTest(q)) : autoFig;
-    const hasAns = !!(q.ans && String(q.ans).trim() && String(q.ans) !== 'Proof (standard theorem)');
+    const hasAns = q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim() && String(q.ans) !== 'Proof (standard theorem)');
     const hasSteps = !!(q.steps && q.steps.length && q.steps.some(s => String(s.en || s.hi || (typeof s === 'string' ? s : '')).trim().length > 5));
     const aiProvided = !!(q.aiAnswer || q.aiSteps);
     const ansVal = hasAns && !sourceQuestion ? String(q.ans) : (q.aiAnswer || (S.lang === 'hi' ? '(कोई सत्यापित उत्तर उपलब्ध नहीं)' : '(no verified answer available)'));
     let steps;
     if (hasSteps && !sourceQuestion) steps = q.steps.map(s => `<li>${esc(P(s))}</li>`).join('');
     else if (q.aiSteps) steps = q.aiSteps.map(s => `<li>${esc(s)}</li>`).join('');
-    else if (q.aiLoading) steps = `<li class="ai-placeholder">${icon('bulb')} ${S.lang === 'hi' ? 'व्याख्या तैयार हो रही है…' : 'Preparing the explanation…'}</li>`;
+    else if (q.aiLoading) steps = `<li class="ai-placeholder">${loadingDots()}</li>`;
     else steps = '';
     return `<div class="q-solution" data-solbox="${esc(q.no)}">
       <div class="sol-ans"><span>${aiProvided && (!hasAns || sourceQuestion) ? (S.lang === 'hi' ? 'AI उत्तर (असत्यापित)' : 'AI answer (unverified)') : (S.lang === 'hi' ? 'उत्तर' : 'Answer')}</span><b>${esc(ansVal)}</b></div>
@@ -5065,6 +5074,7 @@ window.UP = window.UP || {};
       out += '</div></div>';
       out += '<div class="q-review muted">' + (q.textReview === 'source-verified' ? 'Text checked against source' : 'Text not fully source-reviewed') + ' · ' + (q.keyVerified === true ? 'Verified answer key available' : 'No independently verified answer key recorded') + '</div>';
       out += '<div class="q-text">' + esc(pyqQuestionText(q)) + '</div>';
+      if (S.lang === 'hi' && q.hindiReview) out += '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>';
       if (q.optionReview === 'awaiting-source-review') out += '<p class="muted">Options missing or suspect — withheld pending source review. This question is not graded.</p>';
       const reportURL = 'https://github.com/Aaryaveeryadav/Upay/issues/new?title=' + encodeURIComponent('Question issue: '+q.id) + '&body=' + encodeURIComponent('Question ID: '+q.id+'\nSubject: '+S.subject+'\nYear: '+(q.y||'unknown')+'\n\nDescribe the problem (do not include private account details):\n');
       out += '<a class="link" target="_blank" rel="noopener noreferrer" href="'+esc(reportURL)+'">Report a problem (GitHub)</a>';
@@ -5140,6 +5150,7 @@ window.UP = window.UP || {};
           : 'Questions taken directly from the ' + boardName + ' papers you shared. Comprehension and case-study sets are shown with their passage and sub-questions grouped together.')}</p>
     </section>
 
+    ${S.subject === 'physics' && +S.cls === 12 ? '<div class="callout warn physics-quality-note"><div>' + (S.lang === 'hi' ? 'क्षतिग्रस्त या मिले-जुले आयातित प्रश्न स्रोत-जाँच तक रोक दिए गए हैं। उपलब्ध प्रश्नों की भी आधिकारिक उत्तर-कुंजी सत्यापित नहीं है।' : 'Damaged or merged Physics imports are withheld pending source review. Available questions are structurally screened, not fully source-verified; no official answer key is verified.') + '</div></div>' : ''}
     ${renderSuppliedTestPapers(board)}
     ${hasSuppliedTestPapers() && (board !== 'cbse' || S.board !== 'cbse') ? `<div class="callout warn" style="margin-bottom:18px">${icon('info')}<div>${S.lang === 'hi' ? 'मूल प्रश्नपत्र देखने के लिए CBSE बोर्ड चुनें।' : 'Select the CBSE board to view the supplied original papers.'}</div></div>` : ''}
     <section class="card pyq-filter">
@@ -6409,7 +6420,6 @@ function importProgress(file){
     search: ['Search questions…', 'प्रश्न खोजें…'],
     exportPrg: ['Export progress', 'प्रगति निर्यात'],
     importPrg: ['Import progress', 'प्रगति आयात'],
-    dark: ['Dark mode', 'डार्क मोड'],
     large: ['Large text', 'बड़ा अक्षर'],
     dyslexic: ['Dyslexia friendly', 'डिस्लेक्सिया फ्रेंडली']
   };
@@ -6622,11 +6632,7 @@ function wrap(ctx,text,x,y,maxW,lh){
   if(line) ctx.fillText(line,x,y);
 }
 
-/* ---------- #15 Dark mode toggle ---------- */
-function applyDarkMode(on){
-  document.documentElement.classList.toggle('upay-dark', !!on);
-  store.set('dark', !!on);
-}
+/* ---------- Accessibility display preferences ---------- */
 function applyLargeText(on){
   document.documentElement.classList.toggle('upay-large', !!on);
   store.set('largeText', !!on);
@@ -6733,7 +6739,6 @@ window.viewMe = function(){
   <div class="card flat" style="padding:16px;margin-top:12px">
     <h3 style="margin-top:0;font-size:15px">${S.lang==='hi'?'दिखावट व पहुँच':'Appearance'}</h3>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <label class="chip"><input type="checkbox" data-toggle="dark" ${store.get('dark',false)?'checked':''}> ${t('dark')}</label>
       <label class="chip"><input type="checkbox" data-toggle="large" ${store.get('largeText',false)?'checked':''}> ${t('large')}</label>
       <label class="chip"><input type="checkbox" data-toggle="dyslexic" ${store.get('dyslexic',false)?'checked':''}> ${t('dyslexic')}</label>
     </div>
@@ -6787,7 +6792,7 @@ document.addEventListener('click',function(e){
 document.addEventListener('change',function(e){
   if(e.target.id==='importPrgFile'){ const f=e.target.files[0]; if(f) importProgress(f); e.target.value=''; return; }
   const t = e.target.closest('[data-toggle]');
-  if(t){ const k=t.dataset.toggle; if(k==='dark') applyDarkMode(t.checked); if(k==='large') applyLargeText(t.checked); if(k==='dyslexic') applyDyslexic(t.checked); return; }
+  if(t){ const k=t.dataset.toggle; if(k==='large') applyLargeText(t.checked); if(k==='dyslexic') applyDyslexic(t.checked); return; }
 });
 document.addEventListener('input',function(e){
   if(e.target.classList && e.target.classList.contains('mock-ans')){
@@ -6835,7 +6840,9 @@ viewHome = function(){
 };
 
 /* ---------- Boot: apply saved display prefs ---------- */
-applyDarkMode(!!store.get('dark',false));
+// Retire the old preference without disturbing accessibility settings.
+store.remove('dark');
+document.documentElement.classList.remove('upay-dark');
 applyLargeText(!!store.get('largeText',false));
 applyDyslexic(!!store.get('dyslexic',false));
 
