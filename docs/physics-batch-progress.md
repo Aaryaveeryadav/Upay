@@ -17,6 +17,11 @@
 - Added independent `cleanText` bypass; removed indiscriminate standalone
   4–5 digit deletion, preserving quantities such as 1000 W.
 
+- Chapter 1, Electric Charges and Fields: all 31 numbered figures (1.1–1.31),
+  including exercise figures, directly cropped at 144 dpi, visually checked
+  against source pages and registered with SHA-256 and crop coordinates.
+  Multi-panel figures remain one crop per number. Source PDF retained.
+
 ## Checks passed
 
 - Physics syntax validator: all 14 outlines.
@@ -28,7 +33,7 @@
 ## Remaining — do not treat this batch as released
 
 - Chapter 11 completed in the follow-up batch: all five numbered figures (11.1–11.5) directly cropped, visually checked against PDF pages 4–6, registered and checked.
-- Figures remaining: chapters 1–7, 9–10 and 12–14, whole chapters at a time.
+- Figures remaining: chapters 2–7, 9–10 and 12–14, whole chapters at a time.
 - Existing Physics PYQs: option repair/review, numeric kinds, answer mapping,
   render/correct-pick regression test. Initial audit found truncated option
   fragments and options attached to unrelated stems, not just object/array
