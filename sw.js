@@ -1,12 +1,12 @@
 /* Upay service worker — offline shell + public asset caching (v26ab).
    API responses are deliberately never stored: they can be user-specific. */
-const VERSION = 'upay-v26b4';
+const VERSION = 'upay-v26b5';
 const ASSET_CACHE = VERSION + '-assets';
 const PRECACHE = [
   '/',
-  '/assets/css/app.css?v=26b4',
-  '/assets/js/boot.js?v=26b4',
-  '/assets/js/app.js?v=26b4',
+  '/assets/css/app.css?v=26b5',
+  '/assets/js/boot.js?v=26b5',
+  '/assets/js/app.js?v=26b5',
 ];
 
 self.addEventListener('install', ev => {

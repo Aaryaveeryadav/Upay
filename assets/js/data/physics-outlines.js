@@ -41,7 +41,225 @@ window.UP = window.UP || {};
     "unit": 1,
     "unit_title": "Electrostatics",
     "source": "NCERT Class 12 Physics, chapter 1",
-    "figures": []
+    "figures": [
+      {
+        "fig": "1.1",
+        "path": "assets/img/notes/91f303658abac3aa88e6d872be33a7fad96367d57de41836e69f0ee484b5daec.png",
+        "caption": "Rods: like charges repel and unlike charges attract each other.",
+        "page": 2,
+        "sha256": "91f303658abac3aa88e6d872be33a7fad96367d57de41836e69f0ee484b5daec"
+      },
+      {
+        "fig": "1.2",
+        "path": "assets/img/notes/b39a8f21c8821779a042b05b8fc9049c3dc44698106b731ac107dfbc10913d87.png",
+        "caption": "Electroscopes: (a) The gold leaf electroscope, (b) Schematics of a simple electroscope.",
+        "page": 4,
+        "sha256": "b39a8f21c8821779a042b05b8fc9049c3dc44698106b731ac107dfbc10913d87"
+      },
+      {
+        "fig": "1.3",
+        "path": "assets/img/notes/1e539414eac89d48d50548906e00ecb3e70d1e3795083f5ee3103abc7292ae0c.png",
+        "caption": "(a) Geometry and (b) Forces between charges.",
+        "page": 8,
+        "sha256": "1e539414eac89d48d50548906e00ecb3e70d1e3795083f5ee3103abc7292ae0c"
+      },
+      {
+        "fig": "1.4",
+        "path": "assets/img/notes/89d953cf5f67b41b1a09eb50c761e512ee41ed3b3542588322c992ab430d2efa.png",
+        "caption": "",
+        "page": 10,
+        "sha256": "89d953cf5f67b41b1a09eb50c761e512ee41ed3b3542588322c992ab430d2efa"
+      },
+      {
+        "fig": "1.5",
+        "path": "assets/img/notes/24de72486f8295a82e5dcf2da1b296e9472dcafeca0cff386aec70bcaa0ee951.png",
+        "caption": "A system of (a) three charges (b) multiple charges.",
+        "page": 11,
+        "sha256": "24de72486f8295a82e5dcf2da1b296e9472dcafeca0cff386aec70bcaa0ee951"
+      },
+      {
+        "fig": "1.6",
+        "path": "assets/img/notes/476fe55e953ce4542bf33cff0325b3943d103232a945cf71923c5e939608ea46.png",
+        "caption": "",
+        "page": 12,
+        "sha256": "476fe55e953ce4542bf33cff0325b3943d103232a945cf71923c5e939608ea46"
+      },
+      {
+        "fig": "1.7",
+        "path": "assets/img/notes/4aafa74de52e2fe5406cf35cf404cc0e5ecff82c29334e1153777648e06879b4.png",
+        "caption": "",
+        "page": 13,
+        "sha256": "4aafa74de52e2fe5406cf35cf404cc0e5ecff82c29334e1153777648e06879b4"
+      },
+      {
+        "fig": "1.8",
+        "path": "assets/img/notes/d307de1131932b28e7332af5d414fe27ff65525d46775f953e0d5b6b58a155fe.png",
+        "caption": "Electric field (a) due to a charge Q, (b) due to a charge –Q.",
+        "page": 14,
+        "sha256": "d307de1131932b28e7332af5d414fe27ff65525d46775f953e0d5b6b58a155fe"
+      },
+      {
+        "fig": "1.9",
+        "path": "assets/img/notes/b0f322fbac1aea2ee7c67f5520274b62d5a95dd37ae9f5d1bfe1bfa6071798f3.png",
+        "caption": "Electric field at a point due to a system of charges is the vector sum of the electric fields at the point due to individual charges.",
+        "page": 16,
+        "sha256": "b0f322fbac1aea2ee7c67f5520274b62d5a95dd37ae9f5d1bfe1bfa6071798f3"
+      },
+      {
+        "fig": "1.10",
+        "path": "assets/img/notes/dc399eebf105d77eccb41479e85f7b52ec035c46ed7458337f78e06557635ba7.png",
+        "caption": "",
+        "page": 17,
+        "sha256": "dc399eebf105d77eccb41479e85f7b52ec035c46ed7458337f78e06557635ba7"
+      },
+      {
+        "fig": "1.11",
+        "path": "assets/img/notes/f0244a029e70a3d3cdac6305429e76bbe51cb588e8d16e421ce445f97cfdf9b3.png",
+        "caption": "",
+        "page": 18,
+        "sha256": "f0244a029e70a3d3cdac6305429e76bbe51cb588e8d16e421ce445f97cfdf9b3"
+      },
+      {
+        "fig": "1.12",
+        "path": "assets/img/notes/802e1a71caed72e7571788ec2ad510d3fda2a8f5c7a44cde71f0fd5e21bd75ec.png",
+        "caption": "Field of a point charge.",
+        "page": 19,
+        "sha256": "802e1a71caed72e7571788ec2ad510d3fda2a8f5c7a44cde71f0fd5e21bd75ec"
+      },
+      {
+        "fig": "1.13",
+        "path": "assets/img/notes/e2323c5b411fbfb1d78443724ec2cae633f722b318331fee03c0fe40382896ce.png",
+        "caption": "Dependence of electric field strength on the distance and its relation to the number of field lines.",
+        "page": 20,
+        "sha256": "e2323c5b411fbfb1d78443724ec2cae633f722b318331fee03c0fe40382896ce"
+      },
+      {
+        "fig": "1.14",
+        "path": "assets/img/notes/bb7a45b4393983aaea97ae81f210c84b1385147814739910a73605eb4ef290da.png",
+        "caption": "Field lines due to some simple charge configurations.",
+        "page": 21,
+        "sha256": "bb7a45b4393983aaea97ae81f210c84b1385147814739910a73605eb4ef290da"
+      },
+      {
+        "fig": "1.15",
+        "path": "assets/img/notes/80d9f2e30a65d29e22baed58a6bb06d5846c01b1cf994e5bebe6603b45b0b45b.png",
+        "caption": "Dependence of flux on the inclination θ between E and n̂.",
+        "page": 22,
+        "sha256": "80d9f2e30a65d29e22baed58a6bb06d5846c01b1cf994e5bebe6603b45b0b45b"
+      },
+      {
+        "fig": "1.16",
+        "path": "assets/img/notes/d1474c8317c8732f5db2697a2707302ecb5e0233c1cd200c5953648d1289ccc5.png",
+        "caption": "Convention for defining normal n̂ and ΔS.",
+        "page": 22,
+        "sha256": "d1474c8317c8732f5db2697a2707302ecb5e0233c1cd200c5953648d1289ccc5"
+      },
+      {
+        "fig": "1.17",
+        "path": "assets/img/notes/08ac575240a23e900afafc94c0c9428b411da39e6e242cac4becee3be5aca381.png",
+        "caption": "Electric field of a dipole at (a) a point on the axis, (b) a point on the equatorial plane of the dipole. p is the dipole moment vector of magnitude p = q × 2a and directed from –q to q.",
+        "page": 24,
+        "sha256": "08ac575240a23e900afafc94c0c9428b411da39e6e242cac4becee3be5aca381"
+      },
+      {
+        "fig": "1.18",
+        "path": "assets/img/notes/c0330eb0aed5c77f05d8fc6f09541906eceaf0a3842722d1816916eb74c81ec2.png",
+        "caption": "",
+        "page": 25,
+        "sha256": "c0330eb0aed5c77f05d8fc6f09541906eceaf0a3842722d1816916eb74c81ec2"
+      },
+      {
+        "fig": "1.19",
+        "path": "assets/img/notes/837653c25b11a72870395771c619a57a722bdb0097b0356387e5da1e9da37eba.png",
+        "caption": "Dipole in a uniform electric field.",
+        "page": 27,
+        "sha256": "837653c25b11a72870395771c619a57a722bdb0097b0356387e5da1e9da37eba"
+      },
+      {
+        "fig": "1.20",
+        "path": "assets/img/notes/58c3491d4a040a97faa929cad058bedce20b21923f80a371f7aed8b4e8a4571f.png",
+        "caption": "Electric force on a dipole: (a) E parallel to p, (b) E antiparallel to p.",
+        "page": 27,
+        "sha256": "58c3491d4a040a97faa929cad058bedce20b21923f80a371f7aed8b4e8a4571f"
+      },
+      {
+        "fig": "1.21",
+        "path": "assets/img/notes/53d959b53f89870937792563e09a38d68f4356f0627bab985ff0ad6eb0295942.png",
+        "caption": "Definition of linear, surface and volume charge densities. In each case, the element (Δl, ΔS, ΔV) chosen is small on the macroscopic scale but contains a very large number of microscopic constituents.",
+        "page": 28,
+        "sha256": "53d959b53f89870937792563e09a38d68f4356f0627bab985ff0ad6eb0295942"
+      },
+      {
+        "fig": "1.22",
+        "path": "assets/img/notes/06692c797f1c851baffd809c1b86258bf42a588c865c84278e070cb3b60f721e.png",
+        "caption": "Flux through a sphere enclosing a point charge q at its centre.",
+        "page": 29,
+        "sha256": "06692c797f1c851baffd809c1b86258bf42a588c865c84278e070cb3b60f721e"
+      },
+      {
+        "fig": "1.23",
+        "path": "assets/img/notes/07687d6a09fe41c12ede2c773cd9327139420cea395d8b383a34170e5148d9ef.png",
+        "caption": "Calculation of the flux of uniform electric field through the surface of a cylinder.",
+        "page": 30,
+        "sha256": "07687d6a09fe41c12ede2c773cd9327139420cea395d8b383a34170e5148d9ef"
+      },
+      {
+        "fig": "1.24",
+        "path": "assets/img/notes/372fcf29e103b75b6497fd3b00701869be204a94f24abeef1b5ff609ee3038bc.png",
+        "caption": "",
+        "page": 31,
+        "sha256": "372fcf29e103b75b6497fd3b00701869be204a94f24abeef1b5ff609ee3038bc"
+      },
+      {
+        "fig": "1.25",
+        "path": "assets/img/notes/fcb3c80cee0f399b2fbc66c213228d819feb21c18e2b2d33207e6899090b8178.png",
+        "caption": "",
+        "page": 32,
+        "sha256": "fcb3c80cee0f399b2fbc66c213228d819feb21c18e2b2d33207e6899090b8178"
+      },
+      {
+        "fig": "1.26",
+        "path": "assets/img/notes/5f778243188becd11133109fdbf6e9e0478bae8e9fbdb26a252669e57c6ae69a.png",
+        "caption": "(a) Electric field due to an infinitely long thin straight wire is radial, (b) The Gaussian surface for a long thin wire of uniform linear charge density.",
+        "page": 33,
+        "sha256": "5f778243188becd11133109fdbf6e9e0478bae8e9fbdb26a252669e57c6ae69a"
+      },
+      {
+        "fig": "1.27",
+        "path": "assets/img/notes/9d8a67a6a816f236719af36d460c3bc08b6a6b026fb78e6c365372b7cec7310e.png",
+        "caption": "Gaussian surface for a uniformly charged infinite plane sheet.",
+        "page": 34,
+        "sha256": "9d8a67a6a816f236719af36d460c3bc08b6a6b026fb78e6c365372b7cec7310e"
+      },
+      {
+        "fig": "1.28",
+        "path": "assets/img/notes/89a2545679c700f38924e629f24f395453aeb05636f97d049bfaf77114d04cf9.png",
+        "caption": "Gaussian surfaces for a point with (a) r > R, (b) r < R.",
+        "page": 35,
+        "sha256": "89a2545679c700f38924e629f24f395453aeb05636f97d049bfaf77114d04cf9"
+      },
+      {
+        "fig": "1.29",
+        "path": "assets/img/notes/eac9de369fce58e602c0c17ba68ef20151495ee3dbea152c22925af3583ffc5c.png",
+        "caption": "",
+        "page": 36,
+        "sha256": "eac9de369fce58e602c0c17ba68ef20151495ee3dbea152c22925af3583ffc5c"
+      },
+      {
+        "fig": "1.30",
+        "path": "assets/img/notes/247e80fb5c08ea8e721dfcccad22b961caa6dacff15f45c4235a4d00d705690b.png",
+        "caption": "",
+        "page": 43,
+        "sha256": "247e80fb5c08ea8e721dfcccad22b961caa6dacff15f45c4235a4d00d705690b"
+      },
+      {
+        "fig": "1.31",
+        "path": "assets/img/notes/dc117451d93e25fb74e64a97a13d8fe9b706195b41876f44d075c05226ca5897.png",
+        "caption": "",
+        "page": 43,
+        "sha256": "dc117451d93e25fb74e64a97a13d8fe9b706195b41876f44d075c05226ca5897"
+      }
+    ]
   },
   "2": {
     "id": "lephy1202",

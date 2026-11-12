@@ -371,7 +371,7 @@
    "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
    "pdf_page": 2,
    "figure": "2.2a",
-   "caption": "Sub-figure (a): Eext < 1.1 V \u2014 electrons flow from the Zn rod to the Cu rod; Zn dissolves at the anode and copper deposits at the cathode.",
+   "caption": "Sub-figure (a): Eext < 1.1 V — electrons flow from the Zn rod to the Cu rod; Zn dissolves at the anode and copper deposits at the cathode.",
    "crop_points": [
     55,
     366,
@@ -389,7 +389,7 @@
    "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
    "pdf_page": 2,
    "figure": "2.2b",
-   "caption": "Sub-figure (b): Eext = 1.1 V \u2014 no flow of electrons or current; no chemical reaction.",
+   "caption": "Sub-figure (b): Eext = 1.1 V — no flow of electrons or current; no chemical reaction.",
    "crop_points": [
     278,
     366,
@@ -407,7 +407,7 @@
    "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
    "pdf_page": 2,
    "figure": "2.2c",
-   "caption": "Sub-figure (c): Eext > 1.1 V \u2014 electrons flow from Cu to Zn; zinc deposits at the zinc electrode and copper dissolves at the copper electrode.",
+   "caption": "Sub-figure (c): Eext > 1.1 V — electrons flow from Cu to Zn; zinc deposits at the zinc electrode and copper dissolves at the copper electrode.",
    "crop_points": [
     270,
     524,
@@ -479,7 +479,7 @@
    "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
    "pdf_page": 17,
    "figure": "2.6",
-   "caption": "Molar conductivity versus c\u00bd for acetic",
+   "caption": "Molar conductivity versus c½ for acetic",
    "crop_points": [
     36,
     228,
@@ -497,7 +497,7 @@
    "source_sha256": "ca0f380fbfe6a0a4363251a646aafe451fe99c5fc8dba1aa9317438d2bc8705a",
    "pdf_page": 18,
    "figure": "2.7",
-   "caption": "Variation of Lm against c\u00bd.",
+   "caption": "Variation of Lm against c½.",
    "crop_points": [
     187,
     418,
@@ -1631,7 +1631,7 @@
    "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
    "pdf_page": 5,
    "figure": "5.4b",
-   "caption": "b EM picture - \u2018Beads-on-String\u2019",
+   "caption": "b EM picture - ‘Beads-on-String’",
    "crop_points": [
     301,
     339,
@@ -1685,7 +1685,7 @@
    "source_sha256": "21d77cdaf37c11b26956bbdae0b9eff9700d723135ac55c1a2141b1caee8f017",
    "pdf_page": 11,
    "figure": "5.7",
-   "caption": "Meselson and Stahl\u2019s Experiment",
+   "caption": "Meselson and Stahl’s Experiment",
    "crop_points": [
     54,
     406,
@@ -2700,6 +2700,564 @@
    "origin": "source-pdf-crop",
    "ai_drawn": false,
    "source_sha256": "8b465f3a3fddc009ec98b9065014231740bd2f1c29aba6c142ceabfbb73bf764",
+   "edit": "none"
+  },
+  {
+   "figure": "1.1",
+   "pdf_page": 2,
+   "crop_points": [
+    195,
+    100,
+    550,
+    231
+   ],
+   "caption": "Rods: like charges repel and unlike charges attract each other.",
+   "source_file": "leph101.pdf",
+   "sha256": "91f303658abac3aa88e6d872be33a7fad96367d57de41836e69f0ee484b5daec",
+   "path": "assets/img/notes/91f303658abac3aa88e6d872be33a7fad96367d57de41836e69f0ee484b5daec.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.2",
+   "pdf_page": 4,
+   "crop_points": [
+    70,
+    98,
+    260,
+    345
+   ],
+   "caption": "Electroscopes: (a) The gold leaf electroscope, (b) Schematics of a simple electroscope.",
+   "source_file": "leph101.pdf",
+   "sha256": "b39a8f21c8821779a042b05b8fc9049c3dc44698106b731ac107dfbc10913d87",
+   "path": "assets/img/notes/b39a8f21c8821779a042b05b8fc9049c3dc44698106b731ac107dfbc10913d87.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.3",
+   "pdf_page": 8,
+   "crop_points": [
+    65,
+    100,
+    285,
+    331
+   ],
+   "caption": "(a) Geometry and (b) Forces between charges.",
+   "source_file": "leph101.pdf",
+   "sha256": "1e539414eac89d48d50548906e00ecb3e70d1e3795083f5ee3103abc7292ae0c",
+   "path": "assets/img/notes/1e539414eac89d48d50548906e00ecb3e70d1e3795083f5ee3103abc7292ae0c.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.4",
+   "pdf_page": 10,
+   "crop_points": [
+    244,
+    375,
+    515,
+    716
+   ],
+   "caption": "",
+   "source_file": "leph101.pdf",
+   "sha256": "89d953cf5f67b41b1a09eb50c761e512ee41ed3b3542588322c992ab430d2efa",
+   "path": "assets/img/notes/89d953cf5f67b41b1a09eb50c761e512ee41ed3b3542588322c992ab430d2efa.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.5",
+   "pdf_page": 11,
+   "crop_points": [
+    378,
+    445,
+    550,
+    695
+   ],
+   "caption": "A system of (a) three charges (b) multiple charges.",
+   "source_file": "leph101.pdf",
+   "sha256": "24de72486f8295a82e5dcf2da1b296e9472dcafeca0cff386aec70bcaa0ee951",
+   "path": "assets/img/notes/24de72486f8295a82e5dcf2da1b296e9472dcafeca0cff386aec70bcaa0ee951.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.6",
+   "pdf_page": 12,
+   "crop_points": [
+    275,
+    511,
+    463,
+    660
+   ],
+   "caption": "",
+   "source_file": "leph101.pdf",
+   "sha256": "476fe55e953ce4542bf33cff0325b3943d103232a945cf71923c5e939608ea46",
+   "path": "assets/img/notes/476fe55e953ce4542bf33cff0325b3943d103232a945cf71923c5e939608ea46.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.7",
+   "pdf_page": 13,
+   "crop_points": [
+    130,
+    390,
+    365,
+    571
+   ],
+   "caption": "",
+   "source_file": "leph101.pdf",
+   "sha256": "4aafa74de52e2fe5406cf35cf404cc0e5ecff82c29334e1153777648e06879b4",
+   "path": "assets/img/notes/4aafa74de52e2fe5406cf35cf404cc0e5ecff82c29334e1153777648e06879b4.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.8",
+   "pdf_page": 14,
+   "crop_points": [
+    72,
+    383,
+    190,
+    661
+   ],
+   "caption": "Electric field (a) due to a charge Q, (b) due to a charge –Q.",
+   "source_file": "leph101.pdf",
+   "sha256": "d307de1131932b28e7332af5d414fe27ff65525d46775f953e0d5b6b58a155fe",
+   "path": "assets/img/notes/d307de1131932b28e7332af5d414fe27ff65525d46775f953e0d5b6b58a155fe.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.9",
+   "pdf_page": 16,
+   "crop_points": [
+    72,
+    100,
+    260,
+    261
+   ],
+   "caption": "Electric field at a point due to a system of charges is the vector sum of the electric fields at the point due to individual charges.",
+   "source_file": "leph101.pdf",
+   "sha256": "b0f322fbac1aea2ee7c67f5520274b62d5a95dd37ae9f5d1bfe1bfa6071798f3",
+   "path": "assets/img/notes/b0f322fbac1aea2ee7c67f5520274b62d5a95dd37ae9f5d1bfe1bfa6071798f3.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.10",
+   "pdf_page": 17,
+   "crop_points": [
+    135,
+    380,
+    355,
+    467
+   ],
+   "caption": "",
+   "source_file": "leph101.pdf",
+   "sha256": "dc399eebf105d77eccb41479e85f7b52ec035c46ed7458337f78e06557635ba7",
+   "path": "assets/img/notes/dc399eebf105d77eccb41479e85f7b52ec035c46ed7458337f78e06557635ba7.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.11",
+   "pdf_page": 18,
+   "crop_points": [
+    269,
+    423,
+    475,
+    583
+   ],
+   "caption": "",
+   "source_file": "leph101.pdf",
+   "sha256": "f0244a029e70a3d3cdac6305429e76bbe51cb588e8d16e421ce445f97cfdf9b3",
+   "path": "assets/img/notes/f0244a029e70a3d3cdac6305429e76bbe51cb588e8d16e421ce445f97cfdf9b3.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.12",
+   "pdf_page": 19,
+   "crop_points": [
+    346,
+    482,
+    544,
+    669
+   ],
+   "caption": "Field of a point charge.",
+   "source_file": "leph101.pdf",
+   "sha256": "802e1a71caed72e7571788ec2ad510d3fda2a8f5c7a44cde71f0fd5e21bd75ec",
+   "path": "assets/img/notes/802e1a71caed72e7571788ec2ad510d3fda2a8f5c7a44cde71f0fd5e21bd75ec.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.13",
+   "pdf_page": 20,
+   "crop_points": [
+    76,
+    98,
+    238,
+    258
+   ],
+   "caption": "Dependence of electric field strength on the distance and its relation to the number of field lines.",
+   "source_file": "leph101.pdf",
+   "sha256": "e2323c5b411fbfb1d78443724ec2cae633f722b318331fee03c0fe40382896ce",
+   "path": "assets/img/notes/e2323c5b411fbfb1d78443724ec2cae633f722b318331fee03c0fe40382896ce.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.14",
+   "pdf_page": 21,
+   "crop_points": [
+    346,
+    100,
+    548,
+    683
+   ],
+   "caption": "Field lines due to some simple charge configurations.",
+   "source_file": "leph101.pdf",
+   "sha256": "bb7a45b4393983aaea97ae81f210c84b1385147814739910a73605eb4ef290da",
+   "path": "assets/img/notes/bb7a45b4393983aaea97ae81f210c84b1385147814739910a73605eb4ef290da.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.15",
+   "pdf_page": 22,
+   "crop_points": [
+    73,
+    98,
+    310,
+    308
+   ],
+   "caption": "Dependence of flux on the inclination θ between E and n̂.",
+   "source_file": "leph101.pdf",
+   "sha256": "80d9f2e30a65d29e22baed58a6bb06d5846c01b1cf994e5bebe6603b45b0b45b",
+   "path": "assets/img/notes/80d9f2e30a65d29e22baed58a6bb06d5846c01b1cf994e5bebe6603b45b0b45b.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.16",
+   "pdf_page": 22,
+   "crop_points": [
+    72,
+    379,
+    190,
+    653
+   ],
+   "caption": "Convention for defining normal n̂ and ΔS.",
+   "source_file": "leph101.pdf",
+   "sha256": "d1474c8317c8732f5db2697a2707302ecb5e0233c1cd200c5953648d1289ccc5",
+   "path": "assets/img/notes/d1474c8317c8732f5db2697a2707302ecb5e0233c1cd200c5953648d1289ccc5.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.17",
+   "pdf_page": 24,
+   "crop_points": [
+    73,
+    98,
+    263,
+    353
+   ],
+   "caption": "Electric field of a dipole at (a) a point on the axis, (b) a point on the equatorial plane of the dipole. p is the dipole moment vector of magnitude p = q × 2a and directed from –q to q.",
+   "source_file": "leph101.pdf",
+   "sha256": "08ac575240a23e900afafc94c0c9428b411da39e6e242cac4becee3be5aca381",
+   "path": "assets/img/notes/08ac575240a23e900afafc94c0c9428b411da39e6e242cac4becee3be5aca381.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.18",
+   "pdf_page": 25,
+   "crop_points": [
+    118,
+    433,
+    385,
+    646
+   ],
+   "caption": "",
+   "source_file": "leph101.pdf",
+   "sha256": "c0330eb0aed5c77f05d8fc6f09541906eceaf0a3842722d1816916eb74c81ec2",
+   "path": "assets/img/notes/c0330eb0aed5c77f05d8fc6f09541906eceaf0a3842722d1816916eb74c81ec2.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.19",
+   "pdf_page": 27,
+   "crop_points": [
+    407,
+    260,
+    545,
+    346
+   ],
+   "caption": "Dipole in a uniform electric field.",
+   "source_file": "leph101.pdf",
+   "sha256": "837653c25b11a72870395771c619a57a722bdb0097b0356387e5da1e9da37eba",
+   "path": "assets/img/notes/837653c25b11a72870395771c619a57a722bdb0097b0356387e5da1e9da37eba.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.20",
+   "pdf_page": 27,
+   "crop_points": [
+    354,
+    426,
+    546,
+    681
+   ],
+   "caption": "Electric force on a dipole: (a) E parallel to p, (b) E antiparallel to p.",
+   "source_file": "leph101.pdf",
+   "sha256": "58c3491d4a040a97faa929cad058bedce20b21923f80a371f7aed8b4e8a4571f",
+   "path": "assets/img/notes/58c3491d4a040a97faa929cad058bedce20b21923f80a371f7aed8b4e8a4571f.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.21",
+   "pdf_page": 28,
+   "crop_points": [
+    74,
+    230,
+    183,
+    485
+   ],
+   "caption": "Definition of linear, surface and volume charge densities. In each case, the element (Δl, ΔS, ΔV) chosen is small on the macroscopic scale but contains a very large number of microscopic constituents.",
+   "source_file": "leph101.pdf",
+   "sha256": "53d959b53f89870937792563e09a38d68f4356f0627bab985ff0ad6eb0295942",
+   "path": "assets/img/notes/53d959b53f89870937792563e09a38d68f4356f0627bab985ff0ad6eb0295942.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.22",
+   "pdf_page": 29,
+   "crop_points": [
+    423,
+    525,
+    545,
+    658
+   ],
+   "caption": "Flux through a sphere enclosing a point charge q at its centre.",
+   "source_file": "leph101.pdf",
+   "sha256": "06692c797f1c851baffd809c1b86258bf42a588c865c84278e070cb3b60f721e",
+   "path": "assets/img/notes/06692c797f1c851baffd809c1b86258bf42a588c865c84278e070cb3b60f721e.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.23",
+   "pdf_page": 30,
+   "crop_points": [
+    73,
+    99,
+    248,
+    165
+   ],
+   "caption": "Calculation of the flux of uniform electric field through the surface of a cylinder.",
+   "source_file": "leph101.pdf",
+   "sha256": "07687d6a09fe41c12ede2c773cd9327139420cea395d8b383a34170e5148d9ef",
+   "path": "assets/img/notes/07687d6a09fe41c12ede2c773cd9327139420cea395d8b383a34170e5148d9ef.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.24",
+   "pdf_page": 31,
+   "crop_points": [
+    126,
+    356,
+    359,
+    506
+   ],
+   "caption": "",
+   "source_file": "leph101.pdf",
+   "sha256": "372fcf29e103b75b6497fd3b00701869be204a94f24abeef1b5ff609ee3038bc",
+   "path": "assets/img/notes/372fcf29e103b75b6497fd3b00701869be204a94f24abeef1b5ff609ee3038bc.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.25",
+   "pdf_page": 32,
+   "crop_points": [
+    272,
+    526,
+    468,
+    645
+   ],
+   "caption": "",
+   "source_file": "leph101.pdf",
+   "sha256": "fcb3c80cee0f399b2fbc66c213228d819feb21c18e2b2d33207e6899090b8178",
+   "path": "assets/img/notes/fcb3c80cee0f399b2fbc66c213228d819feb21c18e2b2d33207e6899090b8178.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.26",
+   "pdf_page": 33,
+   "crop_points": [
+    300,
+    181,
+    549,
+    658
+   ],
+   "caption": "(a) Electric field due to an infinitely long thin straight wire is radial, (b) The Gaussian surface for a long thin wire of uniform linear charge density.",
+   "source_file": "leph101.pdf",
+   "sha256": "5f778243188becd11133109fdbf6e9e0478bae8e9fbdb26a252669e57c6ae69a",
+   "path": "assets/img/notes/5f778243188becd11133109fdbf6e9e0478bae8e9fbdb26a252669e57c6ae69a.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.27",
+   "pdf_page": 34,
+   "crop_points": [
+    74,
+    549,
+    291,
+    686
+   ],
+   "caption": "Gaussian surface for a uniformly charged infinite plane sheet.",
+   "source_file": "leph101.pdf",
+   "sha256": "9d8a67a6a816f236719af36d460c3bc08b6a6b026fb78e6c365372b7cec7310e",
+   "path": "assets/img/notes/9d8a67a6a816f236719af36d460c3bc08b6a6b026fb78e6c365372b7cec7310e.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.28",
+   "pdf_page": 35,
+   "crop_points": [
+    382,
+    340,
+    538,
+    606
+   ],
+   "caption": "Gaussian surfaces for a point with (a) r > R, (b) r < R.",
+   "source_file": "leph101.pdf",
+   "sha256": "89a2545679c700f38924e629f24f395453aeb05636f97d049bfaf77114d04cf9",
+   "path": "assets/img/notes/89a2545679c700f38924e629f24f395453aeb05636f97d049bfaf77114d04cf9.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.29",
+   "pdf_page": 36,
+   "crop_points": [
+    305,
+    299,
+    430,
+    419
+   ],
+   "caption": "",
+   "source_file": "leph101.pdf",
+   "sha256": "eac9de369fce58e602c0c17ba68ef20151495ee3dbea152c22925af3583ffc5c",
+   "path": "assets/img/notes/eac9de369fce58e602c0c17ba68ef20151495ee3dbea152c22925af3583ffc5c.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.30",
+   "pdf_page": 43,
+   "crop_points": [
+    115,
+    100,
+    410,
+    183
+   ],
+   "caption": "",
+   "source_file": "leph101.pdf",
+   "sha256": "247e80fb5c08ea8e721dfcccad22b961caa6dacff15f45c4235a4d00d705690b",
+   "path": "assets/img/notes/247e80fb5c08ea8e721dfcccad22b961caa6dacff15f45c4235a4d00d705690b.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
+   "edit": "none"
+  },
+  {
+   "figure": "1.31",
+   "pdf_page": 43,
+   "crop_points": [
+    138,
+    398,
+    339,
+    567
+   ],
+   "caption": "",
+   "source_file": "leph101.pdf",
+   "sha256": "dc117451d93e25fb74e64a97a13d8fe9b706195b41876f44d075c05226ca5897",
+   "path": "assets/img/notes/dc117451d93e25fb74e64a97a13d8fe9b706195b41876f44d075c05226ca5897.png",
+   "origin": "source-pdf-crop",
+   "ai_drawn": false,
+   "source_sha256": "ebfbdf8057d7e855385b1720c1771a89d807cb45f5f3b7b79d530f1e8880209f",
    "edit": "none"
   }
  ]
