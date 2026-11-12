@@ -6409,7 +6409,6 @@ function importProgress(file){
     search: ['Search questions…', 'प्रश्न खोजें…'],
     exportPrg: ['Export progress', 'प्रगति निर्यात'],
     importPrg: ['Import progress', 'प्रगति आयात'],
-    dark: ['Dark mode', 'डार्क मोड'],
     large: ['Large text', 'बड़ा अक्षर'],
     dyslexic: ['Dyslexia friendly', 'डिस्लेक्सिया फ्रेंडली']
   };
@@ -6622,11 +6621,7 @@ function wrap(ctx,text,x,y,maxW,lh){
   if(line) ctx.fillText(line,x,y);
 }
 
-/* ---------- #15 Dark mode toggle ---------- */
-function applyDarkMode(on){
-  document.documentElement.classList.toggle('upay-dark', !!on);
-  store.set('dark', !!on);
-}
+/* ---------- Accessibility display preferences ---------- */
 function applyLargeText(on){
   document.documentElement.classList.toggle('upay-large', !!on);
   store.set('largeText', !!on);
@@ -6733,7 +6728,6 @@ window.viewMe = function(){
   <div class="card flat" style="padding:16px;margin-top:12px">
     <h3 style="margin-top:0;font-size:15px">${S.lang==='hi'?'दिखावट व पहुँच':'Appearance'}</h3>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <label class="chip"><input type="checkbox" data-toggle="dark" ${store.get('dark',false)?'checked':''}> ${t('dark')}</label>
       <label class="chip"><input type="checkbox" data-toggle="large" ${store.get('largeText',false)?'checked':''}> ${t('large')}</label>
       <label class="chip"><input type="checkbox" data-toggle="dyslexic" ${store.get('dyslexic',false)?'checked':''}> ${t('dyslexic')}</label>
     </div>
@@ -6787,7 +6781,7 @@ document.addEventListener('click',function(e){
 document.addEventListener('change',function(e){
   if(e.target.id==='importPrgFile'){ const f=e.target.files[0]; if(f) importProgress(f); e.target.value=''; return; }
   const t = e.target.closest('[data-toggle]');
-  if(t){ const k=t.dataset.toggle; if(k==='dark') applyDarkMode(t.checked); if(k==='large') applyLargeText(t.checked); if(k==='dyslexic') applyDyslexic(t.checked); return; }
+  if(t){ const k=t.dataset.toggle; if(k==='large') applyLargeText(t.checked); if(k==='dyslexic') applyDyslexic(t.checked); return; }
 });
 document.addEventListener('input',function(e){
   if(e.target.classList && e.target.classList.contains('mock-ans')){
@@ -6835,7 +6829,9 @@ viewHome = function(){
 };
 
 /* ---------- Boot: apply saved display prefs ---------- */
-applyDarkMode(!!store.get('dark',false));
+// Retire the old preference without disturbing accessibility settings.
+store.remove('dark');
+document.documentElement.classList.remove('upay-dark');
 applyLargeText(!!store.get('largeText',false));
 applyDyslexic(!!store.get('dyslexic',false));
 

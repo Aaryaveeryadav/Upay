@@ -4,6 +4,7 @@
    ============================================================ */
 
 :root{
+  color-scheme: light;
   --surface-2:#fdfcfa;
   --cream-deep:#c0a355;
   /* sky */
@@ -1094,7 +1095,7 @@ select.select option{background:#fff;color:var(--ink-800,#1d2730);font-weight:50
 .answer-steps th,.answer-steps td{padding:6px 10px;border:1px solid var(--line-cool);min-width:70px}
 
 /* ============================================================
-   v23 · SSR shell, skeletons, dark mode, loading UX
+   v23 · SSR shell, skeletons, loading UX
    ============================================================ */
 
 /* Server-rendered shell is visible immediately. When app.js takes over
@@ -1161,7 +1162,7 @@ body.up-ready #view > .ssr-skeleton{display:none} /* only the initial static ske
 .offline-banner{position:fixed;top:0;left:0;right:0;background:#a5321d;color:#fff;text-align:center;padding:8px 14px;font-size:13px;z-index:200;display:none}
 .offline-banner.show{display:block}
 
-/* ======================== Dark mode ======================== */
+/* ======================== Loading utilities ======================== */
 .spin{width:18px;height:18px;border:2.5px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear;flex:0 0 18px}
 .muted{color:var(--ink-500);font-size:12.5px;margin-top:2px}
 @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
@@ -1395,21 +1396,6 @@ h1:lang(hi), h2:lang(hi), h3:lang(hi), .approach-body p:lang(hi), .snippet block
 .upay-toast{animation:upay-pop .2s ease}
 @keyframes upay-pop{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
 
-/* Dark mode (#15) */
-.upay-dark{--bg:#131416;--card:#1d1f23;--ink-900:#f5f2ea;--ink-700:#d3cebf;--ink-500:#8f8a7c;--ink-400:#6f6b60;--line:#2a2d33;--cream:#23262b;background:var(--bg);color:var(--ink-900)}
-.upay-dark .card,.upay-dark .card.flat{background:var(--card);border-color:var(--line)}
-.upay-dark .chip{background:#252830;border-color:#333741;color:var(--ink-700)}
-.upay-dark input,.upay-dark textarea,.upay-dark select{background:#1a1c20;color:var(--ink-900);border-color:var(--line)}
-.upay-dark .bottom-nav,.upay-dark .topbar,.upay-dark .rail{background:#181a1f;border-color:var(--line)}
-.upay-dark .btn-ghost{color:var(--ink-700)}
-.upay-dark .tag.cream,.upay-dark .tag.grey{background:#2a2d33;color:var(--ink-700)}
-.upay-dark .mast-bar{background:#2a2d33}
-.upay-dark .figure-body{background:#2a2620 !important}
-.upay-dark .home-mini-card{background:var(--card);border-color:var(--line)}
-.upay-dark .callout.correct{background:#173a24;border-color:#2a6a41;color:#b4e3c4}
-.upay-dark .callout.warn{background:#3a2f15;border-color:#6a4f1e;color:#f0d79a}
-.upay-dark a{color:#8ab4ff}
-.upay-dark .kbd-focus{box-shadow:0 0 0 3px #f4c24b !important}
 
 /* Large text (#16) */
 .upay-large{font-size:17.5px}
