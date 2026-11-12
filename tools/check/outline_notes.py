@@ -147,7 +147,8 @@ assert '<h3>Unit 1 · Solutions</h3>' in html
 assert '/assets/notes/index.html#business' in (root/'assets/js/app.js').read_text()
 # Physics ledger includes all supplied files, even chapters pending review.
 phy_images = [x for x in images if x['source_file'].startswith('leph')]
-assert len(phy_images) == len(phy['crops']) == sum(s['figure_count'] for s in phy['sources'])
+assert len(phy_images) == len(phy['crops']) == sum(s['figure_count'] for s in phy['sources']) == 235
+assert [sum(x['figure'].split('.')[0] == str(ch) for x in phy_images) for ch in range(1,15)] == [31,31,20,23,8,16,17,6,30,18,5,8,2,20]
 for record in phy['sources']:
     hits = [x for x in phy_images if x['source_file'] == record['source_file']]
     assert record['figure_count'] == len(record['figures']) == len(hits)
@@ -171,6 +172,19 @@ if '--physics-pdfs' in sys.argv:
         assert len(doc) == record['pages']
         assert sum(bool(p.get_text().strip()) for p in doc) == record['text_nonempty_pages']
     print('PASS: all 15 Physics PDF hashes and text-layer page counts')
+    if '--physics-render-crops' in sys.argv:
+        sys.argv.remove('--physics-render-crops')
+        docs = {}
+        for crop in phy['crops']:
+            name = crop['source_file']
+            if name not in docs:
+                docs[name] = pymupdf.open(directory / name)
+            png = docs[name][crop['pdf_page'] - 1].get_pixmap(
+                matrix=pymupdf.Matrix(2, 2), clip=pymupdf.Rect(crop['crop_points']),
+                alpha=False).tobytes('png')
+            assert hashlib.sha256(png).hexdigest() == crop['sha256'], crop['figure']
+        print('PASS: all 235 Physics crops reproduced byte-for-byte from source rectangles')
+
 if len(sys.argv)>1:
     import pymupdf
     directories=[Path(arg) for arg in sys.argv[1:]]; norm=lambda s: re.sub(r'[^a-z0-9]', '', s.lower())

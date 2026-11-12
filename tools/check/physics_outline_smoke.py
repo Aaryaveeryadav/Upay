@@ -22,17 +22,20 @@ with sync_playwright() as p:
  page.wait_for_timeout(800)
  assert page.evaluate('() => UP.pyqQuestionText({en:"A 1000 W heater",cleanText:true})')=='A 1000 W heater'
  assert page.evaluate('() => UP.pyqQuestionText({en:"A 1000 W heater"})')=='A 1000 W heater'
- for n in range(601,615):
-  page.evaluate('(id) => location.hash = "#/chapter/" + id',n)
-  page.wait_for_function('() => document.querySelector(".outline-panel") !== null && document.querySelector("#view").innerText.includes("Outline only")')
-  page.wait_for_timeout(100)
-  assert 'Outline only' in page.locator('#view').inner_text(), (n,page.locator('#view').inner_text()[:1200])
-  if n in (601,608,611):
-   imgs=page.locator('.sci-figgrid img');assert imgs.count()=={601:31,608:6,611:5}[n]
+ counts = [31,31,20,23,8,16,17,6,30,18,5,8,2,20]
+ for width in (1280,390):
+  page.set_viewport_size({'width':width,'height':844})
+  for n in range(601,615):
+   page.evaluate('(id) => location.hash = "#/chapter/" + id',n)
+   page.wait_for_function('() => document.querySelector(".outline-panel") !== null && document.querySelector("#view").innerText.includes("Outline only")')
+   page.wait_for_timeout(100)
+   assert 'Outline only' in page.locator('#view').inner_text(), n
+   imgs=page.locator('.sci-figgrid img');assert imgs.count()==counts[n-601], (width,n,imgs.count())
    imgs.evaluate_all('(els) => els.forEach(e => e.loading="eager")')
    page.wait_for_function('() => [...document.querySelectorAll(".sci-figgrid img")].every(i=>i.complete && i.naturalWidth>0)')
    assert page.locator('a[href="/assets/notes/index.html#figures-phy"]').count()>0
- print('PASS all 14 Physics chapter outlines; 42 chapter 1/8/11 images load; figure inventory link; 1000 W preserved')
+   assert page.locator('.sci-figgrid').evaluate('(el) => el.scrollWidth <= el.clientWidth + 1'), (width,n)
+  print(f'PASS {width}px: all 14 Physics outlines; all 235 images load without figure-grid overflow; inventory links; 1000 W preserved')
  assert not errors,errors
  assert not bad,bad
  print('PASS no browser exceptions or same-origin HTTP errors in Physics checks')

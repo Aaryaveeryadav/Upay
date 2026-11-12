@@ -1,8 +1,8 @@
 {
  "batch": "NCERT Class 12 Physics, fourteen chapter PDFs and answers supplement",
- "status": "partial: chapters 1, 8 and 11 complete; chapters 2–7, 9–10 and 12–14 pending",
+ "status": "source figures complete: all fourteen chapters, 235 numbered figures; PYQ answer repair and production verification remain separate",
  "date": "2026-11-10",
- "method": "Direct PDF rectangle crops at 144 dpi, visually compared against rendered source pages; no edits or generated art. Empty captions mean the source prints only a figure number.",
+ "method": "Direct PDF rectangle crops at 144 dpi, visually compared against rendered source pages; no edits or generated art. Empty captions mean the source prints only a figure number. Figure 10.1 retains both interleaved source captions in its single rectangle; figure 2.15 retains its number label to avoid clipping the adjacent charges.",
  "sources": [
   {
    "source_file": "leph101.pdf",
@@ -52,9 +52,41 @@
    "pages": 36,
    "text_nonempty_pages": 36,
    "classification": "text-layer PDF",
-   "figure_count": 0,
-   "figures": [],
-   "disposition": "retained: awaiting figure verification"
+   "figure_count": 31,
+   "figures": [
+    "2.1",
+    "2.2",
+    "2.3",
+    "2.4",
+    "2.5",
+    "2.6",
+    "2.7",
+    "2.8",
+    "2.9",
+    "2.10",
+    "2.11",
+    "2.12",
+    "2.13",
+    "2.14",
+    "2.15",
+    "2.16",
+    "2.17",
+    "2.18",
+    "2.19",
+    "2.20",
+    "2.21",
+    "2.22",
+    "2.23",
+    "2.24",
+    "2.25",
+    "2.26",
+    "2.27",
+    "2.28",
+    "2.29",
+    "2.30",
+    "2.31"
+   ],
+   "disposition": "retained: all 31 numbered figures visually verified"
   },
   {
    "source_file": "leph103.pdf",
@@ -62,9 +94,30 @@
    "pages": 26,
    "text_nonempty_pages": 26,
    "classification": "text-layer PDF",
-   "figure_count": 0,
-   "figures": [],
-   "disposition": "retained: awaiting figure verification"
+   "figure_count": 20,
+   "figures": [
+    "3.1",
+    "3.2",
+    "3.3",
+    "3.4",
+    "3.5",
+    "3.6",
+    "3.7",
+    "3.8",
+    "3.9",
+    "3.10",
+    "3.11",
+    "3.12",
+    "3.13",
+    "3.14",
+    "3.15",
+    "3.16",
+    "3.17",
+    "3.18",
+    "3.19",
+    "3.20"
+   ],
+   "disposition": "retained: all 20 numbered figures visually verified"
   },
   {
    "source_file": "leph104.pdf",
@@ -72,9 +125,33 @@
    "pages": 29,
    "text_nonempty_pages": 29,
    "classification": "text-layer PDF",
-   "figure_count": 0,
-   "figures": [],
-   "disposition": "retained: awaiting figure verification"
+   "figure_count": 23,
+   "figures": [
+    "4.1",
+    "4.2",
+    "4.3",
+    "4.4",
+    "4.5",
+    "4.6",
+    "4.7",
+    "4.8",
+    "4.9",
+    "4.10",
+    "4.11",
+    "4.12",
+    "4.13",
+    "4.14",
+    "4.15",
+    "4.16",
+    "4.17",
+    "4.18",
+    "4.19",
+    "4.20",
+    "4.21",
+    "4.22",
+    "4.23"
+   ],
+   "disposition": "retained: all 23 numbered figures visually verified"
   },
   {
    "source_file": "leph105.pdf",
@@ -82,9 +159,18 @@
    "pages": 18,
    "text_nonempty_pages": 18,
    "classification": "text-layer PDF",
-   "figure_count": 0,
-   "figures": [],
-   "disposition": "retained: awaiting figure verification"
+   "figure_count": 8,
+   "figures": [
+    "5.1",
+    "5.2",
+    "5.3",
+    "5.4",
+    "5.5",
+    "5.6",
+    "5.7",
+    "5.8"
+   ],
+   "disposition": "retained: all 8 numbered figures visually verified"
   },
   {
    "source_file": "leph106.pdf",
@@ -92,9 +178,26 @@
    "pages": 23,
    "text_nonempty_pages": 23,
    "classification": "text-layer PDF",
-   "figure_count": 0,
-   "figures": [],
-   "disposition": "retained: awaiting figure verification"
+   "figure_count": 16,
+   "figures": [
+    "6.1",
+    "6.2",
+    "6.3",
+    "6.4",
+    "6.5",
+    "6.6",
+    "6.7",
+    "6.8",
+    "6.9",
+    "6.10",
+    "6.11",
+    "6.12",
+    "6.13",
+    "6.14",
+    "6.15",
+    "6.16"
+   ],
+   "disposition": "retained: all 16 numbered figures visually verified"
   },
   {
    "source_file": "leph107.pdf",
@@ -102,9 +205,27 @@
    "pages": 24,
    "text_nonempty_pages": 24,
    "classification": "text-layer PDF",
-   "figure_count": 0,
-   "figures": [],
-   "disposition": "retained: awaiting figure verification"
+   "figure_count": 17,
+   "figures": [
+    "7.1",
+    "7.2",
+    "7.3",
+    "7.4",
+    "7.5",
+    "7.6",
+    "7.7",
+    "7.8",
+    "7.9",
+    "7.10",
+    "7.11",
+    "7.12",
+    "7.13",
+    "7.14",
+    "7.15",
+    "7.16",
+    "7.17"
+   ],
+   "disposition": "retained: all 17 numbered figures visually verified"
   },
   {
    "source_file": "leph108.pdf",
@@ -121,7 +242,7 @@
     "8.5",
     "8.6"
    ],
-   "disposition": "retained: all six numbered figures visually verified"
+   "disposition": "retained: all 6 numbered figures visually verified"
   },
   {
    "source_file": "leph1an.pdf",
@@ -139,9 +260,40 @@
    "pages": 34,
    "text_nonempty_pages": 34,
    "classification": "text-layer PDF",
-   "figure_count": 0,
-   "figures": [],
-   "disposition": "retained: awaiting figure verification"
+   "figure_count": 30,
+   "figures": [
+    "9.1",
+    "9.2",
+    "9.3",
+    "9.4",
+    "9.5",
+    "9.6",
+    "9.7",
+    "9.8",
+    "9.9",
+    "9.10",
+    "9.11",
+    "9.12",
+    "9.13",
+    "9.14",
+    "9.15",
+    "9.16",
+    "9.17",
+    "9.18",
+    "9.19",
+    "9.20",
+    "9.21",
+    "9.22",
+    "9.23",
+    "9.24",
+    "9.25",
+    "9.26",
+    "9.27",
+    "9.28",
+    "9.29",
+    "9.30"
+   ],
+   "disposition": "retained: all 30 numbered figures visually verified"
   },
   {
    "source_file": "leph202.pdf",
@@ -149,9 +301,28 @@
    "pages": 19,
    "text_nonempty_pages": 19,
    "classification": "text-layer PDF",
-   "figure_count": 0,
-   "figures": [],
-   "disposition": "retained: awaiting figure verification"
+   "figure_count": 18,
+   "figures": [
+    "10.1",
+    "10.2",
+    "10.3",
+    "10.4",
+    "10.5",
+    "10.6",
+    "10.7",
+    "10.8",
+    "10.9",
+    "10.10",
+    "10.11",
+    "10.12",
+    "10.13",
+    "10.14",
+    "10.15",
+    "10.16",
+    "10.17",
+    "10.18"
+   ],
+   "disposition": "retained: all 18 numbered figures visually verified"
   },
   {
    "source_file": "leph203.pdf",
@@ -167,7 +338,7 @@
     "11.4",
     "11.5"
    ],
-   "disposition": "retained: all five numbered figures visually verified"
+   "disposition": "retained: all 5 numbered figures visually verified"
   },
   {
    "source_file": "leph204.pdf",
@@ -175,9 +346,18 @@
    "pages": 16,
    "text_nonempty_pages": 16,
    "classification": "text-layer PDF",
-   "figure_count": 0,
-   "figures": [],
-   "disposition": "retained: awaiting figure verification"
+   "figure_count": 8,
+   "figures": [
+    "12.1",
+    "12.2",
+    "12.3",
+    "12.4",
+    "12.5",
+    "12.6",
+    "12.7",
+    "12.8"
+   ],
+   "disposition": "retained: all 8 numbered figures visually verified"
   },
   {
    "source_file": "leph205.pdf",
@@ -185,9 +365,12 @@
    "pages": 17,
    "text_nonempty_pages": 17,
    "classification": "text-layer PDF",
-   "figure_count": 0,
-   "figures": [],
-   "disposition": "retained: awaiting figure verification"
+   "figure_count": 2,
+   "figures": [
+    "13.1",
+    "13.2"
+   ],
+   "disposition": "retained: all 2 numbered figures visually verified"
   },
   {
    "source_file": "leph206.pdf",
@@ -195,9 +378,30 @@
    "pages": 21,
    "text_nonempty_pages": 21,
    "classification": "text-layer PDF",
-   "figure_count": 0,
-   "figures": [],
-   "disposition": "retained: awaiting figure verification"
+   "figure_count": 20,
+   "figures": [
+    "14.1",
+    "14.2",
+    "14.3",
+    "14.4",
+    "14.5",
+    "14.6",
+    "14.7",
+    "14.8",
+    "14.9",
+    "14.10",
+    "14.11",
+    "14.12",
+    "14.13",
+    "14.14",
+    "14.15",
+    "14.16",
+    "14.17",
+    "14.18",
+    "14.19",
+    "14.20"
+   ],
+   "disposition": "retained: all 20 numbered figures visually verified"
   }
  ],
  "crops": [
@@ -996,6 +1200,3673 @@
    "size_px": [
     402,
     338
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.1",
+   "source_file": "leph102.pdf",
+   "pdf_page": 2,
+   "crop_points": [
+    76,
+    99,
+    272,
+    179
+   ],
+   "caption": "A test charge q (> 0) is moved from the point R to the point P against the repulsive force on it by the charge Q (> 0) placed at the origin.",
+   "sha256": "34150902e55bf04cea1659d5016d85299ea05c65f95bba470eed0c952e9f0b27",
+   "path": "assets/img/notes/34150902e55bf04cea1659d5016d85299ea05c65f95bba470eed0c952e9f0b27.png",
+   "size_px": [
+    392,
+    160
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.2",
+   "source_file": "leph102.pdf",
+   "pdf_page": 4,
+   "crop_points": [
+    78,
+    98,
+    294,
+    225
+   ],
+   "caption": "Work done on a test charge q by the electrostatic field due to any given charge configuration is independent of the path, and depends only on its initial and final positions.",
+   "sha256": "3e30d0b02b1c9236e79eeb6765f800a32f1a91decef07d444b25f660e6ca4560",
+   "path": "assets/img/notes/3e30d0b02b1c9236e79eeb6765f800a32f1a91decef07d444b25f660e6ca4560.png",
+   "size_px": [
+    432,
+    254
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.3",
+   "source_file": "leph102.pdf",
+   "pdf_page": 4,
+   "crop_points": [
+    77,
+    365,
+    294,
+    476
+   ],
+   "caption": "Work done in bringing a unit positive test charge from infinity to the point P, against the repulsive force of charge Q (Q > 0), is the potential at P due to the charge Q.",
+   "sha256": "b9397fd7cd1e0beca5b84f23a1418a150a9446a5e8a204458ac0aa1c5bc42c8f",
+   "path": "assets/img/notes/b9397fd7cd1e0beca5b84f23a1418a150a9446a5e8a204458ac0aa1c5bc42c8f.png",
+   "size_px": [
+    434,
+    222
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.4",
+   "source_file": "leph102.pdf",
+   "pdf_page": 5,
+   "crop_points": [
+    252,
+    98,
+    540,
+    288
+   ],
+   "caption": "Variation of potential V with r [in units of (Q/4πε0) m-1] (blue curve) and field with r [in units of (Q/4πε0) m-2] (black curve) for a point charge Q.",
+   "sha256": "e74bdc09264d7453a37a0762edb0607cd77d215531f90d7259cb99e7cc035e52",
+   "path": "assets/img/notes/e74bdc09264d7453a37a0762edb0607cd77d215531f90d7259cb99e7cc035e52.png",
+   "size_px": [
+    576,
+    380
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.5",
+   "source_file": "leph102.pdf",
+   "pdf_page": 6,
+   "crop_points": [
+    73,
+    99,
+    338,
+    301
+   ],
+   "caption": "Quantities involved in the calculation of potential due to a dipole.",
+   "sha256": "814d7535887c84ae2ba16f5ab6d133ef9737e809078b08abaabecfa50aeb2e03",
+   "path": "assets/img/notes/814d7535887c84ae2ba16f5ab6d133ef9737e809078b08abaabecfa50aeb2e03.png",
+   "size_px": [
+    530,
+    404
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.6",
+   "source_file": "leph102.pdf",
+   "pdf_page": 7,
+   "crop_points": [
+    311,
+    540,
+    535,
+    654
+   ],
+   "caption": "Potential at a point due to a system of charges is the sum of potentials due to individual charges.",
+   "sha256": "0fa7295776d9de09b09c89860c0c5fabf0113d15b4ae0f5558a4980b34ec382e",
+   "path": "assets/img/notes/0fa7295776d9de09b09c89860c0c5fabf0113d15b4ae0f5558a4980b34ec382e.png",
+   "size_px": [
+    448,
+    228
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.7",
+   "source_file": "leph102.pdf",
+   "pdf_page": 8,
+   "crop_points": [
+    258,
+    474,
+    488,
+    519
+   ],
+   "caption": "",
+   "sha256": "e84e116ff61ff5a7ec372ab274594d13ace1adc634b3c07429dbaf62cefde64f",
+   "path": "assets/img/notes/e84e116ff61ff5a7ec372ab274594d13ace1adc634b3c07429dbaf62cefde64f.png",
+   "size_px": [
+    460,
+    90
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.8",
+   "source_file": "leph102.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    112,
+    228,
+    363,
+    379
+   ],
+   "caption": "",
+   "sha256": "18f1e2f93f900261b0b6ba4297dcd45d258156a839a634d11e8c0b328c31e388",
+   "path": "assets/img/notes/18f1e2f93f900261b0b6ba4297dcd45d258156a839a634d11e8c0b328c31e388.png",
+   "size_px": [
+    502,
+    302
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.9",
+   "source_file": "leph102.pdf",
+   "pdf_page": 10,
+   "crop_points": [
+    75,
+    98,
+    185,
+    350
+   ],
+   "caption": "For a single charge q (a) equipotential surfaces are spherical surfaces centred at the charge, and (b) electric field lines are radial, starting from the charge if q > 0.",
+   "sha256": "b4735b4314f61131849a12c8d4a929af3e507f7edb36f0c74ab9ecad43b8ced7",
+   "path": "assets/img/notes/b4735b4314f61131849a12c8d4a929af3e507f7edb36f0c74ab9ecad43b8ced7.png",
+   "size_px": [
+    220,
+    504
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.10",
+   "source_file": "leph102.pdf",
+   "pdf_page": 10,
+   "crop_points": [
+    249,
+    432,
+    485,
+    521
+   ],
+   "caption": "Equipotential surfaces for a uniform electric field.",
+   "sha256": "417f413c221fd47a4292004d0e4c6fac120c5989c23e0fac871917f730927ae8",
+   "path": "assets/img/notes/417f413c221fd47a4292004d0e4c6fac120c5989c23e0fac871917f730927ae8.png",
+   "size_px": [
+    472,
+    178
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.11",
+   "source_file": "leph102.pdf",
+   "pdf_page": 10,
+   "crop_points": [
+    191,
+    596,
+    527,
+    705
+   ],
+   "caption": "Some equipotential surfaces for (a) a dipole, (b) two identical positive charges.",
+   "sha256": "4d342603cc2493f2603485d5c3807ce2d9db8ccb362f3cf1aa47de4689fe1f62",
+   "path": "assets/img/notes/4d342603cc2493f2603485d5c3807ce2d9db8ccb362f3cf1aa47de4689fe1f62.png",
+   "size_px": [
+    672,
+    218
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.12",
+   "source_file": "leph102.pdf",
+   "pdf_page": 11,
+   "crop_points": [
+    339,
+    149,
+    533,
+    330
+   ],
+   "caption": "From the potential to the field.",
+   "sha256": "c56be37b61b55fca040259e61a862817b8854f7a9a5468003eff3ce92a45d93e",
+   "path": "assets/img/notes/c56be37b61b55fca040259e61a862817b8854f7a9a5468003eff3ce92a45d93e.png",
+   "size_px": [
+    388,
+    362
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.13",
+   "source_file": "leph102.pdf",
+   "pdf_page": 12,
+   "crop_points": [
+    73,
+    98,
+    259,
+    155
+   ],
+   "caption": "Potential energy of a system of charges q1 and q2 is directly proportional to the product of charges and inversely to the distance between them.",
+   "sha256": "6cf63dc6f6d85335404469083144eea702efd29d15364bb412932d126d05c185",
+   "path": "assets/img/notes/6cf63dc6f6d85335404469083144eea702efd29d15364bb412932d126d05c185.png",
+   "size_px": [
+    372,
+    114
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.14",
+   "source_file": "leph102.pdf",
+   "pdf_page": 12,
+   "crop_points": [
+    74,
+    563,
+    284,
+    652
+   ],
+   "caption": "Potential energy of a system of three charges is given by Eq. (2.26), with the notation given in the figure.",
+   "sha256": "313f249f98992195484f85b7d2f5404f8d12fd0d7ea9cb767137c892098c1c87",
+   "path": "assets/img/notes/313f249f98992195484f85b7d2f5404f8d12fd0d7ea9cb767137c892098c1c87.png",
+   "size_px": [
+    420,
+    178
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.15",
+   "source_file": "leph102.pdf",
+   "pdf_page": 13,
+   "crop_points": [
+    160,
+    198,
+    335,
+    374
+   ],
+   "caption": "",
+   "sha256": "c0aa12a1a740008e1e006c169fe540b13536a3631741395f72dbb6293ed683b6",
+   "path": "assets/img/notes/c0aa12a1a740008e1e006c169fe540b13536a3631741395f72dbb6293ed683b6.png",
+   "size_px": [
+    350,
+    352
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.16",
+   "source_file": "leph102.pdf",
+   "pdf_page": 16,
+   "crop_points": [
+    77,
+    397,
+    268,
+    566
+   ],
+   "caption": "Potential energy of a dipole in a uniform external field.",
+   "sha256": "7080ddbd4847aa2ae7641944ef4369725c7cf9d8498d74018e23520a39ad0a19",
+   "path": "assets/img/notes/7080ddbd4847aa2ae7641944ef4369725c7cf9d8498d74018e23520a39ad0a19.png",
+   "size_px": [
+    382,
+    338
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.17",
+   "source_file": "leph102.pdf",
+   "pdf_page": 19,
+   "crop_points": [
+    335,
+    350,
+    539,
+    526
+   ],
+   "caption": "The Gaussian surface (a pill box) chosen to derive Eq. (2.35) for electric field at the surface of a charged conductor.",
+   "sha256": "2c0bc645e3a9d3150a94b39325601556325a69037ba20e09bad5d3bb394cb4cb",
+   "path": "assets/img/notes/2c0bc645e3a9d3150a94b39325601556325a69037ba20e09bad5d3bb394cb4cb.png",
+   "size_px": [
+    408,
+    352
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.18",
+   "source_file": "leph102.pdf",
+   "pdf_page": 20,
+   "crop_points": [
+    73,
+    98,
+    288,
+    235
+   ],
+   "caption": "The electric field inside a cavity of any conductor is zero. All charges reside only on the outer surface of a conductor with cavity. (There are no charges placed in the cavity.)",
+   "sha256": "2c434924a034d2c251b07904b9a528368ebb9350e11d75d68dadc2ec6397c597",
+   "path": "assets/img/notes/2c434924a034d2c251b07904b9a528368ebb9350e11d75d68dadc2ec6397c597.png",
+   "size_px": [
+    430,
+    274
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.19",
+   "source_file": "leph102.pdf",
+   "pdf_page": 20,
+   "crop_points": [
+    237,
+    300,
+    510,
+    471
+   ],
+   "caption": "Some important electrostatic properties of a conductor.",
+   "sha256": "fb782bafaf4be997824af6bee878aa7f2dfb8603ee14db52814c0b716e3ae5d2",
+   "path": "assets/img/notes/fb782bafaf4be997824af6bee878aa7f2dfb8603ee14db52814c0b716e3ae5d2.png",
+   "size_px": [
+    546,
+    342
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.20",
+   "source_file": "leph102.pdf",
+   "pdf_page": 21,
+   "crop_points": [
+    329,
+    258,
+    536,
+    404
+   ],
+   "caption": "Difference in behaviour of a conductor and a dielectric in an external electric field.",
+   "sha256": "bc0d7b4b635e4c2902ef5060e41d502454b8277625c55bf832fe9519c912fca7",
+   "path": "assets/img/notes/bc0d7b4b635e4c2902ef5060e41d502454b8277625c55bf832fe9519c912fca7.png",
+   "size_px": [
+    414,
+    292
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.21",
+   "source_file": "leph102.pdf",
+   "pdf_page": 21,
+   "crop_points": [
+    281,
+    467,
+    542,
+    673
+   ],
+   "caption": "Some examples of polar and non-polar molecules.",
+   "sha256": "d6e20beae592cbacab0a0ccfa56dffd9ae9f3ab4baa1250b786baee21ce98bad",
+   "path": "assets/img/notes/d6e20beae592cbacab0a0ccfa56dffd9ae9f3ab4baa1250b786baee21ce98bad.png",
+   "size_px": [
+    522,
+    412
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.22",
+   "source_file": "leph102.pdf",
+   "pdf_page": 22,
+   "crop_points": [
+    75,
+    99,
+    343,
+    390
+   ],
+   "caption": "A dielectric develops a net dipole moment in an external electric field. (a) Non-polar molecules, (b) Polar molecules.",
+   "sha256": "0787390185f98f9e00ffcd6ad771cd6f168503a285f9b5a21a961da3ec3c28c6",
+   "path": "assets/img/notes/0787390185f98f9e00ffcd6ad771cd6f168503a285f9b5a21a961da3ec3c28c6.png",
+   "size_px": [
+    536,
+    582
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.23",
+   "source_file": "leph102.pdf",
+   "pdf_page": 23,
+   "crop_points": [
+    365,
+    99,
+    539,
+    322
+   ],
+   "caption": "A uniformly polarised dielectric amounts to induced surface charge density, but no volume charge density.",
+   "sha256": "6a9d76f5c1ac706d069afca31da893e120161fe6ae579688eb9e02fb4ca552ec",
+   "path": "assets/img/notes/6a9d76f5c1ac706d069afca31da893e120161fe6ae579688eb9e02fb4ca552ec.png",
+   "size_px": [
+    348,
+    446
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.24",
+   "source_file": "leph102.pdf",
+   "pdf_page": 23,
+   "crop_points": [
+    325,
+    540,
+    538,
+    641
+   ],
+   "caption": "A system of two conductors separated by an insulator forms a capacitor.",
+   "sha256": "60a6b509302c5e3ab350fa85297e32774bb8c228d11b7a5af563dd27b86c7de1",
+   "path": "assets/img/notes/60a6b509302c5e3ab350fa85297e32774bb8c228d11b7a5af563dd27b86c7de1.png",
+   "size_px": [
+    426,
+    202
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.25",
+   "source_file": "leph102.pdf",
+   "pdf_page": 24,
+   "crop_points": [
+    78,
+    533,
+    291,
+    697
+   ],
+   "caption": "The parallel plate capacitor.",
+   "sha256": "2ee71222d599277595cf7e4e5e50b10136b6cf901e2a387914848227e09c8abe",
+   "path": "assets/img/notes/2ee71222d599277595cf7e4e5e50b10136b6cf901e2a387914848227e09c8abe.png",
+   "size_px": [
+    426,
+    328
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.26",
+   "source_file": "leph102.pdf",
+   "pdf_page": 27,
+   "crop_points": [
+    319,
+    400,
+    536,
+    538
+   ],
+   "caption": "Combination of two capacitors in series.",
+   "sha256": "a6119755078754bfd672490fb24621a2ec9d872644a3d051bc22d846ca158c7d",
+   "path": "assets/img/notes/a6119755078754bfd672490fb24621a2ec9d872644a3d051bc22d846ca158c7d.png",
+   "size_px": [
+    434,
+    276
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.27",
+   "source_file": "leph102.pdf",
+   "pdf_page": 27,
+   "crop_points": [
+    308,
+    574,
+    526,
+    702
+   ],
+   "caption": "Combination of n capacitors in series.",
+   "sha256": "814a0d6e9571e2c20c4719e96fad4a00259009a5a7edc5ba791e43bba8bb460c",
+   "path": "assets/img/notes/814a0d6e9571e2c20c4719e96fad4a00259009a5a7edc5ba791e43bba8bb460c.png",
+   "size_px": [
+    436,
+    256
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.28",
+   "source_file": "leph102.pdf",
+   "pdf_page": 28,
+   "crop_points": [
+    78,
+    352,
+    260,
+    670
+   ],
+   "caption": "Parallel combination of (a) two capacitors, (b) n capacitors.",
+   "sha256": "7c5e842fbfcfdf6c7fe17d03fbe6086037f4c6c46d64d5580dc94870b11f8584",
+   "path": "assets/img/notes/7c5e842fbfcfdf6c7fe17d03fbe6086037f4c6c46d64d5580dc94870b11f8584.png",
+   "size_px": [
+    364,
+    636
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.29",
+   "source_file": "leph102.pdf",
+   "pdf_page": 29,
+   "crop_points": [
+    147,
+    167,
+    338,
+    320
+   ],
+   "caption": "",
+   "sha256": "d31b1964bb2728e3494ef151fad2c89f813d8625377c6dea082f21c2b70d93a3",
+   "path": "assets/img/notes/d31b1964bb2728e3494ef151fad2c89f813d8625377c6dea082f21c2b70d93a3.png",
+   "size_px": [
+    382,
+    306
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.30",
+   "source_file": "leph102.pdf",
+   "pdf_page": 30,
+   "crop_points": [
+    77,
+    98,
+    278,
+    236
+   ],
+   "caption": "(a) Work done in a small step of building charge on conductor 1 from Q′ to Q′ + d Q′. (b) Total work done in charging the capacitor may be viewed as stored in the energy of electric field between the plates.",
+   "sha256": "9b3ee7e620a044f3846ccbb7940cff741e6dd495a7b67782940367f8065dc8b9",
+   "path": "assets/img/notes/9b3ee7e620a044f3846ccbb7940cff741e6dd495a7b67782940367f8065dc8b9.png",
+   "size_px": [
+    402,
+    276
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "2.31",
+   "source_file": "leph102.pdf",
+   "pdf_page": 31,
+   "crop_points": [
+    142,
+    328,
+    390,
+    544
+   ],
+   "caption": "",
+   "sha256": "1f2a06330f847c03d7fa00aaf060083264d6103895f2949adbc24a85bd796616",
+   "path": "assets/img/notes/1f2a06330f847c03d7fa00aaf060083264d6103895f2949adbc24a85bd796616.png",
+   "size_px": [
+    496,
+    432
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.1",
+   "source_file": "leph103.pdf",
+   "pdf_page": 3,
+   "crop_points": [
+    298,
+    135,
+    535,
+    192
+   ],
+   "caption": "Charges +Q and –Q put at the ends of a metallic cylinder. The electrons will drift because of the electric field created to neutralise the charges. The current thus will stop after a while unless the charges +Q and –Q are continuously replenished.",
+   "sha256": "7898f8544673cfb4a47db3c35c9a4289b98b5d80232bbcb42b314062af39bece",
+   "path": "assets/img/notes/7898f8544673cfb4a47db3c35c9a4289b98b5d80232bbcb42b314062af39bece.png",
+   "size_px": [
+    474,
+    114
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.2",
+   "source_file": "leph103.pdf",
+   "pdf_page": 3,
+   "crop_points": [
+    426,
+    390,
+    538,
+    630
+   ],
+   "caption": "Illustrating the relation R = ρl/A for a rectangular slab of length l and area of cross-section A.",
+   "sha256": "bdb29f96f3b905fbfc4bcb7ae90c818b4f01196d35513578ec618358b7a8ac51",
+   "path": "assets/img/notes/bdb29f96f3b905fbfc4bcb7ae90c818b4f01196d35513578ec618358b7a8ac51.png",
+   "size_px": [
+    224,
+    480
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.3",
+   "source_file": "leph103.pdf",
+   "pdf_page": 5,
+   "crop_points": [
+    350,
+    407,
+    553,
+    598
+   ],
+   "caption": "A schematic picture of an electron moving from a point A to another point B through repeated collisions, and straight line travel between collisions (full lines). If an electric field is applied as shown, the electron ends up at point B′ (dotted lines). A slight drift in a direction opposite the electric field is visible.",
+   "sha256": "36fb6cf2a51f84d82600d8b962f67ba89cde30a78d2dff9a3af15e3f66f4fed4",
+   "path": "assets/img/notes/36fb6cf2a51f84d82600d8b962f67ba89cde30a78d2dff9a3af15e3f66f4fed4.png",
+   "size_px": [
+    406,
+    382
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.4",
+   "source_file": "leph103.pdf",
+   "pdf_page": 6,
+   "crop_points": [
+    75,
+    248,
+    272,
+    335
+   ],
+   "caption": "Current in a metallic conductor. The magnitude of current density in a metal is the magnitude of charge contained in a cylinder of unit area and length vd.",
+   "sha256": "b053a87f03e1f7c637b61afd50d12c92f609dac1fd0fb419b0031241818ae41b",
+   "path": "assets/img/notes/b053a87f03e1f7c637b61afd50d12c92f609dac1fd0fb419b0031241818ae41b.png",
+   "size_px": [
+    394,
+    174
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.5",
+   "source_file": "leph103.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    374,
+    94,
+    538,
+    235
+   ],
+   "caption": "The dashed line represents the linear Ohm’s law. The solid line is the voltage V versus current I for a good conductor.",
+   "sha256": "fd9e12c00ad010e5fbf7bfeebed2706b01e0a35308dd7753187abf8273b39677",
+   "path": "assets/img/notes/fd9e12c00ad010e5fbf7bfeebed2706b01e0a35308dd7753187abf8273b39677.png",
+   "size_px": [
+    328,
+    282
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.6",
+   "source_file": "leph103.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    57,
+    355,
+    233,
+    527
+   ],
+   "caption": "Characteristic curve of a diode. Note the different scales for negative and positive values of the voltage and current.",
+   "sha256": "d19f5501bd1d2b8efee00ebf2e920615bb0afae22126ad4ecc58f82b04a18f21",
+   "path": "assets/img/notes/d19f5501bd1d2b8efee00ebf2e920615bb0afae22126ad4ecc58f82b04a18f21.png",
+   "size_px": [
+    352,
+    344
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.7",
+   "source_file": "leph103.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    340,
+    393,
+    537,
+    528
+   ],
+   "caption": "Variation of current versus voltage for GaAs.",
+   "sha256": "e1f1ce4846495495b492c5f5c0935da1f8783a844a30b1902dc570becd38712d",
+   "path": "assets/img/notes/e1f1ce4846495495b492c5f5c0935da1f8783a844a30b1902dc570becd38712d.png",
+   "size_px": [
+    394,
+    270
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.8",
+   "source_file": "leph103.pdf",
+   "pdf_page": 10,
+   "crop_points": [
+    75,
+    460,
+    196,
+    599
+   ],
+   "caption": "Resistivity ρT of copper as a function of temperature T.",
+   "sha256": "d03342f1f751bacc23560da8ef4ba0f6819e44d44bacef7bf83a27823a573aa4",
+   "path": "assets/img/notes/d03342f1f751bacc23560da8ef4ba0f6819e44d44bacef7bf83a27823a573aa4.png",
+   "size_px": [
+    242,
+    278
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.9",
+   "source_file": "leph103.pdf",
+   "pdf_page": 10,
+   "crop_points": [
+    239,
+    461,
+    368,
+    598
+   ],
+   "caption": "Resistivity ρT of nichrome as a function of absolute temperature T.",
+   "sha256": "c5d94564950b4e0389369461abd7cf234607bf1051789559545fcae64591c313",
+   "path": "assets/img/notes/c5d94564950b4e0389369461abd7cf234607bf1051789559545fcae64591c313.png",
+   "size_px": [
+    258,
+    274
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.10",
+   "source_file": "leph103.pdf",
+   "pdf_page": 10,
+   "crop_points": [
+    417,
+    445,
+    554,
+    599
+   ],
+   "caption": "Temperature dependence of resistivity for a typical semiconductor.",
+   "sha256": "28fe24e74b08f4fe1408463a35cf343ea388716ddbd046e579987d48e2d339a7",
+   "path": "assets/img/notes/28fe24e74b08f4fe1408463a35cf343ea388716ddbd046e579987d48e2d339a7.png",
+   "size_px": [
+    274,
+    308
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.11",
+   "source_file": "leph103.pdf",
+   "pdf_page": 13,
+   "crop_points": [
+    330,
+    188,
+    539,
+    304
+   ],
+   "caption": "Heat is produced in the resistor R which is connected across the terminals of a cell. The energy dissipated in the resistor R comes from the chemical energy of the electrolyte.",
+   "sha256": "c5e5c76942436f250c1185e50e3ddb28773a2e9aeda5413d8316fec35e1c76c9",
+   "path": "assets/img/notes/c5e5c76942436f250c1185e50e3ddb28773a2e9aeda5413d8316fec35e1c76c9.png",
+   "size_px": [
+    418,
+    232
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.12",
+   "source_file": "leph103.pdf",
+   "pdf_page": 14,
+   "crop_points": [
+    72,
+    98,
+    220,
+    312
+   ],
+   "caption": "(a) Sketch of an electrolyte cell with positive terminal P and negative terminal N. The gap between the electrodes is exaggerated for clarity. A and B are points in the electrolyte typically close to P and N. (b) the symbol for a cell, + referring to P and – referring to the N electrode. Electrical connections to the cell are made at P and N.",
+   "sha256": "29a3ebefe648c11dda5ab8cec8eaed671fb1102cce863dafd79bf9d0209fbaed",
+   "path": "assets/img/notes/29a3ebefe648c11dda5ab8cec8eaed671fb1102cce863dafd79bf9d0209fbaed.png",
+   "size_px": [
+    296,
+    428
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.13",
+   "source_file": "leph103.pdf",
+   "pdf_page": 15,
+   "crop_points": [
+    112,
+    264,
+    372,
+    315
+   ],
+   "caption": "Two cells of emf’s ε1 and ε2 in the series. r1, r2 are their internal resistances. For connections across A and C, the combination can be considered as one cell of emf εeq and an internal resistance req.",
+   "sha256": "3dc46f01d3448a471ebe70221a864e51fe7706a9f57c6613d2521eaa0b45dbe9",
+   "path": "assets/img/notes/3dc46f01d3448a471ebe70221a864e51fe7706a9f57c6613d2521eaa0b45dbe9.png",
+   "size_px": [
+    520,
+    102
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.14",
+   "source_file": "leph103.pdf",
+   "pdf_page": 16,
+   "crop_points": [
+    74,
+    214,
+    226,
+    315
+   ],
+   "caption": "Two cells in parallel. For connections across A and C, the combination can be replaced by one cell of emf εeq and internal resistances req whose values are given in Eqs. (3.54) and (3.55).",
+   "sha256": "5dbf4bf56e87e56a05f2e6bc21089ea16574a9f4fedec134d4a086ca4447cae6",
+   "path": "assets/img/notes/5dbf4bf56e87e56a05f2e6bc21089ea16574a9f4fedec134d4a086ca4447cae6.png",
+   "size_px": [
+    304,
+    202
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.15",
+   "source_file": "leph103.pdf",
+   "pdf_page": 18,
+   "crop_points": [
+    73,
+    98,
+    292,
+    239
+   ],
+   "caption": "At junction a the current leaving is I1 + I2 and current entering is I3. The junction rule says I3 = I1 + I2. At point h current entering is I1. There is only one current leaving h and by junction rule that will also be I1. For the loops ‘ahdcba’ and ‘ahdefga’, the loop rules give –30I1 – 41 I3 + 45 = 0 and –30I1 + 21 I2 – 80 = 0.",
+   "sha256": "17470a8c882c06f06d34bf98c52e0cec4cfa695370d9e4ab5b26986e76f8f274",
+   "path": "assets/img/notes/17470a8c882c06f06d34bf98c52e0cec4cfa695370d9e4ab5b26986e76f8f274.png",
+   "size_px": [
+    438,
+    282
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.16",
+   "source_file": "leph103.pdf",
+   "pdf_page": 18,
+   "crop_points": [
+    256,
+    431,
+    458,
+    701
+   ],
+   "caption": "",
+   "sha256": "155106322d05336913a5170bdaf3b734e13f2ff4f384bb84806ee619420ba035",
+   "path": "assets/img/notes/155106322d05336913a5170bdaf3b734e13f2ff4f384bb84806ee619420ba035.png",
+   "size_px": [
+    404,
+    540
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.17",
+   "source_file": "leph103.pdf",
+   "pdf_page": 19,
+   "crop_points": [
+    140,
+    535,
+    351,
+    711
+   ],
+   "caption": "",
+   "sha256": "7769ecf4616ed415ed2f98c213b216c0d006863dfa59feb768b18ce3fd49ba92",
+   "path": "assets/img/notes/7769ecf4616ed415ed2f98c213b216c0d006863dfa59feb768b18ce3fd49ba92.png",
+   "size_px": [
+    422,
+    352
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.18",
+   "source_file": "leph103.pdf",
+   "pdf_page": 21,
+   "crop_points": [
+    393,
+    97,
+    539,
+    292
+   ],
+   "caption": "",
+   "sha256": "f720e4dc717498d29d94479312417e601626be7e6ae1eda9db988112d62f4156",
+   "path": "assets/img/notes/f720e4dc717498d29d94479312417e601626be7e6ae1eda9db988112d62f4156.png",
+   "size_px": [
+    292,
+    390
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.19",
+   "source_file": "leph103.pdf",
+   "pdf_page": 21,
+   "crop_points": [
+    149,
+    535,
+    339,
+    712
+   ],
+   "caption": "",
+   "sha256": "be3a0cd9a368676bb430c42404aff95a60375d24a25de28394863555916072eb",
+   "path": "assets/img/notes/be3a0cd9a368676bb430c42404aff95a60375d24a25de28394863555916072eb.png",
+   "size_px": [
+    380,
+    354
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "3.20",
+   "source_file": "leph103.pdf",
+   "pdf_page": 26,
+   "crop_points": [
+    295,
+    262,
+    437,
+    459
+   ],
+   "caption": "",
+   "sha256": "f577ef90b1eb90837ce82485bbc1c644b5614be38c7990d6e739d37909629c4d",
+   "path": "assets/img/notes/f577ef90b1eb90837ce82485bbc1c644b5614be38c7990d6e739d37909629c4d.png",
+   "size_px": [
+    284,
+    394
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.1",
+   "source_file": "leph104.pdf",
+   "pdf_page": 2,
+   "crop_points": [
+    238,
+    189,
+    519,
+    286
+   ],
+   "caption": "The magnetic field due to a straight long current-carrying wire. The wire is perpendicular to the plane of the paper. A ring of compass needles surrounds the wire. The orientation of the needles is shown when (a) the current emerges out of the plane of the paper, (b) the current moves into the plane of the paper. (c) The arrangement of iron filings around the wire. The darkened ends of the needle represent north poles. The effect of the earth’s magnetic field is neglected.",
+   "sha256": "0307f568a48ede9f3fba404f898208ea27cdac2d5c4bda1fbe07b104f0ed4a7d",
+   "path": "assets/img/notes/0307f568a48ede9f3fba404f898208ea27cdac2d5c4bda1fbe07b104f0ed4a7d.png",
+   "size_px": [
+    562,
+    194
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.2",
+   "source_file": "leph104.pdf",
+   "pdf_page": 4,
+   "crop_points": [
+    73,
+    126,
+    303,
+    235
+   ],
+   "caption": "The direction of the magnetic force acting on a charged particle. (a) The force on a positively charged particle with velocity v and making an angle θ with the magnetic field B is given by the right-hand rule. (b) A moving charged particle q is deflected in an opposite sense to –q in the presence of magnetic field.",
+   "sha256": "a264a3c739975d74cc875b9fee154b1cb4ee3069108e2ece8ac45381b9cdf29b",
+   "path": "assets/img/notes/a264a3c739975d74cc875b9fee154b1cb4ee3069108e2ece8ac45381b9cdf29b.png",
+   "size_px": [
+    460,
+    218
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.3",
+   "source_file": "leph104.pdf",
+   "pdf_page": 5,
+   "crop_points": [
+    147,
+    163,
+    329,
+    241
+   ],
+   "caption": "",
+   "sha256": "2fe9e427c0108e6d58971b0a03921453b43a5e74ea324e87c4ab0f56c42531d0",
+   "path": "assets/img/notes/2fe9e427c0108e6d58971b0a03921453b43a5e74ea324e87c4ab0f56c42531d0.png",
+   "size_px": [
+    364,
+    156
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.4",
+   "source_file": "leph104.pdf",
+   "pdf_page": 5,
+   "crop_points": [
+    168,
+    489,
+    306,
+    623
+   ],
+   "caption": "",
+   "sha256": "40a22137221f721457333c6eeda5be78c599d986464f2b917e69e003f3ffb34d",
+   "path": "assets/img/notes/40a22137221f721457333c6eeda5be78c599d986464f2b917e69e003f3ffb34d.png",
+   "size_px": [
+    276,
+    268
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.5",
+   "source_file": "leph104.pdf",
+   "pdf_page": 6,
+   "crop_points": [
+    74,
+    269,
+    231,
+    445
+   ],
+   "caption": "Circular motion",
+   "sha256": "9b34de7aac7f37372fe6cc7c2c820d2e05fe959b7bd98c7b64f9919d6404bf31",
+   "path": "assets/img/notes/9b34de7aac7f37372fe6cc7c2c820d2e05fe959b7bd98c7b64f9919d6404bf31.png",
+   "size_px": [
+    314,
+    352
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.6",
+   "source_file": "leph104.pdf",
+   "pdf_page": 6,
+   "crop_points": [
+    70,
+    483,
+    299,
+    699
+   ],
+   "caption": "Helical motion",
+   "sha256": "8f8a178d57daca97ac816c07f512ec530da6354c35d1c46c6bd82d079a62bebc",
+   "path": "assets/img/notes/8f8a178d57daca97ac816c07f512ec530da6354c35d1c46c6bd82d079a62bebc.png",
+   "size_px": [
+    458,
+    432
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.7",
+   "source_file": "leph104.pdf",
+   "pdf_page": 7,
+   "crop_points": [
+    398,
+    402,
+    539,
+    575
+   ],
+   "caption": "Illustration of the Biot-Savart law. The current element I dl produces a field dB at a distance r. The ⊗ sign indicates that the field is perpendicular to the plane of this page and directed into it.",
+   "sha256": "b190b1da17a5686be65d0c09bcbc6af0092a6bf124ca0c6c26484be13d2b964d",
+   "path": "assets/img/notes/b190b1da17a5686be65d0c09bcbc6af0092a6bf124ca0c6c26484be13d2b964d.png",
+   "size_px": [
+    282,
+    346
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.8",
+   "source_file": "leph104.pdf",
+   "pdf_page": 8,
+   "crop_points": [
+    300,
+    626,
+    436,
+    714
+   ],
+   "caption": "",
+   "sha256": "ccbe03ff8a17fcca56e9638ffefee6233140dec41f5474dfce5cfcfd3469c29b",
+   "path": "assets/img/notes/ccbe03ff8a17fcca56e9638ffefee6233140dec41f5474dfce5cfcfd3469c29b.png",
+   "size_px": [
+    272,
+    176
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.9",
+   "source_file": "leph104.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    339,
+    395,
+    542,
+    563
+   ],
+   "caption": "Magnetic field on the axis of a current carrying circular loop of radius R. Shown are the magnetic field dB (due to a line element dl ) and its components along and perpendicular to the axis.",
+   "sha256": "9b372a26d5e3e0e51006223b62ebde5b9e338bfe7fd56dabdd91c9156fd3873e",
+   "path": "assets/img/notes/9b372a26d5e3e0e51006223b62ebde5b9e338bfe7fd56dabdd91c9156fd3873e.png",
+   "size_px": [
+    406,
+    336
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.10",
+   "source_file": "leph104.pdf",
+   "pdf_page": 10,
+   "crop_points": [
+    298,
+    532,
+    436,
+    682
+   ],
+   "caption": "The magnetic field lines for a current loop. The direction of the field is given by the right-hand thumb rule described in the text. The upper side of the loop may be thought of as the north pole and the lower side as the south pole of a magnet.",
+   "sha256": "13f87d296b5f1b0b311ebef33ede48b809db7c602d6f2676e17d8371b6b6cf67",
+   "path": "assets/img/notes/13f87d296b5f1b0b311ebef33ede48b809db7c602d6f2676e17d8371b6b6cf67.png",
+   "size_px": [
+    276,
+    300
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.11",
+   "source_file": "leph104.pdf",
+   "pdf_page": 11,
+   "crop_points": [
+    108,
+    213,
+    372,
+    298
+   ],
+   "caption": "",
+   "sha256": "52a20fe72ce05bbf305467821c5f07b4c1dcc11a743f28a515bbc5cea4731708",
+   "path": "assets/img/notes/52a20fe72ce05bbf305467821c5f07b4c1dcc11a743f28a515bbc5cea4731708.png",
+   "size_px": [
+    528,
+    170
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.12",
+   "source_file": "leph104.pdf",
+   "pdf_page": 11,
+   "crop_points": [
+    360,
+    621,
+    506,
+    709
+   ],
+   "caption": "",
+   "sha256": "3246a2a73e94616546f009a976a36bc625ac17e11a376f44b3a04f1684ea86c3",
+   "path": "assets/img/notes/3246a2a73e94616546f009a976a36bc625ac17e11a376f44b3a04f1684ea86c3.png",
+   "size_px": [
+    292,
+    176
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.13",
+   "source_file": "leph104.pdf",
+   "pdf_page": 13,
+   "crop_points": [
+    109,
+    560,
+    328,
+    664
+   ],
+   "caption": "",
+   "sha256": "935e79654bce2dd6b1a1152ccbdab33dcc770be862534a0eda7208cb0cd0322b",
+   "path": "assets/img/notes/935e79654bce2dd6b1a1152ccbdab33dcc770be862534a0eda7208cb0cd0322b.png",
+   "size_px": [
+    438,
+    208
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.14",
+   "source_file": "leph104.pdf",
+   "pdf_page": 14,
+   "crop_points": [
+    272,
+    387,
+    478,
+    512
+   ],
+   "caption": "",
+   "sha256": "7d0e9a0cc647286899ceeda00f201b20f635e3073400f0717811b657841745a8",
+   "path": "assets/img/notes/7d0e9a0cc647286899ceeda00f201b20f635e3073400f0717811b657841745a8.png",
+   "size_px": [
+    412,
+    250
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.15",
+   "source_file": "leph104.pdf",
+   "pdf_page": 15,
+   "crop_points": [
+    72,
+    241,
+    524,
+    419
+   ],
+   "caption": "(a) The magnetic field due to a section of the solenoid which has been stretched out for clarity. Only the exterior semi-circular part is shown. Notice how the circular loops between neighbouring turns tend to cancel. (b) The magnetic field of a finite solenoid.",
+   "sha256": "4c9525db52c18ad9b5e3dcd64ecc1303a4edbdbf4fe38e53f90382697c737404",
+   "path": "assets/img/notes/4c9525db52c18ad9b5e3dcd64ecc1303a4edbdbf4fe38e53f90382697c737404.png",
+   "size_px": [
+    904,
+    356
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.16",
+   "source_file": "leph104.pdf",
+   "pdf_page": 15,
+   "crop_points": [
+    108,
+    585,
+    377,
+    706
+   ],
+   "caption": "The magnetic field of a very long solenoid. We consider a rectangular Amperian loop abcd to determine the field.",
+   "sha256": "e3a357131f9e280dfc4ddaa63edd8a17af1d8283add6eda5496d86e6dbd8300f",
+   "path": "assets/img/notes/e3a357131f9e280dfc4ddaa63edd8a17af1d8283add6eda5496d86e6dbd8300f.png",
+   "size_px": [
+    538,
+    242
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.17",
+   "source_file": "leph104.pdf",
+   "pdf_page": 16,
+   "crop_points": [
+    74,
+    501,
+    258,
+    647
+   ],
+   "caption": "Two long straight parallel conductors carrying steady currents Ia and Ib and separated by a distance d. Ba is the magnetic field set up by conductor ‘a’ at conductor ‘b’.",
+   "sha256": "11f9995d171942a69ed2013d08dd995554b7f9f1a7b1ff3f29e615e54bf73fb4",
+   "path": "assets/img/notes/11f9995d171942a69ed2013d08dd995554b7f9f1a7b1ff3f29e615e54bf73fb4.png",
+   "size_px": [
+    368,
+    292
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.18",
+   "source_file": "leph104.pdf",
+   "pdf_page": 19,
+   "crop_points": [
+    342,
+    98,
+    540,
+    394
+   ],
+   "caption": "(a) A rectangular current-carrying coil in uniform magnetic field. The magnetic moment m points downwards. The torque τ is along the axis and tends to rotate the coil anticlockwise. (b) The couple acting on the coil.",
+   "sha256": "b90235f7a151a3e6e4a7f153d057d7e07c002619d0b8ece580f320bfe3d59af2",
+   "path": "assets/img/notes/b90235f7a151a3e6e4a7f153d057d7e07c002619d0b8ece580f320bfe3d59af2.png",
+   "size_px": [
+    396,
+    592
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.19",
+   "source_file": "leph104.pdf",
+   "pdf_page": 20,
+   "crop_points": [
+    74,
+    98,
+    302,
+    386
+   ],
+   "caption": "(a) The area vector of the loop ABCD makes an arbitrary angle θ with the magnetic field. (b) Top view of the loop. The forces F1 and F2 acting on the arms AB and CD are indicated.",
+   "sha256": "8ada1d98ee61bb2bd2e1d829ece1e94876cbcd10c1571a786151c98bd537a774",
+   "path": "assets/img/notes/8ada1d98ee61bb2bd2e1d829ece1e94876cbcd10c1571a786151c98bd537a774.png",
+   "size_px": [
+    456,
+    576
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.20",
+   "source_file": "leph104.pdf",
+   "pdf_page": 24,
+   "crop_points": [
+    73,
+    98,
+    276,
+    342
+   ],
+   "caption": "The moving coil galvanometer. Its elements are described in the text. Depending on the requirement, this device can be used as a current detector or for measuring the value of the current (ammeter) or voltage (voltmeter).",
+   "sha256": "ca564919fb8a0195ea4b2507d9463a93b3f080469a25ba24c776ca63b073f598",
+   "path": "assets/img/notes/ca564919fb8a0195ea4b2507d9463a93b3f080469a25ba24c776ca63b073f598.png",
+   "size_px": [
+    406,
+    488
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.21",
+   "source_file": "leph104.pdf",
+   "pdf_page": 24,
+   "crop_points": [
+    73,
+    476,
+    178,
+    604
+   ],
+   "caption": "Conversion of a galvanometer (G) to an ammeter by the introduction of a shunt resistance rs of very small value in parallel.",
+   "sha256": "4508e18e1be5b4eb213fc134b4e730bdc5a1fe0f2444883003d52fd25ae946b5",
+   "path": "assets/img/notes/4508e18e1be5b4eb213fc134b4e730bdc5a1fe0f2444883003d52fd25ae946b5.png",
+   "size_px": [
+    210,
+    256
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.22",
+   "source_file": "leph104.pdf",
+   "pdf_page": 25,
+   "crop_points": [
+    425,
+    98,
+    541,
+    209
+   ],
+   "caption": "Conversion of a galvanometer (G) to a voltmeter by the introduction of a resistance R of large value in series.",
+   "sha256": "8991cef317e3ff1eb3c0935e70ba1d43d13bed610c4181e8fb687d3625e790a5",
+   "path": "assets/img/notes/8991cef317e3ff1eb3c0935e70ba1d43d13bed610c4181e8fb687d3625e790a5.png",
+   "size_px": [
+    232,
+    222
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "4.23",
+   "source_file": "leph104.pdf",
+   "pdf_page": 25,
+   "crop_points": [
+    150,
+    580,
+    325,
+    713
+   ],
+   "caption": "",
+   "sha256": "e919ed7571502cdb73b998b04fe95273f4250199eeeac3bd4d8d8a96f336bbc3",
+   "path": "assets/img/notes/e919ed7571502cdb73b998b04fe95273f4250199eeeac3bd4d8d8a96f336bbc3.png",
+   "size_px": [
+    350,
+    266
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "5.1",
+   "source_file": "leph105.pdf",
+   "pdf_page": 2,
+   "crop_points": [
+    273,
+    289,
+    430,
+    511
+   ],
+   "caption": "The arrangement of iron filings surrounding a bar magnet. The pattern mimics magnetic field lines. The pattern suggests that the bar magnet is a magnetic dipole.",
+   "sha256": "963046413ac68dde745392577bb97b2f79bb2165e4935b57bf6bc2f8eb3a007d",
+   "path": "assets/img/notes/963046413ac68dde745392577bb97b2f79bb2165e4935b57bf6bc2f8eb3a007d.png",
+   "size_px": [
+    314,
+    444
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "5.2",
+   "source_file": "leph105.pdf",
+   "pdf_page": 3,
+   "crop_points": [
+    88,
+    99,
+    539,
+    329
+   ],
+   "caption": "The field lines of (a) a bar magnet, (b) a current-carrying finite solenoid and (c) electric dipole. At large distances, the field lines are very similar. The curves labelled i and ii are closed Gaussian surfaces.",
+   "sha256": "4f97f51b9b74288083b8ec7ba0a0049b7de6734570bd9288463b90c40c9fa2d6",
+   "path": "assets/img/notes/4f97f51b9b74288083b8ec7ba0a0049b7de6734570bd9288463b90c40c9fa2d6.png",
+   "size_px": [
+    902,
+    460
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "5.3",
+   "source_file": "leph105.pdf",
+   "pdf_page": 3,
+   "crop_points": [
+    75,
+    375,
+    324,
+    631
+   ],
+   "caption": "Calculation of (a) The axial field of a finite solenoid in order to demonstrate its similarity to that of a bar magnet. (b) A magnetic needle in a uniform magnetic field B. The arrangement may be used to determine either B or the magnetic moment m of the needle.",
+   "sha256": "76c0f19b1e0bb8dc51910a09863945416410d2da30ce0d0077adbdb55130e05e",
+   "path": "assets/img/notes/76c0f19b1e0bb8dc51910a09863945416410d2da30ce0d0077adbdb55130e05e.png",
+   "size_px": [
+    498,
+    512
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "5.4",
+   "source_file": "leph105.pdf",
+   "pdf_page": 6,
+   "crop_points": [
+    166,
+    415,
+    320,
+    565
+   ],
+   "caption": "",
+   "sha256": "c8a9245fefb3190fb1a6f70d79f6fcada171719ffe80dd31922d0fe5511d7417",
+   "path": "assets/img/notes/c8a9245fefb3190fb1a6f70d79f6fcada171719ffe80dd31922d0fe5511d7417.png",
+   "size_px": [
+    308,
+    300
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "5.5",
+   "source_file": "leph105.pdf",
+   "pdf_page": 7,
+   "crop_points": [
+    319,
+    439,
+    497,
+    573
+   ],
+   "caption": "",
+   "sha256": "7e11ccdee6fc90a2e74fd4d7ff22bc8aef31873fd4be1495eba6779f253a8a95",
+   "path": "assets/img/notes/7e11ccdee6fc90a2e74fd4d7ff22bc8aef31873fd4be1495eba6779f253a8a95.png",
+   "size_px": [
+    356,
+    268
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "5.6",
+   "source_file": "leph105.pdf",
+   "pdf_page": 8,
+   "crop_points": [
+    95,
+    282,
+    384,
+    712
+   ],
+   "caption": "",
+   "sha256": "34072f883e94f4b3db41c32366920a6d2efba9a3355a853c159169c83b6bb62f",
+   "path": "assets/img/notes/34072f883e94f4b3db41c32366920a6d2efba9a3355a853c159169c83b6bb62f.png",
+   "size_px": [
+    578,
+    860
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "5.7",
+   "source_file": "leph105.pdf",
+   "pdf_page": 12,
+   "crop_points": [
+    428,
+    446,
+    540,
+    619
+   ],
+   "caption": "Behaviour of magnetic field lines near a (a) diamagnetic, (b) paramagnetic substance.",
+   "sha256": "5a43705fa552340b25a4253a9b3234866d440541d57ebd66b1b7cc9f2fe1c7ca",
+   "path": "assets/img/notes/5a43705fa552340b25a4253a9b3234866d440541d57ebd66b1b7cc9f2fe1c7ca.png",
+   "size_px": [
+    224,
+    346
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "5.8",
+   "source_file": "leph105.pdf",
+   "pdf_page": 14,
+   "crop_points": [
+    429,
+    98,
+    536,
+    290
+   ],
+   "caption": "(a) Randomly oriented domains, (b) Aligned domains.",
+   "sha256": "d81b06423586392c0a5cd8418e13767fa5a6caa915d427f2e6c17e711e6931e5",
+   "path": "assets/img/notes/d81b06423586392c0a5cd8418e13767fa5a6caa915d427f2e6c17e711e6931e5.png",
+   "size_px": [
+    214,
+    384
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.1",
+   "source_file": "leph106.pdf",
+   "pdf_page": 2,
+   "crop_points": [
+    335,
+    466,
+    538,
+    625
+   ],
+   "caption": "When the bar magnet is pushed towards the coil, the pointer in the galvanometer G deflects.",
+   "sha256": "778f0821a9544840daaa033f7bd7da9efc1056c3494200d8904f2aa74adb4908",
+   "path": "assets/img/notes/778f0821a9544840daaa033f7bd7da9efc1056c3494200d8904f2aa74adb4908.png",
+   "size_px": [
+    406,
+    318
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.2",
+   "source_file": "leph106.pdf",
+   "pdf_page": 3,
+   "crop_points": [
+    76,
+    98,
+    243,
+    271
+   ],
+   "caption": "Current is induced in coil C1 due to motion of the current carrying coil C2.",
+   "sha256": "e5a23d82601b391f1accedba0993de3f422bfbed833a112254fc9ead2e7231ef",
+   "path": "assets/img/notes/e5a23d82601b391f1accedba0993de3f422bfbed833a112254fc9ead2e7231ef.png",
+   "size_px": [
+    334,
+    346
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.3",
+   "source_file": "leph106.pdf",
+   "pdf_page": 3,
+   "crop_points": [
+    234,
+    320,
+    526,
+    523
+   ],
+   "caption": "Experimental set-up for Experiment 6.3.",
+   "sha256": "55ea73c20d7c413b669a0f8e62bcb0ca2a8061a9b01e6795067b6062f912bfb9",
+   "path": "assets/img/notes/55ea73c20d7c413b669a0f8e62bcb0ca2a8061a9b01e6795067b6062f912bfb9.png",
+   "size_px": [
+    584,
+    406
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.4",
+   "source_file": "leph106.pdf",
+   "pdf_page": 4,
+   "crop_points": [
+    410,
+    98,
+    537,
+    243
+   ],
+   "caption": "A plane of surface area A placed in a uniform magnetic field B.",
+   "sha256": "0db3ef3fe8983bd5c5781280c621fd2a0be11a6c14b21d3ab2fb5f6b0d271910",
+   "path": "assets/img/notes/0db3ef3fe8983bd5c5781280c621fd2a0be11a6c14b21d3ab2fb5f6b0d271910.png",
+   "size_px": [
+    254,
+    290
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.5",
+   "source_file": "leph106.pdf",
+   "pdf_page": 4,
+   "crop_points": [
+    375,
+    298,
+    536,
+    451
+   ],
+   "caption": "Magnetic field Bi at the ith area element. dAi represents area vector of the ith area element.",
+   "sha256": "f33d9c5793ed89c82435722bab532056163275f9ea30110b8395fa2b7ee9a5bd",
+   "path": "assets/img/notes/f33d9c5793ed89c82435722bab532056163275f9ea30110b8395fa2b7ee9a5bd.png",
+   "size_px": [
+    322,
+    306
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.6",
+   "source_file": "leph106.pdf",
+   "pdf_page": 7,
+   "crop_points": [
+    63,
+    449,
+    209,
+    663
+   ],
+   "caption": "Illustration of Lenz’s law.",
+   "sha256": "549c34793d5407bd8b25ecd639dae0965c14601f8d62c6ba4ef967e153f57ffc",
+   "path": "assets/img/notes/549c34793d5407bd8b25ecd639dae0965c14601f8d62c6ba4ef967e153f57ffc.png",
+   "size_px": [
+    292,
+    428
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.7",
+   "source_file": "leph106.pdf",
+   "pdf_page": 8,
+   "crop_points": [
+    146,
+    175,
+    345,
+    373
+   ],
+   "caption": "",
+   "sha256": "3ceaa56936b3123655a2d6e3ca2c81dab07f5c065648a7f036c008902946f7e0",
+   "path": "assets/img/notes/3ceaa56936b3123655a2d6e3ca2c81dab07f5c065648a7f036c008902946f7e0.png",
+   "size_px": [
+    398,
+    396
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.8",
+   "source_file": "leph106.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    230,
+    100,
+    513,
+    168
+   ],
+   "caption": "",
+   "sha256": "dad7ebde8ef8dcd7c6261912411bb3ac9a8e2e19f08483411ea691784302a848",
+   "path": "assets/img/notes/dad7ebde8ef8dcd7c6261912411bb3ac9a8e2e19f08483411ea691784302a848.png",
+   "size_px": [
+    566,
+    136
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.9",
+   "source_file": "leph106.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    263,
+    210,
+    481,
+    286
+   ],
+   "caption": "",
+   "sha256": "586f43cab7f9a0da790dea7d037692d10f05e76e524f57cc01698a603bff0c51",
+   "path": "assets/img/notes/586f43cab7f9a0da790dea7d037692d10f05e76e524f57cc01698a603bff0c51.png",
+   "size_px": [
+    436,
+    152
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.10",
+   "source_file": "leph106.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    72,
+    511,
+    310,
+    669
+   ],
+   "caption": "The arm PQ is moved to the left side, thus decreasing the area of the rectangular loop. This movement induces a current I as shown.",
+   "sha256": "253c5cd512b55fad76a0f65f2eca90d8022d0a62735d8cb6ecbd3638dcadc031",
+   "path": "assets/img/notes/253c5cd512b55fad76a0f65f2eca90d8022d0a62735d8cb6ecbd3638dcadc031.png",
+   "size_px": [
+    476,
+    316
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.11",
+   "source_file": "leph106.pdf",
+   "pdf_page": 11,
+   "crop_points": [
+    274,
+    107,
+    484,
+    289
+   ],
+   "caption": "",
+   "sha256": "24d325212090a0d783e3bdf0d569d5ffda25041c2b5613d8087e7b572c0456fc",
+   "path": "assets/img/notes/24d325212090a0d783e3bdf0d569d5ffda25041c2b5613d8087e7b572c0456fc.png",
+   "size_px": [
+    420,
+    364
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.12",
+   "source_file": "leph106.pdf",
+   "pdf_page": 13,
+   "crop_points": [
+    75,
+    98,
+    257,
+    286
+   ],
+   "caption": "Two long co-axial solenoids of same length l.",
+   "sha256": "ceb594238270c8ca0c19b50422e2ac59cbfd28cc13b4076c0fc934251d5d5da0",
+   "path": "assets/img/notes/ceb594238270c8ca0c19b50422e2ac59cbfd28cc13b4076c0fc934251d5d5da0.png",
+   "size_px": [
+    364,
+    376
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.13",
+   "source_file": "leph106.pdf",
+   "pdf_page": 17,
+   "crop_points": [
+    70,
+    446,
+    310,
+    686
+   ],
+   "caption": "AC Generator",
+   "sha256": "0d98399700d38590bf8785aa8bde8167bd810b600d5309f7185c84f56ed5ce57",
+   "path": "assets/img/notes/0d98399700d38590bf8785aa8bde8167bd810b600d5309f7185c84f56ed5ce57.png",
+   "size_px": [
+    480,
+    480
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.14",
+   "source_file": "leph106.pdf",
+   "pdf_page": 19,
+   "crop_points": [
+    95,
+    112,
+    542,
+    376
+   ],
+   "caption": "An alternating emf is generated by a loop of wire rotating in a magnetic field.",
+   "sha256": "7c9f1f9ea0891be9b89d25e039ab586f5d08ae7945c94ab3b7db3e0a03c0a53c",
+   "path": "assets/img/notes/7c9f1f9ea0891be9b89d25e039ab586f5d08ae7945c94ab3b7db3e0a03c0a53c.png",
+   "size_px": [
+    894,
+    528
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.15",
+   "source_file": "leph106.pdf",
+   "pdf_page": 22,
+   "crop_points": [
+    70,
+    124,
+    515,
+    550
+   ],
+   "caption": "",
+   "sha256": "c017e381fa4f88c81fa21b89e519bb0e24e4c151f995a82c82a4f8e177af3ac8",
+   "path": "assets/img/notes/c017e381fa4f88c81fa21b89e519bb0e24e4c151f995a82c82a4f8e177af3ac8.png",
+   "size_px": [
+    890,
+    852
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "6.16",
+   "source_file": "leph106.pdf",
+   "pdf_page": 23,
+   "crop_points": [
+    261,
+    118,
+    515,
+    237
+   ],
+   "caption": "",
+   "sha256": "ac3c52b05da8595691f4b2d203478e400fc2d4f86cb4ff140a3b46143f1e4ca9",
+   "path": "assets/img/notes/ac3c52b05da8595691f4b2d203478e400fc2d4f86cb4ff140a3b46143f1e4ca9.png",
+   "size_px": [
+    508,
+    238
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.1",
+   "source_file": "leph107.pdf",
+   "pdf_page": 2,
+   "crop_points": [
+    301,
+    259,
+    520,
+    368
+   ],
+   "caption": "AC voltage applied to a resistor.",
+   "sha256": "906ca1031cbf4a741104e3cdd5fe1f1633d2b2c60729960d85255b70cfce3668",
+   "path": "assets/img/notes/906ca1031cbf4a741104e3cdd5fe1f1633d2b2c60729960d85255b70cfce3668.png",
+   "size_px": [
+    438,
+    218
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.2",
+   "source_file": "leph107.pdf",
+   "pdf_page": 2,
+   "crop_points": [
+    77,
+    531,
+    226,
+    640
+   ],
+   "caption": "In a pure resistor, the voltage and current are in phase. The minima, zero and maxima occur at the same respective times.",
+   "sha256": "283ab77b8c25c5020ddb5343b9bae96687e989c70ec20f035a471b444a6e4da6",
+   "path": "assets/img/notes/283ab77b8c25c5020ddb5343b9bae96687e989c70ec20f035a471b444a6e4da6.png",
+   "size_px": [
+    298,
+    218
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.3",
+   "source_file": "leph107.pdf",
+   "pdf_page": 3,
+   "crop_points": [
+    127,
+    488,
+    278,
+    625
+   ],
+   "caption": "The rms current I is related to the peak current im by I = im/√2 = 0.707 im.",
+   "sha256": "504a2fd185038d88a41561de164a9222c6f353f1904d725604be67125087f470",
+   "path": "assets/img/notes/504a2fd185038d88a41561de164a9222c6f353f1904d725604be67125087f470.png",
+   "size_px": [
+    302,
+    274
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.4",
+   "source_file": "leph107.pdf",
+   "pdf_page": 5,
+   "crop_points": [
+    301,
+    190,
+    540,
+    311
+   ],
+   "caption": "(a) A phasor diagram for the circuit in Fig 7.1. (b) Graph of v and i versus ωt.",
+   "sha256": "5e7100086c13ef23cf672a43649b20fa4e270f711f49e5dce67d1858c7a65b3a",
+   "path": "assets/img/notes/5e7100086c13ef23cf672a43649b20fa4e270f711f49e5dce67d1858c7a65b3a.png",
+   "size_px": [
+    478,
+    242
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.5",
+   "source_file": "leph107.pdf",
+   "pdf_page": 5,
+   "crop_points": [
+    344,
+    510,
+    536,
+    615
+   ],
+   "caption": "An ac source connected to an inductor.",
+   "sha256": "294d7f34cac3ee9350aa13b935da2fd8d0255196883c93f9c5b6f83ac44a480e",
+   "path": "assets/img/notes/294d7f34cac3ee9350aa13b935da2fd8d0255196883c93f9c5b6f83ac44a480e.png",
+   "size_px": [
+    384,
+    210
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.6",
+   "source_file": "leph107.pdf",
+   "pdf_page": 7,
+   "crop_points": [
+    111,
+    98,
+    355,
+    222
+   ],
+   "caption": "(a) A Phasor diagram for the circuit in Fig. 7.5. (b) Graph of v and i versus ωt.",
+   "sha256": "58435539be0778fc028eabd299efda5f92bd3b76256035afdf966c980dc05548",
+   "path": "assets/img/notes/58435539be0778fc028eabd299efda5f92bd3b76256035afdf966c980dc05548.png",
+   "size_px": [
+    488,
+    248
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.7",
+   "source_file": "leph107.pdf",
+   "pdf_page": 8,
+   "crop_points": [
+    75,
+    160,
+    280,
+    271
+   ],
+   "caption": "An ac source connected to a capacitor.",
+   "sha256": "da16ca8e7450318206b5c180007a7e32681267e0b287c992678227cdae2256b9",
+   "path": "assets/img/notes/da16ca8e7450318206b5c180007a7e32681267e0b287c992678227cdae2256b9.png",
+   "size_px": [
+    410,
+    222
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.8",
+   "source_file": "leph107.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    290,
+    98,
+    539,
+    206
+   ],
+   "caption": "(a) A Phasor diagram for the circuit in Fig. 7.7. (b) Graph of v and i versus ωt.",
+   "sha256": "9f53b21df47618a3909e6f4caaeff84f5e2c42c5539a569989c8e3e61002b3f9",
+   "path": "assets/img/notes/9f53b21df47618a3909e6f4caaeff84f5e2c42c5539a569989c8e3e61002b3f9.png",
+   "size_px": [
+    498,
+    216
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.9",
+   "source_file": "leph107.pdf",
+   "pdf_page": 10,
+   "crop_points": [
+    306,
+    273,
+    420,
+    363
+   ],
+   "caption": "",
+   "sha256": "7c3cc2263955ba68a812522c057e72fd860b82f5707c14d671960df665aedbfb",
+   "path": "assets/img/notes/7c3cc2263955ba68a812522c057e72fd860b82f5707c14d671960df665aedbfb.png",
+   "size_px": [
+    228,
+    180
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.10",
+   "source_file": "leph107.pdf",
+   "pdf_page": 10,
+   "crop_points": [
+    74,
+    571,
+    294,
+    691
+   ],
+   "caption": "A series LCR circuit connected to an ac source.",
+   "sha256": "cf8d29040c4415258436c7c56c7d0a25f906c14ad32b3f5838e74e75c8f9082c",
+   "path": "assets/img/notes/cf8d29040c4415258436c7c56c7d0a25f906c14ad32b3f5838e74e75c8f9082c.png",
+   "size_px": [
+    440,
+    240
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.11",
+   "source_file": "leph107.pdf",
+   "pdf_page": 11,
+   "crop_points": [
+    315,
+    265,
+    525,
+    401
+   ],
+   "caption": "(a) Relation between the phasors VL, VR, VC, and I, (b) Relation between the phasors VL, VR, and (VL + VC) for the circuit in Fig. 7.10.",
+   "sha256": "a389d48f0357c05422a821c527346c4be938a28ef8f27d882faad8c6b330c933",
+   "path": "assets/img/notes/a389d48f0357c05422a821c527346c4be938a28ef8f27d882faad8c6b330c933.png",
+   "size_px": [
+    420,
+    272
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.12",
+   "source_file": "leph107.pdf",
+   "pdf_page": 12,
+   "crop_points": [
+    78,
+    99,
+    222,
+    231
+   ],
+   "caption": "Impedance diagram.",
+   "sha256": "e2828e721eaf85e102adffd5f709b7ef4a06036cec535d992f0eb5d8ede88117",
+   "path": "assets/img/notes/e2828e721eaf85e102adffd5f709b7ef4a06036cec535d992f0eb5d8ede88117.png",
+   "size_px": [
+    288,
+    264
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.13",
+   "source_file": "leph107.pdf",
+   "pdf_page": 12,
+   "crop_points": [
+    74,
+    366,
+    327,
+    512
+   ],
+   "caption": "(a) Phasor diagram of V and I. (b) Graphs of v and i versus ω t for a series LCR circuit where XC > XL.",
+   "sha256": "0bf14f7099b51daa329419523400ee82798cb47cfd17a68cb3bac14c99353b0f",
+   "path": "assets/img/notes/0bf14f7099b51daa329419523400ee82798cb47cfd17a68cb3bac14c99353b0f.png",
+   "size_px": [
+    506,
+    292
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.14",
+   "source_file": "leph107.pdf",
+   "pdf_page": 13,
+   "crop_points": [
+    306,
+    266,
+    532,
+    442
+   ],
+   "caption": "Variation of im with ω for two cases: (i) R = 100 Ω, (ii) R = 200 Ω, L = 1.00 mH.",
+   "sha256": "d4369e9317f036125aa0b64259d0c5c0805476b1162184e16b6cb8e6c3d1da25",
+   "path": "assets/img/notes/d4369e9317f036125aa0b64259d0c5c0805476b1162184e16b6cb8e6c3d1da25.png",
+   "size_px": [
+    452,
+    352
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.15",
+   "source_file": "leph107.pdf",
+   "pdf_page": 16,
+   "crop_points": [
+    276,
+    100,
+    470,
+    266
+   ],
+   "caption": "",
+   "sha256": "da6d9e176e34fd4f72dc606f9ef0a7f6179e15bb42d162221e9579b234ca0c53",
+   "path": "assets/img/notes/da6d9e176e34fd4f72dc606f9ef0a7f6179e15bb42d162221e9579b234ca0c53.png",
+   "size_px": [
+    388,
+    332
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.16",
+   "source_file": "leph107.pdf",
+   "pdf_page": 18,
+   "crop_points": [
+    84,
+    248,
+    540,
+    427
+   ],
+   "caption": "Two arrangements for winding of primary and secondary coil in a transformer: (a) two coils on top of each other, (b) two coils on separate limbs of the core.",
+   "sha256": "2200bc00cfd203699450600a111a36d22fdfb7fda18f0bd7468d391d4e5b4fa4",
+   "path": "assets/img/notes/2200bc00cfd203699450600a111a36d22fdfb7fda18f0bd7468d391d4e5b4fa4.png",
+   "size_px": [
+    912,
+    358
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "7.17",
+   "source_file": "leph107.pdf",
+   "pdf_page": 24,
+   "crop_points": [
+    291,
+    386,
+    444,
+    475
+   ],
+   "caption": "",
+   "sha256": "2941706a6f37cd10cfaa9d47d58ff38f6bb3bad52e114c5adc78fd534d163baa",
+   "path": "assets/img/notes/2941706a6f37cd10cfaa9d47d58ff38f6bb3bad52e114c5adc78fd534d163baa.png",
+   "size_px": [
+    306,
+    178
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.1",
+   "source_file": "leph201.pdf",
+   "pdf_page": 2,
+   "crop_points": [
+    46,
+    235,
+    266,
+    369
+   ],
+   "caption": "The incident ray, reflected ray and the normal to the reflecting surface lie in the same plane.",
+   "sha256": "3965a60d6c279ac137d0ec38a2d10b785f0b89a0f81f36f609c99eb635d87784",
+   "path": "assets/img/notes/3965a60d6c279ac137d0ec38a2d10b785f0b89a0f81f36f609c99eb635d87784.png",
+   "size_px": [
+    440,
+    268
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.2",
+   "source_file": "leph201.pdf",
+   "pdf_page": 2,
+   "crop_points": [
+    47,
+    513,
+    322,
+    685
+   ],
+   "caption": "The Cartesian Sign Convention.",
+   "sha256": "2b7c83c3d76faf846209f8e0b831333ac94c66384a7dced52ee6e0a16f7ed442",
+   "path": "assets/img/notes/2b7c83c3d76faf846209f8e0b831333ac94c66384a7dced52ee6e0a16f7ed442.png",
+   "size_px": [
+    550,
+    344
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.3",
+   "source_file": "leph201.pdf",
+   "pdf_page": 3,
+   "crop_points": [
+    42,
+    359,
+    486,
+    604
+   ],
+   "caption": "Focus of a concave and convex mirror.",
+   "sha256": "448826fa492079cfcbc4cafbeceb610d11cb663ca73b61adb81685107435ffe5",
+   "path": "assets/img/notes/448826fa492079cfcbc4cafbeceb610d11cb663ca73b61adb81685107435ffe5.png",
+   "size_px": [
+    888,
+    490
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.4",
+   "source_file": "leph201.pdf",
+   "pdf_page": 4,
+   "crop_points": [
+    48,
+    100,
+    211,
+    329
+   ],
+   "caption": "Geometry of reflection of an incident ray on (a) concave spherical mirror, and (b) convex spherical mirror.",
+   "sha256": "83a3222262e0ae7d132ed7cc0cbe1344e616dc2422a3d153120c4c81c1270a57",
+   "path": "assets/img/notes/83a3222262e0ae7d132ed7cc0cbe1344e616dc2422a3d153120c4c81c1270a57.png",
+   "size_px": [
+    326,
+    458
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.5",
+   "source_file": "leph201.pdf",
+   "pdf_page": 4,
+   "crop_points": [
+    48,
+    391,
+    244,
+    557
+   ],
+   "caption": "Ray diagram for image formation by a concave mirror.",
+   "sha256": "1c5dfcfa49ee659e0778665f1d780eac4d004197f731e9cf97dcf49fac6f2173",
+   "path": "assets/img/notes/1c5dfcfa49ee659e0778665f1d780eac4d004197f731e9cf97dcf49fac6f2173.png",
+   "size_px": [
+    392,
+    332
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.6",
+   "source_file": "leph201.pdf",
+   "pdf_page": 6,
+   "crop_points": [
+    100,
+    268,
+    520,
+    371
+   ],
+   "caption": "Image formation by (a) a concave mirror with object between P and F, and (b) a convex mirror.",
+   "sha256": "0e8e01cacb6f271aa7af5175203cb8b2410efc3f657c29c09977eb06e41acf4a",
+   "path": "assets/img/notes/0e8e01cacb6f271aa7af5175203cb8b2410efc3f657c29c09977eb06e41acf4a.png",
+   "size_px": [
+    840,
+    206
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.7",
+   "source_file": "leph201.pdf",
+   "pdf_page": 6,
+   "crop_points": [
+    217,
+    598,
+    462,
+    718
+   ],
+   "caption": "",
+   "sha256": "b33b0b65bbe20b9eb923773c968e410ee402dfae7126a0eb456f50b043cf1ed9",
+   "path": "assets/img/notes/b33b0b65bbe20b9eb923773c968e410ee402dfae7126a0eb456f50b043cf1ed9.png",
+   "size_px": [
+    490,
+    240
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.8",
+   "source_file": "leph201.pdf",
+   "pdf_page": 8,
+   "crop_points": [
+    45,
+    448,
+    277,
+    637
+   ],
+   "caption": "Refraction and reflection of light.",
+   "sha256": "8d0083735d0780247aa174bdedd91cf459ea31879650341678e9c6d37ad6b46a",
+   "path": "assets/img/notes/8d0083735d0780247aa174bdedd91cf459ea31879650341678e9c6d37ad6b46a.png",
+   "size_px": [
+    464,
+    378
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.9",
+   "source_file": "leph201.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    285,
+    98,
+    523,
+    220
+   ],
+   "caption": "Lateral shift of a ray refracted through a parallel-sided slab.",
+   "sha256": "7921fdb3d31ce9dd177f508eddcc06c2c11868d68512192f2ba3fd669538817b",
+   "path": "assets/img/notes/7921fdb3d31ce9dd177f508eddcc06c2c11868d68512192f2ba3fd669538817b.png",
+   "size_px": [
+    476,
+    244
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.10",
+   "source_file": "leph201.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    298,
+    270,
+    524,
+    507
+   ],
+   "caption": "Apparent depth for (a) normal, and (b) oblique viewing.",
+   "sha256": "75b2078c52cdb42c27a6b836b1adb51bda5e56e97c8e2b0d5b631ee66d92cff0",
+   "path": "assets/img/notes/75b2078c52cdb42c27a6b836b1adb51bda5e56e97c8e2b0d5b631ee66d92cff0.png",
+   "size_px": [
+    452,
+    474
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.11",
+   "source_file": "leph201.pdf",
+   "pdf_page": 10,
+   "crop_points": [
+    48,
+    100,
+    302,
+    244
+   ],
+   "caption": "Refraction and internal reflection of rays from a point A in the denser medium (water) incident at different angles at the interface with a rarer medium (air).",
+   "sha256": "21b6847ef7cf61d13e009f029d93bdd1025bd923cee75d312e4449002ba5c014",
+   "path": "assets/img/notes/21b6847ef7cf61d13e009f029d93bdd1025bd923cee75d312e4449002ba5c014.png",
+   "size_px": [
+    508,
+    288
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.12",
+   "source_file": "leph201.pdf",
+   "pdf_page": 11,
+   "crop_points": [
+    419,
+    98,
+    520,
+    373
+   ],
+   "caption": "Observing total internal reflection in water with a laser beam (refraction due to glass of beaker neglected being very thin).",
+   "sha256": "9bbbe1a06964c618dc1e33dcde57b9659c51147a33704f778761b4cf4440e9a4",
+   "path": "assets/img/notes/9bbbe1a06964c618dc1e33dcde57b9659c51147a33704f778761b4cf4440e9a4.png",
+   "size_px": [
+    202,
+    550
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.13",
+   "source_file": "leph201.pdf",
+   "pdf_page": 11,
+   "crop_points": [
+    272,
+    461,
+    525,
+    674
+   ],
+   "caption": "Prisms designed to bend rays by 90° and 180° or to invert image without changing its size make use of total internal reflection.",
+   "sha256": "2da0fbe259ff96a82d8d7e1d1fe71f9b430631628b374c24e2853fce23feb190",
+   "path": "assets/img/notes/2da0fbe259ff96a82d8d7e1d1fe71f9b430631628b374c24e2853fce23feb190.png",
+   "size_px": [
+    506,
+    426
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.14",
+   "source_file": "leph201.pdf",
+   "pdf_page": 12,
+   "crop_points": [
+    45,
+    115,
+    288,
+    201
+   ],
+   "caption": "Light undergoes successive total internal reflections as it moves through an optical fibre.",
+   "sha256": "ded8ba4d7925cac9abe139dd218e9d9ac476744c4263f022c4f8cea317e846ab",
+   "path": "assets/img/notes/ded8ba4d7925cac9abe139dd218e9d9ac476744c4263f022c4f8cea317e846ab.png",
+   "size_px": [
+    486,
+    172
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.15",
+   "source_file": "leph201.pdf",
+   "pdf_page": 13,
+   "crop_points": [
+    295,
+    100,
+    525,
+    235
+   ],
+   "caption": "Refraction at a spherical surface separating two media.",
+   "sha256": "8b846925d6698a018bdf6d12d4781adea4be585a3221ee502ffd0cf0d8d377be",
+   "path": "assets/img/notes/8b846925d6698a018bdf6d12d4781adea4be585a3221ee502ffd0cf0d8d377be.png",
+   "size_px": [
+    460,
+    270
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.16",
+   "source_file": "leph201.pdf",
+   "pdf_page": 14,
+   "crop_points": [
+    65,
+    245,
+    308,
+    633
+   ],
+   "caption": "(a) The position of object, and the image formed by a double convex lens, (b) Refraction at the first spherical surface and (c) Refraction at the second spherical surface.",
+   "sha256": "57b4d23bf9efc9791fb679435f60ca3857d34ad97933e6e0d84c9ca0f64d5827",
+   "path": "assets/img/notes/57b4d23bf9efc9791fb679435f60ca3857d34ad97933e6e0d84c9ca0f64d5827.png",
+   "size_px": [
+    486,
+    776
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.17",
+   "source_file": "leph201.pdf",
+   "pdf_page": 15,
+   "crop_points": [
+    298,
+    429,
+    522,
+    690
+   ],
+   "caption": "Tracing rays through (a) convex lens (b) concave lens.",
+   "sha256": "b5731febba98e36e7a4d97104cdab114ee04ec8f1d55cf70344f6c0e1f9f7198",
+   "path": "assets/img/notes/b5731febba98e36e7a4d97104cdab114ee04ec8f1d55cf70344f6c0e1f9f7198.png",
+   "size_px": [
+    448,
+    522
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.18",
+   "source_file": "leph201.pdf",
+   "pdf_page": 16,
+   "crop_points": [
+    44,
+    328,
+    231,
+    462
+   ],
+   "caption": "Power of a lens.",
+   "sha256": "8d868eb1002a952bd188c57f08751cdd73be3e96438564c38b2e9d01773b7b2b",
+   "path": "assets/img/notes/8d868eb1002a952bd188c57f08751cdd73be3e96438564c38b2e9d01773b7b2b.png",
+   "size_px": [
+    374,
+    268
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.19",
+   "source_file": "leph201.pdf",
+   "pdf_page": 17,
+   "crop_points": [
+    307,
+    400,
+    524,
+    488
+   ],
+   "caption": "Image formation by a combination of two thin lenses in contact.",
+   "sha256": "cb74c26e0c9b706337afadca7c4311e2ecabc0e790e8b71be9cb2ae0878417b8",
+   "path": "assets/img/notes/cb74c26e0c9b706337afadca7c4311e2ecabc0e790e8b71be9cb2ae0878417b8.png",
+   "size_px": [
+    434,
+    176
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.20",
+   "source_file": "leph201.pdf",
+   "pdf_page": 18,
+   "crop_points": [
+    239,
+    499,
+    442,
+    613
+   ],
+   "caption": "",
+   "sha256": "dd6710a012fe2a290e4834103cf2bc04d209134785614553c0ce63cb72eb71a2",
+   "path": "assets/img/notes/dd6710a012fe2a290e4834103cf2bc04d209134785614553c0ce63cb72eb71a2.png",
+   "size_px": [
+    406,
+    228
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.21",
+   "source_file": "leph201.pdf",
+   "pdf_page": 19,
+   "crop_points": [
+    292,
+    363,
+    522,
+    507
+   ],
+   "caption": "A ray of light passing through a triangular glass prism.",
+   "sha256": "fa1c368b366b5d1b45874d5e303666164bf7e2c84afda2a7d241479902d0ad67",
+   "path": "assets/img/notes/fa1c368b366b5d1b45874d5e303666164bf7e2c84afda2a7d241479902d0ad67.png",
+   "size_px": [
+    460,
+    288
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.22",
+   "source_file": "leph201.pdf",
+   "pdf_page": 20,
+   "crop_points": [
+    46,
+    99,
+    269,
+    288
+   ],
+   "caption": "Plot of angle of deviation (δ) versus angle of incidence (i) for a triangular prism.",
+   "sha256": "5e230f22f1f2a32b668cba7ded84c0341eee4657a3922f177fa8affc8fcbe532",
+   "path": "assets/img/notes/5e230f22f1f2a32b668cba7ded84c0341eee4657a3922f177fa8affc8fcbe532.png",
+   "size_px": [
+    446,
+    378
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.23",
+   "source_file": "leph201.pdf",
+   "pdf_page": 21,
+   "crop_points": [
+    85,
+    98,
+    366,
+    552
+   ],
+   "caption": "A simple microscope; (a) the magnifying lens is located such that the image is at the near point, (b) the angle subtanded by the object, is the same as that at the near point, and (c) the object near the focal point of the lens; the image is far off but closer than infinity.",
+   "sha256": "027e60d36525b02ce4a89c5f8a41b9302edb68c6631dff20fc2eca969750cb7b",
+   "path": "assets/img/notes/027e60d36525b02ce4a89c5f8a41b9302edb68c6631dff20fc2eca969750cb7b.png",
+   "size_px": [
+    562,
+    908
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.24",
+   "source_file": "leph201.pdf",
+   "pdf_page": 23,
+   "crop_points": [
+    60,
+    98,
+    379,
+    322
+   ],
+   "caption": "Ray diagram for the formation of image by a compound microscope.",
+   "sha256": "9972c960edfa0bd14a91d2bccfcd5c533b8482ca2c3023103cd49cea634e29b7",
+   "path": "assets/img/notes/9972c960edfa0bd14a91d2bccfcd5c533b8482ca2c3023103cd49cea634e29b7.png",
+   "size_px": [
+    638,
+    448
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.25",
+   "source_file": "leph201.pdf",
+   "pdf_page": 25,
+   "crop_points": [
+    60,
+    259,
+    382,
+    445
+   ],
+   "caption": "A refracting telescope.",
+   "sha256": "7b36886547407350e74f66945a5f5e0e719ae92dc7f5fd174ce349457646965a",
+   "path": "assets/img/notes/7b36886547407350e74f66945a5f5e0e719ae92dc7f5fd174ce349457646965a.png",
+   "size_px": [
+    644,
+    372
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.26",
+   "source_file": "leph201.pdf",
+   "pdf_page": 26,
+   "crop_points": [
+    185,
+    98,
+    512,
+    271
+   ],
+   "caption": "Schematic diagram of a reflecting telescope (Cassegrain).",
+   "sha256": "ededfb42d764f5d8e4f28444fd07fe2eb42101df70f30b1546167a8e7bce58c4",
+   "path": "assets/img/notes/ededfb42d764f5d8e4f28444fd07fe2eb42101df70f30b1546167a8e7bce58c4.png",
+   "size_px": [
+    654,
+    346
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.27",
+   "source_file": "leph201.pdf",
+   "pdf_page": 29,
+   "crop_points": [
+    73,
+    339,
+    397,
+    448
+   ],
+   "caption": "",
+   "sha256": "ad07fe5040b6ddcf0fc858dd78d2a8ff22dfd34675bd0cce652dd9f4cf0dd243",
+   "path": "assets/img/notes/ad07fe5040b6ddcf0fc858dd78d2a8ff22dfd34675bd0cce652dd9f4cf0dd243.png",
+   "size_px": [
+    648,
+    218
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.28",
+   "source_file": "leph201.pdf",
+   "pdf_page": 30,
+   "crop_points": [
+    236,
+    650,
+    464,
+    723
+   ],
+   "caption": "",
+   "sha256": "d10506e643a1a01c756232ca4416e4f89973e42ebd6f9a01315bd3e462cf505e",
+   "path": "assets/img/notes/d10506e643a1a01c756232ca4416e4f89973e42ebd6f9a01315bd3e462cf505e.png",
+   "size_px": [
+    456,
+    146
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.29",
+   "source_file": "leph201.pdf",
+   "pdf_page": 33,
+   "crop_points": [
+    139,
+    129,
+    337,
+    205
+   ],
+   "caption": "",
+   "sha256": "95b6df51deb7cde29e6ea1b52b7e2bd2331335ae2c1a1e647c6595fa9a1f3926",
+   "path": "assets/img/notes/95b6df51deb7cde29e6ea1b52b7e2bd2331335ae2c1a1e647c6595fa9a1f3926.png",
+   "size_px": [
+    396,
+    152
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "9.30",
+   "source_file": "leph201.pdf",
+   "pdf_page": 33,
+   "crop_points": [
+    139,
+    325,
+    327,
+    482
+   ],
+   "caption": "",
+   "sha256": "bfc3a96284650e4fe1ef79f9768d5aef15e54b5aace1b081700adc9c8110365d",
+   "path": "assets/img/notes/bfc3a96284650e4fe1ef79f9768d5aef15e54b5aace1b081700adc9c8110365d.png",
+   "size_px": [
+    376,
+    314
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.1",
+   "source_file": "leph202.pdf",
+   "pdf_page": 3,
+   "crop_points": [
+    410,
+    123,
+    525,
+    490
+   ],
+   "caption": "(a) A diverging spherical wave emanating from a point source. The wavefronts are spherical. (b) At a large distance from the source, a small portion of the spherical wavefront can be approximated by a plane wave.",
+   "sha256": "2881bdade076e6eef33a65421e60072a569f06f6652a85c32e0b2643a27cb58f",
+   "path": "assets/img/notes/2881bdade076e6eef33a65421e60072a569f06f6652a85c32e0b2643a27cb58f.png",
+   "size_px": [
+    230,
+    734
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.2",
+   "source_file": "leph202.pdf",
+   "pdf_page": 3,
+   "crop_points": [
+    101,
+    538,
+    336,
+    674
+   ],
+   "caption": "F1F2 represents the spherical wavefront (with O as centre) at t = 0. The envelope of the secondary wavelets emanating from F1F2 produces the forward moving wavefront G1G2. The backwave D1D2 does not exist.",
+   "sha256": "18b6ef7c031f446cfc4baa45a52d96ded6162dd105f07f12e65db408bdb77e2b",
+   "path": "assets/img/notes/18b6ef7c031f446cfc4baa45a52d96ded6162dd105f07f12e65db408bdb77e2b.png",
+   "size_px": [
+    470,
+    272
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.3",
+   "source_file": "leph202.pdf",
+   "pdf_page": 4,
+   "crop_points": [
+    65,
+    100,
+    126,
+    298
+   ],
+   "caption": "Huygens geometrical construction for a plane wave propagating to the right. F1 F2 is the plane wavefront at t = 0 and G1G2 is the wavefront at a later time t. The lines A1A2, B1B2 … etc., are normal to both F1F2 and G1G2 and represent rays.",
+   "sha256": "c1c009e4dfe82392997ed58312e909617645a7fe118f22e7f42425872e2b17c4",
+   "path": "assets/img/notes/c1c009e4dfe82392997ed58312e909617645a7fe118f22e7f42425872e2b17c4.png",
+   "size_px": [
+    122,
+    396
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.4",
+   "source_file": "leph202.pdf",
+   "pdf_page": 4,
+   "crop_points": [
+    204,
+    499,
+    427,
+    671
+   ],
+   "caption": "A plane wave AB is incident at an angle i on the surface PP′ separating medium 1 and medium 2. The plane wave undergoes refraction and CE represents the refracted wavefront. The figure corresponds to v2 < v1 so that the refracted waves bends towards the normal.",
+   "sha256": "452d9d509076d234dcb3a7c1abf32cb7bb8520ed1b801c85263be8c60d5a22d8",
+   "path": "assets/img/notes/452d9d509076d234dcb3a7c1abf32cb7bb8520ed1b801c85263be8c60d5a22d8.png",
+   "size_px": [
+    446,
+    344
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.5",
+   "source_file": "leph202.pdf",
+   "pdf_page": 6,
+   "crop_points": [
+    215,
+    357,
+    469,
+    527
+   ],
+   "caption": "Refraction of a plane wave incident on a rarer medium for which v2 > v1. The plane wave bends away from the normal.",
+   "sha256": "ec6877eb0898caf4d26116c58f7912a9c8ee1a13256a55260c891c0f31778d4b",
+   "path": "assets/img/notes/ec6877eb0898caf4d26116c58f7912a9c8ee1a13256a55260c891c0f31778d4b.png",
+   "size_px": [
+    508,
+    340
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.6",
+   "source_file": "leph202.pdf",
+   "pdf_page": 7,
+   "crop_points": [
+    119,
+    99,
+    330,
+    215
+   ],
+   "caption": "Reflection of a plane wave AB by the reflecting surface MN. AB and CE represent incident and reflected wavefronts.",
+   "sha256": "479e78008c80d88372e8970731d7d092169a724cf7ff02dc2b7ded6f33414d8c",
+   "path": "assets/img/notes/479e78008c80d88372e8970731d7d092169a724cf7ff02dc2b7ded6f33414d8c.png",
+   "size_px": [
+    422,
+    232
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.7",
+   "source_file": "leph202.pdf",
+   "pdf_page": 7,
+   "crop_points": [
+    49,
+    592,
+    493,
+    711
+   ],
+   "caption": "Refraction of a plane wave by (a) a thin prism, (b) a convex lens. (c) Reflection of a plane wave by a concave mirror.",
+   "sha256": "05f52d789d06d0aea89e1dbc14add9225aee25eee501a779c24d7e87ea85df4b",
+   "path": "assets/img/notes/05f52d789d06d0aea89e1dbc14add9225aee25eee501a779c24d7e87ea85df4b.png",
+   "size_px": [
+    888,
+    238
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.8",
+   "source_file": "leph202.pdf",
+   "pdf_page": 8,
+   "crop_points": [
+    48,
+    407,
+    290,
+    567
+   ],
+   "caption": "(a) Two needles oscillating in phase in water represent two coherent sources. (b) The pattern of displacement of water molecules at an instant on the surface of water showing nodal N (no displacement) and antinodal A (maximum displacement) lines.",
+   "sha256": "6d8e7f4d067592b3f25e2c52cf706c3d347d456760872de0cbad6b41c5d9785e",
+   "path": "assets/img/notes/6d8e7f4d067592b3f25e2c52cf706c3d347d456760872de0cbad6b41c5d9785e.png",
+   "size_px": [
+    484,
+    320
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.9",
+   "source_file": "leph202.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    416,
+    99,
+    526,
+    353
+   ],
+   "caption": "(a) Constructive interference at a point Q for which the path difference is 2λ. (b) Destructive interference at a point R for which the path difference is 2.5 λ.",
+   "sha256": "b23babb929773b2752c0fa92d8f7824cdf7d639db7c943df2f569a58ab4b3998",
+   "path": "assets/img/notes/b23babb929773b2752c0fa92d8f7824cdf7d639db7c943df2f569a58ab4b3998.png",
+   "size_px": [
+    220,
+    508
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.10",
+   "source_file": "leph202.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    409,
+    600,
+    525,
+    651
+   ],
+   "caption": "Locus of points for which S1P – S2P is equal to zero, ±λ, ± 2λ, ± 3λ.",
+   "sha256": "dc93f8c16d7dbfe1637ab05e9a679c36f5a2b2c10bad534c4376b02b85f3f1ad",
+   "path": "assets/img/notes/dc93f8c16d7dbfe1637ab05e9a679c36f5a2b2c10bad534c4376b02b85f3f1ad.png",
+   "size_px": [
+    232,
+    102
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.11",
+   "source_file": "leph202.pdf",
+   "pdf_page": 11,
+   "crop_points": [
+    323,
+    193,
+    523,
+    301
+   ],
+   "caption": "If two sodium lamps illuminate two pinholes S1 and S2, the intensities will add up and no interference fringes will be observed on the screen.",
+   "sha256": "2b7eabb78a4654ecc7ddb3fa040577bfdbce77fe14d5f10203759e4bf1107f7f",
+   "path": "assets/img/notes/2b7eabb78a4654ecc7ddb3fa040577bfdbce77fe14d5f10203759e4bf1107f7f.png",
+   "size_px": [
+    400,
+    216
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.12",
+   "source_file": "leph202.pdf",
+   "pdf_page": 11,
+   "crop_points": [
+    73,
+    548,
+    478,
+    718
+   ],
+   "caption": "Young’s arrangement to produce interference pattern.",
+   "sha256": "6606508eae43f5ce290836e7169b0102cf16e3e10a0fbb9ecd90ed64fa4743fb",
+   "path": "assets/img/notes/6606508eae43f5ce290836e7169b0102cf16e3e10a0fbb9ecd90ed64fa4743fb.png",
+   "size_px": [
+    810,
+    340
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.13",
+   "source_file": "leph202.pdf",
+   "pdf_page": 12,
+   "crop_points": [
+    237,
+    320,
+    442,
+    556
+   ],
+   "caption": "Computer generated fringe pattern produced by two point source S1 and S2 on the screen GG′ (Fig. 10.12); d = 0.025 mm, D = 5 cm and λ = 5 × 10–5 cm.) (Adopted from OPTICS by A. Ghatak, Tata McGraw Hill Publishing Co. Ltd., New Delhi, 2000.)",
+   "sha256": "86c3b1d2c1887d48ba3440c4da78e8a1046211c3a153c0a6c0d5da89ab772d09",
+   "path": "assets/img/notes/86c3b1d2c1887d48ba3440c4da78e8a1046211c3a153c0a6c0d5da89ab772d09.png",
+   "size_px": [
+    410,
+    472
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.14",
+   "source_file": "leph202.pdf",
+   "pdf_page": 13,
+   "crop_points": [
+    274,
+    283,
+    518,
+    434
+   ],
+   "caption": "The geometry of path differences for diffraction by a single slit.",
+   "sha256": "69d8475d2531ff6741d570c4906be6f9a8e87bdba98aad1a9db672625f7ad7db",
+   "path": "assets/img/notes/69d8475d2531ff6741d570c4906be6f9a8e87bdba98aad1a9db672625f7ad7db.png",
+   "size_px": [
+    488,
+    302
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.15",
+   "source_file": "leph202.pdf",
+   "pdf_page": 13,
+   "crop_points": [
+    335,
+    478,
+    522,
+    667
+   ],
+   "caption": "Intensity distribution and photograph of fringes due to diffraction at single slit.",
+   "sha256": "dada6774153ade8a641048a84d63926696890adae3accd4e5d7028b486468e1f",
+   "path": "assets/img/notes/dada6774153ade8a641048a84d63926696890adae3accd4e5d7028b486468e1f.png",
+   "size_px": [
+    374,
+    378
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.16",
+   "source_file": "leph202.pdf",
+   "pdf_page": 14,
+   "crop_points": [
+    49,
+    377,
+    146,
+    485
+   ],
+   "caption": "Holding two blades to form a single slit. A bulb filament viewed through this shows clear diffraction bands.",
+   "sha256": "fbd93a5efbc9adf74e86b0772e3b8bebfd514475cb9df34c176442a4f712f5c1",
+   "path": "assets/img/notes/fbd93a5efbc9adf74e86b0772e3b8bebfd514475cb9df34c176442a4f712f5c1.png",
+   "size_px": [
+    194,
+    216
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.17",
+   "source_file": "leph202.pdf",
+   "pdf_page": 15,
+   "crop_points": [
+    48,
+    192,
+    412,
+    463
+   ],
+   "caption": "(a) The curves represent the displacement of a string at t = 0 and at t = Δt, respectively when a sinusoidal wave is propagating in the +x-direction. (b) The curve represents the time variation of the displacement at x = 0 when a sinusoidal wave is propagating in the +x-direction. At x = Δx, the time variation of the displacement will be slightly displaced to the right.",
+   "sha256": "0bddd8e09c90fe9ae07c7b80b56e23793075442e1705f757235c234d27945b97",
+   "path": "assets/img/notes/0bddd8e09c90fe9ae07c7b80b56e23793075442e1705f757235c234d27945b97.png",
+   "size_px": [
+    728,
+    542
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "10.18",
+   "source_file": "leph202.pdf",
+   "pdf_page": 17,
+   "crop_points": [
+    128,
+    99,
+    313,
+    282
+   ],
+   "caption": "(a) Passage of light through two polaroids P2 and P1. The transmitted fraction falls from 1 to 0 as the angle between them varies from 0° to 90°. Notice that the light seen through a single polaroid P1 does not vary with angle. (b) Behaviour of the electric vector when light passes through two polaroids. The transmitted polarisation is the component parallel to the polaroid axis. The double arrows show the oscillations of the electric vector.",
+   "sha256": "c7a99e19a25c31323ed6f8f57e0a8774e2c0ff3e8b0f860af1078e549f4efe22",
+   "path": "assets/img/notes/c7a99e19a25c31323ed6f8f57e0a8774e2c0ff3e8b0f860af1078e549f4efe22.png",
+   "size_px": [
+    370,
+    366
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "12.1",
+   "source_file": "leph204.pdf",
+   "pdf_page": 3,
+   "crop_points": [
+    46,
+    98,
+    318,
+    335
+   ],
+   "caption": "Geiger-Marsden scattering experiment. The entire apparatus is placed in a vacuum chamber (not shown in this figure).",
+   "sha256": "34c2b0cd4e1682758e10f3df54849f0c4fdc81bb62781cae5ef65a8b43c35c15",
+   "path": "assets/img/notes/34c2b0cd4e1682758e10f3df54849f0c4fdc81bb62781cae5ef65a8b43c35c15.png",
+   "size_px": [
+    544,
+    474
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "12.2",
+   "source_file": "leph204.pdf",
+   "pdf_page": 3,
+   "crop_points": [
+    171,
+    392,
+    515,
+    593
+   ],
+   "caption": "Schematic arrangement of the Geiger-Marsden experiment.",
+   "sha256": "85051af90c75d8c31d18a17c61c547f9349851dc35997296401391ca7e87b88b",
+   "path": "assets/img/notes/85051af90c75d8c31d18a17c61c547f9349851dc35997296401391ca7e87b88b.png",
+   "size_px": [
+    688,
+    402
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "12.3",
+   "source_file": "leph204.pdf",
+   "pdf_page": 4,
+   "crop_points": [
+    246,
+    98,
+    523,
+    327
+   ],
+   "caption": "Experimental data points (shown by dots) on scattering of α-particles by a thin foil at different angles obtained by Geiger and Marsden using the setup shown in Figs. 12.1 and 12.2. Rutherford’s nuclear model predicts the solid curve which is seen to be in good agreement with experiment.",
+   "sha256": "57d0eca8fa8a2ed0a242a3af66d19668ab39d562c74deb5d1c6d23046be0093f",
+   "path": "assets/img/notes/57d0eca8fa8a2ed0a242a3af66d19668ab39d562c74deb5d1c6d23046be0093f.png",
+   "size_px": [
+    554,
+    458
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "12.4",
+   "source_file": "leph204.pdf",
+   "pdf_page": 5,
+   "crop_points": [
+    47,
+    271,
+    303,
+    420
+   ],
+   "caption": "Trajectory of α-particles in the coulomb field of a target nucleus. The impact parameter, b and scattering angle θ are also depicted.",
+   "sha256": "be7d9816291fbab5abfd8dbe71d6734e3aad474d80d3770fb3bfbc27e9e1af40",
+   "path": "assets/img/notes/be7d9816291fbab5abfd8dbe71d6734e3aad474d80d3770fb3bfbc27e9e1af40.png",
+   "size_px": [
+    512,
+    298
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "12.5",
+   "source_file": "leph204.pdf",
+   "pdf_page": 8,
+   "crop_points": [
+    206,
+    97,
+    521,
+    255
+   ],
+   "caption": "Emission lines in the spectrum of hydrogen.",
+   "sha256": "fed5fdb090277df8a9c537a182ccd51d5a678f5dc1c7050d5e7ec71975bca56e",
+   "path": "assets/img/notes/fed5fdb090277df8a9c537a182ccd51d5a678f5dc1c7050d5e7ec71975bca56e.png",
+   "size_px": [
+    630,
+    316
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "12.6",
+   "source_file": "leph204.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    285,
+    98,
+    407,
+    238
+   ],
+   "caption": "An accelerated atomic electron must spiral into the nucleus as it loses energy.",
+   "sha256": "fb292c1d6bbcaacd35191fc491f97ee3f92011e570c8c9f4ac08fd8391145179",
+   "path": "assets/img/notes/fb292c1d6bbcaacd35191fc491f97ee3f92011e570c8c9f4ac08fd8391145179.png",
+   "size_px": [
+    244,
+    280
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "12.7",
+   "source_file": "leph204.pdf",
+   "pdf_page": 11,
+   "crop_points": [
+    46,
+    97,
+    231,
+    378
+   ],
+   "caption": "The energy level diagram for the hydrogen atom. The electron in a hydrogen atom at room temperature spends most of its time in the ground state. To ionise a hydrogen atom an electron from the ground state, 13.6 eV of energy must be supplied. (The horizontal lines specify the presence of allowed energy states.)",
+   "sha256": "83c62587ebbdf76560239d55bce581c1d9747bff11fd6c06d6356dc4492c1177",
+   "path": "assets/img/notes/83c62587ebbdf76560239d55bce581c1d9747bff11fd6c06d6356dc4492c1177.png",
+   "size_px": [
+    370,
+    562
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "12.8",
+   "source_file": "leph204.pdf",
+   "pdf_page": 12,
+   "crop_points": [
+    361,
+    391,
+    522,
+    579
+   ],
+   "caption": "A standing wave is shown on a circular orbit where four de Broglie wavelengths fit into the circumference of the orbit.",
+   "sha256": "6019ee448005366500de2645d3df7aa29e75baa698f44ee1f4b19e922ffc7907",
+   "path": "assets/img/notes/6019ee448005366500de2645d3df7aa29e75baa698f44ee1f4b19e922ffc7907.png",
+   "size_px": [
+    322,
+    376
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "13.1",
+   "source_file": "leph205.pdf",
+   "pdf_page": 7,
+   "crop_points": [
+    46,
+    262,
+    350,
+    435
+   ],
+   "caption": "The binding energy per nucleon as a function of mass number.",
+   "sha256": "0fda1a66c2e32a65784b8cee6f6af98c6b1c3bd9ad940266e15e55461d486be1",
+   "path": "assets/img/notes/0fda1a66c2e32a65784b8cee6f6af98c6b1c3bd9ad940266e15e55461d486be1.png",
+   "size_px": [
+    608,
+    346
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "13.2",
+   "source_file": "leph205.pdf",
+   "pdf_page": 8,
+   "crop_points": [
+    357,
+    431,
+    523,
+    584
+   ],
+   "caption": "Potential energy of a pair of nucleons as a function of their separation. For a separation greater than r0, the force is attractive and for separations less than r0, the force is strongly repulsive.",
+   "sha256": "97112c9186ef92e4519d731c924130975c1cfc6ffaea8ab7af1766b6baafc68f",
+   "path": "assets/img/notes/97112c9186ef92e4519d731c924130975c1cfc6ffaea8ab7af1766b6baafc68f.png",
+   "size_px": [
+    332,
+    306
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.1",
+   "source_file": "leph206.pdf",
+   "pdf_page": 4,
+   "crop_points": [
+    46,
+    98,
+    308,
+    295
+   ],
+   "caption": "The energy band positions in a semiconductor at 0 K. The upper band, called the conduction band, consists of infinitely large number of closely spaced energy states. The lower band, called the valence band, consists of closely spaced completely filled energy states.",
+   "sha256": "a57e0cf63948dac30fc83f58d014182644e23f082d9e0a9a6b7b84e241651021",
+   "path": "assets/img/notes/a57e0cf63948dac30fc83f58d014182644e23f082d9e0a9a6b7b84e241651021.png",
+   "size_px": [
+    524,
+    394
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.2",
+   "source_file": "leph206.pdf",
+   "pdf_page": 4,
+   "crop_points": [
+    60,
+    435,
+    528,
+    707
+   ],
+   "caption": "Difference between energy bands of (a) metals, (b) insulators and (c) semiconductors.",
+   "sha256": "c5f74f1325968f4136b983830d9c3c4850c3874a69b3a55e4f0d694701a54a5b",
+   "path": "assets/img/notes/c5f74f1325968f4136b983830d9c3c4850c3874a69b3a55e4f0d694701a54a5b.png",
+   "size_px": [
+    936,
+    544
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.3",
+   "source_file": "leph206.pdf",
+   "pdf_page": 5,
+   "crop_points": [
+    326,
+    327,
+    521,
+    493
+   ],
+   "caption": "Three-dimensional diamond-like crystal structure for Carbon, Silicon or Germanium with respective lattice spacing a equal to 3.56, 5.43 and 5.66 Å.",
+   "sha256": "534770b78322e8ae0e41bec6c3e82d02abb0ae4fb516df58a953c6e0429e65ad",
+   "path": "assets/img/notes/534770b78322e8ae0e41bec6c3e82d02abb0ae4fb516df58a953c6e0429e65ad.png",
+   "size_px": [
+    390,
+    332
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.4",
+   "source_file": "leph206.pdf",
+   "pdf_page": 6,
+   "crop_points": [
+    48,
+    98,
+    278,
+    256
+   ],
+   "caption": "Schematic two-dimensional representation of Si or Ge structure showing covalent bonds at low temperature (all bonds intact). +4 symbol indicates inner cores of Si or Ge.",
+   "sha256": "a6d20ec612fcd200bf4aaa94679ab4c71f05fb0af01abd86afa9b555c2b27c1a",
+   "path": "assets/img/notes/a6d20ec612fcd200bf4aaa94679ab4c71f05fb0af01abd86afa9b555c2b27c1a.png",
+   "size_px": [
+    460,
+    316
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.5",
+   "source_file": "leph206.pdf",
+   "pdf_page": 6,
+   "crop_points": [
+    68,
+    443,
+    512,
+    669
+   ],
+   "caption": "(a) Schematic model of generation of hole at site 1 and conduction electron due to thermal energy at moderate temperatures. (b) Simplified representation of possible thermal motion of a hole. The electron from the lower left hand covalent bond (site 2) goes to the earlier hole site1, leaving a hole at its site indicating an apparent movement of the hole from site 1 to site 2.",
+   "sha256": "2d3cebf9810b7a10e227f13575ae2dd97be4208b9517e2ed20f0a985ce61c2e4",
+   "path": "assets/img/notes/2d3cebf9810b7a10e227f13575ae2dd97be4208b9517e2ed20f0a985ce61c2e4.png",
+   "size_px": [
+    888,
+    452
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.6",
+   "source_file": "leph206.pdf",
+   "pdf_page": 7,
+   "crop_points": [
+    199,
+    98,
+    521,
+    254
+   ],
+   "caption": "(a) An intrinsic semiconductor at T = 0 K behaves like insulator. (b) At T > 0 K, four thermally generated electron-hole pairs. The filled circles ( ) represent electrons and empty circles ( ) represent holes.",
+   "sha256": "2435657ae590a9adf3c977b9cb06666dd6707ac83352f2ec617d9236b902e6cf",
+   "path": "assets/img/notes/2435657ae590a9adf3c977b9cb06666dd6707ac83352f2ec617d9236b902e6cf.png",
+   "size_px": [
+    644,
+    312
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.7",
+   "source_file": "leph206.pdf",
+   "pdf_page": 8,
+   "crop_points": [
+    47,
+    98,
+    294,
+    407
+   ],
+   "caption": "(a) Pentavalent donor atom (As, Sb, P, etc.) doped for tetravalent Si or Ge giving n-type semiconductor, and (b) Commonly used schematic representation of n-type material which shows only the fixed cores of the substituent donors with one additional effective positive charge and its associated extra electron.",
+   "sha256": "c73b66e2f7adf73ff12906a65d89ca5c90ad313911e3046acc65d0954899d1b6",
+   "path": "assets/img/notes/c73b66e2f7adf73ff12906a65d89ca5c90ad313911e3046acc65d0954899d1b6.png",
+   "size_px": [
+    494,
+    618
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.8",
+   "source_file": "leph206.pdf",
+   "pdf_page": 9,
+   "crop_points": [
+    367,
+    98,
+    523,
+    420
+   ],
+   "caption": "(a) Trivalent acceptor atom (In, Al, B etc.) doped in tetravalent Si or Ge lattice giving p-type semiconductor. (b) Commonly used schematic representation of p-type material which shows only the fixed core of the substituent acceptor with one effective additional negative charge and its associated hole.",
+   "sha256": "45d0fde6ebfd16a6a6216846dc7ae6147e7ebc0f5ccd651ca98957c958a5021b",
+   "path": "assets/img/notes/45d0fde6ebfd16a6a6216846dc7ae6147e7ebc0f5ccd651ca98957c958a5021b.png",
+   "size_px": [
+    312,
+    644
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.9",
+   "source_file": "leph206.pdf",
+   "pdf_page": 10,
+   "crop_points": [
+    54,
+    373,
+    511,
+    556
+   ],
+   "caption": "Energy bands of (a) n-type semiconductor at T > 0K, (b) p-type semiconductor at T > 0K.",
+   "sha256": "0ce10c556fabf48265e2a4dad3de10fae52943a158b9e55deb3a50c9102f51c4",
+   "path": "assets/img/notes/0ce10c556fabf48265e2a4dad3de10fae52943a158b9e55deb3a50c9102f51c4.png",
+   "size_px": [
+    914,
+    366
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.10",
+   "source_file": "leph206.pdf",
+   "pdf_page": 11,
+   "crop_points": [
+    332,
+    574,
+    525,
+    677
+   ],
+   "caption": "p-n junction formation process.",
+   "sha256": "4183ef79c0f27d3f35c6f4540a6a4d9359badf4b92771e252eb0b645e8aeb0f5",
+   "path": "assets/img/notes/4183ef79c0f27d3f35c6f4540a6a4d9359badf4b92771e252eb0b645e8aeb0f5.png",
+   "size_px": [
+    386,
+    206
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.11",
+   "source_file": "leph206.pdf",
+   "pdf_page": 12,
+   "crop_points": [
+    46,
+    100,
+    201,
+    290
+   ],
+   "caption": "(a) Diode under equilibrium (V = 0), (b) Barrier potential under no bias.",
+   "sha256": "c1dc067a34808d21eb1cf111a0e732ea24c6c9ed9239a5253731239277cc0773",
+   "path": "assets/img/notes/c1dc067a34808d21eb1cf111a0e732ea24c6c9ed9239a5253731239277cc0773.png",
+   "size_px": [
+    310,
+    380
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.12",
+   "source_file": "leph206.pdf",
+   "pdf_page": 12,
+   "crop_points": [
+    54,
+    435,
+    239,
+    583
+   ],
+   "caption": "(a) Semiconductor diode, (b) Symbol for p-n junction diode.",
+   "sha256": "2f32714e8a02388dcfb855bc4c76e05e9f5af2654182a6c95ea008457f161954",
+   "path": "assets/img/notes/2f32714e8a02388dcfb855bc4c76e05e9f5af2654182a6c95ea008457f161954.png",
+   "size_px": [
+    370,
+    296
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.13",
+   "source_file": "leph206.pdf",
+   "pdf_page": 13,
+   "crop_points": [
+    366,
+    98,
+    523,
+    290
+   ],
+   "caption": "(a) p-n junction diode under forward bias, (b) Barrier potential (1) without battery, (2) Low battery voltage, and (3) High voltage battery.",
+   "sha256": "1f39d048c93078d36d0b976965e4e28a5c01b3e313b7ec856f1ced5773c00d62",
+   "path": "assets/img/notes/1f39d048c93078d36d0b976965e4e28a5c01b3e313b7ec856f1ced5773c00d62.png",
+   "size_px": [
+    314,
+    384
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.14",
+   "source_file": "leph206.pdf",
+   "pdf_page": 13,
+   "crop_points": [
+    354,
+    373,
+    523,
+    467
+   ],
+   "caption": "Forward bias minority carrier injection.",
+   "sha256": "3004898b5bb01888e29704233366d57ad1a6cf38f036990f80baf60dcf76df1f",
+   "path": "assets/img/notes/3004898b5bb01888e29704233366d57ad1a6cf38f036990f80baf60dcf76df1f.png",
+   "size_px": [
+    338,
+    188
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.15",
+   "source_file": "leph206.pdf",
+   "pdf_page": 14,
+   "crop_points": [
+    46,
+    98,
+    193,
+    287
+   ],
+   "caption": "(a) Diode under reverse bias, (b) Barrier potential under reverse bias.",
+   "sha256": "6e4952b0f3d23fee42ca28117451da9e63a071d62c681a8393790bdff0e56f46",
+   "path": "assets/img/notes/6e4952b0f3d23fee42ca28117451da9e63a071d62c681a8393790bdff0e56f46.png",
+   "size_px": [
+    294,
+    378
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.16",
+   "source_file": "leph206.pdf",
+   "pdf_page": 14,
+   "crop_points": [
+    45,
+    407,
+    524,
+    693
+   ],
+   "caption": "Experimental circuit arrangement for studying V-I characteristics of a p-n junction diode (a) in forward bias, (b) in reverse bias. (c) Typical V-I characteristics of a silicon diode.",
+   "sha256": "f6541b46dc185c36416ab1bf5b3f71ebe36639ec8c790c6f3054c38d7aa5a1f3",
+   "path": "assets/img/notes/f6541b46dc185c36416ab1bf5b3f71ebe36639ec8c790c6f3054c38d7aa5a1f3.png",
+   "size_px": [
+    958,
+    572
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.17",
+   "source_file": "leph206.pdf",
+   "pdf_page": 15,
+   "crop_points": [
+    129,
+    427,
+    328,
+    612
+   ],
+   "caption": "",
+   "sha256": "4a1309743839ab6dfac3bc8dc385133c8e212acfb5d9f1f2f3569cf2c84f8113",
+   "path": "assets/img/notes/4a1309743839ab6dfac3bc8dc385133c8e212acfb5d9f1f2f3569cf2c84f8113.png",
+   "size_px": [
+    398,
+    370
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.18",
+   "source_file": "leph206.pdf",
+   "pdf_page": 16,
+   "crop_points": [
+    44,
+    186,
+    267,
+    425
+   ],
+   "caption": "(a) Half-wave rectifier circuit, (b) Input ac voltage and output voltage waveforms from the rectifier circuit.",
+   "sha256": "8bada8d5226b41dc4e8ea6f23d050ad527ab4241492b8f3399f60ec0aa2fff6b",
+   "path": "assets/img/notes/8bada8d5226b41dc4e8ea6f23d050ad527ab4241492b8f3399f60ec0aa2fff6b.png",
+   "size_px": [
+    446,
+    478
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.19",
+   "source_file": "leph206.pdf",
+   "pdf_page": 17,
+   "crop_points": [
+    265,
+    98,
+    503,
+    489
+   ],
+   "caption": "(a) A Full-wave rectifier circuit; (b) Input wave forms given to the diode D1 at A and to the diode D2 at B; (c) Output waveform across the load RL connected in the full-wave rectifier circuit.",
+   "sha256": "503d44ec40727bc86db2d5dff48f43b95c46ba4b821956c5e8684b24f844f1e1",
+   "path": "assets/img/notes/503d44ec40727bc86db2d5dff48f43b95c46ba4b821956c5e8684b24f844f1e1.png",
+   "size_px": [
+    476,
+    782
+   ],
+   "verified": "visual inspection against rendered source page and crop"
+  },
+  {
+   "figure": "14.20",
+   "source_file": "leph206.pdf",
+   "pdf_page": 18,
+   "crop_points": [
+    46,
+    98,
+    523,
+    228
+   ],
+   "caption": "(a) A full-wave rectifier with capacitor filter, (b) Input and output voltage of rectifier in (a).",
+   "sha256": "3bf20ca3c6ebbcdd9e49e3edba6d63c98f94be99f278c1f3b519836d42d85d05",
+   "path": "assets/img/notes/3bf20ca3c6ebbcdd9e49e3edba6d63c98f94be99f278c1f3b519836d42d85d05.png",
+   "size_px": [
+    954,
+    260
    ],
    "verified": "visual inspection against rendered source page and crop"
   }
