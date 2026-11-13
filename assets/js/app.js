@@ -1708,7 +1708,7 @@ window.UP = window.UP || {};
       .then(({ ok, j }) => {
         clearTimeout(clientTimeout); clearTimeout(slowTimer);
         if (!isCurrent()) return;
-        if (ok && j && j.approaches && j.approaches.length >= 1) {
+        if (ok && j && j.approaches && j.approaches.length >= 4) {
           j = UP.answerFormat.answer(j);
           j.question = q; j.subjectRouting = routing; j.chapterTitle=chapterContext?P(chapterContext):'';
           j._chId = S.chapterId || 0;
@@ -1994,7 +1994,7 @@ window.UP = window.UP || {};
   function renderCachedAnswer(j, qq, sol, ansBox, id) {
     const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
     j = UP.answerFormat.answer(exact || j);
-    if (!j || j.policyVersion !== 'useful-approaches-v1' || !j.approaches || j.approaches.length < 1) return false;
+    if (!j || j.policyVersion !== 'four-approaches-v4' || !j.approaches || j.approaches.length < 4) return false;
     if(S.subject==='sanskrit'&&(!UP.languagePolicy.usableApproach({steps:[{t:j.answer||j.result||''}]},pyqQuestionText(qq),'sanskrit')||j.approaches.some(a=>!UP.languagePolicy.usableApproach(a,pyqQuestionText(qq),'sanskrit'))))return false;
     const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
       (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
@@ -2075,7 +2075,7 @@ window.UP = window.UP || {};
                                      : 'The server\'s reply could not be read (HTTP ' + reply.status + '). Try again.') + '</div></div>';
         return;
       }
-      if (!j.approaches || j.approaches.length < 1) {
+      if (!j.approaches || j.approaches.length < 4) {
         /* 401/403 = the sign-in lapsed or there is no API key. Show the LOCAL
            solver answer underneath the sign-in banner so the student still gets
            help, instead of a dead panel they cannot read. */
@@ -2189,6 +2189,7 @@ window.UP = window.UP || {};
     return `
     <section class="answer">
       ${localBadge}
+      ${!isLoading && methods.length < 4 ? '<p class="muted">' + (S.lang === 'hi' ? 'स्थानीय प्रारंभिक हल; चार पूर्ण तरीकों के लिए AI उत्तर माँगें।' : 'Local starter solution only; request an AI answer for four complete approaches.') + '</p>' : ''}
       <div class="answer-head">
         <div class="meta-row">
           <span class="tag">${esc(ch && !answerRoute.changed ? P({ en: ch.en, hi: ch.hi }) : (isLoading ? (S.lang==='hi'?'एआई':'AI') : (S.lang === 'hi' ? 'अवधारणा' : 'Concept')))}</span>
@@ -3303,6 +3304,50 @@ window.UP = window.UP || {};
   }
 
   /* =============================== AUTH / ACCOUNT =============================== */
+  let googleSignInPending = false;
+  async function startGoogleSignIn(button) {
+    if (googleSignInPending) return;
+    googleSignInPending = true;
+    const original = button.innerHTML;
+    button.disabled = true; button.setAttribute('aria-busy','true');
+    const errorBox = document.getElementById('authErr');
+    if(errorBox){ errorBox.textContent=''; errorBox.style.display='none'; }
+    const fail = message => { if(errorBox){errorBox.textContent=message; errorBox.style.display='block';} };
+    const ctrl = new AbortController();
+    const timer = setTimeout(()=>ctrl.abort(),8000);
+    try {
+      const client = await resolveSupabase();
+      const config = window.__SUPABASE_PUBLIC__;
+      if (!navigator.onLine || !client || !client.auth || !config) throw new Error('unavailable');
+      // Public provider discovery prevents redirecting to a disabled provider.
+      const response = await fetch(config.url+'/auth/v1/settings', {
+        headers:{apikey:config.key}, signal:ctrl.signal, cache:'no-store'
+      });
+      if (!response.ok) throw new Error('unavailable');
+      const settings = await response.json();
+      if (!settings.external || !settings.external.google) {
+        fail(S.lang==='hi'?'Google साइन-इन अभी सेट नहीं है। ईमेल से जारी रखें या व्यवस्थापक से संपर्क करें।':'Google sign-in is not configured yet. Continue with email or contact the site administrator.');
+        return;
+      }
+      button.textContent = S.lang==='hi'?'Google खोल रहे हैं…':'Opening Google…';
+      const result = await client.auth.signInWithOAuth({provider:'google',options:{
+        redirectTo:location.origin+'/', skipBrowserRedirect:true,
+        queryParams:{prompt:'select_account'}
+      }});
+      if (result.error || !result.data || !result.data.url) throw new Error('unavailable');
+      const target = new URL(result.data.url);
+      if (target.origin !== new URL(config.url).origin || target.pathname !== '/auth/v1/authorize') throw new Error('unavailable');
+      // The SDK handles OAuth state and the existing bootstrap consumes the returned session.
+      location.assign(target.href);
+    } catch (_) {
+      fail(S.lang==='hi'?'Google साइन-इन नहीं खुल सका। अपना कनेक्शन जाँचें या ईमेल से जारी रखें।':'Could not start Google sign-in. Check your connection and try again, or continue with email.');
+    } finally {
+      clearTimeout(timer); googleSignInPending=false;
+      button.disabled=false; button.removeAttribute('aria-busy');
+      if(button.isConnected) button.innerHTML=original;
+    }
+  }
+
   function viewLogin(params) {
     if (S.user) { setTimeout(() => go('#/home'), 0); return ''; }
     const mode = params.mode === 'signup' ? 'signup' : 'signin';
@@ -3326,8 +3371,11 @@ window.UP = window.UP || {};
         <p class="auth-sub">${mode==='signin'
           ?(isHi?'अपनी पढ़ाई जारी रखने के लिए साइन इन करें — आपके सहेजे प्रश्न व प्रगति वहीं मिलेंगे।':'Sign in to continue your studies. Saved questions can sync when your account is online; practice progress stays on this device.')
           :(isHi?'ऑनलाइन खाते से सहेजे प्रश्न सिंक हो सकते हैं; अभ्यास प्रगति इस डिवाइस पर रहती है।':'Saved questions can sync with an online account; practice progress stays on this device.')}</p>
-        <div class="auth-err" id="authErr"></div>
+        <div class="auth-err" id="authErr" role="alert" ${window.__UPAY_OAUTH_ERROR__?'style="display:block"':''}>${window.__UPAY_OAUTH_ERROR__ ? esc(S.lang==='hi'?'Google साइन-इन पूरा नहीं हुआ। फिर कोशिश करें या ईमेल से जारी रखें।':'Google sign-in was cancelled or could not be completed. Try again or continue with email.') : ''}</div>
         <div class="auth-ok" id="authOk"></div>
+        <button type="button" class="btn google-signin" data-action="google-signin"><span class="google-mark" aria-hidden="true">G</span>${isHi?'Google से जारी रखें':'Continue with Google'}</button>
+        <p class="auth-google-note">${isHi?'Google खाते से साइन इन करें या नया खाता बनाएँ।':'Sign in or create an account with your Google account.'}</p>
+        <div class="auth-divider"><span>${isHi?'या ईमेल से':'or continue with email'}</span></div>
         <form id="authForm" autocomplete="on">
           <div class="field" id="nameField" style="${mode==='signup'?'':'display:none'}">
             <label>${isHi?'आपका नाम':'Your name'}</label>
@@ -4824,7 +4872,7 @@ window.UP = window.UP || {};
       .then(({ok,j})=>{
         q.aiLoading=false;
         if (!isCurrent()) return;
-        if (ok && j.approaches && j.approaches.length >= 1) {
+        if (ok && j.approaches && j.approaches.length >= 4) {
           j = UP.answerFormat.answer(j);
           const first = j.approaches[0];
           q.aiSolution = Object.assign({}, j, {question:qText});
@@ -5496,6 +5544,7 @@ window.UP = window.UP || {};
     const tgt = e.target.closest('[data-action]');
     if (!tgt) return;
     const action = tgt.dataset.action;
+    if (action === 'google-signin') { e.preventDefault(); startGoogleSignIn(tgt); return; }
     if (action === 'ai-access-refresh' || action === 'ai-access-manage') { loadAIAccess(action === 'ai-access-manage'); return; }
     if (action === 'ai-access-request' || action === 'ai-access-decide') {
       const panel = document.getElementById('ai-access-panel');

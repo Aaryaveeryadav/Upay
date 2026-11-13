@@ -15,7 +15,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
   assert.equal(await page.evaluate(()=>UP.S.subject),'social','do not silently switch selected syllabus');
   assert.equal(await page.locator('#answerMount .figure-body').count(),0);
   assert(!/HCF|LCM|600|150, 200/.test(await page.locator('#answerMount').innerText()));
-  const fixture={source:'ai',policyVersion:'useful-approaches-v1',result:'जल संरक्षण सभी की साझा जिम्मेदारी है।',approaches:['तर्क आधारित','उदाहरण आधारित','समस्या और समाधान','प्रेरक शैली'].map(name=>({name,format:'prose',steps:[{t:'यह केवल परीक्षण का पाठ है, पूरा निबंध नहीं।'}]})),diagram:{type:'triangle',points:[{x:0,y:0},{x:1,y:0},{x:0,y:1}]}};
+  const fixture={source:'ai',policyVersion:'four-approaches-v4',result:'जल संरक्षण सभी की साझा जिम्मेदारी है।',approaches:['तर्क आधारित','उदाहरण आधारित','समस्या और समाधान','प्रेरक शैली'].map(name=>({name,format:'prose',steps:[{t:'यह केवल परीक्षण का पाठ है, पूरा निबंध नहीं।'}]})),diagram:{type:'triangle',points:[{x:0,y:0},{x:1,y:0},{x:0,y:1}]}};
   await pending.shift().fulfill({status:200,contentType:'application/json',body:JSON.stringify(fixture)});
   await page.waitForFunction(()=>UP.S.aiState==='done');
   assert.equal(await page.locator('.ai-answer .approach').count(),4);

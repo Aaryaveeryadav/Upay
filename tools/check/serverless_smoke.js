@@ -121,22 +121,22 @@ async function main() {
     r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Explain a policy test '+subject,subject,cls:12,minMethods:0}});
     assert.equal(r.code,200,subject); assert.equal(providerCalls,before+2);
     assert.equal(r.body.approaches.length,4); assert.equal(r.body.diagram.type,'flow');
-    assert.match(lastPrompt,/ONE complete approach is sufficient/);
+    assert.match(lastPrompt,/at least FOUR/);
     assert.match(lastPrompt,/REPAIR:/);
   }
-  // Natural counts need no repair or filler. Duplicate workings are collapsed.
+  // Short responses require repair; duplicates cannot satisfy the minimum.
   for(const count of [1,2,3]){
     const before=providerCalls;
-    queuedReplies=[JSON.stringify({answer:'Complete result',approaches:four().slice(0,count)})];
+    queuedReplies=[JSON.stringify({answer:'Complete result',approaches:four().slice(0,count)}),complete];
     r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Natural method count '+count,subject:'physics'}});
-    assert.equal(r.code,200);assert.equal(r.body.approaches.length,count);assert.equal(providerCalls,before+1);
+    assert.equal(r.code,200);assert.equal(r.body.approaches.length,4);assert.equal(providerCalls,before+2);
   }
-  queuedReplies=[JSON.stringify({answer:'A',approaches:[four()[0],four()[0],{...four()[0],name:'Renamed copy'}]})];
+  queuedReplies=[1,2].map(()=>JSON.stringify({answer:'A',approaches:[four()[0],four()[0],{...four()[0],name:'Renamed copy'}]}));
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Collapse duplicate method fixture',subject:'physics'}});
-  assert.equal(r.code,200);assert.equal(r.body.approaches.length,1);
+  assert.equal(r.code,502);
   queuedReplies=[short,short];
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Reject genuinely empty fixture',subject:'physics'}});
-  assert.equal(r.code,502);assert.match(r.body.error,/complete usable answer/);
+  assert.equal(r.code,502);assert.match(r.body.error,/four distinct complete approaches/);
   queuedReplies = [];
   r = await invoke(readImage,{method:'POST',token:'valid',body:{}}); assert.equal(r.code,400);
   r = await invoke(readImage,{method:'POST',token:'valid',body:{data:'a'.repeat(240),mime:'image/png'}});
@@ -151,26 +151,26 @@ async function main() {
   const stream = Readable.from([Buffer.from('{"one":1}')]);
   assert.deepEqual(await lib.readBody(stream), {one:1});
   assert.deepEqual(await lib.readBody({body:Buffer.from('{"two":2}')}), {two:2});
-  queuedReplies=[JSON.stringify({answer:'Three useful approaches',approaches:four().slice(0,3)})];
+  queuedReplies=[1,2].map(()=>JSON.stringify({answer:'Three useful approaches',approaches:four().slice(0,3)}));
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Accept a three-approach response under the new policy',subject:'physics'}});
-  assert.equal(r.code,200);assert.equal(r.body.approaches.length,3);
+  assert.equal(r.code,502);
   const hindiPrompt='“जल संरक्षण केवल सरकार की जिम्मेदारी नहीं, हर नागरिक का कर्तव्य है।” इस विषय पर लगभग 150–200 शब्दों में अपने विचार लिखिए।';
   replyText=JSON.stringify({answer:'एक लेखन उत्तर',approaches:four()});
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:hindiPrompt,subject:'social',cls:10,lang:'en'}});
   assert.equal(r.code,200);assert.equal(r.body.subjectRouting.subject,'hindi');
-  assert.match(lastPrompt,/Class 10 hindi/i);assert.match(lastPrompt,/one complete response by default/);
+  assert.match(lastPrompt,/Class 10 hindi/i);assert.match(lastPrompt,/FOUR complete alternative responses/);
   assert.equal(r.body.approaches.length,4);
   const letterQuestion = 'Write a formal letter to the editor arguing against replacing a public park with a parking lot. Discuss health, environment and access to public space, and suggest a practical alternative.';
   const letter = '[Your address]\n[Date]\nThe Editor\n[Newspaper]\n[Town]\nSubject: Preserve our public park\nSir or Madam,\nThrough your newspaper, I urge the council to retain our public park rather than replace it with a parking lot.\nThe park offers free space for walking, exercise and play. Its loss would particularly affect children and older residents who cannot afford private recreation. Trees provide shade, absorb some pollutants and help rainwater soak into the soil; paving the site would increase heat and runoff.\nPublic green space belongs to everyone, including households without cars. Convenient parking should not take priority over their access to recreation and community life.\nThe council should instead improve existing parking on already paved land, introduce timed parking near shops and strengthen bus connections. Please encourage a public consultation before any decision.\nYours faithfully,\n[Your name]';
   queuedReplies = [JSON.stringify({answer:'Four complete formal letter options', approaches:four()})];
-  replyText = JSON.stringify({answer:'I urge the council to retain our public park.', approaches:four().slice(0,1).map((a,i)=>({name:a.name, steps:[{t:letter.replace('Preserve our public park', ['Save our green space','Protect shared recreation','Choose sustainable parking','Keep the park accessible'][i])}]}))});
+  replyText = JSON.stringify({answer:'I urge the council to retain our public park.', approaches:four().map((a,i)=>({name:a.name, steps:[{t:letter.replace('Preserve our public park', ['Save our green space','Protect shared recreation','Choose sustainable parking','Keep the park accessible'][i])}]}))});
   const beforeLetter = providerCalls;
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:letterQuestion,subject:'social'}});
   assert.equal(r.code,200); assert.equal(providerCalls,beforeLetter+2,'outline must trigger repair');
   assert.equal(callBudgets.at(-1),callBudgets.at(-2),'repair uses the exact same budget and signal');
   assert(callBudgets.at(-1).signal.aborted,'successful request releases provider resources');
   assert(callBudgets.at(-1).deadline > Date.now() && callBudgets.at(-1).deadline <= Date.now()+140000);
-  assert.equal(r.body.approaches.length,1);
+  assert.equal(r.body.approaches.length,4);
   assert(r.body.approaches.every(a=>a.format==='prose' && a.steps[0].t.includes('Yours faithfully')));
   assert.match(lastPrompt,/actual finished prose/);
   queuedReplies=[1,2].map(()=>JSON.stringify({answer:'Four letter options',approaches:four()}));

@@ -14,8 +14,8 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
   ];
   await page.evaluate(()=>{UP.S.subject='social';location.hash='#/ask?q=Explain%20federalism.';});
   await page.waitForFunction(()=>UP.S.aiState==='loading');await page.waitForTimeout(50);
-  await pending.shift().fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',policyVersion:'useful-approaches-v1',result:'Power is constitutionally divided between levels of government.',approaches:[1,2,3].map(i=>({name:'Complete explanation '+i,format:'prose',steps:paragraphs.map(t=>({t}))}))})});
-  await page.waitForFunction(()=>UP.S.aiState==='done');assert.equal(await page.locator('.ai-answer .approach').count(),3);
+  await pending.shift().fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',policyVersion:'four-approaches-v4',result:'Power is constitutionally divided between levels of government.',approaches:[1,2,3,4].map(i=>({name:'Complete explanation '+i,format:'prose',steps:paragraphs.map(t=>({t}))}))})});
+  await page.waitForFunction(()=>UP.S.aiState==='done');assert.equal(await page.locator('.ai-answer .approach').count(),4);
   const spacing=await page.locator('.ai-answer .approach').first().locator('ol.prose-answer > li').evaluateAll(els=>els.map(el=>({top:el.getBoundingClientRect().top,bottom:el.getBoundingClientRect().bottom,height:el.getBoundingClientRect().height,whiteSpace:getComputedStyle(el).whiteSpace,after:getComputedStyle(el,'::after').display})));
   for(let i=0;i<spacing.length;i++){
    assert.equal(spacing[i].whiteSpace,'normal');assert.equal(spacing[i].after,'none');
@@ -23,6 +23,8 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
    if(i)assert(spacing[i].top-spacing[i-1].bottom<=25,'paragraph gap should remain compact');
   }
   const first=page.locator('.ai-answer .approach').nth(0);
+  const borders=await page.locator('.ai-answer .approach').evaluateAll(els=>els.map(el=>getComputedStyle(el).borderTopColor));
+  assert(borders.every(color=>color==='rgb(231, 0, 44)'), 'every solution card must match the red navigation outline');
   for(let i=0;i<12;i++){
    await first.locator('[data-action="toggle"]').click();assert.equal(await first.locator('.next-method-cta').count(),0);
    await first.locator('[data-action="toggle"]').click();assert.equal(await first.locator('.next-method-cta').count(),1);
@@ -35,13 +37,14 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
   await page.locator('.ai-answer .approach').nth(1).locator('[data-action="toggle"]').click();assert.equal(await first.locator('.next-method-cta').count(),1);
   await page.evaluate(()=>location.hash='#/ask?q=Define%20federalism%20briefly.');
   await page.waitForFunction(()=>UP.S.aiState==='loading');await page.waitForTimeout(50);
-  await pending.shift().fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',policyVersion:'useful-approaches-v1',result:'A constitutional division of government powers.',approaches:[{name:'Direct definition',format:'prose',steps:[{t:paragraphs[0]}]}]})});
-  await page.waitForFunction(()=>UP.S.aiState==='done');assert.equal(await page.locator('.ai-answer .approach').count(),1);
-  assert.equal(await page.locator('.next-method-cta,.show-all-btn').count(),0);
-  assert(!(await page.locator('.ai-answer').innerText()).includes('at least four'));
+  await pending.shift().fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',policyVersion:'four-approaches-v4',result:'A constitutional division of government powers.',approaches:[1,2,3,4].map(i=>({name:'Complete definition '+i,format:'prose',steps:[{t:paragraphs[0]}]}))})});
+  await page.waitForFunction(()=>UP.S.aiState==='done');assert.equal(await page.locator('.ai-answer .approach').count(),4);
+  assert.equal(await page.locator('.next-method-cta').count(),1);
+  assert.equal(await page.locator('.show-all-btn').count(),1);
+  assert.equal(await page.locator('.ai-answer .approach').count(),4);
   if(width===1280)await page.locator('.ai-answer').screenshot({path:'/tmp/upay-adaptive-prose.png'});
   assert.deepEqual(errors,[]);
-  console.log(`PASS ${width}px: one/three complete approaches, compact prose/no step connector, repeated toggles without duplicate navigation, correct next/show-all state`);
+  console.log(`PASS ${width}px: four complete approaches, compact prose/no step connector, repeated toggles without duplicate navigation, correct next/show-all state`);
   await context.close();
  }}finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

@@ -98,7 +98,7 @@ module.exports = async function handler(req, res) {
     ' "check":"<how to verify the answer>",',
     ' "diagram":{"type":"plane|triangle|circle|bars|solid","points":[...],"circles":[...],"segments":[...],"bars":[...],"parts":[...],"labels":[...],"caption":"..."}}',
     'Rules:',
-    '- Give only genuinely useful complete approaches; one is sufficient, and no fixed count is required. Same working under two labels is forbidden.',
+    '- Give at least four genuinely useful complete approaches. Same working under two labels is forbidden.',
     '- Every step shows real working with the question\'s own numbers.',
     '- Verify arithmetic before writing. No unique answer? Say so in "answer".',
     '- Use · for decimals, √ π θ ° ∠ △ ⇒ as needed.',
@@ -122,7 +122,7 @@ module.exports = async function handler(req, res) {
     ' "check":"<how to verify>",',
     ' "diagram":<either null (no figure needed) OR a figure object below>}',
     'Rules:',
-    '- Give only genuinely useful complete approaches; one is sufficient, and no fixed count is required.',
+    '- Give at least four genuinely useful complete approaches.',
     '- Numericals: show every substitution with units. Balance every equation atom-by-atom.',
     '- Hindi NOT needed — English only.',
     '- Return a "diagram" ONLY when the question is about something that has a diagram:',
@@ -200,7 +200,7 @@ module.exports = async function handler(req, res) {
     // One bounded repair call, sharing the original adaptive deadline.
     let draft;
     try { draft = firstJSON(out.text); } catch (_) { draft = null; }
-    if (draft && solvePolicy.completeApproaches(draft, question, subject).length < 1) {
+    if (draft && solvePolicy.completeApproaches(draft, question, subject).length < 4) {
       out = await Promise.race([
         callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), null, out.model, null, callOptions),
         timeoutPromise
@@ -248,8 +248,8 @@ module.exports = async function handler(req, res) {
       : 'AI-generated; not independently checked.' },
     generatedAt: new Date().toISOString()
   };
-  if (answer.approaches.length < 1 || !answer.result) {
-    return json(res, 502, { error: 'The AI could not provide a complete usable answer. Please try again.', fallback: true });
+  if (answer.approaches.length < 4 || !answer.result) {
+    return json(res, 502, { error: 'The AI could not provide four distinct complete approaches. Please try again.', fallback: true });
   }
   if (!noOfficialKey) cacheSet(cacheKey, answer);
   return json(res, 200, answer);
