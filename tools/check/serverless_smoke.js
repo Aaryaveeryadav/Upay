@@ -7,16 +7,17 @@ process.env.UPAY_AI_ALLOWED_USERS = 'allowed-test-user,allowed-test-user-2';
 process.env.SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_test_fixture';
 process.env.SUPABASE_ANON_KEY = 'legacy_test_fixture';
 const lib = require('../../lib/gemini.js');
-let providerCalls = 0, lastPrompt = '', replyText = '', queuedReplies = [];
+let providerCalls = 0, lastPrompt = '', replyText = '', queuedReplies = [], callBudgets = [];
 const four = () => [
   {name:'First principles', steps:[{t:'The underlying principle links the supplied information to the conclusion, with the assumptions stated explicitly.'}]},
   {name:'Worked application', steps:[{t:'A concrete application illustrates the principle while the boundary conditions show where the comparison stops being valid.'}]},
   {name:'Comparison', steps:[{t:'The relevant concepts differ in their scope and conditions, and this distinction determines which conclusion follows.'}]},
   {name:'Independent check', steps:[{t:'The conclusion is consistent with the requirements because each condition is satisfied without introducing unsupported assumptions.'}]}
 ];
-lib.callGeminiResilient = async function (prompt, keys, model, image) {
+lib.callGeminiResilient = async function (prompt, keys, model, image, options) {
   providerCalls++;
   lastPrompt = prompt;
+  if (options) callBudgets.push(options);
   if (image) return { text: 'Read a question from the photo', model: 'mock-model' };
   return { text: queuedReplies.length ? queuedReplies.shift() : replyText, model: 'mock-model' };
 };
@@ -157,6 +158,9 @@ async function main() {
   const beforeLetter = providerCalls;
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:letterQuestion,subject:'social'}});
   assert.equal(r.code,200); assert.equal(providerCalls,beforeLetter+2,'outline must trigger repair');
+  assert.equal(callBudgets.at(-1),callBudgets.at(-2),'repair uses the exact same budget and signal');
+  assert(callBudgets.at(-1).signal.aborted,'successful request releases provider resources');
+  assert(callBudgets.at(-1).deadline > Date.now() && callBudgets.at(-1).deadline <= Date.now()+50000);
   assert(r.body.approaches.every(a=>a.format==='prose' && a.steps[0].t.includes('Yours faithfully')));
   assert.match(lastPrompt,/actual finished prose/);
   queuedReplies=[1,2].map(()=>JSON.stringify({answer:'Four letter options',approaches:four()}));

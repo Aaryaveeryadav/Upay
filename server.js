@@ -15,6 +15,8 @@
 'use strict';
 const taskRouting = require('./assets/js/task-routing.js');
 const solvePolicy = require('./lib/solve-policy.js');
+const solveRuntime = require('./lib/gemini.js');
+const { aiFailure: solveFailure } = require('./lib/ai-status.js');
 
 const http = require('http');
 const fs = require('fs');
@@ -1898,36 +1900,25 @@ const handleRequest = async function (req, res) {
       ]).filter(Boolean).join('\n');
 
       let out;
+      const solveController = new AbortController();
+      const callOptions = {deadline:Date.now()+50000, signal:solveController.signal};
+      const solveTimer = setTimeout(()=>solveController.abort(), 50000);
       try {
-        out = await callGeminiResilient(prompt, plain, db.settings.geminiModel);
+        out = await solveRuntime.callGeminiResilient(prompt, plain, db.settings.geminiModel, null, callOptions);
         let draft;
         try { draft = firstJSON(out.text); } catch (_) { draft = null; }
         if (draft && solvePolicy.completeApproaches(draft, question).length < 4) {
-          out = await callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), plain, out.model);
+          out = await solveRuntime.callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), plain, out.model, null, callOptions);
         }
       } catch (e) {
         audit(sess.user, 'solve-error', String(e.message).slice(0, 140));
         saveDB();
-        const msg = String(e.message || e);
-        let said = 'The AI call failed: ' + msg.slice(0, 240);
-        /* A free-tier 429 is usually the DAILY cap, not a per-minute burst —
-           telling the student "try again in a minute" is a lie that wastes
-           their time, so say what actually happened. */
-        if (/\b429\b/.test(msg)) said = /per day|daily|perday|quota/i.test(msg)
-          ? (noOfficialKey ? 'The AI quota for today is used up. There is no verified local solution for this question.' : 'The free AI quota for today is used up. The built-in solver below still works offline — or the admin can add a fresh API key in Admin → AI.')
-          : 'The AI is being asked too often right now. Wait a minute and try again.';
-        else if (/\b503\b/.test(msg)) said = 'The AI model is busy at the moment. Please try again in a few seconds.';
-        /* pass Google's own retryDelay through so a caller can wait exactly as
-           long as asked instead of guessing */
-        let retryAfter = 0;
-        const raw = String(e.raw || msg);
-        const m = raw.match(/"retryDelay"\s*:\s*"(\d+(?:\.\d+)?)s"/)
-          || raw.match(/retryDelay['"]?\s*[:=]\s*['"]?(\d+)s/i)
-          || raw.match(/retry in ([\d.]+)\s*s/i);
-        if (m) retryAfter = Math.ceil(Number(m[1]));
-        /* > 10 minutes means the daily allowance, not a burst: stop trying. */
-        if (retryAfter > 600) keyDeadUntil = Date.now() + Math.min(retryAfter, 6 * 3600) * 1000;
-        return json(res, 502, { error: said, rateLimited: /\b429\b/.test(msg), retryAfter: retryAfter, fallback: true });
+        const failure = solveFailure(e);
+        if (failure.body.retryAfter) res.setHeader('retry-after', String(failure.body.retryAfter));
+        return json(res, failure.http, failure.body);
+      } finally {
+        clearTimeout(solveTimer);
+        solveController.abort();
       }
       let parsed;
       try {

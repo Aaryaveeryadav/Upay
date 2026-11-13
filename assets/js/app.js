@@ -1668,13 +1668,13 @@ window.UP = window.UP || {};
       const m = mount();
       if (!m || !isCurrent() || S.aiState !== 'loading') return;
       const sp = document.getElementById('aiRequestStatus');
-      if (sp) sp.textContent = S.lang === 'hi' ? 'AI अभी काम कर रहा है — इसमें लगभग 30 सेकंड तक लग सकते हैं।' : 'Still preparing and checking the explanations — this can take up to about 30 seconds.';
+      if (sp) sp.textContent = S.lang === 'hi' ? 'AI अभी काम कर रहा है — इसमें लगभग 50 सेकंड तक लग सकते हैं।' : 'Still preparing and checking the explanations — this can take up to about 50 seconds.';
     }, 6000);
     let controller;
     try { controller = new AbortController(); } catch(e) { controller = null; }
-    // Allow the server's 30-second deadline plus transport time; do not
-    // discard a valid 26–30 second answer by aborting at 25 seconds.
-    const clientTimeout = setTimeout(() => { if (controller) controller.abort(); }, 35000);
+    // Allow the server's 50-second provider budget, authentication and transport.
+    // Keep the timer alive while reading the response body as well.
+    const clientTimeout = setTimeout(() => { if (controller) controller.abort(); }, 65000);
     let req;
     try {
       if (typeof fetch !== 'function') { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'इस ब्राउज़र में नेटवर्क उपलब्ध नहीं' : 'no network available here', true); return; }
@@ -1686,11 +1686,14 @@ window.UP = window.UP || {};
       });
     } catch (e) { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'नेटवर्क से संपर्क नहीं हुआ' : 'could not reach the server', true); return; }
     req.then(r => {
-      clearTimeout(clientTimeout); clearTimeout(slowTimer);
       if (!r) throw new Error('no response');
-      return r.json().catch(() => ({ error: 'bad-response' })).then(j => ({ ok: r.ok, j }));
+      return r.json().catch(e => {
+        if (controller && controller.signal.aborted) throw e;
+        return { error: 'The server returned an unreadable answer. Your question is preserved; try again.' };
+      }).then(j => ({ ok: r.ok, j }));
     })
       .then(({ ok, j }) => {
+        clearTimeout(clientTimeout); clearTimeout(slowTimer);
         if (!isCurrent()) return;
         if (ok && j && j.approaches && j.approaches.length >= 4) {
           j = UP.answerFormat.answer(j);

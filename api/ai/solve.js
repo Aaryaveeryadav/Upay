@@ -40,6 +40,7 @@ module.exports = async function handler(req, res) {
     return res.status(204).send('');
   }
   if (req.method !== 'POST') return json(res, 405, { error: 'POST only' });
+  const solveDeadline = Date.now() + 50000;
   // Provider-backed calls spend the owner's quota. Require a verified Supabase
   // session; this is not a substitute for production abuse/rate controls.
   const user = await requireStudent(req, res);
@@ -169,27 +170,30 @@ module.exports = async function handler(req, res) {
 
   const prompt = topicPrompt.concat([solvePolicy.instructions,'', 'QUESTION: ' + question]).join('\n');
 
-  // Overall request ceiling — never let the endpoint hang past 30s total
+  // 50-second request budget leaves headroom under Vercel’s 60-second limit.
+  const providerController = new AbortController();
+  const callOptions = {deadline:solveDeadline, signal:providerController.signal};
   let timeoutId;
   const timeoutPromise = new Promise((_, rej) => { timeoutId = setTimeout(() => {
-    const err = new Error('The AI is taking too long; showing the built-in solver.');
+    providerController.abort();
+    const err = new Error('AI request deadline exceeded');
     err.status = 504; err.raw = 'deadline';
     rej(err);
-  }, 30000); });
+  }, Math.max(1, solveDeadline - Date.now())); });
 
   let out, model;
   try {
     // Prefer fast models for the first hit; chain falls back to larger ones if needed
     out = await Promise.race([
-      callGeminiResilient(prompt, null, 'gemini-3.5-flash-lite'),
+      callGeminiResilient(prompt, null, 'gemini-3.5-flash-lite', null, callOptions),
       timeoutPromise
     ]);
-    // One bounded repair call, sharing the original 30-second deadline.
+    // One bounded repair call, sharing the original 50-second deadline.
     let draft;
     try { draft = firstJSON(out.text); } catch (_) { draft = null; }
     if (draft && solvePolicy.completeApproaches(draft, question).length < 4) {
       out = await Promise.race([
-        callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), null, out.model),
+        callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), null, out.model, null, callOptions),
         timeoutPromise
       ]);
     }
@@ -200,6 +204,7 @@ module.exports = async function handler(req, res) {
     return json(res, failure.http, failure.body);
   } finally {
     clearTimeout(timeoutId);
+    providerController.abort();
   }
 
   let parsed;
