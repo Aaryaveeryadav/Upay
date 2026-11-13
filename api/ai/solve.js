@@ -1,5 +1,6 @@
 'use strict';
 const squareInteger = require('../../assets/js/square-integers.js');
+const solveTiming = require('../../assets/js/solve-timing.js');
 const taskRouting = require('../../assets/js/task-routing.js');
 const solvePolicy = require('../../lib/solve-policy.js');
 const { consumeAI } = require('../../lib/ai-usage.js');
@@ -40,7 +41,7 @@ module.exports = async function handler(req, res) {
     return res.status(204).send('');
   }
   if (req.method !== 'POST') return json(res, 405, { error: 'POST only' });
-  const solveDeadline = Date.now() + 50000;
+  const solveStarted = Date.now();
   // Provider-backed calls spend the owner's quota. Require a verified Supabase
   // session; this is not a substitute for production abuse/rate controls.
   const user = await requireStudent(req, res);
@@ -57,6 +58,10 @@ module.exports = async function handler(req, res) {
       const subject = subjectRouting.subject;
       if (subjectRouting.language) b.lang = subjectRouting.language;
       if (subjectRouting.changed) b.chapter = 0;
+  const timing = solveTiming.forQuestion(question,subject);
+  const solveDeadline = solveStarted + timing.serverMs;
+  const clarification = squareInteger.clarification(question);
+  if (clarification) return json(res, 422, clarification);
   const cls = Number(b.cls) || 10;
   const exact = ['maths','applied-maths'].includes(subject) && squareInteger.solve(question, b.lang);
   if (exact) return json(res, 200, Object.assign({subjectRouting},exact));
@@ -170,9 +175,9 @@ module.exports = async function handler(req, res) {
 
   const prompt = topicPrompt.concat([solvePolicy.instructions,'', 'QUESTION: ' + question]).join('\n');
 
-  // 50-second request budget leaves headroom under Vercel’s 60-second limit.
+  // Shared adaptive budget leaves headroom under the solve function duration.
   const providerController = new AbortController();
-  const callOptions = {deadline:solveDeadline, signal:providerController.signal};
+  const callOptions = {deadline:solveDeadline, signal:providerController.signal, attemptMs:timing.attemptMs, maxOutputTokens:timing.maxOutputTokens};
   let timeoutId;
   const timeoutPromise = new Promise((_, rej) => { timeoutId = setTimeout(() => {
     providerController.abort();
@@ -188,7 +193,7 @@ module.exports = async function handler(req, res) {
       callGeminiResilient(prompt, null, 'gemini-3.5-flash-lite', null, callOptions),
       timeoutPromise
     ]);
-    // One bounded repair call, sharing the original 50-second deadline.
+    // One bounded repair call, sharing the original adaptive deadline.
     let draft;
     try { draft = firstJSON(out.text); } catch (_) { draft = null; }
     if (draft && solvePolicy.completeApproaches(draft, question).length < 4) {

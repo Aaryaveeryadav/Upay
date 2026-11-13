@@ -15,14 +15,14 @@
   const mcq=options.length>=2 && options.length<=6;
   // Multi-mark workings, essays and semantic theory answers need human rubric review.
   let target=norm(expected),picked=value,canMark=false;
-  if(expected&&max!==null&&mcq){
+  if(expected&&mcq){
    const optionIndex=v=>{const letter=v.match(/^\(?([a-f])\)?[.)]?$/i);if(letter)return letter[1].toLowerCase().charCodeAt(0)-97;return options.findIndex(o=>norm(o)===v||o&&norm(o.hi)===v);};
    const ki=optionIndex(target),ai=optionIndex(picked);
    if(ki>=0&&ki<options.length){canMark=true;target=String(ki);picked=ai>=0?String(ai):'';}
   }else if(expected&&max===1&&numeric(expected)!==null){canMark=!value||numeric(answer)!==null;target=numeric(expected);picked=numeric(answer);}
   if(!canMark)return {status:value?'pending':'unattempted',awarded:null,max,expected,reason:'review'};
   const ok=value!==''&&picked===target;
-  return {status:!value?'unattempted':ok?'correct':'incorrect',awarded:ok?max:0,max,expected,reason:'verified-key'};
+  return {status:!value?'unattempted':ok?'correct':'incorrect',awarded:max===null?null:ok?max:0,max,expected,reason:'verified-key'};
  }
  function score(test){
   const r={earned:0,gradable:0,knownTotal:0,unknownMarks:0,pendingMarks:0,pending:0,attempted:0,total:test.items.length,selfEarned:0,selfPossible:0,selfReviewed:0};

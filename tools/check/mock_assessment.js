@@ -22,3 +22,6 @@ assert.equal(a.score({items,answers:{},reviewMarks:{2:2.5,3:1}}).selfEarned,2.5)
 assert.equal(a.score({items,answers:{},reviewMarks:{2:4}}).selfReviewed,0,'cannot exceed supplied marks');
 
 assert.equal(a.assess({source:{m:1,keyVerified:true,ans:'22'}},'2²').awarded,null,'never flatten exponents into decimal digits');
+
+const unknownMarkMCQ={source:{...mcq.source,m:null}};
+assert.equal(a.assess(unknownMarkMCQ,'A').status,'incorrect');assert.equal(a.assess(unknownMarkMCQ,'A').awarded,null,'checked correctness does not invent missing marks');

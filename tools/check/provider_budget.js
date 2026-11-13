@@ -43,5 +43,15 @@ const reply=text=>({ok:true,status:200,text:async()=>JSON.stringify({candidates:
  const pending=api.callGeminiResilient('science',['fixture-key'],null,null,{deadline:Date.now()+50000,signal:controller.signal}).catch(e=>canceled=e);
  await flush();controller.abort();await flush();await pending;
  assert.equal(canceled.status,504);assert.equal(calls,4);assert.equal(aborts,4);
+ // Long compositions get a larger per-model slice and output budget.
+ const profile=require('../../assets/js/solve-timing').forQuestion('Write a formal letter','english');
+ let requestedTokens;
+ global.fetch=(_url,{body,signal})=>new Promise((resolve,reject)=>{
+  requestedTokens=JSON.parse(body).generationConfig.maxOutputTokens;
+  const timer=setTimeout(()=>resolve(reply('complete long composition')),60000);
+  signal.addEventListener('abort',()=>{clearTimeout(timer);reject(new Error('aborted'));},{once:true});
+ });
+ api=fresh();const long=api.callGeminiResilient('letter',['fixture-key'],null,null,{deadline:Date.now()+profile.serverMs,attemptMs:profile.attemptMs,maxOutputTokens:profile.maxOutputTokens});
+ await flush();mock.timers.tick(60000);await flush();assert.equal((await long).text,'complete long composition');assert.equal(requestedTokens,12288);
  console.log('PASS provider budget: 20s answers, stalled-model fallback, shared total deadline, repair budget and canceled work');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>mock.timers.reset());

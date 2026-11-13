@@ -47,7 +47,7 @@ window.UP = window.UP || {};
     store.remove(mockStoreKey());
     clearInterval(window.__mtTimer);
   }
-  S.hardList = [];
+  S.hardList = []; S.mistakeQueue = [];
   S.dailyProgress = {};
   S.cmdkOpen = false; S.supabaseReady = false;
   S.q = '';                             // current question text
@@ -73,9 +73,11 @@ window.UP = window.UP || {};
     const daily = store.get(scopedDataKey('dailyProgress'), {});
     S.mastery = mastery && typeof mastery === 'object' && !Array.isArray(mastery) ? mastery : {};
     S.hardList = Array.isArray(hard) ? hard : [];
+    const mistakes=store.get(scopedDataKey('mistakeQueue'),[]);S.mistakeQueue=Array.isArray(mistakes)?mistakes:[];
     S.dailyProgress = daily && typeof daily === 'object' && !Array.isArray(daily) ? daily : {};
   }
   function saveMastery() { store.set(scopedDataKey('mastery'), S.mastery); }
+  function saveMistakeQueue(){store.set(scopedDataKey('mistakeQueue'),S.mistakeQueue);}
   function saveHardList() { store.set(scopedDataKey('hardList'), S.hardList); }
   function saveDailyProgress() { store.set(scopedDataKey('dailyProgress'), S.dailyProgress); }
   syncStudyScope();
@@ -1621,6 +1623,7 @@ window.UP = window.UP || {};
     S.aiErrorCode = ''; S.aiRetryAt = 0;
     const routing = UP.taskRouting.resolve(q, S.subject);
     const responseLang = routing.language || S.lang;
+    const timing = UP.solveTiming.forQuestion(q,routing.subject);
     const scope = aiScope();
     const isCurrent = () => S.aiQuestion === q && S.aiScope === scope && aiScope() === scope;
     const mount = () => document.getElementById('answerMount');
@@ -1632,6 +1635,8 @@ window.UP = window.UP || {};
       const thinking = document.getElementById('aiThinking');
       if (thinking && S.aiState !== 'loading') thinking.remove();
     };
+    const clarification=UP.squareInteger.clarification(q);
+    if(clarification){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'question-clarification',question:q,...clarification};paint();return;}
     const exact = ['maths','applied-maths'].includes(routing.subject) && UP.squareInteger.solve(q, responseLang);
     if (exact) {
       exact.subjectRouting = routing; S.aiAnswer = exact; S.aiState = 'done'; paint(); return;
@@ -1668,13 +1673,13 @@ window.UP = window.UP || {};
       const m = mount();
       if (!m || !isCurrent() || S.aiState !== 'loading') return;
       const sp = document.getElementById('aiRequestStatus');
-      if (sp) sp.textContent = S.lang === 'hi' ? 'AI अभी काम कर रहा है — इसमें लगभग 50 सेकंड तक लग सकते हैं।' : 'Still preparing and checking the explanations — this can take up to about 50 seconds.';
+      if (sp) sp.textContent = S.lang === 'hi' ? 'AI अभी काम कर रहा है — इसमें लगभग '+(timing.serverMs/1000)+' सेकंड तक लग सकते हैं।' : 'Still preparing and checking the complete explanations — this can take up to about '+(timing.serverMs/1000)+' seconds.';
     }, 6000);
     let controller;
     try { controller = new AbortController(); } catch(e) { controller = null; }
     // Allow the server's 50-second provider budget, authentication and transport.
     // Keep the timer alive while reading the response body as well.
-    const clientTimeout = setTimeout(() => { if (controller) controller.abort(); }, 65000);
+    const clientTimeout = setTimeout(() => { if (controller) controller.abort(); }, timing.clientMs);
     let req;
     try {
       if (typeof fetch !== 'function') { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'इस ब्राउज़र में नेटवर्क उपलब्ध नहीं' : 'no network available here', true); return; }
@@ -1703,6 +1708,7 @@ window.UP = window.UP || {};
           pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
           bumpProgress(S.subject);
         } else {
+          if(j&&j.code==='question_needs_confirmation'){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'question-clarification',question:q,...j};paint();return;}
           S.aiErrorCode = j && j.code || '';
         S.aiRetryAt = j && Number.isFinite(j.retryAfter) && j.retryAfter > 0 ? Date.now() + j.retryAfter*1000 : 0;
         const retryHint = j && Number.isFinite(j.retryAfter) && j.retryAfter > 0 ? ' Retry after '+Math.ceil(j.retryAfter)+' seconds.' : '';
@@ -1862,6 +1868,8 @@ window.UP = window.UP || {};
     return fig;
   }
   function renderAIAnswer(a) {
+    const clarification=UP.squareInteger.clarification(a.question || S.aiQuestion || '');
+    if(clarification)return renderAnswer({kind:'question-clarification',question:a.question||S.aiQuestion,...clarification});
     // Also replace legacy/cached drafts for this narrowly supported problem.
     const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(a.question || S.aiQuestion || '', S.lang);
     if (exact && a === S.aiAnswer) S.aiAnswer = exact;
@@ -2137,6 +2145,8 @@ window.UP = window.UP || {};
   }
 
   function renderAnswer(ans) {
+    if(ans.kind==='question-clarification')return `<div class="callout warn question-clarification"><div><h3>Confirm the question first</h3><p>${esc(ans.question)}</p><p>${esc(ans.error)}</p><p><b>Possible intended question (please check):</b> ${esc(ans.suggestedQuestion)}</p><a class="btn btn-primary" href="#/ask?q=${encodeURIComponent(ans.suggestedQuestion)}">Yes, solve this corrected question</a></div></div>`;
+
     if (ans.kind === 'accountancy-unavailable' || ans.kind === 'no-local-solver') {
       return `<div class="callout warn" style="margin-top:14px">${icon('warn')}<div>
         <b>${S.lang === 'hi' ? 'एआई समाधान उपलब्ध नहीं है।' : 'AI solution unavailable.'}</b>
@@ -5395,6 +5405,7 @@ window.UP = window.UP || {};
         revealPyq(id);
         return;
       }
+      attemptItem({q:pyqQuestionText(qq),ch:qq.ch,source:qq},String((qq.opts[i]||{}).en||qq.opts[i]||''));
       const box = pick.closest('.q-opts');
       box.querySelectorAll('[data-pick]').forEach((b, j) => {
         b.disabled = true;
@@ -5426,6 +5437,7 @@ window.UP = window.UP || {};
         else if (j === i) b.classList.add('wrong');
       });
       const ok = i === q.key;
+      attemptItem({q:q.stem,ch:q.ch||UP.detectChapter(q.stem),source:{m:q.m,opts:q.opts,ans:String.fromCharCode(65+q.key),keyVerified:true,src:q.src}},String.fromCharCode(65+i));
       const verdict = document.createElement('div');
       verdict.className = 'pyq-verdict ' + (ok ? 'ok' : 'no');
       verdict.innerHTML = ok
@@ -5559,6 +5571,7 @@ window.UP = window.UP || {};
       const no = +tgt.dataset.q, pick = tgt.dataset.opt;
       const q = findQ(no); if (!q) return;
       const graded = !(q.raw && q.raw.paperCode) && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim());
+      practiceAttempt(q,pick);
       S.answers[no] = { pick, ok: graded ? pick === q.ans : null, shown: !!(S.answers[no] && S.answers[no].shown) };
       render(); return;
     }
@@ -5567,6 +5580,7 @@ window.UP = window.UP || {};
       const q = findQ(no); if (!q) return;
       const inp = document.querySelector('[data-answer="' + no + '"]');
       const text = (inp ? inp.value : '').trim();
+      practiceAttempt(q,text);
       S.answers[no] = { text, ok: sameAnswer(text, q.ans), shown: true };
       render(); return;
     }
@@ -6470,7 +6484,7 @@ function submitMockTest(auto){
   clearInterval(window.__mtTimer);
   S.mockTest.finished = true;
   S.mockTest.submitted = S.mockTest.submitted || {};
-  S.mockTest.items.forEach((_,i)=>{S.mockTest.submitted[i]=true;});
+  S.mockTest.items.forEach((it,i)=>{S.mockTest.submitted[i]=true;attemptItem(it,(S.mockTest.answers||{})[i]||'');});
   S.mockTest.score = UP.mockAssessment.score(S.mockTest);
   store.set('mockLast' + ownerSuffix(), S.mockTest);
   store.set(mockStoreKey(), S.mockTest);
@@ -6513,7 +6527,7 @@ function collectScopedStudy(){
   try {
     for (let i=0; i<localStorage.length; i++) {
       const key = localStorage.key(i) || '';
-      const match = /^upay\.(mastery|hardList|dailyProgress)\.scope\.(.+)$/.exec(key);
+      const match = /^upay\.(mastery|hardList|dailyProgress|mistakeQueue)\.scope\.(.+)$/.exec(key);
       if (!match) continue;
       const scope = JSON.parse(decodeURIComponent(match[2]));
       if (!Array.isArray(scope) || scope[0] !== S.savedKey || scope.length !== 4) continue;
@@ -6546,7 +6560,7 @@ function importProgress(file){
       ['cls','subject','lang','board'].forEach(k=>{ if(d[k]) S[k]=d[k]; });
       S.test.board = S.board;
       if (Array.isArray(d.scopedStudy)) d.scopedStudy.forEach(entry => {
-        if (!entry || !['mastery','hardList','dailyProgress'].includes(entry.kind) ||
+        if (!entry || !['mastery','hardList','dailyProgress','mistakeQueue'].includes(entry.kind) ||
             typeof entry.board !== 'string' || typeof entry.subject !== 'string' ||
             !Number.isInteger(+entry.cls) || +entry.cls < 1 || +entry.cls > 12) return;
         const key = entry.kind + '.scope.' + encodeURIComponent(JSON.stringify([S.savedKey, entry.board, +entry.cls, entry.subject]));
@@ -6751,6 +6765,21 @@ function viewCheatsheet(params){
 }
 
 /* ---------- #13 Mistake book ---------- */
+function rememberAssessment(item,answer,assessment){
+  const wasQueued=(S.mistakeQueue||[]).some(it=>UP.mistakeQueue.id(it.q)===UP.mistakeQueue.id(item.q));
+  S.mistakeQueue=UP.mistakeQueue.update(S.mistakeQueue,item,answer,assessment);
+  saveMistakeQueue();
+  if(wasQueued&&assessment.status==='correct'&&assessment.reason==='verified-key'){
+    S.hardList=(S.hardList||[]).filter(q=>UP.mistakeQueue.id(q)!==UP.mistakeQueue.id(item.q));saveHardList();srsMark(item.q,true);
+  }
+}
+function attemptItem(item,answer){
+  const assessment=UP.mockAssessment.assess(item,answer);rememberAssessment(item,answer,assessment);return assessment;
+}
+function practiceAttempt(q,answer){
+  const trusted=q.keyVerified===true||!!(q.tid && q.keyVerified!==false && !(q.raw&&q.raw.keyVerified===false) && !(q.raw&&q.raw.paperCode));
+  return attemptItem({q:P(q),ch:q.ch,source:{...q,m:q.marks||q.m,keyVerified:trusted}},answer);
+}
 function viewMistakes(){
   const miss = Object.keys(S.mastery||{}).flatMap(chId=>{
     return (S.mastery[chId].cards||[]).filter(c=>c.box===0 && c.last).map(c=>({...c,chId}));
@@ -6758,19 +6787,21 @@ function viewMistakes(){
   // Also include questions dailyMark 'hard' flagged
   const hard = (S.hardList||[]).map(q=>({q,box:0,isHard:true}));
   const hardQuestions = new Set(hard.map(item => item.q));
-  const all = [...hard, ...miss.filter(item => !hardQuestions.has(item.q))];
+  const protectedItems=(S.mistakeQueue||[]).map(entry=>({...entry,chId:entry.ch,protected:true}));
+  const queued=new Set(protectedItems.map(entry=>UP.mistakeQueue.id(entry.q)));
+  const all = [...protectedItems,...hard.filter(entry=>!queued.has(UP.mistakeQueue.id(entry.q))), ...miss.filter(item => !hardQuestions.has(item.q)&&!queued.has(UP.mistakeQueue.id(item.q)))];
   return `<section class="page-head">
     <span class="eyebrow">${icon('book')} ${S.lang==='hi'?'गलतियों की किताब':'Mistake book'}</span>
     <h1>${all.length}</h1>
-    <p>${S.lang==='hi'?'वे प्रश्न जिनमें आपको परेशानी हुई — रोज़ एक दोहराइए':'Questions you struggled with — review one daily'}</p>
+    <p>${S.lang==='hi'?'गलत उत्तर वाले प्रश्न सही उत्तर देने तक यहीं रहेंगे।':'Checked wrong answers stay here until you submit a correct answer. Viewing a solution or self-marking does not clear them.'}</p>
   </section>
   ${!all.length ? `<div class="empty"><h3>${S.lang==='hi'?'अभी कोई गलती नहीं':'No mistakes yet'}</h3><p>${S.lang==='hi'?'आज का अभ्यास शुरू करें':'Start Today\'s practice'}</p></div>` :
   `<div class="pyq-list">${all.map((c,i)=>`<article class="pyq-item">
-    <div class="pmeta"><span class="tag ${c.isHard?'warn':'cream'}">${c.isHard?(S.lang==='hi'?'कठिन':'Hard'):('Box '+ (c.box||0))}</span></div>
+    <div class="pmeta"><span class="tag ${c.isHard?'warn':'cream'}">${c.protected?'Answer needs correction':c.isHard?(S.lang==='hi'?'कठिन':'Hard'):('Box '+ (c.box||0))}</span></div>
     <div class="pbody"><div class="pq">${esc(c.q)}</div>
     <div class="pactions"><button class="btn btn-primary btn-sm" data-action="sample" data-q="${esc(c.q)}">${icon('sparkle')} ${S.lang==='hi'?'हल करें':'Solve'}</button>
     ${c.chId?`<a class="btn btn-sm" href="#/chapter/${c.chId}">${S.lang==='hi'?'अध्याय':'Chapter'}</a>`:''}
-    <button class="btn btn-sm btn-ghost" data-action="removeMistake" data-i="${i}">×</button></div></div></article>`).join('')}</div>`}`;
+    ${c.protected?`<label for="mistake-answer-${i}">Try your corrected answer</label><textarea id="mistake-answer-${i}" class="mock-ans" rows="2"></textarea><button class="btn btn-primary btn-sm" data-action="recheckMistake" data-q="${esc(c.q)}" data-i="${i}">Check corrected answer</button><p data-mistake-status="${i}" role="status"></p>`:`<button class="btn btn-sm btn-ghost" data-action="removeMistake" data-q="${esc(c.q)}">×</button>`}</div></div></article>`).join('')}</div>`}`;
 }
 
 /* ---------- #14 Story-format share image (9:16) ---------- */
@@ -6935,22 +6966,21 @@ document.addEventListener('click', function(e){
   if(act==='exportPrg'){ e.preventDefault(); exportProgress(); return; }
   if(act==='shareStory'){ e.preventDefault(); shareAnswerAsStory(); return; }
   if(act==='shareSheet'){ e.preventDefault(); const ch=a.dataset.ch; go(`#/cheatsheet/${ch}`); return; }
+  if(act==='recheckMistake'){
+    e.preventDefault();const q=a.dataset.q,index=+a.dataset.i;
+    const entry=(S.mistakeQueue||[]).find(it=>UP.mistakeQueue.id(it.q)===UP.mistakeQueue.id(q));if(!entry)return;
+    const input=document.getElementById('mistake-answer-'+index),value=input.value.trim();if(!value){toast('Enter a corrected answer first.');return;}
+    const assessment=attemptItem(entry.item,value);
+    if(assessment.status==='correct'){toast('Correct — removed from Mistakes.');render();}
+    else document.querySelector('[data-mistake-status="'+index+'"]').textContent=assessment.status==='incorrect'?'Not correct yet. Review the solution and try again; the question stays in Mistakes.':'This answer needs review; it stays in Mistakes until a supported correct answer is checked.';
+    return;
+  }
   if(act==='removeMistake'){
-    e.preventDefault();
-    const hard = S.hardList || [];
-    const miss = Object.keys(S.mastery||{}).flatMap(chId => (S.mastery[chId].cards||[])
-      .filter(c => c.box===0 && c.last && !hard.includes(c.q)).map(c => ({...c,chId})))
-      .sort((x,y)=>(y.last>x.last?1:-1));
-    const i = +a.dataset.i;
-    const question = i < hard.length ? hard[i] : (miss[i-hard.length] || {}).q;
-    if (question) {
-      S.hardList = hard.filter(q => q !== question);
-      Object.keys(S.mastery||{}).forEach(chId => (S.mastery[chId].cards||[]).forEach(c => {
-        if (c.q === question && c.box === 0) c.last = null;
-      }));
-      saveHardList(); saveMastery();
-    }
-    render(); return;
+    e.preventDefault();const question=a.dataset.q;
+    if((S.mistakeQueue||[]).some(it=>UP.mistakeQueue.id(it.q)===UP.mistakeQueue.id(question))){toast('Answer this question correctly to clear it.');return;}
+    S.hardList=(S.hardList||[]).filter(q=>q!==question);
+    Object.keys(S.mastery||{}).forEach(chId=>(S.mastery[chId].cards||[]).forEach(c=>{if(c.q===question&&c.box===0)c.last=null;}));
+    saveHardList();saveMastery();render();return;
   }
   if(act==='mock-submit' || act==='submitMock'){ e.preventDefault(); submitMockTest(); return; }
 },{capture:true});
@@ -6968,7 +6998,7 @@ document.addEventListener('click',function(e){
   }
   if(button.hasAttribute('data-mock-recheck')){
     const i=Number(button.dataset.mockRecheck);if(!test.finished||!test.items[i])return;
-    const a=UP.mockAssessment.assess(test.items[i],(test.revisions||{})[i]||'');
+    const a=attemptItem(test.items[i],(test.revisions||{})[i]||'');
     const status=document.querySelector('[data-mock-revision-status="'+i+'"]');
     status.textContent=a.status==='correct'?'Correction matches the verified key. Original test marks are unchanged.':a.status==='incorrect'?'Still differs from the verified key. Review the reference answer and try again.':'Correction saved. Teacher/rubric review is needed; original test marks are unchanged.';
     return;
@@ -6978,7 +7008,7 @@ document.addEventListener('click',function(e){
   const submit=button.hasAttribute('data-mock-submit'),i=Number(submit?button.dataset.mockSubmit:button.dataset.mockEdit);
   if(!test.items[i])return;
   test.submitted=test.submitted||{};
-  if(submit){if(!String((test.answers||{})[i]||'').trim()){toast('Write an answer before submitting.');return;}test.submitted[i]=true;}
+  if(submit){if(!String((test.answers||{})[i]||'').trim()){toast('Write an answer before submitting.');return;}test.submitted[i]=true;attemptItem(test.items[i],test.answers[i]);}
   else delete test.submitted[i];
   store.set(mockStoreKey(),test);render();
   if(!submit)document.getElementById('mock-answer-'+i)?.focus();

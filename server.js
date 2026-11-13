@@ -14,6 +14,7 @@
    ===================================================================== */
 'use strict';
 const taskRouting = require('./assets/js/task-routing.js');
+const solveTiming = require('./assets/js/solve-timing.js');
 const solvePolicy = require('./lib/solve-policy.js');
 const solveRuntime = require('./lib/gemini.js');
 const { aiFailure: solveFailure } = require('./lib/ai-status.js');
@@ -1729,6 +1730,8 @@ const handleRequest = async function (req, res) {
       const plain = liveKeys();                 /* the whole ring; a capped key falls through */
       const b = await readBody(req);
       const question = String(b.question || '').trim();
+      const clarification = require('./assets/js/square-integers.js').clarification(question);
+      if (clarification) return json(res, 422, clarification);
       if (question.length < 3) return json(res, 400, { error: 'Type a question first.' });
 
       /* A question that lost its maths in extraction is a DIFFERENT question.
@@ -1901,8 +1904,9 @@ const handleRequest = async function (req, res) {
 
       let out;
       const solveController = new AbortController();
-      const callOptions = {deadline:Date.now()+50000, signal:solveController.signal};
-      const solveTimer = setTimeout(()=>solveController.abort(), 50000);
+      const timing = solveTiming.forQuestion(question,subject);
+      const callOptions = {deadline:Date.now()+timing.serverMs, signal:solveController.signal, attemptMs:timing.attemptMs, maxOutputTokens:timing.maxOutputTokens};
+      const solveTimer = setTimeout(()=>solveController.abort(), timing.serverMs);
       try {
         out = await solveRuntime.callGeminiResilient(prompt, plain, db.settings.geminiModel, null, callOptions);
         let draft;

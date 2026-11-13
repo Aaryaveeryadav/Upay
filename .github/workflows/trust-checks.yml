@@ -22,6 +22,7 @@ jobs:
       - run: node tools/check/serverless_smoke.js
       - run: node tools/check/provider_budget.js
       - run: node tools/check/mock_assessment.js
+      - run: node tools/check/mistake_queue.js
       - run: node tools/check/physics_question_quality.js
       - run: node tools/check/ai_diagram_geometry.js
       - run: node tools/check/answer_format.js
@@ -74,6 +75,7 @@ jobs:
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/pasted_question_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/science_timeout_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/share_mock_browser.js
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/mistake_confirmation_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/square_integer_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/science_diagram_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/task_routing_browser.js

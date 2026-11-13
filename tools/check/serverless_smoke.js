@@ -160,7 +160,7 @@ async function main() {
   assert.equal(r.code,200); assert.equal(providerCalls,beforeLetter+2,'outline must trigger repair');
   assert.equal(callBudgets.at(-1),callBudgets.at(-2),'repair uses the exact same budget and signal');
   assert(callBudgets.at(-1).signal.aborted,'successful request releases provider resources');
-  assert(callBudgets.at(-1).deadline > Date.now() && callBudgets.at(-1).deadline <= Date.now()+50000);
+  assert(callBudgets.at(-1).deadline > Date.now() && callBudgets.at(-1).deadline <= Date.now()+140000);
   assert(r.body.approaches.every(a=>a.format==='prose' && a.steps[0].t.includes('Yours faithfully')));
   assert.match(lastPrompt,/actual finished prose/);
   queuedReplies=[1,2].map(()=>JSON.stringify({answer:'Four letter options',approaches:four()}));
@@ -171,6 +171,9 @@ async function main() {
   assert.equal(r.code,200); assert.equal(r.body.result,'n = 15, 27, 327, 995');
   assert.equal(r.body.source,'exact'); assert.equal(r.body.check.source,'arithmetic');
   assert.equal(providerCalls,callsBeforeExact,'exact supported question must not spend a provider call');
+  const ambiguousCalls=providerCalls;
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all positive integers 7 for which n2 + 10m + 2026 is a perfect square.',subject:'maths'}});
+  assert.equal(r.code,422);assert.equal(r.body.code,'question_needs_confirmation');assert.equal(providerCalls,ambiguousCalls);
   const radicalCalls = providerCalls;
   r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all integers x for which √(x+6) + √(19-x) is an integer.',subject:'social'}});
   assert.equal(r.code,200);assert.equal(r.body.result,'x ∈ {-6, 3, 10, 19}');

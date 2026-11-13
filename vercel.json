@@ -5,6 +5,7 @@
   "installCommand": null,
   "outputDirectory": null,
   "functions": {
+    "api/ai/solve.js": { "maxDuration": 180 },
     "api/**/*.js": {
       "maxDuration": 60
     }
