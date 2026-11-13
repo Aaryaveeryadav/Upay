@@ -11,6 +11,14 @@ const {chromium}=require('playwright');
    let enabled=false;
    await page.route('https://fynlvbtefmawisauzitu.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({external:{google:enabled}})}));
    await page.goto(base+'#/login',{waitUntil:'domcontentloaded'});
+   const welcomeMotion=await page.locator('#kritin-welcome .welcome-line').evaluate(el=>({
+    lineDelay:getComputedStyle(el).animationDelay,
+    lineDuration:getComputedStyle(el).animationDuration,
+    brandDuration:getComputedStyle(el.parentElement).animationDuration
+   }));
+   assert.equal(welcomeMotion.lineDelay,'0s','underline starts immediately');
+   assert.equal(welcomeMotion.lineDuration,'0.22s','underline remains a quick reveal');
+   assert.equal(welcomeMotion.brandDuration,'0.42s','brand reveal no longer stretches the underline');
    await page.waitForFunction(()=>window.UP&&UP.S&&document.body.classList.contains('up-ready'));
    await page.waitForFunction(()=>!document.getElementById('kritin-welcome'));
    await page.evaluate(()=>{window.__SUPABASE__={auth:{signInWithOAuth:async args=>{window.oauthArgs=args;return {error:{message:'Test refusal'}};}}};});
