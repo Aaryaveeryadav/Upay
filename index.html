@@ -16,12 +16,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap&text=अआइईउऊऋएऐओऔकखगघचछजझटठडढतथदधनपफबभमयरलवशषसहािीुूृेैोौंःँ्द्वद्धृऑ०१२३४५६७८९">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap&text=अआइईउऊऋएऐओऔकखगघचछजझटठडढतथदधनपफबभमयरलवशषसहािीुूृेैोौंःँ्द्वद्धृऑ०१२३४५६७८९" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="assets/css/app.css?v=26e1">
-<link rel="preload" as="script" href="assets/js/boot.js?v=26e1">
+<link rel="stylesheet" href="assets/css/app.css?v=26e4">
+<link rel="preload" as="script" href="assets/js/boot.js?v=26e4">
 <link rel="preload" as="script" href="assets/js/data-extra.js">
 <link rel="preload" as="script" href="assets/js/data/pyq.js">
 <link rel="preload" as="script" href="assets/js/data/pyq-2024.js">
-<link rel="preload" as="script" href="assets/js/solver-arith.js?v=26e1">
+<link rel="preload" as="script" href="assets/js/solver-arith.js?v=26e4">
 <link rel="preload" as="script" href="assets/js/figures.js">
 <link rel="preload" as="script" href="assets/js/testgen.js">
 <noscript>
@@ -29,6 +29,7 @@
 </noscript>
 </head>
 <body>
+<script src="/assets/js/welcome.js?v=26e4"></script>
 
 <!-- ===================== SERVER-RENDERED SHELL ===================== -->
 <!-- This markup paints instantly, before any JS loads, so a student on a
@@ -126,6 +127,8 @@
   window.__SUPABASE__ = (function () {
     var url = 'https://fynlvbtefmawisauzitu.supabase.co';
     var key = 'sb_publishable_HRiF5925V8pU0Jr8TTyv3w_SWTjNo4e';
+    // Public browser configuration, never a service-role key or OAuth secret.
+    window.__SUPABASE_PUBLIC__ = {url:url, key:key};
     function loadSb(){
       try {
         // The bundled UMD build exports window.supabase. Keep supabaseJs as
@@ -172,7 +175,7 @@
 
 <!-- Bootstrap the app. boot.js loads core maths + engine, then lazy-loads
      other subjects when you pick them, then finally app.js renders. -->
-<script src="assets/js/boot.js?v=26e1" defer></script>
+<script src="assets/js/boot.js?v=26e4" defer></script>
 
 <!-- Wire up skeleton ask chips even before app loads, so students can start typing immediately -->
 <script>
