@@ -18,7 +18,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap&text=अआइईउऊऋएऐओऔकखगघचछजझटठडढतथदधनपफबभमयरलवशषसहािीुूृेैोौंःँ्द्वद्धृऑ०१२३४५६७८९">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap&text=अआइईउऊऋएऐओऔकखगघचछजझटठडढतथदधनपफबभमयरलवशषसहािीुूृेैोौंःँ्द्वद्धृऑ०१२३४५६७८९" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="assets/css/app.css?v=26e6">
-<link rel="preload" as="script" href="assets/js/boot.js?v=26e5">
+<link rel="preload" as="script" href="assets/js/boot.js?v=26e6">
 <link rel="preload" as="script" href="assets/js/data-extra.js">
 <link rel="preload" as="script" href="assets/js/data/pyq.js">
 <link rel="preload" as="script" href="assets/js/data/pyq-2024.js">
@@ -122,8 +122,8 @@
 <div id="toast-host" aria-live="polite" aria-atomic="true"></div>
 
 <!-- Supabase JS SDK (auth) — bundled locally so school firewalls that block jsdelivr
-     can still sign in. Falls back gracefully: if Supabase is unreachable the app
-     falls back to server-local username/password auth (admin/teacher accounts). -->
+     can still sign in. Email/password credentials go only to Supabase; standalone
+     school installations may use local username authentication when offline. -->
 <script>
   window.__SUPABASE__ = (function () {
     var url = 'https://fynlvbtefmawisauzitu.supabase.co';
@@ -154,9 +154,9 @@
       var sb = loadSb();
       setSb(sb);
       if (!sb) { window.__supabaseOnline = false; return; }
-      // Assume online initially; the health ping below will flip it to false
-      // if the network blocks Supabase. A 2s timeout is used so a failed
-      // attempt doesn't leave the user stuck; they can retry with local creds.
+      // Assume online initially; the health ping below flips this to false
+      // if the network blocks Supabase. A bounded timeout lets email sign-in
+      // fail closed instead of hanging when the auth service cannot be reached.
       window.__supabaseOnline = true;
       try {
         var ctrl=null;
@@ -176,7 +176,7 @@
 
 <!-- Bootstrap the app. boot.js loads core maths + engine, then lazy-loads
      other subjects when you pick them, then finally app.js renders. -->
-<script src="assets/js/boot.js?v=26e5" defer></script>
+<script src="assets/js/boot.js?v=26e6" defer></script>
 
 <!-- Wire up skeleton ask chips even before app loads, so students can start typing immediately -->
 <script>
