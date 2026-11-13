@@ -2198,7 +2198,7 @@ window.UP = window.UP || {};
         <div class="qtext">${esc(ans.question || '')}</div>
         <div style="font-size:14px;color:var(--ink-600)">${rich(P(ans.summary))}</div>
         ${isLoading ? `
-        <div class="callout" style="margin-top:14px;background:#eef6fb;border-color:#b7d9ea">
+        <div class="callout" style="margin-top:14px;background:#fff5f6;border-color:#ffc8d2">
           ${icon('sparkle')}
           <div data-slow>${S.lang === 'hi' ? 'एआई पूरा हल बना रहा है…' : 'The AI is writing a full step-by-step answer…'}</div>
         </div>` : `
@@ -3309,7 +3309,7 @@ window.UP = window.UP || {};
     const authMode = supabaseOn ? 'cloud' : 'local';
     return `
     <div class="auth-page">
-      ${!supabaseOn ? `<div class="callout" style="margin-bottom:12px;background:#eef4ff;border-color:#b9cdff;color:#1e3a8a">${icon('info')}<div>
+      ${!supabaseOn ? `<div class="callout" style="margin-bottom:12px;background:#fff5f6;border-color:#ffc8d2;color:#9f001e">${icon('info')}<div>
         <b>${isHi?'ऑफ़लाइन मोड':'Offline mode'}</b><br>
         <span style="font-size:13px">${isHi
           ? 'सुपाबेस कनेक्ट नहीं हो पा रहा (स्कूल/ऑफिस वाई-फाई प्रायः CDN ब्लॉक करती है)। आप यहाँ से एडमिन द्वारा दिया यूज़रनेम/पासवर्ड डालकर साइन इन कर सकते हैं।'
@@ -3664,19 +3664,19 @@ window.UP = window.UP || {};
       y+=gap;
     }
     block(P(a.question||S.aiQuestion||S.q||''),'bold 30px system-ui','#2b3a42',44,20);
-    block((S.lang==='hi'?'उत्तर: ':'Answer: ')+P(a.answer||a.result||''),'600 26px system-ui','#1c4962',40,24);
+    block((S.lang==='hi'?'उत्तर: ':'Answer: ')+P(a.answer||a.result||''),'600 26px system-ui','#9f001e',40,24);
     const ap=(a.approaches||[])[0];
     if(ap){
-      block(P(ap.name)+(P(ap.tag||'')?' — '+P(ap.tag):''),'bold 24px system-ui','#28789b',38,18);
+      block(P(ap.name)+(P(ap.tag||'')?' — '+P(ap.tag):''),'bold 24px system-ui','#e7002c',38,18);
       (ap.steps||[]).forEach((st,i)=>{
         block((ap.format==='prose'?'':(i+1)+'. ')+P(st.t||''),'24px system-ui','#2b3a42',38,6);
-        if(st.m)block(UP.answerFormat.text(st.m),'24px system-ui','#1c4962',38,6);
+        if(st.m)block(UP.answerFormat.text(st.m),'24px system-ui','#9f001e',38,6);
         if(st.note)block(P(st.note),'22px system-ui','#58656c',34,14);
       });
     }
     c.width=W;c.height=Math.max(500,Math.min(7900,y+140));
     ctx.fillStyle='#fdfbf6';ctx.fillRect(0,0,W,c.height);
-    ctx.fillStyle='#46a0c9';ctx.fillRect(0,0,W,72);
+    ctx.fillStyle='#e7002c';ctx.fillRect(0,0,W,72);
     ctx.fillStyle='#fff';ctx.font='bold 36px system-ui';ctx.fillText('Upay',48,50);
     rows.forEach(r=>{ctx.font=r.font;ctx.fillStyle=r.color;ctx.fillText(r.text,60,r.y);});
     ctx.fillStyle='#58656c';ctx.font='20px system-ui';

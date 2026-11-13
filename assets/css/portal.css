@@ -1,9 +1,9 @@
 /* Upay admin portal */
 :root{
   --bg:#f6f3ec; --card:#ffffff; --ink:#1e2330; --muted:#6a6f7c;
-  --line:#e6e1d5; --brand:#46a0c9; --brand-dark:#2d7a9c;
+  --line:#e6e1d5; --brand:#e7002c; --brand-dark:#c30025;
   --ok:#2e8a4f; --warn:#b46a0a; --err:#b9362a;
-  --chip:#eef3f6; --chip-ink:#254a5a;
+  --chip:#fff5f6; --chip-ink:#9f001e;
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
 *{box-sizing:border-box}
@@ -11,7 +11,7 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
   font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans",sans-serif;}
 a{color:var(--brand-dark);text-decoration:none}
 a:hover{text-decoration:underline}
-code{font-family:var(--mono);font-size:.92em;background:#eef3f6;padding:1px 5px;border-radius:4px}
+code{font-family:var(--mono);font-size:.92em;background:#fff5f6;padding:1px 5px;border-radius:4px}
 
 /* header */
 .top{display:flex;align-items:center;gap:24px;padding:14px 28px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
@@ -58,7 +58,7 @@ label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
 input[type=text],input[type=password],input[type=number],select,textarea{
   width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font:inherit;color:var(--ink)}
 textarea{min-height:90px;resize:vertical;font-family:var(--mono);font-size:13px}
-input:focus,select:focus,textarea:focus{outline:2px solid #b9dcee;border-color:var(--brand)}
+input:focus,select:focus,textarea:focus{outline:2px solid #ffc8d2;border-color:var(--brand)}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
 .btn{background:var(--brand);color:#fff;border:0;padding:9px 16px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer}
 .btn:hover{background:var(--brand-dark)}
@@ -108,4 +108,38 @@ pre.log{background:#1f2531;color:#dfe7ee;padding:14px;border-radius:10px;font-fa
   .nav{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap}
   .wrap{padding:0 16px 40px}
   th,td{padding:8px}
+}
+
+/* PDF-inspired controls: #E7002C is the reference's dominant red.
+   Shared across student/admin styles; no layout or click-handler changes. */
+:root {
+  --brand-red: #e7002c;
+  --button-paper: #fffafa;
+  --button-shadow: 4px 4px 9px rgba(43,43,43,.25), 0 1px 3px rgba(43,43,43,.10);
+}
+:is(button, [role="button"], .btn, .btn-l, .icon-btn, .nav-a, .nav a, .who a.btn-l) {
+  background: var(--button-paper) !important;
+  color: var(--brand-red) !important;
+  box-shadow: var(--button-shadow) !important;
+  border-radius: 10px;
+}
+:is(button, [role="button"], .btn, .btn-l, .icon-btn, .nav-a, .nav a, .who a.btn-l):hover {
+  background: #fff3f5 !important;
+  box-shadow: 5px 6px 12px rgba(43,43,43,.28), 0 1px 3px rgba(43,43,43,.10) !important;
+}
+:is(button, [role="button"], .btn, .btn-l, .icon-btn, .nav-a, .nav a):focus-visible {
+  outline: 2px solid var(--brand-red);
+  outline-offset: 3px;
+}
+:is(button, [role="button"], .btn, .btn-l, .icon-btn, .nav-a, .nav a):is(.on, .active, [aria-pressed="true"], [aria-selected="true"]) {
+  /* Selection remains visible even though every button uses the same paper. */
+  box-shadow: var(--button-shadow), inset 0 0 0 2px var(--brand-red) !important;
+  font-weight: 700;
+}
+:is(button, [role="button"], .btn, .btn-l, .icon-btn):active {
+  box-shadow: 1px 2px 4px rgba(43,43,43,.22) !important;
+}
+:is(button, [role="button"], .btn, .btn-l, .icon-btn):is(:disabled, [aria-disabled="true"]) {
+  opacity: .6;
+  cursor: not-allowed;
 }
