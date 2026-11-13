@@ -62,6 +62,7 @@ jobs:
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/question_audio_format_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/prime_power_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/dual_diagram_browser.js
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/save_question_browser.js
           UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/physics_quality_browser.py
           python3 tools/check/physics_outline_smoke.py
           python3 tools/check/trust_browser_smoke.py
