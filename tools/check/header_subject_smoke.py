@@ -30,7 +30,7 @@ def main():
             assert page.locator('#topbar a[href="#/login"]').is_visible(),(width,'no sign in')
             assert page.locator('#topbar .top-scope-pickers .hdr-pick-lbl').nth(2).is_visible(),(width,'no subject label')
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'),(width,'horizontal overflow')
-            assert page.locator('.daily-reminder svg').bounding_box()['width'] <= 26,(width,'oversized reminder icon')
+            assert page.locator('.daily-reminder, .study-shortcuts, .home-outline-links').count() == 0,(width,'removed home sections returned')
             print('PASS visible Board / Class / Subject and sign-in at',width,'px',flush=True)
             ctx.close()
 

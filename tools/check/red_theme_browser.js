@@ -8,6 +8,8 @@ const { chromium } = require('playwright');
       const page = await browser.newPage({viewport:{width,height:900},serviceWorkers:'block'});
       await page.goto(process.env.UPAY_BASE || 'http://127.0.0.1:8005/', {waitUntil:'networkidle'});
       await page.waitForFunction(() => window.UP && UP.S && document.body.classList.contains('up-ready'));
+      assert.equal(await page.locator('.daily-reminder, .study-shortcuts, .home-outline-links').count(), 0, 'removed home sections must not return');
+      assert(await page.locator('.hero').isVisible(), 'home hero remains available');
       for (const route of ['/', '/syllabus', '/ask', '/login', '/test']) {
         await page.evaluate(route => { location.hash = '#' + route; }, route);
         await page.waitForTimeout(200);
