@@ -49,7 +49,7 @@ const {chromium}=require('playwright');
   const offlineEmail=await page.evaluate(async()=>{window.__supabaseOnline=false;return await UP.sbSignIn('student@example.invalid','test-only');});
   assert.match(offlineEmail.error.message,/internet|connection/i);
   assert.equal(localAttempts,0,'offline email/password was not sent to local auth');
-  window.__supabaseOnline=true;
+  await page.evaluate(()=>{window.__supabaseOnline=true;});
   const localUser=await page.evaluate(async()=>UP.sbSignIn('admin','local-only-test'));
   assert.equal(localUser.error.message,'Invalid credentials');
   assert.equal(localAttempts,1,'local username auth remains available for standalone installs');
