@@ -379,7 +379,7 @@ window.UP = window.UP || {};
     nav_books: ['Books & sources', 'पुस्तकें व स्रोत'],
     nav_saved: ['Saved', 'सहेजे गए'],
     nav_test: ['Test & sample papers', 'टेस्ट व सैंपल पेपर'],
-    nav_pyq: ['Past years', 'पिछले वर्ष'],
+    nav_pyq: ["PYQ’s", 'पिछले वर्षों के प्रश्न'],
     nav_mcq: ['MCQ drill', 'MCQ अभ्यास'],
     nav_about: ['About & method', 'परिचय व विधि'],
     learn: ['Learn', 'सीखिए'],
@@ -1040,6 +1040,13 @@ window.UP = window.UP || {};
   function viewHome() {
     const chapters = catalogue();
     const all = chapters.filter(ch => !ch._bookHeader);
+    const lastChapter = store.get(scopedDataKey('lastChapter'), null);
+    const resume = all.find(ch => String(ch.id) === String(lastChapter));
+    const savedGoal = Number(store.get(scopedDataKey('studyGoal'), 10));
+    const dailyGoal = [5,10,15].includes(savedGoal) ? savedGoal : 10;
+    const dailyItems = buildDailySet();
+    const dailyDone = Math.min(dailyItems.length, Math.max(0, Number((S.dailyProgress || {})[todayKey()]) || 0));
+
     const scopedQuestionCount = (UP.pyq || []).filter(qInScope).length;
     const scopedRecent = S.recent.filter(r => r.subject === S.subject && (r.cls ? +r.cls === +S.cls : +S.cls === 10) && (r.board ? r.board === S.board : S.board === 'cbse'));
     const subjectSamples = {
@@ -1100,6 +1107,29 @@ window.UP = window.UP || {};
     const specific = (scopedExamples[+S.cls] || {})[S.subject];
     const samples = specific ? specific.map(en => ({ en, hi: en })) : (subjectSamples[S.subject] || [{ en: 'Type a question from your selected subject.', hi: 'अपने चुने हुए विषय का प्रश्न लिखिए।' }]);
     return `
+    <section class="card flat daily-reminder" aria-label="Daily task status">
+      ${icon('target')}
+      <div style="flex:1">
+        <b>${dailyItems.length && dailyDone >= dailyItems.length ? (S.lang==='hi'?'दैनिक कार्य पूरे':'Daily tasks complete') : (S.lang==='hi'?'दैनिक कार्य बाकी हैं':'Daily task pending')}</b>
+        <div class="muted">${dailyItems.length ? `${dailyDone}/${dailyItems.length} ${S.lang==='hi'?'पूरे':'done'}` : (S.lang==='hi'?'इस चयन में अभी अभ्यास प्रश्न उपलब्ध नहीं हैं।':'No daily practice questions available for this selection yet.')}</div>
+      </div>
+      <a class="btn btn-primary btn-sm" href="#/today">${S.lang==='hi'?'शुरू करें':'Start'}</a>
+    </section>
+    <section class="card study-shortcuts" aria-label="Study plan">
+      <h2>${S.lang === 'hi' ? 'आपकी अगली अध्ययन योजना' : 'Your next study plan'}</h2>
+      <nav class="study-shortcuts-actions" aria-label="Study actions">
+        <a class="btn btn-primary" href="${resume ? '#/chapter/'+resume.id : '#/syllabus'}">${S.lang === 'hi' ? 'पढ़ाई जारी रखें' : 'Continue studying'}</a>
+        <a class="btn btn-ghost" href="#/today">${S.lang === 'hi' ? 'अभ्यास और आज की पुनरावृत्ति' : 'Practise · Today’s revision'}</a>
+        <a class="btn btn-ghost" href="#/mistakes">${S.lang === 'hi' ? 'गलतियाँ दोहराएँ' : 'Revise mistakes'}</a>
+        <a class="btn btn-ghost" href="#/saved">${S.lang === 'hi' ? 'सहेजे प्रश्न' : 'Saved questions'}</a>
+      </nav>
+      <div class="study-goal-row">
+        <label class="study-goal-field" for="home-study-goal"><span>${S.lang === 'hi' ? 'दैनिक लक्ष्य (योजना मात्र)' : 'Daily goal (planning only)'}</span>
+          <select id="home-study-goal" data-action="study-goal" aria-label="Daily study goal" aria-describedby="home-study-goal-help">${[5,10,15].map(n=>`<option value="${n}" ${dailyGoal===n?'selected':''}>${n} questions</option>`).join('')}</select>
+        </label>
+        <p class="muted" id="home-study-goal-help">${S.lang === 'hi' ? 'अपनी सुविधा से अभ्यास करें; लक्ष्य कोई अंक नहीं है।' : 'Choose your own pace. This goal is not a score or a promise of available questions.'}</p>
+      </div>
+    </section>
     <section class="hero">
       <div class="hero-grid">
         <div>
@@ -3002,7 +3032,7 @@ window.UP = window.UP || {};
         : 'Sample papers and Past-years pages already hold questions for other subjects. Switch the top bar to Class 10 · Mathematics · CBSE to use this page.'}</p>
       <div class="setup-actions" style="margin-top:14px">
         <a class="btn btn-primary" href="#/test">${icon('sparkle')} ${S.lang === 'hi' ? 'सैंपल पेपर' : 'Sample paper'}</a>
-        <a class="btn btn-ghost" href="#/pyq">${icon('book')} ${S.lang === 'hi' ? 'विगत वर्ष' : 'Past years'}</a>
+        <a class="btn btn-ghost" href="#/pyq">${icon('book')} ${S.lang === 'hi' ? 'विगत वर्ष' : "PYQ’s"}</a>
       </div></div>` : ''}
     ${list.map(q => `
       <article class="q-card pyq" id="mcq-${q.id}">
@@ -4625,7 +4655,7 @@ window.UP = window.UP || {};
         ? (S.lang === 'hi' ? 'इसे स्व-अभ्यास के लिए उपयोग करें; उत्तर अलग से जाँचें।' : 'Use for self-practice and check answers separately.')
         : (S.lang === 'hi'
           ? 'अभ्यास के लिए है, आधिकारिक प्रश्नपत्र नहीं। अध्याय-वार असली प्रश्न “पिछले वर्ष” पृष्ठ पर देखें।'
-          : 'For practice only — not an official question paper. Real past questions are on the Past years page.')}</p>
+          : 'For practice only — not an official question paper. Real past questions are on the PYQ’s page.')}</p>
     </section>`;
   }
 

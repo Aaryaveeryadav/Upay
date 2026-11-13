@@ -30,7 +30,8 @@ def main():
             assert page.locator('#topbar a[href="#/login"]').is_visible(),(width,'no sign in')
             assert page.locator('#topbar .top-scope-pickers .hdr-pick-lbl').nth(2).is_visible(),(width,'no subject label')
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'),(width,'horizontal overflow')
-            assert page.locator('.daily-reminder, .study-shortcuts, .home-outline-links').count() == 0,(width,'removed home sections returned')
+            assert page.locator('.home-outline-links').count() == 0,(width,'outline section returned')
+            assert page.locator('.daily-reminder, .study-shortcuts').count() == 2,(width,'missing restored home sections')
             print('PASS visible Board / Class / Subject and sign-in at',width,'px',flush=True)
             ctx.close()
 
