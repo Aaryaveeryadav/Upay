@@ -49,3 +49,21 @@ formatted on display without editing the imported question bank. Cache 26c1.
 - Diagram screenshot regression, seven-subject conceptual flow and explanation
   scroll regressions pass. Speech mock verifies app behavior, not real audible
   playback; AI is also mocked, not a real-provider accuracy test.
+
+## Gentle teacher voice preference (26c5)
+
+Listen now prefers recognized feminine browser voice names in the selected
+language (e.g. Neerja/Heera for Indian English, Swara/Kalpana for Hindi), then a
+feminine voice in another region of the same language, then the available
+language/default device voice. Web Speech exposes no standardized gender or
+warmth metadata, so this is a best-effort preference, not a guarantee. There is
+no paid TTS service or synthetic pitch-based gender emulation. The rate is 0.88
+for English and 0.86 for Hindi, with normal pitch and full volume. Existing
+short-utterance/Stop/error behavior remains. A fallback notice explains when no
+recognized female voice is available. Voices are rechecked on each chunk, so
+asynchronously loaded device voices can be used.
+
+Unit tests cover exact-language feminine preference, same-language regional
+fallback, missing voices, Hindi and avoiding unrelated-language voices. The
+mocked browser regression asserts the actual utterance gets Neerja at the
+slower rate; real-device voice quality/audio availability is not certified.

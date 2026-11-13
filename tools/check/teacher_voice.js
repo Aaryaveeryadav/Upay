@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict'),{select}=require('../../assets/js/teacher-voice');
+const v=(name,lang,def=false)=>({name,lang,default:def});
+const voices=[v('Microsoft Ravi','en-IN',true),v('Microsoft David','en-US'),v('Microsoft Neerja Online (Natural)','en-IN'),v('Microsoft Swara','hi-IN'),v('Samantha','en-US')];
+assert.equal(select(voices,'en-IN').voice.name,'Microsoft Neerja Online (Natural)');
+assert.equal(select(voices,'hi-IN').voice.name,'Microsoft Swara');
+assert.equal(select([v('David','en-IN'),v('Google UK English Female','en-GB')],'en-IN').voice.name,'Google UK English Female');
+assert.equal(select([v('David','en-IN')],'en-IN').preferred,false);
+assert.equal(select([v('Swara','hi-IN')],'en-IN').voice,null,'never select an unrelated language for gender');
+assert.equal(select([],'hi-IN').voice,null);
+assert.equal(select(voices,'en-IN').rate,.88);
+assert.equal(select(voices,'hi-IN').rate,.86);
+assert.equal(select(voices,'en-IN').pitch,1,'do not fake gender by raising pitch');
+console.log('PASS language-matched feminine voice preference, regional fallback, unavailable voices and gentle pace');

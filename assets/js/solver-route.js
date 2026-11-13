@@ -213,6 +213,15 @@ window.UP = window.UP || {};
     const raw = String(q || '').trim();
     if (raw.length < 2) return null;
     const s = UP.norm(raw).toLowerCase();
+    if (UP.isSymbolicHCF && UP.isSymbolicHCF(raw)) {
+      return UP.solvePrimePowerRatio(raw) || {
+        kind:'not-attempted', chapter:1,
+        title:L('Symbolic HCF/LCM question','बीजीय म.स./ल.स. प्रश्न'),
+        summary:L('Exponents are not the input integers.', 'घातें इनपुट पूर्णांक नहीं हैं।'),
+        result:L('This symbolic question is not supported by the offline solver; do not treat its exponents as numbers to factor. Request an AI explanation.', 'ऑफ़लाइन हल उपलब्ध नहीं है; घातों को गुणनखंड करने वाली संख्याएँ न मानें। AI व्याख्या माँगें।'),
+        approaches:[]
+      };
+    }
     const nums = extractNumbers(raw);
 
     /* Refuse to compute when computation is not what was asked.  These return

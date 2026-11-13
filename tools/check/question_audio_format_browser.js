@@ -9,7 +9,7 @@ const {chromium}=require('playwright');
    page.on('pageerror',e=>errors.push(String(e)));
    await page.addInitScript(()=>{
     window.__speech={calls:[],canceled:0};
-    Object.defineProperty(window,'speechSynthesis',{value:{getVoices:()=>[],cancel:()=>{__speech.canceled++},resume:()=>{},speak:u=>__speech.calls.push(u)},configurable:true});
+    Object.defineProperty(window,'speechSynthesis',{value:{getVoices:()=>[{name:'Microsoft Ravi',lang:'en-IN',default:true},{name:'Microsoft Neerja',lang:'en-IN'},{name:'Microsoft Swara',lang:'hi-IN'}],cancel:()=>{__speech.canceled++},resume:()=>{},speak:u=>__speech.calls.push(u)},configurable:true});
     window.SpeechSynthesisUtterance=function(text){this.text=text;};
    });
    await page.route('**/api/ai/solve',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',result:String.raw`K_{max} = h\nu - \Phi_0`,summary:'Photoelectric effect: energy conservation.',approaches:[1,2,3].map(n=>({name:'Explanation '+n,steps:[{t:String.raw`\nu < \nu_0 \implies \text{No emission}`,m:String.raw`V_0 = \frac{h}{e}\nu - \frac{\Phi_0}{e}`,note:'Synthetic test only.'}]})),diagram:{type:'flow',nodes:[String.raw`Incident photon h\nu`,String.raw`Work function \Phi_0`,String.raw`Energy K_{max}`]}})}));
@@ -36,8 +36,11 @@ const {chromium}=require('playwright');
    const listen=page.locator('.ai-answer [data-action="speak"]');
    await listen.click();
    assert.equal(await listen.getAttribute('aria-pressed'),'true');
-   let speech=await page.evaluate(()=>__speech.calls.map(u=>({text:u.text,lang:u.lang})));
+   let speech=await page.evaluate(()=>__speech.calls.map(u=>({text:u.text,lang:u.lang,voice:u.voice&&u.voice.name,rate:u.rate,pitch:u.pitch})));
    assert(speech.length && speech[0].text.includes('Question:'));
+   assert.equal(speech[0].voice,'Microsoft Neerja');
+   assert.equal(speech[0].rate,.88);
+   assert.equal(speech[0].pitch,1);
    // Complete the queue, proving long explanations do not become one giant utterance.
    await page.evaluate(()=>{for(let i=0;i<100 && __speech.calls.at(-1)?.onend;i++){
     const u=__speech.calls.at(-1);u.onend();if(__speech.calls.at(-1)===u) break;

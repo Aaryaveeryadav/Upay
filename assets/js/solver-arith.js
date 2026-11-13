@@ -14,8 +14,58 @@ window.UP = window.UP || {};
               'प्रत्येक चरण की मूल प्रश्न से जाँच कीजिए — प्रत्येक मान दी गई शर्त को संतुष्ट करना चाहिए।')
   }, o);
 
+  // A symbolic prime-power question is not a list of numeric inputs. In
+  // particular, the 3s in a^3 and b^3 must never be interpreted as integers p,q.
+  UP.isSymbolicHCF = function(q) {
+    return /hcf|highest common|gcd|lcm|least common|lowest common/i.test(q) &&
+      /[a-z]\s*(?:\^\s*\{?\s*\d|[²³⁴⁵⁶⁷⁸⁹])|\b[pq]\s*=\s*[a-z]/i.test(q);
+  };
+  UP.solvePrimePowerRatio = function(q) {
+    if (!/prime/i.test(q) || !/lcm|least common multiple/i.test(q) || !/hcf|highest common factor/i.test(q)) return null;
+    if (!/(?:divided by (?:their |the )?(?:highest common factor|hcf)|lcm\s*[÷/]\s*hcf)/i.test(q)) return null;
+    const src = String(q).replace(/\\[()[\]]|\$/g, '').replace(/\^\{(\d+)\}/g, '^$1')
+      .replace(/[²³⁴⁵⁶⁷⁸⁹]/g, c => '^' + ('²³⁴⁵⁶⁷⁸⁹'.indexOf(c)+2));
+    function powers(name) {
+      const match = src.match(new RegExp('\\b'+name+'\\s*=\\s*([ab](?:\\s*\\^\\s*\\d+)?\\s*[*·×]?\\s*[ab](?:\\s*\\^\\s*\\d+)?)(?![a-z0-9^])', 'i'));
+      if (!match || /^\s*[+*/÷×·^-]/.test(src.slice(match.index+match[0].length))) return null;
+      const tokens = [...match[1].replace(/[\s*·×]/g,'').matchAll(/([ab])(?:\^(\d+))?/g)];
+      if (tokens.length!==2 || tokens[0][1]===tokens[1][1]) return null;
+      const values = Object.fromEntries(tokens.map(t=>[t[1],t[2]?+t[2]:1]));
+      return Object.values(values).every(n=>Number.isInteger(n)&&n>0&&n<=1000)?values:null;
+    }
+    const p = powers('p'), r = powers('q'); if (!p || !r) return null;
+    const hi = {a:Math.max(p.a,r.a),b:Math.max(p.b,r.b)};
+    const lo = {a:Math.min(p.a,r.a),b:Math.min(p.b,r.b)};
+    const delta = {a:hi.a-lo.a,b:hi.b-lo.b};
+    const power = n => String(n).replace(/\d/g, d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[+d]);
+    const fmt = obj => ['a','b'].map(k=>obj[k]===0?'':obj[k]===1?k:k+power(obj[k])).join('')||'1';
+    const distinct = /distinct|different primes|different prime numbers/i.test(q);
+    const same = Math.abs(p.a+p.b-r.a-r.b);
+    const sameText = same===0?'1':same===1?'a':'a'+power(same);
+    const result = fmt(delta);
+    return pack({kind:'prime-power-ratio',chapter:1,
+      title:L('LCM divided by HCF','ल.स. को म.स. से भाग दें'),
+      summary:L('Use maximum prime exponents for LCM and minimum exponents for HCF; then simplify the quotient.', 'ल.स. के लिए अधिकतम और म.स. के लिए न्यूनतम अभाज्य घात लें; फिर भागफल सरल करें।'),
+      result:L(result+(distinct?'':' (assuming distinct primes a and b; if a = b, the ratio is '+sameText+')'), result+(distinct?'':' (a और b अलग अभाज्य मानकर; यदि a = b, भागफल '+sameText+' है)')),
+      approaches:[{
+        name:L('Prime-exponent rule','अभाज्य घात का नियम'),
+        steps:[{t:L('Take the larger exponent of each prime for LCM.', 'ल.स. के लिए प्रत्येक अभाज्य की बड़ी घात लें।'),m:'LCM = '+fmt(hi)},
+          {t:L('Take the smaller exponent for HCF.', 'म.स. के लिए छोटी घात लें।'),m:'HCF = '+fmt(lo)},
+          {t:L('Divide and cancel common powers.', 'भाग देकर साझा घातें काटें।'),m:'LCM/HCF = ('+fmt(hi)+')/('+fmt(lo)+') = '+result}]
+      },{
+        name:L('Exponent-difference shortcut','घातों के अंतर से'),
+        steps:[{t:L('Subtract the smaller exponent from the larger for each prime.', 'हर अभाज्य के लिए बड़ी घात से छोटी घात घटाएँ।'),m:'a: '+hi.a+' − '+lo.a+' = '+delta.a+'; b: '+hi.b+' − '+lo.b+' = '+delta.b},
+          {t:L('Multiply the remaining prime powers.', 'बची अभाज्य घातें गुणा करें।'),m:'LCM/HCF = '+result}]
+      },{
+        name:L('Independent product-identity check','गुणनफल सर्वसमिका से जाँच'),
+        steps:[{t:L('For two positive integers, LCM × HCF = pq.', 'दो धन पूर्णांकों के लिए ल.स. × म.स. = pq।'),m:'pq = '+fmt({a:p.a+r.a,b:p.b+r.b})},
+          {t:L('Divide the identity by HCF squared.', 'सर्वसमिका को म.स. के वर्ग से भाग दें।'),m:'LCM/HCF = pq/HCF² = '+result}]
+      }],verify:L('Multiplying the quotient '+result+' by HCF '+fmt(lo)+' gives LCM '+fmt(hi)+'.', 'भागफल '+result+' को म.स. '+fmt(lo)+' से गुणा करने पर ल.स. '+fmt(hi)+' मिलता है।')});
+  };
+
   /* ---------------------- HCF / LCM ---------------------- */
   UP.solveHCF = function (q, nums) {
+    if (UP.isSymbolicHCF(q)) return UP.solvePrimePowerRatio(q);
     if (!nums || nums.length < 2) return null;
     const sq = UP.norm(q).toLowerCase();
     if (!/hcf|highest common|gcd|lcm|lowest common|least common|म\.?\s?स|ल\.?\s?स/i.test(sq)) return null;

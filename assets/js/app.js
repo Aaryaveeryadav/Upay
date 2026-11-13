@@ -574,6 +574,12 @@ window.UP = window.UP || {};
   /* --------------------------- persistence --------------------------- */
   const saveState = () => { store.set('lang', S.lang); store.set('cls', S.cls); store.set('subject', S.subject); store.set('board', S.board); };
   const saveSaved = () => store.set(S.savedKey, S.saved);
+  function saveQuestionButton(question) {
+    const q = String(question || '').trim(); if (!q) return '';
+    const saved = S.saved.some(item => item.q === q);
+    return `<button type="button" class="btn btn-cream btn-sm" data-action="saveQuestion" data-q="${esc(q)}" ${saved ? 'disabled' : ''}>${icon(saved ? 'check' : 'save')} ${saved ? (S.lang === 'hi' ? 'सहेजा गया' : 'Saved') : (S.lang === 'hi' ? 'प्रश्न सहेजें' : 'Save question')}</button>`;
+  }
+
   const saveRecent = () => store.set(recentStoreKey(), S.recent);
   const saveProgress = () => store.set(progressStoreKey(), S.progress);
   function pushRecent(q, subject, chapter) {
@@ -1744,6 +1750,24 @@ window.UP = window.UP || {};
 
   /* the AI answer, in the same shape as a built-in one */
   function renderAIDiagram(a) {
+    if (!a) return '';
+    const concept = a.conceptDiagram && a.conceptDiagram.type === 'flow' ? a.conceptDiagram : null;
+    const graphical = a.diagram && a.diagram.type !== 'flow' ? a.diagram : null;
+    let drawing = graphical ? renderSingleAIDiagram(a) : '';
+    // A flow-only reply must not replace an existing question-matched local
+    // drawing (e.g. the √5 number-line construction). Never borrow a stale one.
+    const question = a.question || S.aiQuestion || '';
+    if (!graphical && S.answer && S.answer.question === question &&
+        !S.answer._loading && S.answer._geom && !['topic','concept','fallback'].includes(S.answer.kind) && ['maths','applied-maths'].includes(S.subject)) {
+      try {
+        drawing = figureBlock(S.answer);
+        if (drawing && S.answer.kind === 'irrational') drawing += '<p class="muted">' + (S.lang === 'hi' ? 'यह रचना लंबाई दर्शाती है; अपरिमेयता का प्रमाण नीचे दिए तर्क से है।' : 'This construction illustrates the length; the reasoning flow proves irrationality, not the drawing alone.') + '</p>';
+      } catch (_) { /* no honest local figure */ }
+    }
+    const flow = concept || (a.diagram && a.diagram.type === 'flow' ? a.diagram : null);
+    return drawing + (flow ? renderSingleAIDiagram(Object.assign({}, a, {diagram:flow})) : '');
+  }
+  function renderSingleAIDiagram(a) {
     a = UP.answerFormat.answer(a);
     const figSpec = a.diagram ? Object.assign({}, a.diagram, { caption: a.diagram.caption }) : null;
     let fig = '';
@@ -1832,6 +1856,7 @@ window.UP = window.UP || {};
           <span class="tag grey">${esc(a.model || '')}</span>
         </div>
         <div class="qtext">${esc(a.question || S.aiQuestion || '')}</div>
+        <div class="pactions">${saveQuestionButton(a.question || S.aiQuestion)}</div>
         <div style="font-size:14px;color:var(--ink-600)">${rich(a.summary || '')}</div>
         <div class="callout why" style="margin-top:14px">
           ${icon('check')}
@@ -2175,7 +2200,7 @@ window.UP = window.UP || {};
           <button class="btn btn-ghost btn-sm" data-action="share">${icon('share')} ${S.lang === 'hi' ? 'शेयर' : 'Share'}</button>
           <button class="btn btn-ghost btn-sm" data-action="print">${icon('printer')} ${t('print')}</button>
           <button class="btn btn-ghost btn-sm" data-action="shareImage">${icon('share')} ${S.lang==='hi'?'चित्र':'Image'}</button>
-          <button class="btn btn-cream btn-sm" data-action="saveAnswer">${icon('save')} ${t('save')}</button>
+          ${saveQuestionButton(ans.question || ans.q)}
           <button class="btn btn-ghost btn-sm" data-action="newQuestion">${icon('plus')} ${t('newQ')}</button>
         </div>
         <div class="disclaimer">${icon('info')}<span>${t('printNote')}</span></div>
@@ -3376,7 +3401,7 @@ window.UP = window.UP || {};
       ${filters.map(([k, label]) => `<button class="chip ${S.savedFolder===k?'on':''}" data-action="savedFilter" data-f="${esc(k)}">${esc(label)} <span class="chip-count">${S.saved.filter(s => k==='all'?true:k===''?!s.tag:s.tag===k).length}</span></button>`).join('')}
       <button class="chip" data-action="addTag">+ ${S.lang==='hi'?'नया टैग':'new tag'}</button>
     </div>
-    ${!S.saved.length ? `<div class="empty">${icon('save')}<h3>${t('nothingSaved')}</h3><p>${S.lang === 'hi' ? 'उत्तर पृष्ठ पर "सहेजें" दबाकर प्रश्न यहाँ जोड़िए।' : 'Press "Save" on any answer to keep it here.'}</p></div>` : `
+    ${!S.saved.length ? `<div class="empty">${icon('save')}<h3>${t('nothingSaved')}</h3><p>${S.lang === 'hi' ? 'उत्तर या प्रश्न कार्ड पर “प्रश्न सहेजें” दबाएँ। वह यहाँ दिखेगा; बाद में टैग जोड़ सकते हैं।' : 'Tap “Save question” on an answer or question card. It will appear here; you can add a tag afterwards.'}</p></div>` : `
       <div class="saved-list">
         ${Object.keys(byTag).map(tag => `
           <div class="saved-group">
@@ -4611,6 +4636,7 @@ window.UP = window.UP || {};
           ${icon('bulb')} ${a && a.shown ? (S.lang === 'hi' ? 'हल छिपाएँ' : 'Hide solution') : (!graded ? (S.lang === 'hi' ? 'AI से व्याख्या लें' : 'Get AI explanation') : (S.lang === 'hi' ? 'हल देखें' : 'Show solution'))}
         </button>
       </div>
+      <div class="pactions">${saveQuestionButton(q.tid ? P(q) : pyqQuestionText((q.en || q.hi) ? q : (q.raw || q)))}</div>
       <div class="q-text">${esc(q.tid ? P(q) : pyqQuestionText((q.en || q.hi) ? q : (q.raw || q)))}</div>
       ${q.fig && typeof q.fig === 'string' ? (() => { const bf = boardFig(q); return bf ? `<div class="figure-card test-fig">${bf.svg}</div>` : ''; })() : ''}
       ${S.lang === 'hi' && (q.raw || q).hindiReview ? '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>' : ''}
@@ -5080,6 +5106,7 @@ window.UP = window.UP || {};
       out += '</div></div>';
       out += '<div class="q-review muted">' + (q.textReview === 'source-verified' ? 'Text checked against source' : 'Text not fully source-reviewed') + ' · ' + (q.keyVerified === true ? 'Verified answer key available' : 'No independently verified answer key recorded') + '</div>';
       out += '<div class="q-text">' + esc(pyqQuestionText(q)) + '</div>';
+      out += '<div class="pactions">' + saveQuestionButton(pyqQuestionText(q)) + '</div>';
       if (S.lang === 'hi' && q.hindiReview) out += '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>';
       if (q.optionReview === 'awaiting-source-review') out += '<p class="muted">Options missing or suspect — withheld pending source review. This question is not graded.</p>';
       const reportURL = 'https://github.com/Aaryaveeryadav/Upay/issues/new?title=' + encodeURIComponent('Question issue: '+q.id) + '&body=' + encodeURIComponent('Question ID: '+q.id+'\nSubject: '+S.subject+'\nYear: '+(q.y||'unknown')+'\n\nDescribe the problem (do not include private account details):\n');
@@ -5524,6 +5551,22 @@ window.UP = window.UP || {};
       if (S.aiQuestion === q && S.aiState === 'local') { S.aiQuestion = null; S.aiScope = null; }
       go(`#/ask?q=${encodeURIComponent(q)}`, true); return;
     }
+    if (action === 'saveQuestion') {
+      const q = String(tgt.dataset.q || '').trim(); if (!q) return;
+      if (!S.saved.some(item => item.q === q)) {
+        const item = {q, date:new Date().toISOString().slice(0,10), at:Date.now(),
+          subject:S.subject, cls:+S.cls, board:S.board, tag:'', chapter:''};
+        S.saved.unshift(item); S.saved = S.saved.slice(0,200); saveSaved(); addSavedRemote(item);
+      }
+      // No whole-page redraw: saving must not move the question or reset inputs.
+      document.querySelectorAll('[data-action="saveQuestion"]').forEach(btn => {
+        if (btn.dataset.q !== q) return;
+        btn.disabled = true;
+        btn.innerHTML = icon('check') + ' ' + (S.lang === 'hi' ? 'सहेजा गया' : 'Saved');
+      });
+      toast(S.lang === 'hi' ? 'सहेजा गया — Saved पृष्ठ पर देखें' : 'Question saved — find it in Saved');
+      return;
+    }
     if (action === 'solvePyq' || action === 'savePyq') {
       const q = tgt.dataset.q;
       if (action === 'solvePyq') { go(`#/ask?q=${encodeURIComponent(q)}`, true); return; }
@@ -5622,10 +5665,11 @@ window.UP = window.UP || {};
         if (speechSession !== session) return;
         if (index >= parts.length) { stopAnswerSpeech(); return; }
         const u = session.utterance = new SpeechSynthesisUtterance(parts[index++]);
-        u.lang = S.lang === 'hi' ? 'hi-IN' : 'en-IN'; u.rate = S.lang === 'hi' ? .95 : 1;
-        const voices = window.speechSynthesis.getVoices();
-        const voice = voices.find(v=>v.lang===u.lang) || voices.find(v=>v.lang.startsWith(u.lang.slice(0,2)));
-        if (voice) u.voice = voice;
+        u.lang = S.lang === 'hi' ? 'hi-IN' : 'en-IN';
+        const settings = UP.teacherVoice.select(window.speechSynthesis.getVoices(), u.lang);
+        u.rate = settings.rate; u.pitch = settings.pitch; u.volume = settings.volume;
+        if (settings.voice) u.voice = settings.voice;
+        if (index === 1 && !settings.preferred) toast(S.lang === 'hi' ? 'महिला आवाज़ उपलब्ध नहीं मिली; डिवाइस की उपलब्ध आवाज़ धीमी गति में उपयोग होगी।' : 'No recognized female voice is available; using the device voice at a gentle pace.');
         u.onend = next;
         u.onerror = event => {
           if (speechSession !== session) return;
