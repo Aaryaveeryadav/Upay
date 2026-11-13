@@ -38,7 +38,7 @@
 
   /* --- CRITICAL CORE: required before app.js boots --- */
   const CRITICAL_CORE = [
-    'assets/js/data-extra.js?v=26d1',
+    'assets/js/data-extra.js?v=26d6',
     'assets/js/data/chapters1.js',
     'assets/js/data/chapters2.js',
     'assets/js/data/pyq.js',
@@ -48,7 +48,7 @@
     'assets/js/data/chapters12-applied-maths.js',  // Class 12 Applied Maths KB + PYQ seed
     'assets/js/data/chapters12-accountancy.js', // Class 12 Accountancy + Computerised Accounting chapter maps
     'assets/js/data/accountancy-chapters.js?v=26ab', // extracted NCERT outline: objectives and numbered sections
-    'assets/js/data/business-studies12.js?v=26d1', // CBSE English outlines
+    'assets/js/data/business-studies12.js?v=26d6', // CBSE English outlines
     'assets/js/data/economics12.js?v=26ab', // Class 12 Economics guides, including deep links
     'assets/js/data/economics-sources.js?v=26ab', // the original Economics PDF catalogue
     'assets/js/data/english12.js?v=26ab', // Class 12 English reading notes and direct links
@@ -68,16 +68,20 @@
       'assets/js/data/figures-physics.js', // embedded page-image diagrams for 33 Class 12 2025 Qs
     'assets/js/corrupt_gate.js',
     'assets/js/solver-core.js',
-    'assets/js/solver-arith.js?v=26d1',
+    'assets/js/solver-arith.js?v=26d6',
     'assets/js/solver-geo.js',
-    'assets/js/task-routing.js?v=26d1',
-    'assets/js/square-integers.js?v=26d1',
-    'assets/js/solver-route.js?v=26d1',
-    'assets/js/answer-format.js?v=26d1',
-    'assets/js/teacher-voice.js?v=26d1',
-    'assets/js/figures.js?v=26d1',
+    'assets/js/task-routing.js?v=26d6',
+    'assets/js/language-policy.js?v=26d6',
+    'assets/js/solve-timing.js?v=26d6',
+    'assets/js/square-integers.js?v=26d6',
+    'assets/js/solver-route.js?v=26d6',
+    'assets/js/answer-format.js?v=26d6',
+    'assets/js/teacher-voice.js?v=26d6',
+    'assets/js/figures.js?v=26d6',
     'assets/js/checker.js',
     'assets/js/testgen.js',
+    'assets/js/mock-assessment.js?v=26d6',
+    'assets/js/mistake-queue.js?v=26d6',
     'assets/js/panel.js',
     'assets/js/answers.js'
   ];
@@ -94,7 +98,6 @@
     maths:   [],
     science: [
       'assets/science/science10.js',
-      'assets/science/hindi10-ch.js',
       'assets/js/data/science10-q.js',
       'assets/js/data/pyq-science.js'
     ],
@@ -104,6 +107,7 @@
       'assets/js/data/pyq-social.js'
     ],
     hindi: [
+      'assets/science/hindi10-ch.js',
       'assets/js/data/hindi-extra.js',
       'assets/js/data/hindi10-q.js',
       'assets/js/data/hindi10-rich.js',
@@ -124,9 +128,9 @@
       'assets/sanskrit/sanskrit-papers.js'
     ],
     physics: [
-      'assets/js/data/physics12.js?v=26d1',
-      'assets/js/data/physics-outlines.js?v=26d1', // CBSE 2026–27 outline view per chapter
-      'assets/js/data/pyq-physics-2025.js?v=26d1'
+      'assets/js/data/physics12.js?v=26d6',
+      'assets/js/data/physics-outlines.js?v=26d6', // CBSE 2026–27 outline view per chapter
+      'assets/js/data/pyq-physics-2025.js?v=26d6'
     ],
     chemistry: [
       'assets/js/data/chemistry12.js',
@@ -298,7 +302,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26d1');
+    return loadScript('assets/js/app.js?v=26d6');
   }
 
   function loadPostPaint() {

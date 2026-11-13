@@ -14,7 +14,11 @@
    ===================================================================== */
 'use strict';
 const taskRouting = require('./assets/js/task-routing.js');
+const languagePolicy = require('./assets/js/language-policy.js');
+const solveTiming = require('./assets/js/solve-timing.js');
 const solvePolicy = require('./lib/solve-policy.js');
+const solveRuntime = require('./lib/gemini.js');
+const { aiFailure: solveFailure } = require('./lib/ai-status.js');
 
 const http = require('http');
 const fs = require('fs');
@@ -1727,6 +1731,8 @@ const handleRequest = async function (req, res) {
       const plain = liveKeys();                 /* the whole ring; a capped key falls through */
       const b = await readBody(req);
       const question = String(b.question || '').trim();
+      const clarification = require('./assets/js/square-integers.js').clarification(question);
+      if (clarification) return json(res, 422, clarification);
       if (question.length < 3) return json(res, 400, { error: 'Type a question first.' });
 
       /* A question that lost its maths in extraction is a DIFFERENT question.
@@ -1749,6 +1755,9 @@ const handleRequest = async function (req, res) {
          a chemistry answer. */
       const subjectRouting = taskRouting.resolve(question, String(b.selectedSubject || b.subject || 'maths'));
       const subject = subjectRouting.subject;
+      const chapterTitle=subjectRouting.changed?'':String(b.chapterTitle||'').slice(0,200);
+      const contextRequest=languagePolicy.contextRequest(question,subject,chapterTitle);
+      if(contextRequest)return json(res,422,contextRequest);
       if (subjectRouting.language) b.lang = subjectRouting.language;
       if (subjectRouting.changed) b.chapter = 0;
       const cls = Number(b.cls) || 10;
@@ -1802,7 +1811,7 @@ const handleRequest = async function (req, res) {
         ' "check":"<how to verify the answer>",',
         ' "diagram":{"type":"plane|triangle|circle|bars|solid","points":[...],"circles":[...],"segments":[...],"bars":[...],"parts":[...],"labels":[...],"caption":"..."}}',
         'Rules:',
-        '- Give at least 4 genuinely different approaches. Same working under two labels is forbidden.',
+        '- Give only genuinely useful complete approaches; one is sufficient, and no fixed count is required. Same working under two labels is forbidden.',
         '- Every step shows real working with the question\'s own numbers.',
         '- Verify arithmetic before writing. No unique answer? Say so in "answer".',
         '- Use · for decimals, √ π θ ° ∠ △ ⇒ as needed.',
@@ -1828,7 +1837,7 @@ const handleRequest = async function (req, res) {
         ' "check":"<how to verify>",',
         ' "diagram":<either null (no figure needed) OR a figure object below>}',
         'Rules:',
-        '- Give at least 4 genuinely different approaches. Many theory questions have one honest route; give just that.',
+        '- Give only genuinely useful complete approaches; one is sufficient, and no fixed count is required. Many theory questions have one honest route; give just that.',
         '- Numericals: show every substitution with units. Balance every equation atom-by-atom.',
         '- Chemical equations: use → for yields, ↑/↓ for gas/precipitate when appropriate. Balance atoms on BOTH sides.',
         '- Hindi NOT needed — English only.',
@@ -1891,43 +1900,33 @@ const handleRequest = async function (req, res) {
       else topicPrompt = ['Answer the supplied Class ' + cls + ' ' + subject + ' question without inventing missing information.',
         'Reply with JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","steps":[{"t":"..."}]}],"check":"...","diagram":null}'];
 
-      const prompt = topicPrompt.concat([solvePolicy.instructions,
+      const prompt = topicPrompt.concat([solvePolicy.instructions, languagePolicy.instructions, chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:'',
         '',
         'QUESTION: ' + question,
         near ? ('\nFor calibration — real CBSE questions of the same chapter (do not answer these):\n' + near) : ''
       ]).filter(Boolean).join('\n');
 
       let out;
+      const solveController = new AbortController();
+      const timing = solveTiming.forQuestion(question,subject);
+      const callOptions = {deadline:Date.now()+timing.serverMs, signal:solveController.signal, attemptMs:timing.attemptMs, maxOutputTokens:timing.maxOutputTokens};
+      const solveTimer = setTimeout(()=>solveController.abort(), timing.serverMs);
       try {
-        out = await callGeminiResilient(prompt, plain, db.settings.geminiModel);
+        out = await solveRuntime.callGeminiResilient(prompt, plain, db.settings.geminiModel, null, callOptions);
         let draft;
         try { draft = firstJSON(out.text); } catch (_) { draft = null; }
-        if (draft && solvePolicy.completeApproaches(draft, question).length < 4) {
-          out = await callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), plain, out.model);
+        if (draft && solvePolicy.completeApproaches(draft, question, subject).length < 1) {
+          out = await solveRuntime.callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), plain, out.model, null, callOptions);
         }
       } catch (e) {
         audit(sess.user, 'solve-error', String(e.message).slice(0, 140));
         saveDB();
-        const msg = String(e.message || e);
-        let said = 'The AI call failed: ' + msg.slice(0, 240);
-        /* A free-tier 429 is usually the DAILY cap, not a per-minute burst —
-           telling the student "try again in a minute" is a lie that wastes
-           their time, so say what actually happened. */
-        if (/\b429\b/.test(msg)) said = /per day|daily|perday|quota/i.test(msg)
-          ? (noOfficialKey ? 'The AI quota for today is used up. There is no verified local solution for this question.' : 'The free AI quota for today is used up. The built-in solver below still works offline — or the admin can add a fresh API key in Admin → AI.')
-          : 'The AI is being asked too often right now. Wait a minute and try again.';
-        else if (/\b503\b/.test(msg)) said = 'The AI model is busy at the moment. Please try again in a few seconds.';
-        /* pass Google's own retryDelay through so a caller can wait exactly as
-           long as asked instead of guessing */
-        let retryAfter = 0;
-        const raw = String(e.raw || msg);
-        const m = raw.match(/"retryDelay"\s*:\s*"(\d+(?:\.\d+)?)s"/)
-          || raw.match(/retryDelay['"]?\s*[:=]\s*['"]?(\d+)s/i)
-          || raw.match(/retry in ([\d.]+)\s*s/i);
-        if (m) retryAfter = Math.ceil(Number(m[1]));
-        /* > 10 minutes means the daily allowance, not a burst: stop trying. */
-        if (retryAfter > 600) keyDeadUntil = Date.now() + Math.min(retryAfter, 6 * 3600) * 1000;
-        return json(res, 502, { error: said, rateLimited: /\b429\b/.test(msg), retryAfter: retryAfter, fallback: true });
+        const failure = solveFailure(e);
+        if (failure.body.retryAfter) res.setHeader('retry-after', String(failure.body.retryAfter));
+        return json(res, failure.http, failure.body);
+      } finally {
+        clearTimeout(solveTimer);
+        solveController.abort();
       }
       let parsed;
       try {
@@ -1968,7 +1967,7 @@ const handleRequest = async function (req, res) {
         result: String(parsed.answer || ''),
         summary: String(parsed.summary || ''),
         verify: String(parsed.check || ''),
-        approaches: solvePolicy.completeApproaches(parsed, question).map(function (a) {
+        approaches: solvePolicy.completeApproaches(parsed, question, subject).map(function (a) {
           return {
             format: solvePolicy.proseTask(question) ? 'prose' : '', name: String(a.name || 'Method'),
             tag: String(a.tag || ''),
@@ -1983,8 +1982,8 @@ const handleRequest = async function (req, res) {
 
       if (!answer.approaches.length) return json(res, 502, { error: 'The model returned no solvable steps. Try rephrasing.', fallback: true });
 
-      if (answer.approaches.length < 4) return json(res, 502, {
-        error: 'The AI could not provide four distinct usable approaches. Please try again.', fallback: true
+      if (answer.approaches.length < 1) return json(res, 502, {
+        error: 'The AI could not provide a complete usable answer. Please try again.', fallback: true
       });
       answer.methodCount = answer.approaches.length;
 

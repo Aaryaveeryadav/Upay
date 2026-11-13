@@ -2,8 +2,8 @@
    Only the explicitly parsed positive-integer monic quadratic problem applies. */
 (function(root){
  function compute(question){
-  const q=String(question||'').replace(/\\+[()[\]]|\$/g,'').replace(/\^\{(\d+)\}/g,'^$1').replace(/²/g,'^2').replace(/[−–]/g,'-').trim();
-  const m=q.match(/^(?:find|determine) all (?:the )?positive integers? n (?:for which|such that)\s+n\^2\s*\+\s*(\d+)\s*n\s*\+\s*(\d+)\s+is a perfect square[.?]?$/i);
+  const q=String(question||'').replace(/\\+[()[\]]|\$/g,'').replace(/\^\{(\d+)\}/g,'^$1').replace(/²/g,'^2').replace(/[−–]/g,'-').replace(/\s+/g,' ').trim();
+  const m=q.match(/^(?:find|determine) all (?:the )?positive (?:integers? n|integer values? of n) (?:for which|such that)\s+n\^2\s*\+\s*(\d+)\s*n\s*\+\s*(\d+)\s+is a perfect square[.?]?$/i);
   if(!m)return null;
   const b=Number(m[1]),c=Number(m[2]),h=b/2,D=c-h*h;
   if(!Number.isSafeInteger(c)||b>2000||b%2||D<=0||D>10000000)return null;
@@ -20,6 +20,12 @@
  }
  // Exact bounded class: integer x, sqrt(x+a)+sqrt(b-x) an integer.
  // Parse the whole question: never silently discard extra constraints.
+ function clarification(question){
+  const q=String(question||'').replace(/\\+[()[\]]|\$/g,'').replace(/\s+/g,' ').trim();
+  if(!/^(?:find|determine) all (?:the )?positive integers? [n7] (?:for which|such that) n(?:2|²|\^2|\^\{2\})\s*\+\s*10\s*[mn]\s*\+\s*2026 is a perfect square[.?]?$/i.test(q))return null;
+  if(!/positive integers?\s+7\b|n2\s*\+|n[²^2{} ]+\s*\+\s*10\s*m\b|n2\s*\+\s*10\s*m/i.test(q))return null;
+  return {code:'question_needs_confirmation',error:'The question has ambiguous notation (7, n2 or mixed n and m). Please confirm the original expression before solving; it has not been silently changed.',originalQuestion:String(question),suggestedQuestion:'Find all positive integers n for which n² + 10n + 2026 is a perfect square.'};
+ }
  function radicalCompute(question){
   const q=String(question||'').replace(/\\+[()[\]]|\$/g,'').replace(/\\sqrt\s*\{([^{}]+)\}/g,'√($1)').replace(/sqrt\s*\(/gi,'√(').replace(/[−–]/g,'-').replace(/\s+/g,' ').trim();
   const m=q.match(/^(?:find|determine) all (?:the )?(?:integers? x|integer values? of x) (?:for which|such that)\s*√\(\s*x\s*\+\s*(\d+)\s*\)\s*\+\s*√\(\s*(\d+)\s*-\s*x\s*\)\s+is an integer[.?]?$/i);
@@ -48,7 +54,7 @@
    cases.push('k = '+k+': (u − v)² = '+D+'; '+(xs.length?'x = '+xs.join(', '):L('no integer x','कोई पूर्णांक x नहीं')));
   }
   const finish={t:L('Complete verified solution set.','सत्यापित पूर्ण हल समुच्चय।'),m:result};
-  return {source:'exact',kind:'integer-radical-sum',policyVersion:'four-approaches-v3',question,result,
+  return {source:'exact',kind:'integer-radical-sum',policyVersion:'useful-approaches-v1',question,result,
    summary:L('All four explanations use the same exact solution set. Integer square roots and the entire finite domain are checked, not rounded approximations.','चारों व्याख्याओं में एक ही सटीक हल समुच्चय है। पूर्णांक वर्गमूल और पूरे सीमित प्रांत की जाँच की गई है।'),
    approaches:[{
     name:L('Integer-root theorem and square pairs','पूर्णांक वर्गमूल प्रमेय और वर्ग युग्म'),
@@ -82,7 +88,7 @@
   const shift='(n + '+h+')', equation='m² − '+shift+'² = '+D;
   const pairText=pairs.map(p=>'('+p.u+', '+p.v+')').join(', ');
   const positive=valid.map(p=>'('+p.u+', '+p.v+') ⇒ n = '+p.n).join('; ')||result;
-  return {source:'exact',kind:'integer-square',policyVersion:'four-approaches-v3',question,
+  return {source:'exact',kind:'integer-square',policyVersion:'useful-approaches-v1',question,
    title:L('All positive integer solutions','सभी धन पूर्णांक हल'),result,
    summary:L('Complete the square, then enumerate every same-parity factor pair. This finds all solutions, not just one candidate.', 'पूर्ण वर्ग बनाकर समान सम-विषमता वाले सभी गुणनखंड युग्म जाँचें। इससे सभी हल मिलते हैं।'),
    approaches:[{
@@ -111,7 +117,7 @@
    check:{state:'verified',source:'arithmetic',note:L('Exact finite factor-pair enumeration and substitution.','सटीक गुणनखंड खोज और प्रतिस्थापन।')}
   };
  }
- const api={compute,solve,radicalCompute};
+ const api={compute,solve,radicalCompute,clarification};
  if(typeof module==='object'&&module.exports)module.exports=api;
  else{root.UP=root.UP||{};root.UP.squareInteger=api;}
 })(typeof window==='undefined'?globalThis:window);

@@ -47,7 +47,7 @@ window.UP = window.UP || {};
     store.remove(mockStoreKey());
     clearInterval(window.__mtTimer);
   }
-  S.hardList = [];
+  S.hardList = []; S.mistakeQueue = [];
   S.dailyProgress = {};
   S.cmdkOpen = false; S.supabaseReady = false;
   S.q = '';                             // current question text
@@ -73,9 +73,11 @@ window.UP = window.UP || {};
     const daily = store.get(scopedDataKey('dailyProgress'), {});
     S.mastery = mastery && typeof mastery === 'object' && !Array.isArray(mastery) ? mastery : {};
     S.hardList = Array.isArray(hard) ? hard : [];
+    const mistakes=store.get(scopedDataKey('mistakeQueue'),[]);S.mistakeQueue=Array.isArray(mistakes)?mistakes:[];
     S.dailyProgress = daily && typeof daily === 'object' && !Array.isArray(daily) ? daily : {};
   }
   function saveMastery() { store.set(scopedDataKey('mastery'), S.mastery); }
+  function saveMistakeQueue(){store.set(scopedDataKey('mistakeQueue'),S.mistakeQueue);}
   function saveHardList() { store.set(scopedDataKey('hardList'), S.hardList); }
   function saveDailyProgress() { store.set(scopedDataKey('dailyProgress'), S.dailyProgress); }
   syncStudyScope();
@@ -503,6 +505,7 @@ window.UP = window.UP || {};
      P() checks the object itself first, then the side file. */
   const P = obj => {
     if (!obj) return '';
+    if (S.subject==='sanskrit' && obj.sa) return obj.sa;
     if (typeof obj === 'string' || typeof obj === 'number') return String(obj);
     /* If the current subject is Hindi (or any subject whose content only
        exists in Hindi), always prefer the Hindi text regardless of the UI
@@ -649,7 +652,7 @@ window.UP = window.UP || {};
     return !!q && (String(q.ch) === want || (Array.isArray(q.chapterTags) && q.chapterTags.some(tag => String(tag) === want)));
   }
   function pyqQuestionText(q) {
-    const text = P({ en: q && q.en || '', hi: q && q.hi || '' });
+    const text = P({ sa:q&&q.sa||'', en: q && q.en || '', hi: q && q.hi || '' });
     // Preserve source-verified Accountancy text exactly: the legacy Hindi OCR
     // cleaner can strip legitimate numeric runs and spreadsheet formulas.
     return q && (q.paperCode || q.cleanText) ? text : cleanQText(text);
@@ -1621,6 +1624,7 @@ window.UP = window.UP || {};
     S.aiErrorCode = ''; S.aiRetryAt = 0;
     const routing = UP.taskRouting.resolve(q, S.subject);
     const responseLang = routing.language || S.lang;
+    const timing = UP.solveTiming.forQuestion(q,routing.subject);
     const scope = aiScope();
     const isCurrent = () => S.aiQuestion === q && S.aiScope === scope && aiScope() === scope;
     const mount = () => document.getElementById('answerMount');
@@ -1632,6 +1636,13 @@ window.UP = window.UP || {};
       const thinking = document.getElementById('aiThinking');
       if (thinking && S.aiState !== 'loading') thinking.remove();
     };
+    const matches=(UP.pyq||[]).filter(row=>qInScope(row)&&pyqQuestionText(row)===q);
+    const mappedChapters=[...new Set(matches.map(row=>String(row.ch)).filter(Boolean))];
+    const chapterContext=mappedChapters.length===1?chapterById(mappedChapters[0]):chapterById(S.chapterId);
+    const languageContext=UP.languagePolicy.contextRequest(q,routing.subject,chapterContext&&P(chapterContext));
+    if(languageContext){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'language-context',question:q,...languageContext};paint();return;}
+    const clarification=UP.squareInteger.clarification(q);
+    if(clarification){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'question-clarification',question:q,...clarification};paint();return;}
     const exact = ['maths','applied-maths'].includes(routing.subject) && UP.squareInteger.solve(q, responseLang);
     if (exact) {
       exact.subjectRouting = routing; S.aiAnswer = exact; S.aiState = 'done'; paint(); return;
@@ -1668,38 +1679,43 @@ window.UP = window.UP || {};
       const m = mount();
       if (!m || !isCurrent() || S.aiState !== 'loading') return;
       const sp = document.getElementById('aiRequestStatus');
-      if (sp) sp.textContent = S.lang === 'hi' ? 'AI अभी काम कर रहा है — इसमें लगभग 30 सेकंड तक लग सकते हैं।' : 'Still preparing and checking the explanations — this can take up to about 30 seconds.';
+      if (sp) sp.textContent = S.lang === 'hi' ? 'AI अभी काम कर रहा है — इसमें लगभग '+(timing.serverMs/1000)+' सेकंड तक लग सकते हैं।' : 'Still preparing and checking the complete explanations — this can take up to about '+(timing.serverMs/1000)+' seconds.';
     }, 6000);
     let controller;
     try { controller = new AbortController(); } catch(e) { controller = null; }
-    // Allow the server's 30-second deadline plus transport time; do not
-    // discard a valid 26–30 second answer by aborting at 25 seconds.
-    const clientTimeout = setTimeout(() => { if (controller) controller.abort(); }, 35000);
+    // Allow the server's 50-second provider budget, authentication and transport.
+    // Keep the timer alive while reading the response body as well.
+    const clientTimeout = setTimeout(() => { if (controller) controller.abort(); }, timing.clientMs);
     let req;
     try {
       if (typeof fetch !== 'function') { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'इस ब्राउज़र में नेटवर्क उपलब्ध नहीं' : 'no network available here', true); return; }
       req = fetch('/api/ai/solve', {
         method: 'POST',
         headers: { 'content-type': 'application/json', authorization: 'Bearer ' + (localStorage.getItem('upay.token') || '') },
-        body: JSON.stringify({ question: q, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0), subject: routing.subject, selectedSubject:S.subject, cls: S.cls, lang:responseLang }),
+        body: JSON.stringify({ question: q, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0), chapterTitle:!routing.changed&&chapterContext?P(chapterContext):'', subject: routing.subject, selectedSubject:S.subject, cls: S.cls, lang:responseLang }),
         signal: controller ? controller.signal : undefined
       });
     } catch (e) { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'नेटवर्क से संपर्क नहीं हुआ' : 'could not reach the server', true); return; }
     req.then(r => {
-      clearTimeout(clientTimeout); clearTimeout(slowTimer);
       if (!r) throw new Error('no response');
-      return r.json().catch(() => ({ error: 'bad-response' })).then(j => ({ ok: r.ok, j }));
+      return r.json().catch(e => {
+        if (controller && controller.signal.aborted) throw e;
+        return { error: 'The server returned an unreadable answer. Your question is preserved; try again.' };
+      }).then(j => ({ ok: r.ok, j }));
     })
       .then(({ ok, j }) => {
+        clearTimeout(clientTimeout); clearTimeout(slowTimer);
         if (!isCurrent()) return;
-        if (ok && j && j.approaches && j.approaches.length >= 4) {
+        if (ok && j && j.approaches && j.approaches.length >= 1) {
           j = UP.answerFormat.answer(j);
-          j.question = q; j.subjectRouting = routing;
+          j.question = q; j.subjectRouting = routing; j.chapterTitle=chapterContext?P(chapterContext):'';
           j._chId = S.chapterId || 0;
           S.aiAnswer = j; S.aiState = 'done';
           pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
           bumpProgress(S.subject);
         } else {
+          if(j&&j.code==='language_context_required'){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'language-context',question:q,...j};paint();return;}
+          if(j&&j.code==='question_needs_confirmation'){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'question-clarification',question:q,...j};paint();return;}
           S.aiErrorCode = j && j.code || '';
         S.aiRetryAt = j && Number.isFinite(j.retryAfter) && j.retryAfter > 0 ? Date.now() + j.retryAfter*1000 : 0;
         const retryHint = j && Number.isFinite(j.retryAfter) && j.retryAfter > 0 ? ' Retry after '+Math.ceil(j.retryAfter)+' seconds.' : '';
@@ -1859,6 +1875,8 @@ window.UP = window.UP || {};
     return fig;
   }
   function renderAIAnswer(a) {
+    const clarification=UP.squareInteger.clarification(a.question || S.aiQuestion || '');
+    if(clarification)return renderAnswer({kind:'question-clarification',question:a.question||S.aiQuestion,...clarification});
     // Also replace legacy/cached drafts for this narrowly supported problem.
     const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(a.question || S.aiQuestion || '', S.lang);
     if (exact && a === S.aiAnswer) S.aiAnswer = exact;
@@ -1878,6 +1896,7 @@ window.UP = window.UP || {};
           <span class="tag cream">${a.approaches.length} ${theory ? (S.lang === 'hi' ? 'व्याख्याएँ' : 'explanations') : t('methods')}</span>
           <span class="tag grey">${esc(a.model || '')}</span>
         </div>
+        ${a.chapterTitle?'<div class="tag grey">Chapter context: '+esc(a.chapterTitle)+'</div>':''}
         <div class="qtext">${esc(a.question || S.aiQuestion || '')}</div>
         <div class="pactions">${saveQuestionButton(a.question || S.aiQuestion)}</div>
         <div style="font-size:14px;color:var(--ink-600)">${rich(a.summary || '')}</div>
@@ -1973,7 +1992,8 @@ window.UP = window.UP || {};
   function renderCachedAnswer(j, qq, sol, ansBox, id) {
     const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
     j = UP.answerFormat.answer(exact || j);
-    if (!j || j.policyVersion !== 'four-approaches-v3' || !j.approaches || j.approaches.length < 4) return false;
+    if (!j || j.policyVersion !== 'useful-approaches-v1' || !j.approaches || j.approaches.length < 1) return false;
+    if(S.subject==='sanskrit'&&(!UP.languagePolicy.usableApproach({steps:[{t:j.answer||j.result||''}]},pyqQuestionText(qq),'sanskrit')||j.approaches.some(a=>!UP.languagePolicy.usableApproach(a,pyqQuestionText(qq),'sanskrit'))))return false;
     const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
       (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
       '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + mathText(j.answer || j.result) + '</div>' +
@@ -1981,7 +2001,7 @@ window.UP = window.UP || {};
       renderAIDiagram(Object.assign({}, j, {question:qq.en || ''})) +
       j.approaches.map((a, i) => '<div class="sol-method"><div class="sol-mname">' +
         (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i+1) + ' — ' : '') + esc(a.name) + '</div>' +
-        '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + (a.steps||[]).map(st => '<li>' + esc(st.t || '') +
+        '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + (a.steps||[]).map(st => '<li>' + esc(st.t || '').replace(/\n/g,'<br>') +
           (st.m ? '<div class="st-m">' + mathText(st.m) + '</div>' : '') +
           (st.note ? '<span class="st-note">' + esc(st.note) + '</span>' : '') + '</li>').join('') + '</ol>' +
         (a.watch ? '<div class="callout warn">' + icon('warn') + '<div><b>' + t('watchOut') + ':</b> ' + esc(a.watch) + '</div></div>' : '') +
@@ -2032,7 +2052,7 @@ window.UP = window.UP || {};
       /* imported:true turns on the corrupt gate.  Without it the server
          happily spent a model call answering a question whose fraction was
          lost in extraction -- and then showed that answer as a solution. */
-      body: JSON.stringify({ question: pyqQuestionText(qq) + (hasOpts(qq) ? '\nOptions: ' + qq.opts.map(o=>o.en || P(o)).join('; ') : ''), chapter: qq.ch, imported: true, options: hasOpts(qq) ? qq.opts.length : 0, subject: S.subject, cls: S.cls, lang: S.lang })
+      body: JSON.stringify({ question: pyqQuestionText(qq) + (hasOpts(qq) ? '\nOptions: ' + qq.opts.map(o=>o.en || P(o)).join('; ') : ''), chapter: qq.ch, chapterTitle:chapterName(qq.ch), imported: true, options: hasOpts(qq) ? qq.opts.length : 0, subject: S.subject, cls: S.cls, lang: S.lang })
     }).then(r => {
       /* A non-2xx reply used to be thrown away unread (`.then(r => r.ok ? r.json()
          : null)`), so EVERY failure -- a timed-out session, the daily quota, a
@@ -2053,7 +2073,7 @@ window.UP = window.UP || {};
                                      : 'The server\'s reply could not be read (HTTP ' + reply.status + '). Try again.') + '</div></div>';
         return;
       }
-      if (!j.approaches || j.approaches.length < 4) {
+      if (!j.approaches || j.approaches.length < 1) {
         /* 401/403 = the sign-in lapsed or there is no API key. Show the LOCAL
            solver answer underneath the sign-in banner so the student still gets
            help, instead of a dead panel they cannot read. */
@@ -2086,7 +2106,7 @@ window.UP = window.UP || {};
       renderAIDiagram(Object.assign({}, j, {question:qq.en || ''})) +
         j.approaches.map((a, i) => '<div class="sol-method"><div class="sol-mname">' +
           (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i + 1) + ' — ' : '') + esc(a.name) + '</div>' +
-          '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + a.steps.map(st => '<li>' + esc(st.t) +
+          '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + a.steps.map(st => '<li>' + esc(st.t).replace(/\n/g,'<br>') +
             (st.m ? '<div class="st-m">' + mathText(st.m) + '</div>' : '') +
             (st.note ? '<span class="st-note">' + esc(st.note) + '</span>' : '') + '</li>').join('') + '</ol>' +
           (a.watch ? '<div class="callout warn">' + icon('warn') + '<div><b>' + t('watchOut') + ':</b> ' + esc(a.watch) + '</div></div>' : '') +
@@ -2134,6 +2154,9 @@ window.UP = window.UP || {};
   }
 
   function renderAnswer(ans) {
+    if(ans.kind==='language-context')return `<div class="callout warn language-context"><div><h3>More context needed</h3><p>${esc(ans.question)}</p><p>${esc(ans.error)}</p>${aiRecovery(ans.question)}</div></div>`;
+    if(ans.kind==='question-clarification')return `<div class="callout warn question-clarification"><div><h3>Confirm the question first</h3><p>${esc(ans.question)}</p><p>${esc(ans.error)}</p><p><b>Possible intended question (please check):</b> ${esc(ans.suggestedQuestion)}</p><a class="btn btn-primary" href="#/ask?q=${encodeURIComponent(ans.suggestedQuestion)}">Yes, solve this corrected question</a></div></div>`;
+
     if (ans.kind === 'accountancy-unavailable' || ans.kind === 'no-local-solver') {
       return `<div class="callout warn" style="margin-top:14px">${icon('warn')}<div>
         <b>${S.lang === 'hi' ? 'एआई समाधान उपलब्ध नहीं है।' : 'AI solution unavailable.'}</b>
@@ -2164,7 +2187,6 @@ window.UP = window.UP || {};
     return `
     <section class="answer">
       ${localBadge}
-      ${!isLoading && methods.length < 4 ? '<p class="muted">' + (S.lang === 'hi' ? 'यह स्थानीय प्रारंभिक हल है; पूर्ण AI उत्तर में कम-से-कम चार उपयोगी तरीके माँगे गए हैं।' : 'Local starter solution; the complete AI response requests at least four useful approaches.') + '</p>' : ''}
       <div class="answer-head">
         <div class="meta-row">
           <span class="tag">${esc(ch && !answerRoute.changed ? P({ en: ch.en, hi: ch.hi }) : (isLoading ? (S.lang==='hi'?'एआई':'AI') : (S.lang === 'hi' ? 'अवधारणा' : 'Concept')))}</span>
@@ -2622,6 +2644,7 @@ window.UP = window.UP || {};
        ch.richGroups so they render the same way English does. */
     const _isEnLit = S.subject === 'english' && ch.sections;
     const _isHiLit = S.subject === 'hindi' && ch.richSections;
+    if(S.subject==='sanskrit')return `<section class="page-head"><h1>${esc(P(ch))}</h1><p>Legacy chapter outline · not verified against the supplied papers. Hindi summaries/review prompts are not being presented as original Sanskrit text or exam questions.</p></section>`+renderSanskritSources();
     const _isSkLit = S.subject === 'sanskrit' && ch.richSections;
     const _isLit = _isEnLit || _isHiLit || _isSkLit;
     if (_isLit) {
@@ -3612,48 +3635,66 @@ window.UP = window.UP || {};
      ============================================================ */
   async function shareAnswerAsImage() {
     const a = spokenAnswer(); if (!a) return;
-    const W = 1080, H = 1350;
-    const c = document.createElement('canvas'); c.width=W; c.height=H;
-    const ctx = c.getContext('2d');
-    // Cream background
-    ctx.fillStyle = '#fdfbf6'; ctx.fillRect(0,0,W,H);
-    // Brand band
-    ctx.fillStyle = '#46a0c9'; ctx.fillRect(0,0,W,72);
-    ctx.fillStyle = '#fff'; ctx.font = 'bold 36px system-ui, -apple-system, "Noto Sans Devanagari", sans-serif'; ctx.fillText('Upay · उपाय', 48, 50);
-    ctx.font = '20px system-ui'; ctx.fillText('one question, every way to solve it', W-500, 50);
-    // Wrap helper
-    function wrap(text, x, y, maxW, lh, font, color){
-      ctx.font = font; ctx.fillStyle = color;
-      const words = String(text).split(/\s+/); let line='', yy=y;
-      words.forEach(w=>{ const t = line + (line?' ':'') + w; if(ctx.measureText(t).width>maxW){ctx.fillText(line,x,yy);line=w;yy+=lh;} else line=t; });
-      if(line) ctx.fillText(line,x,yy); return yy;
+    document.getElementById('share-preview')?.remove();
+    const dialog=document.createElement('dialog');dialog.id='share-preview';dialog.className='share-preview';
+    dialog.innerHTML='<h2>Share answer image</h2><p data-share-status>Preparing a readable preview…</p><div data-share-picture></div><div class="pactions"><button class="btn btn-primary" data-share-native hidden>Share image</button><button class="btn btn-cream" data-share-download disabled>Download image</button><button class="btn btn-ghost" data-share-close>Close</button></div>';
+    document.body.appendChild(dialog);dialog.showModal();
+    const close=()=>dialog.remove();dialog.querySelector('[data-share-close]').onclick=close;
+    dialog.addEventListener('cancel',e=>{e.preventDefault();close();});
+    if(document.fonts && document.fonts.ready) await document.fonts.ready;
+    if(!dialog.isConnected)return;
+    const W=1080,c=document.createElement('canvas'),ctx=c.getContext('2d'),rows=[];
+    let y=118,truncated=false;
+    const fontFamily=getComputedStyle(document.body).fontFamily;
+    function block(text,font,color,lh,gap=16){
+      font=font.replace('system-ui',fontFamily);
+      ctx.font=font;
+      const paragraphs=String(text||'').split(/\n/);
+      for(const paragraph of paragraphs){
+        let line='';
+        const put=()=>{if(y>7650){truncated=true;line='';return;}rows.push({text:line,font,color,y});y+=lh;line='';};
+        for(const word of paragraph.split(/\s+/).filter(Boolean)){
+          if(line&&ctx.measureText(line+' '+word).width>960)put();
+          if(ctx.measureText(word).width>960){
+            for(const ch of Array.from(word)){if(ctx.measureText(line+ch).width>960)put();line+=ch;}
+          }else line+=(line?' ':'')+word;
+        }
+        if(line)put();else y+=lh/2;
+      }
+      y+=gap;
     }
-    let y=120;
-    ctx.fillStyle='#2b3a42';
-    y = wrap(P(a.question||S.q||''), 60, y, W-120, 36, 'bold 30px system-ui', '#2b3a42');
-    y += 20;
-    y = wrap((S.lang==='hi'?'उत्तर: ':'Answer: ') + P(a.answer||a.result||''), 60, y, W-120, 32, '600 26px "Noto Serif", Georgia, serif', '#1c4962');
-    y += 30;
-    const ap = (a.approaches||[])[0];
-    if (ap) {
-      y = wrap(P(ap.name) + ' — ' + (P(ap.tag||'')), 60, y, W-120, 26, 'bold 22px system-ui', '#46a0c9');
-      y += 10;
-      (ap.steps||[]).slice(0,8).forEach((s,i)=>{
-        y = wrap((i+1)+'. '+P(s.t||''), 80, y, W-160, 26, '20px "Noto Serif", Georgia, serif', '#2b3a42');
-        y += 8;
-        if (y > H-200) return;
+    block(P(a.question||S.aiQuestion||S.q||''),'bold 30px system-ui','#2b3a42',44,20);
+    block((S.lang==='hi'?'उत्तर: ':'Answer: ')+P(a.answer||a.result||''),'600 26px system-ui','#1c4962',40,24);
+    const ap=(a.approaches||[])[0];
+    if(ap){
+      block(P(ap.name)+(P(ap.tag||'')?' — '+P(ap.tag):''),'bold 24px system-ui','#28789b',38,18);
+      (ap.steps||[]).forEach((st,i)=>{
+        block((ap.format==='prose'?'':(i+1)+'. ')+P(st.t||''),'24px system-ui','#2b3a42',38,6);
+        if(st.m)block(UP.answerFormat.text(st.m),'24px system-ui','#1c4962',38,6);
+        if(st.note)block(P(st.note),'22px system-ui','#58656c',34,14);
       });
     }
-    // Footer
-    ctx.fillStyle='#94a4ad'; ctx.font='18px system-ui';
-    ctx.fillText('upay.fyi  ·  AI-generated answer — cross-check with your textbook', 60, H-50);
-    c.toBlob(blob=>{
-      if(!blob) return;
-      const f = new File([blob], 'upay-answer.png', {type:'image/png'});
-      if(navigator.share && navigator.canShare && navigator.canShare({files:[f]})){
-        navigator.share({files:[f], title:'Upay answer', text:P(a.question||'').slice(0,80)}).catch(()=>downloadLink(c));
-      } else downloadLink(c);
-    });
+    c.width=W;c.height=Math.max(500,Math.min(7900,y+140));
+    ctx.fillStyle='#fdfbf6';ctx.fillRect(0,0,W,c.height);
+    ctx.fillStyle='#46a0c9';ctx.fillRect(0,0,W,72);
+    ctx.fillStyle='#fff';ctx.font='bold 36px system-ui';ctx.fillText('Upay',48,50);
+    rows.forEach(r=>{ctx.font=r.font;ctx.fillStyle=r.color;ctx.fillText(r.text,60,r.y);});
+    ctx.fillStyle='#58656c';ctx.font='20px system-ui';
+    ctx.fillText(truncated?'First explanation excerpt · open Upay for the complete answer':'First explanation · cross-check with your textbook',60,c.height-65);
+    ctx.fillText('Upay · '+location.origin,60,c.height-30);
+    const blob=await new Promise(resolve=>c.toBlob(resolve,'image/png'));
+    if(!dialog.isConnected)return;
+    if(!blob){dialog.querySelector('[data-share-status]').textContent='Image could not be prepared. Please try again.';return;}
+    const url=URL.createObjectURL(blob),img=document.createElement('img');img.src=url;img.alt='Preview of the question, answer and first explanation';
+    dialog.querySelector('[data-share-picture]').appendChild(img);
+    const oldClose=close;dialog.querySelector('[data-share-close]').onclick=()=>{URL.revokeObjectURL(url);oldClose();};
+    dialog.addEventListener('cancel',()=>URL.revokeObjectURL(url),{once:true});
+    const file=new File([blob],'upay-answer.png',{type:'image/png'}),share=dialog.querySelector('[data-share-native]');
+    let canShare=false;try{canShare=!!(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]}));}catch(e){/* use explicit download fallback */}
+    dialog.querySelector('[data-share-status]').textContent=canShare?'Preview the image, then share or download it.':'File sharing is not supported in this browser. Preview the image and choose Download image to save it.';
+    share.hidden=!canShare;
+    share.onclick=async()=>{try{await navigator.share({files:[file],title:'Upay answer'});}catch(e){if(e.name!=='AbortError')dialog.querySelector('[data-share-status]').textContent='Sharing was unavailable. You can choose Download image instead.';}};
+    const download=dialog.querySelector('[data-share-download]');download.disabled=false;download.onclick=()=>downloadLink(blob,'upay-answer.png');
   }
   function downloadLink(what, name){
     const a = document.createElement('a');
@@ -3953,11 +3994,10 @@ window.UP = window.UP || {};
       }
       const mockScope = [S.board, String(S.cls), S.subject].join('|');
       if (S.mockTest && S.mockTest.scope !== mockScope) clearMockTest();
-      if (S.mockTest) S.mockTest.ungraded = true;
       html = S.mockTest && S.mockTest.finished ? viewMockResult() : viewMockTest({subject:S.subject});
       setTimeout(startMockTimer,50);
     }
-    else if (r.name === 'mockresult') { if (S.mockTest) S.mockTest.ungraded = true; html = viewMockResult(); }
+    else if (r.name === 'mockresult') { html = viewMockResult(); }
     else if (r.name === 'cheatsheet') html = viewCheatsheet({ch:r.id});
     else if (r.name === 'search') html = viewSearch(r.params);
     else html = viewHome();
@@ -3988,16 +4028,16 @@ window.UP = window.UP || {};
 
   /* ---- post-render UX enhancements: step-reveal CTAs, diagram lightbox, kbd hint ---- */
   function postRenderEnhance(root) {
+    if(!root)return;
     // 1. "Show next method" CTAs between collapsed approaches
     const approaches = root.querySelectorAll('.approach');
     approaches.forEach((art, idx) => {
       const isOpen = art.classList.contains('open');
       const theory = !!art.closest('[data-theory="true"]');
-      const next = approaches[idx + 1];
+      const next = art.nextElementSibling && art.nextElementSibling.classList.contains('approach') ? art.nextElementSibling : null;
       // remove any previously-inserted CTAs
-      const existing = art.querySelector(':scope > .next-method-cta');
-      if (existing) existing.remove();
-      if (isOpen && next && next.classList.contains('closed') && !art.querySelector(':scope > .next-method-cta')) {
+      art.querySelectorAll('.next-method-cta').forEach(button=>button.remove());
+      if (isOpen && next && next.classList.contains('closed')) {
         const nextName = next.querySelector('h3');
         const btn = document.createElement('button');
         btn.className = 'next-method-cta';
@@ -4009,6 +4049,8 @@ window.UP = window.UP || {};
       }
     });
 
+    // Rebuild controls from current state; never leave a stale or duplicated control.
+    root.querySelectorAll('.show-all-btn').forEach(button=>button.remove());
     // "Show all" button next to approaches heading if any are collapsed
     if (approaches.length > 1) {
       const closedCount = Array.from(approaches).filter(a => a.classList.contains('closed')).length;
@@ -4176,7 +4218,7 @@ window.UP = window.UP || {};
     // separately by rbseTitle().
     const c = isRbse() ? (UP.chapters || []).find(x => String(x.id) === String(id)) : chapterById(id);
     if (c) return P({ en: c.en, hi: c.hi });
-    const row = (UP.pyq || []).find(q => +q.ch === +id && qInScope(q) && q.chapter);
+    const row = (UP.pyq || []).find(q => String(q.ch) === String(id) && qInScope(q) && q.chapter);
     return row ? row.chapter : '';
   }
 
@@ -4214,7 +4256,7 @@ window.UP = window.UP || {};
   function paperFromBank(seed) {
     const LV = { 1: 'Basic', 2: 'Standard', 3: 'Hard' };
     const want = S.test.level;
-    const sourceBank = accountancyTrack() || (+S.cls === 12 && S.subject === 'physics');
+    const sourceBank = accountancyTrack() || ['hindi','english','sanskrit'].includes(S.subject) || (+S.cls === 12 && S.subject === 'physics');
     let pool = myBank();
     if (S.test.chapters && S.test.chapters.length) {
       // Selected chapters filter. Only questions mapped to one of the chosen
@@ -4226,9 +4268,9 @@ window.UP = window.UP || {};
       pool = pool.filter(q => S.test.chapters.some(id => qHasChapter(q, id)));
     }
     // An empty selected chapter must stay empty; do not borrow other chapters.
-    if (!sourceBank) {
-      if (want === 'easy') pool = pool.filter(q => (q.lv || 'Basic') === 'Basic');
-      else if (want === 'hard') pool = pool.filter(q => (q.lv || 'Basic') !== 'Basic');
+    if (!accountancyTrack() && !(+S.cls===12&&S.subject==='physics')) {
+      if (want === 'easy') pool = pool.filter(q => ['1','Basic'].includes(String(q.lv||q.d||'Basic')));
+      else if (want === 'hard') pool = pool.filter(q => ['3','Hard'].includes(String(q.lv||q.d||'')));
     }
     if (!pool.length) {
       /* never silently fall back to another class or subject -- show nothing
@@ -4268,7 +4310,7 @@ window.UP = window.UP || {};
         marks: m || null,
         questions: groups[key].map(q => ({
           no: ++questionNumber, ch: q.ch, marks: +q.m > 0 ? +q.m : (sourceBank ? null : +m), tid: q.id, d: q.lv,
-          en: q.en, hi: q.hi || '', opts: q.opts || null, ans: q.ans || '',
+          keyVerified:q.keyVerified===true, en: q.sa || q.en, hi: q.sa || q.hi || '', opts: q.opts || null, ans: q.ans || '',
           steps: null, fig: q.fig || null, raw: q
         }))
       };
@@ -4489,6 +4531,7 @@ window.UP = window.UP || {};
   function viewTest(params) {
     if (params && params.make === '1') { S.test.seed = 0; buildPaper(true); }
     const p = buildPaper(false);
+    if(+S.cls===10&&S.subject==='sanskrit'&&!(p.sections||[]).length)return renderSanskritSources()+'<div class="empty">No source-verified Sanskrit questions are indexed for this filter yet. Original PDFs are available above.</div>';
     const isAccountancyTest = +S.cls === 12 && (S.subject === 'accountancy' || S.subject === 'computerized-accounting');
     const isPhysicsTest = +S.cls === 12 && S.subject === 'physics';
     const totalQ = (p.sections || []).reduce((a, sec) => a + sec.questions.length, 0);
@@ -4498,9 +4541,9 @@ window.UP = window.UP || {};
             hi: LVL[(p.level || S.test.level)] ? LVL[(p.level || S.test.level)][1] : 'मिश्रित' });
 
     /* the chapter list must be the student's own syllabus, not always 1..14 */
-    const cat = UP.catalogue(S.cls, S.subject) || [];
+    const cat = (UP.catalogue(S.cls, S.subject) || []).filter(c=>!c._bookHeader);
     const chips = (cat.length ? cat : []).map(c => {
-      const on = S.test.chapters.indexOf(+c.id) >= 0;
+      const on = S.test.chapters.some(id=>String(id)===String(c.id));
       return `<button class="ch-pick ${on ? 'on' : ''}" data-action="test-ch" data-ch="${c.id}">${c.displayNo || c.n || c.id}. ${esc(P({ en: c.en, hi: c.hi }))}</button>`;
     }).join('');
 
@@ -4773,13 +4816,13 @@ window.UP = window.UP || {};
     try { req = fetch('/api/ai/solve', {
       method:'POST',
       headers:{'content-type':'application/json', authorization:'Bearer '+(localStorage.getItem('upay.token')||'')},
-      body: JSON.stringify({ question: qText, chapter: q.ch||0, subject: S.subject, cls: S.cls, lang: S.lang })
+      body: JSON.stringify({ question: qText, chapter: q.ch||0, chapterTitle:chapterName(q.ch), subject: S.subject, cls: S.cls, lang: S.lang })
     }); } catch (e) { q.aiLoading=false; q.aiNote='Could not reach AI'; if (isCurrent()) render({ preserveScroll: true }); return; }
     req.then(r=>r.json().then(j=>({ok:r.ok,j})))
       .then(({ok,j})=>{
         q.aiLoading=false;
         if (!isCurrent()) return;
-        if (ok && j.approaches && j.approaches.length >= 4) {
+        if (ok && j.approaches && j.approaches.length >= 1) {
           j = UP.answerFormat.answer(j);
           const first = j.approaches[0];
           q.aiSolution = Object.assign({}, j, {question:qText});
@@ -4973,6 +5016,7 @@ window.UP = window.UP || {};
   function qInScope(q) {
     if (!q) return false;
     const subj = qSubject(q);
+    if (UP.languagePolicy.issue(q.subject?q:{...q,subject:subj})) return false;
     if (String(subj) !== String(S.subject)) return false;
     const cls = qCls(q);
     // Hard class gate: if a question declares a class it must match the student's class.
@@ -5000,11 +5044,16 @@ window.UP = window.UP || {};
     return (UP.science10 || []).find(c => c.id === +id) || null;
   }
 
+  function renderSanskritSources(){
+    if(+S.cls!==10||S.subject!=='sanskrit'||S.board!=='cbse')return '';
+    return `<section class="card sanskrit-source-note"><h2>Original Sanskrit question papers</h2><p>The supplied originals are preserved below. Legacy Hindi review prompts have been withheld from the exam bank because they are not verified Sanskrit transcriptions. These PDFs are not yet a chapter/level-indexed question bank; filters do not extract questions from them. No full re-upload is needed for these files.</p><div class="pactions">${(UP.sanskritPapers||[]).map(p=>`<a class="btn btn-cream" href="assets/sanskrit/papers/${encodeURIComponent(p.file)}" target="_blank" rel="noopener">${esc(P(p.title))}</a>`).join('')}</div><p>For an individual missing question, provide its paper code, question number and page so it can be checked against the original.</p></section>`;
+  }
   function hasSuppliedTestPapers(){
-    return S.cls === 12 && (S.subject === 'economics' || S.subject === 'biology' || S.subject === 'english');
+    return (+S.cls===10 && S.subject==='sanskrit') || S.cls === 12 && (S.subject === 'economics' || S.subject === 'biology' || S.subject === 'english');
   }
   function renderSuppliedTestPapers(board){
     if (!hasSuppliedTestPapers() || S.board !== 'cbse' || board !== 'cbse') return '';
+    if(S.subject==='sanskrit')return renderSanskritSources();
     const hi = S.lang === 'hi';
     const rows = (UP.class12OriginalTestPapers || []).filter(p => p.cls === 12 && p.subject === S.subject && p.board === 'cbse');
     if (!rows.length) return '';
@@ -5043,17 +5092,17 @@ window.UP = window.UP || {};
   function viewPyq(params) {
     params = params || {};
     const year = params.y ? +params.y : 0;
-    const ch = params.ch ? +params.ch : 0;
+    const ch = params.ch && params.ch!=='0' ? String(params.ch) : '';
     const lvl = params.lvl || '';
     const board = params.board || S.board || 'cbse';
     const bank = (UP.pyq || []).filter(q => qInScope(q) && qBoard(q) === board);
-    const list = bank.filter(q => (!year || +q.y === year) && (!ch || qHasChapter(q, ch)) && (!lvl || q.lv === lvl));
+    const list = bank.filter(q => (!year || +q.y === year) && (!ch || qHasChapter(q, ch)) && (!lvl || String(q.lv) === String(lvl)));
     const years = [...new Set(bank.map(q => +q.y).filter(Boolean))].sort((a, b) => b - a);
     const byYear = {};
     bank.forEach(q => { if (q.y) byYear[q.y] = (byYear[q.y] || 0) + 1; });
     const boardName = (UP.boards.find(b => b.id === board) || { en: 'CBSE' }).en;
-    const chapterList = UP.catalogue(S.cls, S.subject) || [];
-    const levels = [...new Set(bank.map(q => q.lv).filter(Boolean))].sort();
+    const chapterList = (UP.catalogue(S.cls, S.subject) || []).filter(c=>!c._bookHeader && (S.subject!=='sanskrit'||bank.some(q=>qHasChapter(q,c.id))));
+    const levels = [...new Set(bank.map(q => q.lv==null?'':String(q.lv)).filter(Boolean))].sort();
     // Full source PDFs are deliberately separate from the searchable bank.
     // They are whole papers (both Part B options), not chapter-filtered roots.
     const sourcePapers = accountancyTrack() && S.board === 'cbse' && board === 'cbse'
@@ -5130,7 +5179,7 @@ window.UP = window.UP || {};
       out += '<div class="q-top">';
       out += '<span class="q-no">' + esc(badge || q.q) + '</span>';
       out += '<div class="q-meta">';
-      const isNcertExtract = !q.paperCode && /^NCERT\b/i.test(String(q.src || ''));
+      const isNcertExtract = !q.paperCode && (/^NCERT\b|^[a-z]+\d+\.pdf$/i.test(String(q.src||'')) || ['hindi','english','sanskrit'].includes(S.subject)&&!q.y);
       /* Auto-extracted textbook exercise questions are labelled as practice,
          not as board questions — the board’s own 2025 tag would misstate them. */
       out += '<span class="tag' + (isNcertExtract ? ' grey' : '') + '">' + esc(isNcertExtract ? 'NCERT · practice, not board-verified' : (board === 'cbse' ? 'CBSE' : boardName) + ' ' + q.y) + '</span>';
@@ -5244,7 +5293,7 @@ window.UP = window.UP || {};
         <span class="filter-label">${S.lang === 'hi' ? 'स्तर' : 'Level'}</span>
         <a class="chip ${!lvl ? 'on' : ''}" href="${filterHref({ lvl: '' })}">${S.lang === 'hi' ? 'सभी' : 'All'}</a>
         ${levels.map(L => {
-          const n = bank.filter(q => q.lv === L && (!year || +q.y === year) && (!ch || qHasChapter(q, ch))).length;
+          const n = bank.filter(q => String(q.lv) === String(L) && (!year || +q.y === year) && (!ch || qHasChapter(q, ch))).length;
           return `<a class="chip ${lvl === L ? 'on' : ''}" href="${filterHref({ lvl: L })}">${esc(L)} <small>${n}</small></a>`;
         }).join('')}
       </div>` : ''}
@@ -5253,9 +5302,9 @@ window.UP = window.UP || {};
         <a class="chip ${!ch ? 'on' : ''}" href="${filterHref({ ch: 0 })}">${S.lang === 'hi' ? 'सभी' : 'All'}</a>
         ${chapterList.map(c => {
           const id = c.id;
-          const count = bank.filter(q => qHasChapter(q, id) && (!year || +q.y === year) && (!lvl || q.lv === lvl)).length;
+          const count = bank.filter(q => qHasChapter(q, id) && (!year || +q.y === year) && (!lvl || String(q.lv) === String(lvl))).length;
           const label = (c.displayNo || c.n || c.id) + ' · ' + P({ en: c.en, hi: c.hi });
-          return `<a class="chip ${ch === +id ? 'on' : ''}" href="${filterHref({ ch: id })}" title="${esc(label)}">${esc(label)} <small>${count}</small></a>`;
+          return `<a class="chip ${String(ch) === String(id) ? 'on' : ''}" href="${filterHref({ ch: id })}" title="${esc(label)}">${esc(label)} <small>${count}</small></a>`;
         }).join('')}
       </div>` : ''}
     </section>
@@ -5295,7 +5344,7 @@ window.UP = window.UP || {};
     const q = (a.question || a.q || S.q || '').trim();
     const summary = P(a.summary || '').trim();
     const ans = P(a.answer || a.result || a.final || '').trim();
-    const methods = (a.approaches || []).slice(0, 4);
+    const methods = a.approaches || [];
     let out = '';
     if (q) out += (isHi ? 'प्रश्न: ' : 'Question: ') + q + '.\n\n';
     if (summary) out += summary + '.\n\n';
@@ -5375,6 +5424,7 @@ window.UP = window.UP || {};
         revealPyq(id);
         return;
       }
+      attemptItem({q:pyqQuestionText(qq),ch:qq.ch,source:qq},String((qq.opts[i]||{}).en||qq.opts[i]||''));
       const box = pick.closest('.q-opts');
       box.querySelectorAll('[data-pick]').forEach((b, j) => {
         b.disabled = true;
@@ -5406,6 +5456,7 @@ window.UP = window.UP || {};
         else if (j === i) b.classList.add('wrong');
       });
       const ok = i === q.key;
+      attemptItem({q:q.stem,ch:q.ch||UP.detectChapter(q.stem),source:{m:q.m,opts:q.opts,ans:String.fromCharCode(65+q.key),keyVerified:true,src:q.src}},String.fromCharCode(65+i));
       const verdict = document.createElement('div');
       verdict.className = 'pyq-verdict ' + (ok ? 'ok' : 'no');
       verdict.innerHTML = ok
@@ -5526,10 +5577,11 @@ window.UP = window.UP || {};
       saveState(); buildPaper(true); render(); return;
     }
     if (action === 'test-ch') {
-      const id = +tgt.dataset.ch;
-      const at = S.test.chapters.indexOf(id);
+      const rawId=tgt.dataset.ch;
+      const id = /^\d+$/.test(rawId)?Number(rawId):rawId;
+      const at = S.test.chapters.findIndex(c=>String(c)===String(id));
       if (at >= 0) S.test.chapters.splice(at, 1); else S.test.chapters.push(id);
-      S.test.chapters.sort((a, b) => a - b);
+      S.test.chapters.sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true}));
       S.test.seed = 0; buildPaper(true); render(); return;
     }
     if (action === 'test-clear') { S.test.chapters = []; S.test.seed = 0; buildPaper(true); render(); return; }
@@ -5539,6 +5591,7 @@ window.UP = window.UP || {};
       const no = +tgt.dataset.q, pick = tgt.dataset.opt;
       const q = findQ(no); if (!q) return;
       const graded = !(q.raw && q.raw.paperCode) && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim());
+      practiceAttempt(q,pick);
       S.answers[no] = { pick, ok: graded ? pick === q.ans : null, shown: !!(S.answers[no] && S.answers[no].shown) };
       render(); return;
     }
@@ -5547,6 +5600,7 @@ window.UP = window.UP || {};
       const q = findQ(no); if (!q) return;
       const inp = document.querySelector('[data-answer="' + no + '"]');
       const text = (inp ? inp.value : '').trim();
+      practiceAttempt(q,text);
       S.answers[no] = { text, ok: sameAnswer(text, q.ans), shown: true };
       render(); return;
     }
@@ -6379,7 +6433,7 @@ function viewMockTest(params){
     });
     if (!pool.length) {
       clearMockTest();
-      return `<div class="empty"><h3>${S.lang==='hi'?'अभी प्रश्न उपलब्ध नहीं हैं':'No questions yet'}</h3><p>${S.lang==='hi'?'इस कक्षा, बोर्ड और विषय के लिए कोई प्रश्न नहीं है।':'There are no questions for this class, board and subject.'}</p></div>`;
+      return renderSanskritSources()+`<div class="empty"><h3>${S.lang==='hi'?'अभी प्रश्न उपलब्ध नहीं हैं':'No questions yet'}</h3><p>${S.lang==='hi'?'इस कक्षा, बोर्ड और विषय के लिए कोई प्रश्न नहीं है।':'There are no questions for this class, board and subject.'}</p></div>`;
     }
     const picked=[]; const copy=pool.slice();
     const count=Math.min(N, copy.length);
@@ -6391,33 +6445,49 @@ function viewMockTest(params){
     S.mockTest = { subject, scope:[S.board, String(S.cls), subject].join('|'), started:Date.now(), items:picked, answers:{}, durations:{}, finished:false, ungraded };
     store.set(mockStoreKey(), S.mockTest);
   }
-  // Older in-progress sessions must not suddenly be marked by the local solver.
-  S.mockTest.ungraded = true;
+  // Old imported keys remain ungraded unless explicitly verified and supported.
   const picked = S.mockTest.items;
-  const unkeyedTrack = true;
   const answers = S.mockTest.answers || (S.mockTest.answers = {});
+  S.mockTest.submitted = S.mockTest.submitted || {};
   const attempted = Object.values(answers).filter(v => String(v || '').trim()).length;
+  const score = UP.mockAssessment.score(S.mockTest);
   return `<section class="page-head">
     <span class="eyebrow">${icon('clock')} ${S.lang==='hi'?'मॉक टेस्ट':'Mock test'}</span>
     <h1>${esc(P(UP.subjects[subject]))} — ${picked.length} ${S.lang==='hi'?'प्रश्न':'questions'}</h1>
-    <p>${unkeyedTrack
-      ? (S.lang==='hi'?'3 घंटे · अभ्यास प्रश्न · सभी प्रश्नों की सत्यापित कुंजी उपलब्ध न होने से अंक नहीं दिए जाते':'3 hours · practice questions · ungraded because complete verified keys are not available')
-      : (S.lang==='hi'?'3 घंटे · CBSE पैटर्न · सबमिट पर स्वतः मूल्यांकन':'3 hours · CBSE pattern · auto-graded on submit')}</p>
+    <p>3 hours · ${score.knownTotal} known marks${score.unknownMarks ? ' · '+score.unknownMarks+' questions with marks not supplied' : ''}. Only verified objective/numeric keys are auto-marked; theory, workings and unverified keys need review. This is a practice sample, not an official board paper.</p>
   </section>
-  <div class="card flat" style="padding:14px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+  <div class="card flat mock-toolbar">
     <div id="mock-timer" style="font-size:22px;font-weight:700;font-variant-numeric:tabular-nums">03:00:00</div>
-    <div style="flex:1"></div>
     <span id="mock-progress" class="tag grey">${attempted} / ${picked.length}</span>
-    <button class="btn btn-primary btn-sm" id="mock-submit">${icon('check')} ${unkeyedTrack ? (S.lang==='hi'?'अभ्यास पूरा करें':'Finish practice') : (S.lang==='hi'?'जमा करें':'Submit test')}</button>
+    <button class="btn btn-primary btn-sm" id="mock-submit">${icon('check')} ${S.lang==='hi'?'टेस्ट समाप्त करें':'Finish test & see marks'}</button>
   </div>
-  <ol class="mock-list" id="mock-list" style="padding:0;margin:12px 0 0;list-style:none">
-    ${picked.map((it,i)=>`<li class="card flat" data-i="${i}" style="padding:14px 16px;margin-bottom:10px">
-      <div class="meta-row"><span class="tag cream">Q${i+1}</span><span class="tag grey">${esc(it.chName)}</span>${it.source ? `<span class="tag">${esc([it.source.paperCode, it.source.session, it.source.part ? 'Part ' + it.source.part : '', it.source.option ? 'Option ' + it.source.option : ''].filter(Boolean).join(' · '))}</span>` : ''}</div>
-      <p style="margin:8px 0;font-size:14.5px">${esc(it.q)}</p>
-      <textarea rows="2" class="mock-ans" data-i="${i}" placeholder="${S.lang==='hi'?'अपना उत्तर लिखें…':'Your answer…'}" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;resize:vertical;background:#fff">${esc(answers[i] || '')}</textarea>
-    </li>`).join('')}
+  <ol class="mock-list" id="mock-list" style="padding:0;margin:12px 0;list-style:none">
+    ${picked.map((it,i)=>mockQuestionCard(it,i,false)).join('')}
   </ol>`;
 }
+function mockQuestionCard(it,i,result){
+  const test=S.mockTest,submitted=!!(test.submitted||{})[i],answer=(test.answers||{})[i]||'',a=UP.mockAssessment.assess(it,answer),m=UP.mockAssessment.marks(it);
+  const detailsId='mock-info-'+i;
+  return `<li class="card flat mock-question" data-mock-question="${i}">
+    <div class="meta-row"><span class="tag cream">Q${i+1}</span><span class="tag grey">${m===null?'Marks not supplied':m+' mark'+(m===1?'':'s')}</span>
+    <details class="mock-info"><summary aria-label="Chapter and marks for question ${i+1}" aria-controls="${detailsId}">${icon('info')} Question info</summary><div id="${detailsId}"><b>Chapter:</b> ${esc(it.chName||'Not mapped')}<br><b>Marks:</b> ${m===null?'Not supplied by source':m}<br><b>Source:</b> ${esc(it.source && (it.source.src||it.source.paperCode)||'Practice question')}</div></details></div>
+    <p class="mock-qtext">${esc(it.q)}</p>
+    ${it.source&&Array.isArray(it.source.opts)?'<ul>'+it.source.opts.map((o,j)=>'<li>'+String.fromCharCode(65+j)+'. '+esc(P(o))+'</li>').join('')+'</ul>':''}
+    <label class="mini-label" for="mock-answer-${i}">Your answer</label>
+    <textarea id="mock-answer-${i}" rows="3" class="mock-ans" data-i="${i}" ${submitted||result?'readonly':''}>${esc(answer)}</textarea>
+    ${result?'':`<div class="pactions"><button class="btn btn-primary btn-sm" data-mock-submit="${i}" ${submitted?'disabled':''}>${submitted?'Answer submitted':'Submit answer'}</button><button class="btn btn-cream btn-sm" data-mock-edit="${i}" ${submitted?'':'disabled'}>Edit answer</button></div>`}
+    ${submitted||result?mockFeedback(it,i,a,result):'<p class="muted">Draft saved on this device. Submit to check, or keep editing.</p>'}
+    ${result&&a.awarded===null&&m!==null?`<div class="mock-review"><label for="mock-review-${i}">Optional self-assessment after rubric/teacher review (not verified marks):</label><input id="mock-review-${i}" type="number" min="0" max="${m}" step="0.5" value="${esc((test.reviewMarks||{})[i]??'')}" aria-label="Self-assessed marks for question ${i+1}"><button class="btn btn-cream btn-sm" data-mock-review="${i}">Save review marks</button></div>`:''}
+    ${result?`<details class="mock-correction"><summary>Practise a correction (does not change test marks)</summary><label for="mock-revision-${i}">Revised answer</label><textarea id="mock-revision-${i}" class="mock-revision" data-i="${i}" rows="3">${esc((test.revisions||{})[i]||'')}</textarea><button class="btn btn-cream btn-sm" data-mock-recheck="${i}">Check correction</button><p data-mock-revision-status="${i}" role="status"></p></details>`:''}
+  </li>`;
+}
+function mockFeedback(it,i,a,result){
+  const labels={correct:'Correct',incorrect:'Incorrect',pending:'Submitted · review needed',unattempted:'Not answered'};
+  const score=a.awarded===null?'Marks pending review':a.awarded+' / '+a.max+' marks';
+  let guidance=a.status==='incorrect'?'Compare your answer with the verified key, identify the differing value/option, then rework the question and check it again.':a.status==='pending'?'A verified objective key/rubric is unavailable for automatic marking. Ask a teacher to review your reasoning, required points and units; no AI score is being treated as official.':a.status==='correct'?'Your answer matches the verified key.':'Attempt the question before reviewing its solution.';
+  return `<div class="callout ${a.status==='incorrect'?'warn':'tip'} mock-feedback" role="status"><div><b>${labels[a.status]} · ${score}</b><p>${esc(guidance)}</p>${a.expected?'<p><b>Verified reference answer:</b> '+esc(a.expected)+'</p>':''}<a class="btn btn-ghost btn-sm" href="#/ask?q=${encodeURIComponent(it.q)}">Understand the solution (AI explanation, not a marking scheme)</a> ${it.ch?'<a class="btn btn-ghost btn-sm" href="#/chapter/'+encodeURIComponent(it.ch)+'">Revise chapter</a>':''}</div></div>`;
+}
+
 function startMockTimer(){
   const el=document.getElementById('mock-timer'); if(!el) return;
   const end = S.mockTest.started + 3*3600*1000;
@@ -6433,22 +6503,24 @@ function submitMockTest(auto){
   if(!S.mockTest || S.mockTest.finished) return;
   clearInterval(window.__mtTimer);
   S.mockTest.finished = true;
-  S.mockTest.ungraded = true;
-  const attempted = Object.values(S.mockTest.answers || {}).filter(v => String(v || '').trim()).length;
-  S.mockTest.score = { correct: null, attempted, total: S.mockTest.items.length, ungraded: true };
+  S.mockTest.submitted = S.mockTest.submitted || {};
+  S.mockTest.items.forEach((it,i)=>{S.mockTest.submitted[i]=true;attemptItem(it,(S.mockTest.answers||{})[i]||'');});
+  S.mockTest.score = UP.mockAssessment.score(S.mockTest);
   store.set('mockLast' + ownerSuffix(), S.mockTest);
   store.set(mockStoreKey(), S.mockTest);
   render();
 }
 function viewMockResult(){
-  const r = S.mockTest && S.mockTest.score;
-  if(!r) return `<div class="empty"><h3>${S.lang==='hi'?'कोई टेस्ट पूरा नहीं हुआ':'No completed test'}</h3><p><a class="btn btn-primary btn-sm" href="#/mock">${S.lang==='hi'?'मॉक टेस्ट शुरू करें':'Start a mock test'}</a></p></div>`;
-  return `<section class="page-head">
-    <span class="eyebrow">${icon('check')} ${S.lang==='hi'?'अभ्यास पूरा':'Practice complete'}</span>
-    <h1>${S.lang==='hi'?'अंक नहीं दिए गए':'Ungraded practice'}</h1>
-    <p>${S.lang==='hi'?`${r.attempted}/${r.total} प्रश्नों का प्रयास किया। सभी प्रश्नों की सत्यापित कुंजी उपलब्ध नहीं है, इसलिए अंक नहीं दिए गए।`:`Attempted ${r.attempted} of ${r.total}. Complete verified answer keys are not available, so no score was assigned.`}</p>
-    <div style="margin-top:14px"><a class="btn btn-primary btn-sm" href="#/mock?new=1">${icon('clock')} ${S.lang==='hi'?'नया अभ्यास':'New practice'}</a></div>
-  </section>`;
+  const test=S.mockTest;
+  if(!test || !test.finished)return '<div class="empty"><h3>No completed test</h3><a href="#/mock">Start a mock test</a></div>';
+  const r=UP.mockAssessment.score(test);
+  return `<section class="page-head"><span class="eyebrow">Test completed</span>
+    <h1>${r.gradable?r.earned+' / '+r.gradable+' auto-marked marks':'Marks pending review'}</h1>
+    <p>${r.attempted} / ${r.total} questions attempted. Known paper total: ${r.knownTotal} marks${r.unknownMarks?' · '+r.unknownMarks+' questions have no supplied marks':''}.</p>
+    <p>${r.pending} questions (${r.pendingMarks} known marks) need review. Pending marks are not counted as zero, and this is not a final board score. Descriptive answers require a marking rubric/human review.</p>
+    ${r.selfReviewed?'<p class="mock-estimate"><b>Self-assessed practice estimate: '+(r.earned+r.selfEarned)+' / '+(r.gradable+r.selfPossible)+' reviewed marks.</b> Includes '+r.selfReviewed+' user-reviewed answers, not independently verified; other pending questions are excluded.</p>':''}
+    <a class="btn btn-primary btn-sm" href="#/mock?new=1">New practice test</a></section>
+    <ol class="mock-list" style="padding:0;list-style:none">${test.items.map((it,i)=>mockQuestionCard(it,i,true)).join('')}</ol>`;
 }
 function quickLocalAnswer(q){ try { return window.localSolve ? window.localSolve(q,{subj:S.subject,cls:S.cls,lang:S.lang}) : null; } catch(e){return null;} }
 
@@ -6475,7 +6547,7 @@ function collectScopedStudy(){
   try {
     for (let i=0; i<localStorage.length; i++) {
       const key = localStorage.key(i) || '';
-      const match = /^upay\.(mastery|hardList|dailyProgress)\.scope\.(.+)$/.exec(key);
+      const match = /^upay\.(mastery|hardList|dailyProgress|mistakeQueue)\.scope\.(.+)$/.exec(key);
       if (!match) continue;
       const scope = JSON.parse(decodeURIComponent(match[2]));
       if (!Array.isArray(scope) || scope[0] !== S.savedKey || scope.length !== 4) continue;
@@ -6508,7 +6580,7 @@ function importProgress(file){
       ['cls','subject','lang','board'].forEach(k=>{ if(d[k]) S[k]=d[k]; });
       S.test.board = S.board;
       if (Array.isArray(d.scopedStudy)) d.scopedStudy.forEach(entry => {
-        if (!entry || !['mastery','hardList','dailyProgress'].includes(entry.kind) ||
+        if (!entry || !['mastery','hardList','dailyProgress','mistakeQueue'].includes(entry.kind) ||
             typeof entry.board !== 'string' || typeof entry.subject !== 'string' ||
             !Number.isInteger(+entry.cls) || +entry.cls < 1 || +entry.cls > 12) return;
         const key = entry.kind + '.scope.' + encodeURIComponent(JSON.stringify([S.savedKey, entry.board, +entry.cls, entry.subject]));
@@ -6713,6 +6785,21 @@ function viewCheatsheet(params){
 }
 
 /* ---------- #13 Mistake book ---------- */
+function rememberAssessment(item,answer,assessment){
+  const wasQueued=(S.mistakeQueue||[]).some(it=>UP.mistakeQueue.id(it.q)===UP.mistakeQueue.id(item.q));
+  S.mistakeQueue=UP.mistakeQueue.update(S.mistakeQueue,item,answer,assessment);
+  saveMistakeQueue();
+  if(wasQueued&&assessment.status==='correct'&&assessment.reason==='verified-key'){
+    S.hardList=(S.hardList||[]).filter(q=>UP.mistakeQueue.id(q)!==UP.mistakeQueue.id(item.q));saveHardList();srsMark(item.q,true);
+  }
+}
+function attemptItem(item,answer){
+  const assessment=UP.mockAssessment.assess(item,answer);rememberAssessment(item,answer,assessment);return assessment;
+}
+function practiceAttempt(q,answer){
+  const trusted=q.keyVerified===true||!!(q.raw&&q.raw.keyVerified===true)||!!(q.tid && UP.testgen.templates.some(t=>t.id===q.tid) && q.keyVerified!==false && !(q.raw&&q.raw.keyVerified===false) && !(q.raw&&q.raw.paperCode));
+  return attemptItem({q:P(q),ch:q.ch,source:{...q,m:q.marks||q.m,keyVerified:trusted}},answer);
+}
 function viewMistakes(){
   const miss = Object.keys(S.mastery||{}).flatMap(chId=>{
     return (S.mastery[chId].cards||[]).filter(c=>c.box===0 && c.last).map(c=>({...c,chId}));
@@ -6720,19 +6807,21 @@ function viewMistakes(){
   // Also include questions dailyMark 'hard' flagged
   const hard = (S.hardList||[]).map(q=>({q,box:0,isHard:true}));
   const hardQuestions = new Set(hard.map(item => item.q));
-  const all = [...hard, ...miss.filter(item => !hardQuestions.has(item.q))];
+  const protectedItems=(S.mistakeQueue||[]).map(entry=>({...entry,chId:entry.ch,protected:true}));
+  const queued=new Set(protectedItems.map(entry=>UP.mistakeQueue.id(entry.q)));
+  const all = [...protectedItems,...hard.filter(entry=>!queued.has(UP.mistakeQueue.id(entry.q))), ...miss.filter(item => !hardQuestions.has(item.q)&&!queued.has(UP.mistakeQueue.id(item.q)))];
   return `<section class="page-head">
     <span class="eyebrow">${icon('book')} ${S.lang==='hi'?'गलतियों की किताब':'Mistake book'}</span>
     <h1>${all.length}</h1>
-    <p>${S.lang==='hi'?'वे प्रश्न जिनमें आपको परेशानी हुई — रोज़ एक दोहराइए':'Questions you struggled with — review one daily'}</p>
+    <p>${S.lang==='hi'?'गलत उत्तर वाले प्रश्न सही उत्तर देने तक यहीं रहेंगे।':'Checked wrong answers stay here until you submit a correct answer. Viewing a solution or self-marking does not clear them.'}</p>
   </section>
   ${!all.length ? `<div class="empty"><h3>${S.lang==='hi'?'अभी कोई गलती नहीं':'No mistakes yet'}</h3><p>${S.lang==='hi'?'आज का अभ्यास शुरू करें':'Start Today\'s practice'}</p></div>` :
   `<div class="pyq-list">${all.map((c,i)=>`<article class="pyq-item">
-    <div class="pmeta"><span class="tag ${c.isHard?'warn':'cream'}">${c.isHard?(S.lang==='hi'?'कठिन':'Hard'):('Box '+ (c.box||0))}</span></div>
+    <div class="pmeta"><span class="tag ${c.isHard?'warn':'cream'}">${c.protected?'Answer needs correction':c.isHard?(S.lang==='hi'?'कठिन':'Hard'):('Box '+ (c.box||0))}</span></div>
     <div class="pbody"><div class="pq">${esc(c.q)}</div>
     <div class="pactions"><button class="btn btn-primary btn-sm" data-action="sample" data-q="${esc(c.q)}">${icon('sparkle')} ${S.lang==='hi'?'हल करें':'Solve'}</button>
     ${c.chId?`<a class="btn btn-sm" href="#/chapter/${c.chId}">${S.lang==='hi'?'अध्याय':'Chapter'}</a>`:''}
-    <button class="btn btn-sm btn-ghost" data-action="removeMistake" data-i="${i}">×</button></div></div></article>`).join('')}</div>`}`;
+    ${c.protected?`<label for="mistake-answer-${i}">Try your corrected answer</label><textarea id="mistake-answer-${i}" class="mock-ans" rows="2"></textarea><button class="btn btn-primary btn-sm" data-action="recheckMistake" data-q="${esc(c.q)}" data-i="${i}">Check corrected answer</button><p data-mistake-status="${i}" role="status"></p>`:`<button class="btn btn-sm btn-ghost" data-action="removeMistake" data-q="${esc(c.q)}">×</button>`}</div></div></article>`).join('')}</div>`}`;
 }
 
 /* ---------- #14 Story-format share image (9:16) ---------- */
@@ -6897,25 +6986,53 @@ document.addEventListener('click', function(e){
   if(act==='exportPrg'){ e.preventDefault(); exportProgress(); return; }
   if(act==='shareStory'){ e.preventDefault(); shareAnswerAsStory(); return; }
   if(act==='shareSheet'){ e.preventDefault(); const ch=a.dataset.ch; go(`#/cheatsheet/${ch}`); return; }
+  if(act==='recheckMistake'){
+    e.preventDefault();const q=a.dataset.q,index=+a.dataset.i;
+    const entry=(S.mistakeQueue||[]).find(it=>UP.mistakeQueue.id(it.q)===UP.mistakeQueue.id(q));if(!entry)return;
+    const input=document.getElementById('mistake-answer-'+index),value=input.value.trim();if(!value){toast('Enter a corrected answer first.');return;}
+    const assessment=attemptItem(entry.item,value);
+    if(assessment.status==='correct'){toast('Correct — removed from Mistakes.');render();}
+    else document.querySelector('[data-mistake-status="'+index+'"]').textContent=assessment.status==='incorrect'?'Not correct yet. Review the solution and try again; the question stays in Mistakes.':'This answer needs review; it stays in Mistakes until a supported correct answer is checked.';
+    return;
+  }
   if(act==='removeMistake'){
-    e.preventDefault();
-    const hard = S.hardList || [];
-    const miss = Object.keys(S.mastery||{}).flatMap(chId => (S.mastery[chId].cards||[])
-      .filter(c => c.box===0 && c.last && !hard.includes(c.q)).map(c => ({...c,chId})))
-      .sort((x,y)=>(y.last>x.last?1:-1));
-    const i = +a.dataset.i;
-    const question = i < hard.length ? hard[i] : (miss[i-hard.length] || {}).q;
-    if (question) {
-      S.hardList = hard.filter(q => q !== question);
-      Object.keys(S.mastery||{}).forEach(chId => (S.mastery[chId].cards||[]).forEach(c => {
-        if (c.q === question && c.box === 0) c.last = null;
-      }));
-      saveHardList(); saveMastery();
-    }
-    render(); return;
+    e.preventDefault();const question=a.dataset.q;
+    if((S.mistakeQueue||[]).some(it=>UP.mistakeQueue.id(it.q)===UP.mistakeQueue.id(question))){toast('Answer this question correctly to clear it.');return;}
+    S.hardList=(S.hardList||[]).filter(q=>q!==question);
+    Object.keys(S.mastery||{}).forEach(chId=>(S.mastery[chId].cards||[]).forEach(c=>{if(c.q===question&&c.box===0)c.last=null;}));
+    saveHardList();saveMastery();render();return;
   }
   if(act==='mock-submit' || act==='submitMock'){ e.preventDefault(); submitMockTest(); return; }
 },{capture:true});
+document.addEventListener('click',function(e){
+  const button=e.target.closest('[data-mock-submit],[data-mock-edit],[data-mock-recheck],[data-mock-review]');
+  if(!button||!S.mockTest)return;
+  e.preventDefault();const test=S.mockTest;
+  if(button.hasAttribute('data-mock-review')){
+    const i=Number(button.dataset.mockReview);if(!test.finished||!test.items[i])return;
+    const a=UP.mockAssessment.assess(test.items[i],(test.answers||{})[i]||'');
+    const input=document.getElementById('mock-review-'+i),value=input.value.trim(),n=Number(value);
+    if(a.awarded!==null||a.max===null)return;
+    if(value===''||!Number.isFinite(n)||n<0||n>a.max||!Number.isInteger(n*2)){toast('Enter review marks from 0 to '+a.max+' in half-mark steps.');return;}
+    test.reviewMarks=test.reviewMarks||{};test.reviewMarks[i]=n;store.set(mockStoreKey(),test);render();return;
+  }
+  if(button.hasAttribute('data-mock-recheck')){
+    const i=Number(button.dataset.mockRecheck);if(!test.finished||!test.items[i])return;
+    const a=attemptItem(test.items[i],(test.revisions||{})[i]||'');
+    const status=document.querySelector('[data-mock-revision-status="'+i+'"]');
+    status.textContent=a.status==='correct'?'Correction matches the verified key. Original test marks are unchanged.':a.status==='incorrect'?'Still differs from the verified key. Review the reference answer and try again.':'Correction saved. Teacher/rubric review is needed; original test marks are unchanged.';
+    return;
+  }
+  if(test.finished)return;
+  if(Date.now()>=test.started+3*3600000){submitMockTest(true);return;}
+  const submit=button.hasAttribute('data-mock-submit'),i=Number(submit?button.dataset.mockSubmit:button.dataset.mockEdit);
+  if(!test.items[i])return;
+  test.submitted=test.submitted||{};
+  if(submit){if(!String((test.answers||{})[i]||'').trim()){toast('Write an answer before submitting.');return;}test.submitted[i]=true;attemptItem(test.items[i],test.answers[i]);}
+  else delete test.submitted[i];
+  store.set(mockStoreKey(),test);render();
+  if(!submit)document.getElementById('mock-answer-'+i)?.focus();
+});
 /* mock-submit is rendered without data-action (uses an id); bind via delegation */
 document.addEventListener('click',function(e){
   const b = e.target.closest('#mock-submit');
@@ -6929,8 +7046,13 @@ document.addEventListener('change',function(e){
   if(t){ const k=t.dataset.toggle; if(k==='large') applyLargeText(t.checked); if(k==='dyslexic') applyDyslexic(t.checked); return; }
 });
 document.addEventListener('input',function(e){
+  if(e.target.classList && e.target.classList.contains('mock-revision')){
+    if(!S.mockTest||!S.mockTest.finished)return;
+    S.mockTest.revisions=S.mockTest.revisions||{};S.mockTest.revisions[+e.target.dataset.i]=e.target.value;store.set(mockStoreKey(),S.mockTest);return;
+  }
   if(e.target.classList && e.target.classList.contains('mock-ans')){
-    const i=+e.target.dataset.i; if(!S.mockTest) return;
+    const i=+e.target.dataset.i; if(!S.mockTest || S.mockTest.finished || (S.mockTest.submitted||{})[i]) return;
+    if(Date.now()>=S.mockTest.started+3*3600000){submitMockTest(true);return;}
     S.mockTest.answers[i] = e.target.value;
     store.set(mockStoreKey(), S.mockTest);
     const done = Object.values(S.mockTest.answers).filter(v => String(v || '').trim()).length;

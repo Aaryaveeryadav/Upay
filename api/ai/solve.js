@@ -1,5 +1,7 @@
 'use strict';
 const squareInteger = require('../../assets/js/square-integers.js');
+const languagePolicy = require('../../assets/js/language-policy.js');
+const solveTiming = require('../../assets/js/solve-timing.js');
 const taskRouting = require('../../assets/js/task-routing.js');
 const solvePolicy = require('../../lib/solve-policy.js');
 const { consumeAI } = require('../../lib/ai-usage.js');
@@ -40,6 +42,7 @@ module.exports = async function handler(req, res) {
     return res.status(204).send('');
   }
   if (req.method !== 'POST') return json(res, 405, { error: 'POST only' });
+  const solveStarted = Date.now();
   // Provider-backed calls spend the owner's quota. Require a verified Supabase
   // session; this is not a substitute for production abuse/rate controls.
   const user = await requireStudent(req, res);
@@ -54,8 +57,15 @@ module.exports = async function handler(req, res) {
 
   const subjectRouting = taskRouting.resolve(question, String(b.selectedSubject || b.subject || 'maths'));
       const subject = subjectRouting.subject;
+      const chapterTitle=subjectRouting.changed?'':String(b.chapterTitle||'').slice(0,200);
+      const contextRequest=languagePolicy.contextRequest(question,subject,chapterTitle);
+      if(contextRequest)return json(res,422,contextRequest);
       if (subjectRouting.language) b.lang = subjectRouting.language;
       if (subjectRouting.changed) b.chapter = 0;
+  const timing = solveTiming.forQuestion(question,subject);
+  const solveDeadline = solveStarted + timing.serverMs;
+  const clarification = squareInteger.clarification(question);
+  if (clarification) return json(res, 422, clarification);
   const cls = Number(b.cls) || 10;
   const exact = ['maths','applied-maths'].includes(subject) && squareInteger.solve(question, b.lang);
   if (exact) return json(res, 200, Object.assign({subjectRouting},exact));
@@ -88,7 +98,7 @@ module.exports = async function handler(req, res) {
     ' "check":"<how to verify the answer>",',
     ' "diagram":{"type":"plane|triangle|circle|bars|solid","points":[...],"circles":[...],"segments":[...],"bars":[...],"parts":[...],"labels":[...],"caption":"..."}}',
     'Rules:',
-    '- Give at least 4 genuinely different approaches. Same working under two labels is forbidden.',
+    '- Give only genuinely useful complete approaches; one is sufficient, and no fixed count is required. Same working under two labels is forbidden.',
     '- Every step shows real working with the question\'s own numbers.',
     '- Verify arithmetic before writing. No unique answer? Say so in "answer".',
     '- Use · for decimals, √ π θ ° ∠ △ ⇒ as needed.',
@@ -112,7 +122,7 @@ module.exports = async function handler(req, res) {
     ' "check":"<how to verify>",',
     ' "diagram":<either null (no figure needed) OR a figure object below>}',
     'Rules:',
-    '- Give at least 4 genuinely different approaches.',
+    '- Give only genuinely useful complete approaches; one is sufficient, and no fixed count is required.',
     '- Numericals: show every substitution with units. Balance every equation atom-by-atom.',
     '- Hindi NOT needed — English only.',
     '- Return a "diagram" ONLY when the question is about something that has a diagram:',
@@ -167,29 +177,32 @@ module.exports = async function handler(req, res) {
   else topicPrompt = ['Answer the supplied Class ' + cls + ' ' + subject + ' question without inventing missing information.',
     'Reply with JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","steps":[{"t":"..."}]}],"check":"...","diagram":null}'];
 
-  const prompt = topicPrompt.concat([solvePolicy.instructions,'', 'QUESTION: ' + question]).join('\n');
+  const prompt = topicPrompt.concat([solvePolicy.instructions,languagePolicy.instructions,chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:'', '', 'QUESTION: ' + question]).join('\n');
 
-  // Overall request ceiling — never let the endpoint hang past 30s total
+  // Shared adaptive budget leaves headroom under the solve function duration.
+  const providerController = new AbortController();
+  const callOptions = {deadline:solveDeadline, signal:providerController.signal, attemptMs:timing.attemptMs, maxOutputTokens:timing.maxOutputTokens};
   let timeoutId;
   const timeoutPromise = new Promise((_, rej) => { timeoutId = setTimeout(() => {
-    const err = new Error('The AI is taking too long; showing the built-in solver.');
+    providerController.abort();
+    const err = new Error('AI request deadline exceeded');
     err.status = 504; err.raw = 'deadline';
     rej(err);
-  }, 30000); });
+  }, Math.max(1, solveDeadline - Date.now())); });
 
   let out, model;
   try {
     // Prefer fast models for the first hit; chain falls back to larger ones if needed
     out = await Promise.race([
-      callGeminiResilient(prompt, null, 'gemini-3.5-flash-lite'),
+      callGeminiResilient(prompt, null, 'gemini-3.5-flash-lite', null, callOptions),
       timeoutPromise
     ]);
-    // One bounded repair call, sharing the original 30-second deadline.
+    // One bounded repair call, sharing the original adaptive deadline.
     let draft;
     try { draft = firstJSON(out.text); } catch (_) { draft = null; }
-    if (draft && solvePolicy.completeApproaches(draft, question).length < 4) {
+    if (draft && solvePolicy.completeApproaches(draft, question, subject).length < 1) {
       out = await Promise.race([
-        callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), null, out.model),
+        callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), null, out.model, null, callOptions),
         timeoutPromise
       ]);
     }
@@ -200,6 +213,7 @@ module.exports = async function handler(req, res) {
     return json(res, failure.http, failure.body);
   } finally {
     clearTimeout(timeoutId);
+    providerController.abort();
   }
 
   let parsed;
@@ -223,7 +237,7 @@ module.exports = async function handler(req, res) {
     questionUnderstood: String(parsed.question_understood || ''),
     result: String(parsed.answer || ''), summary: String(parsed.summary || ''),
     verify: typeof parsed.check === 'string' ? parsed.check : '',
-    approaches: solvePolicy.completeApproaches(parsed, question).map(a => ({
+    approaches: solvePolicy.completeApproaches(parsed, question, subject).map(a => ({
       format: solvePolicy.proseTask(question) ? 'prose' : '', name: String((a && a.name) || 'Method'), tag: String((a && a.tag) || ''),
       steps: steps(a && a.steps), why: String((a && a.why) || ''), watch: String((a && a.watch) || '')
     })).filter(a => a.steps.length),
@@ -234,8 +248,8 @@ module.exports = async function handler(req, res) {
       : 'AI-generated; not independently checked.' },
     generatedAt: new Date().toISOString()
   };
-  if (answer.approaches.length < 4 || !answer.result) {
-    return json(res, 502, { error: 'The AI could not provide four distinct usable approaches. Please try again.', fallback: true });
+  if (answer.approaches.length < 1 || !answer.result) {
+    return json(res, 502, { error: 'The AI could not provide a complete usable answer. Please try again.', fallback: true });
   }
   if (!noOfficialKey) cacheSet(cacheKey, answer);
   return json(res, 200, answer);

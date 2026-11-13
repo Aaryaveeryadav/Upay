@@ -7,16 +7,17 @@ process.env.UPAY_AI_ALLOWED_USERS = 'allowed-test-user,allowed-test-user-2';
 process.env.SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_test_fixture';
 process.env.SUPABASE_ANON_KEY = 'legacy_test_fixture';
 const lib = require('../../lib/gemini.js');
-let providerCalls = 0, lastPrompt = '', replyText = '', queuedReplies = [];
+let providerCalls = 0, lastPrompt = '', replyText = '', queuedReplies = [], callBudgets = [];
 const four = () => [
   {name:'First principles', steps:[{t:'The underlying principle links the supplied information to the conclusion, with the assumptions stated explicitly.'}]},
   {name:'Worked application', steps:[{t:'A concrete application illustrates the principle while the boundary conditions show where the comparison stops being valid.'}]},
   {name:'Comparison', steps:[{t:'The relevant concepts differ in their scope and conditions, and this distinction determines which conclusion follows.'}]},
   {name:'Independent check', steps:[{t:'The conclusion is consistent with the requirements because each condition is satisfied without introducing unsupported assumptions.'}]}
 ];
-lib.callGeminiResilient = async function (prompt, keys, model, image) {
+lib.callGeminiResilient = async function (prompt, keys, model, image, options) {
   providerCalls++;
   lastPrompt = prompt;
+  if (options) callBudgets.push(options);
   if (image) return { text: 'Read a question from the photo', model: 'mock-model' };
   return { text: queuedReplies.length ? queuedReplies.shift() : replyText, model: 'mock-model' };
 };
@@ -111,7 +112,7 @@ async function main() {
   r = await invoke(solve,{method:'POST', token:'valid-two', body:{...privateQuestion,lang:'hi'}});
   assert.equal(r.code,200); assert.notEqual(r.body.cached,true); assert.equal(providerCalls,beforeCache+3);
   // One complete repair for a short draft, including theory and non-maths subjects.
-  const short = JSON.stringify({answer:'A theory answer', approaches:[four()[0]]});
+  const short = JSON.stringify({answer:'A theory answer', approaches:[]});
   const complete = JSON.stringify({answer:'A theory answer', approaches:four(),
     diagram:{type:'flow',nodes:['Cause','Mechanism','Effect'],caption:'Cause leads to effect through a mechanism.'}});
   for (const subject of ['maths','applied-maths','physics','chemistry','biology','accountancy','computerized-accounting','economics','english','hindi','social','business']) {
@@ -120,13 +121,22 @@ async function main() {
     r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Explain a policy test '+subject,subject,cls:12,minMethods:0}});
     assert.equal(r.code,200,subject); assert.equal(providerCalls,before+2);
     assert.equal(r.body.approaches.length,4); assert.equal(r.body.diagram.type,'flow');
-    assert.match(lastPrompt,/at least 4 genuinely distinct/i);
+    assert.match(lastPrompt,/ONE complete approach is sufficient/);
     assert.match(lastPrompt,/REPAIR:/);
   }
-  // Repeated/renamed working is not counted; do not return a partial success.
-  queuedReplies = [short, JSON.stringify({answer:'A',approaches:[four()[0],four()[0],{...four()[0],name:'Renamed copy'}]})];
-  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Reject duplicate method fixture',subject:'physics'}});
-  assert.equal(r.code,502); assert.match(r.body.error,/four distinct/);
+  // Natural counts need no repair or filler. Duplicate workings are collapsed.
+  for(const count of [1,2,3]){
+    const before=providerCalls;
+    queuedReplies=[JSON.stringify({answer:'Complete result',approaches:four().slice(0,count)})];
+    r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Natural method count '+count,subject:'physics'}});
+    assert.equal(r.code,200);assert.equal(r.body.approaches.length,count);assert.equal(providerCalls,before+1);
+  }
+  queuedReplies=[JSON.stringify({answer:'A',approaches:[four()[0],four()[0],{...four()[0],name:'Renamed copy'}]})];
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Collapse duplicate method fixture',subject:'physics'}});
+  assert.equal(r.code,200);assert.equal(r.body.approaches.length,1);
+  queuedReplies=[short,short];
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Reject genuinely empty fixture',subject:'physics'}});
+  assert.equal(r.code,502);assert.match(r.body.error,/complete usable answer/);
   queuedReplies = [];
   r = await invoke(readImage,{method:'POST',token:'valid',body:{}}); assert.equal(r.code,400);
   r = await invoke(readImage,{method:'POST',token:'valid',body:{data:'a'.repeat(240),mime:'image/png'}});
@@ -141,22 +151,26 @@ async function main() {
   const stream = Readable.from([Buffer.from('{"one":1}')]);
   assert.deepEqual(await lib.readBody(stream), {one:1});
   assert.deepEqual(await lib.readBody({body:Buffer.from('{"two":2}')}), {two:2});
-  queuedReplies=[1,2].map(()=>JSON.stringify({answer:'Only three approaches',approaches:four().slice(0,3)}));
-  r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Reject a three-approach response under the new policy',subject:'physics'}});
-  assert.equal(r.code,502);assert.match(r.body.error,/four distinct/);
+  queuedReplies=[JSON.stringify({answer:'Three useful approaches',approaches:four().slice(0,3)})];
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Accept a three-approach response under the new policy',subject:'physics'}});
+  assert.equal(r.code,200);assert.equal(r.body.approaches.length,3);
   const hindiPrompt='“जल संरक्षण केवल सरकार की जिम्मेदारी नहीं, हर नागरिक का कर्तव्य है।” इस विषय पर लगभग 150–200 शब्दों में अपने विचार लिखिए।';
   replyText=JSON.stringify({answer:'एक लेखन उत्तर',approaches:four()});
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:hindiPrompt,subject:'social',cls:10,lang:'en'}});
   assert.equal(r.code,200);assert.equal(r.body.subjectRouting.subject,'hindi');
-  assert.match(lastPrompt,/Class 10 hindi/i);assert.match(lastPrompt,/FOUR complete alternative responses/);
+  assert.match(lastPrompt,/Class 10 hindi/i);assert.match(lastPrompt,/one complete response by default/);
   assert.equal(r.body.approaches.length,4);
   const letterQuestion = 'Write a formal letter to the editor arguing against replacing a public park with a parking lot. Discuss health, environment and access to public space, and suggest a practical alternative.';
   const letter = '[Your address]\n[Date]\nThe Editor\n[Newspaper]\n[Town]\nSubject: Preserve our public park\nSir or Madam,\nThrough your newspaper, I urge the council to retain our public park rather than replace it with a parking lot.\nThe park offers free space for walking, exercise and play. Its loss would particularly affect children and older residents who cannot afford private recreation. Trees provide shade, absorb some pollutants and help rainwater soak into the soil; paving the site would increase heat and runoff.\nPublic green space belongs to everyone, including households without cars. Convenient parking should not take priority over their access to recreation and community life.\nThe council should instead improve existing parking on already paved land, introduce timed parking near shops and strengthen bus connections. Please encourage a public consultation before any decision.\nYours faithfully,\n[Your name]';
   queuedReplies = [JSON.stringify({answer:'Four complete formal letter options', approaches:four()})];
-  replyText = JSON.stringify({answer:'I urge the council to retain our public park.', approaches:four().map((a,i)=>({name:a.name, steps:[{t:letter.replace('Preserve our public park', ['Save our green space','Protect shared recreation','Choose sustainable parking','Keep the park accessible'][i])}]}))});
+  replyText = JSON.stringify({answer:'I urge the council to retain our public park.', approaches:four().slice(0,1).map((a,i)=>({name:a.name, steps:[{t:letter.replace('Preserve our public park', ['Save our green space','Protect shared recreation','Choose sustainable parking','Keep the park accessible'][i])}]}))});
   const beforeLetter = providerCalls;
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:letterQuestion,subject:'social'}});
   assert.equal(r.code,200); assert.equal(providerCalls,beforeLetter+2,'outline must trigger repair');
+  assert.equal(callBudgets.at(-1),callBudgets.at(-2),'repair uses the exact same budget and signal');
+  assert(callBudgets.at(-1).signal.aborted,'successful request releases provider resources');
+  assert(callBudgets.at(-1).deadline > Date.now() && callBudgets.at(-1).deadline <= Date.now()+140000);
+  assert.equal(r.body.approaches.length,1);
   assert(r.body.approaches.every(a=>a.format==='prose' && a.steps[0].t.includes('Yours faithfully')));
   assert.match(lastPrompt,/actual finished prose/);
   queuedReplies=[1,2].map(()=>JSON.stringify({answer:'Four letter options',approaches:four()}));
@@ -167,6 +181,16 @@ async function main() {
   assert.equal(r.code,200); assert.equal(r.body.result,'n = 15, 27, 327, 995');
   assert.equal(r.body.source,'exact'); assert.equal(r.body.check.source,'arithmetic');
   assert.equal(providerCalls,callsBeforeExact,'exact supported question must not spend a provider call');
+  const ambiguousCalls=providerCalls;
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all positive integers 7 for which n2 + 10m + 2026 is a perfect square.',subject:'maths'}});
+  assert.equal(r.code,422);assert.equal(r.body.code,'question_needs_confirmation');assert.equal(providerCalls,ambiguousCalls);
+  const contextCalls=providerCalls;
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:'पाठ पढ़ते-पढ़ते आपको भी अपने माता-पिता का लाड-प्यार याद आ रहा होगा। अपनी इन भावनाओं को डायरी में अंकित कीजिए',subject:'hindi'}});
+  assert.equal(r.code,422);assert.equal(r.body.code,'language_context_required');assert.equal(providerCalls,contextCalls);
+  replyText=JSON.stringify({answer:'रामागच्छति।',approaches:['प्रत्यक्षरूपम्','नियमः','उदाहरणम्','परीक्षणम्'].map((name,i)=>({name,steps:[{t:'अत्र सवर्णदीर्घसन्धिः भवति। अकारस्य आकारस्य च मेलने आकारः भवति। '+['रामः आगच्छति।','सन्धिरूपं रामागच्छति इति।','एतत् सन्धेः उदाहरणम् अस्ति।','अत्र वर्णयोः संयोगः परीक्ष्यते।'][i]}]}))});
+  queuedReplies=[JSON.stringify({answer:'यह उत्तर है।',approaches:four().map(a=>({...a,steps:[{t:'यह उत्तर है। इसमें क्या होता है और कैसे होता है।'}]}))})];
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:'सन्धिं कुरुत — राम + आगच्छति',subject:'sanskrit',lang:'hi',chapterTitle:'सन्धिः'}});
+  assert.equal(r.code,200);assert.equal(r.body.subjectRouting.language,'sa');assert.match(lastPrompt,/grammatical Sanskrit/);assert.match(lastPrompt,/Provided chapter context.*सन्धिः/);
   const radicalCalls = providerCalls;
   r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all integers x for which √(x+6) + √(19-x) is an integer.',subject:'social'}});
   assert.equal(r.code,200);assert.equal(r.body.result,'x ∈ {-6, 3, 10, 19}');

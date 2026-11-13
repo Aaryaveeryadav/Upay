@@ -1,0 +1,45 @@
+'use strict';
+const assert=require('node:assert/strict'),{chromium}=require('playwright');
+(async()=>{
+ const browser=await chromium.launch({headless:true,args:['--no-sandbox'],...(process.env.UPAY_CHROMIUM?{executablePath:process.env.UPAY_CHROMIUM}:{})});
+ try{for(const width of [1280,390]){
+  const context=await browser.newContext({viewport:{width,height:844},serviceWorkers:'block'}),page=await context.newPage(),requests=[],errors=[];
+  page.on('pageerror',e=>errors.push(String(e)));
+  await page.route('**/api/ai/solve',r=>requests.push(r));
+  await page.goto(process.env.UPAY_BASE||'http://127.0.0.1:8005/',{waitUntil:'networkidle'});
+  await page.waitForFunction(()=>window.UP&&UP.S&&document.body.classList.contains('up-ready'));
+  await page.clock.install();
+  const q='Why is the sky blue?';
+  await page.evaluate(q=>{UP.S.subject='science';location.hash='#/ask?q='+encodeURIComponent(q);},q);
+  await page.waitForFunction(()=>UP.S.aiState==='loading');await page.waitForTimeout(50);
+  assert.equal(requests.length,1);
+  await page.clock.fastForward(40000);
+  assert.equal(await page.evaluate(()=>UP.S.aiState),'loading','40-second answer must not be discarded');
+  await requests[0].fulfill({status:504,contentType:'application/json',body:JSON.stringify({code:'provider_timeout',error:'The AI took too long to respond. Your question is preserved.',fallback:true})});
+  await page.waitForFunction(()=>UP.S.aiState==='local');
+  assert.equal(await page.evaluate(()=>UP.S.aiQuestion),q);
+  const retry=page.locator('[data-action="retryAI"]');await retry.waitFor();await retry.click();
+  await page.waitForFunction(()=>UP.S.aiState==='loading');await page.waitForTimeout(50);
+  assert.equal(requests.length,2,'one explicit retry, no automatic request storm');
+  assert.equal(requests[1].request().postDataJSON().question,q);
+  assert.equal(requests[1].request().postDataJSON().subject,'science');
+  await page.clock.fastForward(40000);
+  assert.equal(await page.evaluate(()=>UP.S.aiState),'loading');
+  await requests[1].fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',result:'Mock recovered science answer',approaches:[1,2,3,4].map(i=>({name:'Explanation '+i,steps:[{t:'Mock test response; this checks timeout recovery, not provider correctness.'}]}))})});
+  await page.waitForFunction(()=>UP.S.aiState==='done');
+  assert.equal(await page.locator('.ai-answer .approach').count(),4);
+  assert.equal(await page.locator('[data-action="retryAI"]').count(),0);
+  assert.equal(await page.locator('#aiRequestStatus').count(),0);
+  const next='Explain why a clear daytime sky appears blue.';
+  await page.evaluate(q=>location.hash='#/ask?q='+encodeURIComponent(q),next);
+  await page.waitForFunction(()=>UP.S.aiState==='loading');await page.waitForTimeout(50);
+  assert.equal(requests.length,3);
+  await page.clock.fastForward(65001);
+  await page.waitForFunction(()=>UP.S.aiState==='local');
+  assert.equal(await page.evaluate(()=>UP.S.aiQuestion),next);
+  assert.equal(await page.locator('[data-action="retryAI"]').count(),1,'browser safety deadline remains recoverable');
+  assert.deepEqual(errors,[]);
+  console.log(`PASS ${width}px: slow science request survives 40s, timeout preserves question, explicit retry recovers four answers`);
+  await context.close();
+ }}finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

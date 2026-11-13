@@ -1,0 +1,17 @@
+'use strict';
+const assert=require('node:assert/strict'),p=require('../../assets/js/language-policy'),route=require('../../assets/js/task-routing');
+assert(p.issue({subject:'sanskrit',hi:'पाठ के अनुसार क्या लाभ हैं?',sa:''}));
+assert.equal(p.issue({subject:'sanskrit',sourceVerified:true,sa:'सन्धिं कुरुत।'}),'');
+assert(p.issue({subject:'hindi',kind:'text',hi:'a passage'}));
+assert(p.issue({subject:'hindi',hi:'बरामदा 22. साफ़, शुद्ध'}));
+const diary='पाठ पढ़ते-पढ़ते आपको भी अपने माता-पिता का लाड-प्यार याद आ रहा होगा। अपनी इन भावनाओं को डायरी में अंकित कीजिए';
+assert(p.contextRequest(diary,'hindi',''));
+assert.equal(p.contextRequest(diary,'hindi','माता का आँचल'),null);
+assert(p.contextRequest('साना-साना हाथ जोड़ि... '+ 'हम आगे बढ़ते गए। '.repeat(70),'hindi',''));
+assert.equal(p.contextRequest('Why did Lencho write a letter to God?','english',''),null);
+assert.equal(route.resolve('सन्धिं कुरुत — राम + आगच्छति','sanskrit').language,'sa');
+assert.equal(route.resolve('संस्कृत में पत्र लिखिए','hindi').subject,'sanskrit');
+assert(!p.usableApproach({steps:[{t:'यह संस्कृत का पाठ है। इसमें क्या बताया गया है?'}]},'पाठस्य सारः','sanskrit'));
+assert(p.usableApproach({steps:[{t:'अस्य पाठस्य विषयः पर्यावरणरक्षणम् अस्ति।'}]},'पाठस्य सारः','sanskrit'));
+assert(p.usableApproach({steps:[{t:'यह शब्द का अर्थ है।'}]},'हिन्दी अर्थ लिखिए','sanskrit'));
+console.log('PASS source/language separation, incomplete context/passages, Sanskrit default and wrong-language guard');
