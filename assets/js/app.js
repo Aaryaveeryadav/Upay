@@ -1706,7 +1706,7 @@ window.UP = window.UP || {};
       .then(({ ok, j }) => {
         clearTimeout(clientTimeout); clearTimeout(slowTimer);
         if (!isCurrent()) return;
-        if (ok && j && j.approaches && j.approaches.length >= 4) {
+        if (ok && j && j.approaches && j.approaches.length >= 1) {
           j = UP.answerFormat.answer(j);
           j.question = q; j.subjectRouting = routing; j.chapterTitle=chapterContext?P(chapterContext):'';
           j._chId = S.chapterId || 0;
@@ -1992,7 +1992,7 @@ window.UP = window.UP || {};
   function renderCachedAnswer(j, qq, sol, ansBox, id) {
     const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
     j = UP.answerFormat.answer(exact || j);
-    if (!j || j.policyVersion !== 'four-approaches-v3' || !j.approaches || j.approaches.length < 4) return false;
+    if (!j || j.policyVersion !== 'useful-approaches-v1' || !j.approaches || j.approaches.length < 1) return false;
     if(S.subject==='sanskrit'&&(!UP.languagePolicy.usableApproach({steps:[{t:j.answer||j.result||''}]},pyqQuestionText(qq),'sanskrit')||j.approaches.some(a=>!UP.languagePolicy.usableApproach(a,pyqQuestionText(qq),'sanskrit'))))return false;
     const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
       (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
@@ -2001,7 +2001,7 @@ window.UP = window.UP || {};
       renderAIDiagram(Object.assign({}, j, {question:qq.en || ''})) +
       j.approaches.map((a, i) => '<div class="sol-method"><div class="sol-mname">' +
         (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i+1) + ' — ' : '') + esc(a.name) + '</div>' +
-        '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + (a.steps||[]).map(st => '<li>' + esc(st.t || '') +
+        '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + (a.steps||[]).map(st => '<li>' + esc(st.t || '').replace(/\n/g,'<br>') +
           (st.m ? '<div class="st-m">' + mathText(st.m) + '</div>' : '') +
           (st.note ? '<span class="st-note">' + esc(st.note) + '</span>' : '') + '</li>').join('') + '</ol>' +
         (a.watch ? '<div class="callout warn">' + icon('warn') + '<div><b>' + t('watchOut') + ':</b> ' + esc(a.watch) + '</div></div>' : '') +
@@ -2073,7 +2073,7 @@ window.UP = window.UP || {};
                                      : 'The server\'s reply could not be read (HTTP ' + reply.status + '). Try again.') + '</div></div>';
         return;
       }
-      if (!j.approaches || j.approaches.length < 4) {
+      if (!j.approaches || j.approaches.length < 1) {
         /* 401/403 = the sign-in lapsed or there is no API key. Show the LOCAL
            solver answer underneath the sign-in banner so the student still gets
            help, instead of a dead panel they cannot read. */
@@ -2106,7 +2106,7 @@ window.UP = window.UP || {};
       renderAIDiagram(Object.assign({}, j, {question:qq.en || ''})) +
         j.approaches.map((a, i) => '<div class="sol-method"><div class="sol-mname">' +
           (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i + 1) + ' — ' : '') + esc(a.name) + '</div>' +
-          '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + a.steps.map(st => '<li>' + esc(st.t) +
+          '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + a.steps.map(st => '<li>' + esc(st.t).replace(/\n/g,'<br>') +
             (st.m ? '<div class="st-m">' + mathText(st.m) + '</div>' : '') +
             (st.note ? '<span class="st-note">' + esc(st.note) + '</span>' : '') + '</li>').join('') + '</ol>' +
           (a.watch ? '<div class="callout warn">' + icon('warn') + '<div><b>' + t('watchOut') + ':</b> ' + esc(a.watch) + '</div></div>' : '') +
@@ -2187,7 +2187,6 @@ window.UP = window.UP || {};
     return `
     <section class="answer">
       ${localBadge}
-      ${!isLoading && methods.length < 4 ? '<p class="muted">' + (S.lang === 'hi' ? 'यह स्थानीय प्रारंभिक हल है; पूर्ण AI उत्तर में कम-से-कम चार उपयोगी तरीके माँगे गए हैं।' : 'Local starter solution; the complete AI response requests at least four useful approaches.') + '</p>' : ''}
       <div class="answer-head">
         <div class="meta-row">
           <span class="tag">${esc(ch && !answerRoute.changed ? P({ en: ch.en, hi: ch.hi }) : (isLoading ? (S.lang==='hi'?'एआई':'AI') : (S.lang === 'hi' ? 'अवधारणा' : 'Concept')))}</span>
@@ -4029,16 +4028,16 @@ window.UP = window.UP || {};
 
   /* ---- post-render UX enhancements: step-reveal CTAs, diagram lightbox, kbd hint ---- */
   function postRenderEnhance(root) {
+    if(!root)return;
     // 1. "Show next method" CTAs between collapsed approaches
     const approaches = root.querySelectorAll('.approach');
     approaches.forEach((art, idx) => {
       const isOpen = art.classList.contains('open');
       const theory = !!art.closest('[data-theory="true"]');
-      const next = approaches[idx + 1];
+      const next = art.nextElementSibling && art.nextElementSibling.classList.contains('approach') ? art.nextElementSibling : null;
       // remove any previously-inserted CTAs
-      const existing = art.querySelector(':scope > .next-method-cta');
-      if (existing) existing.remove();
-      if (isOpen && next && next.classList.contains('closed') && !art.querySelector(':scope > .next-method-cta')) {
+      art.querySelectorAll('.next-method-cta').forEach(button=>button.remove());
+      if (isOpen && next && next.classList.contains('closed')) {
         const nextName = next.querySelector('h3');
         const btn = document.createElement('button');
         btn.className = 'next-method-cta';
@@ -4050,6 +4049,8 @@ window.UP = window.UP || {};
       }
     });
 
+    // Rebuild controls from current state; never leave a stale or duplicated control.
+    root.querySelectorAll('.show-all-btn').forEach(button=>button.remove());
     // "Show all" button next to approaches heading if any are collapsed
     if (approaches.length > 1) {
       const closedCount = Array.from(approaches).filter(a => a.classList.contains('closed')).length;
@@ -4821,7 +4822,7 @@ window.UP = window.UP || {};
       .then(({ok,j})=>{
         q.aiLoading=false;
         if (!isCurrent()) return;
-        if (ok && j.approaches && j.approaches.length >= 4) {
+        if (ok && j.approaches && j.approaches.length >= 1) {
           j = UP.answerFormat.answer(j);
           const first = j.approaches[0];
           q.aiSolution = Object.assign({}, j, {question:qText});
@@ -5343,7 +5344,7 @@ window.UP = window.UP || {};
     const q = (a.question || a.q || S.q || '').trim();
     const summary = P(a.summary || '').trim();
     const ans = P(a.answer || a.result || a.final || '').trim();
-    const methods = (a.approaches || []).slice(0, 4);
+    const methods = a.approaches || [];
     let out = '';
     if (q) out += (isHi ? 'प्रश्न: ' : 'Question: ') + q + '.\n\n';
     if (summary) out += summary + '.\n\n';

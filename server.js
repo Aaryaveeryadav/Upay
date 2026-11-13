@@ -1811,7 +1811,7 @@ const handleRequest = async function (req, res) {
         ' "check":"<how to verify the answer>",',
         ' "diagram":{"type":"plane|triangle|circle|bars|solid","points":[...],"circles":[...],"segments":[...],"bars":[...],"parts":[...],"labels":[...],"caption":"..."}}',
         'Rules:',
-        '- Give at least 4 genuinely different approaches. Same working under two labels is forbidden.',
+        '- Give only genuinely useful complete approaches; one is sufficient, and no fixed count is required. Same working under two labels is forbidden.',
         '- Every step shows real working with the question\'s own numbers.',
         '- Verify arithmetic before writing. No unique answer? Say so in "answer".',
         '- Use · for decimals, √ π θ ° ∠ △ ⇒ as needed.',
@@ -1837,7 +1837,7 @@ const handleRequest = async function (req, res) {
         ' "check":"<how to verify>",',
         ' "diagram":<either null (no figure needed) OR a figure object below>}',
         'Rules:',
-        '- Give at least 4 genuinely different approaches. Many theory questions have one honest route; give just that.',
+        '- Give only genuinely useful complete approaches; one is sufficient, and no fixed count is required. Many theory questions have one honest route; give just that.',
         '- Numericals: show every substitution with units. Balance every equation atom-by-atom.',
         '- Chemical equations: use → for yields, ↑/↓ for gas/precipitate when appropriate. Balance atoms on BOTH sides.',
         '- Hindi NOT needed — English only.',
@@ -1915,7 +1915,7 @@ const handleRequest = async function (req, res) {
         out = await solveRuntime.callGeminiResilient(prompt, plain, db.settings.geminiModel, null, callOptions);
         let draft;
         try { draft = firstJSON(out.text); } catch (_) { draft = null; }
-        if (draft && solvePolicy.completeApproaches(draft, question, subject).length < 4) {
+        if (draft && solvePolicy.completeApproaches(draft, question, subject).length < 1) {
           out = await solveRuntime.callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), plain, out.model, null, callOptions);
         }
       } catch (e) {
@@ -1982,8 +1982,8 @@ const handleRequest = async function (req, res) {
 
       if (!answer.approaches.length) return json(res, 502, { error: 'The model returned no solvable steps. Try rephrasing.', fallback: true });
 
-      if (answer.approaches.length < 4) return json(res, 502, {
-        error: 'The AI could not provide four distinct usable approaches. Please try again.', fallback: true
+      if (answer.approaches.length < 1) return json(res, 502, {
+        error: 'The AI could not provide a complete usable answer. Please try again.', fallback: true
       });
       answer.methodCount = answer.approaches.length;
 

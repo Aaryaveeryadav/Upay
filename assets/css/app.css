@@ -1647,7 +1647,10 @@ h1:lang(hi), h2:lang(hi), h3:lang(hi), .approach-body p:lang(hi), .snippet block
 
 /* Completed compositions/theory are paragraphs, not numbered calculation steps. */
 ol.prose-answer { list-style: none; padding-left: 0; }
-ol.prose-answer > li { padding-left: 0; margin-bottom: 1em; white-space: pre-wrap; line-height: 1.8; }
+ol.prose-answer > li { padding: 0; margin: 0 0 1em; white-space: normal; line-height: 1.75; min-height: 0; }
+ol.prose-answer > li:last-child { margin-bottom: 0; }
+ol.prose-answer > li::after { content: none; display: none; }
+ol.prose-answer .st-t { white-space: normal; }
 ol.prose-answer > li::before { content: none; display: none; }
 
 /* Share preview is explicit: opening it never downloads a file. */

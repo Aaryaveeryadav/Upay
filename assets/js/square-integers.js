@@ -54,7 +54,7 @@
    cases.push('k = '+k+': (u − v)² = '+D+'; '+(xs.length?'x = '+xs.join(', '):L('no integer x','कोई पूर्णांक x नहीं')));
   }
   const finish={t:L('Complete verified solution set.','सत्यापित पूर्ण हल समुच्चय।'),m:result};
-  return {source:'exact',kind:'integer-radical-sum',policyVersion:'four-approaches-v3',question,result,
+  return {source:'exact',kind:'integer-radical-sum',policyVersion:'useful-approaches-v1',question,result,
    summary:L('All four explanations use the same exact solution set. Integer square roots and the entire finite domain are checked, not rounded approximations.','चारों व्याख्याओं में एक ही सटीक हल समुच्चय है। पूर्णांक वर्गमूल और पूरे सीमित प्रांत की जाँच की गई है।'),
    approaches:[{
     name:L('Integer-root theorem and square pairs','पूर्णांक वर्गमूल प्रमेय और वर्ग युग्म'),
@@ -88,7 +88,7 @@
   const shift='(n + '+h+')', equation='m² − '+shift+'² = '+D;
   const pairText=pairs.map(p=>'('+p.u+', '+p.v+')').join(', ');
   const positive=valid.map(p=>'('+p.u+', '+p.v+') ⇒ n = '+p.n).join('; ')||result;
-  return {source:'exact',kind:'integer-square',policyVersion:'four-approaches-v3',question,
+  return {source:'exact',kind:'integer-square',policyVersion:'useful-approaches-v1',question,
    title:L('All positive integer solutions','सभी धन पूर्णांक हल'),result,
    summary:L('Complete the square, then enumerate every same-parity factor pair. This finds all solutions, not just one candidate.', 'पूर्ण वर्ग बनाकर समान सम-विषमता वाले सभी गुणनखंड युग्म जाँचें। इससे सभी हल मिलते हैं।'),
    approaches:[{
