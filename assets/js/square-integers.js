@@ -18,7 +18,63 @@
   solutions.sort((a,b)=>a.n-b.n);
   return {b,c,h,D,pairs,solutions};
  }
+ // Exact bounded class: integer x, sqrt(x+a)+sqrt(b-x) an integer.
+ // Parse the whole question: never silently discard extra constraints.
+ function radicalCompute(question){
+  const q=String(question||'').replace(/\\+[()[\]]|\$/g,'').replace(/\\sqrt\s*\{([^{}]+)\}/g,'√($1)').replace(/sqrt\s*\(/gi,'√(').replace(/[−–]/g,'-').replace(/\s+/g,' ').trim();
+  const m=q.match(/^(?:find|determine) all (?:the )?(?:integers? x|integer values? of x) (?:for which|such that)\s*√\(\s*x\s*\+\s*(\d+)\s*\)\s*\+\s*√\(\s*(\d+)\s*-\s*x\s*\)\s+is an integer[.?]?$/i);
+  if(!m)return null;
+  const a=Number(m[1]),b=Number(m[2]),S=a+b;
+  if(!Number.isSafeInteger(S)||S<1||S>1000)return null;
+  const solutions=[],checked=[];
+  for(let x=-a;x<=b;x++){
+   const u=x+a,v=b-x,r=Math.floor(Math.sqrt(u)),s=Math.floor(Math.sqrt(v));
+   const valid=r*r===u&&s*s===v;
+   checked.push({x,u,v,valid});if(valid)solutions.push({x,r,s,k:r+s});
+  }
+  return {a,b,S,solutions,checked};
+ }
+ function radicalSolve(question,lang){
+  const d=radicalCompute(question);if(!d)return null;
+  const {a,b,S,solutions}=d,hi=lang==='hi',L=(en,h)=>hi?h:en;
+  const expression='√(x + '+a+') + √('+b+' − x)',result=solutions.length?'x ∈ {'+solutions.map(s=>s.x).join(', ')+'}':L('No integer solutions','कोई पूर्णांक हल नहीं');
+  const checks=solutions.map(s=>'x = '+s.x+': √'+s.r*s.r+' + √'+s.s*s.s+' = '+s.r+' + '+s.s+' = '+s.k);
+  const kmin=Math.ceil(Math.sqrt(S)),kmax=Math.floor(Math.sqrt(2*S));
+  const cases=[];
+  for(let k=kmin;k<=kmax;k++){
+   // u+v=S, 4uv=(k²-S)²; (u-v)²=2Sk²-k⁴.
+   const D=2*S*k*k-k*k*k*k,t=Math.floor(Math.sqrt(Math.max(0,D)));
+   const xs=D>=0&&t*t===D&&(S+t)%2===0?[(S-t)/2-a,(S+t)/2-a].filter((x,i,arr)=>arr.indexOf(x)===i&&solutions.some(s=>s.x===x&&s.k===k)):[];
+   cases.push('k = '+k+': (u − v)² = '+D+'; '+(xs.length?'x = '+xs.join(', '):L('no integer x','कोई पूर्णांक x नहीं')));
+  }
+  const finish={t:L('Complete verified solution set.','सत्यापित पूर्ण हल समुच्चय।'),m:result};
+  return {source:'exact',kind:'integer-radical-sum',policyVersion:'four-approaches-v3',question,result,
+   summary:L('All four explanations use the same exact solution set. Integer square roots and the entire finite domain are checked, not rounded approximations.','चारों व्याख्याओं में एक ही सटीक हल समुच्चय है। पूर्णांक वर्गमूल और पूरे सीमित प्रांत की जाँच की गई है।'),
+   approaches:[{
+    name:L('Integer-root theorem and square pairs','पूर्णांक वर्गमूल प्रमेय और वर्ग युग्म'),
+    steps:[{t:L('Both radicands are nonnegative integers; their sum is fixed.','दोनों वर्गमूलों के अंदर अऋण पूर्णांक हैं और उनका योग निश्चित है।'),m:'−'+a+' ≤ x ≤ '+b+'; u = x + '+a+', v = '+b+' − x; u + v = '+S},
+     {t:L('If √u + √v = k is a positive integer, isolate √u: 2k√u = k² + u − v. Thus √u is rational. A rational square root of an integer is an integer (reduce its fraction and compare prime factors); so √v is also an integer.','यदि √u + √v = k धन पूर्णांक है, तो 2k√u = k² + u − v। अतः √u परिमेय है। पूर्णांक का परिमेय वर्गमूल पूर्णांक होता है; इसलिए √v भी पूर्णांक है।')},
+     {t:L('Enumerate all nonnegative square pairs r² + s² = '+S+' and recover x = r² − '+a+'.','सभी अऋण वर्ग युग्म r² + s² = '+S+' लें और x = r² − '+a+' निकालें।'),m:solutions.map(s=>'('+s.r+'², '+s.s+'²) ⇒ x = '+s.x).join('; ')||result},finish]
+   },{
+    name:L('Bounded integer sums with completed cases','सीमित पूर्णांक योग और पूर्ण जाँच'),
+    steps:[{t:L('The minimum sum is at an endpoint; Cauchy–Schwarz gives the maximum.','न्यूनतम योग सीमा बिंदु पर है; कॉशी–श्वार्ज से अधिकतम मिलता है।'),m:'√'+S+' ≤ k ≤ √'+(2*S)+'; k ∈ {'+Array.from({length:kmax-kmin+1},(_,i)=>kmin+i).join(', ')+'}'},
+     {t:L('Use u + v = S and 2√uv = k² − S, then test the integer square discriminant and parity. Every surviving candidate must satisfy the original expression.','u + v = S और 2√uv = k² − S से पूर्णांक वर्ग विविक्तकर तथा सम-विषमता जाँचें। प्रत्येक बचे मान को मूल व्यंजक में जाँचें।'),m:'(u − v)² = 2Sk² − k⁴'},
+     ...cases.map(m=>({t:L('Completed case','पूर्ण जाँच'),m})),finish]
+   },{
+    name:L('Exhaustive exact domain verification','पूरे प्रांत की सटीक जाँच'),
+    steps:[{t:L('Check every integer in the domain, including both endpoints. This is a verification procedure, not a new independent theorem.','दोनों सीमा बिंदुओं सहित पूरे प्रांत के हर पूर्णांक की जाँच करें। यह सत्यापन प्रक्रिया है, अलग स्वतंत्र प्रमेय नहीं।'),m:'x = −'+a+', …, '+b+'; '+(S+1)+L(' integers checked',' पूर्णांकों की जाँच')},
+     {t:L('For each x calculate u and v. Accept only if their integer roots square back exactly to u and v; the theorem in the first explanation proves this test is necessary and sufficient. No rounded floating-point sum is used.','प्रत्येक x पर u और v निकालें। तभी स्वीकारें जब दोनों पूर्णांक वर्गमूलों के वर्ग ठीक u और v हों; पहली व्याख्या का प्रमेय इस कसौटी को आवश्यक और पर्याप्त बनाता है।')},
+     ...checks.map(m=>({t:L('Successful exact substitution','सफल सटीक प्रतिस्थापन'),m})),finish]
+   },{
+    name:L('Substitution and completeness certificate','प्रतिस्थापन और पूर्णता प्रमाण'),
+    steps:[...checks.map(m=>({t:L('Verify in the original expression.','मूल व्यंजक में जाँचें।'),m})),
+     {t:L('No other integer can work: the domain is finite, and the integer-root theorem reduces every possible solution to the square pairs already exhausted. This is a consistency/completeness check, not a fourth unrelated derivation.','अन्य कोई पूर्णांक हल नहीं है: प्रांत सीमित है और पूर्णांक वर्गमूल प्रमेय से सभी संभावित हल उन्हीं वर्ग युग्मों में आते हैं जिनकी पूरी जाँच हो चुकी है। यह संगति और पूर्णता की जाँच है, अलग चौथी व्युत्पत्ति नहीं।')},finish]
+   }],verify:checks.join('; ')+'; '+result,diagram:null,conceptDiagram:null,
+   check:{state:'verified',source:'arithmetic',note:L('Exact square-pair enumeration, full-domain integer tests and original-expression substitution.','सटीक वर्ग युग्म खोज, पूरे प्रांत की पूर्णांक जाँच और मूल व्यंजक में प्रतिस्थापन।')}};
+ }
+
  function solve(question,lang){
+  const radical=radicalSolve(question,lang);if(radical)return radical;
   const data=compute(question);if(!data)return null;
   const {b,c,h,D,pairs,solutions}=data,hi=lang==='hi',L=(a,b)=>hi?b:a;
   const ns=solutions.map(s=>s.n),valid=pairs.filter(p=>p.n>0);
@@ -55,7 +111,7 @@
    check:{state:'verified',source:'arithmetic',note:L('Exact finite factor-pair enumeration and substitution.','सटीक गुणनखंड खोज और प्रतिस्थापन।')}
   };
  }
- const api={compute,solve};
+ const api={compute,solve,radicalCompute};
  if(typeof module==='object'&&module.exports)module.exports=api;
  else{root.UP=root.UP||{};root.UP.squareInteger=api;}
 })(typeof window==='undefined'?globalThis:window);

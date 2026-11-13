@@ -167,6 +167,11 @@ async function main() {
   assert.equal(r.code,200); assert.equal(r.body.result,'n = 15, 27, 327, 995');
   assert.equal(r.body.source,'exact'); assert.equal(r.body.check.source,'arithmetic');
   assert.equal(providerCalls,callsBeforeExact,'exact supported question must not spend a provider call');
+  const radicalCalls = providerCalls;
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all integers x for which √(x+6) + √(19-x) is an integer.',subject:'social'}});
+  assert.equal(r.code,200);assert.equal(r.body.result,'x ∈ {-6, 3, 10, 19}');
+  assert.equal(r.body.source,'exact');assert.equal(providerCalls,radicalCalls);
+  for(const approach of r.body.approaches)assert.equal(approach.steps.at(-1).m,r.body.result);
   await assert.rejects(lib.readBody({body:'{bad json'}));
   console.log('Mocked serverless auth, paid-AI allowlist, owner-scoped cache, response shape, image reading and body parsing: PASS');
 }

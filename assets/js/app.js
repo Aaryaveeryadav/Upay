@@ -5123,7 +5123,7 @@ window.UP = window.UP || {};
          wrongly flagged as "Latin mojibake". */
       const expectHindi = (S.subject === 'hindi' || S.subject === 'sanskrit')
         || (S.lang === 'hi' && !q.en && q.hi);
-      const exactSquare = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.compute(shown);
+      const exactSquare = ['maths','applied-maths'].includes(S.subject) && (UP.squareInteger.compute(shown) || UP.squareInteger.radicalCompute(shown));
       const why = exactSquare ? null : UP.corrupt && UP.corrupt.why(shown, { expectHindi: !!expectHindi });
       let out = '';
       out += '<article class="q-card pyq' + (badge ? ' pyq-sub' : '') + '" id="' + esc(q.id) + '">';

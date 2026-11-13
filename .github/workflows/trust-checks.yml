@@ -26,6 +26,7 @@ jobs:
       - run: node tools/check/teacher_voice.js
       - run: node tools/check/prime_power_ratio.js
       - run: node tools/check/square_integers.js
+      - run: node tools/check/radical_integers.js
       - run: node tools/check/science_diagrams.js
       - run: node tools/check/task_routing.js
       - run: node tools/check/prose_answers.js

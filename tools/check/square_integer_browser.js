@@ -35,8 +35,17 @@ const {chromium}=require('playwright');
   await page.locator('#square-key-fixture [data-reveal]').click();
   assert((await page.locator('#sol-square-key-fixture').innerText()).includes('n = 15, 27, 327, 995'));
   assert.equal(calls,0);
+  const radical='Find all integers x for which √(x+6) + √(19-x) is an integer.';
+  await page.evaluate(q=>location.hash='#/ask?q='+encodeURIComponent(q),radical);
+  await page.waitForFunction(()=>UP.S.aiAnswer && UP.S.aiAnswer.kind==='integer-radical-sum');
+  assert.equal(await page.locator('.ai-answer .approach').count(),4);
+  const conclusions=await page.evaluate(()=>UP.S.aiAnswer.approaches.map(a=>a.steps.at(-1).m));
+  assert.deepEqual(conclusions,Array(4).fill('x ∈ {-6, 3, 10, 19}'));
+  assert.equal(calls,0);
+  await page.evaluate(()=>{UP.S.aiAnswer={...UP.S.aiAnswer,source:'ai',result:'x ∈ {-6, 3, 10, 15, 18, 19}'};location.hash+='&stale=1';});
+  await page.waitForFunction(()=>UP.S.aiAnswer.result==='x ∈ {-6, 3, 10, 19}');
   assert.deepEqual(errors,[]);
-  console.log(`PASS ${width}px: exact full set in Ask/practice/PYQ, old 191 replaced including speech state, Hindi, four explanations, zero provider requests`);
+  console.log(`PASS ${width}px: exact full set in Ask/practice/PYQ, old 191 replaced including speech state, Hindi, radical four-way agreement/stale correction, zero provider requests`);
   await context.close();
  }}finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
