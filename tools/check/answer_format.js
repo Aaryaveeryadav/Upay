@@ -17,3 +17,11 @@ assert.deepEqual(f.answer(formatted),formatted,'presentation must be idempotent'
 assert.equal(raw.diagram.nodes[0],String.raw`\Phi_0`,'do not mutate stored/source records');
 assert.equal(f.text('<img src=x onerror=alert(1)>'),'<img src=x onerror=alert(1)>','formatter returns text, callers still escape HTML');
 console.log('PASS readable AI maths, grouped fractions, labels, nested commands, immutability/idempotence');
+
+const pasted='Find all positive integers n for which n²+10n+2026 is a perfect square.';
+assert.equal(f.question(String.raw`Find all positive integers \(n\) for which \(n^2+10n+2026\) is a perfect square.`),pasted);
+assert.equal(f.question(String.raw`Find all positive integers \\(n\\) for which \\(n^2+10n+2026\\) is a perfect square.`),pasted);
+assert.equal(f.question('Plain text n^2 should stay unchanged'),'Plain text n^2 should stay unchanged');
+assert.equal(f.question(String.raw`Path C:\notes\chapter`),String.raw`Path C:\notes\chapter`);
+assert.equal(f.question(f.question(pasted)),pasted);
+console.log('PASS single/double-escaped pasted TeX, idempotence and unchanged plain text');

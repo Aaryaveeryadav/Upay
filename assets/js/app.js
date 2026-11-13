@@ -1424,7 +1424,7 @@ window.UP = window.UP || {};
       </div>
       <form class="askbox" data-form="ask">
         <div class="askbox-inner">
-          <textarea name="q" rows="2" placeholder="${t('askPlaceholder')}" aria-label="${t('askTitle')}">${esc(params.q || '')}</textarea>
+          <textarea name="q" rows="2" placeholder="${t('askPlaceholder')}" aria-label="${t('askTitle')}">${esc(UP.answerFormat.question(params.q || ''))}</textarea>
           <button class="photo-btn" type="button" data-action="cameraOCR"
             title="${S.lang === 'hi' ? 'कैमरे से प्रश्न पढ़ें' : 'Scan a question with camera'}"
             aria-label="${S.lang === 'hi' ? 'कैमरे से प्रश्न पढ़ें' : 'Scan a question with camera'}">
@@ -1474,6 +1474,7 @@ window.UP = window.UP || {};
       </div>
 
       ${S.aiState === 'loading' ? `<div class="ai-thinking" id="aiThinking">${loadingDots()}</div>` : ''}
+      ${S.aiState === 'loading' ? `<p id="aiRequestStatus" class="muted" role="status">${S.lang === 'hi' ? 'तीन व्याख्याएँ और उपयोगी चित्र तैयार हो रहे हैं…' : 'Preparing three explanations and relevant diagrams…'}</p>` : ''}
       <div id="answerMount">${S.aiAnswer ? renderAIAnswer(S.aiAnswer) : (S.answer ? renderAnswer(S.answer) : emptyAsk())}</div>
     </div>`;
   }
@@ -1624,6 +1625,10 @@ window.UP = window.UP || {};
     const paint = () => {
       const m = mount();
       if (m) m.innerHTML = S.aiAnswer ? renderAIAnswer(S.aiAnswer) : renderAnswer(S.answer);
+      const status = document.getElementById('aiRequestStatus');
+      if (status && S.aiState !== 'loading') status.remove();
+      const thinking = document.getElementById('aiThinking');
+      if (thinking && S.aiState !== 'loading') thinking.remove();
     };
     const goLocal = (note, showRetry) => {
       if (!isCurrent()) return;
@@ -1655,14 +1660,15 @@ window.UP = window.UP || {};
     // "taking a moment" nudge — after 6s swap the spinner text
     let slowTimer = setTimeout(() => {
       const m = mount();
-      if (!m) return;
-      const sp = m.querySelector('.ai-thinking span[data-slow]');
-      if (sp) sp.textContent = S.lang === 'hi' ? 'एआई सोच रहा है... इसमें कुछ सेकंड लग सकते हैं' : 'Still working... a few more seconds';
+      if (!m || !isCurrent() || S.aiState !== 'loading') return;
+      const sp = document.getElementById('aiRequestStatus');
+      if (sp) sp.textContent = S.lang === 'hi' ? 'AI अभी काम कर रहा है — इसमें लगभग 30 सेकंड तक लग सकते हैं।' : 'Still preparing and checking the explanations — this can take up to about 30 seconds.';
     }, 6000);
     let controller;
     try { controller = new AbortController(); } catch(e) { controller = null; }
-    // Client-side hard timeout: 25s — server returns within 30s so we always get a response
-    const clientTimeout = setTimeout(() => { if (controller) controller.abort(); }, 25000);
+    // Allow the server's 30-second deadline plus transport time; do not
+    // discard a valid 26–30 second answer by aborting at 25 seconds.
+    const clientTimeout = setTimeout(() => { if (controller) controller.abort(); }, 35000);
     let req;
     try {
       if (typeof fetch !== 'function') { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'इस ब्राउज़र में नेटवर्क उपलब्ध नहीं' : 'no network available here', true); return; }
@@ -2355,7 +2361,7 @@ window.UP = window.UP || {};
     <div class="filters">
       <select class="select" data-action="set" data-key="cls">${[10, 11, 12].map(c => `<option value="${c}" ${c === S.cls ? 'selected' : ''}>${t('classLabel')} ${c}</option>`).join('')}</select>
       <select class="select" data-action="set" data-key="subject">${(UP.classes.find(c => c.id === +S.cls) || UP.classes[0]).subjects.map(s => `<option value="${s}" ${s === S.subject ? 'selected' : ''}>${esc(P(UP.subjects[s]))}</option>`).join('')}</select>
-      <div class="search-input">${icon('search')}<input type="search" placeholder="${t('search')}" value="${esc(params.q || '')}" data-action="search"></div>
+      <div class="search-input">${icon('search')}<input type="search" placeholder="${t('search')}" value="${esc(UP.answerFormat.question(params.q || ''))}" data-action="search"></div>
       <span class="tag grey">${filtered.length} ${isEnglish12 ? (S.lang === 'hi' ? 'पाठ-चयन' : 'selections') : (S.lang === 'hi' ? 'अध्याय' : 'chapters')}</span>
     </div>
     ${!filtered.length && !(isBusiness && S.board !== 'cbse') ? `<div class="empty">${icon('search')}<h3>${t('noMatch')}</h3><p>${isEnglish12 ? (S.lang === 'hi' ? 'नाम, लेखक या पुस्तक खोजें।' : 'Search by title, author or book.') : (S.lang === 'hi' ? 'अन्य शब्द आज़माइए, जैसे "त्रिभुज" या "probability"।' : 'Try another keyword, such as “triangle” or “probability”.')}</p></div>` : ''}
@@ -3843,7 +3849,8 @@ window.UP = window.UP || {};
           if (p.q) { r.params.q = p.q; if (p.sub) S.subject = p.sub; }
         } catch (e) {}
       }
-      const q = r.params.q;
+      const q = r.params.q ? UP.answerFormat.question(r.params.q).trim() : r.params.q;
+      if (q) r.params.q = q;
       S.q = q || '';
       if (q) {
         /* the local engine answers instantly so the page is never blank;
@@ -5912,10 +5919,9 @@ window.UP = window.UP || {};
     const form = e.target.closest('form[data-form]');
     if (!form) return;
     e.preventDefault();
-    const q = (form.querySelector('textarea[name="q"]') || {}).value || '';
+    const q = UP.answerFormat.question((form.querySelector('textarea[name="q"]') || {}).value || '');
     if (!q.trim()) { (form.querySelector('textarea') || {}).focus?.(); return; }
-    go(`#/ask?q=${encodeURIComponent(q.trim())}`);
-    if (parseHash().name === 'ask') render();
+    go(`#/ask?q=${encodeURIComponent(q.trim())}`, true);
   });
 
   /* auth form submit */
@@ -6056,9 +6062,20 @@ window.UP = window.UP || {};
     const ta = e.target.closest('textarea[name="q"]');
     if (ta && e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      const q = ta.value.trim(); if (!q) return;
+      const q = UP.answerFormat.question(ta.value).trim(); if (!q) return;
       go(`#/ask?q=${encodeURIComponent(q)}`);
     }
+  });
+
+  document.addEventListener('paste', function(e) {
+    const ta = e.target.closest && e.target.closest('textarea[name="q"]');
+    if (!ta || !e.clipboardData) return;
+    const raw = e.clipboardData.getData('text/plain');
+    const clean = UP.answerFormat.question(raw);
+    if (clean === raw) return;
+    e.preventDefault();
+    ta.setRangeText(clean, ta.selectionStart, ta.selectionEnd, 'end');
+    ta.dispatchEvent(new Event('input', {bubbles:true}));
   });
 
   window.addEventListener('hashchange', render);
