@@ -1,0 +1,15 @@
+'use strict';
+const assert = require('node:assert/strict');
+const policy = require('../../lib/solve-policy');
+const question = 'Write a formal letter to the editor about replacing a public park with parking.';
+const drafts = texts => ({approaches:texts.map((t,i)=>({name:'Style '+i,steps:[{t}]}))});
+assert.equal(policy.completeApproaches(drafts(['Four distinct formal letter drafts addressing the dilemma.']),question).length,0);
+assert.equal(policy.completeApproaches(drafts(['Mention the health effects and suggest an alternative.']),question).length,0);
+for (const q of ['Explain muscle respiration','Define democracy','Describe copper refining','Discuss the effects of inflation','Explain a literary theme','परिभाषा लिखिए','विस्तार से वर्णन कीजिए']) assert(policy.proseTask(q),q);
+assert(!policy.proseTask('Find the HCF of 150 and 200'));
+assert.equal(policy.completeApproaches(drafts(['Mention the main causes.']), 'Explain the causes').length,0);
+assert.equal(policy.completeApproaches(drafts(['A noun is a word used to name a person, place, thing or idea.']), 'Define a noun').length,1);
+assert.equal(policy.completeApproaches(drafts(['The process has several stages.']), 'Explain the process in detail as a long-answer question').length,0);
+assert.match(policy.instructions,/one paragraph per entry/);
+assert.match(policy.instructions,/ANY subject/);
+console.log('PASS prose detection, rejected promised drafts/outlines, developed long-answer guard and concise definitions');

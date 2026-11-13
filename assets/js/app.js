@@ -1897,7 +1897,7 @@ window.UP = window.UP || {};
             <span class="toggle">${icon('chevron')}</span>
           </div>
           <div class="approach-body">
-            <ol class="steps">
+            <ol class="steps ${ap.format === 'prose' ? 'prose-answer' : ''}">
               ${ap.steps.map(st => `<li>
                 <div class="st-t">${rich(st.t)}</div>
                 ${st.m ? `<div class="st-m">${mathText(st.m)}</div>` : ''}
@@ -1973,7 +1973,7 @@ window.UP = window.UP || {};
   function renderCachedAnswer(j, qq, sol, ansBox, id) {
     const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
     j = UP.answerFormat.answer(exact || j);
-    if (!j || j.policyVersion !== 'four-approaches-v2' || !j.approaches || j.approaches.length < 4) return false;
+    if (!j || j.policyVersion !== 'four-approaches-v3' || !j.approaches || j.approaches.length < 4) return false;
     const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
       (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
       '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + mathText(j.answer || j.result) + '</div>' +
@@ -1981,7 +1981,7 @@ window.UP = window.UP || {};
       renderAIDiagram(Object.assign({}, j, {question:qq.en || ''})) +
       j.approaches.map((a, i) => '<div class="sol-method"><div class="sol-mname">' +
         (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i+1) + ' — ' : '') + esc(a.name) + '</div>' +
-        '<ol class="sol-ol">' + (a.steps||[]).map(st => '<li>' + esc(st.t || '') +
+        '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + (a.steps||[]).map(st => '<li>' + esc(st.t || '') +
           (st.m ? '<div class="st-m">' + mathText(st.m) + '</div>' : '') +
           (st.note ? '<span class="st-note">' + esc(st.note) + '</span>' : '') + '</li>').join('') + '</ol>' +
         (a.watch ? '<div class="callout warn">' + icon('warn') + '<div><b>' + t('watchOut') + ':</b> ' + esc(a.watch) + '</div></div>' : '') +
@@ -2086,7 +2086,7 @@ window.UP = window.UP || {};
       renderAIDiagram(Object.assign({}, j, {question:qq.en || ''})) +
         j.approaches.map((a, i) => '<div class="sol-method"><div class="sol-mname">' +
           (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i + 1) + ' — ' : '') + esc(a.name) + '</div>' +
-          '<ol class="sol-ol">' + a.steps.map(st => '<li>' + esc(st.t) +
+          '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + a.steps.map(st => '<li>' + esc(st.t) +
             (st.m ? '<div class="st-m">' + mathText(st.m) + '</div>' : '') +
             (st.note ? '<span class="st-note">' + esc(st.note) + '</span>' : '') + '</li>').join('') + '</ol>' +
           (a.watch ? '<div class="callout warn">' + icon('warn') + '<div><b>' + t('watchOut') + ':</b> ' + esc(a.watch) + '</div></div>' : '') +
@@ -2199,7 +2199,7 @@ window.UP = window.UP || {};
             <span class="toggle">${icon('chevron')}</span>
           </div>
           <div class="approach-body">
-            <ol class="steps">
+            <ol class="steps ${a.format === 'prose' ? 'prose-answer' : ''}">
               ${a.steps.map(st => `<li>
                 <div class="st-t">${rich(P(st.t))}</div>
                 ${st.m ? `<div class="st-m">${mathText(st.m)}</div>` : ''}
@@ -4747,7 +4747,7 @@ window.UP = window.UP || {};
       <div class="sol-ans"><span>${exactProvided ? (S.lang === 'hi' ? 'सटीक गणना' : 'Exact calculation') : aiProvided && (!hasAns || sourceQuestion) ? (S.lang === 'hi' ? 'AI उत्तर (असत्यापित)' : 'AI answer (unverified)') : (S.lang === 'hi' ? 'उत्तर' : 'Answer')}</span><b>${esc(ansVal)}</b></div>
       ${fig ? `<div class="figure-card test-fig">${fig.svg}<div class="figure-cap">${esc(P(fig.caption || {en:'',hi:''}))}</div></div>` : ''}
       ${q.aiSolution ? renderAIDiagram(q.aiSolution) + q.aiSolution.approaches.map((a,i) =>
-        `<section class="sol-method"><h4>${i+1}. ${esc(a.name)}</h4><ol class="sol-steps">${(a.steps || []).map(st =>
+        `<section class="sol-method"><h4>${i+1}. ${esc(a.name)}</h4><ol class="sol-steps ${a.format === 'prose' ? 'prose-answer' : ''}">${(a.steps || []).map(st =>
           `<li>${esc(st.t || '')}${st.m ? `<div class="st-m">${mathText(st.m)}</div>` : ''}${st.note ? `<p>${esc(st.note)}</p>` : ''}</li>`).join('')}</ol>${a.why ? `<p>${esc(a.why)}</p>` : ''}</section>`).join('')
         : (steps ? `<ol class="sol-steps">${steps}</ol>` : '')}
       ${q.aiNote ? `<div class="callout warn" style="margin-top:10px">${esc(q.aiNote)}</div>` : ''}

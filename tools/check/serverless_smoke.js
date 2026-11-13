@@ -9,10 +9,10 @@ process.env.SUPABASE_ANON_KEY = 'legacy_test_fixture';
 const lib = require('../../lib/gemini.js');
 let providerCalls = 0, lastPrompt = '', replyText = '', queuedReplies = [];
 const four = () => [
-  {name:'First principles', steps:[{t:'Explain the underlying principle using the supplied information.'}]},
-  {name:'Worked application', steps:[{t:'Apply the principle to a concrete example, stating its limits.'}]},
-  {name:'Comparison', steps:[{t:'Contrast the relevant concepts and explain why the distinction matters.'}]},
-  {name:'Independent check', steps:[{t:'Check all requirements and explain the implications of the conclusion.'}]}
+  {name:'First principles', steps:[{t:'The underlying principle links the supplied information to the conclusion, with the assumptions stated explicitly.'}]},
+  {name:'Worked application', steps:[{t:'A concrete application illustrates the principle while the boundary conditions show where the comparison stops being valid.'}]},
+  {name:'Comparison', steps:[{t:'The relevant concepts differ in their scope and conditions, and this distinction determines which conclusion follows.'}]},
+  {name:'Independent check', steps:[{t:'The conclusion is consistent with the requirements because each condition is satisfied without introducing unsupported assumptions.'}]}
 ];
 lib.callGeminiResilient = async function (prompt, keys, model, image) {
   providerCalls++;
@@ -150,6 +150,18 @@ async function main() {
   assert.equal(r.code,200);assert.equal(r.body.subjectRouting.subject,'hindi');
   assert.match(lastPrompt,/Class 10 hindi/i);assert.match(lastPrompt,/FOUR complete alternative responses/);
   assert.equal(r.body.approaches.length,4);
+  const letterQuestion = 'Write a formal letter to the editor arguing against replacing a public park with a parking lot. Discuss health, environment and access to public space, and suggest a practical alternative.';
+  const letter = '[Your address]\n[Date]\nThe Editor\n[Newspaper]\n[Town]\nSubject: Preserve our public park\nSir or Madam,\nThrough your newspaper, I urge the council to retain our public park rather than replace it with a parking lot.\nThe park offers free space for walking, exercise and play. Its loss would particularly affect children and older residents who cannot afford private recreation. Trees provide shade, absorb some pollutants and help rainwater soak into the soil; paving the site would increase heat and runoff.\nPublic green space belongs to everyone, including households without cars. Convenient parking should not take priority over their access to recreation and community life.\nThe council should instead improve existing parking on already paved land, introduce timed parking near shops and strengthen bus connections. Please encourage a public consultation before any decision.\nYours faithfully,\n[Your name]';
+  queuedReplies = [JSON.stringify({answer:'Four complete formal letter options', approaches:four()})];
+  replyText = JSON.stringify({answer:'I urge the council to retain our public park.', approaches:four().map((a,i)=>({name:a.name, steps:[{t:letter.replace('Preserve our public park', ['Save our green space','Protect shared recreation','Choose sustainable parking','Keep the park accessible'][i])}]}))});
+  const beforeLetter = providerCalls;
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:letterQuestion,subject:'social'}});
+  assert.equal(r.code,200); assert.equal(providerCalls,beforeLetter+2,'outline must trigger repair');
+  assert(r.body.approaches.every(a=>a.format==='prose' && a.steps[0].t.includes('Yours faithfully')));
+  assert.match(lastPrompt,/actual finished prose/);
+  queuedReplies=[1,2].map(()=>JSON.stringify({answer:'Four letter options',approaches:four()}));
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:letterQuestion,subject:'english'}});
+  assert.equal(r.code,502,'persistent outlines must not be shown as completed letters');
   const callsBeforeExact = providerCalls;
   r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all positive integers n for which n²+10n+2026 is a perfect square.',subject:'maths'}});
   assert.equal(r.code,200); assert.equal(r.body.result,'n = 15, 27, 327, 995');

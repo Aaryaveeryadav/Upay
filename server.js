@@ -1902,7 +1902,7 @@ const handleRequest = async function (req, res) {
         out = await callGeminiResilient(prompt, plain, db.settings.geminiModel);
         let draft;
         try { draft = firstJSON(out.text); } catch (_) { draft = null; }
-        if (draft && solvePolicy.distinctApproaches(draft.approaches).length < 4) {
+        if (draft && solvePolicy.completeApproaches(draft, question).length < 4) {
           out = await callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), plain, out.model);
         }
       } catch (e) {
@@ -1968,9 +1968,9 @@ const handleRequest = async function (req, res) {
         result: String(parsed.answer || ''),
         summary: String(parsed.summary || ''),
         verify: String(parsed.check || ''),
-        approaches: solvePolicy.distinctApproaches(parsed.approaches).map(function (a) {
+        approaches: solvePolicy.completeApproaches(parsed, question).map(function (a) {
           return {
-            name: String(a.name || 'Method'),
+            format: solvePolicy.proseTask(question) ? 'prose' : '', name: String(a.name || 'Method'),
             tag: String(a.tag || ''),
             steps: steps(a.steps),
             why: String(a.why || ''),

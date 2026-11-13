@@ -1644,3 +1644,8 @@ h1:lang(hi), h2:lang(hi), h3:lang(hi), .approach-body p:lang(hi), .snippet block
 .ai-placeholder svg{display:none}
 @keyframes upay-loading-dot{0%,80%,100%{opacity:.3}40%{opacity:1}}
 @media(prefers-reduced-motion:reduce){.ai-dots .ai-dot{animation:none;opacity:.7}}
+
+/* Completed compositions/theory are paragraphs, not numbered calculation steps. */
+ol.prose-answer { list-style: none; padding-left: 0; }
+ol.prose-answer > li { padding-left: 0; margin-bottom: 1em; white-space: pre-wrap; line-height: 1.8; }
+ol.prose-answer > li::before { content: none; display: none; }

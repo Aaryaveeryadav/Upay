@@ -187,7 +187,7 @@ module.exports = async function handler(req, res) {
     // One bounded repair call, sharing the original 30-second deadline.
     let draft;
     try { draft = firstJSON(out.text); } catch (_) { draft = null; }
-    if (draft && solvePolicy.distinctApproaches(draft.approaches).length < 4) {
+    if (draft && solvePolicy.completeApproaches(draft, question).length < 4) {
       out = await Promise.race([
         callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), null, out.model),
         timeoutPromise
@@ -223,8 +223,8 @@ module.exports = async function handler(req, res) {
     questionUnderstood: String(parsed.question_understood || ''),
     result: String(parsed.answer || ''), summary: String(parsed.summary || ''),
     verify: typeof parsed.check === 'string' ? parsed.check : '',
-    approaches: solvePolicy.distinctApproaches(parsed.approaches).map(a => ({
-      name: String((a && a.name) || 'Method'), tag: String((a && a.tag) || ''),
+    approaches: solvePolicy.completeApproaches(parsed, question).map(a => ({
+      format: solvePolicy.proseTask(question) ? 'prose' : '', name: String((a && a.name) || 'Method'), tag: String((a && a.tag) || ''),
       steps: steps(a && a.steps), why: String((a && a.why) || ''), watch: String((a && a.watch) || '')
     })).filter(a => a.steps.length),
     diagram: solvePolicy.diagramForSubject(parsed.diagram, subject),
