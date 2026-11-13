@@ -1,12 +1,16 @@
 /* Upay service worker — offline shell + public asset caching (v26ab).
    API responses are deliberately never stored: they can be user-specific. */
-const VERSION = 'upay-v26d7';
+const VERSION = 'upay-v26d8';
 const ASSET_CACHE = VERSION + '-assets';
 const PRECACHE = [
   '/',
-  '/assets/css/app.css?v=26d7',
-  '/assets/js/boot.js?v=26d7',
-  '/assets/js/app.js?v=26d7',
+  '/manifest.webmanifest',
+  '/assets/brand/kritin-logo.png',
+  '/assets/brand/kritin-icon-192.png',
+  '/assets/brand/kritin-icon-512.png',
+  '/assets/css/app.css?v=26d8',
+  '/assets/js/boot.js?v=26d8',
+  '/assets/js/app.js?v=26d8',
 ];
 
 self.addEventListener('install', ev => {
@@ -41,12 +45,12 @@ self.addEventListener('fetch', ev => {
         if (response.ok) await cache.put('/', response.clone());
         return response;
       } catch (_) {
-        return (await cache.match('/')) || new Response('Upay is offline and the page has not been saved yet.', { status: 503 });
+        return (await cache.match('/')) || new Response('Kritin Upay is offline and the page has not been saved yet.', { status: 503 });
       }
     })());
     return;
   }
-  if (/\.(js|css|png|jpg|jpeg|svg|webp|woff2?|json)$/.test(url.pathname) || url.pathname.startsWith('/assets/')) {
+  if (/\.(js|css|png|jpg|jpeg|svg|webp|woff2?|json|webmanifest)$/.test(url.pathname) || url.pathname.startsWith('/assets/')) {
     const network = fetch(req).then(async response => {
       if (response.ok) {
         const cache = await caches.open(ASSET_CACHE);
