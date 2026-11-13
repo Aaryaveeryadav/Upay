@@ -1630,6 +1630,10 @@ window.UP = window.UP || {};
       const thinking = document.getElementById('aiThinking');
       if (thinking && S.aiState !== 'loading') thinking.remove();
     };
+    const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(q, S.lang);
+    if (exact) {
+      S.aiAnswer = exact; S.aiState = 'done'; paint(); return;
+    }
     const goLocal = (note, showRetry) => {
       if (!isCurrent()) return;
       S.aiState = 'local';
@@ -1848,7 +1852,10 @@ window.UP = window.UP || {};
     return fig;
   }
   function renderAIAnswer(a) {
-    a = UP.answerFormat.answer(a);
+    // Also replace legacy/cached drafts for this narrowly supported problem.
+    const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(a.question || S.aiQuestion || '', S.lang);
+    if (exact && a === S.aiAnswer) S.aiAnswer = exact;
+    a = UP.answerFormat.answer(exact || a);
     const fig = renderAIDiagram(a);
     const chk = a.check || null;
     return `
@@ -1857,7 +1864,7 @@ window.UP = window.UP || {};
       ${a.questionUnderstood ? `<div class="callout" style="margin-bottom:12px">${icon('info')}<div><b>${S.lang === 'hi' ? 'प्रश्न यह समझा गया' : 'Question understood as'}:</b> ${esc(a.questionUnderstood)}</div></div>` : ''}
       <div class="answer-head">
         <div class="meta-row">
-          <span class="tag">${S.lang === 'hi' ? 'एआई द्वारा हल' : 'Solved by AI'}</span>
+          <span class="tag">${a.source === 'exact' ? (S.lang === 'hi' ? 'सटीक गणना से हल' : 'Solved by exact calculation') : (S.lang === 'hi' ? 'एआई द्वारा हल' : 'Solved by AI')}</span>
           <span class="tag cream">${a.approaches.length} ${t('methods')}</span>
           <span class="tag grey">${esc(a.model || '')}</span>
         </div>
@@ -1915,7 +1922,8 @@ window.UP = window.UP || {};
     const localHit = S.answer && S.answer._ver === 'passed';
     const cached = a._id && UP.answers && UP.answers.get(a._id);
     let level, cls, icon_, label;
-    if (localHit) { level='verified'; cls='ok'; icon_='check'; label=(S.lang==='hi'?'स्थानीय हलक से सत्यापित ✓':'Maths engine verified ✓'); }
+    if (a.source === 'exact') { level='verified'; cls='ok'; icon_='check'; label=(S.lang==='hi'?'सटीक गुणनखंड खोज और प्रतिस्थापन से जाँचा गया':'Checked by exact factor enumeration and substitution'); }
+    else if (localHit) { level='verified'; cls='ok'; icon_='check'; label=(S.lang==='hi'?'स्थानीय हलक से सत्यापित ✓':'Maths engine verified ✓'); }
     else if (a.model && /flash-lite/.test(a.model)) { level='ai'; cls='ai'; icon_='sparkle'; label=(S.lang==='hi'?'एआई-जनित — कृपया अपनी पाठ्यपुस्तक से मिलान करें':'AI-generated — cross-check with your textbook'); }
     else { level='ai'; cls='ai'; icon_='sparkle'; label=(S.lang==='hi'?'एआई-जनित — कृपया अपनी पाठ्यपुस्तक से मिलान करें':'AI-generated — cross-check with your textbook'); }
     return `<div class="confidence conf-${cls}">${icon(icon_)}<span>${esc(label)}</span></div>`;
@@ -1953,7 +1961,8 @@ window.UP = window.UP || {};
   }
 
   function renderCachedAnswer(j, qq, sol, ansBox, id) {
-    j = UP.answerFormat.answer(j);
+    const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
+    j = UP.answerFormat.answer(exact || j);
     if (!j || j.policyVersion !== 'three-approaches-v1' || !j.approaches || j.approaches.length < 3) return false;
     const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
       (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
@@ -1985,6 +1994,8 @@ window.UP = window.UP || {};
     if (ansBox) ansBox.hidden = false;
     const qq = (UP.pyq || []).find(x => x.id === id);
     if (!qq) return;
+    const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
+    if (exact) { renderCachedAnswer(exact, qq, sol, ansBox, id); return; }
 
     if (pyqCache[id]) { sol.innerHTML = pyqCache[id]; warmNextQuestions(id); return; }
 
@@ -4702,21 +4713,22 @@ window.UP = window.UP || {};
     const hasAns = q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim() && String(q.ans) !== 'Proof (standard theorem)');
     const hasSteps = !!(q.steps && q.steps.length && q.steps.some(s => String(s.en || s.hi || (typeof s === 'string' ? s : '')).trim().length > 5));
     const aiProvided = !!(q.aiAnswer || q.aiSteps);
-    const ansVal = hasAns && !sourceQuestion ? String(q.ans) : (q.aiAnswer || (S.lang === 'hi' ? '(कोई सत्यापित उत्तर उपलब्ध नहीं)' : '(no verified answer available)'));
+    const exactProvided = q.aiSolution && q.aiSolution.source === 'exact';
+    const ansVal = exactProvided ? q.aiAnswer : hasAns && !sourceQuestion ? String(q.ans) : (q.aiAnswer || (S.lang === 'hi' ? '(कोई सत्यापित उत्तर उपलब्ध नहीं)' : '(no verified answer available)'));
     let steps;
     if (hasSteps && !sourceQuestion) steps = q.steps.map(s => `<li>${esc(P(s))}</li>`).join('');
     else if (q.aiSteps) steps = q.aiSteps.map(s => `<li>${esc(s)}</li>`).join('');
     else if (q.aiLoading) steps = `<li class="ai-placeholder">${loadingDots()}</li>`;
     else steps = '';
     return `<div class="q-solution" data-solbox="${esc(q.no)}">
-      <div class="sol-ans"><span>${aiProvided && (!hasAns || sourceQuestion) ? (S.lang === 'hi' ? 'AI उत्तर (असत्यापित)' : 'AI answer (unverified)') : (S.lang === 'hi' ? 'उत्तर' : 'Answer')}</span><b>${esc(ansVal)}</b></div>
+      <div class="sol-ans"><span>${exactProvided ? (S.lang === 'hi' ? 'सटीक गणना' : 'Exact calculation') : aiProvided && (!hasAns || sourceQuestion) ? (S.lang === 'hi' ? 'AI उत्तर (असत्यापित)' : 'AI answer (unverified)') : (S.lang === 'hi' ? 'उत्तर' : 'Answer')}</span><b>${esc(ansVal)}</b></div>
       ${fig ? `<div class="figure-card test-fig">${fig.svg}<div class="figure-cap">${esc(P(fig.caption || {en:'',hi:''}))}</div></div>` : ''}
       ${q.aiSolution ? renderAIDiagram(q.aiSolution) + q.aiSolution.approaches.map((a,i) =>
         `<section class="sol-method"><h4>${i+1}. ${esc(a.name)}</h4><ol class="sol-steps">${(a.steps || []).map(st =>
           `<li>${esc(st.t || '')}${st.m ? `<div class="st-m">${mathText(st.m)}</div>` : ''}${st.note ? `<p>${esc(st.note)}</p>` : ''}</li>`).join('')}</ol>${a.why ? `<p>${esc(a.why)}</p>` : ''}</section>`).join('')
         : (steps ? `<ol class="sol-steps">${steps}</ol>` : '')}
       ${q.aiNote ? `<div class="callout warn" style="margin-top:10px">${esc(q.aiNote)}</div>` : ''}
-      ${aiProvided ? `<div class="callout warn" style="margin-top:10px">${S.lang === 'hi' ? 'यह AI व्याख्या किसी आधिकारिक उत्तर-कुंजी से सत्यापित नहीं है।' : 'This AI explanation has not been verified against an official answer key.'}</div>` : ''}
+      ${aiProvided && !exactProvided ? `<div class="callout warn" style="margin-top:10px">${S.lang === 'hi' ? 'यह AI व्याख्या किसी आधिकारिक उत्तर-कुंजी से सत्यापित नहीं है।' : 'This AI explanation has not been verified against an official answer key.'}</div>` : ''}
       ${hasSteps && !sourceQuestion ? `<div class="sol-method">${icon('bulb')} ${S.lang === 'hi' ? 'अभ्यास के लिए हल।' : 'Practice solution.'}</div>` : ''}
     </div>`;
   }
@@ -4726,6 +4738,11 @@ window.UP = window.UP || {};
     const q = findQ(no); if (!q || q.aiLoading || q.aiSteps) return;
     const qText = P({en:q.en || '', hi:q.hi || ''}).trim();
     if (!qText) { q.aiNote = 'Question text is unavailable'; return; }
+    const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qText, S.lang);
+    if (exact) {
+      q.aiSolution = exact; q.aiAnswer = exact.result;
+      q.aiSteps = exact.approaches[0].steps.map(st=>st.t+' — '+st.m); return;
+    }
     const paper = S.paper, scope = aiScope();
     const isCurrent = () => S.paper === paper && aiScope() === scope && parseHash().name === 'test';
     q.aiLoading = true; q.aiNote = '';
@@ -5083,7 +5100,8 @@ window.UP = window.UP || {};
          wrongly flagged as "Latin mojibake". */
       const expectHindi = (S.subject === 'hindi' || S.subject === 'sanskrit')
         || (S.lang === 'hi' && !q.en && q.hi);
-      const why = UP.corrupt && UP.corrupt.why(shown, { expectHindi: !!expectHindi });
+      const exactSquare = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.compute(shown);
+      const why = exactSquare ? null : UP.corrupt && UP.corrupt.why(shown, { expectHindi: !!expectHindi });
       let out = '';
       out += '<article class="q-card pyq' + (badge ? ' pyq-sub' : '') + '" id="' + esc(q.id) + '">';
       out += '<div class="q-top">';

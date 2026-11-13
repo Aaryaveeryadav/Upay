@@ -140,6 +140,11 @@ async function main() {
   const stream = Readable.from([Buffer.from('{"one":1}')]);
   assert.deepEqual(await lib.readBody(stream), {one:1});
   assert.deepEqual(await lib.readBody({body:Buffer.from('{"two":2}')}), {two:2});
+  const callsBeforeExact = providerCalls;
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all positive integers n for which n²+10n+2026 is a perfect square.',subject:'maths'}});
+  assert.equal(r.code,200); assert.equal(r.body.result,'n = 15, 27, 327, 995');
+  assert.equal(r.body.source,'exact'); assert.equal(r.body.check.source,'arithmetic');
+  assert.equal(providerCalls,callsBeforeExact,'exact supported question must not spend a provider call');
   await assert.rejects(lib.readBody({body:'{bad json'}));
   console.log('Mocked serverless auth, paid-AI allowlist, owner-scoped cache, response shape, image reading and body parsing: PASS');
 }

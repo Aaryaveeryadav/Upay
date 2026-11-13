@@ -212,6 +212,8 @@ window.UP = window.UP || {};
   UP.answerQuestion = function (q) {
     const raw = String(q || '').trim();
     if (raw.length < 2) return null;
+    const exactSquare = UP.squareInteger && UP.squareInteger.solve(raw, 'en');
+    if (exactSquare) return exactSquare;
     const s = UP.norm(raw).toLowerCase();
     if (UP.isSymbolicHCF && UP.isSymbolicHCF(raw)) {
       return UP.solvePrimePowerRatio(raw) || {

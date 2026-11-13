@@ -1748,6 +1748,8 @@ const handleRequest = async function (req, res) {
          a chemistry answer. */
       const subject = String(b.subject || 'maths');
       const cls = Number(b.cls) || 10;
+      const exact = ['maths','applied-maths'].includes(subject) && require('./assets/js/square-integers.js').solve(question, b.lang);
+      if (exact) return json(res, 200, exact);
       const isAccountancy = subject === 'accountancy' || subject === 'computerized-accounting';
       const isEconomics = subject === 'economics';
       const isEnglish12 = subject === 'english' && cls === 12;

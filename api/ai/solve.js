@@ -1,4 +1,5 @@
 'use strict';
+const squareInteger = require('../../assets/js/square-integers.js');
 const solvePolicy = require('../../lib/solve-policy.js');
 const { consumeAI } = require('../../lib/ai-usage.js');
 const { aiFailure } = require('../../lib/ai-status.js');
@@ -52,6 +53,8 @@ module.exports = async function handler(req, res) {
 
   const subject = String(b.subject || 'maths');
   const cls = Number(b.cls) || 10;
+  const exact = ['maths','applied-maths'].includes(subject) && squareInteger.solve(question, b.lang);
+  if (exact) return json(res, 200, exact);
   const isAccountancy = subject === 'accountancy' || subject === 'computerized-accounting';
   const isEconomics = subject === 'economics';
   const isEnglish12 = subject === 'english' && cls === 12;
