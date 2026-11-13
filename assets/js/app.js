@@ -505,6 +505,7 @@ window.UP = window.UP || {};
      P() checks the object itself first, then the side file. */
   const P = obj => {
     if (!obj) return '';
+    if (S.subject==='sanskrit' && obj.sa) return obj.sa;
     if (typeof obj === 'string' || typeof obj === 'number') return String(obj);
     /* If the current subject is Hindi (or any subject whose content only
        exists in Hindi), always prefer the Hindi text regardless of the UI
@@ -651,7 +652,7 @@ window.UP = window.UP || {};
     return !!q && (String(q.ch) === want || (Array.isArray(q.chapterTags) && q.chapterTags.some(tag => String(tag) === want)));
   }
   function pyqQuestionText(q) {
-    const text = P({ en: q && q.en || '', hi: q && q.hi || '' });
+    const text = P({ sa:q&&q.sa||'', en: q && q.en || '', hi: q && q.hi || '' });
     // Preserve source-verified Accountancy text exactly: the legacy Hindi OCR
     // cleaner can strip legitimate numeric runs and spreadsheet formulas.
     return q && (q.paperCode || q.cleanText) ? text : cleanQText(text);
@@ -1635,6 +1636,11 @@ window.UP = window.UP || {};
       const thinking = document.getElementById('aiThinking');
       if (thinking && S.aiState !== 'loading') thinking.remove();
     };
+    const matches=(UP.pyq||[]).filter(row=>qInScope(row)&&pyqQuestionText(row)===q);
+    const mappedChapters=[...new Set(matches.map(row=>String(row.ch)).filter(Boolean))];
+    const chapterContext=mappedChapters.length===1?chapterById(mappedChapters[0]):chapterById(S.chapterId);
+    const languageContext=UP.languagePolicy.contextRequest(q,routing.subject,chapterContext&&P(chapterContext));
+    if(languageContext){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'language-context',question:q,...languageContext};paint();return;}
     const clarification=UP.squareInteger.clarification(q);
     if(clarification){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'question-clarification',question:q,...clarification};paint();return;}
     const exact = ['maths','applied-maths'].includes(routing.subject) && UP.squareInteger.solve(q, responseLang);
@@ -1686,7 +1692,7 @@ window.UP = window.UP || {};
       req = fetch('/api/ai/solve', {
         method: 'POST',
         headers: { 'content-type': 'application/json', authorization: 'Bearer ' + (localStorage.getItem('upay.token') || '') },
-        body: JSON.stringify({ question: q, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0), subject: routing.subject, selectedSubject:S.subject, cls: S.cls, lang:responseLang }),
+        body: JSON.stringify({ question: q, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0), chapterTitle:!routing.changed&&chapterContext?P(chapterContext):'', subject: routing.subject, selectedSubject:S.subject, cls: S.cls, lang:responseLang }),
         signal: controller ? controller.signal : undefined
       });
     } catch (e) { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'नेटवर्क से संपर्क नहीं हुआ' : 'could not reach the server', true); return; }
@@ -1702,12 +1708,13 @@ window.UP = window.UP || {};
         if (!isCurrent()) return;
         if (ok && j && j.approaches && j.approaches.length >= 4) {
           j = UP.answerFormat.answer(j);
-          j.question = q; j.subjectRouting = routing;
+          j.question = q; j.subjectRouting = routing; j.chapterTitle=chapterContext?P(chapterContext):'';
           j._chId = S.chapterId || 0;
           S.aiAnswer = j; S.aiState = 'done';
           pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
           bumpProgress(S.subject);
         } else {
+          if(j&&j.code==='language_context_required'){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'language-context',question:q,...j};paint();return;}
           if(j&&j.code==='question_needs_confirmation'){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'question-clarification',question:q,...j};paint();return;}
           S.aiErrorCode = j && j.code || '';
         S.aiRetryAt = j && Number.isFinite(j.retryAfter) && j.retryAfter > 0 ? Date.now() + j.retryAfter*1000 : 0;
@@ -1889,6 +1896,7 @@ window.UP = window.UP || {};
           <span class="tag cream">${a.approaches.length} ${theory ? (S.lang === 'hi' ? 'व्याख्याएँ' : 'explanations') : t('methods')}</span>
           <span class="tag grey">${esc(a.model || '')}</span>
         </div>
+        ${a.chapterTitle?'<div class="tag grey">Chapter context: '+esc(a.chapterTitle)+'</div>':''}
         <div class="qtext">${esc(a.question || S.aiQuestion || '')}</div>
         <div class="pactions">${saveQuestionButton(a.question || S.aiQuestion)}</div>
         <div style="font-size:14px;color:var(--ink-600)">${rich(a.summary || '')}</div>
@@ -1985,6 +1993,7 @@ window.UP = window.UP || {};
     const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
     j = UP.answerFormat.answer(exact || j);
     if (!j || j.policyVersion !== 'four-approaches-v3' || !j.approaches || j.approaches.length < 4) return false;
+    if(S.subject==='sanskrit'&&(!UP.languagePolicy.usableApproach({steps:[{t:j.answer||j.result||''}]},pyqQuestionText(qq),'sanskrit')||j.approaches.some(a=>!UP.languagePolicy.usableApproach(a,pyqQuestionText(qq),'sanskrit'))))return false;
     const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
       (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
       '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + mathText(j.answer || j.result) + '</div>' +
@@ -2043,7 +2052,7 @@ window.UP = window.UP || {};
       /* imported:true turns on the corrupt gate.  Without it the server
          happily spent a model call answering a question whose fraction was
          lost in extraction -- and then showed that answer as a solution. */
-      body: JSON.stringify({ question: pyqQuestionText(qq) + (hasOpts(qq) ? '\nOptions: ' + qq.opts.map(o=>o.en || P(o)).join('; ') : ''), chapter: qq.ch, imported: true, options: hasOpts(qq) ? qq.opts.length : 0, subject: S.subject, cls: S.cls, lang: S.lang })
+      body: JSON.stringify({ question: pyqQuestionText(qq) + (hasOpts(qq) ? '\nOptions: ' + qq.opts.map(o=>o.en || P(o)).join('; ') : ''), chapter: qq.ch, chapterTitle:chapterName(qq.ch), imported: true, options: hasOpts(qq) ? qq.opts.length : 0, subject: S.subject, cls: S.cls, lang: S.lang })
     }).then(r => {
       /* A non-2xx reply used to be thrown away unread (`.then(r => r.ok ? r.json()
          : null)`), so EVERY failure -- a timed-out session, the daily quota, a
@@ -2145,6 +2154,7 @@ window.UP = window.UP || {};
   }
 
   function renderAnswer(ans) {
+    if(ans.kind==='language-context')return `<div class="callout warn language-context"><div><h3>More context needed</h3><p>${esc(ans.question)}</p><p>${esc(ans.error)}</p>${aiRecovery(ans.question)}</div></div>`;
     if(ans.kind==='question-clarification')return `<div class="callout warn question-clarification"><div><h3>Confirm the question first</h3><p>${esc(ans.question)}</p><p>${esc(ans.error)}</p><p><b>Possible intended question (please check):</b> ${esc(ans.suggestedQuestion)}</p><a class="btn btn-primary" href="#/ask?q=${encodeURIComponent(ans.suggestedQuestion)}">Yes, solve this corrected question</a></div></div>`;
 
     if (ans.kind === 'accountancy-unavailable' || ans.kind === 'no-local-solver') {
@@ -2635,6 +2645,7 @@ window.UP = window.UP || {};
        ch.richGroups so they render the same way English does. */
     const _isEnLit = S.subject === 'english' && ch.sections;
     const _isHiLit = S.subject === 'hindi' && ch.richSections;
+    if(S.subject==='sanskrit')return `<section class="page-head"><h1>${esc(P(ch))}</h1><p>Legacy chapter outline · not verified against the supplied papers. Hindi summaries/review prompts are not being presented as original Sanskrit text or exam questions.</p></section>`+renderSanskritSources();
     const _isSkLit = S.subject === 'sanskrit' && ch.richSections;
     const _isLit = _isEnLit || _isHiLit || _isSkLit;
     if (_isLit) {
@@ -4206,7 +4217,7 @@ window.UP = window.UP || {};
     // separately by rbseTitle().
     const c = isRbse() ? (UP.chapters || []).find(x => String(x.id) === String(id)) : chapterById(id);
     if (c) return P({ en: c.en, hi: c.hi });
-    const row = (UP.pyq || []).find(q => +q.ch === +id && qInScope(q) && q.chapter);
+    const row = (UP.pyq || []).find(q => String(q.ch) === String(id) && qInScope(q) && q.chapter);
     return row ? row.chapter : '';
   }
 
@@ -4244,7 +4255,7 @@ window.UP = window.UP || {};
   function paperFromBank(seed) {
     const LV = { 1: 'Basic', 2: 'Standard', 3: 'Hard' };
     const want = S.test.level;
-    const sourceBank = accountancyTrack() || (+S.cls === 12 && S.subject === 'physics');
+    const sourceBank = accountancyTrack() || ['hindi','english','sanskrit'].includes(S.subject) || (+S.cls === 12 && S.subject === 'physics');
     let pool = myBank();
     if (S.test.chapters && S.test.chapters.length) {
       // Selected chapters filter. Only questions mapped to one of the chosen
@@ -4256,9 +4267,9 @@ window.UP = window.UP || {};
       pool = pool.filter(q => S.test.chapters.some(id => qHasChapter(q, id)));
     }
     // An empty selected chapter must stay empty; do not borrow other chapters.
-    if (!sourceBank) {
-      if (want === 'easy') pool = pool.filter(q => (q.lv || 'Basic') === 'Basic');
-      else if (want === 'hard') pool = pool.filter(q => (q.lv || 'Basic') !== 'Basic');
+    if (!accountancyTrack() && !(+S.cls===12&&S.subject==='physics')) {
+      if (want === 'easy') pool = pool.filter(q => ['1','Basic'].includes(String(q.lv||q.d||'Basic')));
+      else if (want === 'hard') pool = pool.filter(q => ['3','Hard'].includes(String(q.lv||q.d||'')));
     }
     if (!pool.length) {
       /* never silently fall back to another class or subject -- show nothing
@@ -4298,7 +4309,7 @@ window.UP = window.UP || {};
         marks: m || null,
         questions: groups[key].map(q => ({
           no: ++questionNumber, ch: q.ch, marks: +q.m > 0 ? +q.m : (sourceBank ? null : +m), tid: q.id, d: q.lv,
-          en: q.en, hi: q.hi || '', opts: q.opts || null, ans: q.ans || '',
+          keyVerified:q.keyVerified===true, en: q.sa || q.en, hi: q.sa || q.hi || '', opts: q.opts || null, ans: q.ans || '',
           steps: null, fig: q.fig || null, raw: q
         }))
       };
@@ -4519,6 +4530,7 @@ window.UP = window.UP || {};
   function viewTest(params) {
     if (params && params.make === '1') { S.test.seed = 0; buildPaper(true); }
     const p = buildPaper(false);
+    if(+S.cls===10&&S.subject==='sanskrit'&&!(p.sections||[]).length)return renderSanskritSources()+'<div class="empty">No source-verified Sanskrit questions are indexed for this filter yet. Original PDFs are available above.</div>';
     const isAccountancyTest = +S.cls === 12 && (S.subject === 'accountancy' || S.subject === 'computerized-accounting');
     const isPhysicsTest = +S.cls === 12 && S.subject === 'physics';
     const totalQ = (p.sections || []).reduce((a, sec) => a + sec.questions.length, 0);
@@ -4528,9 +4540,9 @@ window.UP = window.UP || {};
             hi: LVL[(p.level || S.test.level)] ? LVL[(p.level || S.test.level)][1] : 'मिश्रित' });
 
     /* the chapter list must be the student's own syllabus, not always 1..14 */
-    const cat = UP.catalogue(S.cls, S.subject) || [];
+    const cat = (UP.catalogue(S.cls, S.subject) || []).filter(c=>!c._bookHeader);
     const chips = (cat.length ? cat : []).map(c => {
-      const on = S.test.chapters.indexOf(+c.id) >= 0;
+      const on = S.test.chapters.some(id=>String(id)===String(c.id));
       return `<button class="ch-pick ${on ? 'on' : ''}" data-action="test-ch" data-ch="${c.id}">${c.displayNo || c.n || c.id}. ${esc(P({ en: c.en, hi: c.hi }))}</button>`;
     }).join('');
 
@@ -4803,7 +4815,7 @@ window.UP = window.UP || {};
     try { req = fetch('/api/ai/solve', {
       method:'POST',
       headers:{'content-type':'application/json', authorization:'Bearer '+(localStorage.getItem('upay.token')||'')},
-      body: JSON.stringify({ question: qText, chapter: q.ch||0, subject: S.subject, cls: S.cls, lang: S.lang })
+      body: JSON.stringify({ question: qText, chapter: q.ch||0, chapterTitle:chapterName(q.ch), subject: S.subject, cls: S.cls, lang: S.lang })
     }); } catch (e) { q.aiLoading=false; q.aiNote='Could not reach AI'; if (isCurrent()) render({ preserveScroll: true }); return; }
     req.then(r=>r.json().then(j=>({ok:r.ok,j})))
       .then(({ok,j})=>{
@@ -5003,6 +5015,7 @@ window.UP = window.UP || {};
   function qInScope(q) {
     if (!q) return false;
     const subj = qSubject(q);
+    if (UP.languagePolicy.issue(q.subject?q:{...q,subject:subj})) return false;
     if (String(subj) !== String(S.subject)) return false;
     const cls = qCls(q);
     // Hard class gate: if a question declares a class it must match the student's class.
@@ -5030,11 +5043,16 @@ window.UP = window.UP || {};
     return (UP.science10 || []).find(c => c.id === +id) || null;
   }
 
+  function renderSanskritSources(){
+    if(+S.cls!==10||S.subject!=='sanskrit'||S.board!=='cbse')return '';
+    return `<section class="card sanskrit-source-note"><h2>Original Sanskrit question papers</h2><p>The supplied originals are preserved below. Legacy Hindi review prompts have been withheld from the exam bank because they are not verified Sanskrit transcriptions. These PDFs are not yet a chapter/level-indexed question bank; filters do not extract questions from them. No full re-upload is needed for these files.</p><div class="pactions">${(UP.sanskritPapers||[]).map(p=>`<a class="btn btn-cream" href="assets/sanskrit/papers/${encodeURIComponent(p.file)}" target="_blank" rel="noopener">${esc(P(p.title))}</a>`).join('')}</div><p>For an individual missing question, provide its paper code, question number and page so it can be checked against the original.</p></section>`;
+  }
   function hasSuppliedTestPapers(){
-    return S.cls === 12 && (S.subject === 'economics' || S.subject === 'biology' || S.subject === 'english');
+    return (+S.cls===10 && S.subject==='sanskrit') || S.cls === 12 && (S.subject === 'economics' || S.subject === 'biology' || S.subject === 'english');
   }
   function renderSuppliedTestPapers(board){
     if (!hasSuppliedTestPapers() || S.board !== 'cbse' || board !== 'cbse') return '';
+    if(S.subject==='sanskrit')return renderSanskritSources();
     const hi = S.lang === 'hi';
     const rows = (UP.class12OriginalTestPapers || []).filter(p => p.cls === 12 && p.subject === S.subject && p.board === 'cbse');
     if (!rows.length) return '';
@@ -5073,17 +5091,17 @@ window.UP = window.UP || {};
   function viewPyq(params) {
     params = params || {};
     const year = params.y ? +params.y : 0;
-    const ch = params.ch ? +params.ch : 0;
+    const ch = params.ch && params.ch!=='0' ? String(params.ch) : '';
     const lvl = params.lvl || '';
     const board = params.board || S.board || 'cbse';
     const bank = (UP.pyq || []).filter(q => qInScope(q) && qBoard(q) === board);
-    const list = bank.filter(q => (!year || +q.y === year) && (!ch || qHasChapter(q, ch)) && (!lvl || q.lv === lvl));
+    const list = bank.filter(q => (!year || +q.y === year) && (!ch || qHasChapter(q, ch)) && (!lvl || String(q.lv) === String(lvl)));
     const years = [...new Set(bank.map(q => +q.y).filter(Boolean))].sort((a, b) => b - a);
     const byYear = {};
     bank.forEach(q => { if (q.y) byYear[q.y] = (byYear[q.y] || 0) + 1; });
     const boardName = (UP.boards.find(b => b.id === board) || { en: 'CBSE' }).en;
-    const chapterList = UP.catalogue(S.cls, S.subject) || [];
-    const levels = [...new Set(bank.map(q => q.lv).filter(Boolean))].sort();
+    const chapterList = (UP.catalogue(S.cls, S.subject) || []).filter(c=>!c._bookHeader && (S.subject!=='sanskrit'||bank.some(q=>qHasChapter(q,c.id))));
+    const levels = [...new Set(bank.map(q => q.lv==null?'':String(q.lv)).filter(Boolean))].sort();
     // Full source PDFs are deliberately separate from the searchable bank.
     // They are whole papers (both Part B options), not chapter-filtered roots.
     const sourcePapers = accountancyTrack() && S.board === 'cbse' && board === 'cbse'
@@ -5160,7 +5178,7 @@ window.UP = window.UP || {};
       out += '<div class="q-top">';
       out += '<span class="q-no">' + esc(badge || q.q) + '</span>';
       out += '<div class="q-meta">';
-      const isNcertExtract = !q.paperCode && /^NCERT\b/i.test(String(q.src || ''));
+      const isNcertExtract = !q.paperCode && (/^NCERT\b|^[a-z]+\d+\.pdf$/i.test(String(q.src||'')) || ['hindi','english','sanskrit'].includes(S.subject)&&!q.y);
       /* Auto-extracted textbook exercise questions are labelled as practice,
          not as board questions — the board’s own 2025 tag would misstate them. */
       out += '<span class="tag' + (isNcertExtract ? ' grey' : '') + '">' + esc(isNcertExtract ? 'NCERT · practice, not board-verified' : (board === 'cbse' ? 'CBSE' : boardName) + ' ' + q.y) + '</span>';
@@ -5274,7 +5292,7 @@ window.UP = window.UP || {};
         <span class="filter-label">${S.lang === 'hi' ? 'स्तर' : 'Level'}</span>
         <a class="chip ${!lvl ? 'on' : ''}" href="${filterHref({ lvl: '' })}">${S.lang === 'hi' ? 'सभी' : 'All'}</a>
         ${levels.map(L => {
-          const n = bank.filter(q => q.lv === L && (!year || +q.y === year) && (!ch || qHasChapter(q, ch))).length;
+          const n = bank.filter(q => String(q.lv) === String(L) && (!year || +q.y === year) && (!ch || qHasChapter(q, ch))).length;
           return `<a class="chip ${lvl === L ? 'on' : ''}" href="${filterHref({ lvl: L })}">${esc(L)} <small>${n}</small></a>`;
         }).join('')}
       </div>` : ''}
@@ -5283,9 +5301,9 @@ window.UP = window.UP || {};
         <a class="chip ${!ch ? 'on' : ''}" href="${filterHref({ ch: 0 })}">${S.lang === 'hi' ? 'सभी' : 'All'}</a>
         ${chapterList.map(c => {
           const id = c.id;
-          const count = bank.filter(q => qHasChapter(q, id) && (!year || +q.y === year) && (!lvl || q.lv === lvl)).length;
+          const count = bank.filter(q => qHasChapter(q, id) && (!year || +q.y === year) && (!lvl || String(q.lv) === String(lvl))).length;
           const label = (c.displayNo || c.n || c.id) + ' · ' + P({ en: c.en, hi: c.hi });
-          return `<a class="chip ${ch === +id ? 'on' : ''}" href="${filterHref({ ch: id })}" title="${esc(label)}">${esc(label)} <small>${count}</small></a>`;
+          return `<a class="chip ${String(ch) === String(id) ? 'on' : ''}" href="${filterHref({ ch: id })}" title="${esc(label)}">${esc(label)} <small>${count}</small></a>`;
         }).join('')}
       </div>` : ''}
     </section>
@@ -5558,10 +5576,11 @@ window.UP = window.UP || {};
       saveState(); buildPaper(true); render(); return;
     }
     if (action === 'test-ch') {
-      const id = +tgt.dataset.ch;
-      const at = S.test.chapters.indexOf(id);
+      const rawId=tgt.dataset.ch;
+      const id = /^\d+$/.test(rawId)?Number(rawId):rawId;
+      const at = S.test.chapters.findIndex(c=>String(c)===String(id));
       if (at >= 0) S.test.chapters.splice(at, 1); else S.test.chapters.push(id);
-      S.test.chapters.sort((a, b) => a - b);
+      S.test.chapters.sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true}));
       S.test.seed = 0; buildPaper(true); render(); return;
     }
     if (action === 'test-clear') { S.test.chapters = []; S.test.seed = 0; buildPaper(true); render(); return; }
@@ -6413,7 +6432,7 @@ function viewMockTest(params){
     });
     if (!pool.length) {
       clearMockTest();
-      return `<div class="empty"><h3>${S.lang==='hi'?'अभी प्रश्न उपलब्ध नहीं हैं':'No questions yet'}</h3><p>${S.lang==='hi'?'इस कक्षा, बोर्ड और विषय के लिए कोई प्रश्न नहीं है।':'There are no questions for this class, board and subject.'}</p></div>`;
+      return renderSanskritSources()+`<div class="empty"><h3>${S.lang==='hi'?'अभी प्रश्न उपलब्ध नहीं हैं':'No questions yet'}</h3><p>${S.lang==='hi'?'इस कक्षा, बोर्ड और विषय के लिए कोई प्रश्न नहीं है।':'There are no questions for this class, board and subject.'}</p></div>`;
     }
     const picked=[]; const copy=pool.slice();
     const count=Math.min(N, copy.length);
@@ -6777,7 +6796,7 @@ function attemptItem(item,answer){
   const assessment=UP.mockAssessment.assess(item,answer);rememberAssessment(item,answer,assessment);return assessment;
 }
 function practiceAttempt(q,answer){
-  const trusted=q.keyVerified===true||!!(q.tid && q.keyVerified!==false && !(q.raw&&q.raw.keyVerified===false) && !(q.raw&&q.raw.paperCode));
+  const trusted=q.keyVerified===true||!!(q.raw&&q.raw.keyVerified===true)||!!(q.tid && UP.testgen.templates.some(t=>t.id===q.tid) && q.keyVerified!==false && !(q.raw&&q.raw.keyVerified===false) && !(q.raw&&q.raw.paperCode));
   return attemptItem({q:P(q),ch:q.ch,source:{...q,m:q.marks||q.m,keyVerified:trusted}},answer);
 }
 function viewMistakes(){

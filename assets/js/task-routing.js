@@ -4,7 +4,9 @@
  function resolve(question,selected){
   const q=String(question||'').replace(/\\+[()[\]]|\$/g,''),base=selected||'maths';let subject=base,task='subject',reason='Using the selected subject';
   const devanagari=/[\u0900-\u097f]/.test(q);
-  if(devanagari && /निबंध|अनुच्छेद|विचार\s*लिख|पत्र\s*लिख|शब्दों[\s\S]{0,100}लिख|लिख[\s\S]{0,100}शब्दों/.test(q)){
+  if(/संस्कृत|संस्कृते|in Sanskrit/i.test(q) && /लिख|रच|translate|write|compose|सन्धि|संधि/i.test(q)){
+   subject='sanskrit';reason='Explicit Sanskrit response task';
+  }else if(devanagari && /निबंध|अनुच्छेद|विचार\s*लिख|पत्र\s*लिख|शब्दों[\s\S]{0,100}लिख|लिख[\s\S]{0,100}शब्दों/.test(q)){
    subject='hindi';task='writing';reason='Hindi composition/word-limit task';
   }else if(/\b(?:write|draft|compose)\b[\s\S]{0,90}\b(?:letter|essay|article|speech|paragraph|story|report)\b/i.test(q)){
    subject='english';task='writing';reason='English composition task';
@@ -25,7 +27,7 @@
   }else if(/\b(?:hcf|lcm|positive integers|integer x|perfect square|prime numbers)\b|महत्तम समापवर्तक|लघुत्तम समापवर्त्य/.test(q.toLowerCase())){
    subject='maths';reason='Explicit mathematical task';
   }
-  return {selected:base,subject,task,changed:subject!==base,reason,language:subject==='hindi'?'hi':task==='writing'?'en':null};
+  return {selected:base,subject,task,changed:subject!==base,reason,language:subject==='sanskrit'?'sa':subject==='hindi'?'hi':task==='writing'?'en':null};
  }
  const api={resolve};if(typeof module==='object'&&module.exports)module.exports=api;
  else{root.UP=root.UP||{};root.UP.taskRouting=api;}

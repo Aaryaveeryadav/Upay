@@ -14,6 +14,7 @@
    ===================================================================== */
 'use strict';
 const taskRouting = require('./assets/js/task-routing.js');
+const languagePolicy = require('./assets/js/language-policy.js');
 const solveTiming = require('./assets/js/solve-timing.js');
 const solvePolicy = require('./lib/solve-policy.js');
 const solveRuntime = require('./lib/gemini.js');
@@ -1754,6 +1755,9 @@ const handleRequest = async function (req, res) {
          a chemistry answer. */
       const subjectRouting = taskRouting.resolve(question, String(b.selectedSubject || b.subject || 'maths'));
       const subject = subjectRouting.subject;
+      const chapterTitle=subjectRouting.changed?'':String(b.chapterTitle||'').slice(0,200);
+      const contextRequest=languagePolicy.contextRequest(question,subject,chapterTitle);
+      if(contextRequest)return json(res,422,contextRequest);
       if (subjectRouting.language) b.lang = subjectRouting.language;
       if (subjectRouting.changed) b.chapter = 0;
       const cls = Number(b.cls) || 10;
@@ -1896,7 +1900,7 @@ const handleRequest = async function (req, res) {
       else topicPrompt = ['Answer the supplied Class ' + cls + ' ' + subject + ' question without inventing missing information.',
         'Reply with JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","steps":[{"t":"..."}]}],"check":"...","diagram":null}'];
 
-      const prompt = topicPrompt.concat([solvePolicy.instructions,
+      const prompt = topicPrompt.concat([solvePolicy.instructions, languagePolicy.instructions, chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:'',
         '',
         'QUESTION: ' + question,
         near ? ('\nFor calibration — real CBSE questions of the same chapter (do not answer these):\n' + near) : ''
@@ -1911,7 +1915,7 @@ const handleRequest = async function (req, res) {
         out = await solveRuntime.callGeminiResilient(prompt, plain, db.settings.geminiModel, null, callOptions);
         let draft;
         try { draft = firstJSON(out.text); } catch (_) { draft = null; }
-        if (draft && solvePolicy.completeApproaches(draft, question).length < 4) {
+        if (draft && solvePolicy.completeApproaches(draft, question, subject).length < 4) {
           out = await solveRuntime.callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), plain, out.model, null, callOptions);
         }
       } catch (e) {
@@ -1963,7 +1967,7 @@ const handleRequest = async function (req, res) {
         result: String(parsed.answer || ''),
         summary: String(parsed.summary || ''),
         verify: String(parsed.check || ''),
-        approaches: solvePolicy.completeApproaches(parsed, question).map(function (a) {
+        approaches: solvePolicy.completeApproaches(parsed, question, subject).map(function (a) {
           return {
             format: solvePolicy.proseTask(question) ? 'prose' : '', name: String(a.name || 'Method'),
             tag: String(a.tag || ''),

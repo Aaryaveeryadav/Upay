@@ -174,6 +174,13 @@ async function main() {
   const ambiguousCalls=providerCalls;
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all positive integers 7 for which n2 + 10m + 2026 is a perfect square.',subject:'maths'}});
   assert.equal(r.code,422);assert.equal(r.body.code,'question_needs_confirmation');assert.equal(providerCalls,ambiguousCalls);
+  const contextCalls=providerCalls;
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:'पाठ पढ़ते-पढ़ते आपको भी अपने माता-पिता का लाड-प्यार याद आ रहा होगा। अपनी इन भावनाओं को डायरी में अंकित कीजिए',subject:'hindi'}});
+  assert.equal(r.code,422);assert.equal(r.body.code,'language_context_required');assert.equal(providerCalls,contextCalls);
+  replyText=JSON.stringify({answer:'रामागच्छति।',approaches:['प्रत्यक्षरूपम्','नियमः','उदाहरणम्','परीक्षणम्'].map((name,i)=>({name,steps:[{t:'अत्र सवर्णदीर्घसन्धिः भवति। अकारस्य आकारस्य च मेलने आकारः भवति। '+['रामः आगच्छति।','सन्धिरूपं रामागच्छति इति।','एतत् सन्धेः उदाहरणम् अस्ति।','अत्र वर्णयोः संयोगः परीक्ष्यते।'][i]}]}))});
+  queuedReplies=[JSON.stringify({answer:'यह उत्तर है।',approaches:four().map(a=>({...a,steps:[{t:'यह उत्तर है। इसमें क्या होता है और कैसे होता है।'}]}))})];
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:'सन्धिं कुरुत — राम + आगच्छति',subject:'sanskrit',lang:'hi',chapterTitle:'सन्धिः'}});
+  assert.equal(r.code,200);assert.equal(r.body.subjectRouting.language,'sa');assert.match(lastPrompt,/grammatical Sanskrit/);assert.match(lastPrompt,/Provided chapter context.*सन्धिः/);
   const radicalCalls = providerCalls;
   r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all integers x for which √(x+6) + √(19-x) is an integer.',subject:'social'}});
   assert.equal(r.code,200);assert.equal(r.body.result,'x ∈ {-6, 3, 10, 19}');
