@@ -5665,10 +5665,11 @@ window.UP = window.UP || {};
         if (speechSession !== session) return;
         if (index >= parts.length) { stopAnswerSpeech(); return; }
         const u = session.utterance = new SpeechSynthesisUtterance(parts[index++]);
-        u.lang = S.lang === 'hi' ? 'hi-IN' : 'en-IN'; u.rate = S.lang === 'hi' ? .95 : 1;
-        const voices = window.speechSynthesis.getVoices();
-        const voice = voices.find(v=>v.lang===u.lang) || voices.find(v=>v.lang.startsWith(u.lang.slice(0,2)));
-        if (voice) u.voice = voice;
+        u.lang = S.lang === 'hi' ? 'hi-IN' : 'en-IN';
+        const settings = UP.teacherVoice.select(window.speechSynthesis.getVoices(), u.lang);
+        u.rate = settings.rate; u.pitch = settings.pitch; u.volume = settings.volume;
+        if (settings.voice) u.voice = settings.voice;
+        if (index === 1 && !settings.preferred) toast(S.lang === 'hi' ? 'महिला आवाज़ उपलब्ध नहीं मिली; डिवाइस की उपलब्ध आवाज़ धीमी गति में उपयोग होगी।' : 'No recognized female voice is available; using the device voice at a gentle pace.');
         u.onend = next;
         u.onerror = event => {
           if (speechSession !== session) return;
