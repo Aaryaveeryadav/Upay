@@ -9,7 +9,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
   font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans",sans-serif;}
-a{color:var(--brand-dark);text-decoration:none}
+a{color: var(--text-primary);text-decoration:none}
 a:hover{text-decoration:underline}
 code{font-family:var(--mono);font-size:.92em;background:#fff5f6;padding:1px 5px;border-radius:4px}
 
@@ -23,11 +23,11 @@ code{font-family:var(--mono);font-size:.92em;background:#fff5f6;padding:1px 5px;
 .nav-a{padding:7px 12px;border-radius:8px;color:var(--ink);font-weight:500;font-size:14px;text-decoration:none}
 .nav-a:hover{background:var(--chip);text-decoration:none}
 .nav-a.on{background:var(--brand);color:#fff}
-.nav-a.nav-right{margin-left:auto;color:var(--brand-dark)}
+.nav-a.nav-right{margin-left:auto;color: var(--text-primary)}
 .who{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--muted)}
 .who .pill{background:var(--chip);color:var(--chip-ink);padding:3px 8px;border-radius:999px;font-weight:600;font-size:12px}
 .who .wname{color:var(--ink)}
-.who a.btn-l{color:var(--brand-dark);padding:6px 10px;font-size:13px;border-radius:8px;text-decoration:none}
+.who a.btn-l{color: var(--text-primary);padding:6px 10px;font-size:13px;border-radius:8px;text-decoration:none}
 .who a.btn-l:hover{background:var(--chip)}
 .who button{border:1px solid var(--line);background:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;font:inherit;font-size:13px}
 .who button:hover{background:var(--chip)}
@@ -114,12 +114,13 @@ pre.log{background:#1f2531;color:#dfe7ee;padding:14px;border-radius:10px;font-fa
    Shared across student/admin styles; no layout or click-handler changes. */
 :root {
   --brand-red: #e7002c;
+  --text-primary: #3a3a3a;
   --button-paper: #fffafa;
   --button-shadow: 4px 4px 9px rgba(43,43,43,.25), 0 1px 3px rgba(43,43,43,.10);
 }
 :is(button, [role="button"], .btn, .btn-l, .icon-btn, .nav-a, .nav a, .who a.btn-l) {
   background: var(--button-paper) !important;
-  color: var(--brand-red) !important;
+  color: var(--text-primary) !important;
   box-shadow: var(--button-shadow) !important;
   border-radius: 10px;
 }

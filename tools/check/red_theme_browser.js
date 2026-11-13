@@ -17,7 +17,7 @@ const { chromium } = require('playwright');
             count: controls.length,
             bad: controls.filter(el => {
               const s = getComputedStyle(el);
-              return s.color !== 'rgb(231, 0, 44)' || s.backgroundColor !== 'rgb(255, 250, 250)' || s.boxShadow === 'none';
+              return s.color !== 'rgb(58, 58, 58)' || s.backgroundColor !== 'rgb(255, 250, 250)' || s.boxShadow === 'none';
             }).map(el => ({text:el.textContent.trim(),class:el.className})),
             overflow:document.documentElement.scrollWidth > innerWidth + 1,
             accent:getComputedStyle(document.documentElement).getPropertyValue('--sky-500').trim()
@@ -28,10 +28,11 @@ const { chromium } = require('playwright');
       }
       await page.evaluate(() => { location.hash = '#/'; }); await page.waitForTimeout(200);
       if (process.env.UPAY_THEME_SCREENSHOTS) await page.screenshot({path:`/tmp/upay-red-${width}.png`,fullPage:true});
+      assert.equal(await page.locator('.hero h1 em').evaluate(el => getComputedStyle(el).color), 'rgb(58, 58, 58)');
       // A representative primary button retains themed hover and keyboard focus.
       const button = page.locator('.btn-primary').filter({visible:true}).first();
       await button.hover();
-      assert.equal(await button.evaluate(el => getComputedStyle(el).color), 'rgb(231, 0, 44)');
+      assert.equal(await button.evaluate(el => getComputedStyle(el).color), 'rgb(58, 58, 58)');
       await button.focus();
       // Admin styles are independent stylesheets: exercise them separately too.
       for (const sheet of ['portal', 'dash']) {
@@ -39,9 +40,9 @@ const { chromium } = require('playwright');
         await page.setContent('<button>Save settings</button><a class="btn">Continue</a><button disabled>Unavailable</button>');
         await page.addStyleTag({url:(process.env.UPAY_BASE || 'http://127.0.0.1:8005/') + `assets/css/${sheet}.css`});
         const styles = await page.locator('button,.btn').evaluateAll(els => els.map(el => ({color:getComputedStyle(el).color, background:getComputedStyle(el).backgroundColor, shadow:getComputedStyle(el).boxShadow})));
-        for (const s of styles) { assert.equal(s.color,'rgb(231, 0, 44)'); assert.equal(s.background,'rgb(255, 250, 250)'); assert.notEqual(s.shadow,'none'); }
+        for (const s of styles) { assert.equal(s.color,'rgb(58, 58, 58)'); assert.equal(s.background,'rgb(255, 250, 250)'); assert.notEqual(s.shadow,'none'); }
       }
-      console.log(`PASS ${width}px: reference red/off-white/shadows, five routes, no overflow, hover and admin controls`);
+      console.log(`PASS ${width}px: dark grey text/red accents/off-white/shadows, five routes, no overflow, hover and admin controls`);
       await page.close();
     }
   } finally { await browser.close(); }
