@@ -144,7 +144,11 @@ for _m in re.finditer(r'<(h[1-4]|div class="eyebrow")[^>]*>(.*?)</\1>', html, re
     assert '.pdf' not in _m.group(2), 'filename in a heading: %r' % _m.group(2)[:80]
 assert '<h3>Chapter 3 · Reproductive Health</h3>' in html
 assert '<h3>Unit 1 · Solutions</h3>' in html
-assert '/assets/notes/index.html#business' in (root/'assets/js/app.js').read_text()
+# Home outline shortcuts were intentionally removed; chapter views still link
+# to the library by the actual outline ID, and the library retains its section.
+app_source = (root/'assets/js/app.js').read_text()
+assert '/assets/notes/index.html#${esc(n.id)}' in app_source
+assert 'business' in page.ids
 # Physics ledger includes all supplied files, even chapters pending review.
 phy_images = [x for x in images if x['source_file'].startswith('leph')]
 assert len(phy_images) == len(phy['crops']) == sum(s['figure_count'] for s in phy['sources']) == 235

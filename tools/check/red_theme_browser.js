@@ -48,9 +48,10 @@ const { chromium } = require('playwright');
       await button.focus();
       // Admin styles are independent stylesheets: exercise them separately too.
       for (const sheet of ['portal', 'dash']) {
-        await page.goto((process.env.UPAY_BASE || 'http://127.0.0.1:8005/') + `assets/css/${sheet}.css`);
+        const stylesheetURL = new URL(`/assets/css/${sheet}.css`, process.env.UPAY_BASE || 'http://127.0.0.1:8005/').href;
+        await page.goto(stylesheetURL);
         await page.setContent('<button>Save settings</button><a class="btn">Continue</a><button disabled>Unavailable</button>');
-        await page.addStyleTag({url:(process.env.UPAY_BASE || 'http://127.0.0.1:8005/') + `assets/css/${sheet}.css`});
+        await page.addStyleTag({url:stylesheetURL});
         const styles = await page.locator('button,.btn').evaluateAll(els => els.map(el => ({color:getComputedStyle(el).color, background:getComputedStyle(el).backgroundColor, shadow:getComputedStyle(el).boxShadow})));
         for (const s of styles) { assert.equal(s.color,'rgb(58, 58, 58)'); assert.equal(s.background,'rgb(255, 250, 250)'); assert.notEqual(s.shadow,'none'); }
       }
