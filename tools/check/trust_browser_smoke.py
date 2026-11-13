@@ -13,7 +13,7 @@ with sync_playwright() as p:
     page.route('**/api/tel',lambda r:r.fulfill(status=204))
     page.goto(BASE+'/',wait_until='networkidle')
     page.wait_for_function('() => window.UP && UP.S && document.body.classList.contains("up-ready")')
-    assert page.get_by_role('region',name='Study shortcuts').count()==1
+    assert page.get_by_role('region',name='Study plan').count()==1
     page.locator('[data-action="study-goal"]').select_option('5')
     page.reload(wait_until='networkidle')
     page.wait_for_selector('[data-action="study-goal"]')
@@ -25,7 +25,7 @@ with sync_playwright() as p:
     page.evaluate('() => location.hash="#/chapter/608"')
     page.wait_for_selector('.outline-panel')
     page.evaluate('() => location.hash="#/home"')
-    page.wait_for_selector('section[aria-label="Study shortcuts"] a[href="#/chapter/608"]')
+    page.wait_for_selector('section[aria-label="Study plan"] a[href="#/chapter/608"]')
     # Synthetic, browser-memory-only answer: proves render/click wiring, NOT a key.
     page.evaluate('''() => UP.pyq.push({id:'trust-fixture',cls:12,subject:'physics',board:'cbse',y:2098,ch:603,
       q:1,kind:1,m:1,en:'A 1000 W heater: synthetic render fixture.',cleanText:true,

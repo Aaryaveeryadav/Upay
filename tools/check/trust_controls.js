@@ -25,11 +25,24 @@ async function main(){
  r=response();assert.equal(await consumeAI({id:'user'},r),false);assert.equal(r.code,503);
  delete process.env.UPAY_AI_LIMITS_ENABLED;
  global.UP={};require('../../assets/js/data/pyq-physics-2025');
- assert.equal(UP.pyq.length,1019);
+ const ledger=require('../../assets/notes/physics-question-quality.json');
+ const expected=ledger.questions.filter(q=>q.id.startsWith('phys25-') && q.status==='structurally-screened').map(q=>q.id).sort();
+ assert.equal(expected.length,202);
+ assert.deepEqual(UP.pyq.map(q=>q.id).sort(),expected);
+ assert(UP.pyq.every(q=>q.qualityStatus==='structurally-screened'));
  for(const q of UP.pyq){
   assert([1,2,3,4,5,6].includes(q.kind));assert.equal(q.keyVerified,false);
   if(q.opts){assert.equal(q.opts.length,4);assert(q.opts.every(o=>typeof o.en==='string' && typeof o.hi==='string'));
-    const norm=s=>s.replace(/\s+/g,' ').trim(); assert(q.opts.every(o=>norm(q.en).includes(norm(o.en))));}
+    const norm=s=>s.replace(/\s+/g,' ').trim();
+    if(q.kind===2){
+      assert.equal(q.optionReview,'same-paper-instructions');
+      assert(/^Assertion\s*\(A\)/.test(q.en) && /Reason\s*\(R\)/.test(q.en));
+      assert(q.opts.every(o=>o.en.includes('Assertion (A)') && o.en.includes('Reason (R)')));
+    }else{
+      assert.equal(q.optionReview,'inline-text-recovered');
+      assert(ledger.originalRows[q.id], 'missing original source row');
+      assert(q.opts.every(o=>norm(ledger.originalRows[q.id].en).includes(norm(o.en))));
+    }}
  }
  console.log('PASS AI status privacy, retry hints, kill switch, fail-closed usage controls and Physics structural safety');
 }
