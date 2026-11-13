@@ -21,6 +21,8 @@ jobs:
       - run: python3 tools/check/outline_notes.py
       - run: node tools/check/serverless_smoke.js
       - run: node tools/check/physics_question_quality.js
+      - run: node tools/check/ai_diagram_geometry.js
+      - run: node tools/check/answer_format.js
       - run: node tools/check/trust_controls.js
       - run: node tools/check/ai_access.js
       - run: python3 tools/check/backend_smoke.py
@@ -36,6 +38,7 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install playwright==1.58.0
+      - run: npm install --prefix /tmp/upay-diagram-check playwright@1.58.0 pngjs@7.0.0
       # The matching image already contains Chromium and OS dependencies.
       # Avoid the failing runtime browser/apt installation step.
       - name: Physics and security browser checks
@@ -54,6 +57,8 @@ jobs:
           else:
               raise SystemExit('Server did not start')
           PY
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/ai_diagram_browser.js
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/question_audio_format_browser.js
           UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/physics_quality_browser.py
           python3 tools/check/physics_outline_smoke.py
           python3 tools/check/trust_browser_smoke.py

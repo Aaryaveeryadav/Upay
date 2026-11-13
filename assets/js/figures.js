@@ -798,6 +798,45 @@ UP.figures = (function () {
       }
     }
 
+    // Provider JSON can use object segments or numeric strings. Never let a
+    // missing coordinate poison the bounds (NaN collapsed every SVG point to 0).
+    // Keep supplied geometry or refuse it; do not fabricate replacement values.
+    if (['plane', 'triangle', 'circle', 'bars'].includes(spec.type)) {
+      const coordinate = v => (typeof v === 'number' || (typeof v === 'string' && v.trim())) && Number.isFinite(Number(v)) ? Number(v) : NaN;
+      let invalid = false;
+      const rows = key => {
+        if (spec[key] == null) return [];
+        if (!Array.isArray(spec[key])) { invalid = true; return []; }
+        return spec[key];
+      };
+      const objects = (key, fields) => rows(key).map(row => {
+        if (!row || typeof row !== 'object' || Array.isArray(row)) { invalid = true; return {}; }
+        const out = Object.assign({}, row);
+        fields.forEach(k => { out[k] = coordinate(row[k]); if (!Number.isFinite(out[k])) invalid = true; });
+        return out;
+      });
+      const normalized = Object.assign({}, spec, {
+        points: objects('points', ['x', 'y']),
+        circles: objects('circles', ['cx', 'cy', 'r']),
+        ellipses: objects('ellipses', ['cx', 'cy', 'rx', 'ry']),
+        labels: objects('labels', ['x', 'y']),
+        bars: objects('bars', ['value']),
+        segments: rows('segments').map(row => {
+          const values = Array.isArray(row) ? row.slice() : row && typeof row === 'object'
+            ? [row.x1, row.y1, row.x2, row.y2, row.color || row.stroke, row.dash] : [];
+          for (let i = 0; i < 4; i++) {
+            values[i] = coordinate(values[i]);
+            if (!Number.isFinite(values[i])) invalid = true;
+          }
+          return values;
+        })
+      });
+      if (normalized.circles.some(c => c.r <= 0) || normalized.ellipses.some(e => e.rx <= 0 || e.ry <= 0)) invalid = true;
+      const geometry = normalized.points.length + normalized.circles.length + normalized.segments.length + normalized.ellipses.length;
+      if (invalid || (spec.type === 'bars' ? !normalized.bars.length : !geometry) || (spec.type === 'triangle' && normalized.points.length < 3)) return '';
+      spec = normalized;
+    }
+
     const pts = (spec.points || []).filter(p => typeof p.x === 'number' && typeof p.y === 'number');
     const circles = spec.circles || [];
     const segs = spec.segments || [];
@@ -863,6 +902,8 @@ UP.figures = (function () {
     if (ymax - ymin < 1e-9) { ymin -= 1; ymax += 1; }
     const mx = (xmax - xmin) * 0.16 || 1, my = (ymax - ymin) * 0.16 || 1;
     xmin -= mx; xmax += mx; ymin -= my; ymax += my;
+    if (![xmin, xmax, ymin, ymax, xmax - xmin, ymax - ymin].every(Number.isFinite)) return '';
+    if (xmax <= xmin || ymax <= ymin) return '';
 
     const PL = plane({ xmin, xmax, ymin, ymax, w: 580, h: 360 });
     const X = PL.sx, Y = PL.sy;

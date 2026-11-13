@@ -503,6 +503,7 @@ window.UP = window.UP || {};
      P() checks the object itself first, then the side file. */
   const P = obj => {
     if (!obj) return '';
+    if (typeof obj === 'string' || typeof obj === 'number') return String(obj);
     /* If the current subject is Hindi (or any subject whose content only
        exists in Hindi), always prefer the Hindi text regardless of the UI
        language toggle. Otherwise use the chosen language and fall back. */
@@ -1674,6 +1675,7 @@ window.UP = window.UP || {};
       .then(({ ok, j }) => {
         if (!isCurrent()) return;
         if (ok && j && j.approaches && j.approaches.length) {
+          j = UP.answerFormat.answer(j);
           j.question = q;
           j._chId = S.chapterId || 0;
           S.aiAnswer = j; S.aiState = 'done';
@@ -1742,6 +1744,7 @@ window.UP = window.UP || {};
 
   /* the AI answer, in the same shape as a built-in one */
   function renderAIDiagram(a) {
+    a = UP.answerFormat.answer(a);
     const figSpec = a.diagram ? Object.assign({}, a.diagram, { caption: a.diagram.caption }) : null;
     let fig = '';
     /* Client-side safety: a "solid" diagram (cylinder/cone/sphere/...) is only
@@ -1810,10 +1813,12 @@ window.UP = window.UP || {};
           '</div><div class="figure-body">' + svg + '</div>' +
           '<figcaption>' + esc(figSpec.caption || '') + '</figcaption></figure>';
       } catch (e) { fig = ''; }
+      if (!fig) fig = '<p class="muted ai-diagram-unavailable" role="status">' + (S.lang === 'hi' ? 'AI चित्र के निर्देशांक अधूरे हैं; चित्र नहीं दिखाया जा सका। व्याख्या नीचे उपलब्ध है।' : 'The AI diagram data could not be rendered safely. The written explanation is still available below.') + '</p>';
     }
     return fig;
   }
   function renderAIAnswer(a) {
+    a = UP.answerFormat.answer(a);
     const fig = renderAIDiagram(a);
     const chk = a.check || null;
     return `
@@ -1917,6 +1922,7 @@ window.UP = window.UP || {};
   }
 
   function renderCachedAnswer(j, qq, sol, ansBox, id) {
+    j = UP.answerFormat.answer(j);
     if (!j || j.policyVersion !== 'three-approaches-v1' || !j.approaches || j.approaches.length < 3) return false;
     const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
       (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
@@ -1981,7 +1987,7 @@ window.UP = window.UP || {};
         return { status: r.status, ok: r.ok, body: j };
       });
     }).then(function (reply) {
-      const j = reply.body;
+      const j = UP.answerFormat.answer(reply.body);
       /* The loading line used to stay forever when the reply had no usable
          approaches, or when anything below threw. Both are silent failures for
          the student: the spinner never stops and nothing says why. */
@@ -2033,21 +2039,7 @@ window.UP = window.UP || {};
         /* the figure the AI drew from this question's own numbers -- rendered
            here too, because a bank question with a worked solution but no
            diagram is exactly the gap the student complained about */
-        (function () {
-          if (!j.diagram || !UP.figures || !UP.figures.generic) return '';
-          /* apply the same honesty filter as on the main answer */
-          if (typeof diagramIsHonestForSubject === 'function' &&
-              !diagramIsHonestForSubject(j.diagram, j.questionUnderstood || qq.en || qq.hi, S.subject)) return '';
-          try {
-            const svg = UP.figures.generic(Object.assign({}, j.diagram, { caption: j.diagram.caption }));
-            if (!svg) return '';
-            return '<figure class="figure-card" style="margin-top:14px">' +
-              '<div class="figure-head"><span class="mini-label">' + (S.lang === 'hi' ? 'चित्र' : 'Diagram') + '</span>' +
-              '<span class="tag grey">' + (S.lang === 'hi' ? 'प्रश्न के अपने मानों से बना' : 'drawn from this question’s own numbers') + '</span></div>' +
-              '<div class="figure-body">' + svg + '</div>' +
-              '<figcaption>' + esc((j.diagram && j.diagram.caption) || '') + '</figcaption></figure>';
-          } catch (e) { return ''; }
-        })();
+        renderAIDiagram(Object.assign({}, j, {question: qq.en || qq.hi || ''}));
       pyqCache[id] = html;
       sol.innerHTML = html;
       /* Persist this AI answer so next visit is instant */
@@ -3781,7 +3773,7 @@ window.UP = window.UP || {};
       .find(el => el.getBoundingClientRect().bottom > 180);
     const anchorId = anchor && anchor.id;
     const anchorTop = anchor && anchor.getBoundingClientRect().top;
-    if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch(e) {} }
+    stopAnswerSpeech();
     closeSavePopover();
     const r = parseHash();
     // A shareable entry point selects this supplied subject, then removes the
@@ -3855,6 +3847,7 @@ window.UP = window.UP || {};
           } else {
             ans = UP.answerQuestion(q) || UP.fallbackAnswer(q, S.lang, true);
           }
+          if (!ans) ans = accountancyAIWaiting(q);
           ans.question = q;
           S.answer = ans;
           S.aiAnswer = null; S.aiState = 'loading'; S.aiQuestion = q; S.aiScope = scope;
@@ -4618,7 +4611,7 @@ window.UP = window.UP || {};
           ${icon('bulb')} ${a && a.shown ? (S.lang === 'hi' ? 'हल छिपाएँ' : 'Hide solution') : (!graded ? (S.lang === 'hi' ? 'AI से व्याख्या लें' : 'Get AI explanation') : (S.lang === 'hi' ? 'हल देखें' : 'Show solution'))}
         </button>
       </div>
-      <div class="q-text">${esc(pyqQuestionText(q.raw || q))}</div>
+      <div class="q-text">${esc(q.tid ? P(q) : pyqQuestionText((q.en || q.hi) ? q : (q.raw || q)))}</div>
       ${q.fig && typeof q.fig === 'string' ? (() => { const bf = boardFig(q); return bf ? `<div class="figure-card test-fig">${bf.svg}</div>` : ''; })() : ''}
       ${S.lang === 'hi' && (q.raw || q).hindiReview ? '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>' : ''}
       ${opts}
@@ -4714,6 +4707,7 @@ window.UP = window.UP || {};
         q.aiLoading=false;
         if (!isCurrent()) return;
         if (ok && j.approaches && j.approaches.length) {
+          j = UP.answerFormat.answer(j);
           const first = j.approaches[0];
           q.aiSolution = Object.assign({}, j, {question:qText});
           q.aiSteps = (first.steps || []).map(s => {
@@ -5248,7 +5242,17 @@ window.UP = window.UP || {};
     // End with a short check line only if it's concise
     const verify = P(a.verify || '').trim();
     if (verify && verify.length < 240) out += (isHi ? 'जाँच: ' : 'To verify: ') + verify + '.\n';
-    return out.trim();
+    return UP.answerFormat.text(out.trim());
+  }
+
+  let speechSession = null;
+  function stopAnswerSpeech() {
+    const session = speechSession; speechSession = null;
+    if (session && session.btn) {
+      session.btn.setAttribute('aria-pressed','false');
+      session.btn.innerHTML = icon('speaker') + ' <span class="speak-label">' + (S.lang === 'hi' ? 'सुनें' : 'Listen') + '</span>';
+    }
+    if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (_) {} }
   }
 
   /* Answer currently visible on screen (prefer AI answer over local stub) */
@@ -5593,30 +5597,45 @@ window.UP = window.UP || {};
     if (action === 'speak') {
       e.preventDefault();
       const btn = tgt.closest('button');
-      if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-        btn.innerHTML = icon('speaker') + ' <span class="speak-label">' + (S.lang === 'hi' ? 'सुनें' : 'Listen') + '</span>';
-        return;
+      if (speechSession) { stopAnswerSpeech(); return; }
+      if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) {
+        toast(S.lang === 'hi' ? 'इस ब्राउज़र में आवाज़ उपलब्ध नहीं है।' : 'Read aloud is not supported in this browser.'); return;
       }
-      const ans = spokenAnswer();
-      const txt = ans ? answerToText(ans) : '';
-      if (!txt) return;
-      const u = new SpeechSynthesisUtterance(txt);
-      const lang = S.lang === 'hi' ? 'hi-IN' : 'en-IN';
-      u.lang = lang;
-      u.rate = S.lang === 'hi' ? 0.95 : 1.0;
-      u.pitch = 1.0;
-      // Pick the best installed voice for the language, instead of default
-      const voices = window.speechSynthesis.getVoices();
-      const v = voices.find(v => v.lang === lang)
-             || voices.find(v => v.lang.indexOf(lang.split('-')[0]) === 0)
-             || null;
-      if (v) u.voice = v;
+      const txt = answerToText(spokenAnswer());
+      if (!txt) { toast(S.lang === 'hi' ? 'पढ़ने के लिए उत्तर उपलब्ध नहीं है।' : 'No answer is available to read yet.'); return; }
+      // Small utterances avoid long-answer speech stalls on mobile/Chromium.
+      const chunks = txt.match(/[^.!?।]+[.!?।]*/g) || [txt];
+      const parts = [];
+      chunks.forEach(chunk => {
+        let rest = chunk.trim();
+        while (rest.length > 220) {
+          let cut = rest.lastIndexOf(' ', 220); if (cut < 1) cut = 220;
+          parts.push(rest.slice(0,cut)); rest = rest.slice(cut).trim();
+        }
+        if (rest) parts.push(rest);
+      });
+      const session = speechSession = {btn, utterance:null};
+      btn.setAttribute('aria-pressed','true');
       btn.innerHTML = icon('speakeroff') + ' <span class="speak-label">' + (S.lang === 'hi' ? 'रोकें' : 'Stop') + '</span>';
-      u.onend = () => { btn.innerHTML = icon('speaker') + ' <span class="speak-label">' + (S.lang === 'hi' ? 'सुनें' : 'Listen') + '</span>'; };
-      u.onerror = u.onend;
-      window.speechSynthesis.speak(u);
-      return;
+      let index = 0;
+      const next = () => {
+        if (speechSession !== session) return;
+        if (index >= parts.length) { stopAnswerSpeech(); return; }
+        const u = session.utterance = new SpeechSynthesisUtterance(parts[index++]);
+        u.lang = S.lang === 'hi' ? 'hi-IN' : 'en-IN'; u.rate = S.lang === 'hi' ? .95 : 1;
+        const voices = window.speechSynthesis.getVoices();
+        const voice = voices.find(v=>v.lang===u.lang) || voices.find(v=>v.lang.startsWith(u.lang.slice(0,2)));
+        if (voice) u.voice = voice;
+        u.onend = next;
+        u.onerror = event => {
+          if (speechSession !== session) return;
+          stopAnswerSpeech();
+          if (!['canceled','interrupted'].includes(event.error)) toast(S.lang === 'hi' ? 'आवाज़ नहीं चल सकी। डिवाइस की आवाज़ और उपलब्ध भाषाएँ जाँचें।' : 'Read aloud failed. Check device audio and installed speech voices.');
+        };
+        try { window.speechSynthesis.resume(); window.speechSynthesis.speak(u); }
+        catch (_) { u.onerror({error:'unavailable'}); }
+      };
+      next(); return;
     }
     if (action === 'share') {
       e.preventDefault();

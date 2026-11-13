@@ -38,7 +38,7 @@
 
   /* --- CRITICAL CORE: required before app.js boots --- */
   const CRITICAL_CORE = [
-    'assets/js/data-extra.js?v=26b9',
+    'assets/js/data-extra.js?v=26c1',
     'assets/js/data/chapters1.js',
     'assets/js/data/chapters2.js',
     'assets/js/data/pyq.js',
@@ -48,7 +48,7 @@
     'assets/js/data/chapters12-applied-maths.js',  // Class 12 Applied Maths KB + PYQ seed
     'assets/js/data/chapters12-accountancy.js', // Class 12 Accountancy + Computerised Accounting chapter maps
     'assets/js/data/accountancy-chapters.js?v=26ab', // extracted NCERT outline: objectives and numbered sections
-    'assets/js/data/business-studies12.js?v=26b9', // CBSE English outlines
+    'assets/js/data/business-studies12.js?v=26c1', // CBSE English outlines
     'assets/js/data/economics12.js?v=26ab', // Class 12 Economics guides, including deep links
     'assets/js/data/economics-sources.js?v=26ab', // the original Economics PDF catalogue
     'assets/js/data/english12.js?v=26ab', // Class 12 English reading notes and direct links
@@ -71,7 +71,8 @@
     'assets/js/solver-arith.js',
     'assets/js/solver-geo.js',
     'assets/js/solver-route.js',
-    'assets/js/figures.js',
+    'assets/js/answer-format.js?v=26c1',
+    'assets/js/figures.js?v=26c1',
     'assets/js/checker.js',
     'assets/js/testgen.js',
     'assets/js/panel.js',
@@ -120,9 +121,9 @@
       'assets/sanskrit/sanskrit-papers.js'
     ],
     physics: [
-      'assets/js/data/physics12.js?v=26b9',
-      'assets/js/data/physics-outlines.js?v=26b9', // CBSE 2026–27 outline view per chapter
-      'assets/js/data/pyq-physics-2025.js?v=26b9'
+      'assets/js/data/physics12.js?v=26c1',
+      'assets/js/data/physics-outlines.js?v=26c1', // CBSE 2026–27 outline view per chapter
+      'assets/js/data/pyq-physics-2025.js?v=26c1'
     ],
     chemistry: [
       'assets/js/data/chemistry12.js',
@@ -294,7 +295,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26b9');
+    return loadScript('assets/js/app.js?v=26c1');
   }
 
   function loadPostPaint() {
