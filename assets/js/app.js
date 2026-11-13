@@ -1040,9 +1040,6 @@ window.UP = window.UP || {};
   function viewHome() {
     const chapters = catalogue();
     const all = chapters.filter(ch => !ch._bookHeader);
-    const lastChapter = store.get(scopedDataKey('lastChapter'), null);
-    const resume = all.find(ch => String(ch.id) === String(lastChapter));
-    const dailyGoal = store.get(scopedDataKey('studyGoal'), 10);
     const scopedQuestionCount = (UP.pyq || []).filter(qInScope).length;
     const scopedRecent = S.recent.filter(r => r.subject === S.subject && (r.cls ? +r.cls === +S.cls : +S.cls === 10) && (r.board ? r.board === S.board : S.board === 'cbse'));
     const subjectSamples = {
@@ -1103,31 +1100,6 @@ window.UP = window.UP || {};
     const specific = (scopedExamples[+S.cls] || {})[S.subject];
     const samples = specific ? specific.map(en => ({ en, hi: en })) : (subjectSamples[S.subject] || [{ en: 'Type a question from your selected subject.', hi: 'अपने चुने हुए विषय का प्रश्न लिखिए।' }]);
     return `
-    <section class="card study-shortcuts" aria-label="Study shortcuts">
-      <h2>${S.lang === 'hi' ? 'आज की पढ़ाई' : 'Your next study step'}</h2>
-      <nav class="study-shortcuts-actions" aria-label="Study actions">
-        <a class="btn btn-primary" href="${resume ? '#/chapter/'+resume.id : '#/syllabus'}">${S.lang === 'hi' ? 'पढ़ाई जारी रखें' : 'Continue studying'}</a>
-        <a class="btn btn-ghost" href="#/today">${S.lang === 'hi' ? 'अभ्यास और आज की पुनरावृत्ति' : 'Practise · Today’s revision'}</a>
-        <a class="btn btn-ghost" href="#/mistakes">${S.lang === 'hi' ? 'गलतियाँ दोहराएँ' : 'Revise mistakes'}</a>
-        <a class="btn btn-ghost" href="#/saved">${S.lang === 'hi' ? 'सहेजे प्रश्न' : 'Saved questions'}</a>
-      </nav>
-      <div class="study-goal-row">
-        <label class="study-goal-field" for="home-study-goal"><span>${S.lang === 'hi' ? 'दैनिक लक्ष्य (योजना मात्र)' : 'Daily goal (planning only)'}</span>
-          <select id="home-study-goal" data-action="study-goal" aria-label="Daily study goal" aria-describedby="home-study-goal-help">${[5,10,15].map(n=>`<option value="${n}" ${dailyGoal===n?'selected':''}>${n} questions</option>`).join('')}</select>
-        </label>
-        <p class="muted" id="home-study-goal-help">${S.lang === 'hi' ? 'अपनी सुविधा से अभ्यास करें; लक्ष्य कोई अंक नहीं है।' : 'Choose your own pace. This goal is not a score or a promise of available questions.'}</p>
-      </div>
-    </section>
-    <section class="card home-outline-links" aria-labelledby="home-outline-title">
-      <h2 id="home-outline-title">CBSE Class 12 · English outlines</h2>
-      <nav aria-label="Class 12 outline resources">
-        <a class="link" href="/assets/notes/index.html#business">Business Studies</a>
-        <a class="link" href="/assets/notes/index.html#chemistry">Chemistry (units 1–10)</a>
-        <a class="link" href="/assets/notes/index.html#biology">Biology (13 chapters)</a>
-        <a class="link" href="/assets/notes/index.html#figures-bio">Biology figures</a>
-      </nav>
-      <p class="muted">Syllabus-mapped study outlines; coverage is incomplete.</p>
-    </section>
     <section class="hero">
       <div class="hero-grid">
         <div>
@@ -6650,20 +6622,6 @@ function importProgress(file){
   }
 })();
 
-/* ---------- #9 Daily reminder nudge ---------- */
-function todayReminder(){
-  const items = buildDailySet();
-  const done = (S.dailyProgress && S.dailyProgress[todayKey()]) || 0;
-  if (done >= items.length) return '';
-  return `<div class="card flat daily-reminder">
-    ${icon('target')}
-    <div style="flex:1">
-      <b>${S.lang==='hi'?'आज का अभ्यास बाकी है':'Daily practice pending'}</b>
-      <div style="font-size:13px;color:var(--ink-500)">${S.lang==='hi'?`${done}/${items.length} प्रश्न पूरे`:`${done}/${items.length} done`}</div>
-    </div>
-    <a class="btn btn-sm btn-primary" href="#/today">${S.lang==='hi'?'शुरू करें':'Start'}</a>
-  </div>`;
-}
 function askNotifPermission(){
   if (!('Notification' in window)) return;
   if (Notification.permission === 'default') {
@@ -7076,15 +7034,6 @@ viewChapter = function(id, params){
   // The English reading view already links to its tailored printable review.
   if (english12Track() || businessTrack()) return html;
   return html.replace(/(<\/section>)/, `<div style="margin-top:8px"><a class="btn btn-sm btn-ghost" href="#/cheatsheet/${id}">${icon('book')} ${S.lang==='hi'?'चीट शीट':'Cheatsheet'}</a></div></section>`);
-};
-
-/* ---------- Home page nudge ---------- */
-const __orig_viewHome = viewHome;
-viewHome = function(){
-  let h = __orig_viewHome();
-  const nudge = todayReminder();
-  if(nudge) h = nudge + h;
-  return h;
 };
 
 /* ---------- Boot: apply saved display prefs ---------- */

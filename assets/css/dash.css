@@ -2,7 +2,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#f6f3ec;color:#1e2330;
   font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans",sans-serif}
-a{color:#e7002c;text-decoration:none}
+a{color: var(--text-primary);text-decoration:none}
 a:hover{text-decoration:underline}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em;
      background:#fff5f6;padding:1px 5px;border-radius:4px}
@@ -22,9 +22,9 @@ p{margin:0 0 12px}
 .nav a{padding:7px 12px;border-radius:8px;color:#1e2330;font-weight:500;font-size:14px;white-space:nowrap}
 .nav a:hover{background:#fff5f6;text-decoration:none}
 .nav a.on{background:#e7002c;color:#fff}
-.nav a.right{margin-left:auto;color:#e7002c}
+.nav a.right{margin-left:auto;color: var(--text-primary)}
 .who{display:flex;align-items:center;gap:10px;font-size:13.5px;color:#6a6f7c}
-.who .pill{background:#fff5f6;color:#9f001e;padding:3px 8px;border-radius:999px;font-weight:600;font-size:12px}
+.who .pill{background:#fff5f6;color: var(--text-primary);padding:3px 8px;border-radius:999px;font-weight:600;font-size:12px}
 .who .wname{color:#1e2330}
 .who button{border:1px solid #e6e1d5;background:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;font:inherit;font-size:13px}
 .who button:hover{background:#fff5f6}
@@ -63,7 +63,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #ffc8d2;border-color:#
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{padding:5px 10px;border-radius:999px;border:1px solid #e6e1d5;background:#fff;font-size:13px;cursor:pointer;color:#1e2330}
 .chip:hover{background:#fff5f6}
-.tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:999px;background:#fff5f6;color:#9f001e;margin-right:4px}
+.tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:999px;background:#fff5f6;color: var(--text-primary);margin-right:4px}
 .tag.ok{background:#dfe9d8;color:#2e5d31}
 .tag.bad{background:#f3d8d4;color:#8a2b23}
 .tag.warn{background:#fceacb;color:#8a5a14}
@@ -87,12 +87,13 @@ pre.log{background:#1f2531;color:#dfe7ee;padding:14px;border-radius:10px;font-fa
    Shared across student/admin styles; no layout or click-handler changes. */
 :root {
   --brand-red: #e7002c;
+  --text-primary: #3a3a3a;
   --button-paper: #fffafa;
   --button-shadow: 4px 4px 9px rgba(43,43,43,.25), 0 1px 3px rgba(43,43,43,.10);
 }
 :is(button, [role="button"], .btn, .btn-l, .icon-btn, .nav-a, .nav a, .who a.btn-l) {
   background: var(--button-paper) !important;
-  color: var(--brand-red) !important;
+  color: var(--text-primary) !important;
   box-shadow: var(--button-shadow) !important;
   border-radius: 10px;
 }
