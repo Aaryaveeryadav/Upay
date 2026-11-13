@@ -39,3 +39,24 @@ correctness is implied.
 Also passed locally: serverless contract smoke, Physics quality regression,
 seven-subject conceptual-flow browser check, all 235 Physics source figures at
 1280/390px, and the explanation-scroll regression. No source figures were edited.
+
+## Graphical drawing and concept flow together (26c3)
+
+A single diagram field previously forced a choice between a flowchart and a
+geometrical/physical drawing. The solution policy now asks for separate diagram
+and conceptDiagram fields. Both local-server and serverless normalization keep
+them, and the local-server cache preserves conceptDiagram too. Concept data is
+limited to the existing escaped flow schema; no provider HTML/SVG is inserted.
+
+The shared Ask/PYQ/practice renderer outputs both, not one instead of the other.
+Legacy flow-only answers can also retain an existing question-matched local
+Maths drawing with actual geometry. It does not borrow an unrelated/stale
+answer or substitute a generic topic picture. For the reported √5 example,
+the local number-line construction stays visible beside the contradiction
+flow, with a note that constructing the length is not itself a proof of
+irrationality. No unrelated drawing is fabricated when none is applicable.
+
+`dual_diagram_browser.js` tests both new dual-field and legacy flow-only replies,
+retention of the √5 drawing, no duplicate/stale graphical figures, and diagram
+widths at 1280/390px with mocked AI. Existing diagrams/format regressions and
+serverless smoke also pass. Original textbook crops remain untouched.

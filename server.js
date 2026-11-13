@@ -1971,7 +1971,8 @@ const handleRequest = async function (req, res) {
             watch: String(a.watch || '')
           };
         }).filter(function (a) { return a.steps.length; }),
-        diagram: solvePolicy.diagramForSubject(parsed.diagram, subject)
+        diagram: solvePolicy.diagramForSubject(parsed.diagram, subject),
+        conceptDiagram: solvePolicy.conceptDiagram(parsed.conceptDiagram)
       };
 
       if (!answer.approaches.length) return json(res, 502, { error: 'The model returned no solvable steps. Try rephrasing.', fallback: true });
@@ -2117,7 +2118,7 @@ const handleRequest = async function (req, res) {
           owner: aiCacheOwner(sess), at: now(), model: out.model, questionUnderstood: answer.questionUnderstood,
           result: settledByMath ? String(check.yourAnswer) : answer.result,
           summary: answer.summary, verify: answer.verify,
-          policyVersion: solvePolicy.VERSION, approaches: answer.approaches, diagram: answer.diagram, check: check,
+          policyVersion: solvePolicy.VERSION, approaches: answer.approaches, diagram: answer.diagram, conceptDiagram: answer.conceptDiagram, check: check,
           methodCount: answer.approaches.length,
           methodsShort: answer.methodsShort ? true : undefined,
           methodsNote: answer.methodsNote || undefined,

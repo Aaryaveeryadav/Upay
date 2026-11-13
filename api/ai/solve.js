@@ -221,6 +221,7 @@ module.exports = async function handler(req, res) {
       steps: steps(a && a.steps), why: String((a && a.why) || ''), watch: String((a && a.watch) || '')
     })).filter(a => a.steps.length),
     diagram: solvePolicy.diagramForSubject(parsed.diagram, subject),
+    conceptDiagram: solvePolicy.conceptDiagram(parsed.conceptDiagram),
     check: { state: 'unchecked', note: noOfficialKey
       ? 'AI-generated; not checked against an official answer key.'
       : 'AI-generated; not independently checked.' },

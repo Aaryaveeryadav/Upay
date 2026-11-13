@@ -1744,6 +1744,24 @@ window.UP = window.UP || {};
 
   /* the AI answer, in the same shape as a built-in one */
   function renderAIDiagram(a) {
+    if (!a) return '';
+    const concept = a.conceptDiagram && a.conceptDiagram.type === 'flow' ? a.conceptDiagram : null;
+    const graphical = a.diagram && a.diagram.type !== 'flow' ? a.diagram : null;
+    let drawing = graphical ? renderSingleAIDiagram(a) : '';
+    // A flow-only reply must not replace an existing question-matched local
+    // drawing (e.g. the √5 number-line construction). Never borrow a stale one.
+    const question = a.question || S.aiQuestion || '';
+    if (!graphical && S.answer && S.answer.question === question &&
+        !S.answer._loading && S.answer._geom && !['topic','concept','fallback'].includes(S.answer.kind) && ['maths','applied-maths'].includes(S.subject)) {
+      try {
+        drawing = figureBlock(S.answer);
+        if (drawing && S.answer.kind === 'irrational') drawing += '<p class="muted">' + (S.lang === 'hi' ? 'यह रचना लंबाई दर्शाती है; अपरिमेयता का प्रमाण नीचे दिए तर्क से है।' : 'This construction illustrates the length; the reasoning flow proves irrationality, not the drawing alone.') + '</p>';
+      } catch (_) { /* no honest local figure */ }
+    }
+    const flow = concept || (a.diagram && a.diagram.type === 'flow' ? a.diagram : null);
+    return drawing + (flow ? renderSingleAIDiagram(Object.assign({}, a, {diagram:flow})) : '');
+  }
+  function renderSingleAIDiagram(a) {
     a = UP.answerFormat.answer(a);
     const figSpec = a.diagram ? Object.assign({}, a.diagram, { caption: a.diagram.caption }) : null;
     let fig = '';
