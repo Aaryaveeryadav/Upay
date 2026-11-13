@@ -16,7 +16,7 @@ The previous main run `43445467262` failed. GitHub run logs could not be downloa
 - `red_theme_browser.js` concatenated an origin without a trailing slash into `http://127.0.0.1:8004assets/...`. It now resolves stylesheet URLs through `new URL`.
 - `trust_browser_smoke.py` expected the old Study shortcuts accessible name instead of the current Study plan. Goal persistence, scoped resume, verified/unverified answer feedback and mocked AI error recovery checks remain.
 
-- GitHub-specific Python environment mismatch: the container's bare `pip` installed Playwright for a different interpreter than `actions/setup-python` selected. Browser setup now uses `python3 -m pip`, matching the interpreter that runs the checks. Failure annotations expose the exact command/traceback when log downloads are unavailable.
+- GitHub-specific Python environment mismatch: the container's bare `pip` installed Playwright for a different interpreter than `actions/setup-python` selected. Browser setup now uses the image's native Python (no host `setup-python` override) and `python3 -m pip`, matching the interpreter that runs the checks and the Noble container's libraries. Failure annotations expose the exact command/traceback when log downloads are unavailable.
 
 Every contract command and every browser check in `trust-checks.yml` passed locally after these repairs. Browser tests used Playwright 1.58 with an available Chromium executable. Actual GitHub CI results must be checked on the new PR; local results alone do not establish runner success.
 
