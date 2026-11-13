@@ -31,7 +31,14 @@
     if(value && typeof value==='object') return Object.fromEntries(Object.entries(value).map(([k,v])=>[k,answer(v,k)]));
     return value;
   }
-  const api={text,answer};
+  // Pasted questions may contain escaped or double-escaped TeX delimiters.
+  // Only use this for student input/presentation, never rewrite source banks.
+  function question(value) {
+    const s=String(value == null ? '' : value);
+    if (!/\\+[()[\]]|\$[^$]+\$|\\+(?:frac|sqrt|nu|Phi)\b/.test(s)) return s;
+    return text(s.replace(/\\+(?=[()[\]A-Za-z])/g, '\\'));
+  }
+  const api={text,answer,question};
   if(typeof module==='object' && module.exports) module.exports=api;
   else {root.UP=root.UP||{};root.UP.answerFormat=api;}
 })(typeof window==='undefined'?globalThis:window);
