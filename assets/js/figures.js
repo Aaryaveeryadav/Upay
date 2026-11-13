@@ -846,6 +846,7 @@ UP.figures = (function () {
     /* ============ CHEMISTRY / PHYSICS / BIOLOGY SCHEMATICS ============
        The shapes are deliberately simple, labelled line drawings — they read
        like textbook blackboards and never pretend to be photography. */
+    if (spec.type === 'copper-refining') return copperRefiningFig();
     const app = (spec.apparatus || (spec.type === 'apparatus' ? spec.parts : null)) || null;
     if (app || spec.type === 'reaction' || spec.type === 'beaker' || spec.type === 'test-tube' || spec.type === 'flask' || spec.type === 'burner') {
       return apparatusFig(spec);
@@ -1652,6 +1653,7 @@ UP.figures = (function () {
   function apparatusFig(spec) {
     const W=560, H=320;
     const parts = Array.isArray(spec.apparatus) ? spec.apparatus : (Array.isArray(spec.parts) ? spec.parts : []);
+    if (!parts.length || !parts.some(p=>p && ['beaker','test-tube','tube','flask','burner','flame'].includes(p.kind || p.shape))) return '';
     let inner = '';
     // bench line
     inner += `<line x1="40" y1="280" x2="520" y2="280" stroke="${C.line}" stroke-width="1.6"/>`;
@@ -1715,18 +1717,6 @@ UP.figures = (function () {
     function drawPlus(x,y){ return label(x,y,'+',{size:20,fill:C.ink,weight:700}); }
     function drawArrowSym(x,y){ return label(x,y,'→',{size:22,fill:C.green,weight:700}); }
 
-    // If no parts specified (e.g. balance equation), draw reagents -> products schematic
-    if (!parts.length) {
-      // show a generic "balanced equation" visual: left cup + right cup on a balance
-      inner += `<line x1="180" y1="90" x2="380" y2="90" stroke="${C.ink}" stroke-width="2"/>`;
-      inner += `<line x1="280" y1="90" x2="280" y2="220" stroke="${C.ink}" stroke-width="2"/>`;
-      inner += `<path d="M180,90 L150,140 L210,140 Z" fill="${C.skySoft}" stroke="${C.sky}" stroke-width="1.8"/>`;
-      inner += `<path d="M380,90 L350,140 L410,140 Z" fill="${C.green}33" stroke="${C.green}" stroke-width="1.8"/>`;
-      inner += `<line x1="230" y1="220" x2="330" y2="220" stroke="${C.ink}" stroke-width="2"/>`;
-      inner += label(180,175,'अभिकारक',{size:12,fill:C.skyDeep});
-      inner += label(380,175,'उत्पाद',{size:12,fill:C.green});
-      labels.push({x:280,y:260,t:'संतुलित समीकरण',en:'balanced equation'});
-    } else {
       parts.forEach((p,i) => {
         const kind = String(p.kind || p.shape || '').toLowerCase();
         if (kind === 'beaker') { inner += drawBeaker(x,p); labels.push({x:x,y:300,t:p.label||'बीकर',en:p.label||'beaker'}); x+=spaced; }
@@ -1737,7 +1727,6 @@ UP.figures = (function () {
         else if (kind === 'arrow') { inner += drawArrowSym(x-30, 200); x+=60; }
         else { x+=spaced*0.6; }
       });
-    }
     // arrow marker
     inner = `<defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="${C.ink}"/></marker></defs>` + inner;
     labels.forEach(l=>{ inner += label(l.x,l.y,l.t,{size:11,fill:C.inkSoft}); });
@@ -1768,35 +1757,54 @@ UP.figures = (function () {
     return wrap(W,H,inner);
   }
 
-  /* Very simple series circuit (battery + resistor) */
+  // Only a known two-resistor topology is supported, not an arbitrary network.
+  function circuitForQuestion(spec, question) {
+    const q=String(question||''), topology=/parallel/i.test(q)?'parallel':/series/i.test(q)?'series':null;
+    if (!topology || /three|four|mixed|combination|bridge|[3-9]\s+resistors/i.test(q)) return null;
+    let values=[...q.matchAll(/(\d+(?:\.\d+)?)\s*(k|M)?\s*(?:Ω|ohms?\b)/g)].map(m=>Number(m[1])*(m[2]==='k'?1000:m[2]==='M'?1000000:1));
+    const shared=q.match(/(\d+(?:\.\d+)?)\s*(?:and|,)\s*(\d+(?:\.\d+)?)\s*(?:Ω|ohms?\b)/i);
+    if (shared && values.length===1) values=[Number(shared[1]),Number(shared[2])];
+    if (!/two\s+(?:different\s+)?resist(?:ors|ances)|2\s+resistors|R[₁1].*R[₂2]/i.test(q) && values.length!==2) return null;
+    return Object.assign({},spec,{type:'circuit',topology,
+      resistors:[0,1].map(i=>({label:'R'+(i===0?'₁':'₂'),...(values.length===2?{value:values[i]}:{})})),
+      caption:(topology==='parallel'?'Two resistors in parallel — both share the same two nodes.':'Two resistors in series — one current path.')+(values.length===2?'':' R₁ and R₂ are symbolic; no unambiguous numeric resistance pair was provided.')});
+  }
   function circuitFig(spec) {
-    const W=560,H=260;
-    const cx=280,cy=130;
-    let inner = `<rect x="120" y="60" width="320" height="140" fill="none" stroke="${C.ink}" stroke-width="2"/>`;
-    // battery symbol on left side
-    const bx=120;
-    inner += `<line x1="${bx}" y1="100" x2="${bx}" y2="120" stroke="${C.ink}" stroke-width="2"/>`;
-    inner += `<line x1="${bx-12}" y1="120" x2="${bx+12}" y2="120" stroke="${C.ink}" stroke-width="3"/>`;
-    inner += `<line x1="${bx-6}" y1="130" x2="${bx+6}" y2="130" stroke="${C.ink}" stroke-width="1.8"/>`;
-    inner += `<line x1="${bx}" y1="130" x2="${bx}" y2="160" stroke="${C.ink}" stroke-width="2"/>`;
-    // resistor on top (zig-zag)
-    const rx=260,rw=80;
-    let zz = `<polyline points="`;
-    for(let i=0;i<=rw;i+=8){ zz += `${rx+i},${(i%16===0)?50:70} `; }
-    zz += `" fill="none" stroke="${C.ink}" stroke-width="2"/>`;
-    // gap in top line for resistor
-    inner += `<line x1="120" y1="60" x2="${rx}" y2="60" stroke="${C.ink}" stroke-width="2"/>`;
-    inner += `<line x1="${rx+rw}" y1="60" x2="440" y2="60" stroke="${C.ink}" stroke-width="2"/>`;
-    inner += zz;
-    label(cx,30,'R',{size:13,weight:700,fill:C.ink});
-    label(100,128,'+',{size:16,weight:700,fill:C.green});
-    label(100,138,'−',{size:16,weight:700,fill:C.red});
-    // current arrow
-    inner += `<line x1="200" y1="80" x2="230" y2="80" stroke="${C.skyDeep}" stroke-width="2" marker-end="url(#arr)"/>`;
-    inner = `<defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="${C.skyDeep}"/></marker></defs>` + inner;
-    if (spec.caption) inner += label(280,240,spec.caption,{size:11.5,weight:600});
-    else inner += label(280,240,'विद्युत परिपथ / electric circuit',{size:11,fill:C.inkSoft});
+    if (!spec || !['parallel','series'].includes(spec.topology) || !Array.isArray(spec.resistors) || spec.resistors.length!==2) return '';
+    if (spec.resistors.some(r=>!r || (r.value!=null && !(Number.isFinite(r.value)&&r.value>0)))) return '';
+    const parallel=spec.topology==='parallel', W=600,H=330;
+    const wire=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${C.ink}" stroke-width="2"/>`;
+    const resistor=(x,y,i)=>{
+      let pts=`${x},${y} `;
+      for(let j=1;j<10;j++)pts+=`${x+j*8},${y+(j%2?-9:9)} `;
+      pts+=`${x+80},${y}`;
+      const r=spec.resistors[i],text='R'+(i===0?'₁':'₂')+(r.value!=null?' = '+r.value+' Ω':'');
+      return `<g class="circuit-resistor" data-resistor="${i+1}"><polyline points="${pts}" fill="none" stroke="${C.ink}" stroke-width="2"/>${label(x+40,y-22,text,{weight:700})}</g>`;
+    };
+    let inner='';
+    if(parallel){
+      inner+=wire(140,80,140,260)+wire(460,80,460,260);
+      [80,175].forEach((y,i)=>{inner+=wire(140,y,260,y)+resistor(260,y,i)+wire(340,y,460,y);});
+      inner+=dot(140,175,4)+dot(460,175,4)+label(120,175,'A')+label(480,175,'B');
+    }else{
+      inner+=wire(100,100,180,100)+resistor(180,100,0)+wire(260,100,340,100)+resistor(340,100,1)+wire(420,100,500,100)+wire(100,100,100,260)+wire(500,100,500,260);
+    }
+    const left=parallel?140:100,right=parallel?460:500;
+    // Supply symbol has a real gap, never a wire shorting across the cell.
+    inner+=wire(left,260,290,260)+wire(310,260,right,260)+wire(290,240,290,280)+wire(310,249,310,271);
+    inner+=label(280,300,'+')+label(320,300,'−');
     return wrap(W,H,inner);
+  }
+
+  function copperRefiningFig() {
+    let inner=`<path d="M130 115 V285 H470 V115" fill="${C.skySoft}" stroke="${C.ink}" stroke-width="2"/>`;
+    inner+=`<rect x="195" y="105" width="28" height="125" fill="${C.creamDeep}" stroke="${C.ink}"/><rect x="381" y="105" width="8" height="125" fill="${C.sky}" stroke="${C.ink}"/>`;
+    inner+=`<path d="M209 105 V65 H270 M330 65 H385 V105" fill="none" stroke="${C.ink}" stroke-width="2"/><rect x="270" y="42" width="60" height="46" rx="5" fill="white" stroke="${C.ink}"/>`;
+    inner+=label(300,62,'DC')+label(280,79,'+')+label(320,79,'−');
+    inner+=label(190,315,'Impure Cu anode (+)')+label(415,315,'Pure Cu cathode (−)');
+    inner+=label(300,170,'Acidified CuSO₄(aq)')+label(300,195,'Cu²⁺  →  cathode')+label(300,216,'Soluble impurities remain in solution');
+    inner+=`<ellipse cx="210" cy="273" rx="26" ry="6" fill="${C.creamDeep}"/>`+label(300,257,'Anode mud (insoluble impurities)');
+    return wrap(600,350,inner);
   }
 
   /* Inclined-plane / pulley / simple pendulum */
@@ -1861,5 +1869,5 @@ UP.figures = (function () {
     return wrap(W,H,inner);
   }
 
-  return { autoFigureFor, autoSolid, autoComposite, figure, generic, compositeSolid, twoHemispheres, parabola, twoLines, distance, rightTriangle, elevation, sector, solid, diceGrid, similarTriangles, bpt, tangent, diamTangents, apLadder, meanLine, factorVenn, factorTree, sqrtLine, conceptMap, bars, apparatusFig, opticsFig, circuitFig, mechanicsFig, biologyFig };
+  return { circuitForQuestion, copperRefiningFig, autoFigureFor, autoSolid, autoComposite, figure, generic, compositeSolid, twoHemispheres, parabola, twoLines, distance, rightTriangle, elevation, sector, solid, diceGrid, similarTriangles, bpt, tangent, diamTangents, apLadder, meanLine, factorVenn, factorTree, sqrtLine, conceptMap, bars, apparatusFig, opticsFig, circuitFig, mechanicsFig, biologyFig };
 })();

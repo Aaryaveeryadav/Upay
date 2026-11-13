@@ -1833,7 +1833,7 @@ const handleRequest = async function (req, res) {
         '  • Electric circuits: {"type":"circuit","caption":"..."} (we draw a battery + resistor series; add switches/labels if asked).',
         '  • Mechanics (force/pendulum/inclined plane/pulleys): {"type":"pulley","mechanism":"incline|pendulum|pulley","caption":"..."}.',
         '  • Chemistry apparatus (test tubes / flasks / beakers / burners, e.g. electrolysis, reactions that are heated, gas collection): {"type":"apparatus","parts":[{"kind":"beaker|flask|test-tube|burner","label":"...","fillLevel":0.0-1.0,"color":"#hex"}],"caption":"..."}.',
-        '    For balancing/equation questions that do NOT ask for a setup (e.g. "Balance Fe + H2O → Fe3O4 + H2" or "define X"), return {"type":"apparatus","parts":[],"caption":"Balanced equation — left = reactants, right = products"} (this draws a balance scale, not a cylinder).',
+        '- For theory without a meaningful supported graphical setup, use diagram:null, not empty apparatus or a generic balance. For copper electrolytic refining use the copper-refining schema from the shared policy.',
         '  • Biology diagrams (leaf / cell / flower / heart): {"type":"bio","kind":"leaf|cell|flower|organ","caption":"..."}.',
         '- For theory without apparatus, use a conceptual flow diagram when helpful.',
         '- NEVER set diagram.type to "solid", "composite", "plane", "triangle", "circle", or "bars" for Chemistry or Biology — those are Maths/graph shapes and WILL BE REJECTED by the client.',

@@ -1624,7 +1624,7 @@ window.UP = window.UP || {};
     const mount = () => document.getElementById('answerMount');
     const paint = () => {
       const m = mount();
-      if (m) m.innerHTML = S.aiAnswer ? renderAIAnswer(S.aiAnswer) : renderAnswer(S.answer);
+      if (m) { m.innerHTML = S.aiAnswer ? renderAIAnswer(S.aiAnswer) : renderAnswer(S.answer); postRenderEnhance(m); }
       const status = document.getElementById('aiRequestStatus');
       if (status && S.aiState !== 'loading') status.remove();
       const thinking = document.getElementById('aiThinking');
@@ -1779,7 +1779,11 @@ window.UP = window.UP || {};
   }
   function renderSingleAIDiagram(a) {
     a = UP.answerFormat.answer(a);
-    const figSpec = a.diagram ? Object.assign({}, a.diagram, { caption: a.diagram.caption }) : null;
+    let figSpec = a.diagram ? Object.assign({}, a.diagram, { caption: a.diagram.caption }) : null;
+    const diagramQuestion = a.question || S.aiQuestion || '';
+    if (figSpec && figSpec.type === 'circuit') figSpec = UP.figures.circuitForQuestion(figSpec, diagramQuestion);
+    if (figSpec && /copper|ताँबा|तांबा/i.test(diagramQuestion) && /electrolytic refining|purif.*electroly|electroly.*purif/i.test(diagramQuestion) && ['apparatus','copper-refining'].includes(figSpec.type)) figSpec = {type:'copper-refining',caption:'Electrolytic refining of copper — labelled schematic, not to scale.'};
+    if (figSpec && figSpec.type === 'copper-refining' && !(/copper/i.test(diagramQuestion) && /electrolytic|electroly/i.test(diagramQuestion))) figSpec = null;
     let fig = '';
     /* Client-side safety: a "solid" diagram (cylinder/cone/sphere/...) is only
        honest for mensuration / geometry questions. If the subject is not
@@ -1807,7 +1811,7 @@ window.UP = window.UP || {};
          also fine (data). Reject solids entirely. */
       if (['science','physics','chemistry','biology'].includes(subject)) {
         if (ty === 'solid' || ty === 'composite') return false;
-        const sciAllowed = ['apparatus','beaker','test-tube','flask','burner','reaction',
+        const sciAllowed = ['copper-refining','apparatus','beaker','test-tube','flask','burner','reaction',
                            'lens','mirror','ray','optics','circuit','pulley','pendulum',
                            'bio','leaf','cell','flower','organ'];
         if (sciAllowed.indexOf(ty) >= 0) return true;
@@ -1847,6 +1851,7 @@ window.UP = window.UP || {};
           '</div><div class="figure-body">' + svg + '</div>' +
           '<figcaption>' + esc(figSpec.caption || '') + '</figcaption></figure>';
       } catch (e) { fig = ''; }
+      if (!fig && ['circuit','apparatus','reaction','beaker','test-tube','flask','burner'].includes(figSpec.type)) return '';
       if (!fig) fig = '<p class="muted ai-diagram-unavailable" role="status">' + (S.lang === 'hi' ? 'AI चित्र के निर्देशांक अधूरे हैं; चित्र नहीं दिखाया जा सका। व्याख्या नीचे उपलब्ध है।' : 'The AI diagram data could not be rendered safely. The written explanation is still available below.') + '</p>';
     }
     return fig;
@@ -1858,14 +1863,15 @@ window.UP = window.UP || {};
     a = UP.answerFormat.answer(exact || a);
     const fig = renderAIDiagram(a);
     const chk = a.check || null;
+    const theory = /^(?:describe|explain|discuss|identify|define|why\b|how\b)/i.test(a.question || S.aiQuestion || '');
     return `
-    <section class="answer ai-answer">
+    <section class="answer ai-answer" data-theory="${theory}">
       ${checkBadge(chk, true)}
       ${a.questionUnderstood ? `<div class="callout" style="margin-bottom:12px">${icon('info')}<div><b>${S.lang === 'hi' ? 'प्रश्न यह समझा गया' : 'Question understood as'}:</b> ${esc(a.questionUnderstood)}</div></div>` : ''}
       <div class="answer-head">
         <div class="meta-row">
           <span class="tag">${a.source === 'exact' ? (S.lang === 'hi' ? 'सटीक गणना से हल' : 'Solved by exact calculation') : (S.lang === 'hi' ? 'एआई द्वारा हल' : 'Solved by AI')}</span>
-          <span class="tag cream">${a.approaches.length} ${t('methods')}</span>
+          <span class="tag cream">${a.approaches.length} ${theory ? (S.lang === 'hi' ? 'व्याख्याएँ' : 'explanations') : t('methods')}</span>
           <span class="tag grey">${esc(a.model || '')}</span>
         </div>
         <div class="qtext">${esc(a.question || S.aiQuestion || '')}</div>
@@ -1877,7 +1883,7 @@ window.UP = window.UP || {};
         </div>
       </div>
       ${fig}
-      <div class="section-head" style="margin:6px 0 0"><div><h2 style="font-size:20px">${t('approaches')}</h2></div></div>
+      <div class="section-head" data-approaches-heading style="margin:6px 0 0"><div><h2 style="font-size:20px">${theory ? (S.lang === 'hi' ? 'अलग तरीकों से समझें' : 'Different ways to understand') : t('approaches')}</h2></div></div>
       ${a.methodsShort ? `<div class="callout warn" style="margin:0 0 14px">${icon('info')}<div>${esc(a.methodsNote || (S.lang === 'hi' ? 'इस प्रश्न में वास्तव में इतनी ही विधियाँ हैं।' : 'This question genuinely has only this many routes.'))}</div></div>` : ''}
       ${a.approaches.map((ap, i) => `
         <article class="approach ${i === 0 ? 'open' : 'closed'}" data-idx="${i}">
@@ -3973,6 +3979,7 @@ window.UP = window.UP || {};
     const approaches = root.querySelectorAll('.approach');
     approaches.forEach((art, idx) => {
       const isOpen = art.classList.contains('open');
+      const theory = !!art.closest('[data-theory="true"]');
       const next = approaches[idx + 1];
       // remove any previously-inserted CTAs
       const existing = art.querySelector(':scope > .next-method-cta');
@@ -3983,7 +3990,7 @@ window.UP = window.UP || {};
         btn.className = 'next-method-cta';
         btn.type = 'button';
         btn.dataset.action = 'next-method';
-        btn.innerHTML = icon('arrow') + ' ' + (S.lang === 'hi' ? 'अगली विधि देखें' : 'Show the next method') + (nextName ? ' — “' + nextName.textContent.trim() + '”' : '');
+        btn.innerHTML = icon('arrow') + ' ' + (theory ? (S.lang === 'hi' ? 'अगली व्याख्या देखें' : 'Show the next explanation') : (S.lang === 'hi' ? 'अगली विधि देखें' : 'Show the next method')) + (nextName ? ' — “' + esc(nextName.textContent.trim()) + '”' : '');
         const body = art.querySelector('.approach-body');
         if (body) body.appendChild(btn);
       }
@@ -3996,11 +4003,12 @@ window.UP = window.UP || {};
         // find the section-head that follows the figure and precedes approaches
         const heads = root.querySelectorAll('.section-head');
         for (const h of heads) {
-          if (h.textContent.includes(t('approaches'))) {
+          if (h.hasAttribute('data-approaches-heading') || h.textContent.includes(t('approaches'))) {
             if (!h.querySelector('.show-all-btn')) {
               const btn = document.createElement('button');
               btn.className = 'show-all-btn'; btn.type = 'button'; btn.dataset.action = 'expand-all';
-              btn.textContent = S.lang === 'hi' ? 'सभी विधियाँ दिखाएँ' : 'Show all methods';
+              const theory = !!h.closest('[data-theory="true"]');
+              btn.textContent = theory ? (S.lang === 'hi' ? 'सभी व्याख्याएँ दिखाएँ' : 'Show all explanations') : (S.lang === 'hi' ? 'सभी विधियाँ दिखाएँ' : 'Show all methods');
               h.appendChild(btn);
             }
             break;

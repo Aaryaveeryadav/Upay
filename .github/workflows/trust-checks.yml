@@ -26,6 +26,7 @@ jobs:
       - run: node tools/check/teacher_voice.js
       - run: node tools/check/prime_power_ratio.js
       - run: node tools/check/square_integers.js
+      - run: node tools/check/science_diagrams.js
       - run: node tools/check/trust_controls.js
       - run: node tools/check/ai_access.js
       - run: python3 tools/check/backend_smoke.py
@@ -67,6 +68,7 @@ jobs:
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/save_question_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/pasted_question_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/square_integer_browser.js
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 node tools/check/science_diagram_browser.js
           UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/physics_quality_browser.py
           python3 tools/check/physics_outline_smoke.py
           python3 tools/check/trust_browser_smoke.py
