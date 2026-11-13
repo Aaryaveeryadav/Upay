@@ -339,6 +339,9 @@ window.UP = window.UP || {};
           if (res.data && res.data.session) applySession(res.data.session);
           return res;
         }
+        // Preserve service limits and unconfirmed-email errors; a local login
+        // cannot solve cloud delivery limits and must not mask their diagnosis.
+        if (res.error && (Number(res.error.status) === 429 || ['over_email_send_rate_limit','over_request_rate_limit','email_not_confirmed'].includes(res.error.code) || /rate.*limit|email.*not confirmed/i.test(res.error.message || ''))) return res;
         // Supabase said invalid credentials — fall through to local auth so
         // that admin/student accounts on this server still work.
       } catch(e){ /* fall through */ }
@@ -3304,6 +3307,28 @@ window.UP = window.UP || {};
   }
 
   /* =============================== AUTH / ACCOUNT =============================== */
+  let authSubmitPending = false;
+  function authErrorMessage(error) {
+    const code = String(error && error.code || '');
+    const message = String(error && error.message || error || '');
+    if (code === 'over_email_send_rate_limit' || /email.*rate.*limit|rate.*limit.*email/i.test(message)) {
+      return S.lang==='hi'
+        ? 'इस साइट की पुष्टि ईमेल सेवा की भेजने की सीमा पूरी हो गई है। पहले से आए पुष्टि संदेश के लिए अपना इनबॉक्स और स्पैम देखें। संदेश न मिले तो साइट व्यवस्थापक से संपर्क करें; बार-बार कोशिश करने से सीमा नहीं हटेगी। खाता बनना पूरा हुआ है, यह अभी निश्चित नहीं है।'
+        : 'This site’s confirmation-email service has reached its sending limit. Check your inbox and spam for an earlier confirmation email. If none arrives, contact the site administrator; repeated retries will not clear the limit. Registration may not be complete yet.';
+    }
+    if (Number(error && error.status) === 429 || /rate.*limit|too many requests/i.test(message)) {
+      return S.lang==='hi' ? 'साइन-इन सेवा को अभी बहुत अधिक अनुरोध मिल रहे हैं। कुछ समय बाद कोशिश करें।'
+        : 'The sign-in service is receiving too many requests. Please wait before trying again.';
+    }
+    if (code === 'email_not_confirmed' || /email.*not confirmed/i.test(message)) {
+      return S.lang==='hi' ? 'साइन इन करने से पहले अपने इनबॉक्स के पुष्टि लिंक से ईमेल सत्यापित करें।'
+        : 'Confirm your email using the link in your inbox before signing in.';
+    }
+    if (/invalid.*(credentials|login)/i.test(message)) return S.lang==='hi'?'गलत ईमेल या पासवर्ड।':'Invalid email or password.';
+    if (/already.*registered/i.test(message)) return S.lang==='hi'?'यह ईमेल पहले से है। साइन इन कीजिए।':'That email is already registered. Please sign in.';
+    if (/password/i.test(message) && /too/i.test(message)) return S.lang==='hi'?'पासवर्ड बहुत छोटा है (कम से कम 6 अक्षर)।':'Password is too short (at least 6 characters).';
+    return message || (S.lang==='hi'?'अनुरोध पूरा नहीं हुआ। कृपया फिर कोशिश करें।':'The request could not be completed. Please try again.');
+  }
   let googleSignInPending = false;
   async function startGoogleSignIn(button) {
     if (googleSignInPending) return;
@@ -6076,8 +6101,12 @@ window.UP = window.UP || {};
     const authForm = e.target.closest('#authForm');
     if (!authForm) return;
     e.preventDefault();
+    if (authSubmitPending) return;
     const errEl = document.getElementById('authErr');
     const okEl = document.getElementById('authOk');
+    // Google errors use inline visibility; reset it before email-form feedback.
+    errEl.style.removeProperty('display');
+    okEl.style.removeProperty('display');
     errEl.classList.remove('on'); errEl.textContent = '';
     okEl.classList.remove('on'); okEl.textContent = '';
     const fd = new FormData(authForm);
@@ -6086,12 +6115,15 @@ window.UP = window.UP || {};
     const name = String(fd.get('name') || '').trim();
     const mode = document.querySelector('.auth-tab.on')?.dataset.tab || 'signin';
     if (!email || !password) { errEl.textContent = 'Email and password required.'; errEl.classList.add('on'); return; }
-    authForm.querySelector('button[type=submit]').disabled = true;
+    authSubmitPending = true;
+    const submitButton = authForm.querySelector('button[type=submit]');
+    submitButton.disabled = true;
+    submitButton.setAttribute('aria-busy', 'true');
     try {
       let res;
       if (mode === 'signup') {
         res = await UP.sbSignUp(email, password, name);
-        if (res.error) throw new Error(res.error.message);
+        if (res.error) throw res.error;
         okEl.textContent = S.lang==='hi'
           ? (res.data?.user?.identities?.length===0
              ? 'यह ईमेल पहले से पंजीकृत है। कृपया साइन इन करें।'
@@ -6101,10 +6133,10 @@ window.UP = window.UP || {};
              : res.data?.session ? 'Account created! You are now signed in.' : 'Check your email to complete registration, then sign in.');
         okEl.classList.add('on');
         if (res.data?.session) { setTimeout(() => go('#/home'), 500); }
-        else setTimeout(() => go('#/login?mode=signin'), 1400);
+        // Keep confirmation instructions visible until the student chooses Sign in.
       } else {
         res = await UP.sbSignIn(email, password);
-        if (res.error) throw new Error(res.error.message);
+        if (res.error) throw res.error;
         // If sign-in returned a server-local token (fallback path), apply it here
         // because Supabase's applySession() only fires for Supabase sessions.
         if (res.data && res.data.user && !S.user) {
@@ -6116,13 +6148,11 @@ window.UP = window.UP || {};
         go(S.user && S.user.mustChange ? '#/account' : '#/home');
       }
     } catch (err) {
-      let m = String(err.message || err);
-      if (/invalid.*(credentials|login)/i.test(m)) m = S.lang==='hi'?'गलत ईमेल या पासवर्ड।':'Invalid email or password.';
-      else if (/already.*registered/i.test(m)) m = S.lang==='hi'?'यह ईमेल पहले से है। साइन इन कीजिए।':'That email is already registered. Please sign in.';
-      else if (/password/i.test(m) && /too/i.test(m)) m = S.lang==='hi'?'पासवर्ड बहुत छोटा है (कम से कम 6 अक्षर)।':'Password is too short (at least 6 characters).';
-      errEl.textContent = m; errEl.classList.add('on');
+      errEl.textContent = authErrorMessage(err); errEl.classList.add('on');
     } finally {
-      authForm.querySelector('button[type=submit]').disabled = false;
+      authSubmitPending = false;
+      submitButton.disabled = false;
+      submitButton.removeAttribute('aria-busy');
     }
   });
 
