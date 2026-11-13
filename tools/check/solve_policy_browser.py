@@ -12,11 +12,12 @@ with sync_playwright() as p:
     page = browser.new_page(service_workers='block', viewport={'width':390,'height':844})
     errors = []
     page.on('pageerror', lambda e: errors.append(str(e)))
-    fixture = {'source':'ai','policyVersion':'three-approaches-v1','result':'A mock answer',
+    fixture = {'source':'ai','policyVersion':'four-approaches-v2','result':'A mock answer',
         'approaches':[{'name':n,'steps':[{'t':t}]} for n,t in [
             ('First principles','Explain the underlying concept.'),
             ('Worked example','Apply the concept to an example.'),
-            ('Comparison','Contrast related concepts.')]],
+            ('Comparison','Contrast related concepts.'),
+            ('Application','Apply to a new supported scenario.')]],
         'diagram':{'type':'flow','nodes':['Cause','<img src=x onerror=alert(1)>','Effect'],
             'caption':'Conceptual causal chain; not to scale.'},'check':{'state':'unchecked'}}
     page.route('**/api/tel', lambda r:r.fulfill(status=204))
@@ -33,4 +34,4 @@ with sync_playwright() as p:
         assert page.locator('#answerMount .ai-flow-nodes').evaluate('(e) => e.scrollWidth <= e.clientWidth')
     assert not errors, errors
     browser.close()
-print('PASS mocked three-approach answers and escaped concept diagrams across seven subjects on mobile')
+print('PASS mocked four-approach answers and escaped concept diagrams across seven subjects on mobile')

@@ -29,7 +29,7 @@ const {chromium}=require('playwright');
   await page.clock.fastForward(26000);
   assert.equal(await page.evaluate(()=>UP.S.aiState),'loading','do not abort a valid answer at the old 25s cutoff');
   assert((await page.locator('#aiRequestStatus').innerText()).includes('30 seconds'));
-  await pending[0].fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',result:'Mock answer',approaches:[1,2,3].map(i=>({name:'Explanation '+i,steps:[{t:'Mock step, not a mathematical solution.'}]}))})});
+  await pending[0].fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',result:'Mock answer',approaches:[1,2,3,4].map(i=>({name:'Explanation '+i,steps:[{t:'Mock step, not a mathematical solution.'}]}))})});
   await page.waitForFunction(()=>UP.S.aiState==='done');
   assert.equal(await page.locator('#aiRequestStatus').count(),0);
   assert.equal(await page.locator('#aiThinking').count(),0,'loading dots must disappear when the answer is ready');

@@ -26,7 +26,7 @@
   const shift='(n + '+h+')', equation='m² − '+shift+'² = '+D;
   const pairText=pairs.map(p=>'('+p.u+', '+p.v+')').join(', ');
   const positive=valid.map(p=>'('+p.u+', '+p.v+') ⇒ n = '+p.n).join('; ')||result;
-  return {source:'exact',kind:'integer-square',policyVersion:'three-approaches-v1',question,
+  return {source:'exact',kind:'integer-square',policyVersion:'four-approaches-v2',question,
    title:L('All positive integer solutions','सभी धन पूर्णांक हल'),result,
    summary:L('Complete the square, then enumerate every same-parity factor pair. This finds all solutions, not just one candidate.', 'पूर्ण वर्ग बनाकर समान सम-विषमता वाले सभी गुणनखंड युग्म जाँचें। इससे सभी हल मिलते हैं।'),
    approaches:[{
@@ -44,6 +44,11 @@
     name:L('Exact substitution and completeness check','सटीक प्रतिस्थापन और पूर्णता जाँच'),
     steps:solutions.length?solutions.map(s=>({t:L('Substitute n = '+s.n+' into the original expression.','मूल व्यंजक में n = '+s.n+' रखें।'),m:s.n+'² + '+b+' × '+s.n+' + '+c+' = '+(s.square*s.square)+' = '+s.square+'²'})):[{t:L('No same-parity factor pair yields n > 0.','किसी समान सम-विषमता वाले युग्म से n > 0 नहीं मिलता।'),m:result}],
     why:L('Substitution verifies each listed value; the exhaustive factor-pair search proves there are no other positive solutions. Checking examples alone would not prove completeness.','प्रतिस्थापन हर मान की जाँच करता है; सभी गुणनखंड युग्मों की खोज से सिद्ध होता है कि अन्य धन हल नहीं हैं।')
+   },{
+    name:L('Finite bound on n (alternative completeness argument)','n की सीमित सीमा से पूर्णता का तर्क'),
+    steps:[{t:L('Because u is a positive divisor of D, u ≥ 1 and v ≤ D.','u धन भाजक है, इसलिए u ≥ 1 और v ≤ D।'),m:'n = (v − u)/2 − '+h+' ≤ ('+D+' − 1)/2 − '+h},
+     {t:L('The divisor search covers every integer candidate that can meet the square condition within this bound.','इस सीमा में वर्ग की शर्त पूरी करने वाला हर संभावित मान भाजक खोज में शामिल है।'),m:result}],
+    why:L('This is an alternative way to justify the finite search, not a separate numerical solution set.','यह सीमित खोज का वैकल्पिक औचित्य है, अलग उत्तर-सूची नहीं।')
    }],
    verify:L('All same-parity positive factor pairs of '+D+' were enumerated; every retained value was checked in the original expression.','सभी समान सम-विषमता वाले धन गुणनखंड युग्म जाँचे गए और हर हल मूल व्यंजक में परखा गया।'),
    diagram:null,conceptDiagram:{type:'flow',nodes:[equation,'uv = '+D, 'n = (v − u)/2 − '+h,result],caption:L('Factor-pair proof flow; all admissible pairs are checked.','गुणनखंड युग्मों का तर्क; सभी उपयुक्त युग्म जाँचे गए।')},

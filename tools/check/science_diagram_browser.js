@@ -5,7 +5,7 @@ const assert=require('node:assert/strict');const {chromium}=require('playwright'
  try{for(const width of [1280,390]){
   const context=await browser.newContext({viewport:{width,height:844},serviceWorkers:'block'}),page=await context.newPage(),errors=[];let mode='parallel';
   page.on('pageerror',e=>errors.push(String(e)));
-  await page.route('**/api/ai/solve',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',result:'Synthetic explanation fixture',approaches:['Textbook description','Cause and effect','Comparison'].map(name=>({name,steps:[{t:'Synthetic explanation, not a numerical method.'}]})),diagram:mode==='parallel'?{type:'circuit',caption:'Two resistors in parallel',resistors:[{value:999},{value:999}]}:{type:'apparatus',parts:[],caption:mode==='copper'?'Electrolytic refining of copper':'No diagram'},conceptDiagram:mode==='copper'?{type:'flow',nodes:['Cu dissolves from anode','Pure Cu deposits at cathode','Impurities remain in solution or mud']}:null})}));
+  await page.route('**/api/ai/solve',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',result:'Synthetic explanation fixture',approaches:['Textbook description','Cause and effect','Comparison','Application'].map(name=>({name,steps:[{t:'Synthetic explanation, not a numerical method.'}]})),diagram:mode==='parallel'?{type:'circuit',caption:'Two resistors in parallel',resistors:[{value:999},{value:999}]}:{type:'apparatus',parts:[],caption:mode==='copper'?'Electrolytic refining of copper':'No diagram'},conceptDiagram:mode==='copper'?{type:'flow',nodes:['Cu dissolves from anode','Pure Cu deposits at cathode','Impurities remain in solution or mud']}:null})}));
   await page.goto(process.env.UPAY_BASE||'http://127.0.0.1:8005/',{waitUntil:'networkidle'});await page.waitForFunction(()=>window.UP&&UP.S&&document.body.classList.contains('up-ready'));
   const parallel='Explain two resistors of 2 Ω and 6 Ω connected in parallel.';
   await page.evaluate(q=>{UP.S.subject='physics';UP.S.cls=12;location.hash='#/ask?q='+encodeURIComponent(q);},parallel);
@@ -26,7 +26,7 @@ const assert=require('node:assert/strict');const {chromium}=require('playwright'
   mode='empty';await page.evaluate(()=>location.hash='#/ask?q=Describe%20an%20unsupported%20apparatus%20setup');
   await page.waitForFunction(()=>UP.S.aiAnswer&&UP.S.aiAnswer.question==='Describe an unsupported apparatus setup');
   assert.equal(await page.locator('.ai-answer .figure-body').count(),0);assert.equal(await page.locator('.ai-answer .figure-head').count(),0);
-  assert.equal(await page.locator('.ai-answer .approach').count(),3);
+  assert.equal(await page.locator('.ai-answer .approach').count(),4);
   assert.deepEqual(errors,[]);await context.close();
   console.log(`PASS ${width}px: actual parallel branches+given values, labelled copper cell+flow, theory labels, empty diagrams omitted`);
  }}finally{await browser.close();}

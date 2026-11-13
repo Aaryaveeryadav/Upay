@@ -13,7 +13,7 @@ const {PNG} = require('pngjs');
       let diagram;
       await page.route('**/api/ai/solve',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
         source:'ai',result:'Synthetic test only',summary:'Mock diagram regression',
-        approaches:['First principles','Example','Comparison'].map(name=>({name,steps:[{t:'Mock step, not a solution.'}]})),diagram
+        approaches:['First principles','Example','Comparison','Verification'].map(name=>({name,steps:[{t:'Mock step, not a solution.'}]})),diagram
       })}));
       await page.goto(process.env.UPAY_BASE||'http://127.0.0.1:8005/',{waitUntil:'networkidle'});
       await page.waitForFunction(()=>window.UP && UP.S && document.body.classList.contains('up-ready'));

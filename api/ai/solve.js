@@ -1,5 +1,6 @@
 'use strict';
 const squareInteger = require('../../assets/js/square-integers.js');
+const taskRouting = require('../../assets/js/task-routing.js');
 const solvePolicy = require('../../lib/solve-policy.js');
 const { consumeAI } = require('../../lib/ai-usage.js');
 const { aiFailure } = require('../../lib/ai-status.js');
@@ -51,14 +52,17 @@ module.exports = async function handler(req, res) {
   const question = String(b.question || '').trim();
   if (question.length < 3) return json(res, 400, { error: 'Type a question first.' });
 
-  const subject = String(b.subject || 'maths');
+  const subjectRouting = taskRouting.resolve(question, String(b.selectedSubject || b.subject || 'maths'));
+      const subject = subjectRouting.subject;
+      if (subjectRouting.language) b.lang = subjectRouting.language;
+      if (subjectRouting.changed) b.chapter = 0;
   const cls = Number(b.cls) || 10;
   const exact = ['maths','applied-maths'].includes(subject) && squareInteger.solve(question, b.lang);
-  if (exact) return json(res, 200, exact);
+  if (exact) return json(res, 200, Object.assign({subjectRouting},exact));
   const isAccountancy = subject === 'accountancy' || subject === 'computerized-accounting';
   const isEconomics = subject === 'economics';
   const isEnglish12 = subject === 'english' && cls === 12;
-  const noOfficialKey = isAccountancy || isEconomics || isEnglish12;
+  const noOfficialKey = isAccountancy || isEconomics || isEnglish12 || subjectRouting.task === 'writing' || ['social','hindi','english','sanskrit'].includes(subject);
   // Never reuse one student's potentially private prompt/answer for another.
   const cacheKey = JSON.stringify([solvePolicy.VERSION, user.id, subject, cls, String(b.lang || 'en').slice(0, 2).toLowerCase(), question.toLowerCase()]);
   const cached = noOfficialKey ? null : cacheGet(cacheKey);
@@ -84,7 +88,7 @@ module.exports = async function handler(req, res) {
     ' "check":"<how to verify the answer>",',
     ' "diagram":{"type":"plane|triangle|circle|bars|solid","points":[...],"circles":[...],"segments":[...],"bars":[...],"parts":[...],"labels":[...],"caption":"..."}}',
     'Rules:',
-    '- Give at least 3 genuinely different approaches. Same working under two labels is forbidden.',
+    '- Give at least 4 genuinely different approaches. Same working under two labels is forbidden.',
     '- Every step shows real working with the question\'s own numbers.',
     '- Verify arithmetic before writing. No unique answer? Say so in "answer".',
     '- Use · for decimals, √ π θ ° ∠ △ ⇒ as needed.',
@@ -108,7 +112,7 @@ module.exports = async function handler(req, res) {
     ' "check":"<how to verify>",',
     ' "diagram":<either null (no figure needed) OR a figure object below>}',
     'Rules:',
-    '- Give at least 3 genuinely different approaches.',
+    '- Give at least 4 genuinely different approaches.',
     '- Numericals: show every substitution with units. Balance every equation atom-by-atom.',
     '- Hindi NOT needed — English only.',
     '- Return a "diagram" ONLY when the question is about something that has a diagram:',
@@ -183,7 +187,7 @@ module.exports = async function handler(req, res) {
     // One bounded repair call, sharing the original 30-second deadline.
     let draft;
     try { draft = firstJSON(out.text); } catch (_) { draft = null; }
-    if (draft && solvePolicy.distinctApproaches(draft.approaches).length < 3) {
+    if (draft && solvePolicy.distinctApproaches(draft.approaches).length < 4) {
       out = await Promise.race([
         callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), null, out.model),
         timeoutPromise
@@ -215,7 +219,7 @@ module.exports = async function handler(req, res) {
     note: String((st && st.note) || '')
   })).filter(st => st.t);
   const answer = {
-    source: 'ai', policyVersion: solvePolicy.VERSION, model: model,
+    source: 'ai', subjectRouting, policyVersion: solvePolicy.VERSION, model: model,
     questionUnderstood: String(parsed.question_understood || ''),
     result: String(parsed.answer || ''), summary: String(parsed.summary || ''),
     verify: typeof parsed.check === 'string' ? parsed.check : '',
@@ -230,8 +234,8 @@ module.exports = async function handler(req, res) {
       : 'AI-generated; not independently checked.' },
     generatedAt: new Date().toISOString()
   };
-  if (answer.approaches.length < 3 || !answer.result) {
-    return json(res, 502, { error: 'The AI could not provide three distinct usable approaches. Please try again.', fallback: true });
+  if (answer.approaches.length < 4 || !answer.result) {
+    return json(res, 502, { error: 'The AI could not provide four distinct usable approaches. Please try again.', fallback: true });
   }
   if (!noOfficialKey) cacheSet(cacheKey, answer);
   return json(res, 200, answer);

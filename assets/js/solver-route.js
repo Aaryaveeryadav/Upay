@@ -212,6 +212,7 @@ window.UP = window.UP || {};
   UP.answerQuestion = function (q) {
     const raw = String(q || '').trim();
     if (raw.length < 2) return null;
+    if (UP.taskRouting && UP.taskRouting.resolve(raw, 'maths').task === 'writing') return null;
     const exactSquare = UP.squareInteger && UP.squareInteger.solve(raw, 'en');
     if (exactSquare) return exactSquare;
     const s = UP.norm(raw).toLowerCase();
@@ -306,6 +307,7 @@ window.UP = window.UP || {};
 
   /* ---------- fallback: structured study answer ---------- */
   UP.fallbackAnswer = function (q, lang, loadingHint) {
+    if (UP.taskRouting && UP.taskRouting.resolve(q, 'maths').task === 'writing') return {kind:'ai-waiting',question:q,_loading:true,approaches:[],summary:{en:'A writing response is needed, not a numerical calculation.',hi:'यह लेखन कार्य है, संख्यात्मक गणना नहीं।'},result:''};
     const ch = detectChapter(q);
     if (ch) return topicAnswer(q, lang);
     if (loadingHint) {

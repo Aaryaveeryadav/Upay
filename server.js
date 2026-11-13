@@ -13,6 +13,7 @@
      data/secret.key  the AES key for the encrypted admin password
    ===================================================================== */
 'use strict';
+const taskRouting = require('./assets/js/task-routing.js');
 const solvePolicy = require('./lib/solve-policy.js');
 
 const http = require('http');
@@ -1746,14 +1747,17 @@ const handleRequest = async function (req, res) {
          maths vs chemistry, and we never want the old cached maths diagram
          (the bug: a cylinder r=2 h=4 under a balancing question) to leak into
          a chemistry answer. */
-      const subject = String(b.subject || 'maths');
+      const subjectRouting = taskRouting.resolve(question, String(b.selectedSubject || b.subject || 'maths'));
+      const subject = subjectRouting.subject;
+      if (subjectRouting.language) b.lang = subjectRouting.language;
+      if (subjectRouting.changed) b.chapter = 0;
       const cls = Number(b.cls) || 10;
       const exact = ['maths','applied-maths'].includes(subject) && require('./assets/js/square-integers.js').solve(question, b.lang);
-      if (exact) return json(res, 200, exact);
+      if (exact) return json(res, 200, Object.assign({subjectRouting},exact));
       const isAccountancy = subject === 'accountancy' || subject === 'computerized-accounting';
       const isEconomics = subject === 'economics';
       const isEnglish12 = subject === 'english' && cls === 12;
-      const noOfficialKey = isAccountancy || isEconomics || isEnglish12;
+      const noOfficialKey = isAccountancy || isEconomics || isEnglish12 || subjectRouting.task === 'writing' || ['social','hindi','english','sanskrit'].includes(subject);
       const qLang = String(b.lang || 'en').slice(0, 2).toLowerCase();
       const cacheKey = aiCacheKey(sess, 'solve', subject, cls, qLang, question);
       // Do not reuse cached replies for subjects without an official key.
@@ -1798,7 +1802,7 @@ const handleRequest = async function (req, res) {
         ' "check":"<how to verify the answer>",',
         ' "diagram":{"type":"plane|triangle|circle|bars|solid","points":[...],"circles":[...],"segments":[...],"bars":[...],"parts":[...],"labels":[...],"caption":"..."}}',
         'Rules:',
-        '- Give at least 3 genuinely different approaches. Same working under two labels is forbidden.',
+        '- Give at least 4 genuinely different approaches. Same working under two labels is forbidden.',
         '- Every step shows real working with the question\'s own numbers.',
         '- Verify arithmetic before writing. No unique answer? Say so in "answer".',
         '- Use · for decimals, √ π θ ° ∠ △ ⇒ as needed.',
@@ -1824,7 +1828,7 @@ const handleRequest = async function (req, res) {
         ' "check":"<how to verify>",',
         ' "diagram":<either null (no figure needed) OR a figure object below>}',
         'Rules:',
-        '- Give at least 3 genuinely different approaches. Many theory questions have one honest route; give just that.',
+        '- Give at least 4 genuinely different approaches. Many theory questions have one honest route; give just that.',
         '- Numericals: show every substitution with units. Balance every equation atom-by-atom.',
         '- Chemical equations: use → for yields, ↑/↓ for gas/precipitate when appropriate. Balance atoms on BOTH sides.',
         '- Hindi NOT needed — English only.',
@@ -1845,14 +1849,14 @@ const handleRequest = async function (req, res) {
         'You are an experienced CBSE Class ' + cls + ' Social Science teacher (History / Geography / Civics / Economics). Answer the question asked.',
         'Reply with ONLY this JSON shape:',
         '{"question_understood":"...","answer":"<short answer>","summary":"<2 sentences>","approaches":[{"name":"<angle>","tag":"<when to use>","steps":[{"t":"<point>"}],"why":"...","watch":"..."}],"check":"...","diagram":null}',
-        'Rules: At least 3 approaches (causes / effects / constitutional article / map-location angle). Use dates and article numbers accurately. Use a conceptual flow diagram when helpful. Hindi not needed.'
+        'Rules: At least 4 approaches (causes / effects / constitutional article / map-location angle). Use dates and article numbers accurately. Use a conceptual flow diagram when helpful. Hindi not needed.'
       ];
 
       const langPrompt = [
         'You are an experienced CBSE Class ' + cls + ' ' + subject + ' teacher. Answer the literature/grammar question asked.',
         'Reply with ONLY this JSON shape:',
         '{"question_understood":"...","answer":"<short answer / भावार्थ / व्याकरण स्पष्टीकरण>","summary":"<2 sentences>","approaches":[{"name":"<विधि / angle>","tag":"<when to use>","steps":[{"t":"<point / स्पष्टीकरण>"}],"why":"...","watch":"..."}],"check":"...","diagram":null}',
-        'Rules: At least 3 approaches (सप्रसंग व्याख्या / भावार्थ / व्याकरण-विश्लेषण / सन्दर्भ-सहित-उत्तर). Hindi/Sanskrit may appear in "answer" if the question is in that language; explanations match the language the student used. Use a conceptual flow diagram when helpful.'
+        'Rules: At least 4 approaches (सप्रसंग व्याख्या / भावार्थ / व्याकरण-विश्लेषण / सन्दर्भ-सहित-उत्तर). Hindi/Sanskrit may appear in "answer" if the question is in that language; explanations match the language the student used. Use a conceptual flow diagram when helpful.'
       ];
 
       const accountancyPrompt = [
@@ -1898,7 +1902,7 @@ const handleRequest = async function (req, res) {
         out = await callGeminiResilient(prompt, plain, db.settings.geminiModel);
         let draft;
         try { draft = firstJSON(out.text); } catch (_) { draft = null; }
-        if (draft && solvePolicy.distinctApproaches(draft.approaches).length < 3) {
+        if (draft && solvePolicy.distinctApproaches(draft.approaches).length < 4) {
           out = await callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), plain, out.model);
         }
       } catch (e) {
@@ -1958,7 +1962,7 @@ const handleRequest = async function (req, res) {
       }).filter(function (st) { return st.t; });
 
       const answer = {
-        source: 'ai', policyVersion: solvePolicy.VERSION,
+        source: 'ai', subjectRouting, policyVersion: solvePolicy.VERSION,
         model: out.model,
         questionUnderstood: String(parsed.question_understood || ''),
         result: String(parsed.answer || ''),
@@ -1979,8 +1983,8 @@ const handleRequest = async function (req, res) {
 
       if (!answer.approaches.length) return json(res, 502, { error: 'The model returned no solvable steps. Try rephrasing.', fallback: true });
 
-      if (answer.approaches.length < 3) return json(res, 502, {
-        error: 'The AI could not provide three distinct usable approaches. Please try again.', fallback: true
+      if (answer.approaches.length < 4) return json(res, 502, {
+        error: 'The AI could not provide four distinct usable approaches. Please try again.', fallback: true
       });
       answer.methodCount = answer.approaches.length;
 

@@ -6,7 +6,7 @@ const answer=UP.answerQuestion(question);
 assert.equal(answer.kind,'prime-power-ratio');
 assert(answer.result.en.startsWith('a²b'));
 assert(answer.result.en.includes('if a = b, the ratio is a'));
-assert.equal(answer.approaches.length,3);
+assert.equal(answer.approaches.length,4);
 const rendered=JSON.stringify(answer);
 assert(rendered.includes('LCM = a³b³') && rendered.includes('HCF = ab²'));
 assert(!rendered.includes('HCF = 3'));
@@ -37,4 +37,4 @@ for(let i=1;i<=4;i++)for(let j=1;j<=4;j++)for(let k=1;k<=4;k++)for(let l=1;l<=4;
  assert.equal(symbolic.kind,'prime-power-ratio');
  assert(!symbolic.result.en.includes('HCF ='));
 }
-console.log('PASS requested symbolic quotient, three approaches, ambiguity caveat, notation variants, unsafe-input refusal, numeric HCF regression and 256 exponent combinations');
+console.log('PASS requested symbolic quotient, four approaches, ambiguity caveat, notation variants, unsafe-input refusal, numeric HCF regression and 256 exponent combinations');

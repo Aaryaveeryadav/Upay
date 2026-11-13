@@ -1474,7 +1474,7 @@ window.UP = window.UP || {};
       </div>
 
       ${S.aiState === 'loading' ? `<div class="ai-thinking" id="aiThinking">${loadingDots()}</div>` : ''}
-      ${S.aiState === 'loading' ? `<p id="aiRequestStatus" class="muted" role="status">${S.lang === 'hi' ? 'तीन व्याख्याएँ और उपयोगी चित्र तैयार हो रहे हैं…' : 'Preparing three explanations and relevant diagrams…'}</p>` : ''}
+      ${S.aiState === 'loading' ? `<p id="aiRequestStatus" class="muted" role="status">${S.lang === 'hi' ? 'चार व्याख्याएँ और उपयोगी चित्र तैयार हो रहे हैं…' : 'Preparing four explanations and relevant diagrams…'}</p>` : ''}
       <div id="answerMount">${S.aiAnswer ? renderAIAnswer(S.aiAnswer) : (S.answer ? renderAnswer(S.answer) : emptyAsk())}</div>
     </div>`;
   }
@@ -1619,6 +1619,8 @@ window.UP = window.UP || {};
   function aiScope() { return JSON.stringify([S.savedKey, +S.cls, S.board, S.subject]); }
   function askAI(q) {
     S.aiErrorCode = ''; S.aiRetryAt = 0;
+    const routing = UP.taskRouting.resolve(q, S.subject);
+    const responseLang = routing.language || S.lang;
     const scope = aiScope();
     const isCurrent = () => S.aiQuestion === q && S.aiScope === scope && aiScope() === scope;
     const mount = () => document.getElementById('answerMount');
@@ -1630,16 +1632,16 @@ window.UP = window.UP || {};
       const thinking = document.getElementById('aiThinking');
       if (thinking && S.aiState !== 'loading') thinking.remove();
     };
-    const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(q, S.lang);
+    const exact = ['maths','applied-maths'].includes(routing.subject) && UP.squareInteger.solve(q, responseLang);
     if (exact) {
-      S.aiAnswer = exact; S.aiState = 'done'; paint(); return;
+      exact.subjectRouting = routing; S.aiAnswer = exact; S.aiState = 'done'; paint(); return;
     }
     const goLocal = (note, showRetry) => {
       if (!isCurrent()) return;
       S.aiState = 'local';
       S.aiNote = note || '';
       S.aiRetry = !!showRetry;
-      if (needsAIOnly()) {
+      if (needsAIOnly() || routing.task === 'writing' || !['maths','applied-maths'].includes(routing.subject)) {
         S.aiAnswer = null;
         S.answer = { kind: isAccountancyTrack() ? 'accountancy-unavailable' : 'no-local-solver', question: q,
           note: /built-in solver|बिल्ट-इन हल/.test(note || '') ? '' : (note || '') };
@@ -1660,7 +1662,7 @@ window.UP = window.UP || {};
         m.insertBefore(d, m.firstChild);
       }
     };
-    if (businessTrack()) { goLocal('Business Studies AI is not enabled; use the supplied outlines.', false); return; }
+    if (routing.subject === 'business-studies') { goLocal('Business Studies AI is not enabled; use the supplied outlines.', false); return; }
     // "taking a moment" nudge — after 6s swap the spinner text
     let slowTimer = setTimeout(() => {
       const m = mount();
@@ -1679,7 +1681,7 @@ window.UP = window.UP || {};
       req = fetch('/api/ai/solve', {
         method: 'POST',
         headers: { 'content-type': 'application/json', authorization: 'Bearer ' + (localStorage.getItem('upay.token') || '') },
-        body: JSON.stringify({ question: q, chapter: chapterById(S.chapterId) ? S.chapterId : 0, subject: S.subject, cls: S.cls, lang: S.lang }),
+        body: JSON.stringify({ question: q, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0), subject: routing.subject, selectedSubject:S.subject, cls: S.cls, lang:responseLang }),
         signal: controller ? controller.signal : undefined
       });
     } catch (e) { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'नेटवर्क से संपर्क नहीं हुआ' : 'could not reach the server', true); return; }
@@ -1690,9 +1692,9 @@ window.UP = window.UP || {};
     })
       .then(({ ok, j }) => {
         if (!isCurrent()) return;
-        if (ok && j && j.approaches && j.approaches.length) {
+        if (ok && j && j.approaches && j.approaches.length >= 4) {
           j = UP.answerFormat.answer(j);
-          j.question = q;
+          j.question = q; j.subjectRouting = routing;
           j._chId = S.chapterId || 0;
           S.aiAnswer = j; S.aiState = 'done';
           pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
@@ -1842,7 +1844,7 @@ window.UP = window.UP || {};
         '<ol class="ai-flow-nodes">' + nodes.map(n => '<li>' + esc(n.slice(0, 180)) + '</li>').join('') + '</ol>' +
         '<figcaption>' + esc(String(figSpec.caption || '').slice(0, 600)) + '</figcaption></figure>';
     }
-    if (!fig && figSpec && figSpec.type !== 'flow' && UP.figures && UP.figures.generic && diagramIsHonestForSubject(figSpec, a.question || S.aiQuestion || '', S.subject)) {
+    if (!fig && figSpec && figSpec.type !== 'flow' && UP.figures && UP.figures.generic && diagramIsHonestForSubject(figSpec, a.question || S.aiQuestion || '', UP.taskRouting.resolve(a.question || S.aiQuestion || '', S.subject).subject)) {
       try {
         const svg = UP.figures.generic(figSpec);
         if (svg) fig = '<figure class="figure-card"><div class="figure-head">' +
@@ -1862,10 +1864,12 @@ window.UP = window.UP || {};
     if (exact && a === S.aiAnswer) S.aiAnswer = exact;
     a = UP.answerFormat.answer(exact || a);
     const fig = renderAIDiagram(a);
+    const routing = a.subjectRouting || UP.taskRouting.resolve(a.question || S.aiQuestion || '', S.subject);
     const chk = a.check || null;
-    const theory = /^(?:describe|explain|discuss|identify|define|why\b|how\b)/i.test(a.question || S.aiQuestion || '');
+    const theory = routing.task === 'writing' || /^(?:describe|explain|discuss|identify|define|why\b|how\b)/i.test(a.question || S.aiQuestion || '');
     return `
     <section class="answer ai-answer" data-theory="${theory}">
+      ${routing.changed ? `<div class="callout"><div>${S.lang === 'hi' ? 'इस प्रश्न का विषय पहचाना गया' : 'Detected task subject'}: <b>${esc(routing.subject)}</b>. ${S.lang === 'hi' ? 'आपका चुना हुआ विषय बदला नहीं गया है।' : 'Your selected subject has not been changed.'}</div></div>` : ''}
       ${checkBadge(chk, true)}
       ${a.questionUnderstood ? `<div class="callout" style="margin-bottom:12px">${icon('info')}<div><b>${S.lang === 'hi' ? 'प्रश्न यह समझा गया' : 'Question understood as'}:</b> ${esc(a.questionUnderstood)}</div></div>` : ''}
       <div class="answer-head">
@@ -1969,7 +1973,7 @@ window.UP = window.UP || {};
   function renderCachedAnswer(j, qq, sol, ansBox, id) {
     const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
     j = UP.answerFormat.answer(exact || j);
-    if (!j || j.policyVersion !== 'three-approaches-v1' || !j.approaches || j.approaches.length < 3) return false;
+    if (!j || j.policyVersion !== 'four-approaches-v2' || !j.approaches || j.approaches.length < 4) return false;
     const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
       (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
       '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + mathText(j.answer || j.result) + '</div>' +
@@ -2000,6 +2004,10 @@ window.UP = window.UP || {};
     if (ansBox) ansBox.hidden = false;
     const qq = (UP.pyq || []).find(x => x.id === id);
     if (!qq) return;
+    if (ansBox && UP.taskRouting.resolve(qq.en || qq.hi || '', S.subject).task === 'writing') {
+      const answerText = ansBox.querySelector('b');
+      if (answerText) answerText.textContent = S.lang === 'hi' ? 'इस लेखन कार्य के लिए नीचे व्याख्या देखें।' : 'See the writing response below; a numeric key is not applicable.';
+    }
     const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
     if (exact) { renderCachedAnswer(exact, qq, sol, ansBox, id); return; }
 
@@ -2008,7 +2016,7 @@ window.UP = window.UP || {};
     // Check answer cache first
     // Old locally cached AI replies may have been made with a maths prompt.
     // Never reuse them as an Accountancy answer or official answer key.
-    const sourceTrack = qq.subject === 'accountancy' || qq.subject === 'computerized-accounting' || qq.keyVerified === false;
+    const sourceTrack = qq.subject === 'accountancy' || qq.subject === 'computerized-accounting' || qq.keyVerified === false || UP.taskRouting.resolve(qq.en || qq.hi || '', S.subject).task === 'writing';
     const cached = sourceTrack ? null : UP.answers.get(id);
     if (cached && renderCachedAnswer(cached, qq, sol, ansBox, id)) { warmNextQuestions(id); return; }
 
@@ -2024,7 +2032,7 @@ window.UP = window.UP || {};
       /* imported:true turns on the corrupt gate.  Without it the server
          happily spent a model call answering a question whose fraction was
          lost in extraction -- and then showed that answer as a solution. */
-      body: JSON.stringify({ question: ask, chapter: qq.ch, imported: true, options: hasOpts(qq) ? qq.opts.length : 0, subject: S.subject, cls: S.cls, lang: S.lang })
+      body: JSON.stringify({ question: pyqQuestionText(qq) + (hasOpts(qq) ? '\nOptions: ' + qq.opts.map(o=>o.en || P(o)).join('; ') : ''), chapter: qq.ch, imported: true, options: hasOpts(qq) ? qq.opts.length : 0, subject: S.subject, cls: S.cls, lang: S.lang })
     }).then(r => {
       /* A non-2xx reply used to be thrown away unread (`.then(r => r.ok ? r.json()
          : null)`), so EVERY failure -- a timed-out session, the daily quota, a
@@ -2045,11 +2053,11 @@ window.UP = window.UP || {};
                                      : 'The server\'s reply could not be read (HTTP ' + reply.status + '). Try again.') + '</div></div>';
         return;
       }
-      if (!j.approaches || !j.approaches.length) {
+      if (!j.approaches || j.approaches.length < 4) {
         /* 401/403 = the sign-in lapsed or there is no API key. Show the LOCAL
            solver answer underneath the sign-in banner so the student still gets
            help, instead of a dead panel they cannot read. */
-        const accTrack = needsAIOnly() || qq.keyVerified === false;
+        const accTrack = needsAIOnly() || qq.keyVerified === false || UP.taskRouting.resolve(qq.en || qq.hi || '', S.subject).task === 'writing';
         const localAns = accTrack ? null : ((UP.answerQuestion && UP.answerQuestion(qq))
                        || (UP.fallbackAnswer && UP.fallbackAnswer(qq.en + ' ' + (qq.hi || ''), S.lang))
                        || null);
@@ -2151,16 +2159,19 @@ window.UP = window.UP || {};
       } else if (claim) localBadge = checkBadge({ state: 'unchecked' }, false);
     } catch (e) { /* a missing checker must never break the answer */ }
     const isLoading = ans._loading === true;
+    const answerRoute = UP.taskRouting.resolve(ans.question || S.aiQuestion || '', S.subject);
+    const answerSubject = P(UP.subjects[answerRoute.subject]) || answerRoute.subject;
     return `
     <section class="answer">
       ${localBadge}
+      ${!isLoading && methods.length < 4 ? '<p class="muted">' + (S.lang === 'hi' ? 'यह स्थानीय प्रारंभिक हल है; पूर्ण AI उत्तर में कम-से-कम चार उपयोगी तरीके माँगे गए हैं।' : 'Local starter solution; the complete AI response requests at least four useful approaches.') + '</p>' : ''}
       <div class="answer-head">
         <div class="meta-row">
-          <span class="tag">${esc(ch ? P({ en: ch.en, hi: ch.hi }) : (isLoading ? (S.lang==='hi'?'एआई':'AI') : (S.lang === 'hi' ? 'अवधारणा' : 'Concept')))}</span>
+          <span class="tag">${esc(ch && !answerRoute.changed ? P({ en: ch.en, hi: ch.hi }) : (isLoading ? (S.lang==='hi'?'एआई':'AI') : (S.lang === 'hi' ? 'अवधारणा' : 'Concept')))}</span>
           ${isLoading
             ? `<span class="tag cream spin-tag">${icon('clock')} ${S.lang==='hi'?'हल हो रहा है…':'working…'}</span>`
             : `<span class="tag cream">${methods.length} ${t('methods')}</span>`}
-          <span class="tag grey">${S.lang === 'hi' ? 'कक्षा' : 'Class'} ${S.cls} · ${esc(P(UP.subjects[S.subject] || UP.subjects.maths))}</span>
+          <span class="tag grey">${S.lang === 'hi' ? 'कक्षा' : 'Class'} ${S.cls} · ${esc(answerSubject)}</span>
         </div>
         <div class="qtext">${esc(ans.question || '')}</div>
         <div style="font-size:14px;color:var(--ink-600)">${rich(P(ans.summary))}</div>
@@ -3869,6 +3880,7 @@ window.UP = window.UP || {};
       const q = r.params.q ? UP.answerFormat.question(r.params.q).trim() : r.params.q;
       if (q) r.params.q = q;
       S.q = q || '';
+      if (q && UP.taskRouting.resolve(q, S.subject).task === 'writing' && S.answer && S.answer.kind !== 'ai-waiting') { S.answer = accountancyAIWaiting(q); }
       if (q) {
         /* the local engine answers instantly so the page is never blank;
            the AI answer replaces it when it arrives.
@@ -3879,7 +3891,8 @@ window.UP = window.UP || {};
           let ans;
           // Try to find the underlying PYQ object to get its .approaches
           const pyq = (UP.pyq || []).find(x => x === q || (q.id && x.id === q.id) || x.en === q);
-          if (needsAIOnly()) {
+          const taskRoute = UP.taskRouting.resolve(q, S.subject);
+          if (needsAIOnly() || taskRoute.task === 'writing' || !['maths','applied-maths'].includes(taskRoute.subject)) {
             ans = accountancyAIWaiting(q);
           } else if (pyq && pyq.approaches && pyq.approaches.length) {
             ans = {
@@ -4632,7 +4645,8 @@ window.UP = window.UP || {};
   function questionCard(q) {
     const a = S.answers[q.no];
     const sourceQuestion = !!(q.raw && q.raw.paperCode);
-    const graded = !sourceQuestion && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim());
+    const writingTask = UP.taskRouting.resolve(P(q), S.subject).task === 'writing';
+    const graded = !writingTask && !sourceQuestion && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim());
     const diff = q.d >= 3 ? 3 : q.d >= 2 ? 2 : 1;
     const opts = hasOpts(q) ? `<div class="q-opts">${q.opts.map((o, i) => {
       const label = String.fromCharCode(65 + i);
@@ -4718,8 +4732,9 @@ window.UP = window.UP || {};
     const sourceQuestion = !!(q.raw && q.raw.paperCode);
     const autoFig = sourceQuestion ? null : autoFigureForQuestion(q);
     const fig = q.fig ? (typeof q.fig === 'string' ? boardFig(q) : figureFromTest(q)) : autoFig;
-    const hasAns = q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim() && String(q.ans) !== 'Proof (standard theorem)');
-    const hasSteps = !!(q.steps && q.steps.length && q.steps.some(s => String(s.en || s.hi || (typeof s === 'string' ? s : '')).trim().length > 5));
+    const writingTask = UP.taskRouting.resolve(P(q), S.subject).task === 'writing';
+    const hasAns = !writingTask && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim() && String(q.ans) !== 'Proof (standard theorem)');
+    const hasSteps = !writingTask && !!(q.steps && q.steps.length && q.steps.some(s => String(s.en || s.hi || (typeof s === 'string' ? s : '')).trim().length > 5));
     const aiProvided = !!(q.aiAnswer || q.aiSteps);
     const exactProvided = q.aiSolution && q.aiSolution.source === 'exact';
     const ansVal = exactProvided ? q.aiAnswer : hasAns && !sourceQuestion ? String(q.ans) : (q.aiAnswer || (S.lang === 'hi' ? '(कोई सत्यापित उत्तर उपलब्ध नहीं)' : '(no verified answer available)'));
@@ -4764,7 +4779,7 @@ window.UP = window.UP || {};
       .then(({ok,j})=>{
         q.aiLoading=false;
         if (!isCurrent()) return;
-        if (ok && j.approaches && j.approaches.length) {
+        if (ok && j.approaches && j.approaches.length >= 4) {
           j = UP.answerFormat.answer(j);
           const first = j.approaches[0];
           q.aiSolution = Object.assign({}, j, {question:qText});
@@ -5276,11 +5291,11 @@ window.UP = window.UP || {};
   /* ============================== EVENTS ============================== */
   function answerToText(a) {
     if (!a) return '';
-    const isHi = S.lang === 'hi';
+    const isHi = ((a.subjectRouting && a.subjectRouting.language) || S.lang) === 'hi';
     const q = (a.question || a.q || S.q || '').trim();
     const summary = P(a.summary || '').trim();
     const ans = P(a.answer || a.result || a.final || '').trim();
-    const methods = (a.approaches || []).slice(0, 3);
+    const methods = (a.approaches || []).slice(0, 4);
     let out = '';
     if (q) out += (isHi ? 'प्रश्न: ' : 'Question: ') + q + '.\n\n';
     if (summary) out += summary + '.\n\n';
@@ -5588,7 +5603,7 @@ window.UP = window.UP || {};
       const q = String(tgt.dataset.q || '').trim(); if (!q) return;
       if (!S.saved.some(item => item.q === q)) {
         const item = {q, date:new Date().toISOString().slice(0,10), at:Date.now(),
-          subject:S.subject, cls:+S.cls, board:S.board, tag:'', chapter:''};
+          subject:UP.taskRouting.resolve(q,S.subject).subject, cls:+S.cls, board:S.board, tag:'', chapter:''};
         S.saved.unshift(item); S.saved = S.saved.slice(0,200); saveSaved(); addSavedRemote(item);
       }
       // No whole-page redraw: saving must not move the question or reset inputs.
@@ -5698,7 +5713,8 @@ window.UP = window.UP || {};
         if (speechSession !== session) return;
         if (index >= parts.length) { stopAnswerSpeech(); return; }
         const u = session.utterance = new SpeechSynthesisUtterance(parts[index++]);
-        u.lang = S.lang === 'hi' ? 'hi-IN' : 'en-IN';
+        const speechLanguage = (S.aiAnswer && S.aiAnswer.subjectRouting && S.aiAnswer.subjectRouting.language) || S.lang;
+        u.lang = speechLanguage === 'hi' ? 'hi-IN' : 'en-IN';
         const settings = UP.teacherVoice.select(window.speechSynthesis.getVoices(), u.lang);
         u.rate = settings.rate; u.pitch = settings.pitch; u.volume = settings.volume;
         if (settings.voice) u.voice = settings.voice;

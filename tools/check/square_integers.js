@@ -4,7 +4,7 @@ const data=s.compute(q),answer=s.solve(q);
 assert.deepEqual(data.solutions.map(v=>v.n),[15,27,327,995]);
 assert.deepEqual(data.solutions.map(v=>v.square),[49,55,335,1001]);
 assert.equal(answer.result,'n = 15, 27, 327, 995');
-assert.equal(answer.check.source,'arithmetic');assert.equal(answer.approaches.length,3);
+assert.equal(answer.check.source,'arithmetic');assert.equal(answer.approaches.length,4);
 assert.notEqual(Math.sqrt(191**2+10*191+2026),Math.floor(Math.sqrt(191**2+10*191+2026)));
 for(const variant of [q.replace('²','^2'),q.replace('n²+10n+2026',String.raw`\(n^{2}+10n+2026\)`)])assert.deepEqual(s.compute(variant).solutions,data.solutions);
 for(let b=0;b<=16;b+=2)for(let D=1;D<=100;D++){
