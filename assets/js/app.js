@@ -3615,48 +3615,66 @@ window.UP = window.UP || {};
      ============================================================ */
   async function shareAnswerAsImage() {
     const a = spokenAnswer(); if (!a) return;
-    const W = 1080, H = 1350;
-    const c = document.createElement('canvas'); c.width=W; c.height=H;
-    const ctx = c.getContext('2d');
-    // Cream background
-    ctx.fillStyle = '#fdfbf6'; ctx.fillRect(0,0,W,H);
-    // Brand band
-    ctx.fillStyle = '#46a0c9'; ctx.fillRect(0,0,W,72);
-    ctx.fillStyle = '#fff'; ctx.font = 'bold 36px system-ui, -apple-system, "Noto Sans Devanagari", sans-serif'; ctx.fillText('Upay · उपाय', 48, 50);
-    ctx.font = '20px system-ui'; ctx.fillText('one question, every way to solve it', W-500, 50);
-    // Wrap helper
-    function wrap(text, x, y, maxW, lh, font, color){
-      ctx.font = font; ctx.fillStyle = color;
-      const words = String(text).split(/\s+/); let line='', yy=y;
-      words.forEach(w=>{ const t = line + (line?' ':'') + w; if(ctx.measureText(t).width>maxW){ctx.fillText(line,x,yy);line=w;yy+=lh;} else line=t; });
-      if(line) ctx.fillText(line,x,yy); return yy;
+    document.getElementById('share-preview')?.remove();
+    const dialog=document.createElement('dialog');dialog.id='share-preview';dialog.className='share-preview';
+    dialog.innerHTML='<h2>Share answer image</h2><p data-share-status>Preparing a readable preview…</p><div data-share-picture></div><div class="pactions"><button class="btn btn-primary" data-share-native hidden>Share image</button><button class="btn btn-cream" data-share-download disabled>Download image</button><button class="btn btn-ghost" data-share-close>Close</button></div>';
+    document.body.appendChild(dialog);dialog.showModal();
+    const close=()=>dialog.remove();dialog.querySelector('[data-share-close]').onclick=close;
+    dialog.addEventListener('cancel',e=>{e.preventDefault();close();});
+    if(document.fonts && document.fonts.ready) await document.fonts.ready;
+    if(!dialog.isConnected)return;
+    const W=1080,c=document.createElement('canvas'),ctx=c.getContext('2d'),rows=[];
+    let y=118,truncated=false;
+    const fontFamily=getComputedStyle(document.body).fontFamily;
+    function block(text,font,color,lh,gap=16){
+      font=font.replace('system-ui',fontFamily);
+      ctx.font=font;
+      const paragraphs=String(text||'').split(/\n/);
+      for(const paragraph of paragraphs){
+        let line='';
+        const put=()=>{if(y>7650){truncated=true;line='';return;}rows.push({text:line,font,color,y});y+=lh;line='';};
+        for(const word of paragraph.split(/\s+/).filter(Boolean)){
+          if(line&&ctx.measureText(line+' '+word).width>960)put();
+          if(ctx.measureText(word).width>960){
+            for(const ch of Array.from(word)){if(ctx.measureText(line+ch).width>960)put();line+=ch;}
+          }else line+=(line?' ':'')+word;
+        }
+        if(line)put();else y+=lh/2;
+      }
+      y+=gap;
     }
-    let y=120;
-    ctx.fillStyle='#2b3a42';
-    y = wrap(P(a.question||S.q||''), 60, y, W-120, 36, 'bold 30px system-ui', '#2b3a42');
-    y += 20;
-    y = wrap((S.lang==='hi'?'उत्तर: ':'Answer: ') + P(a.answer||a.result||''), 60, y, W-120, 32, '600 26px "Noto Serif", Georgia, serif', '#1c4962');
-    y += 30;
-    const ap = (a.approaches||[])[0];
-    if (ap) {
-      y = wrap(P(ap.name) + ' — ' + (P(ap.tag||'')), 60, y, W-120, 26, 'bold 22px system-ui', '#46a0c9');
-      y += 10;
-      (ap.steps||[]).slice(0,8).forEach((s,i)=>{
-        y = wrap((i+1)+'. '+P(s.t||''), 80, y, W-160, 26, '20px "Noto Serif", Georgia, serif', '#2b3a42');
-        y += 8;
-        if (y > H-200) return;
+    block(P(a.question||S.aiQuestion||S.q||''),'bold 30px system-ui','#2b3a42',44,20);
+    block((S.lang==='hi'?'उत्तर: ':'Answer: ')+P(a.answer||a.result||''),'600 26px system-ui','#1c4962',40,24);
+    const ap=(a.approaches||[])[0];
+    if(ap){
+      block(P(ap.name)+(P(ap.tag||'')?' — '+P(ap.tag):''),'bold 24px system-ui','#28789b',38,18);
+      (ap.steps||[]).forEach((st,i)=>{
+        block((ap.format==='prose'?'':(i+1)+'. ')+P(st.t||''),'24px system-ui','#2b3a42',38,6);
+        if(st.m)block(UP.answerFormat.text(st.m),'24px system-ui','#1c4962',38,6);
+        if(st.note)block(P(st.note),'22px system-ui','#58656c',34,14);
       });
     }
-    // Footer
-    ctx.fillStyle='#94a4ad'; ctx.font='18px system-ui';
-    ctx.fillText('upay.fyi  ·  AI-generated answer — cross-check with your textbook', 60, H-50);
-    c.toBlob(blob=>{
-      if(!blob) return;
-      const f = new File([blob], 'upay-answer.png', {type:'image/png'});
-      if(navigator.share && navigator.canShare && navigator.canShare({files:[f]})){
-        navigator.share({files:[f], title:'Upay answer', text:P(a.question||'').slice(0,80)}).catch(()=>downloadLink(c));
-      } else downloadLink(c);
-    });
+    c.width=W;c.height=Math.max(500,Math.min(7900,y+140));
+    ctx.fillStyle='#fdfbf6';ctx.fillRect(0,0,W,c.height);
+    ctx.fillStyle='#46a0c9';ctx.fillRect(0,0,W,72);
+    ctx.fillStyle='#fff';ctx.font='bold 36px system-ui';ctx.fillText('Upay',48,50);
+    rows.forEach(r=>{ctx.font=r.font;ctx.fillStyle=r.color;ctx.fillText(r.text,60,r.y);});
+    ctx.fillStyle='#58656c';ctx.font='20px system-ui';
+    ctx.fillText(truncated?'First explanation excerpt · open Upay for the complete answer':'First explanation · cross-check with your textbook',60,c.height-65);
+    ctx.fillText('Upay · '+location.origin,60,c.height-30);
+    const blob=await new Promise(resolve=>c.toBlob(resolve,'image/png'));
+    if(!dialog.isConnected)return;
+    if(!blob){dialog.querySelector('[data-share-status]').textContent='Image could not be prepared. Please try again.';return;}
+    const url=URL.createObjectURL(blob),img=document.createElement('img');img.src=url;img.alt='Preview of the question, answer and first explanation';
+    dialog.querySelector('[data-share-picture]').appendChild(img);
+    const oldClose=close;dialog.querySelector('[data-share-close]').onclick=()=>{URL.revokeObjectURL(url);oldClose();};
+    dialog.addEventListener('cancel',()=>URL.revokeObjectURL(url),{once:true});
+    const file=new File([blob],'upay-answer.png',{type:'image/png'}),share=dialog.querySelector('[data-share-native]');
+    let canShare=false;try{canShare=!!(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]}));}catch(e){/* use explicit download fallback */}
+    dialog.querySelector('[data-share-status]').textContent=canShare?'Preview the image, then share or download it.':'File sharing is not supported in this browser. Preview the image and choose Download image to save it.';
+    share.hidden=!canShare;
+    share.onclick=async()=>{try{await navigator.share({files:[file],title:'Upay answer'});}catch(e){if(e.name!=='AbortError')dialog.querySelector('[data-share-status]').textContent='Sharing was unavailable. You can choose Download image instead.';}};
+    const download=dialog.querySelector('[data-share-download]');download.disabled=false;download.onclick=()=>downloadLink(blob,'upay-answer.png');
   }
   function downloadLink(what, name){
     const a = document.createElement('a');
@@ -3956,11 +3974,10 @@ window.UP = window.UP || {};
       }
       const mockScope = [S.board, String(S.cls), S.subject].join('|');
       if (S.mockTest && S.mockTest.scope !== mockScope) clearMockTest();
-      if (S.mockTest) S.mockTest.ungraded = true;
       html = S.mockTest && S.mockTest.finished ? viewMockResult() : viewMockTest({subject:S.subject});
       setTimeout(startMockTimer,50);
     }
-    else if (r.name === 'mockresult') { if (S.mockTest) S.mockTest.ungraded = true; html = viewMockResult(); }
+    else if (r.name === 'mockresult') { html = viewMockResult(); }
     else if (r.name === 'cheatsheet') html = viewCheatsheet({ch:r.id});
     else if (r.name === 'search') html = viewSearch(r.params);
     else html = viewHome();
@@ -6394,33 +6411,49 @@ function viewMockTest(params){
     S.mockTest = { subject, scope:[S.board, String(S.cls), subject].join('|'), started:Date.now(), items:picked, answers:{}, durations:{}, finished:false, ungraded };
     store.set(mockStoreKey(), S.mockTest);
   }
-  // Older in-progress sessions must not suddenly be marked by the local solver.
-  S.mockTest.ungraded = true;
+  // Old imported keys remain ungraded unless explicitly verified and supported.
   const picked = S.mockTest.items;
-  const unkeyedTrack = true;
   const answers = S.mockTest.answers || (S.mockTest.answers = {});
+  S.mockTest.submitted = S.mockTest.submitted || {};
   const attempted = Object.values(answers).filter(v => String(v || '').trim()).length;
+  const score = UP.mockAssessment.score(S.mockTest);
   return `<section class="page-head">
     <span class="eyebrow">${icon('clock')} ${S.lang==='hi'?'मॉक टेस्ट':'Mock test'}</span>
     <h1>${esc(P(UP.subjects[subject]))} — ${picked.length} ${S.lang==='hi'?'प्रश्न':'questions'}</h1>
-    <p>${unkeyedTrack
-      ? (S.lang==='hi'?'3 घंटे · अभ्यास प्रश्न · सभी प्रश्नों की सत्यापित कुंजी उपलब्ध न होने से अंक नहीं दिए जाते':'3 hours · practice questions · ungraded because complete verified keys are not available')
-      : (S.lang==='hi'?'3 घंटे · CBSE पैटर्न · सबमिट पर स्वतः मूल्यांकन':'3 hours · CBSE pattern · auto-graded on submit')}</p>
+    <p>3 hours · ${score.knownTotal} known marks${score.unknownMarks ? ' · '+score.unknownMarks+' questions with marks not supplied' : ''}. Only verified objective/numeric keys are auto-marked; theory, workings and unverified keys need review. This is a practice sample, not an official board paper.</p>
   </section>
-  <div class="card flat" style="padding:14px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+  <div class="card flat mock-toolbar">
     <div id="mock-timer" style="font-size:22px;font-weight:700;font-variant-numeric:tabular-nums">03:00:00</div>
-    <div style="flex:1"></div>
     <span id="mock-progress" class="tag grey">${attempted} / ${picked.length}</span>
-    <button class="btn btn-primary btn-sm" id="mock-submit">${icon('check')} ${unkeyedTrack ? (S.lang==='hi'?'अभ्यास पूरा करें':'Finish practice') : (S.lang==='hi'?'जमा करें':'Submit test')}</button>
+    <button class="btn btn-primary btn-sm" id="mock-submit">${icon('check')} ${S.lang==='hi'?'टेस्ट समाप्त करें':'Finish test & see marks'}</button>
   </div>
-  <ol class="mock-list" id="mock-list" style="padding:0;margin:12px 0 0;list-style:none">
-    ${picked.map((it,i)=>`<li class="card flat" data-i="${i}" style="padding:14px 16px;margin-bottom:10px">
-      <div class="meta-row"><span class="tag cream">Q${i+1}</span><span class="tag grey">${esc(it.chName)}</span>${it.source ? `<span class="tag">${esc([it.source.paperCode, it.source.session, it.source.part ? 'Part ' + it.source.part : '', it.source.option ? 'Option ' + it.source.option : ''].filter(Boolean).join(' · '))}</span>` : ''}</div>
-      <p style="margin:8px 0;font-size:14.5px">${esc(it.q)}</p>
-      <textarea rows="2" class="mock-ans" data-i="${i}" placeholder="${S.lang==='hi'?'अपना उत्तर लिखें…':'Your answer…'}" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;resize:vertical;background:#fff">${esc(answers[i] || '')}</textarea>
-    </li>`).join('')}
+  <ol class="mock-list" id="mock-list" style="padding:0;margin:12px 0;list-style:none">
+    ${picked.map((it,i)=>mockQuestionCard(it,i,false)).join('')}
   </ol>`;
 }
+function mockQuestionCard(it,i,result){
+  const test=S.mockTest,submitted=!!(test.submitted||{})[i],answer=(test.answers||{})[i]||'',a=UP.mockAssessment.assess(it,answer),m=UP.mockAssessment.marks(it);
+  const detailsId='mock-info-'+i;
+  return `<li class="card flat mock-question" data-mock-question="${i}">
+    <div class="meta-row"><span class="tag cream">Q${i+1}</span><span class="tag grey">${m===null?'Marks not supplied':m+' mark'+(m===1?'':'s')}</span>
+    <details class="mock-info"><summary aria-label="Chapter and marks for question ${i+1}" aria-controls="${detailsId}">${icon('info')} Question info</summary><div id="${detailsId}"><b>Chapter:</b> ${esc(it.chName||'Not mapped')}<br><b>Marks:</b> ${m===null?'Not supplied by source':m}<br><b>Source:</b> ${esc(it.source && (it.source.src||it.source.paperCode)||'Practice question')}</div></details></div>
+    <p class="mock-qtext">${esc(it.q)}</p>
+    ${it.source&&Array.isArray(it.source.opts)?'<ul>'+it.source.opts.map((o,j)=>'<li>'+String.fromCharCode(65+j)+'. '+esc(P(o))+'</li>').join('')+'</ul>':''}
+    <label class="mini-label" for="mock-answer-${i}">Your answer</label>
+    <textarea id="mock-answer-${i}" rows="3" class="mock-ans" data-i="${i}" ${submitted||result?'readonly':''}>${esc(answer)}</textarea>
+    ${result?'':`<div class="pactions"><button class="btn btn-primary btn-sm" data-mock-submit="${i}" ${submitted?'disabled':''}>${submitted?'Answer submitted':'Submit answer'}</button><button class="btn btn-cream btn-sm" data-mock-edit="${i}" ${submitted?'':'disabled'}>Edit answer</button></div>`}
+    ${submitted||result?mockFeedback(it,i,a,result):'<p class="muted">Draft saved on this device. Submit to check, or keep editing.</p>'}
+    ${result&&a.awarded===null&&m!==null?`<div class="mock-review"><label for="mock-review-${i}">Optional self-assessment after rubric/teacher review (not verified marks):</label><input id="mock-review-${i}" type="number" min="0" max="${m}" step="0.5" value="${esc((test.reviewMarks||{})[i]??'')}" aria-label="Self-assessed marks for question ${i+1}"><button class="btn btn-cream btn-sm" data-mock-review="${i}">Save review marks</button></div>`:''}
+    ${result?`<details class="mock-correction"><summary>Practise a correction (does not change test marks)</summary><label for="mock-revision-${i}">Revised answer</label><textarea id="mock-revision-${i}" class="mock-revision" data-i="${i}" rows="3">${esc((test.revisions||{})[i]||'')}</textarea><button class="btn btn-cream btn-sm" data-mock-recheck="${i}">Check correction</button><p data-mock-revision-status="${i}" role="status"></p></details>`:''}
+  </li>`;
+}
+function mockFeedback(it,i,a,result){
+  const labels={correct:'Correct',incorrect:'Incorrect',pending:'Submitted · review needed',unattempted:'Not answered'};
+  const score=a.awarded===null?'Marks pending review':a.awarded+' / '+a.max+' marks';
+  let guidance=a.status==='incorrect'?'Compare your answer with the verified key, identify the differing value/option, then rework the question and check it again.':a.status==='pending'?'A verified objective key/rubric is unavailable for automatic marking. Ask a teacher to review your reasoning, required points and units; no AI score is being treated as official.':a.status==='correct'?'Your answer matches the verified key.':'Attempt the question before reviewing its solution.';
+  return `<div class="callout ${a.status==='incorrect'?'warn':'tip'} mock-feedback" role="status"><div><b>${labels[a.status]} · ${score}</b><p>${esc(guidance)}</p>${a.expected?'<p><b>Verified reference answer:</b> '+esc(a.expected)+'</p>':''}<a class="btn btn-ghost btn-sm" href="#/ask?q=${encodeURIComponent(it.q)}">Understand the solution (AI explanation, not a marking scheme)</a> ${it.ch?'<a class="btn btn-ghost btn-sm" href="#/chapter/'+encodeURIComponent(it.ch)+'">Revise chapter</a>':''}</div></div>`;
+}
+
 function startMockTimer(){
   const el=document.getElementById('mock-timer'); if(!el) return;
   const end = S.mockTest.started + 3*3600*1000;
@@ -6436,22 +6469,24 @@ function submitMockTest(auto){
   if(!S.mockTest || S.mockTest.finished) return;
   clearInterval(window.__mtTimer);
   S.mockTest.finished = true;
-  S.mockTest.ungraded = true;
-  const attempted = Object.values(S.mockTest.answers || {}).filter(v => String(v || '').trim()).length;
-  S.mockTest.score = { correct: null, attempted, total: S.mockTest.items.length, ungraded: true };
+  S.mockTest.submitted = S.mockTest.submitted || {};
+  S.mockTest.items.forEach((_,i)=>{S.mockTest.submitted[i]=true;});
+  S.mockTest.score = UP.mockAssessment.score(S.mockTest);
   store.set('mockLast' + ownerSuffix(), S.mockTest);
   store.set(mockStoreKey(), S.mockTest);
   render();
 }
 function viewMockResult(){
-  const r = S.mockTest && S.mockTest.score;
-  if(!r) return `<div class="empty"><h3>${S.lang==='hi'?'कोई टेस्ट पूरा नहीं हुआ':'No completed test'}</h3><p><a class="btn btn-primary btn-sm" href="#/mock">${S.lang==='hi'?'मॉक टेस्ट शुरू करें':'Start a mock test'}</a></p></div>`;
-  return `<section class="page-head">
-    <span class="eyebrow">${icon('check')} ${S.lang==='hi'?'अभ्यास पूरा':'Practice complete'}</span>
-    <h1>${S.lang==='hi'?'अंक नहीं दिए गए':'Ungraded practice'}</h1>
-    <p>${S.lang==='hi'?`${r.attempted}/${r.total} प्रश्नों का प्रयास किया। सभी प्रश्नों की सत्यापित कुंजी उपलब्ध नहीं है, इसलिए अंक नहीं दिए गए।`:`Attempted ${r.attempted} of ${r.total}. Complete verified answer keys are not available, so no score was assigned.`}</p>
-    <div style="margin-top:14px"><a class="btn btn-primary btn-sm" href="#/mock?new=1">${icon('clock')} ${S.lang==='hi'?'नया अभ्यास':'New practice'}</a></div>
-  </section>`;
+  const test=S.mockTest;
+  if(!test || !test.finished)return '<div class="empty"><h3>No completed test</h3><a href="#/mock">Start a mock test</a></div>';
+  const r=UP.mockAssessment.score(test);
+  return `<section class="page-head"><span class="eyebrow">Test completed</span>
+    <h1>${r.gradable?r.earned+' / '+r.gradable+' auto-marked marks':'Marks pending review'}</h1>
+    <p>${r.attempted} / ${r.total} questions attempted. Known paper total: ${r.knownTotal} marks${r.unknownMarks?' · '+r.unknownMarks+' questions have no supplied marks':''}.</p>
+    <p>${r.pending} questions (${r.pendingMarks} known marks) need review. Pending marks are not counted as zero, and this is not a final board score. Descriptive answers require a marking rubric/human review.</p>
+    ${r.selfReviewed?'<p class="mock-estimate"><b>Self-assessed practice estimate: '+(r.earned+r.selfEarned)+' / '+(r.gradable+r.selfPossible)+' reviewed marks.</b> Includes '+r.selfReviewed+' user-reviewed answers, not independently verified; other pending questions are excluded.</p>':''}
+    <a class="btn btn-primary btn-sm" href="#/mock?new=1">New practice test</a></section>
+    <ol class="mock-list" style="padding:0;list-style:none">${test.items.map((it,i)=>mockQuestionCard(it,i,true)).join('')}</ol>`;
 }
 function quickLocalAnswer(q){ try { return window.localSolve ? window.localSolve(q,{subj:S.subject,cls:S.cls,lang:S.lang}) : null; } catch(e){return null;} }
 
@@ -6919,6 +6954,35 @@ document.addEventListener('click', function(e){
   }
   if(act==='mock-submit' || act==='submitMock'){ e.preventDefault(); submitMockTest(); return; }
 },{capture:true});
+document.addEventListener('click',function(e){
+  const button=e.target.closest('[data-mock-submit],[data-mock-edit],[data-mock-recheck],[data-mock-review]');
+  if(!button||!S.mockTest)return;
+  e.preventDefault();const test=S.mockTest;
+  if(button.hasAttribute('data-mock-review')){
+    const i=Number(button.dataset.mockReview);if(!test.finished||!test.items[i])return;
+    const a=UP.mockAssessment.assess(test.items[i],(test.answers||{})[i]||'');
+    const input=document.getElementById('mock-review-'+i),value=input.value.trim(),n=Number(value);
+    if(a.awarded!==null||a.max===null)return;
+    if(value===''||!Number.isFinite(n)||n<0||n>a.max||!Number.isInteger(n*2)){toast('Enter review marks from 0 to '+a.max+' in half-mark steps.');return;}
+    test.reviewMarks=test.reviewMarks||{};test.reviewMarks[i]=n;store.set(mockStoreKey(),test);render();return;
+  }
+  if(button.hasAttribute('data-mock-recheck')){
+    const i=Number(button.dataset.mockRecheck);if(!test.finished||!test.items[i])return;
+    const a=UP.mockAssessment.assess(test.items[i],(test.revisions||{})[i]||'');
+    const status=document.querySelector('[data-mock-revision-status="'+i+'"]');
+    status.textContent=a.status==='correct'?'Correction matches the verified key. Original test marks are unchanged.':a.status==='incorrect'?'Still differs from the verified key. Review the reference answer and try again.':'Correction saved. Teacher/rubric review is needed; original test marks are unchanged.';
+    return;
+  }
+  if(test.finished)return;
+  if(Date.now()>=test.started+3*3600000){submitMockTest(true);return;}
+  const submit=button.hasAttribute('data-mock-submit'),i=Number(submit?button.dataset.mockSubmit:button.dataset.mockEdit);
+  if(!test.items[i])return;
+  test.submitted=test.submitted||{};
+  if(submit){if(!String((test.answers||{})[i]||'').trim()){toast('Write an answer before submitting.');return;}test.submitted[i]=true;}
+  else delete test.submitted[i];
+  store.set(mockStoreKey(),test);render();
+  if(!submit)document.getElementById('mock-answer-'+i)?.focus();
+});
 /* mock-submit is rendered without data-action (uses an id); bind via delegation */
 document.addEventListener('click',function(e){
   const b = e.target.closest('#mock-submit');
@@ -6932,8 +6996,13 @@ document.addEventListener('change',function(e){
   if(t){ const k=t.dataset.toggle; if(k==='large') applyLargeText(t.checked); if(k==='dyslexic') applyDyslexic(t.checked); return; }
 });
 document.addEventListener('input',function(e){
+  if(e.target.classList && e.target.classList.contains('mock-revision')){
+    if(!S.mockTest||!S.mockTest.finished)return;
+    S.mockTest.revisions=S.mockTest.revisions||{};S.mockTest.revisions[+e.target.dataset.i]=e.target.value;store.set(mockStoreKey(),S.mockTest);return;
+  }
   if(e.target.classList && e.target.classList.contains('mock-ans')){
-    const i=+e.target.dataset.i; if(!S.mockTest) return;
+    const i=+e.target.dataset.i; if(!S.mockTest || S.mockTest.finished || (S.mockTest.submitted||{})[i]) return;
+    if(Date.now()>=S.mockTest.started+3*3600000){submitMockTest(true);return;}
     S.mockTest.answers[i] = e.target.value;
     store.set(mockStoreKey(), S.mockTest);
     const done = Object.values(S.mockTest.answers).filter(v => String(v || '').trim()).length;

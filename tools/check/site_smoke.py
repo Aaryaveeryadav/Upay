@@ -78,8 +78,8 @@ def main():
         pg.locator('.mock-ans').first.fill('A practice answer')
         pg.locator('#mock-submit').click()
         pg.wait_for_function('UP.S.mockTest && UP.S.mockTest.finished')
-        assert pg.evaluate('UP.S.mockTest.score.correct === null && UP.S.mockTest.score.ungraded'), 'unverified maths mock was given a score'
-        assert 'no score was assigned' in pg.locator('#view').inner_text(), 'ungraded mock result is not clearly labelled'
+        assert pg.evaluate('UP.S.mockTest.score.pending > 0'), 'unverified questions must remain pending review'
+        assert 'need review' in pg.locator('#view').inner_text(), 'pending marks are not clearly labelled'
         print('MOCK no unverified score OK', flush=True)
         ctx.close()
 

@@ -1649,3 +1649,21 @@ h1:lang(hi), h2:lang(hi), h3:lang(hi), .approach-body p:lang(hi), .snippet block
 ol.prose-answer { list-style: none; padding-left: 0; }
 ol.prose-answer > li { padding-left: 0; margin-bottom: 1em; white-space: pre-wrap; line-height: 1.8; }
 ol.prose-answer > li::before { content: none; display: none; }
+
+/* Share preview is explicit: opening it never downloads a file. */
+.share-preview { width:min(680px,94vw); max-height:90vh; overflow:auto; border:1px solid var(--line); border-radius:18px; padding:22px; background:var(--paper,#fdfbf6); color:var(--ink,#2b3a42); }
+.share-preview::backdrop { background:#0009; }
+.share-preview img { display:block; width:100%; height:auto; border:1px solid var(--line); margin:12px 0; }
+.mock-toolbar { padding:14px 16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.mock-question { padding:16px; margin-bottom:14px; }
+.mock-qtext { white-space:pre-wrap; margin:10px 0; }
+.mock-ans,.mock-revision { width:100%; box-sizing:border-box; border:1px solid var(--line); border-radius:10px; padding:10px; font:inherit; resize:vertical; background:#fff; }
+.mock-ans[readonly] { background:#f4f3ee; }
+.mock-info summary,.mock-correction summary { cursor:pointer; display:flex; align-items:center; gap:6px; padding:8px 0; }
+.mock-info summary svg { width:18px; height:18px; }
+.mock-info > div { padding:10px; border:1px solid var(--line); border-radius:8px; }
+.mock-feedback p { margin:8px 0; }
+.share-preview [hidden] { display:none !important; }
+.mock-review { margin:12px 0; display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.mock-review label { flex-basis:100%; font-size:13px; }
+.mock-review input { width:85px; padding:8px; border:1px solid var(--line); border-radius:8px; }
