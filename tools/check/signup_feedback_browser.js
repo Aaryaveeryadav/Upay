@@ -33,12 +33,26 @@ const {chromium}=require('playwright');
   assert(!(await page.locator('#authForm button[type=submit]').isDisabled()));
   assert.equal(await page.locator('#authOk').innerText(),'');
   assert.equal(await page.evaluate(()=>UP.S.user),null);
-  // Cloud rate limits and unconfirmed emails must never trigger a local fallback.
-  for(const error of [{code:'over_request_rate_limit',status:429,message:'Service is busy'},{code:'email_not_confirmed',status:400,message:'Email not confirmed'}]){
+  // Cloud errors and email credentials must never fall through to local auth.
+  for(const error of [
+   {code:'over_request_rate_limit',status:429,message:'Service is busy'},
+   {code:'email_not_confirmed',status:400,message:'Email not confirmed'},
+   {code:'invalid_credentials',status:400,message:'Invalid login credentials'}
+  ]){
    const result=await page.evaluate(async error=>{window.__SUPABASE__.auth.signInWithPassword=async()=>({error});return await UP.sbSignIn('student@example.invalid','test-only');},error);
    assert.equal(result.error.code,error.code);
   }
-  assert.equal(localAttempts,0);
+  assert.equal(localAttempts,0,'cloud email/password was not sent to local auth');
+  const thrownCloudError=await page.evaluate(async()=>{window.__SUPABASE__.auth.signInWithPassword=async()=>{throw new Error('network error');};return await UP.sbSignIn('student@example.invalid','test-only');});
+  assert.match(thrownCloudError.error.message,/email sign-in service/i);
+  assert.equal(localAttempts,0,'a network exception did not trigger a local credential retry');
+  const offlineEmail=await page.evaluate(async()=>{window.__supabaseOnline=false;return await UP.sbSignIn('student@example.invalid','test-only');});
+  assert.match(offlineEmail.error.message,/internet|connection/i);
+  assert.equal(localAttempts,0,'offline email/password was not sent to local auth');
+  await page.evaluate(()=>{window.__supabaseOnline=true;});
+  const localUser=await page.evaluate(async()=>UP.sbSignIn('admin','local-only-test'));
+  assert.equal(localUser.error.message,'Invalid credentials');
+  assert.equal(localAttempts,1,'local username auth remains available for standalone installs');
   await page.evaluate(()=>{window.__SUPABASE__.auth.signUp=async()=>({error:{status:429,code:'over_request_rate_limit',message:'Service is busy'}});});
   await page.locator('#authForm button[type=submit]').click();
   await page.waitForFunction(()=>document.getElementById('authErr').textContent.includes('too many requests'));
@@ -56,7 +70,7 @@ const {chromium}=require('playwright');
   assert(await page.locator('#authOk').isVisible());
   assert(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1));
   assert.deepEqual(errors,[]);
-  console.log(`PASS ${width}px: single in-flight signup, actionable email quota feedback, preserved input/no false success, no local fallback, generic throttle and persistent confirmation instructions`);
+  console.log(`PASS ${width}px: single in-flight signup, actionable email quota feedback, preserved input/no false success, no email credential fallback, generic throttle and persistent confirmation instructions`);
   await page.close();
  }}finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

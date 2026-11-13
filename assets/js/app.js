@@ -283,27 +283,20 @@ window.UP = window.UP || {};
   }
   window.__authBearer = authBearer;
 
-  /* Local server-auth fallback: when Supabase CDN or network is unreachable
-     (very common on Indian school/office wifi), sign in against /api/auth/login
-     which issues a bearer token the rest of the app already understands.
-     Accepts either username OR email in the "user" field, matching how the
-     form submits both to Supabase (as email) and to local auth (as user). */
+  /* Local server auth is for standalone school installations and accepts
+     usernames only. Email/password credentials must stay on Supabase and must
+     never be retried against this separate auth endpoint. */
   async function localSignIn(identifier, password) {
-    // Try as email first (for admin who typed "admin" it's a username, not email)
-    async function tryLogin(userField) {
-      const r = await fetch('/api/auth/login', {
-        method:'POST', headers:{'content-type':'application/json'},
-        body: JSON.stringify({ user: userField, password })
-      });
-      return { r, j: await r.json().catch(()=>({})) };
+    if (identifier.includes('@')) {
+      return { error: { message: S.lang==='hi'
+        ? 'स्थानीय खाते के लिए यूज़रनेम चाहिए। ईमेल से साइन इन करने के लिए इंटरनेट कनेक्शन चाहिए।'
+        : 'Local sign-in accepts a username only. Email sign-in needs an internet connection.' } };
     }
-    let {r, j} = await tryLogin(identifier);
-    // If that failed and identifier looks like an email, try the local part before @ as username
-    if (!r.ok && identifier.indexOf('@') > 0) {
-      const local = identifier.split('@')[0];
-      const r2 = await tryLogin(local);
-      if (r2.r.ok) { r = r2.r; j = r2.j; }
-    }
+    const r = await fetch('/api/auth/login', {
+      method:'POST', headers:{'content-type':'application/json'},
+      body: JSON.stringify({ user: identifier, password })
+    });
+    const j = await r.json().catch(()=>({}));
     if (!r.ok) return { error: { message: j.error || ('HTTP '+r.status) } };
     localStorage.setItem('upay.token', j.token);
     const u = j.user || {};
@@ -328,25 +321,27 @@ window.UP = window.UP || {};
 
   UP.sbSignIn = async function (identifier, password) {
     await resolveSupabase();
-    // Always try Supabase first when it's definitely online. If SDK didn't load,
-    // or the network can't reach Supabase, or Supabase returns "Invalid login
-    // credentials", fall back to the local server (username/password) auth.
-    if (sb && window.__supabaseOnline === true && identifier.includes('@')) {
-      try {
-        const res = await sb.auth.signInWithPassword({ email: identifier, password });
-        if (!res.error) {
-          if (localStorage.getItem('upay.token')) await localSignOut();
-          if (res.data && res.data.session) applySession(res.data.session);
-          return res;
-        }
-        // Preserve service limits and unconfirmed-email errors; a local login
-        // cannot solve cloud delivery limits and must not mask their diagnosis.
-        if (res.error && (Number(res.error.status) === 429 || ['over_email_send_rate_limit','over_request_rate_limit','email_not_confirmed'].includes(res.error.code) || /rate.*limit|email.*not confirmed/i.test(res.error.message || ''))) return res;
-        // Supabase said invalid credentials — fall through to local auth so
-        // that admin/student accounts on this server still work.
-      } catch(e){ /* fall through */ }
+    // Standalone school accounts use usernames. Email credentials go only to
+    // Supabase, even on an invalid-password or network-error response.
+    if (!identifier.includes('@')) return localSignIn(identifier, password);
+    if (!sb || window.__supabaseOnline !== true) {
+      return { error: { message: S.lang==='hi'
+        ? 'ईमेल से साइन इन करने के लिए इंटरनेट कनेक्शन चाहिए। कनेक्शन जाँचकर फिर कोशिश करें।'
+        : 'Email sign-in needs a connection to the Kritin Upay account service. Check your connection and try again.' } };
     }
-    return localSignIn(identifier, password);
+    try {
+      const res = await sb.auth.signInWithPassword({ email: identifier, password });
+      if (!res.error) {
+        if (localStorage.getItem('upay.token')) await localSignOut();
+        if (res.data && res.data.session) applySession(res.data.session);
+      }
+      // Never send a failed Supabase email/password attempt to local auth.
+      return res;
+    } catch(e){
+      return { error: { message: S.lang==='hi'
+        ? 'साइन-इन सेवा से संपर्क नहीं हो पाया। अपना कनेक्शन जाँचकर फिर कोशिश करें।'
+        : 'Could not reach the email sign-in service. Check your connection and try again.' } };
+    }
   };
   UP.sbSignUp = async function (email, password, name) {
     await resolveSupabase();
@@ -3384,8 +3379,8 @@ window.UP = window.UP || {};
       ${!supabaseOn ? `<div class="callout" style="margin-bottom:12px;background:#fff5f6;border-color:#ffc8d2;color:#9f001e">${icon('info')}<div>
         <b>${isHi?'ऑफ़लाइन मोड':'Offline mode'}</b><br>
         <span style="font-size:13px">${isHi
-          ? 'सुपाबेस कनेक्ट नहीं हो पा रहा (स्कूल/ऑफिस वाई-फाई प्रायः CDN ब्लॉक करती है)। आप यहाँ से एडमिन द्वारा दिया यूज़रनेम/पासवर्ड डालकर साइन इन कर सकते हैं।'
-          : 'Could not reach Supabase (school/office networks often block its CDN). You can still sign in with a local admin-issued username and password here.'}</span>
+          ? 'ऑनलाइन साइन-इन सेवा से संपर्क नहीं हो पाया। ईमेल और Google साइन-इन के लिए इंटरनेट चाहिए। आप अतिथि के रूप में पढ़ाई जारी रख सकते हैं; स्थानीय व्यवस्थापक यूज़रनेम केवल स्कूल के स्टैंडअलोन सर्वर पर काम करते हैं।'
+          : 'Could not reach the online sign-in service. Email and Google sign-in need an internet connection. You can continue studying as a guest; local administrator usernames work only on a school standalone server.'}</span>
       </div></div>` : ''}
       <div class="auth-card">
         <div class="auth-tabs">
@@ -3413,7 +3408,9 @@ window.UP = window.UP || {};
           <div class="field">
             <label>${isHi?'पासवर्ड':'Password'}</label>
             <input type="password" name="password" autocomplete="${mode==='signin'?'current-password':'new-password'}" minlength="6" required placeholder="••••••••">
-            <div class="hint">${isHi?'कम से कम 6 अक्षर':'At least 6 characters'}</div>
+            <div class="hint">${mode==='signin'
+              ? (isHi?'यह Kritin Upay का अलग पासवर्ड है, Google का नहीं। Google साइन-इन के लिए ऊपर का बटन चुनें।':'Use your Kritin Upay password here—not your Google password. Use the button above for Google sign-in.')
+              : (isHi?'कम से कम 6 अक्षर; Google पासवर्ड से अलग पासवर्ड बनाएँ।':'At least 6 characters. Create a unique password; do not reuse your Google password.')}</div>
           </div>
           <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:15.5px;margin-top:6px">
             ${mode==='signin' ? (isHi?'साइन इन':'Sign in') : (isHi?'खाता बनाएँ':'Create account')}
