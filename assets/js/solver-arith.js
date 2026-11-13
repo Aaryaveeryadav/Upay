@@ -60,15 +60,20 @@ window.UP = window.UP || {};
         name:L('Independent product-identity check','गुणनफल सर्वसमिका से जाँच'),
         steps:[{t:L('For two positive integers, LCM × HCF = pq.', 'दो धन पूर्णांकों के लिए ल.स. × म.स. = pq।'),m:'pq = '+fmt({a:p.a+r.a,b:p.b+r.b})},
           {t:L('Divide the identity by HCF squared.', 'सर्वसमिका को म.स. के वर्ग से भाग दें।'),m:'LCM/HCF = pq/HCF² = '+result}]
+      },{
+        name:L('Reconstruct the original numbers','मूल संख्याओं का पुनर्निर्माण'),
+        steps:[{t:L('Divide each original number by the HCF to expose its leftover prime factors.','हर मूल संख्या को म.स. से भाग देकर बची अभाज्य घातें देखें।'),m:'p/HCF = '+fmt({a:p.a-lo.a,b:p.b-lo.b})+'; q/HCF = '+fmt({a:r.a-lo.a,b:r.b-lo.b})},
+          {t:L('For distinct primes these leftovers are coprime; their product is the requested ratio.','अलग अभाज्यों के लिए ये बचे भाग सह-अभाज्य हैं; इनका गुणनफल वांछित भागफल है।'),m:'(p/HCF)(q/HCF) = LCM/HCF = '+result}]
       }],verify:L('Multiplying the quotient '+result+' by HCF '+fmt(lo)+' gives LCM '+fmt(hi)+'.', 'भागफल '+result+' को म.स. '+fmt(lo)+' से गुणा करने पर ल.स. '+fmt(hi)+' मिलता है।')});
   };
 
   /* ---------------------- HCF / LCM ---------------------- */
   UP.solveHCF = function (q, nums) {
+    if (UP.taskRouting && UP.taskRouting.resolve(q, 'maths').task === 'writing') return null;
     if (UP.isSymbolicHCF(q)) return UP.solvePrimePowerRatio(q);
     if (!nums || nums.length < 2) return null;
     const sq = UP.norm(q).toLowerCase();
-    if (!/hcf|highest common|gcd|lcm|lowest common|least common|म\.?\s?स|ल\.?\s?स/i.test(sq)) return null;
+    if (!/\b(?:hcf|highest common|gcd|lcm|lowest common|least common)\b|महत्तम समापवर्तक|लघुत्तम समापवर्त्य|म\s*\.\s*स|ल\s*\.\s*स/i.test(sq)) return null;
     /* "HCF is 4 and LCM is 300; one number is 60, find the other" is the
        PRODUCT-RULE question, not a factor-these-numbers question. Answering it
        with HCF(4,300) = 4 is a confident wrong answer, so hand it over. */

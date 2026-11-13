@@ -17,12 +17,12 @@ const {chromium}=require('playwright');
    assert((await answer.innerText()).includes('a²b'));
    assert((await answer.innerText()).includes('if a = b, the ratio is a'));
    assert(!(await answer.innerText()).includes('HCF = 3'));
-   assert.equal(await answer.locator('.approach').count(),3);
+   assert.equal(await answer.locator('.approach').count(),4);
    await page.locator('.lang-btn').click();
    assert((await answer.innerText()).includes('a²b'));
-   assert.equal(await answer.locator('.approach').count(),3);
+   assert.equal(await answer.locator('.approach').count(),4);
    assert.deepEqual(errors,[]);
-   console.log(`PASS ${width}px: exact reported question gives symbolic quotient, not HCF(3,3); three approaches and ambiguity caveat in English/Hindi with AI unavailable`);
+   console.log(`PASS ${width}px: exact reported question gives symbolic quotient, not HCF(3,3); four approaches and ambiguity caveat in English/Hindi with AI unavailable`);
    await context.close();
   }
  }finally{await browser.close();}

@@ -9,7 +9,7 @@ const {chromium}=require('playwright');
    page.on('pageerror',e=>errors.push(String(e)));
    let mode='legacy';
    const flow={type:'flow',nodes:['Assume √5 = a/b in lowest terms','a² = 5b²','5 divides both a and b','Contradiction; √5 is irrational'],caption:'Proof by contradiction'};
-   await page.route('**/api/ai/solve',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',result:'√5 is irrational',approaches:[1,2,3].map(i=>({name:'Explanation '+i,steps:[{t:'Mock step'}]})),diagram:mode==='legacy'?flow:{type:'triangle',points:[{x:0,y:0,label:'O'},{x:2,y:0,label:'A'},{x:2,y:1,label:'B'}],caption:'Illustration of a length √5, not a proof of irrationality'},...(mode==='legacy'?{}:{conceptDiagram:flow})})}));
+   await page.route('**/api/ai/solve',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',result:'√5 is irrational',approaches:[1,2,3,4].map(i=>({name:'Explanation '+i,steps:[{t:'Mock step'}]})),diagram:mode==='legacy'?flow:{type:'triangle',points:[{x:0,y:0,label:'O'},{x:2,y:0,label:'A'},{x:2,y:1,label:'B'}],caption:'Illustration of a length √5, not a proof of irrationality'},...(mode==='legacy'?{}:{conceptDiagram:flow})})}));
    await page.goto(process.env.UPAY_BASE||'http://127.0.0.1:8005/',{waitUntil:'networkidle'});
    await page.waitForFunction(()=>window.UP && UP.S && document.body.classList.contains('up-ready'));
    for(const variant of ['legacy','dual']){

@@ -8,10 +8,11 @@ process.env.SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_test_fixture';
 process.env.SUPABASE_ANON_KEY = 'legacy_test_fixture';
 const lib = require('../../lib/gemini.js');
 let providerCalls = 0, lastPrompt = '', replyText = '', queuedReplies = [];
-const three = () => [
+const four = () => [
   {name:'First principles', steps:[{t:'Explain the underlying principle using the supplied information.'}]},
   {name:'Worked application', steps:[{t:'Apply the principle to a concrete example, stating its limits.'}]},
-  {name:'Comparison', steps:[{t:'Contrast the relevant concepts and explain why the distinction matters.'}]}
+  {name:'Comparison', steps:[{t:'Contrast the relevant concepts and explain why the distinction matters.'}]},
+  {name:'Independent check', steps:[{t:'Check all requirements and explain the implications of the conclusion.'}]}
 ];
 lib.callGeminiResilient = async function (prompt, keys, model, image) {
   providerCalls++;
@@ -68,7 +69,7 @@ async function main() {
     assert.equal(r.code,status); assert.equal(providerCalls,0);
   }
   replyText = JSON.stringify({ question_understood:'Capital accounts', answer:'Debit X', summary:'An accounting entry',
-    approaches:three(), check:'Review the entry',
+    approaches:four(), check:'Review the entry',
     diagram:{type:'solid'} });
   r = await invoke(solve,{method:'POST', token:'valid', body:{question:'Record a partnership entry', subject:'accountancy', cls:12}});
   assert.equal(r.code,200); assert.equal(r.body.result,'Debit X'); assert.equal(r.body.questionUnderstood,'Capital accounts');
@@ -86,7 +87,7 @@ async function main() {
   assert.equal(r.code,200); assert.notEqual(r.body.cached,true); assert.equal(providerCalls,beforeEconomics+2);
   const beforeEnglish12 = providerCalls;
   replyText = JSON.stringify({ question_understood:'An English question', answer:'A sample literary explanation.', summary:'A mock response.',
-    approaches:three(), check:'Check the book', diagram:{type:'solid'} });
+    approaches:four(), check:'Check the book', diagram:{type:'solid'} });
   const english12Question = {question:'How does Franz view his last lesson?', subject:'english', cls:12, lang:'en'};
   for (let i=0; i<2; i++) {
     r = await invoke(solve,{method:'POST', token:'valid', body:english12Question});
@@ -110,22 +111,22 @@ async function main() {
   r = await invoke(solve,{method:'POST', token:'valid-two', body:{...privateQuestion,lang:'hi'}});
   assert.equal(r.code,200); assert.notEqual(r.body.cached,true); assert.equal(providerCalls,beforeCache+3);
   // One complete repair for a short draft, including theory and non-maths subjects.
-  const short = JSON.stringify({answer:'A theory answer', approaches:[three()[0]]});
-  const complete = JSON.stringify({answer:'A theory answer', approaches:three(),
+  const short = JSON.stringify({answer:'A theory answer', approaches:[four()[0]]});
+  const complete = JSON.stringify({answer:'A theory answer', approaches:four(),
     diagram:{type:'flow',nodes:['Cause','Mechanism','Effect'],caption:'Cause leads to effect through a mechanism.'}});
   for (const subject of ['maths','applied-maths','physics','chemistry','biology','accountancy','computerized-accounting','economics','english','hindi','social','business']) {
     const before = providerCalls;
     queuedReplies = [short, complete];
     r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Explain a policy test '+subject,subject,cls:12,minMethods:0}});
     assert.equal(r.code,200,subject); assert.equal(providerCalls,before+2);
-    assert.equal(r.body.approaches.length,3); assert.equal(r.body.diagram.type,'flow');
-    assert.match(lastPrompt,/at least 3 genuinely distinct/i);
+    assert.equal(r.body.approaches.length,4); assert.equal(r.body.diagram.type,'flow');
+    assert.match(lastPrompt,/at least 4 genuinely distinct/i);
     assert.match(lastPrompt,/REPAIR:/);
   }
   // Repeated/renamed working is not counted; do not return a partial success.
-  queuedReplies = [short, JSON.stringify({answer:'A',approaches:[three()[0],three()[0],{...three()[0],name:'Renamed copy'}]})];
+  queuedReplies = [short, JSON.stringify({answer:'A',approaches:[four()[0],four()[0],{...four()[0],name:'Renamed copy'}]})];
   r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Reject duplicate method fixture',subject:'physics'}});
-  assert.equal(r.code,502); assert.match(r.body.error,/three distinct/);
+  assert.equal(r.code,502); assert.match(r.body.error,/four distinct/);
   queuedReplies = [];
   r = await invoke(readImage,{method:'POST',token:'valid',body:{}}); assert.equal(r.code,400);
   r = await invoke(readImage,{method:'POST',token:'valid',body:{data:'a'.repeat(240),mime:'image/png'}});
@@ -140,6 +141,20 @@ async function main() {
   const stream = Readable.from([Buffer.from('{"one":1}')]);
   assert.deepEqual(await lib.readBody(stream), {one:1});
   assert.deepEqual(await lib.readBody({body:Buffer.from('{"two":2}')}), {two:2});
+  queuedReplies=[1,2].map(()=>JSON.stringify({answer:'Only three approaches',approaches:four().slice(0,3)}));
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Reject a three-approach response under the new policy',subject:'physics'}});
+  assert.equal(r.code,502);assert.match(r.body.error,/four distinct/);
+  const hindiPrompt='“जल संरक्षण केवल सरकार की जिम्मेदारी नहीं, हर नागरिक का कर्तव्य है।” इस विषय पर लगभग 150–200 शब्दों में अपने विचार लिखिए।';
+  replyText=JSON.stringify({answer:'एक लेखन उत्तर',approaches:four()});
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:hindiPrompt,subject:'social',cls:10,lang:'en'}});
+  assert.equal(r.code,200);assert.equal(r.body.subjectRouting.subject,'hindi');
+  assert.match(lastPrompt,/Class 10 hindi/i);assert.match(lastPrompt,/FOUR complete alternative responses/);
+  assert.equal(r.body.approaches.length,4);
+  const callsBeforeExact = providerCalls;
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all positive integers n for which n²+10n+2026 is a perfect square.',subject:'maths'}});
+  assert.equal(r.code,200); assert.equal(r.body.result,'n = 15, 27, 327, 995');
+  assert.equal(r.body.source,'exact'); assert.equal(r.body.check.source,'arithmetic');
+  assert.equal(providerCalls,callsBeforeExact,'exact supported question must not spend a provider call');
   await assert.rejects(lib.readBody({body:'{bad json'}));
   console.log('Mocked serverless auth, paid-AI allowlist, owner-scoped cache, response shape, image reading and body parsing: PASS');
 }

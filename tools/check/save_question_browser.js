@@ -7,7 +7,7 @@ const {chromium}=require('playwright');
   for(const width of [1280,390]){
    const context=await browser.newContext({viewport:{width,height:844},serviceWorkers:'block'}),page=await context.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(String(e)));
-   await page.route('**/api/ai/solve',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',result:'Synthetic result',approaches:[1,2,3].map(i=>({name:'Test '+i,steps:[{t:'Synthetic test step'}]}))})}));
+   await page.route('**/api/ai/solve',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',result:'Synthetic result',approaches:[1,2,3,4].map(i=>({name:'Test '+i,steps:[{t:'Synthetic test step'}]}))})}));
    await page.goto(process.env.UPAY_BASE||'http://127.0.0.1:8005/',{waitUntil:'networkidle'});
    await page.waitForFunction(()=>window.UP && UP.S && document.body.classList.contains('up-ready'));
    const q='Prove that √5 is irrational. Save regression.';

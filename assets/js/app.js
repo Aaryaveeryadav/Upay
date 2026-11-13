@@ -1474,7 +1474,7 @@ window.UP = window.UP || {};
       </div>
 
       ${S.aiState === 'loading' ? `<div class="ai-thinking" id="aiThinking">${loadingDots()}</div>` : ''}
-      ${S.aiState === 'loading' ? `<p id="aiRequestStatus" class="muted" role="status">${S.lang === 'hi' ? 'तीन व्याख्याएँ और उपयोगी चित्र तैयार हो रहे हैं…' : 'Preparing three explanations and relevant diagrams…'}</p>` : ''}
+      ${S.aiState === 'loading' ? `<p id="aiRequestStatus" class="muted" role="status">${S.lang === 'hi' ? 'चार व्याख्याएँ और उपयोगी चित्र तैयार हो रहे हैं…' : 'Preparing four explanations and relevant diagrams…'}</p>` : ''}
       <div id="answerMount">${S.aiAnswer ? renderAIAnswer(S.aiAnswer) : (S.answer ? renderAnswer(S.answer) : emptyAsk())}</div>
     </div>`;
   }
@@ -1619,23 +1619,29 @@ window.UP = window.UP || {};
   function aiScope() { return JSON.stringify([S.savedKey, +S.cls, S.board, S.subject]); }
   function askAI(q) {
     S.aiErrorCode = ''; S.aiRetryAt = 0;
+    const routing = UP.taskRouting.resolve(q, S.subject);
+    const responseLang = routing.language || S.lang;
     const scope = aiScope();
     const isCurrent = () => S.aiQuestion === q && S.aiScope === scope && aiScope() === scope;
     const mount = () => document.getElementById('answerMount');
     const paint = () => {
       const m = mount();
-      if (m) m.innerHTML = S.aiAnswer ? renderAIAnswer(S.aiAnswer) : renderAnswer(S.answer);
+      if (m) { m.innerHTML = S.aiAnswer ? renderAIAnswer(S.aiAnswer) : renderAnswer(S.answer); postRenderEnhance(m); }
       const status = document.getElementById('aiRequestStatus');
       if (status && S.aiState !== 'loading') status.remove();
       const thinking = document.getElementById('aiThinking');
       if (thinking && S.aiState !== 'loading') thinking.remove();
     };
+    const exact = ['maths','applied-maths'].includes(routing.subject) && UP.squareInteger.solve(q, responseLang);
+    if (exact) {
+      exact.subjectRouting = routing; S.aiAnswer = exact; S.aiState = 'done'; paint(); return;
+    }
     const goLocal = (note, showRetry) => {
       if (!isCurrent()) return;
       S.aiState = 'local';
       S.aiNote = note || '';
       S.aiRetry = !!showRetry;
-      if (needsAIOnly()) {
+      if (needsAIOnly() || routing.task === 'writing' || !['maths','applied-maths'].includes(routing.subject)) {
         S.aiAnswer = null;
         S.answer = { kind: isAccountancyTrack() ? 'accountancy-unavailable' : 'no-local-solver', question: q,
           note: /built-in solver|बिल्ट-इन हल/.test(note || '') ? '' : (note || '') };
@@ -1656,7 +1662,7 @@ window.UP = window.UP || {};
         m.insertBefore(d, m.firstChild);
       }
     };
-    if (businessTrack()) { goLocal('Business Studies AI is not enabled; use the supplied outlines.', false); return; }
+    if (routing.subject === 'business-studies') { goLocal('Business Studies AI is not enabled; use the supplied outlines.', false); return; }
     // "taking a moment" nudge — after 6s swap the spinner text
     let slowTimer = setTimeout(() => {
       const m = mount();
@@ -1675,7 +1681,7 @@ window.UP = window.UP || {};
       req = fetch('/api/ai/solve', {
         method: 'POST',
         headers: { 'content-type': 'application/json', authorization: 'Bearer ' + (localStorage.getItem('upay.token') || '') },
-        body: JSON.stringify({ question: q, chapter: chapterById(S.chapterId) ? S.chapterId : 0, subject: S.subject, cls: S.cls, lang: S.lang }),
+        body: JSON.stringify({ question: q, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0), subject: routing.subject, selectedSubject:S.subject, cls: S.cls, lang:responseLang }),
         signal: controller ? controller.signal : undefined
       });
     } catch (e) { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'नेटवर्क से संपर्क नहीं हुआ' : 'could not reach the server', true); return; }
@@ -1686,9 +1692,9 @@ window.UP = window.UP || {};
     })
       .then(({ ok, j }) => {
         if (!isCurrent()) return;
-        if (ok && j && j.approaches && j.approaches.length) {
+        if (ok && j && j.approaches && j.approaches.length >= 4) {
           j = UP.answerFormat.answer(j);
-          j.question = q;
+          j.question = q; j.subjectRouting = routing;
           j._chId = S.chapterId || 0;
           S.aiAnswer = j; S.aiState = 'done';
           pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
@@ -1775,7 +1781,11 @@ window.UP = window.UP || {};
   }
   function renderSingleAIDiagram(a) {
     a = UP.answerFormat.answer(a);
-    const figSpec = a.diagram ? Object.assign({}, a.diagram, { caption: a.diagram.caption }) : null;
+    let figSpec = a.diagram ? Object.assign({}, a.diagram, { caption: a.diagram.caption }) : null;
+    const diagramQuestion = a.question || S.aiQuestion || '';
+    if (figSpec && figSpec.type === 'circuit') figSpec = UP.figures.circuitForQuestion(figSpec, diagramQuestion);
+    if (figSpec && /copper|ताँबा|तांबा/i.test(diagramQuestion) && /electrolytic refining|purif.*electroly|electroly.*purif/i.test(diagramQuestion) && ['apparatus','copper-refining'].includes(figSpec.type)) figSpec = {type:'copper-refining',caption:'Electrolytic refining of copper — labelled schematic, not to scale.'};
+    if (figSpec && figSpec.type === 'copper-refining' && !(/copper/i.test(diagramQuestion) && /electrolytic|electroly/i.test(diagramQuestion))) figSpec = null;
     let fig = '';
     /* Client-side safety: a "solid" diagram (cylinder/cone/sphere/...) is only
        honest for mensuration / geometry questions. If the subject is not
@@ -1803,7 +1813,7 @@ window.UP = window.UP || {};
          also fine (data). Reject solids entirely. */
       if (['science','physics','chemistry','biology'].includes(subject)) {
         if (ty === 'solid' || ty === 'composite') return false;
-        const sciAllowed = ['apparatus','beaker','test-tube','flask','burner','reaction',
+        const sciAllowed = ['copper-refining','apparatus','beaker','test-tube','flask','burner','reaction',
                            'lens','mirror','ray','optics','circuit','pulley','pendulum',
                            'bio','leaf','cell','flower','organ'];
         if (sciAllowed.indexOf(ty) >= 0) return true;
@@ -1834,7 +1844,7 @@ window.UP = window.UP || {};
         '<ol class="ai-flow-nodes">' + nodes.map(n => '<li>' + esc(n.slice(0, 180)) + '</li>').join('') + '</ol>' +
         '<figcaption>' + esc(String(figSpec.caption || '').slice(0, 600)) + '</figcaption></figure>';
     }
-    if (!fig && figSpec && figSpec.type !== 'flow' && UP.figures && UP.figures.generic && diagramIsHonestForSubject(figSpec, a.question || S.aiQuestion || '', S.subject)) {
+    if (!fig && figSpec && figSpec.type !== 'flow' && UP.figures && UP.figures.generic && diagramIsHonestForSubject(figSpec, a.question || S.aiQuestion || '', UP.taskRouting.resolve(a.question || S.aiQuestion || '', S.subject).subject)) {
       try {
         const svg = UP.figures.generic(figSpec);
         if (svg) fig = '<figure class="figure-card"><div class="figure-head">' +
@@ -1843,22 +1853,29 @@ window.UP = window.UP || {};
           '</div><div class="figure-body">' + svg + '</div>' +
           '<figcaption>' + esc(figSpec.caption || '') + '</figcaption></figure>';
       } catch (e) { fig = ''; }
+      if (!fig && ['circuit','apparatus','reaction','beaker','test-tube','flask','burner'].includes(figSpec.type)) return '';
       if (!fig) fig = '<p class="muted ai-diagram-unavailable" role="status">' + (S.lang === 'hi' ? 'AI चित्र के निर्देशांक अधूरे हैं; चित्र नहीं दिखाया जा सका। व्याख्या नीचे उपलब्ध है।' : 'The AI diagram data could not be rendered safely. The written explanation is still available below.') + '</p>';
     }
     return fig;
   }
   function renderAIAnswer(a) {
-    a = UP.answerFormat.answer(a);
+    // Also replace legacy/cached drafts for this narrowly supported problem.
+    const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(a.question || S.aiQuestion || '', S.lang);
+    if (exact && a === S.aiAnswer) S.aiAnswer = exact;
+    a = UP.answerFormat.answer(exact || a);
     const fig = renderAIDiagram(a);
+    const routing = a.subjectRouting || UP.taskRouting.resolve(a.question || S.aiQuestion || '', S.subject);
     const chk = a.check || null;
+    const theory = routing.task === 'writing' || /^(?:describe|explain|discuss|identify|define|why\b|how\b)/i.test(a.question || S.aiQuestion || '');
     return `
-    <section class="answer ai-answer">
+    <section class="answer ai-answer" data-theory="${theory}">
+      ${routing.changed ? `<div class="callout"><div>${S.lang === 'hi' ? 'इस प्रश्न का विषय पहचाना गया' : 'Detected task subject'}: <b>${esc(routing.subject)}</b>. ${S.lang === 'hi' ? 'आपका चुना हुआ विषय बदला नहीं गया है।' : 'Your selected subject has not been changed.'}</div></div>` : ''}
       ${checkBadge(chk, true)}
       ${a.questionUnderstood ? `<div class="callout" style="margin-bottom:12px">${icon('info')}<div><b>${S.lang === 'hi' ? 'प्रश्न यह समझा गया' : 'Question understood as'}:</b> ${esc(a.questionUnderstood)}</div></div>` : ''}
       <div class="answer-head">
         <div class="meta-row">
-          <span class="tag">${S.lang === 'hi' ? 'एआई द्वारा हल' : 'Solved by AI'}</span>
-          <span class="tag cream">${a.approaches.length} ${t('methods')}</span>
+          <span class="tag">${a.source === 'exact' ? (S.lang === 'hi' ? 'सटीक गणना से हल' : 'Solved by exact calculation') : (S.lang === 'hi' ? 'एआई द्वारा हल' : 'Solved by AI')}</span>
+          <span class="tag cream">${a.approaches.length} ${theory ? (S.lang === 'hi' ? 'व्याख्याएँ' : 'explanations') : t('methods')}</span>
           <span class="tag grey">${esc(a.model || '')}</span>
         </div>
         <div class="qtext">${esc(a.question || S.aiQuestion || '')}</div>
@@ -1870,7 +1887,7 @@ window.UP = window.UP || {};
         </div>
       </div>
       ${fig}
-      <div class="section-head" style="margin:6px 0 0"><div><h2 style="font-size:20px">${t('approaches')}</h2></div></div>
+      <div class="section-head" data-approaches-heading style="margin:6px 0 0"><div><h2 style="font-size:20px">${theory ? (S.lang === 'hi' ? 'अलग तरीकों से समझें' : 'Different ways to understand') : t('approaches')}</h2></div></div>
       ${a.methodsShort ? `<div class="callout warn" style="margin:0 0 14px">${icon('info')}<div>${esc(a.methodsNote || (S.lang === 'hi' ? 'इस प्रश्न में वास्तव में इतनी ही विधियाँ हैं।' : 'This question genuinely has only this many routes.'))}</div></div>` : ''}
       ${a.approaches.map((ap, i) => `
         <article class="approach ${i === 0 ? 'open' : 'closed'}" data-idx="${i}">
@@ -1915,7 +1932,8 @@ window.UP = window.UP || {};
     const localHit = S.answer && S.answer._ver === 'passed';
     const cached = a._id && UP.answers && UP.answers.get(a._id);
     let level, cls, icon_, label;
-    if (localHit) { level='verified'; cls='ok'; icon_='check'; label=(S.lang==='hi'?'स्थानीय हलक से सत्यापित ✓':'Maths engine verified ✓'); }
+    if (a.source === 'exact') { level='verified'; cls='ok'; icon_='check'; label=(S.lang==='hi'?'सटीक गुणनखंड खोज और प्रतिस्थापन से जाँचा गया':'Checked by exact factor enumeration and substitution'); }
+    else if (localHit) { level='verified'; cls='ok'; icon_='check'; label=(S.lang==='hi'?'स्थानीय हलक से सत्यापित ✓':'Maths engine verified ✓'); }
     else if (a.model && /flash-lite/.test(a.model)) { level='ai'; cls='ai'; icon_='sparkle'; label=(S.lang==='hi'?'एआई-जनित — कृपया अपनी पाठ्यपुस्तक से मिलान करें':'AI-generated — cross-check with your textbook'); }
     else { level='ai'; cls='ai'; icon_='sparkle'; label=(S.lang==='hi'?'एआई-जनित — कृपया अपनी पाठ्यपुस्तक से मिलान करें':'AI-generated — cross-check with your textbook'); }
     return `<div class="confidence conf-${cls}">${icon(icon_)}<span>${esc(label)}</span></div>`;
@@ -1953,8 +1971,9 @@ window.UP = window.UP || {};
   }
 
   function renderCachedAnswer(j, qq, sol, ansBox, id) {
-    j = UP.answerFormat.answer(j);
-    if (!j || j.policyVersion !== 'three-approaches-v1' || !j.approaches || j.approaches.length < 3) return false;
+    const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
+    j = UP.answerFormat.answer(exact || j);
+    if (!j || j.policyVersion !== 'four-approaches-v2' || !j.approaches || j.approaches.length < 4) return false;
     const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
       (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
       '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + mathText(j.answer || j.result) + '</div>' +
@@ -1985,13 +2004,19 @@ window.UP = window.UP || {};
     if (ansBox) ansBox.hidden = false;
     const qq = (UP.pyq || []).find(x => x.id === id);
     if (!qq) return;
+    if (ansBox && UP.taskRouting.resolve(qq.en || qq.hi || '', S.subject).task === 'writing') {
+      const answerText = ansBox.querySelector('b');
+      if (answerText) answerText.textContent = S.lang === 'hi' ? 'इस लेखन कार्य के लिए नीचे व्याख्या देखें।' : 'See the writing response below; a numeric key is not applicable.';
+    }
+    const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
+    if (exact) { renderCachedAnswer(exact, qq, sol, ansBox, id); return; }
 
     if (pyqCache[id]) { sol.innerHTML = pyqCache[id]; warmNextQuestions(id); return; }
 
     // Check answer cache first
     // Old locally cached AI replies may have been made with a maths prompt.
     // Never reuse them as an Accountancy answer or official answer key.
-    const sourceTrack = qq.subject === 'accountancy' || qq.subject === 'computerized-accounting' || qq.keyVerified === false;
+    const sourceTrack = qq.subject === 'accountancy' || qq.subject === 'computerized-accounting' || qq.keyVerified === false || UP.taskRouting.resolve(qq.en || qq.hi || '', S.subject).task === 'writing';
     const cached = sourceTrack ? null : UP.answers.get(id);
     if (cached && renderCachedAnswer(cached, qq, sol, ansBox, id)) { warmNextQuestions(id); return; }
 
@@ -2007,7 +2032,7 @@ window.UP = window.UP || {};
       /* imported:true turns on the corrupt gate.  Without it the server
          happily spent a model call answering a question whose fraction was
          lost in extraction -- and then showed that answer as a solution. */
-      body: JSON.stringify({ question: ask, chapter: qq.ch, imported: true, options: hasOpts(qq) ? qq.opts.length : 0, subject: S.subject, cls: S.cls, lang: S.lang })
+      body: JSON.stringify({ question: pyqQuestionText(qq) + (hasOpts(qq) ? '\nOptions: ' + qq.opts.map(o=>o.en || P(o)).join('; ') : ''), chapter: qq.ch, imported: true, options: hasOpts(qq) ? qq.opts.length : 0, subject: S.subject, cls: S.cls, lang: S.lang })
     }).then(r => {
       /* A non-2xx reply used to be thrown away unread (`.then(r => r.ok ? r.json()
          : null)`), so EVERY failure -- a timed-out session, the daily quota, a
@@ -2028,11 +2053,11 @@ window.UP = window.UP || {};
                                      : 'The server\'s reply could not be read (HTTP ' + reply.status + '). Try again.') + '</div></div>';
         return;
       }
-      if (!j.approaches || !j.approaches.length) {
+      if (!j.approaches || j.approaches.length < 4) {
         /* 401/403 = the sign-in lapsed or there is no API key. Show the LOCAL
            solver answer underneath the sign-in banner so the student still gets
            help, instead of a dead panel they cannot read. */
-        const accTrack = needsAIOnly() || qq.keyVerified === false;
+        const accTrack = needsAIOnly() || qq.keyVerified === false || UP.taskRouting.resolve(qq.en || qq.hi || '', S.subject).task === 'writing';
         const localAns = accTrack ? null : ((UP.answerQuestion && UP.answerQuestion(qq))
                        || (UP.fallbackAnswer && UP.fallbackAnswer(qq.en + ' ' + (qq.hi || ''), S.lang))
                        || null);
@@ -2134,16 +2159,19 @@ window.UP = window.UP || {};
       } else if (claim) localBadge = checkBadge({ state: 'unchecked' }, false);
     } catch (e) { /* a missing checker must never break the answer */ }
     const isLoading = ans._loading === true;
+    const answerRoute = UP.taskRouting.resolve(ans.question || S.aiQuestion || '', S.subject);
+    const answerSubject = P(UP.subjects[answerRoute.subject]) || answerRoute.subject;
     return `
     <section class="answer">
       ${localBadge}
+      ${!isLoading && methods.length < 4 ? '<p class="muted">' + (S.lang === 'hi' ? 'यह स्थानीय प्रारंभिक हल है; पूर्ण AI उत्तर में कम-से-कम चार उपयोगी तरीके माँगे गए हैं।' : 'Local starter solution; the complete AI response requests at least four useful approaches.') + '</p>' : ''}
       <div class="answer-head">
         <div class="meta-row">
-          <span class="tag">${esc(ch ? P({ en: ch.en, hi: ch.hi }) : (isLoading ? (S.lang==='hi'?'एआई':'AI') : (S.lang === 'hi' ? 'अवधारणा' : 'Concept')))}</span>
+          <span class="tag">${esc(ch && !answerRoute.changed ? P({ en: ch.en, hi: ch.hi }) : (isLoading ? (S.lang==='hi'?'एआई':'AI') : (S.lang === 'hi' ? 'अवधारणा' : 'Concept')))}</span>
           ${isLoading
             ? `<span class="tag cream spin-tag">${icon('clock')} ${S.lang==='hi'?'हल हो रहा है…':'working…'}</span>`
             : `<span class="tag cream">${methods.length} ${t('methods')}</span>`}
-          <span class="tag grey">${S.lang === 'hi' ? 'कक्षा' : 'Class'} ${S.cls} · ${esc(P(UP.subjects[S.subject] || UP.subjects.maths))}</span>
+          <span class="tag grey">${S.lang === 'hi' ? 'कक्षा' : 'Class'} ${S.cls} · ${esc(answerSubject)}</span>
         </div>
         <div class="qtext">${esc(ans.question || '')}</div>
         <div style="font-size:14px;color:var(--ink-600)">${rich(P(ans.summary))}</div>
@@ -3852,6 +3880,7 @@ window.UP = window.UP || {};
       const q = r.params.q ? UP.answerFormat.question(r.params.q).trim() : r.params.q;
       if (q) r.params.q = q;
       S.q = q || '';
+      if (q && UP.taskRouting.resolve(q, S.subject).task === 'writing' && S.answer && S.answer.kind !== 'ai-waiting') { S.answer = accountancyAIWaiting(q); }
       if (q) {
         /* the local engine answers instantly so the page is never blank;
            the AI answer replaces it when it arrives.
@@ -3862,7 +3891,8 @@ window.UP = window.UP || {};
           let ans;
           // Try to find the underlying PYQ object to get its .approaches
           const pyq = (UP.pyq || []).find(x => x === q || (q.id && x.id === q.id) || x.en === q);
-          if (needsAIOnly()) {
+          const taskRoute = UP.taskRouting.resolve(q, S.subject);
+          if (needsAIOnly() || taskRoute.task === 'writing' || !['maths','applied-maths'].includes(taskRoute.subject)) {
             ans = accountancyAIWaiting(q);
           } else if (pyq && pyq.approaches && pyq.approaches.length) {
             ans = {
@@ -3962,6 +3992,7 @@ window.UP = window.UP || {};
     const approaches = root.querySelectorAll('.approach');
     approaches.forEach((art, idx) => {
       const isOpen = art.classList.contains('open');
+      const theory = !!art.closest('[data-theory="true"]');
       const next = approaches[idx + 1];
       // remove any previously-inserted CTAs
       const existing = art.querySelector(':scope > .next-method-cta');
@@ -3972,7 +4003,7 @@ window.UP = window.UP || {};
         btn.className = 'next-method-cta';
         btn.type = 'button';
         btn.dataset.action = 'next-method';
-        btn.innerHTML = icon('arrow') + ' ' + (S.lang === 'hi' ? 'अगली विधि देखें' : 'Show the next method') + (nextName ? ' — “' + nextName.textContent.trim() + '”' : '');
+        btn.innerHTML = icon('arrow') + ' ' + (theory ? (S.lang === 'hi' ? 'अगली व्याख्या देखें' : 'Show the next explanation') : (S.lang === 'hi' ? 'अगली विधि देखें' : 'Show the next method')) + (nextName ? ' — “' + esc(nextName.textContent.trim()) + '”' : '');
         const body = art.querySelector('.approach-body');
         if (body) body.appendChild(btn);
       }
@@ -3985,11 +4016,12 @@ window.UP = window.UP || {};
         // find the section-head that follows the figure and precedes approaches
         const heads = root.querySelectorAll('.section-head');
         for (const h of heads) {
-          if (h.textContent.includes(t('approaches'))) {
+          if (h.hasAttribute('data-approaches-heading') || h.textContent.includes(t('approaches'))) {
             if (!h.querySelector('.show-all-btn')) {
               const btn = document.createElement('button');
               btn.className = 'show-all-btn'; btn.type = 'button'; btn.dataset.action = 'expand-all';
-              btn.textContent = S.lang === 'hi' ? 'सभी विधियाँ दिखाएँ' : 'Show all methods';
+              const theory = !!h.closest('[data-theory="true"]');
+              btn.textContent = theory ? (S.lang === 'hi' ? 'सभी व्याख्याएँ दिखाएँ' : 'Show all explanations') : (S.lang === 'hi' ? 'सभी विधियाँ दिखाएँ' : 'Show all methods');
               h.appendChild(btn);
             }
             break;
@@ -4613,7 +4645,8 @@ window.UP = window.UP || {};
   function questionCard(q) {
     const a = S.answers[q.no];
     const sourceQuestion = !!(q.raw && q.raw.paperCode);
-    const graded = !sourceQuestion && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim());
+    const writingTask = UP.taskRouting.resolve(P(q), S.subject).task === 'writing';
+    const graded = !writingTask && !sourceQuestion && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim());
     const diff = q.d >= 3 ? 3 : q.d >= 2 ? 2 : 1;
     const opts = hasOpts(q) ? `<div class="q-opts">${q.opts.map((o, i) => {
       const label = String.fromCharCode(65 + i);
@@ -4699,24 +4732,26 @@ window.UP = window.UP || {};
     const sourceQuestion = !!(q.raw && q.raw.paperCode);
     const autoFig = sourceQuestion ? null : autoFigureForQuestion(q);
     const fig = q.fig ? (typeof q.fig === 'string' ? boardFig(q) : figureFromTest(q)) : autoFig;
-    const hasAns = q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim() && String(q.ans) !== 'Proof (standard theorem)');
-    const hasSteps = !!(q.steps && q.steps.length && q.steps.some(s => String(s.en || s.hi || (typeof s === 'string' ? s : '')).trim().length > 5));
+    const writingTask = UP.taskRouting.resolve(P(q), S.subject).task === 'writing';
+    const hasAns = !writingTask && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim() && String(q.ans) !== 'Proof (standard theorem)');
+    const hasSteps = !writingTask && !!(q.steps && q.steps.length && q.steps.some(s => String(s.en || s.hi || (typeof s === 'string' ? s : '')).trim().length > 5));
     const aiProvided = !!(q.aiAnswer || q.aiSteps);
-    const ansVal = hasAns && !sourceQuestion ? String(q.ans) : (q.aiAnswer || (S.lang === 'hi' ? '(कोई सत्यापित उत्तर उपलब्ध नहीं)' : '(no verified answer available)'));
+    const exactProvided = q.aiSolution && q.aiSolution.source === 'exact';
+    const ansVal = exactProvided ? q.aiAnswer : hasAns && !sourceQuestion ? String(q.ans) : (q.aiAnswer || (S.lang === 'hi' ? '(कोई सत्यापित उत्तर उपलब्ध नहीं)' : '(no verified answer available)'));
     let steps;
     if (hasSteps && !sourceQuestion) steps = q.steps.map(s => `<li>${esc(P(s))}</li>`).join('');
     else if (q.aiSteps) steps = q.aiSteps.map(s => `<li>${esc(s)}</li>`).join('');
     else if (q.aiLoading) steps = `<li class="ai-placeholder">${loadingDots()}</li>`;
     else steps = '';
     return `<div class="q-solution" data-solbox="${esc(q.no)}">
-      <div class="sol-ans"><span>${aiProvided && (!hasAns || sourceQuestion) ? (S.lang === 'hi' ? 'AI उत्तर (असत्यापित)' : 'AI answer (unverified)') : (S.lang === 'hi' ? 'उत्तर' : 'Answer')}</span><b>${esc(ansVal)}</b></div>
+      <div class="sol-ans"><span>${exactProvided ? (S.lang === 'hi' ? 'सटीक गणना' : 'Exact calculation') : aiProvided && (!hasAns || sourceQuestion) ? (S.lang === 'hi' ? 'AI उत्तर (असत्यापित)' : 'AI answer (unverified)') : (S.lang === 'hi' ? 'उत्तर' : 'Answer')}</span><b>${esc(ansVal)}</b></div>
       ${fig ? `<div class="figure-card test-fig">${fig.svg}<div class="figure-cap">${esc(P(fig.caption || {en:'',hi:''}))}</div></div>` : ''}
       ${q.aiSolution ? renderAIDiagram(q.aiSolution) + q.aiSolution.approaches.map((a,i) =>
         `<section class="sol-method"><h4>${i+1}. ${esc(a.name)}</h4><ol class="sol-steps">${(a.steps || []).map(st =>
           `<li>${esc(st.t || '')}${st.m ? `<div class="st-m">${mathText(st.m)}</div>` : ''}${st.note ? `<p>${esc(st.note)}</p>` : ''}</li>`).join('')}</ol>${a.why ? `<p>${esc(a.why)}</p>` : ''}</section>`).join('')
         : (steps ? `<ol class="sol-steps">${steps}</ol>` : '')}
       ${q.aiNote ? `<div class="callout warn" style="margin-top:10px">${esc(q.aiNote)}</div>` : ''}
-      ${aiProvided ? `<div class="callout warn" style="margin-top:10px">${S.lang === 'hi' ? 'यह AI व्याख्या किसी आधिकारिक उत्तर-कुंजी से सत्यापित नहीं है।' : 'This AI explanation has not been verified against an official answer key.'}</div>` : ''}
+      ${aiProvided && !exactProvided ? `<div class="callout warn" style="margin-top:10px">${S.lang === 'hi' ? 'यह AI व्याख्या किसी आधिकारिक उत्तर-कुंजी से सत्यापित नहीं है।' : 'This AI explanation has not been verified against an official answer key.'}</div>` : ''}
       ${hasSteps && !sourceQuestion ? `<div class="sol-method">${icon('bulb')} ${S.lang === 'hi' ? 'अभ्यास के लिए हल।' : 'Practice solution.'}</div>` : ''}
     </div>`;
   }
@@ -4726,6 +4761,11 @@ window.UP = window.UP || {};
     const q = findQ(no); if (!q || q.aiLoading || q.aiSteps) return;
     const qText = P({en:q.en || '', hi:q.hi || ''}).trim();
     if (!qText) { q.aiNote = 'Question text is unavailable'; return; }
+    const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qText, S.lang);
+    if (exact) {
+      q.aiSolution = exact; q.aiAnswer = exact.result;
+      q.aiSteps = exact.approaches[0].steps.map(st=>st.t+' — '+st.m); return;
+    }
     const paper = S.paper, scope = aiScope();
     const isCurrent = () => S.paper === paper && aiScope() === scope && parseHash().name === 'test';
     q.aiLoading = true; q.aiNote = '';
@@ -4739,7 +4779,7 @@ window.UP = window.UP || {};
       .then(({ok,j})=>{
         q.aiLoading=false;
         if (!isCurrent()) return;
-        if (ok && j.approaches && j.approaches.length) {
+        if (ok && j.approaches && j.approaches.length >= 4) {
           j = UP.answerFormat.answer(j);
           const first = j.approaches[0];
           q.aiSolution = Object.assign({}, j, {question:qText});
@@ -5083,7 +5123,8 @@ window.UP = window.UP || {};
          wrongly flagged as "Latin mojibake". */
       const expectHindi = (S.subject === 'hindi' || S.subject === 'sanskrit')
         || (S.lang === 'hi' && !q.en && q.hi);
-      const why = UP.corrupt && UP.corrupt.why(shown, { expectHindi: !!expectHindi });
+      const exactSquare = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.compute(shown);
+      const why = exactSquare ? null : UP.corrupt && UP.corrupt.why(shown, { expectHindi: !!expectHindi });
       let out = '';
       out += '<article class="q-card pyq' + (badge ? ' pyq-sub' : '') + '" id="' + esc(q.id) + '">';
       out += '<div class="q-top">';
@@ -5250,11 +5291,11 @@ window.UP = window.UP || {};
   /* ============================== EVENTS ============================== */
   function answerToText(a) {
     if (!a) return '';
-    const isHi = S.lang === 'hi';
+    const isHi = ((a.subjectRouting && a.subjectRouting.language) || S.lang) === 'hi';
     const q = (a.question || a.q || S.q || '').trim();
     const summary = P(a.summary || '').trim();
     const ans = P(a.answer || a.result || a.final || '').trim();
-    const methods = (a.approaches || []).slice(0, 3);
+    const methods = (a.approaches || []).slice(0, 4);
     let out = '';
     if (q) out += (isHi ? 'प्रश्न: ' : 'Question: ') + q + '.\n\n';
     if (summary) out += summary + '.\n\n';
@@ -5562,7 +5603,7 @@ window.UP = window.UP || {};
       const q = String(tgt.dataset.q || '').trim(); if (!q) return;
       if (!S.saved.some(item => item.q === q)) {
         const item = {q, date:new Date().toISOString().slice(0,10), at:Date.now(),
-          subject:S.subject, cls:+S.cls, board:S.board, tag:'', chapter:''};
+          subject:UP.taskRouting.resolve(q,S.subject).subject, cls:+S.cls, board:S.board, tag:'', chapter:''};
         S.saved.unshift(item); S.saved = S.saved.slice(0,200); saveSaved(); addSavedRemote(item);
       }
       // No whole-page redraw: saving must not move the question or reset inputs.
@@ -5672,7 +5713,8 @@ window.UP = window.UP || {};
         if (speechSession !== session) return;
         if (index >= parts.length) { stopAnswerSpeech(); return; }
         const u = session.utterance = new SpeechSynthesisUtterance(parts[index++]);
-        u.lang = S.lang === 'hi' ? 'hi-IN' : 'en-IN';
+        const speechLanguage = (S.aiAnswer && S.aiAnswer.subjectRouting && S.aiAnswer.subjectRouting.language) || S.lang;
+        u.lang = speechLanguage === 'hi' ? 'hi-IN' : 'en-IN';
         const settings = UP.teacherVoice.select(window.speechSynthesis.getVoices(), u.lang);
         u.rate = settings.rate; u.pitch = settings.pitch; u.volume = settings.volume;
         if (settings.voice) u.voice = settings.voice;
