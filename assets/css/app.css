@@ -1736,7 +1736,7 @@ ol.prose-answer > li::before { content: none; display: none; }
 .welcome-brand img { display:block; margin:0 auto 22px; object-fit:contain; filter:drop-shadow(0 8px 14px rgba(43,43,43,.10)); }
 .welcome-title { font:600 clamp(28px,5vw,42px)/1.2 var(--serif); color:#3a3a3a; letter-spacing:-.025em; }
 .welcome-brand p { color:var(--ink-600); font-size:13px; margin:18px 0 0; letter-spacing:.03em; }
-.welcome-line { height:3px; width:56px; margin:22px auto 0; background:#e7002c; border-radius:3px; transform-origin:center; animation:welcome-line .8s .2s ease both; }
+.welcome-line { height:3px; width:56px; margin:22px auto 0; background:#e7002c; border-radius:3px; transform-origin:center; animation:welcome-line .75s cubic-bezier(.16,1,.3,1) both; }
 .kritin-welcome.welcome-leaving { opacity:0; transition:opacity .45s ease; }
 @keyframes welcome-backdrop { from{opacity:0} to{opacity:1} }
 @keyframes welcome-brand { from{opacity:0;transform:translateY(18px) scale(.94)} to{opacity:1;transform:translateY(0) scale(1)} }
