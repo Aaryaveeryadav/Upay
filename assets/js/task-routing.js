@@ -20,6 +20,8 @@
    subject='physics';reason='Explicit electrical circuit';
   }else if(/civil disobedience|power sharing|belgium|sri lanka|rainwater harvesting|groundwater recharge|water.management plan|income[\s\S]{0,120}sustainability|सविनय अवज्ञा|बेल्जियम|श्रीलंका|वर्षा जल संचयन|भूजल पुनर्भरण/i.test(q)){
    subject='social';reason='Explicit social-science task';
+  }else if(/√|\\sqrt|sqrt\(/i.test(q) && /integer|पूर्णांक/i.test(q)){
+   subject='maths';reason='Explicit integer radical task';
   }else if(/\b(?:hcf|lcm|positive integers|integer x|perfect square|prime numbers)\b|महत्तम समापवर्तक|लघुत्तम समापवर्त्य/.test(q.toLowerCase())){
    subject='maths';reason='Explicit mathematical task';
   }
