@@ -26,7 +26,7 @@
   const shift='(n + '+h+')', equation='m² − '+shift+'² = '+D;
   const pairText=pairs.map(p=>'('+p.u+', '+p.v+')').join(', ');
   const positive=valid.map(p=>'('+p.u+', '+p.v+') ⇒ n = '+p.n).join('; ')||result;
-  return {source:'exact',kind:'integer-square',policyVersion:'four-approaches-v2',question,
+  return {source:'exact',kind:'integer-square',policyVersion:'four-approaches-v3',question,
    title:L('All positive integer solutions','सभी धन पूर्णांक हल'),result,
    summary:L('Complete the square, then enumerate every same-parity factor pair. This finds all solutions, not just one candidate.', 'पूर्ण वर्ग बनाकर समान सम-विषमता वाले सभी गुणनखंड युग्म जाँचें। इससे सभी हल मिलते हैं।'),
    approaches:[{

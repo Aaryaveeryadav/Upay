@@ -12,7 +12,7 @@ with sync_playwright() as p:
     page = browser.new_page(service_workers='block', viewport={'width':390,'height':844})
     errors = []
     page.on('pageerror', lambda e: errors.append(str(e)))
-    fixture = {'source':'ai','policyVersion':'four-approaches-v2','result':'A mock answer',
+    fixture = {'source':'ai','policyVersion':'four-approaches-v3','result':'A mock answer',
         'approaches':[{'name':n,'steps':[{'t':t}]} for n,t in [
             ('First principles','Explain the underlying concept.'),
             ('Worked example','Apply the concept to an example.'),

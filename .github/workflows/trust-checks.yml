@@ -28,6 +28,7 @@ jobs:
       - run: node tools/check/square_integers.js
       - run: node tools/check/science_diagrams.js
       - run: node tools/check/task_routing.js
+      - run: node tools/check/prose_answers.js
       - run: node tools/check/trust_controls.js
       - run: node tools/check/ai_access.js
       - run: python3 tools/check/backend_smoke.py
