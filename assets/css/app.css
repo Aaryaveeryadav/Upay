@@ -1711,3 +1711,12 @@ ol.prose-answer > li::before { content: none; display: none; }
   .askbox-inner { flex-wrap: wrap; justify-content: flex-end; }
   .askbox-inner textarea { flex: 1 0 100%; width: 100%; padding-right: 14px; }
 }
+
+/* Original Kritin artwork extracted from the supplied company PDF. */
+.brand-mark {
+  width: 54px; height: 48px; flex: 0 0 54px;
+  background: transparent; border: 0; box-shadow: none; border-radius: 0;
+}
+.brand-mark img { display: block; width: 54px; height: 48px; object-fit: contain; }
+.brand .brand-name { font-size: 20px; }
+@media (max-width: 820px) { .brand .brand-name { font-size: 17px; } }

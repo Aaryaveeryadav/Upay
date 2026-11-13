@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · app shell, router and views
+   Kritin Upay · app shell, router and views
    ===================================================================== */
 window.UP = window.UP || {};
 (function () {
@@ -390,8 +390,8 @@ window.UP = window.UP || {};
     heroTitle1: ['One question.', 'एक प्रश्न।'],
     heroTitle2: ['Every way', 'हर तरीका'],
     heroTitle3: ['to solve it.', 'हल करने का।'],
-    heroLead: ['Ask any question from your syllabus. Upay shows the same answer worked out by different methods — so you learn the reasoning, not just the result. Every chapter page also gives concepts, formulas, past-board questions and a study plan.',
-      'अपने पाठ्यक्रम का कोई भी प्रश्न पूछिए। उपाय वही उत्तर अलग-अलग विधियों से हल करके दिखाता है — जिससे आप केवल उत्तर नहीं, तर्क भी सीखते हैं। प्रत्येक अध्याय पृष्ठ पर अवधारणाएँ, सूत्र, पिछले बोर्ड प्रश्न तथा अध्ययन योजना भी मिलती है।'],
+    heroLead: ['Ask any question from your syllabus. Kritin Upay shows the same answer worked out by different methods — so you learn the reasoning, not just the result. Every chapter page also gives concepts, formulas, past-board questions and a study plan.',
+      'अपने पाठ्यक्रम का कोई भी प्रश्न पूछिए। कृतिन उपाय वही उत्तर अलग-अलग विधियों से हल करके दिखाता है — जिससे आप केवल उत्तर नहीं, तर्क भी सीखते हैं। प्रत्येक अध्याय पृष्ठ पर अवधारणाएँ, सूत्र, पिछले बोर्ड प्रश्न तथा अध्ययन योजना भी मिलती है।'],
     askPlaceholder: {
       maths:   ['Type your question — e.g. 2x² + x − 6 = 0, or "HCF of 510 and 92"', 'अपना प्रश्न लिखिए — जैसे 2x² + x − 6 = 0, या "510 और 92 का म.स. ज्ञात कीजिए"'],
       science: ['Type your question — e.g. "Balance Fe + H₂O → Fe₃O₄ + H₂" or "Why is the sky blue?"', 'अपना प्रश्न लिखिए — जैसे "Fe + H₂O → Fe₃O₄ + H₂ को संतुलित कीजिए" या "आकाश नीला क्यों दिखाई देता है?"'],
@@ -429,7 +429,7 @@ window.UP = window.UP || {};
     sourcesTitle: ['Built from real textbooks', 'वास्तविक पाठ्यपुस्तकों से बना'],
     openChapter: ['Open chapter', 'अध्याय खोलें'],
     askTitle: ['Ask a question', 'प्रश्न पूछिए'],
-    askSub: ['Write it the way it appears in your book. Upay checks the structure, not the exact wording.', 'जैसे पुस्तक में है वैसे ही लिखिए। उपाय शब्दों की जगह संरचना देखता है।'],
+    askSub: ['Write it the way it appears in your book. Kritin Upay checks the structure, not the exact wording.', 'जैसे पुस्तक में है वैसे ही लिखिए। कृतिन उपाय शब्दों की जगह संरचना देखता है।'],
     classLabel: ['Class', 'कक्षा'],
     subjectLabel: ['Subject', 'विषय'],
     boardLabel: ['Board', 'बोर्ड'],
@@ -460,7 +460,7 @@ window.UP = window.UP || {};
     solveThis: ['Solve this', 'इसे हल करें'],
     noPyq: ['Past-paper questions for this chapter are being added. Use the concepts and formulas meanwhile.', 'इस अध्याय के बोर्ड प्रश्न जोड़े जा रहे हैं। तब तक अवधारणाएँ व सूत्र देखिए।'],
     booksTitle: ['Books & sources', 'पुस्तकें व स्रोत'],
-    booksSub: ['What is loaded into Upay right now, and exactly how it was read.', 'अभी उपाय में क्या लोड है, और उसे ठीक कैसे पढ़ा गया।'],
+    booksSub: ['What is loaded into Kritin Upay right now, and exactly how it was read.', 'अभी कृतिन उपाय में क्या लोड है, और उसे ठीक कैसे पढ़ा गया।'],
     loaded: ['Loaded', 'लोडेड'],
     pending: ['Awaiting file', 'फ़ाइल प्रतीक्षित'],
     addBook: ['Add a book', 'पुस्तक जोड़ें'],
@@ -470,7 +470,7 @@ window.UP = window.UP || {};
     nothingSaved: ['Nothing saved yet', 'अभी कुछ सहेजा नहीं'],
     boards_h: ['Boards & paper patterns', 'बोर्ड व प्रश्नपत्र प्रारूप'],
     boards_s: ['The same chapter is examined differently across boards. Here is what changes.', 'एक ही अध्याय विभिन्न बोर्डों में भिन्न रूप में पूछा जाता है। यहाँ अंतर दिया है।'],
-    aboutTitle: ['About Upay, and its limits', 'उपाय के बारे में, और उसकी सीमाएँ'],
+    aboutTitle: ['About Kritin Upay, and its limits', 'कृतिन उपाय के बारे में, और उसकी सीमाएँ'],
     clear: ['Clear all', 'सब हटाइए'],
     methodCount: ['methods', 'विधियाँ'],
     source: ['Source', 'स्रोत'],
@@ -481,7 +481,7 @@ window.UP = window.UP || {};
     toastCopied: ['Answer copied', 'उत्तर कॉपी हो गया'],
     toastCleared: ['Cleared', 'हटा दिया गया'],
     toastQueued: ['Book queued — chapter text will be indexed when the file arrives', 'पुस्तक कतार में — फ़ाइल आने पर अध्याय पाठ अनुक्रमित होगा'],
-    footer1: ['Upay is a study aid. Solutions and AI explanations can be wrong; check them against your textbook and source.', 'उपाय एक अध्ययन सहायक है। हल और एआई की व्याख्याएँ गलत हो सकती हैं; इन्हें पाठ्यपुस्तक और मूल स्रोत से मिलाएँ।'],
+    footer1: ['Kritin Upay is a study aid. Solutions and AI explanations can be wrong; check them against your textbook and source.', 'कृतिन उपाय एक अध्ययन सहायक है। हल और एआई की व्याख्याएँ गलत हो सकती हैं; इन्हें पाठ्यपुस्तक और मूल स्रोत से मिलाएँ।'],
     footer2: ['NCERT content belongs to NCERT. Past-paper questions are reproduced for practice.', 'एनसीईआरटी सामग्री एनसीईआरटी की है। पिछले प्रश्न अभ्यास हेतु दिए गए हैं।'],
     classShort: ['Class', 'कक्षा'],
     weightage: ['Weightage', 'भार'],
@@ -862,9 +862,9 @@ window.UP = window.UP || {};
     const chapterCount = (catalogue() || []).length;
     rail.setAttribute('aria-label', S.lang === 'hi' ? 'मुख्य मेन्यू' : 'Main menu');
     rail.innerHTML = `
-      <a class="brand" href="#/home">
-        <span class="brand-mark">${icon('sparkle')}</span>
-        <span class="brand-name">उपाय<span>${t('brandSub')}</span></span>
+      <a class="brand" href="#/home" aria-label="Kritin Upay home">
+        <span class="brand-mark"><img src="/assets/brand/kritin-logo.png" alt="" width="54" height="48"></span>
+        <span class="brand-name">Kritin Upay<span>${t('brandSub')}</span></span>
       </a>
       <nav class="nav" aria-label="${S.lang === 'hi' ? 'अनुभाग' : 'Sections'}">
         <span class="nav-label">${t('learn')}</span>
@@ -992,7 +992,7 @@ window.UP = window.UP || {};
     const subject = P(UP.subjects[S.subject] || { en: S.subject, hi: S.subject });
     const src = (S.lang === 'hi' ? 'कक्षा ' : 'Class ') + S.cls + ' · ' + subject;
     document.getElementById('footer').innerHTML = `
-      <span>© ${new Date().getFullYear()} Upay · उपाय — ${t('brandSub')}</span>
+      <span>© ${new Date().getFullYear()} Kritin Upay — ${t('brandSub')}</span>
       <span class="fl"><span>${esc(src)}</span><span>${t('footer1')}</span><span>${t('footer2')}</span></span>`;
   }
 
@@ -2458,7 +2458,7 @@ window.UP = window.UP || {};
           </a>`).join('')}
       </div>` : ''}
     ${isBusiness ? `<div class="callout tip" style="margin-top:20px"><div>English outlines only; no full chapter text, questions or official answer key. Mapped to the CBSE syllabus, not certified by CBSE. <a class="link" href="https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/BusinessStudies_SecP2_2026-27.pdf">CBSE syllabus</a>.</div></div>` : isChemistry ? `<div class="callout tip" style="margin-top:20px"><div>English outlines only; no full chapter text or official answer key. Mapped to the CBSE 2026–27 Chemistry syllabus (subject 043), not certified by CBSE. The formative-only topics (Surface Chemistry; General Principles and Processes of Isolation of Elements; Polymers; Chemistry in Everyday Life) and the practical syllabus are not covered. <a class="link" href="https://cbseacademic.nic.in/web_material/CurriculumMain27/SecPart2/Chemistry_SecP2_2026-27.pdf">CBSE syllabus</a>.</div></div>` : (!isMaths10 || isAccountancy) ? `<div class="callout tip" style="margin-top:20px">${icon('info')}<div>${isEnglish12
-      ? (S.lang === 'hi' ? 'अध्यायों के स्वयं-जाँच प्रश्न उपाय ने बनाए हैं; वे बोर्ड प्रश्न या आधिकारिक उत्तर-कुंजी नहीं हैं। मूल पाठ और पुस्तक के अभ्यास PDF में हैं।' : 'The chapter review prompts were written by Upay; they are not board questions or an official answer key. The original text and textbook exercises are in the PDFs.')
+      ? (S.lang === 'hi' ? 'अध्यायों के स्वयं-जाँच प्रश्न कृतिन उपाय ने बनाए हैं; वे बोर्ड प्रश्न या आधिकारिक उत्तर-कुंजी नहीं हैं। मूल पाठ और पुस्तक के अभ्यास PDF में हैं।' : 'The chapter review prompts were written by Kritin Upay; they are not board questions or an official answer key. The original text and textbook exercises are in the PDFs.')
       : isEconomics
       ? (S.lang === 'hi'
         ? 'अध्ययन सामग्री संक्षिप्त मार्गदर्शिका है, पूर्ण पुस्तक या आधिकारिक उत्तर-कुंजी नहीं। दी गई सभी 11 अध्याय PDF अंग्रेज़ी और हिंदी में हैं; भारतीय आर्थिक विकास की पुस्तक इस सेट में नहीं है।'
@@ -2494,7 +2494,7 @@ window.UP = window.UP || {};
       </section>
       <section class="card flat english12-study-card" aria-labelledby="english12-review-heading">
         <h2 id="english12-review-heading">${hi ? 'स्वयं-जाँच के प्रश्न' : 'Questions for reflection'}</h2>
-        <p class="muted">${hi ? 'उपाय के अभ्यास संकेत; ये बोर्ड प्रश्न या आधिकारिक उत्तर-कुंजी नहीं हैं। उत्तर के लिए पाठ से प्रमाण खोजें।' : 'Upay review prompts, not past-paper questions or an official answer key. Support your answers with evidence from the text.'}</p>
+        <p class="muted">${hi ? 'कृतिन उपाय के अभ्यास संकेत; ये बोर्ड प्रश्न या आधिकारिक उत्तर-कुंजी नहीं हैं। उत्तर के लिए पाठ से प्रमाण खोजें।' : 'Kritin Upay review prompts, not past-paper questions or an official answer key. Support your answers with evidence from the text.'}</p>
         <ol>${ch.review.map(item => `<li>${esc(P(item))}</li>`).join('')}</ol>
       </section>
     </div>
@@ -2759,8 +2759,8 @@ window.UP = window.UP || {};
         </div>`).join('')}</div>`;
     } else if (isEconomicsChapter && tab === 'practice') {
       body = `<p class="muted econ-practice-intro">${S.lang === 'hi'
-        ? 'समझ जाँचने के लिए उपाय द्वारा बनाए गए प्रश्न और सुझाए गए संक्षिप्त उत्तर। ये बोर्ड प्रश्न या आधिकारिक उत्तर-कुंजी नहीं हैं।'
-        : 'Original Upay review checks with suggested short answers. These are not board questions or an official answer key.'}</p>
+        ? 'समझ जाँचने के लिए कृतिन उपाय द्वारा बनाए गए प्रश्न और सुझाए गए संक्षिप्त उत्तर। ये बोर्ड प्रश्न या आधिकारिक उत्तर-कुंजी नहीं हैं।'
+        : 'Original Kritin Upay review checks with suggested short answers. These are not board questions or an official answer key.'}</p>
         <div class="grid" style="gap:12px">${(ch.practice || []).map((item, i) => `<article class="card flat econ-practice-card">
           <div class="mini-label">${S.lang === 'hi' ? 'अभ्यास' : 'Review'} ${i + 1}</div>
           <h3>${esc(P(item.q))}</h3>
@@ -3353,7 +3353,7 @@ window.UP = window.UP || {};
         </div>
       </div>
       <p style="text-align:center;margin-top:16px;font-size:12.5px;color:var(--ink-400)">
-        ${isHi?'बिना खाते के भी आप प्रश्न पूछ सकते हैं, पर आपकी प्रगति सहेजी नहीं जाएगी।':'You can still use Upay without signing in, but your progress will not be saved across devices.'}
+        ${isHi?'बिना खाते के भी आप प्रश्न पूछ सकते हैं, पर आपकी प्रगति सहेजी नहीं जाएगी।':'You can still use Kritin Upay without signing in, but your progress will not be saved across devices.'}
       </p>
     </div>`;
   }
@@ -3677,11 +3677,11 @@ window.UP = window.UP || {};
     c.width=W;c.height=Math.max(500,Math.min(7900,y+140));
     ctx.fillStyle='#fdfbf6';ctx.fillRect(0,0,W,c.height);
     ctx.fillStyle='#e7002c';ctx.fillRect(0,0,W,72);
-    ctx.fillStyle='#fff';ctx.font='bold 36px system-ui';ctx.fillText('Upay',48,50);
+    ctx.fillStyle='#fff';ctx.font='bold 36px system-ui';ctx.fillText('Kritin Upay',48,50);
     rows.forEach(r=>{ctx.font=r.font;ctx.fillStyle=r.color;ctx.fillText(r.text,60,r.y);});
     ctx.fillStyle='#58656c';ctx.font='20px system-ui';
-    ctx.fillText(truncated?'First explanation excerpt · open Upay for the complete answer':'First explanation · cross-check with your textbook',60,c.height-65);
-    ctx.fillText('Upay · '+location.origin,60,c.height-30);
+    ctx.fillText(truncated?'First explanation excerpt · open Kritin Upay for the complete answer':'First explanation · cross-check with your textbook',60,c.height-65);
+    ctx.fillText('Kritin Upay · '+location.origin,60,c.height-30);
     const blob=await new Promise(resolve=>c.toBlob(resolve,'image/png'));
     if(!dialog.isConnected)return;
     if(!blob){dialog.querySelector('[data-share-status]').textContent='Image could not be prepared. Please try again.';return;}
@@ -3693,7 +3693,7 @@ window.UP = window.UP || {};
     let canShare=false;try{canShare=!!(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]}));}catch(e){/* use explicit download fallback */}
     dialog.querySelector('[data-share-status]').textContent=canShare?'Preview the image, then share or download it.':'File sharing is not supported in this browser. Preview the image and choose Download image to save it.';
     share.hidden=!canShare;
-    share.onclick=async()=>{try{await navigator.share({files:[file],title:'Upay answer'});}catch(e){if(e.name!=='AbortError')dialog.querySelector('[data-share-status]').textContent='Sharing was unavailable. You can choose Download image instead.';}};
+    share.onclick=async()=>{try{await navigator.share({files:[file],title:'Kritin Upay answer'});}catch(e){if(e.name!=='AbortError')dialog.querySelector('[data-share-status]').textContent='Sharing was unavailable. You can choose Download image instead.';}};
     const download=dialog.querySelector('[data-share-download]');download.disabled=false;download.onclick=()=>downloadLink(blob,'upay-answer.png');
   }
   function downloadLink(what, name){
@@ -3799,7 +3799,7 @@ window.UP = window.UP || {};
     <header class="page-head">
       <span class="eyebrow"><span class="dot"></span>${S.lang === 'hi' ? 'पारदर्शिता' : 'transparency'}</span>
       <h1>${t('aboutTitle')}</h1>
-      <p>${S.lang === 'hi' ? 'उपाय कैसे उत्तर बनाता है, और वह कहाँ आपकी पाठ्यपुस्तक से मेल नहीं खा सकता।' : 'How Upay builds an answer, and where it can differ from your textbook.'}</p>
+      <p>${S.lang === 'hi' ? 'कृतिन उपाय कैसे उत्तर बनाता है, और वह कहाँ आपकी पाठ्यपुस्तक से मेल नहीं खा सकता।' : 'How Kritin Upay builds an answer, and where it can differ from your textbook.'}</p>
     </header>
     <div class="grid grid-2">
       <article class="card">
@@ -4011,7 +4011,7 @@ window.UP = window.UP || {};
       a.classList.toggle('active', on);
       if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
-    document.title = 'Upay · ' + ({ home: 'Home', ask: 'Ask', today: 'Today', syllabus: 'Syllabus', chapter: (chapterById(r.id) ? P({ en: chapterById(r.id).en, hi: chapterById(r.id).hi }) : 'Chapter'), boards: 'Boards', books: 'Books', saved: 'Saved', about: 'About', parent: 'Parent', apikey: 'API key', admin: 'Admin', login: 'Sign in', account: 'Account', mistakes: 'Mistakes', mock: 'Mock test', mockresult: 'Result', cheatsheet: 'Cheatsheet', search: 'Search' }[r.name] || 'Home');
+    document.title = 'Kritin Upay · ' + ({ home: 'Home', ask: 'Ask', today: 'Today', syllabus: 'Syllabus', chapter: (chapterById(r.id) ? P({ en: chapterById(r.id).en, hi: chapterById(r.id).hi }) : 'Chapter'), boards: 'Boards', books: 'Books', saved: 'Saved', about: 'About', parent: 'Parent', apikey: 'API key', admin: 'Admin', login: 'Sign in', account: 'Account', mistakes: 'Mistakes', mock: 'Mock test', mockresult: 'Result', cheatsheet: 'Cheatsheet', search: 'Search' }[r.name] || 'Home');
     // auto-size hero textarea
     const ta = main.querySelector('textarea[name="q"]');
     if (ta) {
@@ -4582,8 +4582,8 @@ window.UP = window.UP || {};
           ? 'अध्याय चुनिए और दिए गए CBSE प्रश्नपत्रों से स्रोत-चिह्नित प्रश्नों का अभ्यास सेट बनाइए। ये मूल प्रश्न हैं — नए अंकों से बनाए गए प्रश्न नहीं। उत्तर-कुंजी और अंक-वितरण इस बैंक में शामिल नहीं हैं।'
           : 'Choose chapters to build a practice set from the source-tagged CBSE papers. These are original questions, not newly generated variants; answer keys and marks are not included in this bank.')
         : (S.lang === 'hi'
-          ? 'बोर्ड चुनिए, अध्याय चुनिए, और उपाय उसी पैटर्न पर नया प्रश्नपत्र बनाएगा — आसान, मध्यम और कठिन खंडों में। प्रत्येक प्रश्न CBSE के पिछले प्रश्नों की किसी तर्क-शैली से बना है, पर संख्याएँ नई हैं।'
-          : 'Pick your board and chapters. Upay assembles a fresh paper in the same pattern, split into easy, medium and hard sections. Every question is built from the reasoning of a real CBSE past question — with new numbers, so nothing is memorised.')}</p>
+          ? 'बोर्ड चुनिए, अध्याय चुनिए, और कृतिन उपाय उसी पैटर्न पर नया प्रश्नपत्र बनाएगा — आसान, मध्यम और कठिन खंडों में। प्रत्येक प्रश्न CBSE के पिछले प्रश्नों की किसी तर्क-शैली से बना है, पर संख्याएँ नई हैं।'
+          : 'Pick your board and chapters. Kritin Upay assembles a fresh paper in the same pattern, split into easy, medium and hard sections. Every question is built from the reasoning of a real CBSE past question — with new numbers, so nothing is memorised.')}</p>
     </section>
 
     <section class="card test-setup">
@@ -5793,7 +5793,7 @@ window.UP = window.UP || {};
       const b64 = btoa(unescape(encodeURIComponent(json))).replace(/=+$/, '').replace(/\//g, '_').replace(/\+/g, '-');
       const url = location.origin + location.pathname + '#/ask?s=' + b64;
       if (navigator.share) {
-        navigator.share({ title: 'Upay · ' + (q || ''), text: q, url: url }).catch(() => {});
+        navigator.share({ title: 'Kritin Upay · ' + (q || ''), text: q, url: url }).catch(() => {});
       } else {
         (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => toast(S.lang === 'hi' ? 'लिंक कॉपी हो गया' : 'Link copied')).catch(() => toast(url));
       }
@@ -6639,22 +6639,14 @@ function importProgress(file){
     link = document.createElement('link'); link.rel='manifest';
     document.head.appendChild(link);
   }
-  const manifest = {
-    name:'Upay · उपाय', short_name:'Upay',
-    description:'Free Class 10 CBSE study companion',
-    start_url:'/', scope:'/', display:'standalone', orientation:'portrait',
-    background_color:'#fbf7ec', theme_color:'#1e3a2b',
-    icons:[{src:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="36" fill="%231e3a2b"/><text x="96" y="120" font-family="serif" font-size="96" fill="%23f4c24b" text-anchor="middle" font-weight="700">उ</text></svg>', sizes:'192x192', type:'image/svg+xml', purpose:'any maskable'}]
-  };
-  const blob = new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
-  link.href = URL.createObjectURL(blob);
-  // Meta theme color
+  // Keep install branding identical before and after the application boots.
+  link.href = '/manifest.webmanifest';
   let mt=document.querySelector('meta[name=theme-color]');
   if(!mt){ mt=document.createElement('meta'); mt.name='theme-color'; document.head.appendChild(mt); }
-  mt.content = '#1e3a2b';
-  // Apple touch icon
+  mt.content = '#e7002c';
   if(!document.querySelector('link[rel=apple-touch-icon]')){
-    const l=document.createElement('link'); l.rel='apple-touch-icon'; l.href=manifest.icons[0].src; document.head.appendChild(l);
+    const l=document.createElement('link'); l.rel='apple-touch-icon';
+    l.href='/assets/brand/kritin-icon-192.png'; document.head.appendChild(l);
   }
 })();
 
@@ -6741,7 +6733,7 @@ function viewCheatsheet(params){
       <a class="btn btn-sm btn-ghost" href="#/chapter/${ch.id}">${hi ? 'पाठ पर लौटें' : 'Back to reading'}</a>
     </section>
     <article class="card flat cheatsheet" style="padding:20px;line-height:1.75">
-      <p class="muted">${hi ? 'उपाय के संकेत; मूल PDF से उत्तर और व्याख्या जाँचें। यह आधिकारिक उत्तर-कुंजी नहीं है।' : 'Upay prompts; check answers and interpretations against the original PDF. This is not an official answer key.'}</p>
+      <p class="muted">${hi ? 'कृतिन उपाय के संकेत; मूल PDF से उत्तर और व्याख्या जाँचें। यह आधिकारिक उत्तर-कुंजी नहीं है।' : 'Kritin Upay prompts; check answers and interpretations against the original PDF. This is not an official answer key.'}</p>
       <p>${esc(P({en:ch.enDesc,hi:ch.hiDesc}))}</p><h3>${hi ? 'पढ़ते समय' : 'Reading focus'}</h3>
       <ul>${ch.focus.map(item => `<li>${esc(P(item))}</li>`).join('')}</ul>
       <h3>${hi ? 'स्वयं-जाँच' : 'Review questions'}</h3><ol>${ch.review.map(item => `<li>${esc(P(item))}</li>`).join('')}</ol>
@@ -6763,7 +6755,7 @@ function viewCheatsheet(params){
       ${formulas ? `<h3>${S.lang==='hi'?'मुख्य सूत्र':'Key formulas'}</h3><ul>${formulas}</ul>` : ''}
       <h3>${S.lang==='hi'?'स्वयं जाँच':'Review checks'}</h3>
       <ol>${(ch.practice||[]).map(item => `<li>${esc(P(item.q))}</li>`).join('')}</ol>
-      <p class="muted">${S.lang==='hi'?'ये उपाय के अभ्यास प्रश्न हैं, बोर्ड प्रश्न या आधिकारिक उत्तर-कुंजी नहीं।':'These are Upay review checks, not board questions or an official answer key.'}</p>
+      <p class="muted">${S.lang==='hi'?'ये कृतिन उपाय के अभ्यास प्रश्न हैं, बोर्ड प्रश्न या आधिकारिक उत्तर-कुंजी नहीं।':'These are Kritin Upay review checks, not board questions or an official answer key.'}</p>
     </article>`;
   }
   const qs = (UP.pyq || []).filter(q => qInScope(q) && UP.qHasChapter(q, params.ch)).map(pyqQuestionText);
@@ -6833,7 +6825,7 @@ function shareAnswerAsStory(){
   x.fillStyle='#fdf8ea'; x.fillRect(0,0,W,H);
   // Brand band
   x.fillStyle='#1e3a2b'; x.fillRect(0,0,W,180);
-  x.fillStyle='#f4c24b'; x.font='bold 60px serif, Noto Serif, Georgia'; x.fillText('उपाय · Upay',70,120);
+  x.fillStyle='#f4c24b'; x.font='bold 60px serif, Noto Serif, Georgia'; x.fillText('Kritin Upay',70,120);
   x.fillStyle='#1e3a2b'; x.font='bold 52px serif, Noto Serif, Georgia';
   wrap(x,'प्रश्न',70,280,W-140,70);
   x.fillStyle='#2a2a2a'; x.font='40px sans-serif, Noto Sans, Arial';
@@ -6841,11 +6833,11 @@ function shareAnswerAsStory(){
   x.fillStyle='#1e3a2b'; x.font='bold 52px serif'; wrap(x,'उत्तर',70,780,W-140,70);
   x.fillStyle='#2a2a2a'; x.font='40px sans-serif';
   wrap(x,(a.result||a.summary||(typeof a==='string'?a:'')).toString().slice(0,360),70,840,W-140,56);
-  x.fillStyle='#1e3a2b'; x.font='30px sans-serif'; x.fillText('upay.fyi · Class 10 CBSE · मैंने हल किया!',70,H-80);
+  x.fillStyle='#1e3a2b'; x.font='30px sans-serif'; x.fillText('Kritin Upay · '+location.host+' · मैंने हल किया!',70,H-80);
   c.toBlob(b=>{
     const f=new File([b],'upay-story.png',{type:'image/png'});
     if(navigator.share && navigator.canShare && navigator.canShare({files:[f]})){
-      navigator.share({files:[f], title:'Upay story'}).catch(()=>downloadLink(b,'upay-story.png'));
+      navigator.share({files:[f], title:'Kritin Upay story'}).catch(()=>downloadLink(b,'upay-story.png'));
     } else downloadLink(b,'upay-story.png');
   },'image/png');
 }

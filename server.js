@@ -97,7 +97,7 @@ function freshDB() {
       signupCode: '',
       signupNote: 'Class 10 Mathematics',
       geminiModel: 'gemini-3.5-flash-lite',
-      siteTitle: 'Upay · उपाय'
+      siteTitle: 'Kritin Upay'
     },
     users: [{
       id: 'u_admin',
@@ -416,6 +416,7 @@ function requireRole(sess, roles) {
 /* ---------------- static files ---------------- */
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
+  '.webmanifest': 'application/manifest+json; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon',
   '.woff2': 'font/woff2', '.pdf': 'application/pdf'
@@ -431,14 +432,14 @@ function notFoundPage(res, why, hint) {
   /* "/" is relative to whatever host the browser actually used. A literal
      http://localhost:PORT link is dead when the app is opened on 192.168.x.x
      or through a preview host. */
-  res.end('<!doctype html><meta charset="utf-8"><title>Upay</title>'
+  res.end('<!doctype html><meta charset="utf-8"><title>Kritin Upay</title>'
     + '<div style="font:16px/1.6 system-ui,sans-serif;max-width:560px;margin:12vh auto;padding:0 24px;color:#2b3a42">'
-    + '<h1 style="font-size:20px;margin:0 0 10px">This is not the Upay address</h1>'
+    + '<h1 style="font-size:20px;margin:0 0 10px">This is not the Kritin Upay address</h1>'
     + '<p style="color:#5b6b74">' + why + '</p>'
     + (hint ? '<p style="color:#5b6b74">' + hint + '</p>' : '')
     + '<p style="margin-top:18px"><a href="/" '
     + 'style="display:inline-block;padding:9px 20px;border-radius:10px;background:#46a0c9;'
-    + 'color:#fff;text-decoration:none;font-weight:600">Open Upay</a></p>'
+    + 'color:#fff;text-decoration:none;font-weight:600">Open Kritin Upay</a></p>'
     + '</div>');
 }
 
