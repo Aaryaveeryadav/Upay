@@ -1810,6 +1810,7 @@ window.UP = window.UP || {};
           '</div><div class="figure-body">' + svg + '</div>' +
           '<figcaption>' + esc(figSpec.caption || '') + '</figcaption></figure>';
       } catch (e) { fig = ''; }
+      if (!fig) fig = '<p class="muted ai-diagram-unavailable" role="status">' + (S.lang === 'hi' ? 'AI चित्र के निर्देशांक अधूरे हैं; चित्र नहीं दिखाया जा सका। व्याख्या नीचे उपलब्ध है।' : 'The AI diagram data could not be rendered safely. The written explanation is still available below.') + '</p>';
     }
     return fig;
   }
@@ -2033,21 +2034,7 @@ window.UP = window.UP || {};
         /* the figure the AI drew from this question's own numbers -- rendered
            here too, because a bank question with a worked solution but no
            diagram is exactly the gap the student complained about */
-        (function () {
-          if (!j.diagram || !UP.figures || !UP.figures.generic) return '';
-          /* apply the same honesty filter as on the main answer */
-          if (typeof diagramIsHonestForSubject === 'function' &&
-              !diagramIsHonestForSubject(j.diagram, j.questionUnderstood || qq.en || qq.hi, S.subject)) return '';
-          try {
-            const svg = UP.figures.generic(Object.assign({}, j.diagram, { caption: j.diagram.caption }));
-            if (!svg) return '';
-            return '<figure class="figure-card" style="margin-top:14px">' +
-              '<div class="figure-head"><span class="mini-label">' + (S.lang === 'hi' ? 'चित्र' : 'Diagram') + '</span>' +
-              '<span class="tag grey">' + (S.lang === 'hi' ? 'प्रश्न के अपने मानों से बना' : 'drawn from this question’s own numbers') + '</span></div>' +
-              '<div class="figure-body">' + svg + '</div>' +
-              '<figcaption>' + esc((j.diagram && j.diagram.caption) || '') + '</figcaption></figure>';
-          } catch (e) { return ''; }
-        })();
+        renderAIDiagram(Object.assign({}, j, {question: qq.en || qq.hi || ''}));
       pyqCache[id] = html;
       sol.innerHTML = html;
       /* Persist this AI answer so next visit is instant */
@@ -3855,6 +3842,7 @@ window.UP = window.UP || {};
           } else {
             ans = UP.answerQuestion(q) || UP.fallbackAnswer(q, S.lang, true);
           }
+          if (!ans) ans = accountancyAIWaiting(q);
           ans.question = q;
           S.answer = ans;
           S.aiAnswer = null; S.aiState = 'loading'; S.aiQuestion = q; S.aiScope = scope;
