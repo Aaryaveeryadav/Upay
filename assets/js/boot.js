@@ -59,7 +59,7 @@
     'assets/js/data/pyq-accountancy-2023-2026-extracted.js?v=26ab', // 34 source-tagged Accountancy papers, loaded into both Class 12 tracks
     'assets/js/data/accountancy-original-papers.js?v=26ab', // source-only PDFs, not searchable questions
     'assets/js/data/mcq-keyed.js',
-    'assets/js/question-quality.js?v=26f0', // shared conservative activity/OCR quality gates
+    'assets/js/question-quality.js?v=26f2', // shared conservative activity/OCR quality gates
     'assets/js/question-fold.js?v=26f0', // shared Hindi/Sanskrit/English exercise folding
     'assets/js/data/question-overrides.js?v=26f0', // question-bank curation, applied once packs are in
     'assets/js/math-render.js?v=26f0', // safe inline TeX rendering for questions, options and answers
@@ -243,7 +243,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26f0');
+    return loadScript('assets/js/app.js?v=26f2');
   }
 
   function loadPostPaint() {
