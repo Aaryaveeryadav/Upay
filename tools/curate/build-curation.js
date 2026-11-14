@@ -28,6 +28,8 @@ const vm = require('vm');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const OUT = path.join(ROOT, 'assets/js/data/question-overrides.js');
+const questionQuality = require(path.join(ROOT, 'assets/js/question-quality.js'));
+const questionFold = require(path.join(ROOT, 'assets/js/question-fold.js'));
 
 /* ---------------------------------------------------------------- loading */
 
@@ -72,7 +74,7 @@ const PACKS = [
 ];
 
 function loadBank() {
-  const ctx = { window: {}, console };
+  const ctx = { window: {}, console, setTimeout: () => 0 };
   ctx.window = ctx;
   ctx.document = {};
   ctx.self = ctx;
@@ -85,7 +87,8 @@ function loadBank() {
   };
   CORE.forEach(run);
   PACKS.forEach(p => p.forEach(run));
-  return ctx.UP.pyq || [];
+  const synthesizedIds = questionFold.foldLiteratureQuestions(ctx.UP || {});
+  return { bank: ctx.UP.pyq || [], synthesizedIds };
 }
 
 /* ---------------------------------------------------------------- cleaning */
@@ -131,11 +134,11 @@ function norm(text) {
 // are the two "OR" alternatives of one question: they share the Hindi field and
 // the answer but hold different English parts, so they are not duplicates.
 function compareText(q) {
-  return norm(q.en) + '\u0000' + norm(q.hi);
+  return norm(q.en) + '\u0000' + norm(q.hi) + '\u0000' + norm(q.sa);
 }
 
 function displayText(q) {
-  return (stripDebris(q.en) || stripDebris(q.hi)).slice(0, 88);
+  return (stripDebris(q.en) || stripDebris(q.hi) || stripDebris(q.sa)).slice(0, 88);
 }
 
 /* ------------------------------------------------------------ classification */
@@ -144,11 +147,17 @@ function displayText(q) {
 const QUESTION_SIGNAL = /\b(define|explain|describe|calculate|compute|find|prove|why|how|what|which|state|write|give|name|mention|differentiate|distinguish|compare|derive|show|solve|evaluate|identify|choose|select|complete|list|discuss|justify|assertion|reason|match|read|answer|attempt|examine|observe|draw|label|comment|analyse|analyze|predict|interpret|verify|check|express|represent|construct|locate|trace|fill|true or false|correct option|given below|following)\b/i;
 
 function classify(q) {
-  const body = stripDebris(q.en) || stripDebris(q.hi);
+  const body = stripDebris(q.en) || stripDebris(q.hi) || stripDebris(q.sa);
 
   // Nothing to show at all.
   if (!body) return 'blank';
   if (body.length < 4) return 'blank';
+
+  // Activities, paper-level directions, generic prompts without a topic, and
+  // obvious Hindi OCR noise are not standalone questions. Keep source text
+  // untouched; the sidecar only withholds the defective record.
+  const qualityIssue = questionQuality.inspect(q, q.subject);
+  if (qualityIssue) return qualityIssue;
 
   // Many records keep their options inline in the stem, e.g.
   // "... is : (A) 12 (B) 120 (C) 1200 (D) 40". Those are real MCQs.
@@ -181,8 +190,11 @@ function classify(q) {
 /* ------------------------------------------------------------------- build */
 
 function build() {
-  const bank = loadBank();
+  const loaded = loadBank();
+  const bank = loaded.bank;
+  const synthesizedIds = loaded.synthesizedIds;
   const dropped = [];
+  const dropReasons = {};
   const duplicates = [];
   const renames = {};
   const patched = {};
@@ -196,6 +208,7 @@ function build() {
     const verdict = classify(q);
     if (verdict) {
       dropped.push({ id: q.id, reason: verdict, text: displayText(q) });
+      dropReasons[q.id] = verdict;
       continue;
     }
 
@@ -227,29 +240,33 @@ function build() {
 
     seenExact.set(exactKey, q.id);
 
-    // Non-destructive text repairs: strip print debris only.
-    const fixedEn = stripDebris(q.en);
-    const fixedHi = stripDebris(q.hi);
+    // Non-destructive text repairs: remove print debris and, when a clean
+    // question precedes an explicit activity label, separate that activity.
+    const fixedEn = stripDebris(questionQuality.cleanActivityTail(q.en));
+    const fixedHi = stripDebris(questionQuality.cleanActivityTail(q.hi));
+    const fixedSa = stripDebris(questionQuality.cleanActivityTail(q.sa));
     const patch = {};
     if (fixedEn !== String(q.en || '')) patch.en = fixedEn;
     if (fixedHi !== String(q.hi || '')) patch.hi = fixedHi;
+    if (fixedSa !== String(q.sa || '')) patch.sa = fixedSa;
     if (Object.keys(patch).length) patched[q.id] = patch;
 
     kept.push(q);
   }
 
-  return { bank, kept, dropped, duplicates, renames, patched };
+  return { bank, kept, dropped, dropReasons, duplicates, renames, patched, synthesizedIds };
 }
 
 /* ------------------------------------------------------------------ output */
 
 function report(res) {
-  const { bank, kept, dropped, duplicates, renames, patched } = res;
+  const { bank, kept, dropped, duplicates, renames, patched, synthesizedIds } = res;
   const byReason = {};
   dropped.forEach(d => { byReason[d.reason] = (byReason[d.reason] || 0) + 1; });
   const removed = dropped.length + duplicates.length;
 
   console.log(`records loaded        : ${bank.length}`);
+  console.log(`folded exercise rows  : ${synthesizedIds.length}`);
   console.log(`records held back     : ${removed} (${(100 * removed / bank.length).toFixed(2)}%)`);
   Object.entries(byReason).sort((a, b) => b[1] - a[1])
     .forEach(([k, v]) => console.log(`    ${k.padEnd(18)}${String(v).padStart(5)}`));
@@ -282,18 +299,23 @@ function report(res) {
   });
 }
 
-function write(res) {
-  const { dropped, duplicates, renames, patched } = res;
-  const payload = {
+function payloadFor(res) {
+  const { dropped, dropReasons, duplicates, renames, patched, synthesizedIds } = res;
+  return {
     version: 1,
-    generated: new Date().toISOString(),
     note: 'Generated by tools/curate/build-curation.js. Applied by boot.js after every ' +
           'question pack loads. Source data files are never modified.',
     drop: dropped.map(d => d.id),
+    dropReasons,
     duplicates: duplicates.map(d => d.id),
     renames,
     patched,
+    foldedExerciseIds: synthesizedIds,
   };
+}
+
+function write(res) {
+  const payload = Object.assign({ generated: new Date().toISOString() }, payloadFor(res));
   const body = JSON.stringify(payload);
   fs.writeFileSync(OUT,
     '/* GENERATED by tools/curate/build-curation.js - do not edit by hand.\n' +
@@ -303,6 +325,37 @@ function write(res) {
   console.log(`\nwrote ${path.relative(ROOT, OUT)} (${(body.length / 1024).toFixed(1)} KB)`);
 }
 
+function stable(value) {
+  if (Array.isArray(value)) return '[' + value.map(stable).join(',') + ']';
+  if (value && typeof value === 'object') return '{' + Object.keys(value).sort()
+    .map(key => JSON.stringify(key) + ':' + stable(value[key])).join(',') + '}';
+  return JSON.stringify(value);
+}
+
+function check(res) {
+  try {
+    const source = fs.readFileSync(OUT, 'utf8');
+    const match = source.match(/UP\.questionOverrides\s*=\s*(\{[\s\S]*\});?\s*$/);
+    if (!match) throw new Error('generated sidecar assignment not found');
+    const actual = JSON.parse(match[1]);
+    const expected = payloadFor(res);
+    const stale = Object.keys(expected).filter(key => stable(actual[key]) !== stable(expected[key]));
+    if (stale.length) {
+      console.error('curation sidecar is stale; rerun with --write (fields: ' + stale.join(', ') + ')');
+      process.exitCode = 1;
+    } else {
+      console.log('curation sidecar matches the current bank and runtime-folded exercises');
+    }
+  } catch (error) {
+    console.error('curation sidecar check failed: ' + error.message);
+    process.exitCode = 1;
+  }
+}
+
 const res = build();
 report(res);
-if (process.argv.includes('--write')) write(res);
+if (process.argv.includes('--write') && process.argv.includes('--check')) {
+  console.error('choose either --write or --check');
+  process.exitCode = 1;
+} else if (process.argv.includes('--write')) write(res);
+else if (process.argv.includes('--check')) check(res);

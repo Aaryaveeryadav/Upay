@@ -17,7 +17,7 @@ const {chromium}=require('playwright');
     brandDuration:getComputedStyle(el.parentElement).animationDuration
    }));
    assert.equal(welcomeMotion.lineDelay,'0s','underline starts immediately');
-   assert.equal(welcomeMotion.lineDuration,'0.22s','underline remains a quick reveal');
+   assert.equal(welcomeMotion.lineDuration,'0.2s','underline uses the requested 200ms reveal');
    assert.equal(welcomeMotion.brandDuration,'0.42s','brand reveal no longer stretches the underline');
    await page.waitForFunction(()=>window.UP&&UP.S&&document.body.classList.contains('up-ready'));
    await page.waitForFunction(()=>!document.getElementById('kritin-welcome'));

@@ -32,7 +32,10 @@ def main():
     bad_responses = []
     failed_requests = []
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True, args=['--disable-dev-shm-usage'])
+        launch_options = {'headless': True, 'args': ['--disable-dev-shm-usage']}
+        if os.environ.get('UPAY_CHROMIUM'):
+            launch_options['executable_path'] = os.environ['UPAY_CHROMIUM']
+        browser = p.chromium.launch(**launch_options)
 
         def setup(width=1440, height=950):
             ctx = browser.new_context(service_workers='block', viewport={'width': width, 'height': height})
@@ -46,6 +49,10 @@ def main():
             pg.on('requestfailed', lambda r: failed_requests.append((pg.url, r.url, r.failure)))
             pg.route('**/api/ai/solve', lambda route: route.fulfill(status=503, content_type='application/json', body='{"error":"AI disabled for smoke test"}'))
             pg.route('**/api/tel', lambda route: route.fulfill(status=200, content_type='application/json', body='{"ok":true}'))
+            # The public-route smoke does not depend on remote fonts or auth
+            # health. Keep it hermetic when the test environment blocks egress.
+            pg.route('https://fonts.googleapis.com/**', lambda route: route.fulfill(status=200, content_type='text/css', body=''))
+            pg.route('https://**/auth/v1/health', lambda route: route.fulfill(status=200, content_type='application/json', body='{}'))
             pg.goto(BASE + '/', wait_until='networkidle', timeout=60000)
             pg.wait_for_function('window.UP && UP.S && document.body.classList.contains("up-ready")', timeout=60000)
             return ctx, pg

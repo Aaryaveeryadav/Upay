@@ -26,6 +26,10 @@ with sync_playwright() as p:
     assert page.locator('#'+ar+' .q-opt').count()==4
     assert 'Assertion' in page.locator('#'+ar+' .pyq-kind').inner_text()
     assert 'Questions number' not in page.locator('#'+ar+' .q-text').inner_text()
+    choices = page.locator('#'+ar+' .q-opts')
+    assert choices.is_hidden(), 'past-paper choices should start collapsed'
+    page.locator('#'+ar+' .q-options-toggle').click()
+    assert choices.is_visible(), 'the options control should reveal past-paper choices'
     page.locator('#'+ar+' [data-i="0"]').click()
     assert page.locator('#'+ar+' .q-opt.right, #'+ar+' .q-opt.wrong').count()==0
     for width in (1280,390):
