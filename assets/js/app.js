@@ -575,10 +575,14 @@ window.UP = window.UP || {};
   /* --------------------------- persistence --------------------------- */
   const saveState = () => { store.set('lang', S.lang); store.set('cls', S.cls); store.set('subject', S.subject); store.set('board', S.board); };
   const saveSaved = () => store.set(S.savedKey, S.saved);
-  function saveQuestionButton(question) {
+  function saveQuestionButton(question, compact = false) {
     const q = String(question || '').trim(); if (!q) return '';
     const saved = S.saved.some(item => item.q === q);
-    return `<button type="button" class="btn btn-cream btn-sm" data-action="saveQuestion" data-q="${esc(q)}" ${saved ? 'disabled' : ''}>${icon(saved ? 'check' : 'save')} ${saved ? (S.lang === 'hi' ? 'सहेजा गया' : 'Saved') : (S.lang === 'hi' ? 'प्रश्न सहेजें' : 'Save question')}</button>`;
+    const label = saved ? (S.lang === 'hi' ? 'सहेजा गया' : 'Saved') : (S.lang === 'hi' ? 'प्रश्न सहेजें' : 'Save question');
+    if (compact) {
+      return `<button type="button" class="q-save-corner" data-action="saveQuestion" data-q="${esc(q)}" aria-label="${esc(label)}" title="${esc(label)}" ${saved ? 'disabled' : ''}>${icon(saved ? 'check' : 'save')}</button>`;
+    }
+    return `<button type="button" class="btn btn-cream btn-sm" data-action="saveQuestion" data-q="${esc(q)}" ${saved ? 'disabled' : ''}>${icon(saved ? 'check' : 'save')} ${label}</button>`;
   }
 
   const saveRecent = () => store.set(recentStoreKey(), S.recent);
@@ -4763,6 +4767,7 @@ window.UP = window.UP || {};
     const writingTask = UP.taskRouting.resolve(P(q), S.subject).task === 'writing';
     const graded = !writingTask && !sourceQuestion && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim());
     const diff = q.d >= 3 ? 3 : q.d >= 2 ? 2 : 1;
+    const questionText = q.tid ? P(q) : pyqQuestionText((q.en || q.hi) ? q : (q.raw || q));
     const opts = hasOpts(q) ? `<div class="q-opts">${q.opts.map((o, i) => {
       const label = String.fromCharCode(65 + i);
       const picked = a && a.pick === o.en;
@@ -4787,12 +4792,14 @@ window.UP = window.UP || {};
           <span class="q-ch">${esc(chapterName(q.ch))}</span>
           ${q.marks != null && q.marks > 0 ? `<span class="q-marks">${q.marks} ${S.lang === 'hi' ? 'अंक' : 'mark' + (q.marks > 1 ? 's' : '')}</span>` : ''}
         </div>
-        <button class="q-toggle" data-action="test-reveal" data-q="${q.no}" aria-expanded="${a && a.shown ? 'true' : 'false'}">
-          ${icon('bulb')} ${a && a.shown ? (S.lang === 'hi' ? 'हल छिपाएँ' : 'Hide solution') : (!graded ? (S.lang === 'hi' ? 'AI से व्याख्या लें' : 'Get AI explanation') : (S.lang === 'hi' ? 'हल देखें' : 'Show solution'))}
-        </button>
+        <div class="q-actions">
+          <button class="q-toggle" data-action="test-reveal" data-q="${q.no}" aria-expanded="${a && a.shown ? 'true' : 'false'}">
+            ${icon('bulb')} ${a && a.shown ? (S.lang === 'hi' ? 'हल छिपाएँ' : 'Hide solution') : (!graded ? (S.lang === 'hi' ? 'AI से व्याख्या लें' : 'Get AI explanation') : (S.lang === 'hi' ? 'हल देखें' : 'Show solution'))}
+          </button>
+          ${saveQuestionButton(questionText, true)}
+        </div>
       </div>
-      <div class="pactions">${saveQuestionButton(q.tid ? P(q) : pyqQuestionText((q.en || q.hi) ? q : (q.raw || q)))}</div>
-      <div class="q-text">${esc(q.tid ? P(q) : pyqQuestionText((q.en || q.hi) ? q : (q.raw || q)))}</div>
+      <div class="q-text">${esc(questionText)}</div>
       ${q.fig && typeof q.fig === 'string' ? (() => { const bf = boardFig(q); return bf ? `<div class="figure-card test-fig">${bf.svg}</div>` : ''; })() : ''}
       ${S.lang === 'hi' && (q.raw || q).hindiReview ? '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>' : ''}
       ${opts}
@@ -5737,7 +5744,14 @@ window.UP = window.UP || {};
       document.querySelectorAll('[data-action="saveQuestion"]').forEach(btn => {
         if (btn.dataset.q !== q) return;
         btn.disabled = true;
-        btn.innerHTML = icon('check') + ' ' + (S.lang === 'hi' ? 'सहेजा गया' : 'Saved');
+        const label = S.lang === 'hi' ? 'सहेजा गया' : 'Saved';
+        if (btn.classList.contains('q-save-corner')) {
+          btn.innerHTML = icon('check');
+          btn.setAttribute('aria-label', label);
+          btn.title = label;
+        } else {
+          btn.innerHTML = icon('check') + ' ' + label;
+        }
       });
       toast(S.lang === 'hi' ? 'सहेजा गया — Saved पृष्ठ पर देखें' : 'Question saved — find it in Saved');
       return;

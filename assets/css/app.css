@@ -750,7 +750,14 @@ select.select option{background:#fff;color:var(--ink-800,#1d2730);font-weight:50
 .q-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex:1;font-size:12px;color:var(--ink-400)}
 .q-ch{color:var(--ink-500)}
 .q-marks{font-family:var(--mono);font-size:11px;color:var(--ink-400)}
-.q-toggle{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:12.3px;color: var(--text-primary);
+.q-actions{display:flex;align-items:center;gap:6px;flex:0 0 auto;margin-left:auto}
+.q-save-corner{width:30px;height:30px;flex:0 0 30px;display:inline-flex;align-items:center;justify-content:center;padding:0;
+  color:var(--ink-600);background:#fff;border:1px solid var(--cream-300);border-radius:9px;box-shadow:var(--shadow-sm);transition:background .14s,border-color .14s,color .14s}
+.q-save-corner svg{width:15px;height:15px}
+.q-save-corner:hover:not(:disabled){color:#e7002c;background:#fff5f6;border-color:#e7002c}
+.q-save-corner:disabled{color:#e7002c;cursor:default}
+.q-save-corner:focus-visible{outline:2px solid #e7002c;outline-offset:2px}
+.q-toggle{margin-left:0;display:inline-flex;align-items:center;gap:6px;font-size:12.3px;color: var(--text-primary);
   background:var(--sky-50);border:1px solid var(--sky-100);border-radius:9px;padding:5px 10px;cursor:pointer}
 .q-toggle svg{width:14px;height:14px}
 .q-toggle:hover{background:var(--sky-100)}
@@ -1407,7 +1414,7 @@ h1:lang(hi), h2:lang(hi), h3:lang(hi), .approach-body p:lang(hi), .snippet block
 .upay-dyslexic p,.upay-dyslexic li{max-width:68ch}
 
 /* Print */
-@media print{.topbar,.bottom-nav,.rail,.pactions,.ask-bar,.search-bar,.page-head .eyebrow~button{display:none!important}body{background:#fff}}
+@media print{.topbar,.bottom-nav,.rail,.pactions,.q-save-corner,.ask-bar,.search-bar,.page-head .eyebrow~button{display:none!important}body{background:#fff}}
 
 /* Mistakes list */
 .pyq-list{display:flex;flex-direction:column;gap:10px}
