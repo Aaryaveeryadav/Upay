@@ -12,6 +12,18 @@
    a question the student could have used.
    ===================================================================== */
 (function (root) {
+  const ENGLISH_FUNCTION_WORDS = new Set([
+    'the','and','or','but','if','then','which','what','who','when','where','why','how',
+    'is','are','was','were','be','been','being','of','to','in','on','for','from','with',
+    'by','at','as','into','between','than','that','this','these','those','each','any',
+    'all','given','following','below','above','after','before','there','their','its','whose'
+  ]);
+  const ENGLISH_TASK_WORDS = new Set([
+    'find','calculate','compute','determine','state','write','give','show','prove','solve',
+    'identify','choose','select','explain','describe','compare','predict','estimate','simplify',
+    'evaluate','construct','draw','name','mention','represent','factorise','factorize'
+  ]);
+
   const HARD = [
     [/[çèøö÷æîïðòóôõúûüýø]/, 'equation brackets lost'],
     [/[æö]\s*\d/, 'over-bracket lost'],
@@ -82,9 +94,17 @@
        Latin-mojibake — that was firing on perfectly good English MCQs
        because they happen to have zero Devanagari characters. */
     const expectHindi = opts && opts.expectHindi;
-    const latinWords = (t.replace(/\s/g,'').match(/[A-Za-z]{3,}/g) || []).length;
-    const looksLikeEnglish = latinWords >= 3;
-    if (expectHindi || !looksLikeEnglish) {
+    const latinWords = (t.match(/[A-Za-z]{2,}/g) || []).map(word => word.toLowerCase());
+    const functionWords = latinWords.filter(word => ENGLISH_FUNCTION_WORDS.has(word)).length;
+    const hasEnglishTask = latinWords.some(word => ENGLISH_TASK_WORDS.has(word));
+    const looksLikeEnglish = (latinWords.length >= 3 && functionWords >= 2)
+      || (latinWords.length >= 2 && hasEnglishTask);
+    // A Hindi/Sanskrit subject can still contain an English-language source
+    // question. Do not let `expectHindi` override clear English function/task
+    // words; that was the source of false Latin-mojibake warnings on intact
+    // English MCQs. Damaged Latin-script Hindi still reaches this gate because
+    // it does not form a coherent English sentence.
+    if (!looksLikeEnglish && (expectHindi || latinWords.length > 0 || /[^A-Za-z\s]/.test(t))) {
       const dg = devanagariRot(t); if (dg) return dg;
     }
     const fr = fragment(t); if (fr) return fr;

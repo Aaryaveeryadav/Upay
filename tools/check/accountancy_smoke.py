@@ -26,7 +26,10 @@ def main():
     failures = []
     ai_calls = []
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True, args=['--disable-dev-shm-usage'])
+        launch_options = {'headless': True, 'args': ['--disable-dev-shm-usage']}
+        if os.environ.get('UPAY_CHROMIUM'):
+            launch_options['executable_path'] = os.environ['UPAY_CHROMIUM']
+        browser = p.chromium.launch(**launch_options)
         context = browser.new_context(service_workers='block', viewport={'width': 1440, 'height': 1000})
         page = context.new_page()
         page.on('pageerror', lambda err: errors.append(str(err)))
@@ -39,8 +42,10 @@ def main():
                           body='{"error":"AI unavailable in regression test"}')
         page.route('**/api/ai/solve', ai_offline)
         page.route('**/api/tel', lambda route: route.fulfill(status=200, content_type='application/json', body='{"ok":true}'))
+        page.route('https://fonts.googleapis.com/**', lambda route: route.fulfill(status=200, content_type='text/css', body=''))
+        page.route('https://**/auth/v1/health', lambda route: route.fulfill(status=200, content_type='application/json', body='{}'))
         page.goto(BASE + '/', wait_until='networkidle', timeout=60000)
-        page.wait_for_function('window.UP && UP.S && document.body.classList.contains("up-ready")')
+        page.wait_for_function('() => window.UP && UP.S && document.body.classList.contains("up-ready")')
         check(page.locator('#view').inner_text().strip() != '', 'fresh home renders')
 
         def pick(key, value):
@@ -56,18 +61,20 @@ def main():
 
         def wait_mock():
             page.wait_for_selector('.mock-ans', timeout=30000)
-            page.wait_for_function('UP.S.mockTest && UP.S.mockTest.items.length === 80')
+            page.wait_for_function('() => UP.S.mockTest && UP.S.mockTest.items.length === 80')
 
         pick('cls', '12')
         pick('subject', 'accountancy')
-        page.wait_for_function('UP.pyq.filter(q => q.paperCode && +q.cls===12 && (q.subject==="accountancy" || q.subject==="computerized-accounting")).length === 1428', timeout=30000)
+        # Three paper-level/uncaptured direction rows are intentionally withheld
+        # by the shared question-quality curation, leaving only student questions.
+        page.wait_for_function('() => UP.pyq.filter(q => q.paperCode && +q.cls===12 && (q.subject==="accountancy" || q.subject==="computerized-accounting")).length === 1425', timeout=30000)
         stats = page.evaluate('''() => {
           const a=UP.pyq.filter(q=>q.paperCode && +q.cls===12 && (q.subject==='accountancy'||q.subject==='computerized-accounting'));
           return {count:a.length, papers:new Set(a.map(q=>[q.y,q.session,q.paperCode].join('|'))).size,
                   badMethods:a.filter(q=>q.approaches && q.approaches.length).length};
         }''')
-        check(stats == {'count': 1428, 'papers': 34, 'badMethods': 0},
-              '34 papers / 1,428 records loaded without fabricated maths approaches')
+        check(stats == {'count': 1425, 'papers': 34, 'badMethods': 0},
+              '34 papers / 1,425 curated question records loaded without fabricated maths approaches')
         route('#/home')
         home = page.locator('#view').inner_text()
         placeholder = page.locator('#view textarea[name="q"]').get_attribute('placeholder')
@@ -90,34 +97,34 @@ def main():
         check(target.count() == 1 and '1/3rd of Credit Revenue' in target.inner_text(),
               'source-backed fraction visible in chapter-filtered PYQ')
         target.locator('[data-action="sample"]').click()
-        page.wait_for_function('UP.S.answer && UP.S.answer.kind === "accountancy-unavailable"', timeout=15000)
+        page.wait_for_function('() => UP.S.answer && UP.S.answer.kind === "accountancy-unavailable"', timeout=15000)
         text = page.locator('#answerMount').inner_text()
         check('no verified local solution or official answer key' in text.lower() and 'trig identity' not in text.lower(),
               'AI failure states there is no verified local answer, not a maths template')
         page.locator('#answerMount [data-action="retryAI"]').click()
-        page.wait_for_function('UP.S.answer && UP.S.answer.kind === "accountancy-unavailable"', timeout=15000)
+        page.wait_for_function('() => UP.S.answer && UP.S.answer.kind === "accountancy-unavailable"', timeout=15000)
         check(len(ai_calls) >= 2, 'AI retry remains available and safe')
         # A synthetic AI success tests rendering only; it is not a source key.
         captured = []
         page.unroute('**/api/ai/solve', ai_offline)
         def ai_success(route):
             captured.append(route.request.post_data_json)
-            route.fulfill(status=200, content_type='application/json', body='{"source":"ai","model":"mock-test","result":"Illustrative AI result","approaches":[{"name":"Example","steps":[{"t":"Illustrative step"}]}],"check":{"state":"unchecked"},"figure":{"svg":"<svg onload=window.__aiSvgExecuted=true></svg>"}}')
+            route.fulfill(status=200, content_type='application/json', body='{"source":"ai","model":"mock-test","result":"Illustrative AI result","approaches":[{"name":"Example 1","steps":[{"t":"Illustrative step 1"}]},{"name":"Example 2","steps":[{"t":"Illustrative step 2"}]},{"name":"Example 3","steps":[{"t":"Illustrative step 3"}]},{"name":"Example 4","steps":[{"t":"Illustrative step 4"}]}],"check":{"state":"unchecked"},"figure":{"svg":"<svg onload=window.__aiSvgExecuted=true></svg>"}}')
         page.route('**/api/ai/solve', ai_success)
         page.evaluate("window.lastLocalSolve = {result:'STALE-MATH-12345'}")
         route('#/pyq?y=2025&ch=205')
         page.locator('#acc12-2025-67-2-1-bi-q33 [data-action="sample"]').click()
-        page.wait_for_function('UP.S.aiState === "done" && UP.S.aiAnswer', timeout=15000)
+        page.wait_for_function('() => UP.S.aiState === "done" && UP.S.aiAnswer', timeout=15000)
         result = page.locator('#answerMount').inner_text()
         check('Illustrative AI result' in result and 'Not independently checked' in result and
               'STALE-MATH-12345' not in result and captured[-1]['subject'] == 'accountancy' and captured[-1]['cls'] == 12,
               'simulated Accountancy AI success is labelled unchecked and uses the correct scope')
         pick('subject', 'computerized-accounting')
-        page.wait_for_function('UP.S.aiState === "done" && UP.S.aiAnswer', timeout=15000)
+        page.wait_for_function('() => UP.S.aiState === "done" && UP.S.aiAnswer', timeout=15000)
         check(captured[-1]['subject'] == 'computerized-accounting',
               'the same question is re-requested when its subject scope changes')
         pick('subject', 'accountancy')
-        page.wait_for_function('UP.S.aiState === "done" && UP.S.aiAnswer', timeout=15000)
+        page.wait_for_function('() => UP.S.aiState === "done" && UP.S.aiAnswer', timeout=15000)
         check(captured[-1]['subject'] == 'accountancy', 'returning to Accountancy re-requests in scope')
 
         route('#/search?q=Credit%20Revenue')
@@ -145,10 +152,13 @@ def main():
         page.evaluate('''() => {const q=UP.S.paper.sections[0].questions[0];
           q.opts=[{en:'Choice A'},{en:'Choice B'}];q.ans='';}''')
         page.locator('#topbar [data-action="lang"]').click()
-        page.wait_for_function('UP.S.lang === "hi"')
+        page.wait_for_function('() => UP.S.lang === "hi"')
         page.locator('#topbar [data-action="lang"]').click()
-        page.wait_for_function('UP.S.lang === "en"')
+        page.wait_for_function('() => UP.S.lang === "en"')
         card = page.locator('#view .q-card').first
+        check(card.locator('.q-opts').is_hidden(), 'sample-paper answer choices start collapsed')
+        card.locator('.q-options-toggle').click()
+        check(card.locator('.q-opts').is_visible(), 'sample-paper choices open on request')
         card.locator('[data-action="test-pick"]').first.click()
         check(card.locator('.q-opt.chosen').count() == 1 and
               card.locator('.q-opt.right,.q-opt.wrong,.q-verdict').count() == 0 and
@@ -158,7 +168,7 @@ def main():
         check(card.locator('.q-opt.chosen').count() == 1,
               'unkeyed sample-paper choice can be changed')
         card.locator('[data-action="test-reveal"]').click()
-        page.wait_for_function('UP.S.paper.sections[0].questions[0].aiAnswer === "Illustrative AI result"', timeout=15000)
+        page.wait_for_function('() => UP.S.paper.sections[0].questions[0].aiAnswer === "Illustrative AI result"', timeout=15000)
         card = page.locator('#view .q-card').first
         check('ai answer (unverified)' in card.inner_text().lower() and
               'not been verified against an official answer key' in card.inner_text() and
@@ -196,7 +206,7 @@ def main():
               'legacyUnscoped' in backup, 'guest backup exports scoped practice and retains legacy unscoped data')
         route('#/today')
         page.reload(wait_until='networkidle')
-        page.wait_for_function('window.UP && UP.S && UP.S.dailySet && UP.S.dailySet.items[0].marked === "hard"',timeout=30000)
+        page.wait_for_function('() => window.UP && UP.S && UP.S.dailySet && UP.S.dailySet.items[0].marked === "hard"',timeout=30000)
         check(page.locator('#daily-0 [data-action="dailyMark"]:disabled').count() == 2,
               'daily self-assessment survives reload')
         route('#/mistakes')
@@ -229,13 +239,13 @@ def main():
         page.locator('.mock-ans').nth(2).fill('Second answer')
         check(page.locator('#mock-progress').inner_text().strip() == '2 / 80', 'answer input updates attempted count')
         page.locator('#topbar [data-action="lang"]').click()
-        page.wait_for_function('UP.S.lang === "hi"')
+        page.wait_for_function('() => UP.S.lang === "hi"')
         check(page.locator('.mock-ans').nth(0).input_value() == 'First answer <not HTML>' and
               page.locator('#mock-progress').inner_text().strip() == '2 / 80' and
               page.evaluate('UP.S.mockTest.started') == snap['started'],
               'rerender preserves mock questions, escaped answers, progress and timer start')
         page.locator('#topbar [data-action="lang"]').click()
-        page.wait_for_function('UP.S.lang === "en"')
+        page.wait_for_function('() => UP.S.lang === "en"')
         page.reload(wait_until='networkidle')
         wait_mock()
         restored = page.evaluate('''() => ({ids:UP.S.mockTest.items.map(x=>x.source.id), started:UP.S.mockTest.started,
@@ -246,12 +256,13 @@ def main():
               page.locator('#mock-progress').inner_text().strip() == '2 / 80',
               'reload restores the same active mock and answers')
         page.locator('#mock-submit').click()
-        page.wait_for_function('UP.S.mockTest && UP.S.mockTest.finished')
-        check('Attempted 2 of 80' in page.locator('#view').inner_text() and
-              'no score was assigned' in page.locator('#view').inner_text().lower(),
+        page.wait_for_function('() => UP.S.mockTest && UP.S.mockTest.finished')
+        result_text = page.locator('#view').inner_text()
+        check('2 / 80 questions attempted' in result_text and 'Marks pending review' in result_text and
+              'need review' in result_text.lower() and 'not a final board score' in result_text.lower(),
               'submission reports attempted count without an invented score')
         page.reload(wait_until='networkidle')
-        check('Attempted 2 of 80' in page.locator('#view').inner_text(), 'completed mock result survives reload')
+        check('2 / 80 questions attempted' in page.locator('#view').inner_text(), 'completed mock result survives reload')
         page.locator('#view a[href="#/mock?new=1"]').click()
         wait_mock()
         new_ids = page.evaluate('UP.S.mockTest.items.map(x=>x.source.id)')
@@ -263,9 +274,11 @@ def main():
         page.evaluate('''() => {let m=JSON.parse(localStorage.getItem('upay.mockTest'));
           m.started=Date.now()-3*3600*1000-2000; localStorage.setItem('upay.mockTest',JSON.stringify(m));}''')
         page.reload(wait_until='networkidle')
-        page.wait_for_function('UP.S.mockTest && UP.S.mockTest.finished', timeout=10000)
-        check('Attempted 1 of 80' in page.locator('#view').inner_text() and
-              page.evaluate('UP.S.mockTest.score.ungraded === true'), 'expired timer auto-finishes ungraded practice')
+        page.wait_for_function('() => UP.S.mockTest && UP.S.mockTest.finished', timeout=10000)
+        check('1 / 80 questions attempted' in page.locator('#view').inner_text() and
+              'Marks pending review' in page.locator('#view').inner_text() and
+              page.evaluate('UP.S.mockTest.score.attempted === 1 && UP.S.mockTest.score.gradable === 0 && UP.S.mockTest.score.pending === 80'),
+              'expired timer auto-finishes without assigning an unverified score')
 
         pick('subject', 'computerized-accounting')
         # The completed Accountancy mock must be cleared, not reused.
@@ -294,6 +307,9 @@ def main():
         route('#/today'); route('#/pyq?y=2025&ch=302&page=2')
         mcq = page.locator('#fixture-unkeyed-mcq')
         before_ai = len(ai_calls)
+        check(mcq.locator('.q-opts').is_hidden(), 'past-paper MCQ choices start collapsed')
+        mcq.locator('.q-options-toggle').click()
+        check(mcq.locator('.q-opts').is_visible(), 'past-paper MCQ choices open on request')
         mcq.locator('[data-pick]').first.click()
         check('not scored' in mcq.inner_text().lower() and mcq.locator('.q-opt.right,.q-opt.wrong').count() == 0 and
               mcq.locator('.q-opt.chosen').count() == 1 and len(ai_calls) == before_ai,

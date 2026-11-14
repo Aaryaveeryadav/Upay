@@ -15,23 +15,65 @@ const CACHE_MAX = 400;
 function cacheGet(k) { const v = CACHE.get(k); if (v) { CACHE.delete(k); CACHE.set(k, v); } return v; }
 function cacheSet(k, v) { CACHE.set(k, v); if (CACHE.size > CACHE_MAX) { const firstKey = CACHE.keys().next().value; CACHE.delete(firstKey); } }
 
-const repairNumericDots = (s) => String(s || '').replace(/(\d)·(\d)/g, '$1.$2');
-function repairStructure(s) {
-  s = String(s || '');
-  // try closing unclosed braces/brackets at the end
-  let ob = 0, ar = 0, inStr = false, esc = false;
+function repairNumericDots(text) {
+  const s = String(text || '');
+  let out = '', inString = false, escaped = false;
   for (let i = 0; i < s.length; i++) {
     const c = s[i];
-    if (esc) { esc = false; continue; }
-    if (c === '\\') { esc = true; continue; }
-    if (c === '"') inStr = !inStr;
-    if (inStr) continue;
-    if (c === '{') ob++; else if (c === '}') ob--;
-    if (c === '[') ar++; else if (c === ']') ar--;
+    if (inString) {
+      out += c;
+      if (escaped) escaped = false;
+      else if (c === '\\') escaped = true;
+      else if (c === '"') inString = false;
+      continue;
+    }
+    if (c === '"') { inString = true; out += c; continue; }
+    if (c === '·' && /\d/.test(s[i - 1] || '') && /\d/.test(s[i + 1] || '')) out += '.';
+    else out += c;
   }
-  while (ar-- > 0) s += ']';
-  while (ob-- > 0) s += '}';
-  return s;
+  return out;
+}
+
+function repairStructure(text) {
+  const s = String(text || '');
+  const closers = [];
+  let inString = false, escaped = false;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (c === '\\') escaped = true;
+      else if (c === '"') inString = false;
+      continue;
+    }
+    if (c === '"') { inString = true; continue; }
+    if (c === '{') closers.push('}');
+    else if (c === '[') closers.push(']');
+    else if (c === '}' || c === ']') {
+      if (closers.pop() !== c) return s; // mismatched, not a safe truncation repair
+    }
+  }
+  if (escaped) return s; // do not guess the rest of a truncated escape sequence
+  let repaired = s + (inString ? '"' : '');
+  while (closers.length) repaired += closers.pop();
+  return repaired;
+}
+
+/* firstJSON deliberately returns null for malformed JSON rather than throwing.
+   Try the safe text repairs explicitly, and only return a parsed object; callers
+   can then distinguish a parse failure from a valid but incomplete answer. */
+function parseSolveJSON(text) {
+  const original = String(text || '');
+  const numeric = repairNumericDots(original);
+  const candidates = [original, numeric, repairStructure(numeric), repairStructure(original)];
+  const seen = new Set();
+  for (const candidate of candidates) {
+    if (seen.has(candidate)) continue;
+    seen.add(candidate);
+    const parsed = firstJSON(candidate);
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) return parsed;
+  }
+  return null;
 }
 
 module.exports = async function handler(req, res) {
@@ -198,9 +240,10 @@ module.exports = async function handler(req, res) {
       timeoutPromise
     ]);
     // One bounded repair call, sharing the original adaptive deadline.
-    let draft;
-    try { draft = firstJSON(out.text); } catch (_) { draft = null; }
-    if (draft && solvePolicy.completeApproaches(draft, question, subject).length < 4) {
+    const draft = parseSolveJSON(out.text);
+    if (!draft || solvePolicy.completeApproaches(draft, question, subject).length < 4) {
+      // A malformed response is a null result from firstJSON, not an exception.
+      // Give the provider one bounded chance to return a valid replacement.
       out = await Promise.race([
         callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), null, out.model, null, callOptions),
         timeoutPromise
@@ -216,14 +259,11 @@ module.exports = async function handler(req, res) {
     providerController.abort();
   }
 
-  let parsed;
-  try {
-    try { parsed = firstJSON(out.text); }
-    catch (_) { try { parsed = firstJSON(repairNumericDots(out.text)); } catch (_) { parsed = firstJSON(repairStructure(repairNumericDots(out.text))); } }
-  } catch (_) {
+  const parsed = parseSolveJSON(out.text);
+  if (!parsed) {
     return json(res, 502, { error: 'The AI returned an unusable response. Please try again.', fallback: true });
   }
-  if (!parsed || !parsed.approaches) {
+  if (!parsed.approaches) {
     return json(res, 502, { error: 'The AI returned an unexpected shape. Please try again.', fallback: true });
   }
   // Match the local server's response contract; the UI reads result,

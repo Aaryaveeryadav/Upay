@@ -145,6 +145,25 @@ async function main() {
   assert.equal(r.code,400);
   r = await invoke(readImage,{method:'POST',token:'valid',body:{data:'X'.repeat(4*1024*1024),mime:'image/png'}});
   assert.equal(r.code,400);
+  const malformedCalls = providerCalls;
+  const incompleteJSON = JSON.stringify({answer:'The partial structure is closed safely.',approaches:four()});
+  const truncatedAfterNestedStep = incompleteJSON.slice(0,incompleteJSON.lastIndexOf('}]')+1);
+  replyText = truncatedAfterNestedStep;
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Check safe nested JSON closure',subject:'accountancy',cls:12}});
+  assert.equal(r.code,200,'a truncated nested JSON structure is repaired before shape validation');
+  assert.equal(r.body.result,'The partial structure is closed safely.');
+  assert.equal(r.body.approaches.length,4);
+  assert.equal(providerCalls,malformedCalls+1,'safe structure repair does not need a second model call');
+
+  const regenerationCalls = providerCalls;
+  queuedReplies = ['not JSON',JSON.stringify({answer:'Regenerated answer',approaches:four()})];
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Regenerate a malformed provider response',subject:'accountancy',cls:12}});
+  assert.equal(r.code,200,'unrecoverable JSON triggers one bounded provider repair');
+  assert.equal(r.body.result,'Regenerated answer');
+  assert.equal(providerCalls,regenerationCalls+2);
+  assert.match(lastPrompt,/REPAIR:.*PREVIOUS DRAFT/s);
+  queuedReplies = [];
+
   replyText = 'not JSON';
   r = await invoke(solve,{method:'POST',token:'valid',body:JSON.stringify({question:'different test input',subject:'accountancy',cls:12})});
   assert.equal(r.code,502);

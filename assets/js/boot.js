@@ -59,7 +59,10 @@
     'assets/js/data/pyq-accountancy-2023-2026-extracted.js?v=26ab', // 34 source-tagged Accountancy papers, loaded into both Class 12 tracks
     'assets/js/data/accountancy-original-papers.js?v=26ab', // source-only PDFs, not searchable questions
     'assets/js/data/mcq-keyed.js',
-    'assets/js/data/question-overrides.js', // question-bank curation, applied once packs are in
+    'assets/js/question-quality.js?v=26f0', // shared conservative activity/OCR quality gates
+    'assets/js/question-fold.js?v=26f0', // shared Hindi/Sanskrit/English exercise folding
+    'assets/js/data/question-overrides.js?v=26f0', // question-bank curation, applied once packs are in
+    'assets/js/math-render.js?v=26f0', // safe inline TeX rendering for questions, options and answers
     'assets/js/approach-enrich.js?v=26ab',
       'assets/js/maths-solvers.js',  // attaches three solution methods to every PYQ (all classes/subjects)
     'assets/js/data/figures-c12.js',
@@ -169,65 +172,14 @@
 
   function foldLiteratureIntoBank() {
     UP.pyq = UP.pyq || [];
-    const existingIds = new Set(UP.pyq.map(q => q.id));
-    function pushQ(q) { if (!existingIds.has(q.id)) { UP.pyq.push(q); existingIds.add(q.id); } }
-
-    /* Backfill: any literature/sample PYQ with ch=null gets assigned ch = 1 of its subject
-       so it doesn't disappear from chapter-filtered practice views. Better heuristic mapping
-       is done per-subject in the individual PYQ loader scripts where they can. */
-    (UP.pyq || []).forEach(function (q) {
-      if (q && q.subject && (q.ch == null) && q.cls === 10) {
-        // defer to catalogue at runtime? No, set ch to a sentinel "0" meaning "misc" and
-        // treat 0 as a "general" chapter that always appears
-        q.ch = 0;
-      }
+    /* Backfill: any literature/sample PYQ with ch=null gets assigned ch = 0
+       so it remains available in general (not chapter-only) practice views. */
+    UP.pyq.forEach(function (q) {
+      if (q && q.subject && q.ch == null && q.cls === 10) q.ch = 0;
     });
-    if (UP.english10) {
-      UP.english10.forEach(function (ch, idx) {
-        if (!ch || !ch.exercises) return;
-        ch.exercises.forEach(function (raw, ei) {
-          splitExerciseQs(raw).forEach(function (txt, qi) {
-            if (txt.length < 8) return;
-            pushQ({ id: 'eng10-' + (ch.id || ch.bookCode || idx) + '-q' + (qi + 1),
-              cls: 10, subject: 'english', board: 'cbse', ch: ch.id || ('eng-' + idx),
-              m: 2, kind: 'saq', d: 2, lv: 'Standard', en: txt, hi: '', ans: '', opts: null,
-              src: (ch.book || 'First Flight') + ' · ' + (ch.en || ch.title || '') });
-          });
-        });
-      });
-    }
-    if (UP.hindi10Chapters) {
-      UP.hindi10Chapters.forEach(function (ch, idx) {
-        const exs = ch.exercises || ch.questions || [];
-        exs.forEach(function (raw, ei) {
-          if (typeof raw === 'string') {
-            splitExerciseQs(raw).forEach(function (txt, qi) {
-              if (txt.length < 6) return;
-              pushQ({ id: 'hind10-' + (ch.id || idx) + '-q' + (qi + 1),
-                cls: 10, subject: 'hindi', board: 'cbse', ch: ch.id || ('hnd-' + idx),
-                m: 2, kind: 'saq', d: 2, lv: 'Standard', en: '', hi: txt, ans: '', opts: null,
-                src: ch.en || ch.hi || '' });
-            });
-          }
-        });
-      });
-    }
-    if (UP.sanskrit10Chapters) {
-      UP.sanskrit10Chapters.forEach(function (ch, idx) {
-        const exs = ch.exercises || ch.questions || [];
-        exs.forEach(function (raw, ei) {
-          if (typeof raw === 'string') {
-            splitExerciseQs(raw).forEach(function (txt, qi) {
-              if (txt.length < 6) return;
-              pushQ({ id: 'san10-' + (ch.id || idx) + '-q' + (qi + 1),
-                cls: 10, subject: 'sanskrit', board: 'cbse', ch: ch.id || ('san-' + idx),
-                m: 2, kind: 'saq', d: 2, lv: 'Standard', en: '', hi: txt, sa: '', ans: '', opts: null,
-                src: ch.en || ch.hi || '' });
-            });
-          }
-        });
-      });
-    }
+    // The shared data-only fold uses exact exercise/question strings. It never
+    // traverses richSections, which are passages rather than standalone tasks.
+    UP.questionFold.foldLiteratureQuestions(UP);
     // pyq-old, if loaded, folds via UP.pyq = UP.pyq.concat(...) at end of that file
     applyCuration();
   }
@@ -263,6 +215,7 @@
       if (fix) {
         if (fix.en !== undefined) q.en = fix.en;
         if (fix.hi !== undefined) q.hi = fix.hi;
+        if (fix.sa !== undefined) q.sa = fix.sa;
       }
 
       if (taken.has(q.id)) {
@@ -284,25 +237,13 @@
     UP.pyq = out;
   }
 
-  function splitExerciseQs(raw) {
-    if (!raw) return [];
-    const out = []; let buf = '';
-    const parts = String(raw).split(/\s*(?:^|\n)\s*(?:\d+|[१२३४५६७८९०]+)\s*[\.\)\u0964]\s+/);
-    parts.forEach(function (p) {
-      const t = p.trim();
-      if (t.length > 4) out.push(t.replace(/\s+/g, ' ').slice(0, 300));
-    });
-    if (!out.length) { const t = String(raw).trim(); if (t.length > 4) out.push(t.slice(0, 300)); }
-    return out;
-  }
-
   function bootApp() {
     UP.loaded.core = true;
     foldLiteratureIntoBank();
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26e6');
+    return loadScript('assets/js/app.js?v=26f0');
   }
 
   function loadPostPaint() {

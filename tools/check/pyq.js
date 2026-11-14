@@ -1,11 +1,15 @@
 const { chromium } = require('playwright');
-const BASE = 'http://127.0.0.1:8090';
+const BASE = process.env.UPAY_BASE || 'http://127.0.0.1:8090';
 (async () => {
-  const b = await chromium.launch();
+  const launchOptions = { headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] };
+  if (process.env.UPAY_CHROMIUM) launchOptions.executablePath = process.env.UPAY_CHROMIUM;
+  const b = await chromium.launch(launchOptions);
   const pg = await (await b.newContext({ viewport: { width: 1280, height: 1000 } })).newPage();
   const errs = [];
   pg.on('pageerror', e => errs.push('PAGEERROR ' + e));
   pg.on('console', m => { if (m.type() === 'error') errs.push('CONSOLE ' + m.text()); });
+  await pg.route('https://fonts.googleapis.com/**', r => r.fulfill({status:200,contentType:'text/css',body:''}));
+  await pg.route('https://**/auth/v1/health', r => r.fulfill({status:200,contentType:'application/json',body:'{}'}));
   await pg.goto(BASE, { waitUntil: 'networkidle' });
   await pg.waitForTimeout(900);
 
@@ -23,10 +27,12 @@ const BASE = 'http://127.0.0.1:8090';
   });
   console.log('BANK:', JSON.stringify(totals, null, 1));
 
-  const s = await pg.$$('select');
-  await s[0].selectOption({ value: 'cbse' }); await pg.waitForTimeout(250);
-  await (await pg.$$('select'))[1].selectOption({ value: '10' }); await pg.waitForTimeout(250);
-  await (await pg.$$('select'))[2].selectOption({ value: 'science' }); await pg.waitForTimeout(500);
+  await pg.locator('#topbar select[data-key="board"]').selectOption('cbse');
+  await pg.waitForFunction(() => UP.S.board === 'cbse');
+  await pg.locator('#topbar select[data-key="cls"]').selectOption('10');
+  await pg.waitForFunction(() => UP.S.cls === 10);
+  await pg.locator('#topbar select[data-key="subject"]').selectOption('science');
+  await pg.waitForFunction(() => UP.S.subject === 'science'); await pg.waitForTimeout(500);
   await pg.goto(BASE + '#/test', { waitUntil: 'networkidle' });
   await pg.waitForTimeout(1800);
 

@@ -566,19 +566,134 @@ window.UP = window.UP || {};
   const icon = (n, cls) => `<svg class="${cls || ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ICONS.sparkle}</svg>`;
 
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  /* escape, then lift our math/format markers to real markup */
-  const rich = s => esc(s)
+  /* Render student-facing text through the safe local TeX formatter. Its
+     fallback keeps the shell usable if a cached/old boot misses the helper. */
+  const rich = s => UP.mathRender ? UP.mathRender.rich(s) : esc(s)
     .replace(/«([^»]*)»/g, '<b>$1</b>')
     .replace(/\n/g, '<br>');
-  const mathText = s => esc(s).replace(/«([^»]*)»/g, '$1');
+  const mathText = s => UP.mathRender ? UP.mathRender.math(s) : esc(s).replace(/«([^»]*)»/g, '$1');
 
   /* --------------------------- persistence --------------------------- */
   const saveState = () => { store.set('lang', S.lang); store.set('cls', S.cls); store.set('subject', S.subject); store.set('board', S.board); };
   const saveSaved = () => store.set(S.savedKey, S.saved);
-  function saveQuestionButton(question) {
+  function saveQuestionButton(question, compact = false) {
     const q = String(question || '').trim(); if (!q) return '';
     const saved = S.saved.some(item => item.q === q);
-    return `<button type="button" class="btn btn-cream btn-sm" data-action="saveQuestion" data-q="${esc(q)}" ${saved ? 'disabled' : ''}>${icon(saved ? 'check' : 'save')} ${saved ? (S.lang === 'hi' ? 'सहेजा गया' : 'Saved') : (S.lang === 'hi' ? 'प्रश्न सहेजें' : 'Save question')}</button>`;
+    const label = saved ? (S.lang === 'hi' ? 'सहेजा गया' : 'Saved') : (S.lang === 'hi' ? 'प्रश्न सहेजें' : 'Save question');
+    if (compact) {
+      return `<button type="button" class="q-save-corner" data-action="saveQuestion" data-q="${esc(q)}" aria-label="${esc(label)}" title="${esc(label)}" ${saved ? 'disabled' : ''}>${icon(saved ? 'check' : 'save')}</button>`;
+    }
+    return `<button type="button" class="btn btn-cream btn-sm" data-action="saveQuestion" data-q="${esc(q)}" ${saved ? 'disabled' : ''}>${icon(saved ? 'check' : 'save')} ${label}</button>`;
+  }
+  function questionControlId(prefix, value) {
+    const encoded = Array.from(String(value == null ? 'question' : value), ch => ch.codePointAt(0).toString(36)).join('-');
+    return prefix + '-' + (encoded || 'question');
+  }
+  function questionPanelButton(targetId, config) {
+    config = config || {};
+    const expanded = !!config.expanded;
+    const closedLabel = config.closedLabel || (S.lang === 'hi' ? 'दिखाएँ' : 'Show');
+    const openLabel = config.openLabel || (S.lang === 'hi' ? 'छिपाएँ' : 'Hide');
+    const closedAria = config.closedAria || closedLabel;
+    const openAria = config.openAria || openLabel;
+    const label = expanded ? openLabel : closedLabel;
+    const aria = expanded ? openAria : closedAria;
+    return `<button type="button" class="${esc(config.className || 'q-inline-toggle')}" data-action="toggle-question-panel" data-target="${esc(targetId)}" data-label-closed="${esc(closedLabel)}" data-label-open="${esc(openLabel)}" data-aria-closed="${esc(closedAria)}" data-aria-open="${esc(openAria)}" aria-controls="${esc(targetId)}" aria-expanded="${expanded ? 'true' : 'false'}" aria-label="${esc(aria)}" title="${esc(aria)}">${icon(config.icon || 'eye')}<span class="q-action-label">${esc(label)}</span></button>`;
+  }
+  function thinkFirstButton(targetId) {
+    return questionPanelButton(targetId, {
+      className: 'q-corner-action q-think-action', icon: 'eye',
+      closedLabel: S.lang === 'hi' ? 'पहले सोचें' : 'Think → reveal',
+      openLabel: S.lang === 'hi' ? 'उत्तर छिपाएँ' : 'Hide answer',
+      closedAria: S.lang === 'hi' ? 'पहले सोचें, फिर उत्तर देखें' : 'Think first, then reveal the answer',
+      openAria: S.lang === 'hi' ? 'उत्तर छिपाएँ' : 'Hide the answer'
+    });
+  }
+  function solveWithAIButton(question) {
+    const q = String(question || '').trim(); if (!q) return '';
+    const label = S.lang === 'hi' ? 'AI से हल' : 'Solve with AI';
+    return `<button type="button" class="q-corner-action q-ai-action" data-action="sample" data-q="${esc(q)}" aria-label="${esc(label)}" title="${esc(label)}">${icon('sparkle')}<span class="q-action-label">${esc(label)}</span></button>`;
+  }
+  function questionActionBar(question, answerButton, includeSave = true) {
+    return `<div class="q-actions q-corner-actions">${answerButton || ''}${solveWithAIButton(question)}${includeSave ? saveQuestionButton(question, true) : ''}</div>`;
+  }
+  function pyqAnswerButton(id) {
+    const closed = S.lang === 'hi' ? 'पहले सोचें' : 'Think first';
+    const open = S.lang === 'hi' ? 'उत्तर छिपाएँ' : 'Hide answer';
+    const closedAria = S.lang === 'hi' ? 'पहले सोचें, फिर उत्तर देखें' : 'Think first, then reveal the answer';
+    const openAria = S.lang === 'hi' ? 'उत्तर छिपाएँ' : 'Hide the answer';
+    return `<button type="button" class="q-corner-action q-think-action" data-reveal="${esc(id)}" data-label-closed="${esc(closed)}" data-label-open="${esc(open)}" data-aria-closed="${esc(closedAria)}" data-aria-open="${esc(openAria)}" aria-controls="sol-${esc(id)}" aria-expanded="false" aria-label="${esc(closedAria)}" title="${esc(closedAria)}">${icon('eye')}<span class="q-action-label">${esc(closed)}</span></button>`;
+  }
+  function updatePanelButton(button, expanded) {
+    if (!button) return;
+    const label = button.dataset[expanded ? 'labelOpen' : 'labelClosed'];
+    const aria = button.dataset[expanded ? 'ariaOpen' : 'ariaClosed'] || label || '';
+    const text = button.querySelector('.q-action-label');
+    if (text && label) text.textContent = label;
+    button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    if (aria) { button.setAttribute('aria-label', aria); button.title = aria; }
+  }
+  function questionDiagramMarkup(q, questionKey) {
+    let figure = null, lazySource = '';
+    const figureQuestion = q && (q.en || q.hi || q.stem || q.text || q.q)
+      ? Object.assign({}, q, { en: q.en || q.hi || q.stem || q.text || q.q }) : q;
+    if (q && typeof q.fig === 'string') {
+      if (/^figs\/[A-Za-z0-9_./%()-]+\.svg$/.test(q.fig) && !q.fig.includes('..')) lazySource = q.fig;
+      else figure = figureFromTest(figureQuestion);
+    }
+    if (!figure && !lazySource && UP.figures && UP.figures.autoFigureFor) {
+      try { figure = UP.figures.autoFigureFor(figureQuestion); } catch (_) { figure = null; }
+    }
+    if ((!figure || !figure.svg) && !lazySource) return '';
+
+    const panelId = questionControlId('q-diagram', questionKey);
+    const panel = figure && figure.svg
+      ? `<figure class="figure-card q-question-figure"><div class="figure-head"><span class="mini-label">${S.lang === 'hi' ? 'चित्र' : 'Diagram'}</span><span class="tag grey">${S.lang === 'hi' ? 'प्रश्न के मानों से बना' : 'Drawn from this question’s own values'}</span></div><div class="figure-body">${figure.svg}</div>${figure.caption ? `<figcaption>${esc(P(figure.caption))}</figcaption>` : ''}</figure>`
+      : `<div class="q-lazy-figure" data-lazy-figure-src="${esc(lazySource)}"><span class="muted">${S.lang === 'hi' ? 'चित्र लोड हो रहा है…' : 'Loading diagram…'}</span></div>`;
+    const toggle = questionPanelButton(panelId, {
+      className: 'q-inline-toggle q-diagram-toggle', icon: 'eye',
+      closedLabel: S.lang === 'hi' ? 'चित्र देखें' : 'View diagram',
+      openLabel: S.lang === 'hi' ? 'चित्र छिपाएँ' : 'Hide diagram',
+      closedAria: S.lang === 'hi' ? 'प्रश्न का चित्र दिखाएँ' : 'Show the question diagram',
+      openAria: S.lang === 'hi' ? 'प्रश्न का चित्र छिपाएँ' : 'Hide the question diagram'
+    });
+    return `<div class="q-question-extra q-diagram-extra">${toggle}<div id="${esc(panelId)}" class="q-diagram-panel" role="region" aria-label="${S.lang === 'hi' ? 'प्रश्न का चित्र' : 'Question diagram'}" hidden>${panel}</div></div>`;
+  }
+  function sanitizeQuestionSvg(source) {
+    try {
+      const doc = new DOMParser().parseFromString(String(source || ''), 'image/svg+xml');
+      const svg = doc.documentElement;
+      if (!svg || String(svg.localName).toLowerCase() !== 'svg' || doc.querySelector('parsererror')) return '';
+      svg.querySelectorAll('script,foreignObject,iframe,object,embed').forEach(node => node.remove());
+      [svg].concat(Array.from(svg.querySelectorAll('*'))).forEach(node => Array.from(node.attributes || []).forEach(attr => {
+        const name = attr.name.toLowerCase(), value = String(attr.value || '').trim();
+        if (name.startsWith('on') || (name === 'style' && /url\s*\(/i.test(value))) node.removeAttribute(attr.name);
+        else if ((name === 'href' || name === 'xlink:href') && value && value[0] !== '#') node.removeAttribute(attr.name);
+      }));
+      return svg.outerHTML;
+    } catch (_) { return ''; }
+  }
+  function loadLazyQuestionFigure(panel) {
+    const holder = panel && panel.querySelector('[data-lazy-figure-src]');
+    if (!holder || holder.dataset.loading || holder.dataset.loaded) return;
+    const src = holder.dataset.lazyFigureSrc || '';
+    if (!/^figs\/[A-Za-z0-9_./%()-]+\.svg$/.test(src) || src.includes('..')) {
+      holder.textContent = S.lang === 'hi' ? 'यह चित्र सुरक्षित रूप से नहीं खोला जा सका।' : 'This diagram could not be opened safely.';
+      holder.dataset.loaded = 'failed'; return;
+    }
+    holder.dataset.loading = 'true';
+    fetch('assets/science/' + src).then(response => response.ok ? response.text() : Promise.reject(new Error('Diagram unavailable')))
+      .then(source => {
+        if (!holder.isConnected) return;
+        const svg = sanitizeQuestionSvg(source);
+        if (!svg) throw new Error('Invalid diagram');
+        holder.outerHTML = `<figure class="figure-card q-question-figure"><div class="figure-head"><span class="mini-label">${S.lang === 'hi' ? 'चित्र' : 'Diagram'}</span><span class="tag grey">${S.lang === 'hi' ? 'स्रोत प्रश्न का चित्र' : 'Source-question diagram'}</span></div><div class="figure-body">${svg}</div></figure>`;
+      }).catch(() => {
+        if (!holder.isConnected) return;
+        holder.dataset.loading = '';
+        holder.dataset.loaded = 'failed';
+        holder.textContent = S.lang === 'hi' ? 'चित्र लोड नहीं हो सका।' : 'The diagram could not be loaded.';
+      });
   }
 
   const saveRecent = () => store.set(recentStoreKey(), S.recent);
@@ -1229,7 +1344,7 @@ window.UP = window.UP || {};
       ${scopedRecent.slice(0, 8).map(r => `
         <a class="recent-q" href="#/ask?q=${encodeURIComponent(r.q)}">
           <div class="rq-sub">${esc(P(UP.subjects[r.subject] || UP.subjects.maths))}</div>
-          <div class="rq-text">${esc(r.q)}</div>
+          <div class="rq-text">${rich(r.q)}</div>
           <div class="rq-when">${timeAgo(r.at)}</div>
         </a>`).join('')}
     </div>` : ''}
@@ -1889,7 +2004,7 @@ window.UP = window.UP || {};
     <section class="answer ai-answer" data-theory="${theory}">
       ${routing.changed ? `<div class="callout"><div>${S.lang === 'hi' ? 'इस प्रश्न का विषय पहचाना गया' : 'Detected task subject'}: <b>${esc(routing.subject)}</b>. ${S.lang === 'hi' ? 'आपका चुना हुआ विषय बदला नहीं गया है।' : 'Your selected subject has not been changed.'}</div></div>` : ''}
       ${checkBadge(chk, true)}
-      ${a.questionUnderstood ? `<div class="callout" style="margin-bottom:12px">${icon('info')}<div><b>${S.lang === 'hi' ? 'प्रश्न यह समझा गया' : 'Question understood as'}:</b> ${esc(a.questionUnderstood)}</div></div>` : ''}
+      ${a.questionUnderstood ? `<div class="callout" style="margin-bottom:12px">${icon('info')}<div><b>${S.lang === 'hi' ? 'प्रश्न यह समझा गया' : 'Question understood as'}:</b> ${rich(a.questionUnderstood)}</div></div>` : ''}
       <div class="answer-head">
         <div class="meta-row">
           <span class="tag">${a.source === 'exact' ? (S.lang === 'hi' ? 'सटीक गणना से हल' : 'Solved by exact calculation') : (S.lang === 'hi' ? 'एआई द्वारा हल' : 'Solved by AI')}</span>
@@ -1897,7 +2012,7 @@ window.UP = window.UP || {};
           <span class="tag grey">${esc(a.model || '')}</span>
         </div>
         ${a.chapterTitle?'<div class="tag grey">Chapter context: '+esc(a.chapterTitle)+'</div>':''}
-        <div class="qtext">${esc(a.question || S.aiQuestion || '')}</div>
+        <div class="qtext">${rich(a.question || S.aiQuestion || '')}</div>
         <div class="pactions">${saveQuestionButton(a.question || S.aiQuestion)}</div>
         <div style="font-size:14px;color:var(--ink-600)">${rich(a.summary || '')}</div>
         <div class="callout why" style="margin-top:14px">
@@ -1989,39 +2104,180 @@ window.UP = window.UP || {};
     return Array.isArray(q.opts) && q.opts.length > 0;
   }
 
+  function keyMetadataAllows(q) {
+    if (!q || q.keyVerified === false || (q.raw && q.raw.keyVerified === false)) return false;
+    const rows = [q, q.raw].filter(Boolean);
+    return !rows.some(row => row.qualityStatus === 'withheld' || row.optionReview === 'awaiting-source-review'
+      || row.textReview === 'awaiting-source-review' || (Array.isArray(row.qualityReasons) && row.qualityReasons.length));
+  }
+
+  function trustedKeyRecord(q) {
+    if (!keyMetadataAllows(q)) return false;
+    if (q.keyVerified === true || (q.raw && q.raw.keyVerified === true)) return true;
+    return !!(q.tid && UP.testgen && UP.testgen.templates.some(template => template.id === q.tid)
+      && !(q.raw && q.raw.paperCode));
+  }
+
+  function rawChoiceIndex(q) {
+    if (!hasOpts(q) || !String(q.ans == null ? '' : q.ans).trim()) return -1;
+    const answer = String(q.ans).normalize('NFKC').trim().toLowerCase();
+    const letter = answer.match(/^\(?([a-f])\)?[.)]?$/i);
+    if (letter) {
+      const i = letter[1].toLowerCase().charCodeAt(0) - 97;
+      return i >= 0 && i < q.opts.length ? i : -1;
+    }
+    const norm = text => String(text == null ? '' : text).normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
+    const target = norm(answer);
+    if (!target) return -1;
+    return q.opts.findIndex(option => {
+      const choices = typeof option === 'string' ? [option] : [option && option.en, option && option.hi];
+      return choices.some(value => value && norm(value) === target);
+    });
+  }
+
+  function verifiedChoiceIndex(q) {
+    return trustedKeyRecord(q) ? rawChoiceIndex(q) : -1;
+  }
+
+  function hasVerifiedAnswer(q) {
+    if (!trustedKeyRecord(q) || !String(q.ans == null ? '' : q.ans).trim()
+      || (q.raw && q.raw.paperCode)) return false;
+    return !hasOpts(q) || rawChoiceIndex(q) >= 0;
+  }
+
+  function mcqRecordIssue(q) {
+    const kind = String(q && q.kind != null ? q.kind : '').toLowerCase();
+    if (!q || !['mcq','1','2','assertion-reason','assertion_reason','assertion reason'].includes(kind)) return 'not-mcq';
+    if (!Array.isArray(q.opts) || q.opts.length !== 4) return 'option-count';
+    const rows = [q, q.raw].filter(Boolean);
+    if (rows.some(row => row.qualityStatus === 'withheld' || row.optionReview === 'awaiting-source-review'
+      || row.textReview === 'awaiting-source-review' || (Array.isArray(row.qualityReasons) && row.qualityReasons.length))) return 'quality-review';
+    const subject = q.subject || S.subject;
+    const text = pyqQuestionText(q).trim();
+    if (text.length < 8 || (UP.questionQuality && UP.questionQuality.inspect(q, subject))) return 'question-quality';
+    if (UP.questionQuality && UP.questionQuality.optionIssue(q.opts, subject)) return 'option-quality';
+    if (UP.corrupt) {
+      const expectHindi = !!(q.hi && (S.lang === 'hi' || !q.en));
+      const why = UP.corrupt.why(text, { expectHindi });
+      if (why) return 'damaged-text';
+    }
+    if (q.keyVerified === true && verifiedChoiceIndex(q) < 0) return 'unmatched-key';
+    return '';
+  }
+
+  function mcqOptionText(option) {
+    if (typeof option === 'string') return option.trim();
+    if (!option || typeof option !== 'object') return '';
+    return String(option.text || option.en || option.hi || option.value || '').trim();
+  }
+
+  function mcqSignature(stem, options) {
+    const norm = value => String(value || '').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
+    return [norm(stem)].concat((options || []).map(norm)).join('|');
+  }
+
+  function mcqRows() {
+    const rows = [], ids = new Set(), signatures = new Map();
+    function add(q, viewId, sourceType) {
+      if (!q || !qInScope(q) || mcqRecordIssue(q) || ids.has(viewId)) return;
+      const stem = pyqQuestionText(q).trim();
+      const optionTexts = q.opts.map(mcqOptionText);
+      const signature = mcqSignature(stem, optionTexts);
+      if (!signature) return;
+      const keyIndex = q.keyVerified === true && hasVerifiedAnswer(q) ? verifiedChoiceIndex(q) : -1;
+      const row = Object.assign({}, q, { viewId, sourceType, stem, optionTexts,
+        keyIndex, verified: q.keyVerified === true && keyIndex >= 0 });
+      if (signatures.has(signature)) {
+        const index = signatures.get(signature);
+        const prior = rows[index];
+        // A duplicate practice copy must not mask a later explicitly verified
+        // answer key from another source bank.
+        if (row.verified && !prior.verified) {
+          ids.delete(prior.viewId);
+          rows[index] = row;
+          ids.add(viewId);
+        }
+        return;
+      }
+      signatures.set(signature, rows.length);
+      ids.add(viewId);
+      rows.push(row);
+    }
+
+    // This list is explicitly source-checked against the board's printed key.
+    (UP.mcqKeyed || []).forEach(raw => {
+      const key = Number(raw && raw.key);
+      if (!raw || !Number.isInteger(key) || key < 0 || key >= (raw.opts || []).length) return;
+      add({ id:raw.id, cls:10, subject:'maths', board:'cbse', kind:1, y:raw.y,
+        set:raw.paper, m:1, en:raw.stem, hi:'', opts:raw.opts, ans:String.fromCharCode(65 + key),
+        keyVerified:true, src:raw.src }, 'board-' + raw.id, 'board-key');
+    });
+
+    // A legacy source includes an answer letter but lacks per-record verified
+    // metadata. Keep usable options available as unscored practice; never copy
+    // that answer into the graded record.
+    (UP.pyqMCQ || []).forEach(raw => {
+      if (!raw) return;
+      const paper = String(raw.paper || '').replace(/[^a-z0-9-]+/gi, '-');
+      const id = 'legacy-' + String(raw.year || '') + '-' + paper + '-q' + String(raw.q || '');
+      add({ id, cls:10, subject:'maths', board:'cbse', kind:1, y:Number(raw.year) || null,
+        set:raw.paper || '', m:1, en:raw.stem || '', hi:'',
+        opts:(raw.opts || []).map(mcqOptionText), ans:'', keyVerified:false,
+        src:'CBSE MCQ import; no per-question verified-key flag' }, id, 'practice');
+    });
+
+    // All other source-bank MCQs are available to practice, but remain
+    // unscored unless the source record explicitly carries keyVerified: true.
+    (UP.pyq || []).forEach(q => {
+      if (!q) return;
+      add(q, 'bank-' + String(q.id || ''), 'bank');
+    });
+
+    return rows.sort((a, b) => (+b.y || 0) - (+a.y || 0) || String(a.viewId).localeCompare(String(b.viewId), undefined, { numeric:true }));
+  }
+
   function renderCachedAnswer(j, qq, sol, ansBox, id) {
     const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
     j = UP.answerFormat.answer(exact || j);
     if (!j || j.policyVersion !== 'four-approaches-v4' || !j.approaches || j.approaches.length < 4) return false;
     if(S.subject==='sanskrit'&&(!UP.languagePolicy.usableApproach({steps:[{t:j.answer||j.result||''}]},pyqQuestionText(qq),'sanskrit')||j.approaches.some(a=>!UP.languagePolicy.usableApproach(a,pyqQuestionText(qq),'sanskrit'))))return false;
     const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
-      (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
+      (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + rich(j.questionUnderstood) + '</div>' : '') +
       '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + mathText(j.answer || j.result) + '</div>' +
-      (j.summary ? '<p class="sol-sum">' + esc(j.summary) + '</p>' : '') +
+      (j.summary ? '<p class="sol-sum">' + rich(j.summary) + '</p>' : '') +
       renderAIDiagram(Object.assign({}, j, {question:qq.en || ''})) +
       j.approaches.map((a, i) => '<div class="sol-method"><div class="sol-mname">' +
-        (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i+1) + ' — ' : '') + esc(a.name) + '</div>' +
-        '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + (a.steps||[]).map(st => '<li>' + esc(st.t || '').replace(/\n/g,'<br>') +
+        (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i+1) + ' — ' : '') + rich(a.name) + '</div>' +
+        '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + (a.steps||[]).map(st => '<li>' + rich(st.t || '') +
           (st.m ? '<div class="st-m">' + mathText(st.m) + '</div>' : '') +
-          (st.note ? '<span class="st-note">' + esc(st.note) + '</span>' : '') + '</li>').join('') + '</ol>' +
-        (a.watch ? '<div class="callout warn">' + icon('warn') + '<div><b>' + t('watchOut') + ':</b> ' + esc(a.watch) + '</div></div>' : '') +
+          (st.note ? '<span class="st-note">' + rich(st.note) + '</span>' : '') + '</li>').join('') + '</ol>' +
+        (a.watch ? '<div class="callout warn">' + icon('warn') + '<div><b>' + t('watchOut') + ':</b> ' + rich(a.watch) + '</div></div>' : '') +
         '</div>').join('') +
-      (j.verify ? '<div class="sol-check"><b>' + t('checkIt') + ':</b> ' + esc(j.verify) + '</div>' : '') +
+      (j.verify ? '<div class="sol-check"><b>' + t('checkIt') + ':</b> ' + rich(j.verify) + '</div>' : '') +
       '<div class="sol-cached">' + icon('check') + ' ' + (S.lang==='hi'?'सहेजा हुआ उत्तर':'Saved answer') + '</div>';
     pyqCache[id] = html;
     sol.innerHTML = html;
     const bEl = ansBox && ansBox.querySelector('b');
-    if (bEl) bEl.textContent = String(j.answer || j.result || bEl.textContent);
+    if (bEl) bEl.innerHTML = mathText(j.answer || j.result || bEl.textContent);
     UP.answers.set(id, j);
     return true;
+  }
+
+  function setPyqRevealState(id, expanded) {
+    const sol = document.getElementById('sol-' + id);
+    const ansBox = document.getElementById('ans-' + id);
+    if (sol) sol.hidden = !expanded;
+    if (ansBox) ansBox.hidden = !expanded;
+    Array.from(document.querySelectorAll('[data-reveal]')).forEach(button => {
+      if (button.dataset.reveal === String(id)) updatePanelButton(button, expanded);
+    });
   }
 
   function revealPyq(id) {
     const sol = document.getElementById('sol-' + id);
     const ansBox = document.getElementById('ans-' + id);
     if (!sol) return;
-    sol.hidden = false;
-    if (ansBox) ansBox.hidden = false;
+    setPyqRevealState(id, true);
     const qq = (UP.pyq || []).find(x => x.id === id);
     if (!qq) return;
     if (ansBox && UP.taskRouting.resolve(qq.en || qq.hi || '', S.subject).task === 'writing') {
@@ -2041,7 +2297,7 @@ window.UP = window.UP || {};
     if (cached && renderCachedAnswer(cached, qq, sol, ansBox, id)) { warmNextQuestions(id); return; }
 
     const stored = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
-      '<div class="sol-steps"><p>' + esc(qq.twist || '') + '</p></div>';
+      '<div class="sol-steps"><p>' + rich(qq.twist || '') + '</p></div>';
     sol.innerHTML = '<div class="sol-loading">' + loadingDots() + '</div>' + stored;
 
     const ask = 'Solve this ' + String(S.board || 'CBSE').toUpperCase() + ' Class ' + S.cls + ' ' + S.subject + ' question completely, showing every step:\n\n' +
@@ -2090,8 +2346,8 @@ window.UP = window.UP || {};
           : (j.error || (S.lang === 'hi' ? 'एआई हल नहीं बना सका। नीचे स्थानीय हल देखें।' : 'AI could not produce a solution. A local answer is shown below.'));
         const localHtml = localAns ? (
           '<div class="sol-head" style="margin-top:14px">' + (S.lang === 'hi' ? 'स्थानीय हल' : 'Local answer') + '</div>' +
-          '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + esc(localAns.result || localAns.text || (typeof localAns === 'string' ? localAns : '')) + '</div>' +
-          (localAns.steps && localAns.steps.length ? '<ol class="sol-ol" style="margin-top:8px">' + localAns.steps.map(s => '<li>' + esc(s.t || s) + '</li>').join('') + '</ol>' : '')
+          '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + mathText(localAns.result || localAns.text || (typeof localAns === 'string' ? localAns : '')) + '</div>' +
+          (localAns.steps && localAns.steps.length ? '<ol class="sol-ol" style="margin-top:8px">' + localAns.steps.map(s => '<li>' + rich(s.t || s) + '</li>').join('') + '</ol>' : '')
         ) : '<p style="color:var(--ink-500);margin:0">' + esc(S.lang === 'hi' ? 'स्थानीय हल भी उपलब्ध नहीं।' : 'No local answer is available either.') + '</p>';
         sol.innerHTML = '<div class="callout warn">' + icon('warn') + '<div>' + esc(msg) + '</div>' +
           (isAuthFail ? '<div style="margin-top:8px"><a class="btn btn-sm" href="#/login">' +
@@ -2100,18 +2356,18 @@ window.UP = window.UP || {};
       }
       const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'एआई द्वारा चरण-दर-चरण हल' : 'AI-generated step-by-step solution') + '</div>' +
         (sourceTrack ? '<div class="callout warn"><div>' + (S.lang === 'hi' ? 'यह एआई हल आधिकारिक उत्तर-कुंजी से सत्यापित नहीं है।' : 'This AI solution has not been verified against an official answer key.') + '</div></div>' : '') +
-        (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + esc(j.questionUnderstood) + '</div>' : '') +
+        (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + rich(j.questionUnderstood) + '</div>' : '') +
         '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + mathText(j.result) + '</div>' +
-        (j.summary ? '<p class="sol-sum">' + esc(j.summary) + '</p>' : '') +
+        (j.summary ? '<p class="sol-sum">' + rich(j.summary) + '</p>' : '') +
       renderAIDiagram(Object.assign({}, j, {question:qq.en || ''})) +
         j.approaches.map((a, i) => '<div class="sol-method"><div class="sol-mname">' +
           (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i + 1) + ' — ' : '') + esc(a.name) + '</div>' +
-          '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + a.steps.map(st => '<li>' + esc(st.t).replace(/\n/g,'<br>') +
+          '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + a.steps.map(st => '<li>' + rich(st.t) +
             (st.m ? '<div class="st-m">' + mathText(st.m) + '</div>' : '') +
-            (st.note ? '<span class="st-note">' + esc(st.note) + '</span>' : '') + '</li>').join('') + '</ol>' +
-          (a.watch ? '<div class="callout warn">' + icon('warn') + '<div><b>' + t('watchOut') + ':</b> ' + esc(a.watch) + '</div></div>' : '') +
+            (st.note ? '<span class="st-note">' + rich(st.note) + '</span>' : '') + '</li>').join('') + '</ol>' +
+          (a.watch ? '<div class="callout warn">' + icon('warn') + '<div><b>' + t('watchOut') + ':</b> ' + rich(a.watch) + '</div></div>' : '') +
           '</div>').join('') +
-        (j.verify ? '<div class="sol-check"><b>' + t('checkIt') + ':</b> ' + esc(j.verify) + '</div>' : '') +
+        (j.verify ? '<div class="sol-check"><b>' + t('checkIt') + ':</b> ' + rich(j.verify) + '</div>' : '') +
         /* the figure the AI drew from this question's own numbers -- rendered
            here too, because a bank question with a worked solution but no
            diagram is exactly the gap the student complained about */
@@ -2126,7 +2382,7 @@ window.UP = window.UP || {};
          paper has no printed key, the solved answer fills that strip. */
       const bEl = ansBox && ansBox.querySelector('b');
       if (!sourceTrack && bEl && !String(qq.ans || '').trim() && (j.result || j.answer)) {
-        bEl.textContent = String(j.answer || j.result);
+        bEl.innerHTML = mathText(j.answer || j.result);
         ansBox.hidden = false;
       }
       warmNextQuestions(id);
@@ -2154,8 +2410,8 @@ window.UP = window.UP || {};
   }
 
   function renderAnswer(ans) {
-    if(ans.kind==='language-context')return `<div class="callout warn language-context"><div><h3>More context needed</h3><p>${esc(ans.question)}</p><p>${esc(ans.error)}</p>${aiRecovery(ans.question)}</div></div>`;
-    if(ans.kind==='question-clarification')return `<div class="callout warn question-clarification"><div><h3>Confirm the question first</h3><p>${esc(ans.question)}</p><p>${esc(ans.error)}</p><p><b>Possible intended question (please check):</b> ${esc(ans.suggestedQuestion)}</p><a class="btn btn-primary" href="#/ask?q=${encodeURIComponent(ans.suggestedQuestion)}">Yes, solve this corrected question</a></div></div>`;
+    if(ans.kind==='language-context')return `<div class="callout warn language-context"><div><h3>More context needed</h3><p>${rich(ans.question)}</p><p>${rich(ans.error)}</p>${aiRecovery(ans.question)}</div></div>`;
+    if(ans.kind==='question-clarification')return `<div class="callout warn question-clarification"><div><h3>Confirm the question first</h3><p>${rich(ans.question)}</p><p>${rich(ans.error)}</p><p><b>Possible intended question (please check):</b> ${rich(ans.suggestedQuestion)}</p><a class="btn btn-primary" href="#/ask?q=${encodeURIComponent(ans.suggestedQuestion)}">Yes, solve this corrected question</a></div></div>`;
 
     if (ans.kind === 'accountancy-unavailable' || ans.kind === 'no-local-solver') {
       return `<div class="callout warn" style="margin-top:14px">${icon('warn')}<div>
@@ -2196,7 +2452,7 @@ window.UP = window.UP || {};
             : `<span class="tag cream">${methods.length} ${t('methods')}</span>`}
           <span class="tag grey">${S.lang === 'hi' ? 'कक्षा' : 'Class'} ${S.cls} · ${esc(answerSubject)}</span>
         </div>
-        <div class="qtext">${esc(ans.question || '')}</div>
+        <div class="qtext">${rich(ans.question || '')}</div>
         <div style="font-size:14px;color:var(--ink-600)">${rich(P(ans.summary))}</div>
         ${isLoading ? `
         <div class="callout" style="margin-top:14px;background:#fff5f6;border-color:#ffc8d2">
@@ -2608,8 +2864,24 @@ window.UP = window.UP || {};
       ? [['concepts', t('concepts')], ['pyq', t('pyq')], ['planTab', t('planTab')]]
       : [['concepts', t('concepts')], ['formulas', t('formulas')], ['pyq', t('pyq')], ['planTab', t('planTab')]];
     const demandText = { easy: ['easy', 'सरल'], moderate: ['moderate', 'मध्यम'], 'exam-favourite': ['exam favourite', 'परीक्षा प्रिय'], 'proof-heavy': ['proof heavy', 'उपपत्ति प्रधान'], scoring: ['scoring', 'अंक-दायक'], 'practice-heavy': ['practice heavy', 'अभ्यास प्रधान'], 'theorem-based': ['theorem based', 'प्रमेय आधारित'], outline: ['outline', 'रूपरेखा'] };
-    const renderChapterPyq = p => {
+    const renderChapterPyq = (p, index) => {
       const text = P(p);
+      const questionKey = String(ch.id || 'chapter') + '-' + String(p && p.id || index);
+      const answerId = questionControlId('chapter-answer', questionKey);
+      const optionsId = questionControlId('chapter-options', questionKey);
+      const verified = hasVerifiedAnswer(p);
+      const answerMarkup = verified
+        ? `<span class="q-answer-label">${S.lang === 'hi' ? 'सत्यापित उत्तर' : 'Verified answer'}</span> <b>${mathText(p.ans)}</b>`
+        : `<span class="muted">${S.lang === 'hi' ? 'इस कार्ड में सत्यापित उत्तर-कुंजी उपलब्ध नहीं है।' : 'No verified answer key is attached to this question.'}</span>`;
+      const optionsMarkup = hasOpts(p) ? `<div class="q-question-extra q-options-extra">${questionPanelButton(optionsId, {
+        className: 'q-inline-toggle q-options-toggle', icon: 'list',
+        closedLabel: S.lang === 'hi' ? `विकल्प देखें · ${p.opts.length}` : `Show choices · ${p.opts.length}`,
+        openLabel: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide choices',
+        closedAria: S.lang === 'hi' ? `${p.opts.length} बहुविकल्पीय विकल्प दिखाएँ` : `Reveal the ${p.opts.length} multiple-choice options`,
+        openAria: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide the multiple-choice options'
+      })}<div id="${esc(optionsId)}" class="q-opts" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" hidden>${p.opts.map((o, i) => `<div class="q-opt q-opt-static"><b>${String.fromCharCode(65 + i)}</b><span>${rich(P(o))}</span></div>`).join('')}</div></div>` : '';
+      const questionToolbar = questionActionBar(text, thinkFirstButton(answerId));
+      const questionTools = `${questionDiagramMarkup(p, 'chapter-' + questionKey)}${optionsMarkup}<div id="${esc(answerId)}" class="q-answer-reveal" role="status" aria-live="polite" hidden>${answerMarkup}</div>`;
       if (p && p.paperCode) {
         const paperMeta = [p.paperCode, p.session, 'Part ' + p.part, p.option ? 'Option ' + p.option : ''].filter(Boolean).join(' · ');
         const chapterMeta = qChapterIds(p).map(chapterName).filter(Boolean);
@@ -2620,22 +2892,19 @@ window.UP = window.UP || {};
             ${chapterMeta.map(name => `<span class="tag cream">${esc(name)}</span>`).join('')}
           </div>
           <div class="pbody">
+            <div class="chapter-question-toolbar">${questionToolbar}</div>
             <div class="pq">${rich(text)}</div>
+            ${questionTools}
             <div class="muted" style="font-size:12px;margin-top:8px">${S.lang === 'hi' ? 'मूल PDF' : 'Source PDF'}: ${esc(p.sourceFile || '')}${p.sourcePage ? ` · ${S.lang === 'hi' ? 'पृष्ठ' : 'p.'} ${esc(p.sourcePage)}` : ''}</div>
-            <div class="pactions">
-              <button class="btn btn-primary btn-sm" data-action="solvePyq" data-q="${esc(text)}">${icon('sparkle')} ${t('solveThis')}</button>
-              <button class="btn btn-ghost btn-sm" data-action="savePyq" data-q="${esc(text)}">${icon('save')} ${t('save')}</button>
-            </div>
           </div>
         </article>`;
       }
       const isNcertExtract = /^NCERT\b/i.test(String(p.src || ''));
       return `<article class="pyq-item">
         <div class="pmeta"><span class="tag">${isNcertExtract ? 'NCERT · practice, not board-verified' : `${esc(p.board)} ${esc(p.year)}`}</span><span class="tag grey">${p.marks} ${t('marks')}</span></div>
-        <div class="pbody"><div class="pq">${rich(text)}</div><div class="pactions">
-          <button class="btn btn-primary btn-sm" data-action="solvePyq" data-q="${esc(text)}">${icon('sparkle')} ${t('solveThis')}</button>
-          <button class="btn btn-ghost btn-sm" data-action="savePyq" data-q="${esc(text)}">${icon('save')} ${t('save')}</button>
-        </div></div>
+        <div class="pbody"><div class="chapter-question-toolbar">${questionToolbar}</div><div class="pq">${rich(text)}</div>
+          ${questionTools}
+        </div>
       </article>`;
     };
 
@@ -2652,11 +2921,16 @@ window.UP = window.UP || {};
       const paras = (t) => String(t || '').split(/\n\n+/).map(p => `<p>${esc(p.replace(/\s+/g,' ').trim())}</p>`).join('');
       const sections = (_isHiLit || _isSkLit) ? ch.richSections : (ch.sections || []);
       const beforeText = (_isHiLit || _isSkLit) ? (ch.beforeYouReadHi || '') : (ch.beforeYouRead || '');
-      const groups = (_isHiLit || _isSkLit) ? (ch.richGroups || []) : (ch.exerciseGroups || []);
+      const sourceGroups = (_isHiLit || _isSkLit) ? (ch.richGroups || []) : (ch.exerciseGroups || []);
+      const groups = sourceGroups.map(g => ({ ...g, questions:(g.questions||[]).map(q => {
+        const text=String(q||'').replace(/\s+/g,' ').trim();
+        return UP.questionQuality ? UP.questionQuality.cleanActivityTail(text) : text;
+      }).filter(text => text && !(UP.questionQuality && UP.questionQuality.inspectText(text,S.subject))) }))
+        .filter(g => g.questions.length);
       const lessonLabel = S.lang === 'hi' ? 'पाठ' : 'Lesson';
       const bookLabel = (_isHiLit || _isSkLit) ? (ch.bookHi || ch.book || '') : (ch.book || 'First Flight');
       const titleText = P({ en: ch.en || '', hi: ch.hi || ch.en || '' });
-      const totalQs = groups.reduce((n,g) => n + ((g.questions||[]).length), 0);
+      const totalQs = groups.reduce((n,g) => n + g.questions.length, 0);
       const renderSection = (s) => {
         let txt = String(s.text || '');
         if (_isHiLit && ch.isPoetry) {
@@ -2998,56 +3272,94 @@ window.UP = window.UP || {};
      --------------------------------------------------------------------- */
   function viewMcq(params) {
     params = params || {};
-    /* The MCQ keyed bank (board's printed-answer MCQs) was harvested from
-       Class-10 CBSE Maths papers. Questions carry no `cls` field on them;
-       they belong to Class-10 Maths CBSE by construction. When the student
-       is viewing Class-10 Maths CBSE, show them; for any other subject/class
-       combination say so honestly. */
-    const isMcqScope = (+S.cls === 10 && S.subject === 'maths' && S.board === 'cbse');
-    const all = isMcqScope ? (UP.mcqKeyed || []).map(q => Object.assign({ cls: 10, board: 'cbse', subject: 'maths' }, q)) : [];
-    const year = params.y ? +params.y : null;
-    const list = all.filter(q => !year || q.y === year);
-    const years = [...new Set(all.map(q => q.y))].sort((a, b) => b - a);
+    const all = mcqRows();
+    const year = params.y ? Number(params.y) : null;
+    const list = all.filter(q => !year || Number(q.y) === year);
+    const years = [...new Set(all.map(q => Number(q.y)).filter(Number.isFinite))].sort((a, b) => b - a);
+    const pageSize = 30;
+    const pageCount = Math.max(1, Math.ceil(list.length / pageSize));
+    const page = Math.max(1, Math.min(pageCount, Number(params.p) || 1));
+    const pageItems = list.slice((page - 1) * pageSize, page * pageSize);
+    const verifiedCount = list.filter(q => q.verified).length;
     const boardLabel = S.board === 'cbse' ? 'CBSE' : ((UP.boards.find(b => b.id === S.board) || {}).en || S.board);
+    const href = (nextYear, nextPage) => {
+      const query = [];
+      if (nextYear) query.push('y=' + encodeURIComponent(nextYear));
+      if (nextPage > 1) query.push('p=' + encodeURIComponent(nextPage));
+      return '#/mcq' + (query.length ? '?' + query.join('&') : '');
+    };
+    const pageNav = pageCount > 1 ? `<nav class="pyq-pages" aria-label="${S.lang === 'hi' ? 'MCQ पृष्ठ' : 'MCQ pages'}">
+      ${page > 1 ? `<a class="btn btn-ghost btn-sm" href="${href(year, page - 1)}">${S.lang === 'hi' ? 'पिछला' : 'Previous'}</a>` : '<span></span>'}
+      <span class="pyq-page-label">${S.lang === 'hi' ? 'पृष्ठ' : 'Page'} ${page} / ${pageCount}</span>
+      ${page < pageCount ? `<a class="btn btn-ghost btn-sm" href="${href(year, page + 1)}">${S.lang === 'hi' ? 'अगला' : 'Next'}</a>` : '<span></span>'}
+    </nav>` : '';
+
     return `
     <section class="page-head">
-      <span class="eyebrow"><span class="dot"></span>${t('classShort')} ${S.cls} · ${esc(P(UP.subjects[S.subject] || UP.subjects.maths))}</span>
-      <h1>${S.lang === 'hi' ? 'बोर्ड की कुंजी वाले बहुविकल्पीय प्रश्न' : 'Multiple-choice questions with the board’s own key'}</h1>
+      <span class="eyebrow"><span class="dot"></span>${t('classShort')} ${S.cls} · ${esc(P(UP.subjects[S.subject] || UP.subjects.maths))} · ${esc(boardLabel)}</span>
+      <h1>${S.lang === 'hi' ? 'बहुविकल्पीय अभ्यास' : 'Multiple-choice practice'}</h1>
       <p class="lead">${S.lang === 'hi'
-        ? 'इन प्रश्नों का उत्तर कागज़ पर ही छपा है। इसलिए ये बिना इंटरनेट, बिना AI, तुरंत जाँचे जाते हैं — और किसी सही उत्तर को गलत नहीं बताया जा सकता।'
-        : 'Each of these questions was printed with its answer in the board paper itself. So they are marked instantly, with no internet and no AI — and a correct answer can never be called wrong.'}</p>
+        ? `इस चयन में ${verifiedCount} प्रश्नों की उत्तर-कुंजी स्पष्ट रूप से सत्यापित है; शेष ${list.length - verifiedCount} केवल अभ्यास के लिए हैं। सत्यापित कुंजी वाले प्रश्न ही अंकित होते हैं।`
+        : `${verifiedCount} questions in this selection have an explicitly verified answer key; the other ${list.length - verifiedCount} are practice only. Only verified keys are scored.`}</p>
+      <p class="muted">${S.lang === 'hi'
+        ? 'केवल चार स्पष्ट विकल्पों वाले, संरचनात्मक जाँच में पास प्रश्न दिखते हैं। स्रोत-जाँच लंबित या क्षतिग्रस्त प्रश्न रोक दिए गए हैं।'
+        : 'Only structurally screened four-option items are shown. Damaged items and records awaiting source review are withheld.'}</p>
     </section>
-    ${years.length > 1 ? `<section class="card pyq-filter"><div class="filter-line">
+    ${years.length ? `<section class="card pyq-filter"><div class="filter-line">
         <span class="filter-label">${S.lang === 'hi' ? 'वर्ष' : 'Year'}</span>
-        <a class="chip ${!year ? 'on' : ''}" href="#/mcq">${S.lang === 'hi' ? 'सभी' : 'All'}</a>
-        ${years.map(y => `<a class="chip ${year === y ? 'on' : ''}" href="#/mcq?y=${y}">${y} <small>${all.filter(q => q.y === y).length}</small></a>`).join('')}
+        <a class="chip ${!year ? 'on' : ''}" href="${href(null, 1)}">${S.lang === 'hi' ? 'सभी' : 'All'} <small>${all.length}</small></a>
+        ${years.map(y => `<a class="chip ${year === y ? 'on' : ''}" href="${href(y, 1)}">${y} <small>${all.filter(q => Number(q.y) === y).length}</small></a>`).join('')}
       </div></section>` : ''}
-    <div class="pyq-count">${list.length} ${S.lang === 'hi' ? 'प्रश्न' : 'questions'}</div>
-    ${list.length === 0 ? `<div class="empty">${icon('clock')}<h3>${S.lang === 'hi'
-      ? 'बोर्ड की छपी कुंजी वाले MCQ अभी केवल कक्षा-10 गणित (CBSE 2024) के लिए उपलब्ध हैं'
-      : 'Keyed MCQs are currently available for Class 10 Maths · CBSE 2024'}</h3>
+    <div class="pyq-count">${list.length ? `${(page - 1) * pageSize + 1}–${Math.min(page * pageSize, list.length)} / ${list.length}` : '0'} ${S.lang === 'hi' ? 'प्रश्न' : 'questions'}</div>
+    ${pageNav}
+    ${!list.length ? `<div class="empty">${icon('clock')}<h3>${S.lang === 'hi'
+      ? 'इस कक्षा, विषय और बोर्ड के लिए अभी कोई साफ़ चार-विकल्पीय प्रश्न उपलब्ध नहीं है'
+      : 'No clean four-option questions are available for this class, subject and board yet'}</h3>
       <p>${S.lang === 'hi'
-        ? 'टेस्ट और विगत-वर्ष पृष्ठों पर अन्य विषयों के प्रश्न मिलते हैं। वहाँ से अभ्यास करें — अथवा शीर्ष बार से कक्षा 10 → गणित चुनिए।'
-        : 'Sample papers and Past-years pages already hold questions for other subjects. Switch the top bar to Class 10 · Mathematics · CBSE to use this page.'}</p>
+        ? 'क्षतिग्रस्त पाठ, संदिग्ध विकल्प और स्रोत-जाँच की प्रतीक्षा वाले प्रश्न यहाँ रोक दिए जाते हैं। यह वास्तविक परीक्षा में MCQ न होने का दावा नहीं है।'
+        : 'Damaged stems, suspect options and items awaiting source review are withheld here. This does not claim the actual exam has no MCQs.'}</p>
       <div class="setup-actions" style="margin-top:14px">
         <a class="btn btn-primary" href="#/test">${icon('sparkle')} ${S.lang === 'hi' ? 'सैंपल पेपर' : 'Sample paper'}</a>
-        <a class="btn btn-ghost" href="#/pyq">${icon('book')} ${S.lang === 'hi' ? 'विगत वर्ष' : "PYQ’s"}</a>
+        <a class="btn btn-ghost" href="#/pyq">${icon('book')} ${S.lang === 'hi' ? 'विगत वर्ष' : 'Past-year questions'}</a>
       </div></div>` : ''}
-    ${list.map(q => `
-      <article class="q-card pyq" id="mcq-${q.id}">
+    ${pageItems.map(q => {
+      const answerId = questionControlId('mcq-answer', q.viewId);
+      const optionsId = questionControlId('mcq-options', q.viewId);
+      const keyVisible = q.verified && q.keyIndex >= 0;
+      const answerHTML = keyVisible
+        ? `<span class="q-answer-label">${S.lang === 'hi' ? 'सत्यापित उत्तर' : 'Verified answer'}</span> <b>${String.fromCharCode(65 + q.keyIndex)}.</b> ${rich(q.optionTexts[q.keyIndex])}`
+        : `<span class="muted">${S.lang === 'hi' ? 'इस प्रश्न की सत्यापित उत्तर-कुंजी उपलब्ध नहीं है; सही विकल्प नहीं दिखाया जा सकता।' : 'No verified answer key is recorded, so a correct choice cannot be revealed.'}</span>`;
+      const choicesButton = questionPanelButton(optionsId, {
+        className: 'q-inline-toggle q-options-toggle', icon: 'list',
+        closedLabel: S.lang === 'hi' ? `विकल्प देखें · ${q.optionTexts.length}` : `Show choices · ${q.optionTexts.length}`,
+        openLabel: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide choices',
+        closedAria: S.lang === 'hi' ? `${q.optionTexts.length} बहुविकल्पीय विकल्प दिखाएँ` : `Reveal the ${q.optionTexts.length} multiple-choice options`,
+        openAria: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide the multiple-choice options'
+      });
+      return `
+      <article class="q-card pyq mcq-card" id="mcq-${esc(q.viewId)}">
         <div class="q-top">
-          <span class="q-no">${esc(q.set || q.paper || '')}</span>
+          <span class="q-no">${esc(q.set || q.paper || q.q || '')}</span>
           <div class="q-meta">
-            <span class="tag">${esc(boardLabel)} ${q.y}</span>
-            <span class="tag grey ok-tag">${icon('check')} ${S.lang === 'hi' ? 'बोर्ड कुंजी' : 'board key'}</span>
+            <span class="tag">${esc(boardLabel)} ${esc(q.y || '')}</span>
+            <span class="tag ${q.verified ? 'grey ok-tag' : 'grey'}">${q.verified && q.sourceType === 'board-key' ? icon('check') + ' ' : ''}${q.verified
+              ? (S.lang === 'hi' ? 'सत्यापित कुंजी' : (q.sourceType === 'board-key' ? 'board-verified key' : 'verified key'))
+              : (S.lang === 'hi' ? 'अंकित नहीं · कुंजी सत्यापित नहीं' : 'practice only · key unverified')}</span>
+          </div>
+          ${questionActionBar(q.stem, thinkFirstButton(answerId))}
+        </div>
+        <div class="q-text">${rich(q.stem)}</div>
+        ${questionDiagramMarkup(q, 'mcq-' + q.viewId)}
+        <div class="q-question-extra q-options-extra">${choicesButton}
+          <div id="${esc(optionsId)}" class="q-opts" data-mcq="${esc(q.viewId)}" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" hidden>
+            ${q.optionTexts.map((o, i) => `<button type="button" class="q-opt" data-mcqpick="${esc(q.viewId)}" data-i="${i}"><b>${String.fromCharCode(65 + i)}</b><span>${rich(o)}</span></button>`).join('')}
           </div>
         </div>
-        <div class="q-text">${esc(cleanQText(q.stem || q.en || ''))}</div>
-        <div class="q-opts" data-mkey="${q.id}">
-          ${(q.opts || []).map((o, i) => `<button type="button" class="q-opt" data-kpick="${q.id}" data-i="${i}"><b>${String.fromCharCode(65 + i)}</b><span>${esc(typeof o === 'string' ? o : (o.en || o.hi || ''))}</span></button>`).join('')}
-        </div>
-        <div class="pyq-sol" id="ksol-${q.id}" hidden></div>
-      </article>`).join('')}`;
+        <div id="${esc(answerId)}" class="q-answer-reveal mcq-answer-reveal" role="status" aria-live="polite" hidden>${answerHTML}</div>
+        <div class="mcq-feedback" data-mcq-feedback="${esc(q.viewId)}" role="status" aria-live="polite"></div>
+      </article>`;
+    }).join('')}
+    ${pageNav}`;
   }
 
   function viewBoards() {
@@ -3544,7 +3856,7 @@ window.UP = window.UP || {};
               return `<article class="pyq-item saved-row">
                 <div class="pmeta"><span class="tag cream">${esc(s.date || '')}</span><span class="tag grey">${esc(s.subject || '')}</span><span class="tag grey">${esc(s.chapter || '')}</span></div>
                 <div class="pbody">
-                  <div class="pq">${esc(s.q)}</div>
+                  <div class="pq">${rich(s.q)}</div>
                   <div class="ptags">
                     ${S.savedTags.map(tg => `<button class="tag-pill ${s.tag===tg?'on':''}" data-action="tagSaved" data-i="${realIdx}" data-tag="${esc(tg)}" style="--tc:${tagColor(tg)}">${esc(tg)}</button>`).join('')}
                     <button class="tag-pill ${!s.tag?'on':''}" data-action="tagSaved" data-i="${realIdx}" data-tag="">${S.lang==='hi'?'कोई नहीं':'none'}</button>
@@ -3606,14 +3918,30 @@ window.UP = window.UP || {};
     </section>
     <div class="daily-list">
       ${DAILY.map((q,i) => {
-        const txt = typeof q.q === 'string' ? q.q : pyqQuestionText(q);
+        const txt = (q.en || q.hi) ? pyqQuestionText(q) : (typeof q.q === 'string' ? q.q : pyqQuestionText(q));
         const ch = q.chName || chapterName(q.ch);
         const sourceMeta = q.sourceMeta || '';
+        const answerId = questionControlId('daily-answer', i);
+        const optionsId = questionControlId('daily-options', i);
+        const verified = hasVerifiedAnswer(q);
+        const answerText = verified
+          ? `<span class="q-answer-label">${S.lang === 'hi' ? 'सत्यापित उत्तर' : 'Verified answer'}</span> <b>${mathText(q.ans)}</b>`
+          : `<span class="muted">${S.lang === 'hi' ? 'इस प्रश्न की सत्यापित उत्तर-कुंजी उपलब्ध नहीं है।' : 'No verified answer key is recorded for this question.'}</span>`;
+        const choicesButton = hasOpts(q) ? questionPanelButton(optionsId, {
+          className: 'q-inline-toggle q-options-toggle', icon: 'list',
+          closedLabel: S.lang === 'hi' ? `विकल्प देखें · ${q.opts.length}` : `Show choices · ${q.opts.length}`,
+          openLabel: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide choices',
+          closedAria: S.lang === 'hi' ? `${q.opts.length} बहुविकल्पीय विकल्प दिखाएँ` : `Reveal the ${q.opts.length} multiple-choice options`,
+          openAria: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide the multiple-choice options'
+        }) : '';
+        const choices = hasOpts(q) ? `<div class="q-question-extra q-options-extra">${choicesButton}<div id="${esc(optionsId)}" class="q-opts" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" hidden>${q.opts.map((o, oi) => `<div class="q-opt q-opt-static"><b>${String.fromCharCode(65 + oi)}</b><span>${rich(P(o))}</span></div>`).join('')}</div></div>` : '';
         return `<article class="q-card pyq" id="daily-${i}" ${q.marked ? 'style="opacity:.65"' : ''}>
-          <div class="q-top"><span class="q-no">${i+1}</span><div class="q-meta">${ch?`<span class="tag grey">${esc(ch)}</span>`:''}${sourceMeta?`<span class="tag">${esc(sourceMeta)}</span>`:''}${q.label?`<span class="tag cream">${esc(q.label)}</span>`:(q.lv?`<span class="tag">${esc(q.lv)}</span>`:'')}</div></div>
-          <div class="q-text">${esc(txt)}</div>
-          <div class="pactions" style="margin-top:10px;display:flex;gap:6px">
-            <button class="btn btn-primary btn-sm" data-action="sample" data-q="${esc(txt)}">${icon('sparkle')} ${S.lang==='hi'?'हल करें':'Solve'}</button>
+          <div class="q-top"><span class="q-no">${i+1}</span><div class="q-meta">${ch?`<span class="tag grey">${esc(ch)}</span>`:''}${sourceMeta?`<span class="tag">${esc(sourceMeta)}</span>`:''}${q.label?`<span class="tag cream">${esc(q.label)}</span>`:(q.lv?`<span class="tag">${esc(q.lv)}</span>`:'')}</div>${questionActionBar(txt, thinkFirstButton(answerId))}</div>
+          <div class="q-text">${rich(txt)}</div>
+          ${questionDiagramMarkup(q, 'daily-' + i)}
+          ${choices}
+          <div id="${esc(answerId)}" class="q-answer-reveal" role="status" aria-live="polite" hidden>${answerText}</div>
+          <div class="pactions daily-mark-actions">
             <button class="btn btn-ghost btn-sm" data-action="dailyMark" data-i="${i}" data-ok="1" ${q.marked ? 'disabled' : ''}>${icon('check')} ${S.lang==='hi'?'आसान':'Got it'}</button>
             <button class="btn btn-ghost btn-sm" data-action="dailyMark" data-i="${i}" data-ok="0" ${q.marked ? 'disabled' : ''}>${icon('warn')} ${S.lang==='hi'?'कठिन':'Hard'}</button>
           </div>
@@ -4437,7 +4765,7 @@ window.UP = window.UP || {};
         </div>
       </section>
       ${qs.length ? `<section class="card"><h3>${S.lang === 'hi' ? 'प्रश्न' : 'Questions'}</h3>
-        <ol class="sci-qlist">${qs.map(q => `<li>${esc(q.en)}</li>`).join('')}</ol></section>` : ''}`;
+        <ol class="sci-qlist">${qs.map(q => `<li>${rich(q.en)}</li>`).join('')}</ol></section>` : ''}`;
     }
 
     let body = '';
@@ -4486,13 +4814,13 @@ window.UP = window.UP || {};
       ${qs.map((q, i) => `<div class="sci-q">
         <div class="sci-qno">${q.qno || i + 1}</div>
         <div>
-          <p>${esc(q.en)}</p>
+          <p>${rich(q.en)}</p>
           ${(q.opts && q.opts.length) ? `<ul class="sci-opts">${q.opts.map((o, oi) =>
             `<li><b>(${esc(q.optLetters && q.optLetters[oi] || String.fromCharCode(97 + oi))})</b> ${esc(o.en || o)}</li>`).join('')}</ul>` : ''}
           ${q.fig ? `<figure class="sci-fig"><img src="${esc(q.fig.src)}" alt="${esc(q.fig.cap)}" loading="lazy">
             <figcaption><b>Figure ${esc(q.fig.num)}</b> ${esc(q.fig.cap)}</figcaption></figure>` : ''}
           ${q.ans ? `<details class="sci-ans"><summary>${S.lang === 'hi' ? 'उत्तर देखें' : 'Show answer'}</summary>
-            <div><span class="sci-ans-lbl">${S.lang === 'hi' ? 'NCERT उत्तर' : 'NCERT answer key'}</span> ${esc(q.ans)}</div></details>` : ''}
+            <div><span class="sci-ans-lbl">${S.lang === 'hi' ? 'NCERT उत्तर' : 'NCERT answer key'}</span> ${mathText(q.ans)}</div></details>` : ''}
         </div>
       </div>`).join('')}
     </section>` : ''}`;
@@ -4761,17 +5089,29 @@ window.UP = window.UP || {};
     const a = S.answers[q.no];
     const sourceQuestion = !!(q.raw && q.raw.paperCode);
     const writingTask = UP.taskRouting.resolve(P(q), S.subject).task === 'writing';
-    const graded = !writingTask && !sourceQuestion && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim());
+    const graded = !writingTask && !sourceQuestion && hasVerifiedAnswer(q);
+    const rightIndex = graded && hasOpts(q) ? verifiedChoiceIndex(q) : -1;
     const diff = q.d >= 3 ? 3 : q.d >= 2 ? 2 : 1;
-    const opts = hasOpts(q) ? `<div class="q-opts">${q.opts.map((o, i) => {
+    const questionText = q.tid ? P(q) : pyqQuestionText((q.en || q.hi) ? q : (q.raw || q));
+    const optionsId = questionControlId('test-options', q.no);
+    const choicesOpen = !!(a && a.pick !== undefined);
+    const optionsToggle = hasOpts(q) ? questionPanelButton(optionsId, {
+      className: 'q-inline-toggle q-options-toggle', icon: 'list', expanded: choicesOpen,
+      closedLabel: S.lang === 'hi' ? `विकल्प देखें · ${q.opts.length}` : `Show choices · ${q.opts.length}`,
+      openLabel: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide choices',
+      closedAria: S.lang === 'hi' ? `${q.opts.length} बहुविकल्पीय विकल्प दिखाएँ` : `Reveal the ${q.opts.length} multiple-choice options`,
+      openAria: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide the multiple-choice options'
+    }) : '';
+    const opts = hasOpts(q) ? `<div class="q-question-extra q-options-extra">${optionsToggle}<div id="${esc(optionsId)}" class="q-opts" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" ${choicesOpen ? '' : 'hidden'}>${q.opts.map((o, i) => {
       const label = String.fromCharCode(65 + i);
-      const picked = a && a.pick === o.en;
-      const correct = o.en === q.ans;
-      const cls = a && a.pick ? (!graded ? (picked ? 'chosen' : '') : (correct ? 'right' : picked ? 'wrong' : '')) : '';
-      return `<button class="q-opt ${cls}" data-action="test-pick" data-q="${q.no}" data-opt="${esc(o.en)}" ${a && a.pick && graded ? 'disabled' : ''}>
-        <b>${label}</b><span>${esc(P(o))}</span></button>`;
-    }).join('')}</div>` : !graded ? `<div class="callout tip" style="margin-top:10px"><div>${S.lang === 'hi' ? 'उत्तर-पत्र पर स्वयं हल करें। इस प्रश्न की सत्यापित उत्तर-कुंजी उपलब्ध नहीं है; नीचे AI से व्याख्या माँगी जा सकती है।' : 'Work it out on paper. No verified answer key is available for this question; use the button below to request an AI explanation.'}</div></div>` : `<div class="q-answer">
-        ${a && Object.prototype.hasOwnProperty.call(a, 'text') ? `<div class="q-given">${S.lang === 'hi' ? 'आपका उत्तर' : 'Your answer'}: <b>${esc(a.text || '—')}</b></div>` : `
+      const value = typeof o === 'string' ? o : String((o && (o.en || o.hi)) || P(o) || '');
+      const picked = a && (a.pickIndex === i || a.pick === value);
+      const correct = rightIndex === i;
+      const cls = a && a.pick !== undefined ? (!graded ? (picked ? 'chosen' : '') : (correct ? 'right' : picked ? 'wrong' : '')) : '';
+      return `<button class="q-opt ${cls}" data-action="test-pick" data-q="${q.no}" data-i="${i}" data-opt="${esc(value)}" ${graded && a && a.pick !== undefined ? 'disabled' : ''}>
+        <b>${label}</b><span>${rich(P(o))}</span></button>`;
+    }).join('')}</div></div>` : !graded ? `<div class="callout tip q-unscored-note"><div>${S.lang === 'hi' ? 'उत्तर-पत्र पर स्वयं हल करें। इस प्रश्न की सत्यापित उत्तर-कुंजी उपलब्ध नहीं है; नीचे AI से व्याख्या माँगी जा सकती है।' : 'Work it out on paper. No verified answer key is available for this question; use the button below to request an AI explanation.'}</div></div>` : `<div class="q-answer">
+        ${a && Object.prototype.hasOwnProperty.call(a, 'text') ? `<div class="q-given">${S.lang === 'hi' ? 'आपका उत्तर' : 'Your answer'}: <b>${mathText(a.text || '—')}</b></div>` : `
         <div class="q-input">
           <input class="input" data-answer="${q.no}" placeholder="${S.lang === 'hi' ? 'अपना उत्तर लिखिए…' : 'Type your answer…'}" value="">
           <button class="btn btn-sm btn-ghost" data-action="test-check" data-q="${q.no}">${icon('check')} ${S.lang === 'hi' ? 'जाँचें' : 'Check'}</button>
@@ -4787,16 +5127,14 @@ window.UP = window.UP || {};
           <span class="q-ch">${esc(chapterName(q.ch))}</span>
           ${q.marks != null && q.marks > 0 ? `<span class="q-marks">${q.marks} ${S.lang === 'hi' ? 'अंक' : 'mark' + (q.marks > 1 ? 's' : '')}</span>` : ''}
         </div>
-        <button class="q-toggle" data-action="test-reveal" data-q="${q.no}" aria-expanded="${a && a.shown ? 'true' : 'false'}">
-          ${icon('bulb')} ${a && a.shown ? (S.lang === 'hi' ? 'हल छिपाएँ' : 'Hide solution') : (!graded ? (S.lang === 'hi' ? 'AI से व्याख्या लें' : 'Get AI explanation') : (S.lang === 'hi' ? 'हल देखें' : 'Show solution'))}
-        </button>
+        ${questionActionBar(questionText, `<button type="button" class="q-toggle q-corner-action q-think-action" data-action="test-reveal" data-q="${q.no}" aria-expanded="${a && a.shown ? 'true' : 'false'}" aria-label="${esc(a && a.shown ? (S.lang === 'hi' ? 'उत्तर छिपाएँ' : 'Hide the answer') : (S.lang === 'hi' ? 'पहले सोचें, फिर उत्तर देखें' : 'Think first, then reveal the answer'))}" title="${esc(a && a.shown ? (S.lang === 'hi' ? 'उत्तर छिपाएँ' : 'Hide the answer') : (S.lang === 'hi' ? 'पहले सोचें, फिर उत्तर देखें' : 'Think first, then reveal the answer'))}">${icon('eye')}<span class="q-action-label">${a && a.shown ? (S.lang === 'hi' ? 'उत्तर छिपाएँ' : 'Hide answer') : (S.lang === 'hi' ? 'पहले सोचें' : 'Think first')}</span></button>`)}
       </div>
-      <div class="pactions">${saveQuestionButton(q.tid ? P(q) : pyqQuestionText((q.en || q.hi) ? q : (q.raw || q)))}</div>
-      <div class="q-text">${esc(q.tid ? P(q) : pyqQuestionText((q.en || q.hi) ? q : (q.raw || q)))}</div>
-      ${q.fig && typeof q.fig === 'string' ? (() => { const bf = boardFig(q); return bf ? `<div class="figure-card test-fig">${bf.svg}</div>` : ''; })() : ''}
+      <div class="q-text">${rich(questionText)}</div>
+      ${questionDiagramMarkup(q, 'test-' + q.no)}
       ${S.lang === 'hi' && (q.raw || q).hindiReview ? '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>' : ''}
       ${opts}
-      ${graded && a && a.ok !== null ? `<div class="q-verdict ${a.ok ? 'ok' : 'bad'}">${a.ok ? '✓ ' + (S.lang === 'hi' ? 'सही' : 'Correct') : '× ' + (S.lang === 'hi' ? 'सही उत्तर' : 'Correct answer') + ': ' + esc(String(q.ans))}</div>` : ''}
+      ${hasOpts(q) && !graded ? `<div class="callout tip mcq-unscored-note" role="note" style="margin-top:10px">${S.lang === 'hi' ? 'सत्यापित उत्तर-कुंजी उपलब्ध नहीं है। विकल्प चुनना अभ्यास है; अंक नहीं दिए जाएँगे।' : 'No verified answer key is recorded. Choosing an option is practice only and will not be scored.'}</div>` : ''}
+      ${graded && a && a.ok !== null ? `<div class="q-verdict ${a.ok ? 'ok' : 'bad'}">${a.ok ? '✓ ' + (S.lang === 'hi' ? 'सही' : 'Correct') : '× ' + (S.lang === 'hi' ? 'सही उत्तर' : 'Correct answer') + ': ' + mathText(String(q.ans))}</div>` : ''}
       ${a && a.shown ? solutionBlock(q) : ''}
     </article>`;
   }
@@ -4848,24 +5186,24 @@ window.UP = window.UP || {};
     const autoFig = sourceQuestion ? null : autoFigureForQuestion(q);
     const fig = q.fig ? (typeof q.fig === 'string' ? boardFig(q) : figureFromTest(q)) : autoFig;
     const writingTask = UP.taskRouting.resolve(P(q), S.subject).task === 'writing';
-    const hasAns = !writingTask && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim() && String(q.ans) !== 'Proof (standard theorem)');
+    const hasAns = !writingTask && hasVerifiedAnswer(q) && String(q.ans) !== 'Proof (standard theorem)';
     const hasSteps = !writingTask && !!(q.steps && q.steps.length && q.steps.some(s => String(s.en || s.hi || (typeof s === 'string' ? s : '')).trim().length > 5));
     const aiProvided = !!(q.aiAnswer || q.aiSteps);
     const exactProvided = q.aiSolution && q.aiSolution.source === 'exact';
     const ansVal = exactProvided ? q.aiAnswer : hasAns && !sourceQuestion ? String(q.ans) : (q.aiAnswer || (S.lang === 'hi' ? '(कोई सत्यापित उत्तर उपलब्ध नहीं)' : '(no verified answer available)'));
     let steps;
-    if (hasSteps && !sourceQuestion) steps = q.steps.map(s => `<li>${esc(P(s))}</li>`).join('');
-    else if (q.aiSteps) steps = q.aiSteps.map(s => `<li>${esc(s)}</li>`).join('');
+    if (hasSteps && !sourceQuestion) steps = q.steps.map(s => `<li>${rich(P(s))}</li>`).join('');
+    else if (q.aiSteps) steps = q.aiSteps.map(s => `<li>${rich(s)}</li>`).join('');
     else if (q.aiLoading) steps = `<li class="ai-placeholder">${loadingDots()}</li>`;
     else steps = '';
     return `<div class="q-solution" data-solbox="${esc(q.no)}">
-      <div class="sol-ans"><span>${exactProvided ? (S.lang === 'hi' ? 'सटीक गणना' : 'Exact calculation') : aiProvided && (!hasAns || sourceQuestion) ? (S.lang === 'hi' ? 'AI उत्तर (असत्यापित)' : 'AI answer (unverified)') : (S.lang === 'hi' ? 'उत्तर' : 'Answer')}</span><b>${esc(ansVal)}</b></div>
-      ${fig ? `<div class="figure-card test-fig">${fig.svg}<div class="figure-cap">${esc(P(fig.caption || {en:'',hi:''}))}</div></div>` : ''}
+      <div class="sol-ans"><span>${exactProvided ? (S.lang === 'hi' ? 'सटीक गणना' : 'Exact calculation') : aiProvided && (!hasAns || sourceQuestion) ? (S.lang === 'hi' ? 'AI उत्तर (असत्यापित)' : 'AI answer (unverified)') : (S.lang === 'hi' ? 'उत्तर' : 'Answer')}</span><b>${mathText(ansVal)}</b></div>
+      ${fig ? `<div class="figure-card test-fig">${fig.svg}<div class="figure-cap">${rich(P(fig.caption || {en:'',hi:''}))}</div></div>` : ''}
       ${q.aiSolution ? renderAIDiagram(q.aiSolution) + q.aiSolution.approaches.map((a,i) =>
-        `<section class="sol-method"><h4>${i+1}. ${esc(a.name)}</h4><ol class="sol-steps ${a.format === 'prose' ? 'prose-answer' : ''}">${(a.steps || []).map(st =>
-          `<li>${esc(st.t || '')}${st.m ? `<div class="st-m">${mathText(st.m)}</div>` : ''}${st.note ? `<p>${esc(st.note)}</p>` : ''}</li>`).join('')}</ol>${a.why ? `<p>${esc(a.why)}</p>` : ''}</section>`).join('')
+        `<section class="sol-method"><h4>${i+1}. ${rich(a.name)}</h4><ol class="sol-steps ${a.format === 'prose' ? 'prose-answer' : ''}">${(a.steps || []).map(st =>
+          `<li>${rich(st.t || '')}${st.m ? `<div class="st-m">${mathText(st.m)}</div>` : ''}${st.note ? `<p>${rich(st.note)}</p>` : ''}</li>`).join('')}</ol>${a.why ? `<p>${rich(a.why)}</p>` : ''}</section>`).join('')
         : (steps ? `<ol class="sol-steps">${steps}</ol>` : '')}
-      ${q.aiNote ? `<div class="callout warn" style="margin-top:10px">${esc(q.aiNote)}</div>` : ''}
+      ${q.aiNote ? `<div class="callout warn" style="margin-top:10px">${rich(q.aiNote)}</div>` : ''}
       ${aiProvided && !exactProvided ? `<div class="callout warn" style="margin-top:10px">${S.lang === 'hi' ? 'यह AI व्याख्या किसी आधिकारिक उत्तर-कुंजी से सत्यापित नहीं है।' : 'This AI explanation has not been verified against an official answer key.'}</div>` : ''}
       ${hasSteps && !sourceQuestion ? `<div class="sol-method">${icon('bulb')} ${S.lang === 'hi' ? 'अभ्यास के लिए हल।' : 'Practice solution.'}</div>` : ''}
     </div>`;
@@ -5089,6 +5427,7 @@ window.UP = window.UP || {};
     if (!q) return false;
     const subj = qSubject(q);
     if (UP.languagePolicy.issue(q.subject?q:{...q,subject:subj})) return false;
+    if (UP.questionQuality && UP.questionQuality.inspect(q, subj)) return false;
     if (String(subj) !== String(S.subject)) return false;
     const cls = qCls(q);
     // Hard class gate: if a question declares a class it must match the student's class.
@@ -5238,14 +5577,16 @@ window.UP = window.UP || {};
 
     function qCardHtml(q, badge) {
       const shown = (S.lang === 'hi' ? (q.hi || q.en) : (q.en || q.hi)) || '';
-      /* Only run the Devanagari-rot gate when we actually expected Hindi text
-         (i.e. the subject is Hindi/Sanskrit or S.lang is Hindi AND the
-         question wasn't English-only). Otherwise plain English MCQs get
-         wrongly flagged as "Latin mojibake". */
-      const expectHindi = (S.subject === 'hindi' || S.subject === 'sanskrit')
-        || (S.lang === 'hi' && !q.en && q.hi);
+      /* Gate mojibake only when the displayed field is actually the Hindi
+         translation (or the only available field is the Hindi fallback). A
+         question can belong to Hindi/Sanskrit and still have intact English
+         source text, which must not be called Latin mojibake. */
+      const expectHindi = !!(q.hi && (S.lang === 'hi' || !q.en));
       const exactSquare = ['maths','applied-maths'].includes(S.subject) && (UP.squareInteger.compute(shown) || UP.squareInteger.radicalCompute(shown));
       const why = exactSquare ? null : UP.corrupt && UP.corrupt.why(shown, { expectHindi: !!expectHindi });
+      const questionText = pyqQuestionText(q);
+      const optionsId = questionControlId('pyq-options', q.id);
+      const questionFigure = questionDiagramMarkup(q, 'pyq-' + q.id);
       let out = '';
       out += '<article class="q-card pyq' + (badge ? ' pyq-sub' : '') + '" id="' + esc(q.id) + '">';
       out += '<div class="q-top">';
@@ -5272,10 +5613,12 @@ window.UP = window.UP || {};
         const lbl = (S.lang === 'hi' ? ['आसान','मध्यम','कठिन'] : ['easy','medium','hard'])[q.d - 1];
         out += '<span class="lvl lvl-' + q.d + '">' + esc(lbl) + '</span>';
       }
-      out += '</div></div>';
+      out += '</div>';
+      out += questionActionBar(questionText, pyqAnswerButton(q.id));
+      out += '</div>';
       out += '<div class="q-review muted">' + (q.textReview === 'source-verified' ? 'Text checked against source' : 'Text not fully source-reviewed') + ' · ' + (q.keyVerified === true ? 'Verified answer key available' : 'No independently verified answer key recorded') + '</div>';
-      out += '<div class="q-text">' + esc(pyqQuestionText(q)) + '</div>';
-      out += '<div class="pactions">' + saveQuestionButton(pyqQuestionText(q)) + '</div>';
+      out += '<div class="q-text">' + rich(questionText) + '</div>';
+      out += questionFigure;
       if (S.lang === 'hi' && q.hindiReview) out += '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>';
       if (q.optionReview === 'awaiting-source-review') out += '<p class="muted">Options missing or suspect — withheld pending source review. This question is not graded.</p>';
       const reportURL = 'https://github.com/Aaryaveeryadav/Upay/issues/new?title=' + encodeURIComponent('Question issue: '+q.id) + '&body=' + encodeURIComponent('Question ID: '+q.id+'\nSubject: '+S.subject+'\nYear: '+(q.y||'unknown')+'\n\nDescribe the problem (do not include private account details):\n');
@@ -5284,37 +5627,28 @@ window.UP = window.UP || {};
       if (/^\/assets\/papers\/[a-zA-Z0-9_./%()-]+\.pdf$/.test(sourceFile) && !sourceFile.includes('..')) out += ' · <a class="link" target="_blank" rel="noopener noreferrer" href="'+esc(sourceFile)+'">View source PDF</a>';
 
       if (hasOpts(q)) {
-        out += '<div class="q-opts" data-quiz="' + esc(q.id) + '">';
-        out += q.opts.map((o, i) => '<button type="button" class="q-opt" data-pick="' + esc(q.id) + '" data-i="' + i + '"><b>' + String.fromCharCode(65 + i) + '</b><span>' + esc(P(o)) + '</span></button>').join('');
-        out += '</div>';
+        const choicesToggle = questionPanelButton(optionsId, {
+          className: 'q-inline-toggle q-options-toggle', icon: 'list',
+          closedLabel: S.lang === 'hi' ? `विकल्प देखें · ${q.opts.length}` : `Show choices · ${q.opts.length}`,
+          openLabel: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide choices',
+          closedAria: S.lang === 'hi' ? `${q.opts.length} बहुविकल्पीय विकल्प दिखाएँ` : `Reveal the ${q.opts.length} multiple-choice options`,
+          openAria: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide the multiple-choice options'
+        });
+        out += '<div class="q-question-extra q-options-extra">' + choicesToggle;
+        out += '<div id="' + esc(optionsId) + '" class="q-opts" data-quiz="' + esc(q.id) + '" role="group" aria-label="' + (S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices') + '" hidden>';
+        out += q.opts.map((o, i) => '<button type="button" class="q-opt" data-pick="' + esc(q.id) + '" data-i="' + i + '"><b>' + String.fromCharCode(65 + i) + '</b><span>' + rich(P(o)) + '</span></button>').join('');
+        out += '</div></div>';
       }
-      // Always show a "Solve with AI" button. If PDF extraction is torn, say so
-      // but DO let AI try: a partial question plus context is better than a
-      // permanent "will not be solved" wall, and the AI will state its
-      // interpretation before answering.
+      // If extraction is torn, preserve the warning and keep the corner AI
+      // action available so the student can still ask for an interpretation.
       if (why) {
-        out += '<div class="pyq-torn warn"><div>' + icon('warn') + '</div><div><b>' + (S.lang === 'hi' ? 'पीडीएफ से पाठ आंशिक रूप से निकला' : 'PDF text is partially damaged') + ':</b> ' + esc(why) + '.' +
-          '<div style="margin-top:8px"><button type="button" class="btn btn-cream btn-sm" data-action="sample" data-q="' + esc(pyqQuestionText(q)) + '">' + icon('sparkle') + ' ' + (S.lang === 'hi' ? 'एआई से हल करवाएँ' : 'Let the AI solve it anyway') + '</button></div></div></div>';
+        out += '<div class="pyq-torn warn"><div>' + icon('warn') + '</div><div><b>' + (S.lang === 'hi' ? 'पीडीएफ से पाठ आंशिक रूप से निकला' : 'PDF text is partially damaged') + ':</b> ' + esc(why) + '.</div></div>';
       } else if (q.paperCode && !q.ans) {
-        out += '<div class="callout tip" style="margin-top:10px">' + icon('info') + '<div>' + (S.lang === 'hi' ? 'इस आयातित प्रश्न-बैंक में आधिकारिक उत्तर-कुंजी शामिल नहीं है।' : 'The official answer key is not included in this imported question bank.') + '</div></div>';
-        out += '<div class="pyq-ask"><button type="button" class="btn btn-ghost btn-sm" data-action="sample" data-q="' + esc(pyqQuestionText(q)) + '">' + icon('sparkle') + ' ' + (S.lang === 'hi' ? 'एआई से हल' : 'Solve with AI') + '</button></div>';
-      } else {
-        out += '<div class="pyq-ask"><button type="button" class="btn btn-cream btn-sm" data-reveal="' + esc(q.id) + '">' + icon('eye') + ' ' + (S.lang === 'hi' ? 'पहले स्वयं सोचें, फिर उत्तर देखें' : 'Think first, then reveal the answer') + '</button>';
-        out += ' <button type="button" class="btn btn-ghost btn-sm" data-action="sample" data-q="' + esc(pyqQuestionText(q)) + '">' + icon('sparkle') + ' ' + (S.lang === 'hi' ? 'एआई से हल' : 'Solve with AI') + '</button></div>';
+        out += '<div class="callout tip q-unscored-note">' + icon('info') + '<div>' + (S.lang === 'hi' ? 'इस आयातित प्रश्न-बैंक में आधिकारिक उत्तर-कुंजी शामिल नहीं है। AI व्याख्या भी सत्यापित कुंजी नहीं है।' : 'The official answer key is not included in this imported question bank. An AI explanation is not a verified key.') + '</div></div>';
       }
-      if (!(q.paperCode && !q.ans)) out += '<div class="pyq-ans" id="ans-' + esc(q.id) + '" hidden><span>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + '</span> <b>' + esc(q.ans || (S.lang === 'hi' ? 'इस प्रश्न की कुंजी अभी दर्ज नहीं है — ऊपर "एआई से हल" दबाइए' : "Key not on file — tap Solve with AI above")) + '</b></div>';
-      // inline auto-diagram
-      try {
-        if (UP.figures && UP.figures.autoFigureFor) {
-          const af = UP.figures.autoFigureFor(q);
-          if (af && af.svg) {
-            const cap = (S.lang === 'hi' ? (af.caption && (af.caption.hi || af.caption.en)) : (af.caption && af.caption.en)) || '';
-            out += '<figure class="figure-card" style="margin:14px 0"><div class="figure-head"><span class="mini-label">' + (S.lang === 'hi' ? 'चित्र' : 'Diagram') + '</span><span class="tag grey">' + (S.lang === 'hi' ? 'प्रश्न के अपने मानों से' : 'drawn from this question’s own numbers') + '</span></div><div class="figure-body">' + af.svg + '</div>' + (cap ? '<figcaption>' + esc(cap) + '</figcaption>' : '') + '</figure>';
-          }
-        }
-      } catch (e) { /* ignore */ }
+      if (!(q.paperCode && !q.ans)) out += '<div class="pyq-ans q-answer-reveal" id="ans-' + esc(q.id) + '" hidden><span>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + '</span> <b>' + mathText(q.ans || (S.lang === 'hi' ? 'इस प्रश्न की कुंजी अभी दर्ज नहीं है — ऊपर "AI से हल" दबाइए' : "Key not on file — tap Solve with AI above")) + '</b></div>';
       out += '<div class="pyq-sol" id="sol-' + esc(q.id) + '" hidden></div>';
-      if (q.twist) out += '<div class="pyq-twist">' + icon('bulb') + '<div><b>' + (S.lang === 'hi' ? 'इससे नया प्रश्न कैसे बनता है' : 'How a new question is built from this') + '</b><p>' + esc(q.twist) + '</p></div></div>';
+      if (q.twist) out += '<div class="pyq-twist">' + icon('bulb') + '<div><b>' + (S.lang === 'hi' ? 'इससे नया प्रश्न कैसे बनता है' : 'How a new question is built from this') + '</b><p>' + rich(q.twist) + '</p></div></div>';
       const kindText = q.paperCode
         ? (S.lang === 'hi' ? 'CBSE मूल प्रश्न' : 'CBSE source question')
         : P({ en: (PYQ_KIND[q.kind] || ['Question','प्रश्न'])[0], hi: (PYQ_KIND[q.kind] || ['Question','प्रश्न'])[1] });
@@ -5514,35 +5848,56 @@ window.UP = window.UP || {};
       revealPyq(id);
       return;
     }
-    const kp = e.target.closest('[data-kpick]');
+    const kp = e.target.closest('[data-mcqpick]');
     if (kp) {
-      const id = kp.dataset.kpick, i = +kp.dataset.i;
-      const q = (UP.mcqKeyed || []).find(x => x.id === id);
-      if (!q) return;
+      const id = kp.dataset.mcqpick, i = Number(kp.dataset.i);
+      const q = mcqRows().find(row => row.viewId === id);
+      if (!q || !Number.isInteger(i) || i < 0 || i >= q.optionTexts.length) return;
       const box = kp.closest('.q-opts');
-      if (box.dataset.done) return;              // mark once, not on every click
+      if (!box || box.dataset.done) return;
       box.dataset.done = '1';
-      box.querySelectorAll('[data-kpick]').forEach((b, j) => {
-        b.disabled = true;
-        if (j === q.key) b.classList.add('right');
-        else if (j === i) b.classList.add('wrong');
+      const feedback = kp.closest('.q-card').querySelector('[data-mcq-feedback]');
+      const letter = String.fromCharCode(65 + i);
+
+      if (!q.verified || q.keyIndex < 0) {
+        box.querySelectorAll('[data-mcqpick]').forEach((button, j) => {
+          button.disabled = true;
+          if (j === i) button.classList.add('chosen');
+        });
+        if (feedback) {
+          feedback.className = 'mcq-feedback pyq-verdict note';
+          feedback.textContent = S.lang === 'hi'
+            ? 'इस प्रश्न की सत्यापित उत्तर-कुंजी उपलब्ध नहीं है। आपका चयन केवल अभ्यास है; इसे अंकित नहीं किया गया।'
+            : 'No verified answer key is recorded. This selection is practice only; it has not been scored.';
+        }
+        return;
+      }
+
+      const right = q.keyIndex;
+      box.querySelectorAll('[data-mcqpick]').forEach((button, j) => {
+        button.disabled = true;
+        if (j === right) button.classList.add('right');
+        else if (j === i) button.classList.add('wrong');
       });
-      const ok = i === q.key;
-      attemptItem({q:q.stem,ch:q.ch||UP.detectChapter(q.stem),source:{m:q.m,opts:q.opts,ans:String.fromCharCode(65+q.key),keyVerified:true,src:q.src}},String.fromCharCode(65+i));
-      const verdict = document.createElement('div');
-      verdict.className = 'pyq-verdict ' + (ok ? 'ok' : 'no');
-      verdict.innerHTML = ok
-        ? (S.lang === 'hi' ? '✔ सही — बोर्ड की कुंजी भी यही है।' : '✔ Correct — this is the board’s key too.')
-        : (S.lang === 'hi'
-            ? '✘ सही उत्तर <b>' + String.fromCharCode(65 + q.key) + ') ' + esc(q.opts[q.key]) + '</b> है (बोर्ड की कुंजी)।'
-            : '✘ The board’s key is <b>' + String.fromCharCode(65 + q.key) + ') ' + esc(q.opts[q.key]) + '</b>.');
-      box.parentNode.insertBefore(verdict, box.nextSibling);
+      const ok = i === right;
+      attemptItem({q:q.stem,ch:q.ch,source:{m:q.m || 1,opts:q.optionTexts,ans:String.fromCharCode(65 + right),keyVerified:true,src:q.src}},letter);
+      if (feedback) {
+        feedback.className = 'mcq-feedback pyq-verdict ' + (ok ? 'ok' : 'no');
+        feedback.textContent = ok
+          ? (S.lang === 'hi' ? '✔ सही — सत्यापित कुंजी से मेल खाता है।' : '✔ Correct — it matches the verified key.')
+          : (S.lang === 'hi'
+            ? '✘ सही उत्तर विकल्प ' + String.fromCharCode(65 + right) + ' है: ' + q.optionTexts[right]
+            : '✘ The verified key is option ' + String.fromCharCode(65 + right) + ': ' + q.optionTexts[right]);
+      }
       return;
     }
     const rev = e.target.closest('[data-reveal]');
     if (rev) {
-      rev.closest('.pyq-ask').style.display = 'none';
-      revealPyq(rev.dataset.reveal);
+      const id = rev.dataset.reveal;
+      const expanded = rev.getAttribute('aria-expanded') === 'true';
+      setPyqRevealState(id, !expanded);
+      if (!expanded) revealPyq(id);
+      return;
     }
   });
 
@@ -5566,6 +5921,15 @@ window.UP = window.UP || {};
     const tgt = e.target.closest('[data-action]');
     if (!tgt) return;
     const action = tgt.dataset.action;
+    if (action === 'toggle-question-panel') {
+      const panel = document.getElementById(tgt.dataset.target || '');
+      if (!panel) return;
+      const expanded = panel.hidden;
+      panel.hidden = !expanded;
+      updatePanelButton(tgt, expanded);
+      if (expanded) loadLazyQuestionFigure(panel);
+      return;
+    }
     if (action === 'google-signin') { e.preventDefault(); startGoogleSignIn(tgt); return; }
     if (action === 'ai-access-refresh' || action === 'ai-access-manage') { loadAIAccess(action === 'ai-access-manage'); return; }
     if (action === 'ai-access-request' || action === 'ai-access-decide') {
@@ -5661,11 +6025,13 @@ window.UP = window.UP || {};
     if (action === 'test-reset-filters') { S.test.chapters = []; S.test.level = 'mixed'; S.test.seed = 0; buildPaper(true); render(); return; }
     if (action === 'test-new') { S.test.seed = 0; buildPaper(true); render(); toast(S.lang === 'hi' ? 'नया प्रश्नपत्र तैयार' : 'New paper generated'); return; }
     if (action === 'test-pick') {
-      const no = +tgt.dataset.q, pick = tgt.dataset.opt;
+      const no = +tgt.dataset.q, pick = tgt.dataset.opt, pickIndex = Number(tgt.dataset.i);
       const q = findQ(no); if (!q) return;
-      const graded = !(q.raw && q.raw.paperCode) && q.keyVerified !== false && !(q.raw && q.raw.keyVerified === false) && !!(q.ans && String(q.ans).trim());
+      const answerIndex = verifiedChoiceIndex(q);
+      const graded = hasVerifiedAnswer(q) && answerIndex >= 0;
       practiceAttempt(q,pick);
-      S.answers[no] = { pick, ok: graded ? pick === q.ans : null, shown: !!(S.answers[no] && S.answers[no].shown) };
+      S.answers[no] = { pick, pickIndex, ok: graded ? pickIndex === answerIndex : null,
+        shown: !!(S.answers[no] && S.answers[no].shown) };
       render(); return;
     }
     if (action === 'test-check') {
@@ -5673,8 +6039,9 @@ window.UP = window.UP || {};
       const q = findQ(no); if (!q) return;
       const inp = document.querySelector('[data-answer="' + no + '"]');
       const text = (inp ? inp.value : '').trim();
-      practiceAttempt(q,text);
-      S.answers[no] = { text, ok: sameAnswer(text, q.ans), shown: true };
+      const graded = hasVerifiedAnswer(q);
+      if (graded) practiceAttempt(q,text);
+      S.answers[no] = { text, ok: graded ? sameAnswer(text, q.ans) : null, shown: true };
       render(); return;
     }
     if (action === 'test-reveal') {
@@ -5683,7 +6050,7 @@ window.UP = window.UP || {};
       cur.shown = !cur.shown; S.answers[no] = cur;
       if (cur.shown) {
         const q = findQ(no);
-        const hasAns = !!(q && q.ans && String(q.ans).trim() && String(q.ans) !== 'Proof (standard theorem)');
+        const hasAns = !!(q && hasVerifiedAnswer(q) && String(q.ans) !== 'Proof (standard theorem)');
         const hasSteps = !!(q && q.steps && q.steps.length && q.steps.some(s => String(s.en||s.hi||(typeof s==='string'?s:'')).trim().length > 5));
         if (q && (!hasAns || !hasSteps)) solveTestQuestionAI(no);
       }
@@ -5737,7 +6104,14 @@ window.UP = window.UP || {};
       document.querySelectorAll('[data-action="saveQuestion"]').forEach(btn => {
         if (btn.dataset.q !== q) return;
         btn.disabled = true;
-        btn.innerHTML = icon('check') + ' ' + (S.lang === 'hi' ? 'सहेजा गया' : 'Saved');
+        const label = S.lang === 'hi' ? 'सहेजा गया' : 'Saved';
+        if (btn.classList.contains('q-save-corner')) {
+          btn.innerHTML = icon('check');
+          btn.setAttribute('aria-label', label);
+          btn.title = label;
+        } else {
+          btn.innerHTML = icon('check') + ' ' + label;
+        }
       });
       toast(S.lang === 'hi' ? 'सहेजा गया — Saved पृष्ठ पर देखें' : 'Question saved — find it in Saved');
       return;
@@ -6874,7 +7248,7 @@ function viewMistakes(){
   ${!all.length ? `<div class="empty"><h3>${S.lang==='hi'?'अभी कोई गलती नहीं':'No mistakes yet'}</h3><p>${S.lang==='hi'?'आज का अभ्यास शुरू करें':'Start Today\'s practice'}</p></div>` :
   `<div class="pyq-list">${all.map((c,i)=>`<article class="pyq-item">
     <div class="pmeta"><span class="tag ${c.isHard?'warn':'cream'}">${c.protected?'Answer needs correction':c.isHard?(S.lang==='hi'?'कठिन':'Hard'):('Box '+ (c.box||0))}</span></div>
-    <div class="pbody"><div class="pq">${esc(c.q)}</div>
+    <div class="pbody"><div class="pq">${rich(c.q)}</div>
     <div class="pactions"><button class="btn btn-primary btn-sm" data-action="sample" data-q="${esc(c.q)}">${icon('sparkle')} ${S.lang==='hi'?'हल करें':'Solve'}</button>
     ${c.chId?`<a class="btn btn-sm" href="#/chapter/${c.chId}">${S.lang==='hi'?'अध्याय':'Chapter'}</a>`:''}
     ${c.protected?`<label for="mistake-answer-${i}">Try your corrected answer</label><textarea id="mistake-answer-${i}" class="mock-ans" rows="2"></textarea><button class="btn btn-primary btn-sm" data-action="recheckMistake" data-q="${esc(c.q)}" data-i="${i}">Check corrected answer</button><p data-mistake-status="${i}" role="status"></p>`:`<button class="btn btn-sm btn-ghost" data-action="removeMistake" data-q="${esc(c.q)}">×</button>`}</div></div></article>`).join('')}</div>`}`;
@@ -6997,7 +7371,7 @@ function viewSearch(params){
   </section>
   ${q?`<p style="color:var(--ink-500);font-size:13.5px;margin:8px 0">${results.length} ${S.lang==='hi'?'परिणाम':'results'}</p>
   <div class="pyq-list">${results.map(r=>`<article class="pyq-item"><div class="pmeta"><span class="tag grey">${esc(r.sub)}</span><span class="tag cream">${esc(r.chName)}</span></div>
-    <div class="pbody"><div class="pq">${esc(r.q)}</div>
+    <div class="pbody"><div class="pq">${rich(r.q)}</div>
     <div class="pactions"><button class="btn btn-primary btn-sm" data-action="sample" data-q="${esc(r.q)}">${icon('sparkle')} ${S.lang==='hi'?'हल करें':'Solve'}</button></div></div></article>`).join('')||`<p>${S.lang==='hi'?'कुछ नहीं मिला':'Nothing found'}</p>`}</div>`:''}`;
 }
 

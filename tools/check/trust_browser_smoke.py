@@ -36,9 +36,13 @@ with sync_playwright() as p:
     page.wait_for_selector('#trust-fixture')
     assert '1000 W' in page.locator('#trust-fixture').inner_text()
     assert page.locator('#trust-fixture .q-opt').count()==4
+    assert page.locator('#trust-fixture .q-opts').is_hidden()
+    page.locator('#trust-fixture .q-options-toggle').click()
+    assert page.locator('#trust-fixture .q-opts').is_visible()
     page.locator('#trust-fixture [data-i="0"]').click()
     assert page.locator('#trust-fixture .q-opt.right').count()==1
     assert page.locator('#trust-fixture a',has_text='Report a problem').count()==1
+    page.locator('#trust-unverified .q-options-toggle').click()
     page.locator('#trust-unverified [data-i="0"]').click()
     assert page.locator('#trust-unverified .q-opt.right, #trust-unverified .q-opt.wrong').count()==0
     page.locator('#topbar select[data-key="subject"]').select_option('economics')
