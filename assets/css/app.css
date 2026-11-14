@@ -1791,7 +1791,13 @@ ol.prose-answer > li::before { content: none; display: none; }
 .q-answer-label{display:inline-block;margin-right:5px;color:var(--ink-500);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .q-question-figure{margin:0;overflow:hidden}
 .q-question-figure .figure-body{padding:8px;overflow-x:auto}
-.q-question-figure svg{max-width:100%;height:auto}
+.q-question-figure svg{display:block;width:auto;max-width:min(100%,640px);max-height:230px;height:auto;margin:0 auto}
+.q-question-image .figure-head{padding:7px 10px;font-size:11px}
+.q-question-image .figure-body{padding:6px 10px}
+.q-question-image .q-figure-thumbnail{display:block;width:auto;height:auto;max-width:min(100%,640px);max-height:230px;margin:0 auto;border-radius:6px;object-fit:contain;background:#fff;cursor:zoom-in}
+.q-diagram-inline{width:100%;margin-top:10px}
+.q-diagram-inline .figure-card{width:fit-content;max-width:100%;margin:0 auto}
+.q-diagram-inline .q-question-image{width:100%}
 .q-diagram-panel{width:100%;margin-top:2px}
 .q-diagram-panel[hidden],.q-opts[hidden],.q-answer-reveal[hidden],.pyq-sol[hidden],.pyq-ans[hidden]{display:none!important}
 .q-lazy-figure{padding:14px;border:1px dashed var(--line);border-radius:10px;background:var(--cream-50);font-size:12.5px}

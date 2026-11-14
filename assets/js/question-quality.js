@@ -37,9 +37,21 @@
     return [q.sa, q.hi, q.en].filter(Boolean).map(asText).join('\n');
   }
 
+  function hasUnbalancedSquareBrackets(text) {
+    let depth = 0;
+    for (const char of String(text || '')) {
+      if (char === '[') depth += 1;
+      else if (char === ']') {
+        if (depth === 0) return true;
+        depth -= 1;
+      }
+    }
+    return depth !== 0;
+  }
+
   function taskSignal(text) {
     const hindiTask = /(?:^|[^\p{L}\p{M}])(?:लिखिए|लिखें|बताइए|बताएँ|कीजिए|करिए|समझाइए|समझाएँ|वर्णन|स्पष्ट|सिद्ध|ज्ञात|छाँटिए|दीजिए|चर्चा|व्यक्त|तैयार|कौन|क्यों|कैसे|क्या)(?=$|[^\p{L}\p{M}])/u;
-    const englishTask = /\b(?:explain|describe|write|state|find|calculate|discuss|identify|which|what|why|how)\b/i;
+    const englishTask = /\b(?:explain|describe|write|state|find|calculate|discuss|identify|which|what|why|how|name|mention|give|compare|justify|select|choose|complete|answer|attempt|read|fill|draw|label|match|translate|construct|summari[sz]e|analyse|analyze)\b/i;
     return /[?？]/.test(text) || hindiTask.test(text) || englishTask.test(text);
   }
 
@@ -97,11 +109,15 @@
         || (/[\p{L}]/u.test(text) && /\b[\p{L}]{1,3}\s+\d{1,3}$/u.test(text))
         || /[#@$]\s*$/.test(text)
         || /\bquestions?\s+(?:number|no\.?)\b|\bgeneral\s+instructions\b|\banswer\s+book(?:let)?\b/i.test(text)) return 'damaged-option';
-      const key = text.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
+      // Preserve mathematical operators and punctuation when detecting exact
+      // duplicates. Stripping every symbol made distinct choices such as 1
+      // and −1, or x + y and x − y, collide and falsely withheld valid MCQs.
+      const key = text.toLowerCase().replace(/[−–—]/g, '-').replace(/\s+/g, ' ').trim();
       if (!key || seen.has(key)) return 'damaged-option';
       seen.add(key);
       if (['hindi','sanskrit'].includes(subject) && /[\u0900-\u097f]/.test(text)
-        && (HINDI_OCR_MARKS.test(text) || /(?:[०-९\d]\s*){4,}/.test(text))) return 'ocr-damaged-option';
+        && (HINDI_OCR_MARKS.test(text) || hasUnbalancedSquareBrackets(text)
+          || /(?:[०-९\d]\s*){4,}/.test(text))) return 'ocr-damaged-option';
     }
     return '';
   }
@@ -118,6 +134,11 @@
 
     const fields = [q.sa, q.hi, q.en].map(asText).filter(value => value.trim());
     const tails = fields.map(activityTail);
+    const isEnglishSourcePaper = actualSubject === 'english' && q.y != null
+      && (q.src || q.source || q.paperCode || q.set != null);
+    const hasUsableOptions = Array.isArray(q.opts) && q.opts.some(option => asText(option).trim());
+    if (isEnglishSourcePaper && !hasUsableOptions && text.length <= 50
+      && !/[?？.!।॥]$/.test(text) && !taskSignal(text)) return 'incomplete-source-fragment';
     if (tails.length && tails.every(tail => tail && tail.drop)) return 'activity-only';
     if (isGenericUncontextualized(text)) return 'uncontextualized-prompt';
     if (isPaperDirections(text, q)) return 'paper-directions';

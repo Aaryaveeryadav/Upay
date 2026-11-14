@@ -633,23 +633,56 @@ window.UP = window.UP || {};
     button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
     if (aria) { button.setAttribute('aria-label', aria); button.title = aria; }
   }
+  function questionImageFor(q) {
+    const candidates = [];
+    if (q && q.fig) candidates.push(q.fig);
+    if (q && Array.isArray(q.figs)) candidates.push(...q.figs);
+    for (const item of candidates) {
+      const source = typeof item === 'string' ? item
+        : item && typeof item === 'object' ? (item.src || item.data || item.url || '') : '';
+      if (typeof source !== 'string') continue;
+      let uri = source;
+      const mime = item && typeof item === 'object' ? String(item.mime || '').toLowerCase() : '';
+      if (!/^data:image\/(?:jpeg|jpg|png|webp);base64,/i.test(uri)) {
+        const safeMime = mime === 'image/jpg' ? 'image/jpeg' : mime;
+        if (!/^image\/(?:jpeg|png|webp)$/.test(safeMime) || !/^[A-Za-z0-9+/]+={0,2}$/.test(source)) continue;
+        uri = `data:${safeMime};base64,${source}`;
+      }
+      if (!/^data:image\/(?:jpeg|jpg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/i.test(uri)) continue;
+      const caption = item && typeof item === 'object' ? (item.caption || item.alt || '') : '';
+      return { src: uri, caption: String(caption || '') };
+    }
+    return null;
+  }
   function questionDiagramMarkup(q, questionKey) {
     let figure = null, lazySource = '';
+    const pageImage = questionImageFor(q);
     const figureQuestion = q && (q.en || q.hi || q.stem || q.text || q.q)
       ? Object.assign({}, q, { en: q.en || q.hi || q.stem || q.text || q.q }) : q;
-    if (q && typeof q.fig === 'string') {
+    if (!pageImage && q && typeof q.fig === 'string') {
       if (/^figs\/[A-Za-z0-9_./%()-]+\.svg$/.test(q.fig) && !q.fig.includes('..')) lazySource = q.fig;
       else figure = figureFromTest(figureQuestion);
+    } else if (!pageImage && q && q.fig && typeof q.fig === 'object' && typeof q.fig.svg === 'string') {
+      const svg = sanitizeQuestionSvg(q.fig.svg);
+      if (svg) figure = { svg, caption: q.fig.caption || '' };
     }
-    if (!figure && !lazySource && UP.figures && UP.figures.autoFigureFor) {
+    if (!pageImage && !figure && !lazySource && UP.figures && UP.figures.autoFigureFor) {
       try { figure = UP.figures.autoFigureFor(figureQuestion); } catch (_) { figure = null; }
     }
-    if ((!figure || !figure.svg) && !lazySource) return '';
+    if (!pageImage && ((!figure || !figure.svg) && !lazySource)) return '';
 
     const panelId = questionControlId('q-diagram', questionKey);
-    const panel = figure && figure.svg
-      ? `<figure class="figure-card q-question-figure"><div class="figure-head"><span class="mini-label">${S.lang === 'hi' ? 'चित्र' : 'Diagram'}</span><span class="tag grey">${S.lang === 'hi' ? 'प्रश्न के मानों से बना' : 'Drawn from this question’s own values'}</span></div><div class="figure-body">${figure.svg}</div>${figure.caption ? `<figcaption>${esc(P(figure.caption))}</figcaption>` : ''}</figure>`
-      : `<div class="q-lazy-figure" data-lazy-figure-src="${esc(lazySource)}"><span class="muted">${S.lang === 'hi' ? 'चित्र लोड हो रहा है…' : 'Loading diagram…'}</span></div>`;
+    const panel = pageImage
+      ? `<figure class="figure-card q-question-figure q-question-image"><div class="figure-head"><span class="mini-label">${S.lang === 'hi' ? 'चित्र / स्रोत छवि' : 'Question image'}</span><span class="tag grey">${S.lang === 'hi' ? 'बड़ा देखने के लिए चित्र पर टैप करें' : 'Tap the image to enlarge'}</span></div><div class="figure-body"><img class="q-figure-thumbnail" src="${esc(pageImage.src)}" alt="${esc(pageImage.caption || (S.lang === 'hi' ? 'मूल प्रश्नपत्र का चित्र' : 'Question diagram from the original paper'))}" loading="lazy" decoding="async" tabindex="0" role="button" aria-label="${S.lang === 'hi' ? 'चित्र बड़ा करके देखें' : 'Open a larger view of the question image'}"></div>${pageImage.caption ? `<figcaption>${esc(P(pageImage.caption))}</figcaption>` : ''}</figure>`
+      : figure && figure.svg
+        ? `<figure class="figure-card q-question-figure"><div class="figure-head"><span class="mini-label">${S.lang === 'hi' ? 'चित्र' : 'Diagram'}</span><span class="tag grey">${S.lang === 'hi' ? 'प्रश्न के मानों से बना' : 'Drawn from this question’s own values'}</span></div><div class="figure-body">${figure.svg}</div>${figure.caption ? `<figcaption>${esc(P(figure.caption))}</figcaption>` : ''}</figure>`
+        : `<div class="q-lazy-figure" data-lazy-figure-src="${esc(lazySource)}"><span class="muted">${S.lang === 'hi' ? 'चित्र लोड हो रहा है…' : 'Loading diagram…'}</span></div>`;
+    /* PYQ figures stay in the question flow as small previews; the image/SVG
+       itself opens in the existing zoom lightbox. Other views keep their
+       explicit reveal control to avoid making generated pages too tall. */
+    if (String(questionKey || '').startsWith('pyq-'))
+      return `<div class="q-question-extra q-diagram-extra q-diagram-inline">${panel}</div>`;
+
     const toggle = questionPanelButton(panelId, {
       className: 'q-inline-toggle q-diagram-toggle', icon: 'eye',
       closedLabel: S.lang === 'hi' ? 'चित्र देखें' : 'View diagram',
@@ -674,7 +707,8 @@ window.UP = window.UP || {};
     } catch (_) { return ''; }
   }
   function loadLazyQuestionFigure(panel) {
-    const holder = panel && panel.querySelector('[data-lazy-figure-src]');
+    const holder = panel && (panel.matches && panel.matches('[data-lazy-figure-src]')
+      ? panel : panel.querySelector('[data-lazy-figure-src]'));
     if (!holder || holder.dataset.loading || holder.dataset.loaded) return;
     const src = holder.dataset.lazyFigureSrc || '';
     if (!/^figs\/[A-Za-z0-9_./%()-]+\.svg$/.test(src) || src.includes('..')) {
@@ -687,7 +721,9 @@ window.UP = window.UP || {};
         if (!holder.isConnected) return;
         const svg = sanitizeQuestionSvg(source);
         if (!svg) throw new Error('Invalid diagram');
+        const zoomRoot = holder.parentElement || panel;
         holder.outerHTML = `<figure class="figure-card q-question-figure"><div class="figure-head"><span class="mini-label">${S.lang === 'hi' ? 'चित्र' : 'Diagram'}</span><span class="tag grey">${S.lang === 'hi' ? 'स्रोत प्रश्न का चित्र' : 'Source-question diagram'}</span></div><div class="figure-body">${svg}</div></figure>`;
+        bindQuestionFigureZoom(zoomRoot);
       }).catch(() => {
         if (!holder.isConnected) return;
         holder.dataset.loading = '';
@@ -2148,14 +2184,14 @@ window.UP = window.UP || {};
   function mcqRecordIssue(q) {
     const kind = String(q && q.kind != null ? q.kind : '').toLowerCase();
     if (!q || !['mcq','1','2','assertion-reason','assertion_reason','assertion reason'].includes(kind)) return 'not-mcq';
-    if (!Array.isArray(q.opts) || q.opts.length !== 4) return 'option-count';
+    if (!Array.isArray(q.opts) || q.opts.length < 4 || q.opts.length > 6) return 'option-count';
     const rows = [q, q.raw].filter(Boolean);
     if (rows.some(row => row.qualityStatus === 'withheld' || row.optionReview === 'awaiting-source-review'
       || row.textReview === 'awaiting-source-review' || (Array.isArray(row.qualityReasons) && row.qualityReasons.length))) return 'quality-review';
     const subject = q.subject || S.subject;
     const text = pyqQuestionText(q).trim();
     if (text.length < 8 || (UP.questionQuality && UP.questionQuality.inspect(q, subject))) return 'question-quality';
-    if (UP.questionQuality && UP.questionQuality.optionIssue(q.opts, subject)) return 'option-quality';
+    if (pyqOptionIssue(q.opts, q)) return 'option-quality';
     if (UP.corrupt) {
       const expectHindi = !!(q.hi && (S.lang === 'hi' || !q.en));
       const why = UP.corrupt.why(text, { expectHindi });
@@ -4426,6 +4462,24 @@ window.UP = window.UP || {};
     } else window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
+  function bindQuestionFigureZoom(root) {
+    if (!root) return;
+    const selector = '.figure-card img, .sci-fig img, .panel-figure img, .figure-body img, .figure-body svg';
+    const items = root.matches && root.matches(selector) ? [root] : Array.from(root.querySelectorAll(selector));
+    items.forEach(el => {
+      if (el.dataset.questionZoomBound === 'true') return;
+      el.dataset.questionZoomBound = 'true';
+      el.addEventListener('click', openFigLightbox);
+      if (el.classList.contains('q-figure-thumbnail')) {
+        el.addEventListener('keydown', event => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          openFigLightbox({ currentTarget: el });
+        });
+      }
+    });
+  }
+
   /* ---- post-render UX enhancements: step-reveal CTAs, diagram lightbox, kbd hint ---- */
   function postRenderEnhance(root) {
     if(!root)return;
@@ -4472,11 +4526,25 @@ window.UP = window.UP || {};
       }
     }
 
-    // 2. Diagram lightbox: any <img> inside .figure-card / .sci-fig / .panel-figure / .st-m svg inside answers
-    const zoomables = root.querySelectorAll('.figure-card img, .sci-fig img, .panel-figure img, .figure-body img, .figure-body svg');
-    zoomables.forEach(img => {
-      img.addEventListener('click', openFigLightbox);
-    });
+    // 2. Bind zoom once, including figures inserted by the lazy loader. Inline
+    // PYQ figures load when they approach the viewport; collapsed non-PYQ
+    // figures continue to load only after their reveal control is opened.
+    bindQuestionFigureZoom(root);
+    if (typeof IntersectionObserver === 'function') {
+      root.querySelectorAll('.q-diagram-inline .q-lazy-figure[data-lazy-figure-src]').forEach(holder => {
+        if (holder.dataset.figureObserved === 'true') return;
+        holder.dataset.figureObserved = 'true';
+        const observer = new IntersectionObserver(entries => {
+          if (!entries.some(entry => entry.isIntersecting)) return;
+          observer.disconnect();
+          loadLazyQuestionFigure(holder);
+        }, { rootMargin: '120px 0px' });
+        observer.observe(holder);
+      });
+    } else {
+      root.querySelectorAll('.q-diagram-inline .q-lazy-figure[data-lazy-figure-src]')
+        .forEach(holder => loadLazyQuestionFigure(holder));
+    }
 
     // 3. ⌘K hint next to the primary Ask button if present
     const askCta = document.querySelector('.ask-cta');
@@ -4538,6 +4606,19 @@ window.UP = window.UP || {};
     if (isSvg) {
       const clone = el.cloneNode(true);
       clone.removeAttribute('width'); clone.removeAttribute('height');
+      const viewBox = String(clone.getAttribute('viewBox') || '').trim().split(/[\s,]+/).map(Number);
+      if (viewBox.length === 4 && Number.isFinite(viewBox[2]) && viewBox[2] > 0
+        && Number.isFinite(viewBox[3]) && viewBox[3] > 0) {
+        // Preserve an explicit intrinsic size after cloning. SVGs with only a
+        // viewBox can otherwise collapse to 0×0 in the flex lightbox.
+        const size = Math.min(1200 / viewBox[2], 900 / viewBox[3]);
+        clone.setAttribute('width', String(viewBox[2] * size));
+        clone.setAttribute('height', String(viewBox[3] * size));
+      } else {
+        const rect = el.getBoundingClientRect();
+        clone.setAttribute('width', String(Math.max(1, Math.round(rect.width || 300))));
+        clone.setAttribute('height', String(Math.max(1, Math.round(rect.height || 150))));
+      }
       clone.style.maxWidth = '94vw'; clone.style.maxHeight = '92vh';
       wrap.appendChild(clone); target = clone;
     } else {
@@ -4964,7 +5045,7 @@ window.UP = window.UP || {};
         </div></div>
         <div class="setup-actions" style="margin-top:14px">
           ${(S.test.chapters.length || S.test.level !== 'mixed') ? `<button class="btn btn-ghost" data-action="test-reset-filters">${S.lang === 'hi' ? 'फ़िल्टर साफ़ करें' : 'Clear filters'}</button>` : ''}
-          ${hasSuppliedTestPapers() && S.board === 'cbse' ? `<a class="btn btn-ghost" href="#/pyq">${icon('book')} ${S.lang === 'hi' ? 'मूल प्रश्नपत्र PDF देखें' : 'View original test papers'}</a>` : ''}
+          ${class12OriginalPapersLink()}
           <a class="btn btn-primary" href="#/ask">${icon('sparkle')} ${S.lang === 'hi' ? 'प्रश्न पूछें' : 'Ask a question'}</a>
           <a class="btn btn-ghost" href="#/syllabus">${S.lang === 'hi' ? 'पाठ्यक्रम देखें' : 'See the syllabus'}</a>
         </div>
@@ -4992,6 +5073,7 @@ window.UP = window.UP || {};
         <div class="setup-actions">
           <button class="btn btn-primary" data-action="test-new">${icon('sparkle')} ${S.lang === 'hi' ? 'नया पेपर बनाएँ' : 'Generate paper'}</button>
           <button class="btn btn-ghost" data-action="test-print">${icon('printer')} ${S.lang === 'hi' ? 'प्रिंट' : 'Print'}</button>
+          ${class12OriginalPapersLink()}
         </div>
       </div>
       <div class="setup-chapters">
@@ -5391,6 +5473,101 @@ window.UP = window.UP || {};
      before the board field existed, so a missing board means CBSE. */
   const qBoard = q => q.board || 'cbse';
 
+  function pyqDeclaredMcq(q) {
+    const kind = String(q && q.kind != null ? q.kind : '').toLowerCase();
+    return ['mcq', '1', '2', 'assertion-reason', 'assertion_reason', 'assertion reason'].includes(kind);
+  }
+
+  function pyqOptionIssue(options, q) {
+    if (!Array.isArray(options) || options.length < 2 || options.length > 6) return 'option-count';
+    if (pyqDeclaredMcq(q) && options.length < 4) return 'option-count';
+    const rows = [q, q && q.raw].filter(Boolean);
+    if (rows.some(row => row.qualityStatus === 'withheld' || row.optionReview === 'awaiting-source-review'
+      || row.textReview === 'awaiting-source-review' || (Array.isArray(row.qualityReasons) && row.qualityReasons.length)))
+      return 'source-review';
+    const subject = (q && q.subject) || S.subject;
+    const issue = UP.questionQuality && UP.questionQuality.optionIssue(options, subject);
+    if (issue) return issue;
+
+    /* Five- and six-choice arrays are not rejected just for being longer than
+       the usual four. Still withhold obvious cross-question extraction where
+       several entries are themselves question prompts, rather than answer
+       choices. Raw OCR text is never split into options here. */
+    if (options.length > 4) {
+      const texts = options.map(mcqOptionText).map(text => text.normalize('NFKC').trim());
+      if (texts.some(text => /\boptions\s*:/i.test(text)
+        || /\b(?:list\s*[-–]?\s*i|list\s*[-–]?\s*ii|column\s+i|column\s+ii)\b/i.test(text)
+        || /#\s*SECTION\s+[A-E]\b|\bP\.?\s*T\.?\s*O\.?\b/i.test(text)
+        || /^(?:assertion|reason\s*\(?r\)?)[,:.]?$/i.test(text)
+        || /^is\s+(?:true|false)\s*,?\s*but\s+reason\b/i.test(text)
+        // Repeated source-pack artefacts where the first glyph of a word was
+        // dropped at a page/column boundary (not a generic lowercase test).
+        || /^(?:etween|iversity|ustralia|elgium|riven|onservatism|ppropriate|ssertion|oth(?=\s|\(|$)|anks\b|hhattisgarh|ropping|xplanation|urrency|ducation|ommunication|lections|gainst|rop\b|xtension|onstruction|emand\b|xchange|ccount|heque|xplain|omparative|ge of\b|xample\b)/i.test(text)))
+        return 'cross-question-extraction';
+      const prompts = texts.filter(text => /[?？]/.test(text)
+        || /^\s*(?:name|write|define|list|describe|explain|calculate|find|what|which|how|why|give reason|state|mention|compare|justify|identify|analyse|analyze|choose|read|study|answer|select)\b/i.test(text)
+        || /^\s*(?:कौन|क्यों|कैसे|क्या|बताइए|लिखिए|समझाइए|ज्ञात|सिद्ध|गणना|वर्णन|स्पष्ट|दीजिए)/u.test(text));
+      if (prompts.length >= 2) return 'cross-question-extraction';
+      const stem = String(q && (q.en || q.hi || q.sa) || '').trim();
+      const first = texts[0] || '';
+      const lowerLeads = texts.filter(text => /^[a-z]/.test(text)).length;
+      const abruptStem = stem && !/[.?!।॥]$/.test(stem);
+      // Imported social-science PDFs sometimes split a stem across the first
+      // array entries (e.g. “... Jharkhand,” / “hhattisgarh and Odisha.”).
+      // Require both an abrupt stem and a continuation clue; lowercase answer
+      // text alone is not grounds to reject a five-choice set.
+      if (/^[a-z]/.test(first) && abruptStem
+        && (/[?？]\s*(?:\d+)?$/.test(first) || /[,;:]$/.test(stem)
+          || /_{3,}/.test(first) || (lowerLeads >= 2 && /[a-z]{1,3}$/.test(stem))))
+        return 'cross-question-extraction';
+    }
+    return '';
+  }
+
+  function pyqOptions(q) {
+    if (!q) return [];
+    let options = hasOpts(q) ? q.opts : [];
+    /* A small legacy Class 10 Maths set stores its options in the separate
+       source-checked MCQ table. Reuse them only when paper, question number,
+       and normalized stem all match exactly; `kind: 1` alone is never enough
+       to turn a short-answer record into an MCQ. Imported keys stay unused.
+       Do not split A–D-looking text out of OCR stems without source review. */
+    if (!options.length && String(q.kind) === '1' && +q.cls === 10 && q.subject === 'maths' && qBoard(q) === 'cbse') {
+      const normalize = value => String(value || '').normalize('NFKC').toLowerCase()
+        .replace(/[−–—]/g, '-').replace(/[^\p{L}\p{N}-]+/gu, '');
+      const paper = String(q.set || q.paper || '').replace(/\s+/g, '');
+      const source = (UP.pyqMCQ || []).find(row => row
+        && Number(row.year) === Number(q.y)
+        && String(row.paper || '').replace(/\s+/g, '') === paper
+        && Number(row.q) === Number(q.q)
+        && normalize(row.stem) === normalize(q.en || q.hi));
+      if (source && Array.isArray(source.opts) && source.opts.length >= 2 && source.opts.length <= 4)
+        options = source.opts.map(option => ({ en: mcqOptionText(option), hi: '' }));
+    }
+    return pyqOptionIssue(options, q) ? [] : options;
+  }
+
+  function pyqKeyIsVerified(q) {
+    return !!q && trustedKeyRecord(q);
+  }
+
+  function pyqVerifiedChoiceIndex(q, choices) {
+    if (!q || !Array.isArray(choices) || !choices.length || !pyqKeyIsVerified(q)
+      || q.paperCode || (q.raw && q.raw.paperCode)) return -1;
+    const storedAnswer = q.ans == null || !String(q.ans).trim() ? (q.raw && q.raw.ans) : q.ans;
+    const answer = String(storedAnswer == null ? '' : storedAnswer).normalize('NFKC').trim();
+    if (!answer) return -1;
+    const letter = answer.match(/^\(?([A-F])\)?[.)]?$/i);
+    if (letter) {
+      const index = letter[1].toUpperCase().charCodeAt(0) - 65;
+      return index < choices.length ? index : -1;
+    }
+    const normalize = value => mcqOptionText(value).normalize('NFKC')
+      .replace(/[−–—]/g, '-').replace(/\s+/g, ' ').trim().toLowerCase();
+    const target = normalize(answer);
+    return target ? choices.findIndex(option => normalize(option) === target) : -1;
+  }
+
   /* ---------------------------------------------------------------------
      THE SCOPE GATE
      Everything a student sees passes through here, so there is one place
@@ -5461,6 +5638,17 @@ window.UP = window.UP || {};
   }
   function hasSuppliedTestPapers(){
     return (+S.cls===10 && S.subject==='sanskrit') || S.cls === 12 && (S.subject === 'economics' || S.subject === 'biology' || S.subject === 'english');
+  }
+  function hasClass12OriginalPaperSources(){
+    if (+S.cls !== 12 || S.board !== 'cbse') return false;
+    if (S.subject === 'accountancy' || S.subject === 'computerized-accounting')
+      return !!((UP.accountancyOriginalPapers || []).length);
+    return (UP.class12OriginalTestPapers || []).some(p => p.cls === 12 && p.subject === S.subject && p.board === 'cbse');
+  }
+  function class12OriginalPapersLink(){
+    return hasClass12OriginalPaperSources()
+      ? `<a class="btn btn-ghost" href="#/pyq">${icon('book')} ${S.lang === 'hi' ? 'मूल प्रश्नपत्र PDF देखें' : 'Browse original paper PDFs'}</a>`
+      : '';
   }
   function renderSuppliedTestPapers(board){
     if (!hasSuppliedTestPapers() || S.board !== 'cbse' || board !== 'cbse') return '';
@@ -5576,6 +5764,7 @@ window.UP = window.UP || {};
     </nav>` : '';
 
     function qCardHtml(q, badge) {
+      const choices = pyqOptions(q);
       const shown = (S.lang === 'hi' ? (q.hi || q.en) : (q.en || q.hi)) || '';
       /* Gate mojibake only when the displayed field is actually the Hindi
          translation (or the only available field is the Hindi fallback). A
@@ -5620,23 +5809,26 @@ window.UP = window.UP || {};
       out += '<div class="q-text">' + rich(questionText) + '</div>';
       out += questionFigure;
       if (S.lang === 'hi' && q.hindiReview) out += '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>';
-      if (q.optionReview === 'awaiting-source-review') out += '<p class="muted">Options missing or suspect — withheld pending source review. This question is not graded.</p>';
+      const questionKind = String(q.kind == null ? '' : q.kind).toLowerCase();
+      const optionDataIncomplete = hasOpts(q) && !choices.length;
+      if (q.optionReview === 'awaiting-source-review' || optionDataIncomplete || (pyqDeclaredMcq(q) && !choices.length))
+        out += '<p class="muted">Options missing or suspect — withheld pending source review. This question is not graded.</p>';
       const reportURL = 'https://github.com/Aaryaveeryadav/Upay/issues/new?title=' + encodeURIComponent('Question issue: '+q.id) + '&body=' + encodeURIComponent('Question ID: '+q.id+'\nSubject: '+S.subject+'\nYear: '+(q.y||'unknown')+'\n\nDescribe the problem (do not include private account details):\n');
       out += '<a class="link" target="_blank" rel="noopener noreferrer" href="'+esc(reportURL)+'">Report a problem (GitHub)</a>';
       const sourceFile = String(q.sourceUrl || q.sourceFile || '');
       if (/^\/assets\/papers\/[a-zA-Z0-9_./%()-]+\.pdf$/.test(sourceFile) && !sourceFile.includes('..')) out += ' · <a class="link" target="_blank" rel="noopener noreferrer" href="'+esc(sourceFile)+'">View source PDF</a>';
 
-      if (hasOpts(q)) {
+      if (choices.length) {
         const choicesToggle = questionPanelButton(optionsId, {
           className: 'q-inline-toggle q-options-toggle', icon: 'list',
-          closedLabel: S.lang === 'hi' ? `विकल्प देखें · ${q.opts.length}` : `Show choices · ${q.opts.length}`,
+          closedLabel: S.lang === 'hi' ? `विकल्प देखें · ${choices.length}` : `Show choices · ${choices.length}`,
           openLabel: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide choices',
-          closedAria: S.lang === 'hi' ? `${q.opts.length} बहुविकल्पीय विकल्प दिखाएँ` : `Reveal the ${q.opts.length} multiple-choice options`,
+          closedAria: S.lang === 'hi' ? `${choices.length} बहुविकल्पीय विकल्प दिखाएँ` : `Reveal the ${choices.length} multiple-choice options`,
           openAria: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide the multiple-choice options'
         });
         out += '<div class="q-question-extra q-options-extra">' + choicesToggle;
         out += '<div id="' + esc(optionsId) + '" class="q-opts" data-quiz="' + esc(q.id) + '" role="group" aria-label="' + (S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices') + '" hidden>';
-        out += q.opts.map((o, i) => '<button type="button" class="q-opt" data-pick="' + esc(q.id) + '" data-i="' + i + '"><b>' + String.fromCharCode(65 + i) + '</b><span>' + rich(P(o)) + '</span></button>').join('');
+        out += choices.map((o, i) => '<button type="button" class="q-opt" data-pick="' + esc(q.id) + '" data-i="' + i + '"><b>' + String.fromCharCode(65 + i) + '</b><span>' + rich(P(o)) + '</span></button>').join('');
         out += '</div></div>';
       }
       // If extraction is torn, preserve the warning and keep the corner AI
@@ -5649,9 +5841,13 @@ window.UP = window.UP || {};
       if (!(q.paperCode && !q.ans)) out += '<div class="pyq-ans q-answer-reveal" id="ans-' + esc(q.id) + '" hidden><span>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + '</span> <b>' + mathText(q.ans || (S.lang === 'hi' ? 'इस प्रश्न की कुंजी अभी दर्ज नहीं है — ऊपर "AI से हल" दबाइए' : "Key not on file — tap Solve with AI above")) + '</b></div>';
       out += '<div class="pyq-sol" id="sol-' + esc(q.id) + '" hidden></div>';
       if (q.twist) out += '<div class="pyq-twist">' + icon('bulb') + '<div><b>' + (S.lang === 'hi' ? 'इससे नया प्रश्न कैसे बनता है' : 'How a new question is built from this') + '</b><p>' + rich(q.twist) + '</p></div></div>';
+      const kindPair = (questionKind === 'mcq' || questionKind === '1') && choices.length
+        ? ['MCQ', 'बहुविकल्पीय']
+        : questionKind === '1' && !choices.length
+          ? ['Question', 'प्रश्न'] : (PYQ_KIND[q.kind] || ['Question','प्रश्न']);
       const kindText = q.paperCode
         ? (S.lang === 'hi' ? 'CBSE मूल प्रश्न' : 'CBSE source question')
-        : P({ en: (PYQ_KIND[q.kind] || ['Question','प्रश्न'])[0], hi: (PYQ_KIND[q.kind] || ['Question','प्रश्न'])[1] });
+        : P({ en: kindPair[0], hi: kindPair[1] });
       const sourceMeta = q.paperCode
         ? [q.part ? 'Part ' + q.part : '', q.option ? 'Option ' + q.option : '', q.sourcePage ? (S.lang === 'hi' ? 'PDF पृष्ठ ' : 'PDF p. ') + q.sourcePage : ''].filter(Boolean).join(' · ')
         : '';
@@ -5801,8 +5997,14 @@ window.UP = window.UP || {};
     if (pick) {
       const id = pick.dataset.pick, i = +pick.dataset.i;
       const qq = (UP.pyq || []).find(x => x.id === id);
-      if (!qq || !qq.opts) return;
-      if (qq.keyVerified === false || !String(qq.ans || '').trim()) {
+      const choices = pyqOptions(qq);
+      if (!qq || !choices.length || !Number.isInteger(i) || i < 0 || i >= choices.length) return;
+      /* Choices recovered from the separate source table are practice-only.
+         Imported answers are also unscored unless the bank explicitly marks a
+         key as verified; a non-empty `ans` string by itself is not evidence. */
+      const answerText = String(qq.ans == null || !String(qq.ans).trim() ? (qq.raw && qq.raw.ans) || '' : qq.ans).trim();
+      const keyTrusted = pyqKeyIsVerified(qq) && !!answerText && !qq.paperCode && !(qq.raw && qq.raw.paperCode);
+      if (!hasOpts(qq) || !keyTrusted) {
         const box = pick.closest('.q-opts');
         box.querySelectorAll('[data-pick]').forEach(b => { b.classList.remove('chosen'); b.setAttribute('aria-pressed', 'false'); });
         pick.classList.add('chosen'); pick.setAttribute('aria-pressed', 'true');
@@ -5813,11 +6015,9 @@ window.UP = window.UP || {};
           : 'No official answer key is available; this choice is not scored.';
         return;
       }
-      /* `right` can be -1 when the stored answer is prose or a lost fraction.
-         Treating that as "the student is wrong" is the false FAIL the whole
-         project is built to avoid -- so if we cannot locate the answer in the
-         option list we say so and reveal the solution instead of marking. */
-      const right = qq.opts.findIndex(o => (o.en || o) === qq.ans);
+      /* A verified key still has to match a displayed choice exactly enough
+         to avoid turning a lost fraction or OCR mismatch into a false grade. */
+      const right = pyqVerifiedChoiceIndex(qq, choices);
       if (right < 0) {
         const box0 = pick.closest('.q-opts');
         box0.querySelectorAll('[data-pick]').forEach(b => { b.disabled = true; });
@@ -5830,7 +6030,11 @@ window.UP = window.UP || {};
         revealPyq(id);
         return;
       }
-      attemptItem({q:pyqQuestionText(qq),ch:qq.ch,source:qq},String((qq.opts[i]||{}).en||qq.opts[i]||''));
+      const scoreSource = Object.assign({}, qq, {
+        ans: answerText,
+        keyVerified: pyqKeyIsVerified(qq)
+      });
+      attemptItem({q:pyqQuestionText(qq),ch:qq.ch,source:scoreSource},String((choices[i]||{}).en||choices[i]||''));
       const box = pick.closest('.q-opts');
       box.querySelectorAll('[data-pick]').forEach((b, j) => {
         b.disabled = true;

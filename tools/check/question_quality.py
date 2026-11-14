@@ -64,10 +64,14 @@ def main():
     # activity-only rows and damaged PDF text (including unsupported private-use
     # math glyphs). Keep a generous regression ceiling without treating those
     # intentional, auditable quality holds as an error.
-    check(len(drop) < 650, 'overrides.drop is unexpectedly large: %d' % len(drop))
+    check(len(drop) < 750, 'overrides.drop is unexpectedly large: %d' % len(drop))
     check(sum(reason == 'ocr-damaged' for reason in drop_reasons.values()) < 450,
           'OCR-damaged holdbacks are unexpectedly large')
     check(set(drop_reasons) == set(drop), 'dropReasons does not describe every held-back record')
+    for qid in ('ell26u-s1v1-01', 'ell26u-s1v1-02'):
+        check(qid in drop, '%s English source fragment is not explicitly withheld' % qid)
+        check(drop_reasons.get(qid) == 'incomplete-source-fragment',
+              '%s does not have the incomplete-source-fragment reason' % qid)
     check(len(set(folded)) == len(folded), 'foldedExerciseIds contains repeated ids')
     check(sum(str(qid).startswith('hind10-rich-') for qid in folded) >= 150,
           'runtime fold does not include Hindi rich-group exercise questions')
