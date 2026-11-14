@@ -36,9 +36,13 @@ const {chromium}=require('playwright');
    await page.evaluate(()=>{UP.pyq.push({id:'save-ui-fixture',cls:10,subject:'maths',board:'cbse',y:2096,ch:1,q:1,kind:4,m:2,en:'Synthetic source question for saving regression.',hi:'सहेजने के परीक्षण के लिए प्रश्न।',cleanText:true,keyVerified:false});location.hash='#/pyq?y=2096';});
    const pyq=page.locator('#save-ui-fixture [data-action="saveQuestion"]');await pyq.waitFor();await pyq.click();assert(await pyq.isDisabled());
    await page.locator('.lang-btn').click();
-   // Switching language exposes a Hindi Save question affordance too.
-   const hindi=page.locator('#save-ui-fixture [data-action="saveQuestion"]');assert((await hindi.innerText()).includes('प्रश्न सहेजें'));await hindi.click();
-   assert((await hindi.innerText()).includes('सहेजा गया'));
+   // The compact Save control is icon-only; its accessible label follows the UI language.
+   const hindi=page.locator('#save-ui-fixture [data-action="saveQuestion"]');
+   assert.equal(await hindi.getAttribute('aria-label'),'प्रश्न सहेजें');
+   assert.equal(await hindi.getAttribute('title'),'प्रश्न सहेजें');
+   await hindi.click();
+   assert.equal(await hindi.getAttribute('aria-label'),'सहेजा गया');
+   assert.equal(await hindi.getAttribute('title'),'सहेजा गया');
    await page.evaluate(()=>location.hash='#/test');
    const compactHindi=page.locator('.q-card .q-save-corner:not([disabled])').first();await compactHindi.waitFor();
    assert.equal(await compactHindi.getAttribute('aria-label'),'प्रश्न सहेजें');
