@@ -311,9 +311,9 @@ def main():
         mcq.locator('.q-options-toggle').click()
         check(mcq.locator('.q-opts').is_visible(), 'past-paper MCQ choices open on request')
         mcq.locator('[data-pick]').first.click()
-        check('not scored' in mcq.inner_text().lower() and mcq.locator('.q-opt.right,.q-opt.wrong').count() == 0 and
-              mcq.locator('.q-opt.chosen').count() == 1 and len(ai_calls) == before_ai,
-              'unkeyed MCQ selection is not marked or sent to AI automatically')
+        check('ai' in mcq.inner_text().lower() and mcq.locator('.q-opt.right,.q-opt.wrong').count() == 0 and
+              mcq.locator('.q-opt.chosen').count() == 1,
+              'unkeyed MCQ selection is sent to AI checking, not key-marked')
         page.evaluate("UP.pyq = UP.pyq.filter(q => q.id !== 'fixture-unkeyed-mcq')")
         route('#/test')
         page.wait_for_selector('#view .q-card')

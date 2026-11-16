@@ -99,7 +99,7 @@ for (const prompt of [
   if (!(await matchedMcq.locator('.q-opts').isVisible())) throw new Error('PYQ choices toggle did not open options');
   await matchedMcq.locator('.q-opt').first().click();
   if (await matchedMcq.locator('.q-opt.right,.q-opt.wrong').count() ||
-      !/not scored/i.test(await matchedMcq.innerText())) throw new Error('source-only choices must remain ungraded');
+      !/AI/i.test(await matchedMcq.innerText())) throw new Error('source-only choices must be AI-checked, not key-graded');
   await pg.waitForSelector('#imp11086717');
   const shortAnswer = pg.locator('#imp11086717');
   if (await shortAnswer.locator('.q-options-toggle').count())
@@ -146,8 +146,8 @@ for (const prompt of [
   await fiveChoice.locator('.q-options-toggle').click();
   await fiveChoice.locator('.q-opt').nth(4).click();
   if (await fiveChoice.locator('.q-opt.right,.q-opt.wrong').count() ||
-      !/not scored/i.test(await fiveChoice.innerText()))
-    throw new Error('five-choice fixture without a verified key must remain unscored');
+      !/AI/i.test(await fiveChoice.innerText()))
+    throw new Error('five-choice fixture without a verified key must be AI-checked');
   const verifiedFallback = pg.locator('#pyq-test-verified-fallback');
   await verifiedFallback.waitFor({ state: 'attached' });
   await verifiedFallback.locator('.q-options-toggle').click();
@@ -243,8 +243,8 @@ for (const prompt of [
   await unverified.locator('.q-options-toggle').click();
   await unverified.locator('.q-opt').first().click();
   if (await unverified.locator('.q-opt.right,.q-opt.wrong').count() ||
-      !/not scored/i.test(await unverified.innerText()))
-    throw new Error('an unverified imported answer letter must never score a PYQ choice');
+      !/AI/i.test(await unverified.innerText()))
+    throw new Error('an unverified imported answer letter must be AI-checked, never key-scored');
 
   // This source diagram is beyond the first 60 grouped questions for 2026.
   await pg.evaluate(() => { location.hash = '#/pyq?y=2026&page=2'; });

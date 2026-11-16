@@ -3335,8 +3335,8 @@ window.UP = window.UP || {};
       <span class="eyebrow"><span class="dot"></span>${t('classShort')} ${S.cls} · ${esc(P(UP.subjects[S.subject] || UP.subjects.maths))} · ${esc(boardLabel)}</span>
       <h1>${S.lang === 'hi' ? 'बहुविकल्पीय अभ्यास' : 'Multiple-choice practice'}</h1>
       <p class="lead">${S.lang === 'hi'
-        ? `इस चयन में ${verifiedCount} प्रश्नों की उत्तर-कुंजी स्पष्ट रूप से सत्यापित है; शेष ${list.length - verifiedCount} केवल अभ्यास के लिए हैं। सत्यापित कुंजी वाले प्रश्न ही अंकित होते हैं।`
-        : `${verifiedCount} questions in this selection have an explicitly verified answer key; the other ${list.length - verifiedCount} are practice only. Only verified keys are scored.`}</p>
+        ? `इस चयन में ${verifiedCount} प्रश्नों की उत्तर-कुंजी सत्यापित है; शेष प्रश्नों का उत्तर चुनते ही AI जाँचकर अंक देगा।`
+        : `${verifiedCount} questions in this selection have a verified answer key; for the rest, AI checks your answer as soon as you pick one and scores it.`}</p>
       <p class="muted">${S.lang === 'hi'
         ? 'केवल चार स्पष्ट विकल्पों वाले, संरचनात्मक जाँच में पास प्रश्न दिखते हैं। स्रोत-जाँच लंबित या क्षतिग्रस्त प्रश्न रोक दिए गए हैं।'
         : 'Only structurally screened four-option items are shown. Damaged items and records awaiting source review are withheld.'}</p>
@@ -3364,7 +3364,7 @@ window.UP = window.UP || {};
       const keyVisible = q.verified && q.keyIndex >= 0;
       const answerHTML = keyVisible
         ? `<span class="q-answer-label">${S.lang === 'hi' ? 'सत्यापित उत्तर' : 'Verified answer'}</span> <b>${String.fromCharCode(65 + q.keyIndex)}.</b> ${rich(q.optionTexts[q.keyIndex])}`
-        : `<span class="muted">${S.lang === 'hi' ? 'इस प्रश्न की सत्यापित उत्तर-कुंजी उपलब्ध नहीं है; सही विकल्प नहीं दिखाया जा सकता।' : 'No verified answer key is recorded, so a correct choice cannot be revealed.'}</span>`;
+        : `<span class="muted">${S.lang === 'hi' ? 'इस प्रश्न की संग्रहीत कुंजी नहीं है — विकल्प चुनिए, AI सही उत्तर जाँचकर बताएगा।' : 'No stored key for this question — pick an option and AI will check and reveal the correct answer.'}</span>`;
       const choicesButton = questionPanelButton(optionsId, {
         className: 'q-inline-toggle q-options-toggle', icon: 'list',
         closedLabel: S.lang === 'hi' ? `विकल्प देखें · ${q.optionTexts.length}` : `Show choices · ${q.optionTexts.length}`,
@@ -4884,11 +4884,6 @@ window.UP = window.UP || {};
 
     <article class="card sci-read">${body}</article>
 
-    ${(ch.activities || []).length ? `<section class="card">
-      <h3>${S.lang === 'hi' ? 'क्रियाकलाप' : 'Activities'}</h3>
-      ${ch.activities.map(a => `<div class="sci-act"><b>Activity ${esc(a.n)}</b><p>${esc(a.text)}</p></div>`).join('')}
-    </section>` : ''}
-
     ${qs.length ? `<section class="card">
       <h3>${S.lang === 'hi' ? 'अभ्यास प्रश्न' : 'Exercise questions'}</h3>
       <p class="hint">${S.lang === 'hi' ? 'पुस्तक के अंत में दिए प्रश्न, मूल शब्दों में। किसी प्रश्न पर चित्र दिखे तो वह उसी प्रश्न का है।' : 'The textbook’s own end-of-chapter questions, in their original wording. Where a question shows a diagram, it is the figure printed for that question.'}</p>
@@ -5215,7 +5210,9 @@ window.UP = window.UP || {};
       ${questionDiagramMarkup(q, 'test-' + q.no)}
       ${S.lang === 'hi' && (q.raw || q).hindiReview ? '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>' : ''}
       ${opts}
-      ${hasOpts(q) && !graded ? `<div class="callout tip mcq-unscored-note" role="note" style="margin-top:10px">${S.lang === 'hi' ? 'सत्यापित उत्तर-कुंजी उपलब्ध नहीं है। विकल्प चुनना अभ्यास है; अंक नहीं दिए जाएँगे।' : 'No verified answer key is recorded. Choosing an option is practice only and will not be scored.'}</div>` : ''}
+      ${hasOpts(q) && !graded && !(a && a.aiVerdict) ? `<div class="callout tip mcq-unscored-note" role="note" style="margin-top:10px">${S.lang === 'hi' ? 'इस प्रश्न की संग्रहीत कुंजी नहीं है — विकल्प चुनिए, AI आपका उत्तर जाँचेगा और अंक देगा। इसमें कुछ सेकंड लग सकते हैं।' : 'No stored key for this question — pick an option and AI will check it and score you. It can take a few seconds.'}</div>` : ''}
+      ${a && a.aiChecking ? `<div class="callout tip" role="status"><div>Checking your answer with AI… please wait a few seconds.</div></div>` : ''}
+      ${a && a.aiVerdict ? `<div class="callout ${a.aiVerdict === 'incorrect' ? 'warn' : 'tip'}" role="status"><div><b>${a.aiVerdict === 'correct' ? '✔ Correct — checked by AI' : a.aiVerdict === 'incorrect' ? '✘ Incorrect — checked by AI' : a.aiVerdict === 'partly-correct' ? 'Partly correct — checked by AI' : 'AI could not decide this one'}</b>${a.aiCorrect ? '<p><b>Correct answer:</b> ' + esc(a.aiCorrect) + '</p>' : ''}${a.aiFeedback ? '<p>' + esc(a.aiFeedback) + '</p>' : ''}<p class="muted">AI practice marking — not an official board key.</p>${a.aiVerdict !== 'correct' ? `<a class="btn btn-primary btn-sm" href="#/ask?q=${encodeURIComponent('Question: ' + (q.en || q.hi || '') + '\nMy answer: ' + (a.pick || a.text || '') + (a.aiCorrect ? '\nCorrect answer: ' + a.aiCorrect : '') + '\nWhere did I go wrong? Explain my mistake step by step.')}">Ask AI where I went wrong</a>` : ''}</div></div>` : ''}
       ${graded && a && a.ok !== null ? `<div class="q-verdict ${a.ok ? 'ok' : 'bad'}">${a.ok ? '✓ ' + (S.lang === 'hi' ? 'सही' : 'Correct') : '× ' + (S.lang === 'hi' ? 'सही उत्तर' : 'Correct answer') + ': ' + mathText(String(q.ans))}</div>` : ''}
       ${a && a.shown ? solutionBlock(q) : ''}
     </article>`;
@@ -6006,13 +6003,27 @@ window.UP = window.UP || {};
       const keyTrusted = pyqKeyIsVerified(qq) && !!answerText && !qq.paperCode && !(qq.raw && qq.raw.paperCode);
       if (!hasOpts(qq) || !keyTrusted) {
         const box = pick.closest('.q-opts');
-        box.querySelectorAll('[data-pick]').forEach(b => { b.classList.remove('chosen'); b.setAttribute('aria-pressed', 'false'); });
+        box.querySelectorAll('[data-pick]').forEach(b => { b.classList.remove('chosen'); b.setAttribute('aria-pressed', 'false'); b.disabled = true; });
         pick.classList.add('chosen'); pick.setAttribute('aria-pressed', 'true');
         let note = box.parentNode.querySelector('.pyq-verdict.note');
         if (!note) { note = document.createElement('div'); note.className = 'pyq-verdict note'; box.parentNode.insertBefore(note, box.nextSibling); }
-        note.textContent = S.lang === 'hi'
-          ? 'आधिकारिक उत्तर-कुंजी उपलब्ध नहीं है; इस चयन को अंक नहीं दिए गए हैं।'
-          : 'No official answer key is available; this choice is not scored.';
+        note.textContent = S.lang === 'hi' ? 'AI से आपका उत्तर जाँचा जा रहा है… इसमें कुछ सेकंड लग सकते हैं।' : 'Checking your answer with AI… this can take a few seconds.';
+        const chosenText = String((choices[i] || {}).en || choices[i] || '');
+        const fullQuestion = pyqQuestionText(qq) + '\nOptions: ' + choices.map((o, j) => String.fromCharCode(65 + j) + '. ' + String((o || {}).en || o || '')).join('  ');
+        aiCheckAnswerText(fullQuestion, String.fromCharCode(65 + i) + '. ' + chosenText, answerText || '').then(j => {
+          const verdict = j.verdict;
+          note.className = 'pyq-verdict ' + (verdict === 'correct' ? 'ok' : verdict === 'incorrect' ? 'no' : 'note');
+          note.textContent = verdict === 'correct'
+            ? (S.lang === 'hi' ? '✔ सही — AI ने जाँचा।' : '✔ Correct — checked by AI.') + (j.feedback ? ' ' + j.feedback : '')
+            : verdict === 'incorrect'
+              ? (S.lang === 'hi' ? '✘ सही नहीं — AI ने जाँचा। सही उत्तर: ' : '✘ Incorrect — checked by AI. Correct answer: ') + (j.correctAnswer || '') + (j.feedback ? ' ' + j.feedback : '')
+              : (S.lang === 'hi' ? 'AI जाँच: ' : 'AI check: ') + (j.feedback || 'The AI could not decide this one.');
+          if (verdict === 'correct' || verdict === 'incorrect') {
+            rememberAssessment({ q: pyqQuestionText(qq), ch: qq.ch, source: { m: 1, opts: choices, ans: chosenText } }, String.fromCharCode(65 + i),
+              { status: verdict, awarded: verdict === 'correct' ? 1 : 0, max: 1, expected: j.correctAnswer || '', reason: 'ai-check' });
+            if (verdict === 'correct') pick.classList.add('right'); else pick.classList.add('wrong');
+          }
+        }).catch(() => { note.textContent = S.lang === 'hi' ? 'AI जाँच अभी नहीं हो सकी — कृपया फिर प्रयास करें।' : 'AI check could not run right now — please try again.'; box.querySelectorAll('[data-pick]').forEach(b => { b.disabled = false; }); });
         return;
       }
       /* A verified key still has to match a displayed choice exactly enough
@@ -6070,10 +6081,36 @@ window.UP = window.UP || {};
         });
         if (feedback) {
           feedback.className = 'mcq-feedback pyq-verdict note';
-          feedback.textContent = S.lang === 'hi'
-            ? 'इस प्रश्न की सत्यापित उत्तर-कुंजी उपलब्ध नहीं है। आपका चयन केवल अभ्यास है; इसे अंकित नहीं किया गया।'
-            : 'No verified answer key is recorded. This selection is practice only; it has not been scored.';
+          feedback.textContent = S.lang === 'hi' ? 'AI से आपका उत्तर जाँचा जा रहा है… इसमें कुछ सेकंड लग सकते हैं।' : 'Checking your answer with AI… this can take a few seconds.';
         }
+        const chosenText = q.optionTexts[i];
+        const fullQuestion = q.stem + '\nOptions: ' + q.optionTexts.map((o, j) => String.fromCharCode(65 + j) + '. ' + o).join('  ');
+        aiCheckAnswerText(fullQuestion, String.fromCharCode(65 + i) + '. ' + chosenText, '').then(j => {
+          const verdict = j.verdict;
+          const status = verdict === 'correct' ? 'correct' : verdict === 'incorrect' ? 'incorrect' : 'pending';
+          if (status !== 'pending') {
+            rememberAssessment({ q: q.stem, ch: q.ch, source: { m: 1, opts: q.optionTexts, ans: chosenText } }, String.fromCharCode(65 + i),
+              { status, awarded: status === 'correct' ? 1 : 0, max: 1, expected: j.correctAnswer || '', reason: 'ai-check' });
+          }
+          box.querySelectorAll('[data-mcqpick]').forEach((button, j2) => {
+            if (verdict === 'correct' && j2 === i) button.classList.add('right');
+            else if (verdict === 'incorrect' && j2 === i) button.classList.add('wrong');
+          });
+          if (feedback) {
+            feedback.className = 'mcq-feedback pyq-verdict ' + (verdict === 'correct' ? 'ok' : verdict === 'incorrect' ? 'no' : 'note');
+            feedback.textContent = verdict === 'correct'
+              ? (S.lang === 'hi' ? '✔ सही — AI ने जाँचा।' : '✔ Correct — checked by AI.') + (j.feedback ? ' ' + j.feedback : '')
+              : verdict === 'incorrect'
+                ? (S.lang === 'hi' ? '✘ सही नहीं — AI ने जाँचा। सही उत्तर: ' : '✘ Incorrect — checked by AI. Correct answer: ') + (j.correctAnswer || '') + (j.feedback ? ' ' + j.feedback : '')
+                : verdict === 'partly-correct'
+                  ? (S.lang === 'hi' ? 'आंशिक रूप से सही — AI जाँच: ' : 'Partly correct — AI check: ') + (j.feedback || '')
+                  : (S.lang === 'hi' ? 'AI इस उत्तर की पुष्टि नहीं कर सका; नीचे हल देखिए।' : 'The AI could not decide this one; see the solution below.') + (j.feedback ? ' ' + j.feedback : '');
+          }
+        }).catch(() => {
+          if (feedback) { feedback.className = 'mcq-feedback pyq-verdict note'; feedback.textContent = S.lang === 'hi' ? 'AI जाँच अभी नहीं हो सकी — कृपया फिर प्रयास करें या नीचे हल देखें।' : 'AI check could not run right now — try again or see the solution below.'; }
+          box.querySelectorAll('[data-mcqpick]').forEach(b => { b.disabled = false; });
+          delete box.dataset.done;
+        });
         return;
       }
 
@@ -6233,10 +6270,10 @@ window.UP = window.UP || {};
       const q = findQ(no); if (!q) return;
       const answerIndex = verifiedChoiceIndex(q);
       const graded = hasVerifiedAnswer(q) && answerIndex >= 0;
-      practiceAttempt(q,pick);
+      if (graded) practiceAttempt(q,pick);
       S.answers[no] = { pick, pickIndex, ok: graded ? pickIndex === answerIndex : null,
-        shown: !!(S.answers[no] && S.answers[no].shown) };
-      render(); return;
+        shown: !!(S.answers[no] && S.answers[no].shown), aiChecking: !graded };
+      render(); if (!graded) aiGradeTestAnswer(no); return;
     }
     if (action === 'test-check') {
       const no = +tgt.dataset.q;
@@ -6245,8 +6282,8 @@ window.UP = window.UP || {};
       const text = (inp ? inp.value : '').trim();
       const graded = hasVerifiedAnswer(q);
       if (graded) practiceAttempt(q,text);
-      S.answers[no] = { text, ok: graded ? sameAnswer(text, q.ans) : null, shown: true };
-      render(); return;
+      S.answers[no] = { text, ok: graded ? sameAnswer(text, q.ans) : null, shown: true, aiChecking: !graded };
+      render(); if (!graded) aiGradeTestAnswer(no); return;
     }
     if (action === 'test-reveal') {
       const no = +tgt.dataset.q;
@@ -7159,14 +7196,41 @@ function mockAICheckBlock(it,i,a){
   const wrongPrompt='Question: '+it.q+'\nMy answer: '+answer+(chk.correctAnswer?'\nCorrect answer: '+chk.correctAnswer:'')+'\nWhere did I go wrong? Explain my mistake and show the correct solution step by step.';
   return `<div class="callout ${chk.verdict==='incorrect'?'warn':'tip'} mock-ai-check" role="status"><div><b>${verdictLabels[chk.verdict]||'AI check'}</b>${chk.marksHint?` <span class="tag grey">${esc(chk.marksHint)}</span>`:''}<p>${esc(chk.feedback||'')}</p>${chk.correctAnswer?'<p><b>Correct answer:</b> '+esc(chk.correctAnswer)+'</p>':''}<p class="muted">AI practice feedback — not official board marking.</p>${chk.verdict!=='correct'?`<a class="btn btn-primary btn-sm" href="#/ask?q=${encodeURIComponent(wrongPrompt)}">${icon('sparkle')} Ask AI where I went wrong</a>`:''}</div></div>`;
 }
+async function aiCheckAnswerText(question, studentAnswer, referenceAnswer){
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timer = controller ? setTimeout(() => controller.abort(), 120000) : null;
+  try {
+    const r = await fetch('/api/ai/check-answer', { method:'POST', headers:{ 'content-type':'application/json', authorization:'Bearer ' + (localStorage.getItem('upay.token') || '') }, body: JSON.stringify({ question: question, studentAnswer: studentAnswer, referenceAnswer: referenceAnswer || '', subject: S.subject, cls: S.cls, lang: S.lang }), signal: controller ? controller.signal : undefined });
+    const j = await r.json().catch(() => null);
+    if (!r.ok || !j || !j.verdict) throw new Error((j && j.error) || 'AI check failed. Please try again.');
+    return j;
+  } finally { if (timer) clearTimeout(timer); }
+}
+async function aiGradeTestAnswer(no){
+  const q = findQ(no); const a = S.answers[no];
+  if (!q || !a) return;
+  const studentAnswer = a.pick || a.text || '';
+  if (!String(studentAnswer).trim()) { a.aiChecking = false; return; }
+  const questionText = (q.en || q.hi || '') + (Array.isArray(q.opts) && q.opts.length ? '\nOptions: ' + q.opts.map((o, j) => String.fromCharCode(65 + j) + '. ' + String((o || {}).en || o || '')).join('  ') : '');
+  try {
+    const j = await aiCheckAnswerText(questionText, studentAnswer, '');
+    a.aiChecking = false; a.aiVerdict = j.verdict; a.aiFeedback = j.feedback || ''; a.aiCorrect = j.correctAnswer || '';
+    a.ok = j.verdict === 'correct' ? true : j.verdict === 'incorrect' ? false : null;
+    if (j.verdict === 'correct' || j.verdict === 'incorrect') {
+      rememberAssessment({ q: q.en || q.hi || '', ch: q.ch, source: { m: 1, opts: q.opts || [], ans: a.aiCorrect || studentAnswer } }, studentAnswer,
+        { status: j.verdict, awarded: j.verdict === 'correct' ? 1 : 0, max: 1, expected: a.aiCorrect || '', reason: 'ai-check' });
+    }
+  } catch (e) {
+    a.aiChecking = false; a.aiVerdict = 'cannot-tell'; a.aiFeedback = 'AI check could not run right now — please try again.';
+  }
+  render({ preserveScroll: true });
+}
 async function checkMockAnswerWithAI(i){
   const test=S.mockTest; if(!test||!test.items[i])return;
   const it=test.items[i], answer=String((test.answers||{})[i]||'').trim(); if(!answer)return;
   test.aiChecks=test.aiChecks||{}; test.aiChecks[i]={loading:true}; store.set(mockStoreKey(),test); render();
   try{
-    const r=await fetch('/api/ai/check-answer',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(localStorage.getItem('upay.token')||'')},body:JSON.stringify({question:it.q,studentAnswer:answer,referenceAnswer:(it.source&&it.source.ans)||'',subject:test.subject||S.subject,cls:S.cls,lang:S.lang})});
-    const j=await r.json().catch(()=>null);
-    if(!r.ok||!j||!j.verdict) throw new Error((j&&j.error)||'AI check failed. Please try again.');
+    const j=await aiCheckAnswerText(it.q,answer,(it.source&&it.source.ans)||'');
     test.aiChecks[i]={verdict:j.verdict,feedback:j.feedback||'',correctAnswer:j.correctAnswer||'',marksHint:j.marksHint||''};
   }catch(e){ test.aiChecks[i]={error:String(e&&e.message||e||'AI check failed.')}; }
   store.set(mockStoreKey(),test); render();

@@ -1746,7 +1746,7 @@ const handleRequest = async function (req, res) {
         '', 'QUESTION: ' + question, reference ? 'REFERENCE ANSWER: ' + reference : '', 'STUDENT ANSWER: ' + studentAnswer
       ].filter(Boolean).join('\n');
       try {
-        const out = await callGeminiResilient(prompt, plain, db.settings.geminiModel);
+        const out = await callGeminiResilient(prompt, plain, db.settings.geminiModel, null, { attemptMs: 90000 });
         const parsed = firstJSON(out.text);
         if (!parsed) return json(res, 502, { error: 'The AI returned an unusable response. Please try again.', fallback: true });
         const verdicts = ['correct', 'partly-correct', 'incorrect', 'cannot-tell'];
