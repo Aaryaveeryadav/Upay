@@ -1,4 +1,4 @@
-/* CBSE Class 10 Social Science board papers (code 32). Auto-extracted. */
+/* CBSE Class 10 Social Science board papers (code 32). Cleaned. */
 window.UP = window.UP || {};
 UP.pyq = UP.pyq || [];
 UP.socialPyq = [
@@ -15,7 +15,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following regions became a part of unified Italy in 1866 ? 1",
+    "en": "Which one of the following regions became a part of unified Italy in 1866 ?",
     "hi": "",
     "twist": "",
     "src": "32/1/1 SST Set 1",
@@ -33,7 +33,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Papal State #",
+        "en": "Papal State",
         "hi": ""
       }
     ],
@@ -52,29 +52,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : Assertion (A): Minerals are an indispensable part of our lives. Reason (R): All living things need minerals.",
     "hi": "",
     "twist": "",
     "src": "32/1/1 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Minerals are an indispensable part of our lives. Reason (R): All living things need minerals. Options:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "is false, but (R) is true. #",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -93,7 +89,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/1/1 SST Set 1",
@@ -180,7 +176,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Only I, II and IV are correct. #",
+        "en": "Only I, II and IV are correct.",
         "hi": ""
       }
     ],
@@ -199,7 +195,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the given picture and answer the question that follow : The work being done in the picture falls under which sector of the economy ? 1",
+    "en": "Look at the given picture and answer the question that follow : The work being done in the picture falls under which sector of the economy ?",
     "hi": "",
     "twist": "",
     "src": "32/1/1 SST Set 1",
@@ -221,7 +217,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "conomy? 1",
+        "en": "conomy?",
         "hi": ""
       },
       {
@@ -237,7 +233,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Fisherman #",
+        "en": "Fisherman",
         "hi": ""
       }
     ],
@@ -262,11 +258,11 @@ UP.socialPyq = [
     "src": "32/1/1 SST Set 1",
     "opts": [
       {
-        "en": "ppropriate option: 1 I. Lack of collateral II.",
+        "en": "Appropriate option: 1 I. Lack of collateral II.",
         "hi": ""
       },
       {
-        "en": "omplicated procedure III. Higher cost of borrowing IV. Lack of awareness Options:",
+        "en": "Complicated procedure III. Higher cost of borrowing IV. Lack of awareness Options:",
         "hi": ""
       },
       {
@@ -301,7 +297,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following groups in urban India depend on informal sources to meet their credit needs ? 1",
+    "en": "Which of the following groups in urban India depend on informal sources to meet their credit needs ?",
     "hi": "",
     "twist": "",
     "src": "32/1/1 SST Set 1",
@@ -315,11 +311,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth poor households and households with few assets",
+        "en": "Both poor households and households with few assets",
         "hi": ""
       },
       {
-        "en": "oth well-off households and households with few assets",
+        "en": "Both well-off households and households with few assets",
         "hi": ""
       }
     ],
@@ -389,7 +385,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth statements I and II are correct and statement II is the correct",
+        "en": "Both statements I and II are correct and statement II is the correct",
         "hi": ""
       },
       {
@@ -397,7 +393,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth statements I and II are correct, but statement II is not the",
+        "en": "Both statements I and II are correct, but statement II is not the",
         "hi": ""
       },
       {
@@ -409,7 +405,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Statement I is incorrect, but statement II is correct. # SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "Statement I is incorrect, but statement II is correct. #",
         "hi": ""
       }
     ],
@@ -448,7 +444,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "How did the process of liberalisation initiated in India in the 1990s, promote globalisation ? Explain. 2 SECTION C (Short Answer Type Questions) (5 3=15)",
+    "en": "How did the process of liberalisation initiated in India in the 1990s, promote globalisation ? Explain. 2",
     "hi": "",
     "twist": "",
     "src": "32/1/1 SST Set 1",
@@ -478,7 +474,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "haracteristics. 1+2=3 #",
+        "en": "haracteristics. 1+2=3",
         "hi": ""
       }
     ],
@@ -628,7 +624,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/1/1 SST Set 1",
@@ -678,7 +674,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "-i, b-ii, c-iii, d-iv #",
+        "en": "-i, b-ii, c-iii, d-iv",
         "hi": ""
       }
     ],
@@ -697,7 +693,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Imagine you are travelling from Delhi to Chandigarh to attend a wedding, by road in January. Which of the following crops will you notice prominently in the fields during the journey ? 1",
+    "en": "Imagine you are travelling from Delhi to Chandigarh to attend a wedding, by road in January. Which of the following crops will you notice prominently in the fields during the journey ?",
     "hi": "",
     "twist": "",
     "src": "32/1/1 SST Set 1",
@@ -826,7 +822,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "menities and facilities for the comforts of life. (12.1) How is science an important factor in the development of transport? 1 Page 9 (12.2) How has transport integrated socio-cultural plurality? Explain. 1 (12.3) Analyse the significance of communication for a nation. 2 SECTION E (Map-Based Question) (1+2=3)",
+        "en": "menities and facilities for the comforts of life. (12.1) How is science an important factor in the development of transport? 1 Page 9 (12.2) How has transport integrated socio-cultural plurality? Explain. 1 (12.3) Analyse the significance of communication for a nation. 2",
         "hi": ""
       }
     ],
@@ -867,7 +863,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "engaluru Software Technology Park 1",
+        "en": "engaluru Software Technology Park",
         "hi": ""
       },
       {
@@ -875,7 +871,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Name the State where Bengaluru Software Technology Park is located. 1 (13.3) Name the city where Indira Gandhi International Airport is located. 1",
+        "en": "Name the State where Bengaluru Software Technology Park is located. 1 (13.3) Name the city where Indira Gandhi International Airport is located.",
         "hi": ""
       }
     ],
@@ -914,7 +910,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Study the given flowchart and answer the questions that follow : (5.1) Which is the basic material required for garment manufacturing ? 1 (5.2) Give one example of value addition in the textile industry. 1 SECTION B (Short-Answer Type Questions) (3 3=9)",
+    "en": "Study the given flowchart and answer the questions that follow : (5.1) Which is the basic material required for garment manufacturing ? 1 (5.2) Give one example of value addition in the textile industry.",
     "hi": "",
     "twist": "",
     "src": "32/1/1 SST Set 1",
@@ -954,7 +950,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Imagine you are travelling from Delhi to Chandigarh to attend a wedding, by road in January. Which of the following crops will you notice prominently in the fields during the journey ? 1",
+    "en": "Imagine you are travelling from Delhi to Chandigarh to attend a wedding, by road in January. Which of the following crops will you notice prominently in the fields during the journey ?",
     "hi": "",
     "twist": "",
     "src": "32/1/2 SST Set 2",
@@ -972,7 +968,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Jowar #",
+        "en": "Jowar",
         "hi": ""
       }
     ],
@@ -1005,7 +1001,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth statements I and II are correct and statement II is the correct",
+        "en": "Both statements I and II are correct and statement II is the correct",
         "hi": ""
       },
       {
@@ -1013,7 +1009,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth statements I and II are correct, but statement II is not the",
+        "en": "Both statements I and II are correct, but statement II is not the",
         "hi": ""
       },
       {
@@ -1044,7 +1040,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following groups in urban India depend on informal sources to meet their credit needs ? 1",
+    "en": "Which of the following groups in urban India depend on informal sources to meet their credit needs ?",
     "hi": "",
     "twist": "",
     "src": "32/1/2 SST Set 2",
@@ -1058,19 +1054,19 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth poor households and households with few assets",
+        "en": "Both poor households and households with few assets",
         "hi": ""
       },
       {
-        "en": "oth well-off households and households with few assets # 12 Why does it become difficult for farmers in rural areas to take loans from government banks? Read the following reasons and choose the most",
+        "en": "Both well-off households and households with few assets # 12 Why does it become difficult for farmers in rural areas to take loans from government banks? Read the following reasons and choose the most",
         "hi": ""
       },
       {
-        "en": "ppropriate option: 1 I. Lack of collateral II.",
+        "en": "Appropriate option: 1 I. Lack of collateral II.",
         "hi": ""
       },
       {
-        "en": "omplicated procedure III. Higher cost of borrowing IV. Lack of awareness Options:",
+        "en": "Complicated procedure III. Higher cost of borrowing IV. Lack of awareness Options:",
         "hi": ""
       },
       {
@@ -1105,7 +1101,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the given picture and answer the question that follow : The work being done in the picture falls under which sector of the economy ? 1",
+    "en": "Look at the given picture and answer the question that follow : The work being done in the picture falls under which sector of the economy ?",
     "hi": "",
     "twist": "",
     "src": "32/1/2 SST Set 2",
@@ -1127,7 +1123,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "conomy? 1",
+        "en": "conomy?",
         "hi": ""
       },
       {
@@ -1143,7 +1139,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Fisherman #",
+        "en": "Fisherman",
         "hi": ""
       }
     ],
@@ -1207,7 +1203,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/1/2 SST Set 2",
@@ -1268,29 +1264,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : Assertion (A): Minerals are an indispensable part of our lives. Reason (R): All living things need minerals.",
     "hi": "",
     "twist": "",
     "src": "32/1/2 SST Set 2",
     "opts": [
       {
-        "en": "ssertion (A): Minerals are an indispensable part of our lives. Reason (R): All living things need minerals. Options:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "is false, but (R) is true. # SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -1378,7 +1370,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/1/2 SST Set 2",
@@ -1596,7 +1588,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Only I, II and IV are correct. #",
+        "en": "Only I, II and IV are correct.",
         "hi": ""
       }
     ],
@@ -1615,7 +1607,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following regions became a part of unified Italy in 1866 ? 1",
+    "en": "Which one of the following regions became a part of unified Italy in 1866 ?",
     "hi": "",
     "twist": "",
     "src": "32/1/2 SST Set 2",
@@ -1743,7 +1735,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "onnection and attain Purna Swaraj or Complete Independenc (12.1) Why was freedom considered an inalienable right of the Indian people? 1 Page 9 (12.2) Why was Purna Swaraj considered essential by the people of India? 1 (12.3) Explain the significance of the Lahore Session of Congress (1930). 2 SECTION E (Map-Based Question) (1+2=3)",
+        "en": "onnection and attain Purna Swaraj or Complete Independenc (12.1) Why was freedom considered an inalienable right of the Indian people? 1 Page 9 (12.2) Why was Purna Swaraj considered essential by the people of India? 1 (12.3) Explain the significance of the Lahore Session of Congress (1930). 2",
         "hi": ""
       }
     ],
@@ -1784,7 +1776,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "engaluru Software Technology Park 1",
+        "en": "engaluru Software Technology Park",
         "hi": ""
       },
       {
@@ -1792,7 +1784,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Name the State where Bengaluru Software Technology Park is located. 1 (13.3) Name the city where Indira Gandhi International Airport is located. 1",
+        "en": "Name the State where Bengaluru Software Technology Park is located. 1 (13.3) Name the city where Indira Gandhi International Airport is located.",
         "hi": ""
       }
     ],
@@ -1856,7 +1848,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Study the given flowchart and answer the questions that follow : (5.1) Which is the basic material required for garment manufacturing ? 1 (5.2) Give one example of value addition in the textile industry. 1 SECTION B (Short-Answer Type Questions) (3 3=9)",
+    "en": "Study the given flowchart and answer the questions that follow : (5.1) Which is the basic material required for garment manufacturing ? 1 (5.2) Give one example of value addition in the textile industry.",
     "hi": "",
     "twist": "",
     "src": "32/1/2 SST Set 2",
@@ -1896,7 +1888,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "- 3 SECTION C (Long-Answer Type Questions) (2 5=10)",
+    "en": "- 3",
     "hi": "",
     "twist": "",
     "src": "32/1/2 SST Set 2",
@@ -1916,7 +1908,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/1/3 SST Set 3",
@@ -1985,7 +1977,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Imagine you are travelling from Delhi to Chandigarh to attend a wedding, by road in January. Which of the following crops will you notice prominently in the fields during the journey ? 1",
+    "en": "Imagine you are travelling from Delhi to Chandigarh to attend a wedding, by road in January. Which of the following crops will you notice prominently in the fields during the journey ?",
     "hi": "",
     "twist": "",
     "src": "32/1/3 SST Set 3",
@@ -2003,7 +1995,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Jowar #",
+        "en": "Jowar",
         "hi": ""
       }
     ],
@@ -2022,29 +2014,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : Assertion (A): Minerals are an indispensable part of our lives. Reason (R): All living things need minerals.",
     "hi": "",
     "twist": "",
     "src": "32/1/3 SST Set 3",
     "opts": [
       {
-        "en": "ssertion (A): Minerals are an indispensable part of our lives. Reason (R): All living things need minerals. Options:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "is false, but (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -2077,7 +2065,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth statements I and II are correct and statement II is the correct",
+        "en": "Both statements I and II are correct and statement II is the correct",
         "hi": ""
       },
       {
@@ -2085,7 +2073,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth statements I and II are correct, but statement II is not the",
+        "en": "Both statements I and II are correct, but statement II is not the",
         "hi": ""
       },
       {
@@ -2116,7 +2104,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following groups in urban India depend on informal sources to meet their credit needs ? 1",
+    "en": "Which of the following groups in urban India depend on informal sources to meet their credit needs ?",
     "hi": "",
     "twist": "",
     "src": "32/1/3 SST Set 3",
@@ -2130,11 +2118,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth poor households and households with few assets",
+        "en": "Both poor households and households with few assets",
         "hi": ""
       },
       {
-        "en": "oth well-off households and households with few assets #",
+        "en": "Both well-off households and households with few assets",
         "hi": ""
       }
     ],
@@ -2159,11 +2147,11 @@ UP.socialPyq = [
     "src": "32/1/3 SST Set 3",
     "opts": [
       {
-        "en": "ppropriate option: 1 I. Lack of collateral II.",
+        "en": "Appropriate option: 1 I. Lack of collateral II.",
         "hi": ""
       },
       {
-        "en": "omplicated procedure III. Higher cost of borrowing IV. Lack of awareness Options:",
+        "en": "Complicated procedure III. Higher cost of borrowing IV. Lack of awareness Options:",
         "hi": ""
       },
       {
@@ -2190,7 +2178,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the given picture and answer the question that follow : The work being done in the picture falls under which sector of the economy ? 1",
+    "en": "Look at the given picture and answer the question that follow : The work being done in the picture falls under which sector of the economy ?",
     "hi": "",
     "twist": "",
     "src": "32/1/3 SST Set 3",
@@ -2212,7 +2200,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "conomy? 1",
+        "en": "conomy?",
         "hi": ""
       },
       {
@@ -2312,7 +2300,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "How did improvement in transportation technology stimulate the globalisation process ? Explain. 2 SECTION C (Short Answer Type Questions) (5 3=15)",
+    "en": "How did improvement in transportation technology stimulate the globalisation process ? Explain. 2",
     "hi": "",
     "twist": "",
     "src": "32/1/3 SST Set 3",
@@ -2362,7 +2350,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "haracteristics. 1+2=3 #",
+        "en": "haracteristics. 1+2=3",
         "hi": ""
       }
     ],
@@ -2415,7 +2403,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "udget of the city is discussed in these meetings. The proposals are put to the municipality that takes a final decision about it. (34.1) Explain the meaning of articipatory democracy. 1 (34.2) In the context of separation of powers, the given example defines which type of government? 1 (34.3) Describe the structure of the system in India which is almost similar to the above example of Brazil. 2 #",
+        "en": "udget of the city is discussed in these meetings. The proposals are put to the municipality that takes a final decision about it. (34.1) Explain the meaning of articipatory democracy. 1 (34.2) In the context of separation of powers, the given example defines which type of government? 1 (34.3) Describe the structure of the system in India which is almost similar to the above example of Brazil. 2",
         "hi": ""
       }
     ],
@@ -2512,7 +2500,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/1/3 SST Set 3",
@@ -2554,7 +2542,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "-ii, b-iii, c-iv, d-i #",
+        "en": "-ii, b-iii, c-iv, d-i",
         "hi": ""
       }
     ],
@@ -2573,7 +2561,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following regions became a part of unified Italy in 1866 ? 1",
+    "en": "Which one of the following regions became a part of unified Italy in 1866 ?",
     "hi": "",
     "twist": "",
     "src": "32/1/3 SST Set 3",
@@ -2739,7 +2727,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "bolish it. The British Government in India has not only deprived the Indian people of their freedom but has based itself on the exploitation of the masses, and has ruined India economically, politically, culturally, and spiritually. We believe, therefore, that India must sever the British (12.1) Why was freedom considered an inalienable right of the Indian people? 1 Page 9 (12.2) Why was Purna Swaraj considered essential by the people of India? 1 (12.3) Explain the significance of the Lahore Session of Congress (1930). 2 SECTION E (Map-Based Question) (1+2=3)",
+        "en": "bolish it. The British Government in India has not only deprived the Indian people of their freedom but has based itself on the exploitation of the masses, and has ruined India economically, politically, culturally, and spiritually. We believe, therefore, that India must sever the British (12.1) Why was freedom considered an inalienable right of the Indian people? 1 Page 9 (12.2) Why was Purna Swaraj considered essential by the people of India? 1 (12.3) Explain the significance of the Lahore Session of Congress (1930). 2",
         "hi": ""
       }
     ],
@@ -2780,7 +2768,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "engaluru Software Technology Park 1",
+        "en": "engaluru Software Technology Park",
         "hi": ""
       },
       {
@@ -2788,7 +2776,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Name the State where Bengaluru Software Technology Park is located. 1 (13.3) Name the city where Indira Gandhi International Airport is located. 1",
+        "en": "Name the State where Bengaluru Software Technology Park is located. 1 (13.3) Name the city where Indira Gandhi International Airport is located.",
         "hi": ""
       }
     ],
@@ -2827,7 +2815,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Study the given flowchart and answer the questions that follow : (4.1) Which is the basic material required for garment manufacturing ? 1 (4.2) Give one example of value addition in the textile industry. 1",
+    "en": "Study the given flowchart and answer the questions that follow : (4.1) Which is the basic material required for garment manufacturing ? 1 (4.2) Give one example of value addition in the textile industry.",
     "hi": "",
     "twist": "",
     "src": "32/1/3 SST Set 3",
@@ -2867,7 +2855,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "- 3 SECTION C (Long-Answer Type Questions) (2 5=10)",
+    "en": "- 3",
     "hi": "",
     "twist": "",
     "src": "32/1/3 SST Set 3",
@@ -2907,13 +2895,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): India has enormous possibilities of production of solar",
+        "en": "Assertion (A): India has enormous possibilities of production of solar",
         "hi": ""
       },
       {
@@ -2921,19 +2909,19 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is false, but (R) is true. 11. Match Column I with Column II and choose the correct option: 1",
+        "en": "is false, but (R) is true. 11. Match Column I with Column II and choose the correct option:",
         "hi": ""
       },
       {
@@ -2998,7 +2986,7 @@ UP.socialPyq = [
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "russels? 1",
+        "en": "russels?",
         "hi": ""
       },
       {
@@ -3006,7 +2994,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "uropean Union",
+        "en": "European Union",
         "hi": ""
       },
       {
@@ -3014,7 +3002,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "South Asian Association for Regional Co-operation #",
+        "en": "South Asian Association for Regional Co-operation",
         "hi": ""
       }
     ],
@@ -3043,7 +3031,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "iversity? 1",
+        "en": "iversity?",
         "hi": ""
       },
       {
@@ -3113,7 +3101,7 @@ UP.socialPyq = [
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "conomy? 1",
+        "en": "conomy?",
         "hi": ""
       },
       {
@@ -3133,7 +3121,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "conomy? 1",
+        "en": "conomy?",
         "hi": ""
       },
       {
@@ -3149,7 +3137,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Gur making #",
+        "en": "Gur making",
         "hi": ""
       }
     ],
@@ -3223,7 +3211,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth statements I and II are correct and statement II is the correct",
+        "en": "Both statements I and II are correct and statement II is the correct",
         "hi": ""
       },
       {
@@ -3231,7 +3219,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth statements I and II are correct, but statement II is not the",
+        "en": "Both statements I and II are correct, but statement II is not the",
         "hi": ""
       },
       {
@@ -3243,7 +3231,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Statement I is incorrect, but statement II is correct. # SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "Statement I is incorrect, but statement II is correct. #",
         "hi": ""
       }
     ],
@@ -3332,7 +3320,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "s she can, but this little girl has no idea about the declining fertility of season. Suggest any three measures to Rinjha so that the fertility of the soil of her fields remains intact for a long time. 3 #",
+        "en": "s she can, but this little girl has no idea about the declining fertility of season. Suggest any three measures to Rinjha so that the fertility of the soil of her fields remains intact for a long time. 3",
         "hi": ""
       }
     ],
@@ -3351,7 +3339,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In the mid-16th century, diseases like smallpox reached America through which of the following ? 1",
+    "en": "In the mid-16th century, diseases like smallpox reached America through which of the following ?",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -3369,7 +3357,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ritish tourists",
+        "en": "British tourists",
         "hi": ""
       }
     ],
@@ -3455,7 +3443,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ffective terms. #",
+        "en": "ffective terms.",
         "hi": ""
       },
       {
@@ -3527,7 +3515,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the following characteristics of of Korea carefully and choose the correct option : 1",
+    "en": "Read the following characteristics of of Korea carefully and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -3594,7 +3582,7 @@ UP.socialPyq = [
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "ct are correct? Choose the most appropriate option. 1",
+        "en": "ct are correct? Choose the most appropriate option.",
         "hi": ""
       },
       {
@@ -3614,7 +3602,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Only I, III and IV are correct. #",
+        "en": "Only I, III and IV are correct.",
         "hi": ""
       }
     ],
@@ -3633,7 +3621,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -3708,7 +3696,7 @@ UP.socialPyq = [
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "ppropriate option. 1",
+        "en": "Appropriate option.",
         "hi": ""
       },
       {
@@ -3716,7 +3704,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "lack soil, Light rainfall, High temperature and Bright sunshine",
+        "en": "Black soil, Light rainfall, High temperature and Bright sunshine",
         "hi": ""
       },
       {
@@ -3724,7 +3712,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "lack soil, High rainfall, Low temperature and Moderate sunshine #",
+        "en": "Black soil, High rainfall, Low temperature and Moderate sunshine",
         "hi": ""
       }
     ],
@@ -3743,7 +3731,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "The German philosopher ‘Johann Gottfried’ belonged to which one of the following schools of thought ? 1",
+    "en": "The German philosopher ‘Johann Gottfried’ belonged to which one of the following schools of thought ?",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -3829,7 +3817,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following countries has ‘one-party system’ ? 1",
+    "en": "Which one of the following countries has ‘one-party system’ ?",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -3847,7 +3835,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "China /21/BBCA2",
+        "en": "China",
         "hi": ""
       }
     ],
@@ -3866,7 +3854,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is a fundamental principle of democracy ? 1",
+    "en": "Which one of the following is a fundamental principle of democracy ?",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -3903,7 +3891,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following languages is included in Eighth Schedule in Indian Constitution ? 1",
+    "en": "Which one of the following languages is included in Eighth Schedule in Indian Constitution ?",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -3940,7 +3928,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Choose the correct option to fill the blank. Literacy Rate measures the proportion of literate population in the _____ years and above age group. 1",
+    "en": "Choose the correct option to fill the blank. Literacy Rate measures the proportion of literate population in the _____ years and above age group.",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -3977,25 +3965,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Assume there are four families in a locality. If the incomes of these four families in a week are ` 2,000, ` 5,000, ` 3,000 and ` 6,000, then the weekly average income of the locality will be – 1",
+    "en": "Assume there are four families in a locality. If the incomes of these four families in a week are ₹ 2,000, ₹ 5,000, ₹ 3,000 and ₹ 6,000, then the weekly average income of the locality will be –",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "` 4,000",
+        "en": "₹ 4,000",
         "hi": ""
       },
       {
-        "en": "` 5,000",
+        "en": "₹ 5,000",
         "hi": ""
       },
       {
-        "en": "` 2,000",
+        "en": "₹ 2,000",
         "hi": ""
       },
       {
-        "en": "` 1,000 /21/BBCA2",
+        "en": "₹ 1,000",
         "hi": ""
       }
     ],
@@ -4063,7 +4051,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the given image. The work done in the image comes under which one of the following sectors ? 1",
+    "en": "Look at the given image. The work done in the image comes under which one of the following sectors ?",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -4085,7 +4073,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "andidatesinlieuofquestionno.17. Which one of the following enterprises belongs to the organized sector? 1",
+        "en": "andidatesinlieuofquestionno.17. Which one of the following enterprises belongs to the organized sector?",
         "hi": ""
       },
       {
@@ -4126,7 +4114,7 @@ UP.socialPyq = [
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "anks? 1",
+        "en": "anks?",
         "hi": ""
       },
       {
@@ -4142,7 +4130,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "To support economic growth /21/BBCA2",
+        "en": "To support economic growth",
         "hi": ""
       }
     ],
@@ -4222,13 +4210,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option. 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option.",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): ‘The Act of Union 1707’ between England and Scotland resulted in the formation of ‘United Kingdom of Great Britain’. Reason(R): England wanted to impose its influence on Scotland. Options:",
+        "en": "Assertion (A): ‘The Act of Union 1707’ between England and Scotland resulted in the formation of ‘United Kingdom of Great Britain’. Reason(R): England wanted to impose its influence on Scotland. Options:",
         "hi": ""
       },
       {
@@ -4263,7 +4251,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Choose the correct option regarding ‘Body Mass Index’ (BMI) from the following. 1",
+    "en": "Choose the correct option regarding ‘Body Mass Index’ (BMI) from the following.",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -4281,7 +4269,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Assessment of under Nutrition /21/BBCA2 SECTION–B (4 2=8) (VeryShortAnswerTypeQuestions)",
+        "en": "Assessment of under Nutrition  SECTION–B (4 2=8) (VeryShortAnswerTypeQuestions)",
         "hi": ""
       }
     ],
@@ -4375,7 +4363,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "How did food promote long-distance cultural contacts in the pre-modern world? Explain. 3 /21/BBCA2",
+        "en": "How did food promote long-distance cultural contacts in the pre-modern world? Explain. 3",
         "hi": ""
       }
     ],
@@ -4498,7 +4486,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "How did people belonging to different communities, regions and language groups develop a sense of collective belonging in the late – nineteenth century India? Explain with examples. 5 /21/BBCA2",
+        "en": "How did people belonging to different communities, regions and language groups develop a sense of collective belonging in the late – nineteenth century India? Explain with examples. 5",
         "hi": ""
       }
     ],
@@ -4585,7 +4573,7 @@ UP.socialPyq = [
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "ontinuous track of all books and newspapers published in India and passed numerous laws to control the press. /21/BBCA2",
+        "en": "ontinuous track of all books and newspapers published in India and passed numerous laws to control the press.",
         "hi": ""
       },
       {
@@ -4630,7 +4618,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ffort to save an endangered species but with equal importance as a means of preserving biotypes of sizeable magnitude. Corbett National Park in Uttarakhand, Sunderbans National Park in West Bengal, Bandhavgarh National Park in Madhya Pradesh, Sariska Wildlife Sanctuary in Rajasthan, Manas Tiger Reserve in Assam and Periyar Tiger Reserve in Kerala are some examples of the tiger reserves in India. /21/BBCA2 (35.1) Why was ‘Project Tiger’ considered a significant step for Tiger",
+        "en": "ffort to save an endangered species but with equal importance as a means of preserving biotypes of sizeable magnitude. Corbett National Park in Uttarakhand, Sunderbans National Park in West Bengal, Bandhavgarh National Park in Madhya Pradesh, Sariska Wildlife Sanctuary in Rajasthan, Manas Tiger Reserve in Assam and Periyar Tiger Reserve in Kerala are some examples of the tiger reserves in India.  (35.1) Why was ‘Project Tiger’ considered a significant step for Tiger",
         "hi": ""
       },
       {
@@ -4671,7 +4659,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hhattisgarhi, Rajasthani and many others were grouped together under ‘Hindi’. Even after this grouping, the Census found 121 major languages. Of these, 22 languages are now included in the Eighth Schedule of the Indian Constitution and are therefore called ‘Scheduled Languages’. Others are called ‘Non-Scheduled Languages’. In terms of languages, India is perhaps the most diverse country in the world. (36.1) How many languages were recorded as mother tongues in the 2011 Census of India? 1 (36.2) How were the languages grouped together in the Census report? 1 (36.3) How does the inclusion of languages in the Eighth Schedule of the Indian Constitution contribute to linguistic diversity? Explain. 2 /21/BBCA2 SECTION–F 2+3=5) (MapSkillBasedQuestions)",
+        "en": "hhattisgarhi, Rajasthani and many others were grouped together under ‘Hindi’. Even after this grouping, the Census found 121 major languages. Of these, 22 languages are now included in the Eighth Schedule of the Indian Constitution and are therefore called ‘Scheduled Languages’. Others are called ‘Non-Scheduled Languages’. In terms of languages, India is perhaps the most diverse country in the world. (36.1) How many languages were recorded as mother tongues in the 2011 Census of India? 1 (36.2) How were the languages grouped together in the Census report? 1 (36.3) How does the inclusion of languages in the Eighth Schedule of the Indian Constitution contribute to linguistic diversity? Explain. 2  SECTION–F 2+3=5) (MapSkillBasedQuestions)",
         "hi": ""
       }
     ],
@@ -4690,7 +4678,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "(a) Two places A and B have been marked on the given political outline map of India. Identify them with the help of the following information and write their correct names on the lines drawn near them : 2 1=2 (i) The place where Gandhiji broke Salt Law. 1 (ii) The place where the Indian National Congress Session was held in 1920. 1",
+    "en": "(a) Two places A and B have been marked on the given political outline map of India. Identify them with the help of the following information and write their correct names on the lines drawn near them : 2 1=2 (i) The place where Gandhiji broke Salt Law. 1 (ii) The place where the Indian National Congress Session was held in 1920.",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -4790,7 +4778,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Alluvial soil /21/BBCA2",
+        "en": "Alluvial soil",
         "hi": ""
       }
     ],
@@ -4809,7 +4797,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column-I with Column-II and choose the correct option : 1",
+    "en": "Match Column-I with Column-II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -4876,7 +4864,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Secular /21/BBCA2",
+        "en": "Secular",
         "hi": ""
       }
     ],
@@ -5028,15 +5016,15 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "rab states",
+        "en": "Arab states",
         "hi": ""
       },
       {
-        "en": "uropean countries",
+        "en": "European countries",
         "hi": ""
       },
       {
-        "en": "sian countries 11",
+        "en": "Asian countries 11",
         "hi": ""
       }
     ],
@@ -5106,7 +5094,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hina",
+        "en": "China",
         "hi": ""
       },
       {
@@ -5286,7 +5274,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "opper coins",
+        "en": "Copper coins",
         "hi": ""
       }
     ],
@@ -5348,11 +5336,11 @@ UP.socialPyq = [
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "ccess to New Markets",
+        "en": "Access to New Markets",
         "hi": ""
       },
       {
-        "en": "ccess to New Talent",
+        "en": "Access to New Talent",
         "hi": ""
       },
       {
@@ -5360,7 +5348,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "isproportionate Growth 15 SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "Disproportionate Growth 15",
         "hi": ""
       }
     ],
@@ -5419,7 +5407,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "y is 2 SECTION C (Short Answer Type Questions) (5 3=15)",
+    "en": "y is 2",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
@@ -5674,7 +5662,7 @@ UP.socialPyq = [
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "i 4, ii 3, iii 2, iv 1",
+        "en": "i 4, ii 3, iii 2, iv",
         "hi": ""
       },
       {
@@ -5715,11 +5703,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "lack",
+        "en": "Black",
         "hi": ""
       },
       {
-        "en": "lluvial",
+        "en": "Alluvial",
         "hi": ""
       },
       {
@@ -5742,37 +5730,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There are two statements given as Assertion (A) and Reason (R). Read",
+    "en": "There are two statements given as Assertion (A) and Reason (R). Read Assertion (A): Agriculture and industry move hand in hand. Reason (R): Industrial development is a precondition for eradication of unemployment and poverty from the country.",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option.",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): Agriculture and industry move hand in hand. Reason (R): Industrial development is a precondition for eradication of unemployment and poverty from the country.",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "orrect explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the correct explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -5820,41 +5796,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There are two statements given as Assertion (A) and Reason (R). Read",
+    "en": "There are two statements given as Assertion (A) and Reason (R). Read Assertion (A): Belgium amended their constitution four times. Reason (R):",
     "hi": "",
     "twist": "",
     "src": "32/2/1 SST Set 1",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option.",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): Belgium amended their constitution four times. Reason (R):",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "mendments were to enable everyone to live together in the same country.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
-        "hi": ""
-      },
-      {
-        "en": "orrect explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the correct explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -5879,7 +5839,7 @@ UP.socialPyq = [
     "src": "32/2/2 SST Set 2",
     "opts": [
       {
-        "en": "ppropriate option. 1",
+        "en": "Appropriate option.",
         "hi": ""
       },
       {
@@ -5887,7 +5847,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "lack soil, Light rainfall, High temperature and Bright sunshine",
+        "en": "Black soil, Light rainfall, High temperature and Bright sunshine",
         "hi": ""
       },
       {
@@ -5895,7 +5855,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "lack soil, High rainfall, Low temperature and Moderate sunshine #",
+        "en": "Black soil, High rainfall, Low temperature and Moderate sunshine",
         "hi": ""
       }
     ],
@@ -5944,7 +5904,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth statements I and II are correct and statement II is the correct",
+        "en": "Both statements I and II are correct and statement II is the correct",
         "hi": ""
       },
       {
@@ -5952,7 +5912,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth statements I and II are correct, but statement II is not the",
+        "en": "Both statements I and II are correct, but statement II is not the",
         "hi": ""
       },
       {
@@ -6014,7 +5974,7 @@ UP.socialPyq = [
     "src": "32/2/2 SST Set 2",
     "opts": [
       {
-        "en": "conomy? 1",
+        "en": "conomy?",
         "hi": ""
       },
       {
@@ -6034,7 +5994,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "conomy? 1",
+        "en": "conomy?",
         "hi": ""
       },
       {
@@ -6108,7 +6068,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "iversity? 1",
+        "en": "iversity?",
         "hi": ""
       },
       {
@@ -6124,7 +6084,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Switzerland #",
+        "en": "Switzerland",
         "hi": ""
       }
     ],
@@ -6149,7 +6109,7 @@ UP.socialPyq = [
     "src": "32/2/2 SST Set 2",
     "opts": [
       {
-        "en": "russels? 1",
+        "en": "russels?",
         "hi": ""
       },
       {
@@ -6157,7 +6117,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "uropean Union",
+        "en": "European Union",
         "hi": ""
       },
       {
@@ -6165,7 +6125,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "South Asian Association for Regional Co-operation 19. Match Column I with Column II and choose the correct option: 1",
+        "en": "South Asian Association for Regional Co-operation 19. Match Column I with Column II and choose the correct option:",
         "hi": ""
       },
       {
@@ -6244,13 +6204,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 2",
     "opts": [
       {
-        "en": "ssertion (A): India has enormous possibilities of production of solar",
+        "en": "Assertion (A): India has enormous possibilities of production of solar",
         "hi": ""
       },
       {
@@ -6258,19 +6218,19 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is false, but (R) is true. # SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "is false, but (R) is true. #",
         "hi": ""
       }
     ],
@@ -6318,7 +6278,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 2",
@@ -6532,7 +6492,7 @@ UP.socialPyq = [
     "src": "32/2/2 SST Set 2",
     "opts": [
       {
-        "en": "ct are correct? Choose the most appropriate option. 1",
+        "en": "ct are correct? Choose the most appropriate option.",
         "hi": ""
       },
       {
@@ -6552,7 +6512,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Only I, III and IV are correct. #",
+        "en": "Only I, III and IV are correct.",
         "hi": ""
       }
     ],
@@ -6591,7 +6551,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the following characteristics of of Korea carefully and choose the correct option : 1",
+    "en": "Read the following characteristics of of Korea carefully and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 2",
@@ -6632,7 +6592,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In the mid-16th century, diseases like smallpox reached America through which of the following ? 1",
+    "en": "In the mid-16th century, diseases like smallpox reached America through which of the following ?",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 2",
@@ -6650,7 +6610,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ritish tourists",
+        "en": "British tourists",
         "hi": ""
       }
     ],
@@ -6669,7 +6629,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following countries has ‘one-party system’ ? 1",
+    "en": "Which one of the following countries has ‘one-party system’ ?",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
@@ -6706,7 +6666,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "The German philosopher ‘Johann Gottfried’ belonged to which one of the following schools of thought ? 1",
+    "en": "The German philosopher ‘Johann Gottfried’ belonged to which one of the following schools of thought ?",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
@@ -6743,7 +6703,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Choose the correct option regarding ‘Body Mass Index’ (BMI) from the following. 1",
+    "en": "Choose the correct option regarding ‘Body Mass Index’ (BMI) from the following.",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
@@ -6761,7 +6721,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Assessment of under Nutrition /21/BBCA2",
+        "en": "Assessment of under Nutrition",
         "hi": ""
       }
     ],
@@ -6847,7 +6807,7 @@ UP.socialPyq = [
     "src": "32/2/2 SST Set 1",
     "opts": [
       {
-        "en": "anks? 1",
+        "en": "anks?",
         "hi": ""
       },
       {
@@ -6863,7 +6823,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "To support economic growth /21/BBCA2",
+        "en": "To support economic growth",
         "hi": ""
       }
     ],
@@ -6882,7 +6842,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the given image. The work done in the image comes under which one of the following sectors ? 1",
+    "en": "Look at the given image. The work done in the image comes under which one of the following sectors ?",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
@@ -6904,7 +6864,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "andidatesinlieuofquestionno.14. Which one of the following enterprises belongs to the organized sector? 1",
+        "en": "andidatesinlieuofquestionno.14. Which one of the following enterprises belongs to the organized sector?",
         "hi": ""
       },
       {
@@ -6988,25 +6948,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Assume there are four families in a locality. If the incomes of these four families in a week are ` 2,000, ` 5,000, ` 3,000 and ` 6,000, then the weekly average income of the locality will be – 1",
+    "en": "Assume there are four families in a locality. If the incomes of these four families in a week are ₹ 2,000, ₹ 5,000, ₹ 3,000 and ₹ 6,000, then the weekly average income of the locality will be –",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
     "opts": [
       {
-        "en": "` 4,000",
+        "en": "₹ 4,000",
         "hi": ""
       },
       {
-        "en": "` 5,000",
+        "en": "₹ 5,000",
         "hi": ""
       },
       {
-        "en": "` 2,000",
+        "en": "₹ 2,000",
         "hi": ""
       },
       {
-        "en": "` 1,000 /21/BBCA2",
+        "en": "₹ 1,000",
         "hi": ""
       }
     ],
@@ -7025,7 +6985,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Choose the correct option to fill the blank. Literacy Rate measures the proportion of literate population in the _____ years and above age group. 1",
+    "en": "Choose the correct option to fill the blank. Literacy Rate measures the proportion of literate population in the _____ years and above age group.",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
@@ -7062,7 +7022,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following languages is included in Eighth Schedule in Indian Constitution ? 1",
+    "en": "Which one of the following languages is included in Eighth Schedule in Indian Constitution ?",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
@@ -7099,7 +7059,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is a fundamental principle of democracy ? 1",
+    "en": "Which one of the following is a fundamental principle of democracy ?",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
@@ -7185,13 +7145,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option. 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option.",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): ‘The Act of Union 1707’ between England and Scotland resulted in the formation of ‘United Kingdom of Great Britain’. Reason(R): England wanted to impose its influence on Scotland. Options:",
+        "en": "Assertion (A): ‘The Act of Union 1707’ between England and Scotland resulted in the formation of ‘United Kingdom of Great Britain’. Reason(R): England wanted to impose its influence on Scotland. Options:",
         "hi": ""
       },
       {
@@ -7207,7 +7167,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "(A) is false but (R) is true. /21/BBCA2 SECTION–B (4 2=8) (VeryShortAnswerTypeQuestions)",
+        "en": "(A) is false but (R) is true.  SECTION–B (4 2=8) (VeryShortAnswerTypeQuestions)",
         "hi": ""
       }
     ],
@@ -7391,7 +7351,7 @@ UP.socialPyq = [
     "src": "32/2/2 SST Set 1",
     "opts": [
       {
-        "en": "nd explain them. 3 /21/BBCA2 SECTION–D (4 5=20) (LongAnswerTypeQuestions)",
+        "en": "nd explain them. 3  SECTION–D (4 5=20) (LongAnswerTypeQuestions)",
         "hi": ""
       }
     ],
@@ -7444,7 +7404,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Residuary Subjects – Marriages /21/BBCA2",
+        "en": "Residuary Subjects – Marriages",
         "hi": ""
       }
     ],
@@ -7560,7 +7520,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "xamples. 5 /21/BBCA2 SECTION–E (3 4=12)",
+        "en": "xamples. 5  SECTION–E (3 4=12)",
         "hi": ""
       },
       {
@@ -7601,7 +7561,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hhattisgarhi, Rajasthani and many others were grouped together under ‘Hindi’. Even after this grouping, the Census found 121 major languages. Of these, 22 languages are now included in the Eighth Schedule of the Indian Constitution and are therefore called ‘Scheduled Languages’. Others are called ‘Non-Scheduled Languages’. In terms of languages, India is perhaps the most diverse country in the world. (34.1) How many languages were recorded as mother tongues in the 2011 Census of India? 1 (34.2) How were the languages grouped together in the Census report? 1 (34.3) How does the inclusion of languages in the Eighth Schedule of the Indian Constitution contribute to linguistic diversity? Explain. 2 /21/BBCA2",
+        "en": "hhattisgarhi, Rajasthani and many others were grouped together under ‘Hindi’. Even after this grouping, the Census found 121 major languages. Of these, 22 languages are now included in the Eighth Schedule of the Indian Constitution and are therefore called ‘Scheduled Languages’. Others are called ‘Non-Scheduled Languages’. In terms of languages, India is perhaps the most diverse country in the world. (34.1) How many languages were recorded as mother tongues in the 2011 Census of India? 1 (34.2) How were the languages grouped together in the Census report? 1 (34.3) How does the inclusion of languages in the Eighth Schedule of the Indian Constitution contribute to linguistic diversity? Explain. 2",
         "hi": ""
       }
     ],
@@ -7667,7 +7627,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "epletion of prey base species, growing human population, etc. The trade of tiger skins and the use of their bones in traditional medicines, especially in the Asian countries left the tiger population on the verge of extinction. Since India and Nepal provide habitat to about two-thirds of the surviving tiger population in the world, these two nations become prime targets for poaching and illegal trading. /21/BBCA2 “Project Tiger”, one of the well publicised wildlife campaigns in the world, was launched in 1973. Tiger conservation has been viewed not only as an",
+        "en": "epletion of prey base species, growing human population, etc. The trade of tiger skins and the use of their bones in traditional medicines, especially in the Asian countries left the tiger population on the verge of extinction. Since India and Nepal provide habitat to about two-thirds of the surviving tiger population in the world, these two nations become prime targets for poaching and illegal trading.  “Project Tiger”, one of the well publicised wildlife campaigns in the world, was launched in 1973. Tiger conservation has been viewed not only as an",
         "hi": ""
       },
       {
@@ -7694,13 +7654,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "(a) Two places A and B have been marked on the given political outline map of India. Identify them with the help of the following information and write their correct names on the lines drawn near them : 2 1=2 (i) The place where Gandhiji broke Salt Law. 1 (ii) The place where the Indian National Congress Session was held in 1920. 1",
+    "en": "(a) Two places A and B have been marked on the given political outline map of India. Identify them with the help of the following information and write their correct names on the lines drawn near them : 2 1=2 (i) The place where Gandhiji broke Salt Law. 1 (ii) The place where the Indian National Congress Session was held in 1920.",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
     "opts": [
       {
-        "en": "On the same political outline map of India, locate and label any three of the following with suitable symbols: 3 1=3 (i) Salal – Dam 1 (ii) Kalpakkam – Nuclear Power Plant 1 (iii) Bengaluru – Software Technology Park 1 (iv) Mormugao – Major Sea Port 1 /21/BBCA2 Note: ThefollowingquestionsareforVisuallyImpairedCandidates onlyinlieuofQ.No.37. 5 1=5",
+        "en": "On the same political outline map of India, locate and label any three of the following with suitable symbols: 3 1=3 (i) Salal – Dam 1 (ii) Kalpakkam – Nuclear Power Plant 1 (iii) Bengaluru – Software Technology Park 1 (iv) Mormugao – Major Sea Port 1  Note: ThefollowingquestionsareforVisuallyImpairedCandidates onlyinlieuofQ.No.37. 5 1=5",
         "hi": ""
       },
       {
@@ -7760,7 +7720,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column-I with Column-II and choose the correct option : 1",
+    "en": "Match Column-I with Column-II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
@@ -7794,7 +7754,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "/21/BBCA2",
+        "en": "",
         "hi": ""
       }
     ],
@@ -7884,7 +7844,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hotte aur Bade Sawal /21/BBCA2",
+        "en": "hotte aur Bade Sawal",
         "hi": ""
       }
     ],
@@ -7913,15 +7873,15 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "rab states",
+        "en": "Arab states",
         "hi": ""
       },
       {
-        "en": "uropean countries",
+        "en": "European countries",
         "hi": ""
       },
       {
-        "en": "sian countries",
+        "en": "Asian countries",
         "hi": ""
       }
     ],
@@ -7987,11 +7947,11 @@ UP.socialPyq = [
     "src": "32/2/2 SST Set 1",
     "opts": [
       {
-        "en": "ccess to New Markets",
+        "en": "Access to New Markets",
         "hi": ""
       },
       {
-        "en": "ccess to New Talent",
+        "en": "Access to New Talent",
         "hi": ""
       },
       {
@@ -7999,7 +7959,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "isproportionate Growth 11",
+        "en": "Disproportionate Growth 11",
         "hi": ""
       }
     ],
@@ -8073,7 +8033,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "opper coins",
+        "en": "Copper coins",
         "hi": ""
       }
     ],
@@ -8217,7 +8177,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hina",
+        "en": "China",
         "hi": ""
       },
       {
@@ -8315,7 +8275,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Nepal SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "Nepal",
         "hi": ""
       }
     ],
@@ -8493,41 +8453,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There are two statements given as Assertion (A) and Reason (R). Read",
+    "en": "There are two statements given as Assertion (A) and Reason (R). Read Assertion (A): Belgium amended their constitution four times. Reason (R):",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option.",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): Belgium amended their constitution four times. Reason (R):",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "mendments were to enable everyone to live together in the same country.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
-        "hi": ""
-      },
-      {
-        "en": "orrect explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the correct explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -8552,7 +8496,7 @@ UP.socialPyq = [
     "src": "32/2/2 SST Set 1",
     "opts": [
       {
-        "en": "i 4, ii 3, iii 2, iv 1",
+        "en": "i 4, ii 3, iii 2, iv",
         "hi": ""
       },
       {
@@ -8612,37 +8556,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There are two statements given as Assertion (A) and Reason (R). Read",
+    "en": "There are two statements given as Assertion (A) and Reason (R). Read Assertion (A): Agriculture and industry move hand in hand. Reason (R): Industrial development is a precondition for eradication of unemployment and poverty from the country.",
     "hi": "",
     "twist": "",
     "src": "32/2/2 SST Set 1",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option.",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): Agriculture and industry move hand in hand. Reason (R): Industrial development is a precondition for eradication of unemployment and poverty from the country.",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "orrect explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the correct explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -8671,11 +8603,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "lack",
+        "en": "Black",
         "hi": ""
       },
       {
-        "en": "lluvial",
+        "en": "Alluvial",
         "hi": ""
       },
       {
@@ -8843,7 +8775,7 @@ UP.socialPyq = [
     "src": "32/2/3 SST Set 3",
     "opts": [
       {
-        "en": "ct are correct? Choose the most appropriate option. 1",
+        "en": "ct are correct? Choose the most appropriate option.",
         "hi": ""
       },
       {
@@ -8863,7 +8795,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Only I, III and IV are correct. #",
+        "en": "Only I, III and IV are correct.",
         "hi": ""
       }
     ],
@@ -8882,7 +8814,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the following characteristics of of Korea carefully and choose the correct option : 1",
+    "en": "Read the following characteristics of of Korea carefully and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 3",
@@ -8923,7 +8855,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In the mid-16th century, diseases like smallpox reached America through which of the following ? 1",
+    "en": "In the mid-16th century, diseases like smallpox reached America through which of the following ?",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 3",
@@ -8941,7 +8873,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ritish tourists",
+        "en": "British tourists",
         "hi": ""
       }
     ],
@@ -8970,7 +8902,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth statements I and II are correct and statement II is the correct",
+        "en": "Both statements I and II are correct and statement II is the correct",
         "hi": ""
       },
       {
@@ -8978,7 +8910,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth statements I and II are correct, but statement II is not the",
+        "en": "Both statements I and II are correct, but statement II is not the",
         "hi": ""
       },
       {
@@ -9040,7 +8972,7 @@ UP.socialPyq = [
     "src": "32/2/3 SST Set 3",
     "opts": [
       {
-        "en": "conomy? 1",
+        "en": "conomy?",
         "hi": ""
       },
       {
@@ -9060,7 +8992,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "conomy? 1",
+        "en": "conomy?",
         "hi": ""
       },
       {
@@ -9165,7 +9097,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "s she can, but this little girl has no idea about the declining fertility of season. Suggest any three measures to Rinjha so that the fertility of the soil of her fields remains intact for a long time. 3 #",
+        "en": "s she can, but this little girl has no idea about the declining fertility of season. Suggest any three measures to Rinjha so that the fertility of the soil of her fields remains intact for a long time. 3",
         "hi": ""
       }
     ],
@@ -9214,7 +9146,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "iversity? 1",
+        "en": "iversity?",
         "hi": ""
       },
       {
@@ -9332,7 +9264,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ank. 1 (35.3) 2 #",
+        "en": "ank. 1 (35.3) 2",
         "hi": ""
       }
     ],
@@ -9394,7 +9326,7 @@ UP.socialPyq = [
     "src": "32/2/3 SST Set 3",
     "opts": [
       {
-        "en": "russels? 1",
+        "en": "russels?",
         "hi": ""
       },
       {
@@ -9402,7 +9334,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "uropean Union",
+        "en": "European Union",
         "hi": ""
       },
       {
@@ -9449,7 +9381,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 3",
@@ -9491,7 +9423,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "-ii, b-i, c-iii, d-iv #",
+        "en": "-ii, b-i, c-iii, d-iv",
         "hi": ""
       }
     ],
@@ -9510,13 +9442,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 3",
     "opts": [
       {
-        "en": "ssertion (A): India has enormous possibilities of production of solar",
+        "en": "Assertion (A): India has enormous possibilities of production of solar",
         "hi": ""
       },
       {
@@ -9524,19 +9456,19 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is false, but (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -9561,7 +9493,7 @@ UP.socialPyq = [
     "src": "32/2/3 SST Set 3",
     "opts": [
       {
-        "en": "ppropriate option. 1",
+        "en": "Appropriate option.",
         "hi": ""
       },
       {
@@ -9569,7 +9501,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "lack soil, Light rainfall, High temperature and Bright sunshine",
+        "en": "Black soil, Light rainfall, High temperature and Bright sunshine",
         "hi": ""
       },
       {
@@ -9577,7 +9509,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "lack soil, High rainfall, Low temperature and Moderate sunshine",
+        "en": "Black soil, High rainfall, Low temperature and Moderate sunshine",
         "hi": ""
       }
     ],
@@ -9596,7 +9528,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 3",
@@ -9665,7 +9597,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following countries has ‘one-party system’ ? 1",
+    "en": "Which one of the following countries has ‘one-party system’ ?",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 1",
@@ -9785,7 +9717,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Residuary Subjects – Marriages /21/BBCA2",
+        "en": "Residuary Subjects – Marriages",
         "hi": ""
       }
     ],
@@ -9841,7 +9773,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column-I with Column-II and choose the correct option : 1",
+    "en": "Match Column-I with Column-II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 1",
@@ -9875,7 +9807,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "/21/BBCA2",
+        "en": "",
         "hi": ""
       }
     ],
@@ -10006,7 +9938,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hotte aur Bade Sawal /21/BBCA2",
+        "en": "hotte aur Bade Sawal",
         "hi": ""
       }
     ],
@@ -10062,13 +9994,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option. 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option.",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): ‘The Act of Union 1707’ between England and Scotland resulted in the formation of ‘United Kingdom of Great Britain’. Reason(R): England wanted to impose its influence on Scotland. Options:",
+        "en": "Assertion (A): ‘The Act of Union 1707’ between England and Scotland resulted in the formation of ‘United Kingdom of Great Britain’. Reason(R): England wanted to impose its influence on Scotland. Options:",
         "hi": ""
       },
       {
@@ -10149,7 +10081,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "/21/BBCA2",
+        "en": "",
         "hi": ""
       }
     ],
@@ -10168,7 +10100,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "The German philosopher ‘Johann Gottfried’ belonged to which one of the following schools of thought ? 1",
+    "en": "The German philosopher ‘Johann Gottfried’ belonged to which one of the following schools of thought ?",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 1",
@@ -10186,7 +10118,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Marxist /21/BBCA2 SECTION–B (4 2=8) (VeryShortAnswerTypeQuestions)",
+        "en": "Marxist  SECTION–B (4 2=8) (VeryShortAnswerTypeQuestions)",
         "hi": ""
       }
     ],
@@ -10299,7 +10231,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "How can fresh water be saved from the industrial pollution ? Suggest any three ways. 3 /21/BBCA2",
+    "en": "How can fresh water be saved from the industrial pollution ? Suggest any three ways. 3",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 1",
@@ -10390,7 +10322,7 @@ UP.socialPyq = [
     "src": "32/2/3 SST Set 1",
     "opts": [
       {
-        "en": "anks? 1",
+        "en": "anks?",
         "hi": ""
       },
       {
@@ -10493,7 +10425,7 @@ UP.socialPyq = [
     "src": "32/2/3 SST Set 1",
     "opts": [
       {
-        "en": "‘Democracy is related with deep values.’ Explain the statement. 5 /21/BBCA2",
+        "en": "‘Democracy is related with deep values.’ Explain the statement. 5",
         "hi": ""
       }
     ],
@@ -10567,7 +10499,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "onservation? 1 (34.2) What role did India play in the global tiger population? 1 (34.3) Mention any two major threats to the wildlife species. 2 /21/BBCA2",
+        "en": "onservation? 1 (34.2) What role did India play in the global tiger population? 1 (34.3) Mention any two major threats to the wildlife species. 2",
         "hi": ""
       }
     ],
@@ -10629,7 +10561,7 @@ UP.socialPyq = [
     "src": "32/2/3 SST Set 1",
     "opts": [
       {
-        "en": "ontinuous track of all books and newspapers published in India and passed numerous laws to control the press. /21/BBCA2",
+        "en": "ontinuous track of all books and newspapers published in India and passed numerous laws to control the press.",
         "hi": ""
       },
       {
@@ -10656,13 +10588,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "(a) Two places A and B have been marked on the given political outline map of India. Identify them with the help of the following information and write their correct names on the lines drawn near them : 2 1=2 (i) The place where Gandhiji broke Salt Law. 1 (ii) The place where the Indian National Congress Session was held in 1920. 1",
+    "en": "(a) Two places A and B have been marked on the given political outline map of India. Identify them with the help of the following information and write their correct names on the lines drawn near them : 2 1=2 (i) The place where Gandhiji broke Salt Law. 1 (ii) The place where the Indian National Congress Session was held in 1920.",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 1",
     "opts": [
       {
-        "en": "On the same political outline map of India, locate and label any three of the following with suitable symbols: 3 1=3 (i) Salal – Dam 1 (ii) Kalpakkam – Nuclear Power Plant 1 (iii) Bengaluru – Software Technology Park 1 (iv) Mormugao – Major Sea Port 1 /21/BBCA2 Note: ThefollowingquestionsareforVisuallyImpairedCandidates onlyinlieuofQ.No.37. 5 1=5",
+        "en": "On the same political outline map of India, locate and label any three of the following with suitable symbols: 3 1=3 (i) Salal – Dam 1 (ii) Kalpakkam – Nuclear Power Plant 1 (iii) Bengaluru – Software Technology Park 1 (iv) Mormugao – Major Sea Port 1  Note: ThefollowingquestionsareforVisuallyImpairedCandidates onlyinlieuofQ.No.37. 5 1=5",
         "hi": ""
       },
       {
@@ -10685,7 +10617,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the given image. The work done in the image comes under which one of the following sectors ? 1",
+    "en": "Look at the given image. The work done in the image comes under which one of the following sectors ?",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 1",
@@ -10707,7 +10639,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "andidatesinlieuofquestionno.4. Which one of the following enterprises belongs to the organized sector? 1",
+        "en": "andidatesinlieuofquestionno.4. Which one of the following enterprises belongs to the organized sector?",
         "hi": ""
       },
       {
@@ -10772,7 +10704,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ourier /21/BBCA2",
+        "en": "ourier",
         "hi": ""
       }
     ],
@@ -10791,7 +10723,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following languages is included in Eighth Schedule in Indian Constitution ? 1",
+    "en": "Which one of the following languages is included in Eighth Schedule in Indian Constitution ?",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 1",
@@ -10828,7 +10760,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is a fundamental principle of democracy ? 1",
+    "en": "Which one of the following is a fundamental principle of democracy ?",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 1",
@@ -10846,7 +10778,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Rule of military chiefs /21/BBCA2",
+        "en": "Rule of military chiefs",
         "hi": ""
       }
     ],
@@ -10945,11 +10877,11 @@ UP.socialPyq = [
     "src": "32/2/3 SST Set 1",
     "opts": [
       {
-        "en": "ccess to New Markets",
+        "en": "Access to New Markets",
         "hi": ""
       },
       {
-        "en": "ccess to New Talent",
+        "en": "Access to New Talent",
         "hi": ""
       },
       {
@@ -10957,7 +10889,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "isproportionate Growth 11",
+        "en": "Disproportionate Growth 11",
         "hi": ""
       }
     ],
@@ -11031,7 +10963,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "opper coins",
+        "en": "Copper coins",
         "hi": ""
       }
     ],
@@ -11203,7 +11135,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hina",
+        "en": "China",
         "hi": ""
       },
       {
@@ -11273,15 +11205,15 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "rab states",
+        "en": "Arab states",
         "hi": ""
       },
       {
-        "en": "uropean countries",
+        "en": "European countries",
         "hi": ""
       },
       {
-        "en": "sian countries SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "Asian countries",
         "hi": ""
       }
     ],
@@ -11320,7 +11252,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "How does the use of money make it easier to exchange things ? Explain with examples. 2 SECTION C (Short Answer Type Questions) (5 3=15)",
+    "en": "How does the use of money make it easier to exchange things ? Explain with examples. 2",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 1",
@@ -11365,41 +11297,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There are two statements given as Assertion (A) and Reason (R). Read",
+    "en": "There are two statements given as Assertion (A) and Reason (R). Read Assertion (A): Belgium amended their constitution four times. Reason (R):",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 1",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option.",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): Belgium amended their constitution four times. Reason (R):",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "mendments were to enable everyone to live together in the same country.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
-        "hi": ""
-      },
-      {
-        "en": "orrect explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the correct explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -11572,7 +11488,7 @@ UP.socialPyq = [
     "src": "32/2/3 SST Set 1",
     "opts": [
       {
-        "en": "i 4, ii 3, iii 2, iv 1",
+        "en": "i 4, ii 3, iii 2, iv",
         "hi": ""
       },
       {
@@ -11603,37 +11519,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There are two statements given as Assertion (A) and Reason (R). Read",
+    "en": "There are two statements given as Assertion (A) and Reason (R). Read Assertion (A): Agriculture and industry move hand in hand. Reason (R): Industrial development is a precondition for eradication of unemployment and poverty from the country.",
     "hi": "",
     "twist": "",
     "src": "32/2/3 SST Set 1",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option.",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): Agriculture and industry move hand in hand. Reason (R): Industrial development is a precondition for eradication of unemployment and poverty from the country.",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "orrect explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the correct explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -11662,11 +11566,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "lack",
+        "en": "Black",
         "hi": ""
       },
       {
-        "en": "lluvial",
+        "en": "Alluvial",
         "hi": ""
       },
       {
@@ -11779,13 +11683,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following languages is included in the Eighth Schedule of the Indian Constitution ? 1",
+    "en": "Which one of the following languages is included in the Eighth Schedule of the Indian Constitution ?",
     "hi": "",
     "twist": "",
     "src": "32/3/1 SST Set 1",
     "opts": [
       {
-        "en": "hojpuri",
+        "en": "Bhojpuri",
         "hi": ""
       },
       {
@@ -11865,13 +11769,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/3/1 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Most of the jute industry in India is located in a narrow",
+        "en": "Assertion (A): Most of the jute industry in India is located in a narrow",
         "hi": ""
       },
       {
@@ -11879,19 +11783,19 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is false, but (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -11910,7 +11814,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/3/1 SST Set 1",
@@ -11981,7 +11885,7 @@ UP.socialPyq = [
     "src": "32/3/1 SST Set 1",
     "opts": [
       {
-        "en": "ecreases, she prepares another piece of land for agriculture. Which of the following methods of agriculture does she use? 1",
+        "en": "ecreases, she prepares another piece of land for agriculture. Which of the following methods of agriculture does she use?",
         "hi": ""
       },
       {
@@ -11997,7 +11901,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ommercial farming #",
+        "en": "ommercial farming",
         "hi": ""
       }
     ],
@@ -12016,7 +11920,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which among the following newspapers is related to Bal Gangadhar Tilak ? 1",
+    "en": "Which among the following newspapers is related to Bal Gangadhar Tilak ?",
     "hi": "",
     "twist": "",
     "src": "32/3/1 SST Set 1",
@@ -12026,7 +11930,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "angla Patrika",
+        "en": "Bangla Patrika",
         "hi": ""
       },
       {
@@ -12059,7 +11963,7 @@ UP.socialPyq = [
     "src": "32/3/1 SST Set 1",
     "opts": [
       {
-        "en": "dvantage of reservation? 1",
+        "en": "dvantage of reservation?",
         "hi": ""
       },
       {
@@ -12075,7 +11979,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Judiciary #",
+        "en": "Judiciary",
         "hi": ""
       }
     ],
@@ -12114,7 +12018,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Why did the Indian Government restrict foreign trade and foreign investment between 1947 1991 ? Explain. 2 SECTION C (Short Answer Type Questions) (5 3=15)",
+    "en": "Why did the Indian Government restrict foreign trade and foreign investment between 1947 1991 ? Explain. 2",
     "hi": "",
     "twist": "",
     "src": "32/3/1 SST Set 1",
@@ -12189,11 +12093,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "uropean states to train revolutionaries and spread their ideas. To be revolutionary at this time meant a commitment to oppose monarchical forms that had been established after the Vienna Congress, and to fight for liberty and freedom. Most of these revolutionaries also saw the",
+        "en": "European states to train revolutionaries and spread their ideas. To be revolutionary at this time meant a commitment to oppose monarchical forms that had been established after the Vienna Congress, and to fight for liberty and freedom. Most of these revolutionaries also saw the",
         "hi": ""
       },
       {
-        "en": "reation of nation-states as a necessary part of this struggle for freedom. (34.1) Mention any one political demand of the liberals. 1 (34.2) Mention the main cause for the rise of secret societies in European States. 1 (34.3) Analyse the reasons for many liberal-nationalists going underground after 1815. 2 #",
+        "en": "reation of nation-states as a necessary part of this struggle for freedom. (34.1) Mention any one political demand of the liberals. 1 (34.2) Mention the main cause for the rise of secret societies in European States. 1 (34.3) Analyse the reasons for many liberal-nationalists going underground after 1815. 2",
         "hi": ""
       }
     ],
@@ -12270,7 +12174,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following statements represent gender equality ? 1",
+    "en": "Which of the following statements represent gender equality ?",
     "hi": "",
     "twist": "",
     "src": "32/3/1 SST Set 1",
@@ -12352,7 +12256,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following group is in majority in Sri Lanka ? 1",
+    "en": "Which of the following group is in majority in Sri Lanka ?",
     "hi": "",
     "twist": "",
     "src": "32/3/1 SST Set 1",
@@ -12370,7 +12274,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "nglish-speakers #",
+        "en": "nglish-speakers",
         "hi": ""
       }
     ],
@@ -12389,13 +12293,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/3/1 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Every party in India has to register with the Election",
+        "en": "Assertion (A): Every party in India has to register with the Election",
         "hi": ""
       },
       {
@@ -12403,19 +12307,19 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is false, but (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -12456,7 +12360,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Private Sector #",
+        "en": "Private Sector",
         "hi": ""
       }
     ],
@@ -12582,7 +12486,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "orporation (NTPC). 2 SECTION E (Map-based question) (1+2=3)",
+        "en": "orporation (NTPC). 2",
         "hi": ""
       }
     ],
@@ -12615,7 +12519,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "(I) Singrauli Thermal Plant 1 OR (II) Mumbai Software Technology Park 1",
+        "en": "(I) Singrauli Thermal Plant 1 OR (II) Mumbai Software Technology Park",
         "hi": ""
       },
       {
@@ -12627,7 +12531,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Name the State where Mumbai Software Technology Park is located. 1 (13.3) Name the State where Kolkata (Netaji Subhash Chandra Bose) International Airport is located. 1",
+        "en": "Name the State where Mumbai Software Technology Park is located. 1 (13.3) Name the State where Kolkata (Netaji Subhash Chandra Bose) International Airport is located.",
         "hi": ""
       }
     ],
@@ -12677,7 +12581,7 @@ UP.socialPyq = [
     "src": "32/3/1 SST Set 1",
     "opts": [
       {
-        "en": "road Gauge (1.676) 63,491 89,521 1,17,560 Metre Gauge (1.000) 3,200 3,462 3,775 Narrow Gauge (0.762 and 0.610) 1,751 1,752 1,901 Total 68,442 94,735 1,23,236 (5.1) Which gauge covers maximum of track length in hilly areas in India? 1 (5.2) Which gauge has the highest length in India? 1 SECTION B (Short Answer Type Questions) (3 3=9)",
+        "en": "road Gauge (1.676) 63,491 89,521 1,17,560 Metre Gauge (1.000) 3,200 3,462 3,775 Narrow Gauge (0.762 and 0.610) 1,751 1,752 1,901 Total 68,442 94,735 1,23,236 (5.1) Which gauge covers maximum of track length in hilly areas in India? 1 (5.2) Which gauge has the highest length in India?",
         "hi": ""
       }
     ],
@@ -12746,7 +12650,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Only I, III and IV are correct. #",
+        "en": "Only I, III and IV are correct.",
         "hi": ""
       }
     ],
@@ -12806,13 +12710,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/3/2 SST Set 2",
     "opts": [
       {
-        "en": "ssertion (A): Every party in India has to register with the Election",
+        "en": "Assertion (A): Every party in India has to register with the Election",
         "hi": ""
       },
       {
@@ -12820,19 +12724,19 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is false, but (R) is true. #",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -12851,7 +12755,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following group is in majority in Sri Lanka ? 1",
+    "en": "Which of the following group is in majority in Sri Lanka ?",
     "hi": "",
     "twist": "",
     "src": "32/3/2 SST Set 2",
@@ -12937,7 +12841,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following statements represent gender equality ? 1",
+    "en": "Which of the following statements represent gender equality ?",
     "hi": "",
     "twist": "",
     "src": "32/3/2 SST Set 2",
@@ -12976,7 +12880,7 @@ UP.socialPyq = [
     "src": "32/3/2 SST Set 2",
     "opts": [
       {
-        "en": "dvantage of reservation? 1",
+        "en": "dvantage of reservation?",
         "hi": ""
       },
       {
@@ -13011,13 +12915,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following languages is included in the Eighth Schedule of the Indian Constitution ? 1",
+    "en": "Which one of the following languages is included in the Eighth Schedule of the Indian Constitution ?",
     "hi": "",
     "twist": "",
     "src": "32/3/2 SST Set 2",
     "opts": [
       {
-        "en": "hojpuri",
+        "en": "Bhojpuri",
         "hi": ""
       },
       {
@@ -13029,7 +12933,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Tamil # SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "Tamil #",
         "hi": ""
       }
     ],
@@ -13068,7 +12972,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Mention any two economic impacts of the First World War on India. 2 SECTION C (Short Answer Type Questions) (5 3=15)",
+    "en": "Mention any two economic impacts of the First World War on India. 2",
     "hi": "",
     "twist": "",
     "src": "32/3/2 SST Set 2",
@@ -13142,7 +13046,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ut they too have to register themselves with the government and follow the rules and regulations. (34.1) Mention any one feature of the working conditions of organised sector. 1 (34.2) Explain any one benefit provided by the employers to the organised sector employees. 1 (34.3) Why is it necessary for all self-employed people to register with the government? 2 #",
+        "en": "ut they too have to register themselves with the government and follow the rules and regulations. (34.1) Mention any one feature of the working conditions of organised sector. 1 (34.2) Explain any one benefit provided by the employers to the organised sector employees. 1 (34.3) Why is it necessary for all self-employed people to register with the government? 2",
         "hi": ""
       }
     ],
@@ -13171,7 +13075,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "uropean states to train revolutionaries and spread their ideas. To be revolutionary at this time meant a commitment to oppose monarchical forms that had been established after the Vienna Congress, and to fight for liberty and freedom. Most of these revolutionaries also saw the",
+        "en": "European states to train revolutionaries and spread their ideas. To be revolutionary at this time meant a commitment to oppose monarchical forms that had been established after the Vienna Congress, and to fight for liberty and freedom. Most of these revolutionaries also saw the",
         "hi": ""
       },
       {
@@ -13219,13 +13123,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/3/2 SST Set 2",
     "opts": [
       {
-        "en": "ssertion (A): Most of the jute industry in India is located in a narrow",
+        "en": "Assertion (A): Most of the jute industry in India is located in a narrow",
         "hi": ""
       },
       {
@@ -13233,19 +13137,19 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is false, but (R) is true. #",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -13264,7 +13168,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/3/2 SST Set 2",
@@ -13335,7 +13239,7 @@ UP.socialPyq = [
     "src": "32/3/2 SST Set 2",
     "opts": [
       {
-        "en": "ecreases, she prepares another piece of land for agriculture. Which of the following methods of agriculture does she use? 1",
+        "en": "ecreases, she prepares another piece of land for agriculture. Which of the following methods of agriculture does she use?",
         "hi": ""
       },
       {
@@ -13370,7 +13274,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which among the following newspapers is related to Bal Gangadhar Tilak ? 1",
+    "en": "Which among the following newspapers is related to Bal Gangadhar Tilak ?",
     "hi": "",
     "twist": "",
     "src": "32/3/2 SST Set 2",
@@ -13380,7 +13284,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "angla Patrika",
+        "en": "Bangla Patrika",
         "hi": ""
       },
       {
@@ -13514,7 +13418,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ollective belonging? 2 SECTION E (Map-based question) (1+2=3)",
+        "en": "ollective belonging? 2",
         "hi": ""
       }
     ],
@@ -13547,7 +13451,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "(I) Singrauli Thermal Plant 1 OR (II) Mumbai Software Technology Park 1",
+        "en": "(I) Singrauli Thermal Plant 1 OR (II) Mumbai Software Technology Park",
         "hi": ""
       },
       {
@@ -13559,7 +13463,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Name the State where Mumbai Software Technology Park is located. 1 (13.3) Name the State where Kolkata (Netaji Subhash Chandra Bose) International Airport is located. 1",
+        "en": "Name the State where Mumbai Software Technology Park is located. 1 (13.3) Name the State where Kolkata (Netaji Subhash Chandra Bose) International Airport is located.",
         "hi": ""
       }
     ],
@@ -13609,7 +13513,7 @@ UP.socialPyq = [
     "src": "32/3/2 SST Set 2",
     "opts": [
       {
-        "en": "road Gauge (1.676) 63,491 89,521 1,17,560 Metre Gauge (1.000) 3,200 3,462 3,775 Narrow Gauge (0.762 and 0.610) 1,751 1,752 1,901 Total 68,442 94,735 1,23,236 (5.1) Which gauge covers maximum of track length in hilly areas in India? 1 (5.2) Which gauge has the highest length in India? 1 SECTION B (Short Answer Type Questions) (3 3=9)",
+        "en": "road Gauge (1.676) 63,491 89,521 1,17,560 Metre Gauge (1.000) 3,200 3,462 3,775 Narrow Gauge (0.762 and 0.610) 1,751 1,752 1,901 Total 68,442 94,735 1,23,236 (5.1) Which gauge covers maximum of track length in hilly areas in India? 1 (5.2) Which gauge has the highest length in India?",
         "hi": ""
       }
     ],
@@ -13699,7 +13603,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Private Sector #",
+        "en": "Private Sector",
         "hi": ""
       }
     ],
@@ -13718,13 +13622,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/3/3 SST Set 3",
     "opts": [
       {
-        "en": "ssertion (A): Every party in India has to register with the Election",
+        "en": "Assertion (A): Every party in India has to register with the Election",
         "hi": ""
       },
       {
@@ -13732,19 +13636,19 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is false, but (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -13763,7 +13667,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following group is in majority in Sri Lanka ? 1",
+    "en": "Which of the following group is in majority in Sri Lanka ?",
     "hi": "",
     "twist": "",
     "src": "32/3/3 SST Set 3",
@@ -13781,7 +13685,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "nglish-speakers #",
+        "en": "nglish-speakers",
         "hi": ""
       }
     ],
@@ -13849,7 +13753,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following statements represent gender equality ? 1",
+    "en": "Which of the following statements represent gender equality ?",
     "hi": "",
     "twist": "",
     "src": "32/3/3 SST Set 3",
@@ -13888,7 +13792,7 @@ UP.socialPyq = [
     "src": "32/3/3 SST Set 3",
     "opts": [
       {
-        "en": "dvantage of reservation? 1",
+        "en": "dvantage of reservation?",
         "hi": ""
       },
       {
@@ -13923,7 +13827,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which among the following newspapers is related to Bal Gangadhar Tilak ? 1",
+    "en": "Which among the following newspapers is related to Bal Gangadhar Tilak ?",
     "hi": "",
     "twist": "",
     "src": "32/3/3 SST Set 3",
@@ -13933,7 +13837,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "angla Patrika",
+        "en": "Bangla Patrika",
         "hi": ""
       },
       {
@@ -13960,13 +13864,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following languages is included in the Eighth Schedule of the Indian Constitution ? 1",
+    "en": "Which one of the following languages is included in the Eighth Schedule of the Indian Constitution ?",
     "hi": "",
     "twist": "",
     "src": "32/3/3 SST Set 3",
     "opts": [
       {
-        "en": "hojpuri",
+        "en": "Bhojpuri",
         "hi": ""
       },
       {
@@ -13978,7 +13882,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Tamil # SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "Tamil #",
         "hi": ""
       }
     ],
@@ -14063,7 +13967,7 @@ UP.socialPyq = [
     "src": "32/3/3 SST Set 3",
     "opts": [
       {
-        "en": "evelopment. India is endowed with fairly abundant resources of iron ore. India is rich in good quality iron ores. Magnetite is the finest iron ore with a very high content of iron up to 70 per cent. It has excellent magnetic qualities, especially valuable in the electrical industry. Hematite ore is the most important industrial iron ore in terms of the quantity used, but has a slightly lower iron content than magnetite (50 60 per cent). In 2018 19, almost the entire production of iron ore (97%) accrued from Odisha, Chhattisgarh, Karnataka and Jharkhand. The remaining production (3%) was from other states. (34.1) In which iron ore is the maximum iron content found? 1 (34.2) Which is the most important industrial iron ore? 1 (34.3) 2 #",
+        "en": "evelopment. India is endowed with fairly abundant resources of iron ore. India is rich in good quality iron ores. Magnetite is the finest iron ore with a very high content of iron up to 70 per cent. It has excellent magnetic qualities, especially valuable in the electrical industry. Hematite ore is the most important industrial iron ore in terms of the quantity used, but has a slightly lower iron content than magnetite (50 60 per cent). In 2018 19, almost the entire production of iron ore (97%) accrued from Odisha, Chhattisgarh, Karnataka and Jharkhand. The remaining production (3%) was from other states. (34.1) In which iron ore is the maximum iron content found? 1 (34.2) Which is the most important industrial iron ore? 1 (34.3) 2",
         "hi": ""
       }
     ],
@@ -14125,7 +14029,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "uropean states to train revolutionaries and spread their ideas. To be revolutionary at this time meant a commitment to oppose monarchical forms that had been established after the Vienna Congress, and to fight for liberty and freedom. Most of these revolutionaries also saw the",
+        "en": "European states to train revolutionaries and spread their ideas. To be revolutionary at this time meant a commitment to oppose monarchical forms that had been established after the Vienna Congress, and to fight for liberty and freedom. Most of these revolutionaries also saw the",
         "hi": ""
       },
       {
@@ -14154,7 +14058,7 @@ UP.socialPyq = [
     "src": "32/3/3 SST Set 3",
     "opts": [
       {
-        "en": "ecreases, she prepares another piece of land for agriculture. Which of the following methods of agriculture does she use? 1",
+        "en": "ecreases, she prepares another piece of land for agriculture. Which of the following methods of agriculture does she use?",
         "hi": ""
       },
       {
@@ -14170,7 +14074,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ommercial farming #",
+        "en": "ommercial farming",
         "hi": ""
       }
     ],
@@ -14189,7 +14093,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/3/3 SST Set 3",
@@ -14254,13 +14158,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/3/3 SST Set 3",
     "opts": [
       {
-        "en": "ssertion (A): Most of the jute industry in India is located in a narrow",
+        "en": "Assertion (A): Most of the jute industry in India is located in a narrow",
         "hi": ""
       },
       {
@@ -14268,19 +14172,19 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is false, but (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -14411,7 +14315,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ollective belonging? 2 SECTION E (Map-based question) (1+2=3)",
+        "en": "ollective belonging? 2",
         "hi": ""
       }
     ],
@@ -14444,7 +14348,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "(I) Singrauli Thermal Plant 1 OR (II) Mumbai Software Technology Park 1",
+        "en": "(I) Singrauli Thermal Plant 1 OR (II) Mumbai Software Technology Park",
         "hi": ""
       },
       {
@@ -14456,7 +14360,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Name the State where Mumbai Software Technology Park is located. 1 (13.3) Name the State where Kolkata (Netaji Subhash Chandra Bose) International Airport is located. 1",
+        "en": "Name the State where Mumbai Software Technology Park is located. 1 (13.3) Name the State where Kolkata (Netaji Subhash Chandra Bose) International Airport is located.",
         "hi": ""
       }
     ],
@@ -14635,7 +14539,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which of the following regions did the “Beej-Bachao Andolan” of farmers begin ? 1",
+    "en": "In which of the following regions did the “Beej-Bachao Andolan” of farmers begin ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -14672,7 +14576,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column – I with Column – II and choose the correct option : 1",
+    "en": "Match Column – I with Column – II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -14770,7 +14674,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which of the following categories of ‘land-use’ has India registered an increase ? 1",
+    "en": "In which of the following categories of ‘land-use’ has India registered an increase ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -14807,7 +14711,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following crops grows well in hot and humid climate ? 1",
+    "en": "Which one of the following crops grows well in hot and humid climate ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -14918,19 +14822,11 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read Assertion (A): Silver from Peru and Mexico enhanced Europe’s wealth in the sixteenth century. Reason (R): Europe used this silver to finance its trade with Asia.",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
     "opts": [
-      {
-        "en": "oth the statements and choose the correct option. 1",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A): Silver from Peru and Mexico enhanced Europe’s wealth in the sixteenth century. Reason (R): Europe used this silver to finance its trade with Asia. Options:",
-        "hi": ""
-      },
       {
         "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
@@ -14944,7 +14840,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "(A) is false, but (R) is true. ~ ~ { } 7 ",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -14963,37 +14859,17 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : Assertion (A): The civil war in Sri Lanka resulted due to failure of political accommodation of ethnicity. Reason (R): The",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): The civil war in Sri Lanka resulted due to failure of political accommodation of ethnicity. Reason (R): The",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "istrust",
-        "hi": ""
-      },
-      {
-        "en": "etween the Sinhala",
-        "hi": ""
-      },
-      {
-        "en": "nd Tamil",
-        "hi": ""
-      },
-      {
-        "en": "ommunities turned into widespread conflict in Sri Lanka. Options:",
-        "hi": ""
-      },
-      {
-        "en": "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
-        "hi": ""
-      },
-      {
-        "en": "Both (A) and (R) are correct, but (R) is not the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
@@ -15026,7 +14902,7 @@ UP.socialPyq = [
     "src": "32/4/1 SST Set 1",
     "opts": [
       {
-        "en": "artoon? 1",
+        "en": "artoon?",
         "hi": ""
       },
       {
@@ -15081,7 +14957,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Find the odd one out from the following : 1",
+    "en": "Find the odd one out from the following :",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -15266,13 +15142,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Study the given data carefully and answer the question that follows : 1",
+    "en": "Study the given data carefully and answer the question that follows :",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
     "opts": [
       {
-        "en": "ountry Monthly income of citizens in ` I II III IV V",
+        "en": "ountry Monthly income of citizens in ₹ I II III IV V",
         "hi": ""
       },
       {
@@ -15319,7 +15195,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "The given painting is from the sixteenth century from Mughal India. Identify the work shown in this painting from the following options : 1",
+    "en": "The given painting is from the sixteenth century from Mughal India. Identify the work shown in this painting from the following options :",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -15337,7 +15213,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Book making Note: The following question is for the visually impaired candidates only in lieu of Q. No. 3. Which one of the following areas in Calcutta was devoted to the printing of popular books in the 19th century? 1",
+        "en": "Book making Note: The following question is for the visually impaired candidates only in lieu of Q. No. 3. Which one of the following areas in Calcutta was devoted to the printing of popular books in the 19th century?",
         "hi": ""
       },
       {
@@ -15450,7 +15326,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "The removal of barriers on foreign trade and investment by the Indian government has been called as : 1",
+    "en": "The removal of barriers on foreign trade and investment by the Indian government has been called as :",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -15493,7 +15369,7 @@ UP.socialPyq = [
     "src": "32/4/1 SST Set 1",
     "opts": [
       {
-        "en": "nd per capita income? 1",
+        "en": "nd per capita income?",
         "hi": ""
       },
       {
@@ -15654,7 +15530,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following pairs is correctly matched ? 1",
+    "en": "Which one of the following pairs is correctly matched ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -15758,7 +15634,7 @@ UP.socialPyq = [
     "src": "32/4/1 SST Set 1",
     "opts": [
       {
-        "en": "The place where Gandhiji broke the Salt Law. 1",
+        "en": "The place where Gandhiji broke the Salt Law.",
         "hi": ""
       },
       {
@@ -15801,7 +15677,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Why did the Indian government liberalize trade regulations in 1991 ? 1",
+    "en": "Why did the Indian government liberalize trade regulations in 1991 ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -15909,7 +15785,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ppropriate option from the following:",
+        "en": "Appropriate option from the following:",
         "hi": ""
       },
       {
@@ -15944,7 +15820,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is a developmental goal of the factory workers ? 1",
+    "en": "Which one of the following is a developmental goal of the factory workers ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -15981,7 +15857,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following pairs is correctly matched ? 1",
+    "en": "Which one of the following pairs is correctly matched ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -16018,29 +15894,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below as Assertion (A) and Reason (R). Read the statements and choose the correct option : 1",
+    "en": "Two statements are given below as Assertion (A) and Reason (R). Read the statements and choose the correct option : Assertion (A): Sri Lanka adopted ‘Tamil’ as the official language of the State. Reason (R): The Govt. of Sri Lanka adopted a series of majoritarian measures.",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Sri Lanka adopted ‘Tamil’ as the official language of the State. Reason (R): The Govt. of Sri Lanka adopted a series of majoritarian measures. Options:",
-        "hi": ""
-      },
-      {
         "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "Both (A) and (R) are true but (R) is not the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "(A) is true but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "(A) is false but (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -16059,7 +15931,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match column − A with column − B and choose the correct option : 1",
+    "en": "Match column − A with column − B and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -16092,7 +15964,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Identify the administrative level of Indian Government with the help of the information given in the box and choose the correct option : 1",
+    "en": "Identify the administrative level of Indian Government with the help of the information given in the box and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -16112,7 +15984,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following countries has two party system ? 1",
+    "en": "Which one of the following countries has two party system ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -16149,7 +16021,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following aspects was common among the writings of Kailashbashini Debi, Tarabai Shinde and Pandita Ramabai ? 1",
+    "en": "Which one of the following aspects was common among the writings of Kailashbashini Debi, Tarabai Shinde and Pandita Ramabai ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -16206,7 +16078,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which type of government is likely to be more acceptable to the people in the world ? 1",
+    "en": "Which type of government is likely to be more acceptable to the people in the world ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -16358,7 +16230,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There were three important developments that greatly shrank the pre-modern world. Identify the incorrect one from the following options : 1",
+    "en": "There were three important developments that greatly shrank the pre-modern world. Identify the incorrect one from the following options :",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -16405,11 +16277,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "3 2 1",
+        "en": "3 2",
         "hi": ""
       },
       {
-        "en": "2 3 1",
+        "en": "2 3",
         "hi": ""
       },
       {
@@ -16626,7 +16498,7 @@ UP.socialPyq = [
     "src": "32/4/1 SST Set 1",
     "opts": [
       {
-        "en": "The place where Mahatma Gandhi started Satyagraha for Indigo peasants. 1",
+        "en": "The place where Mahatma Gandhi started Satyagraha for Indigo peasants.",
         "hi": ""
       },
       {
@@ -16634,15 +16506,15 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Tehri Dam 1",
+        "en": "Tehri Dam",
         "hi": ""
       },
       {
-        "en": "Naraura Atomic Power Station 1",
+        "en": "Naraura Atomic Power Station",
         "hi": ""
       },
       {
-        "en": "Pune Software Technology Park 1",
+        "en": "Pune Software Technology Park",
         "hi": ""
       },
       {
@@ -16654,7 +16526,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "TTEMPT ANY FIVE: (i) Name the place where the session of Indian National Congress was held in December, 1920. 1 (ii) Name the place where Mahatma Gandhi started Satyagraha for Indigo peasants. 1 (iii) Name the State where Naraura Nuclear Plant is located. 1 (iv) Name the State where Tehri Dam is located. 1 (v) Name the State where Mumbai Software Technology Park is located. 1 (vi) Name the State where Haldia Sea Port is located. 1",
+        "en": "TTEMPT ANY FIVE: (i) Name the place where the session of Indian National Congress was held in December, 1920. 1 (ii) Name the place where Mahatma Gandhi started Satyagraha for Indigo peasants. 1 (iii) Name the State where Naraura Nuclear Plant is located. 1 (iv) Name the State where Tehri Dam is located. 1 (v) Name the State where Mumbai Software Technology Park is located. 1 (vi) Name the State where Haldia Sea Port is located.",
         "hi": ""
       }
     ],
@@ -16673,7 +16545,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Who among the following improved the steam engine ? 1",
+    "en": "Who among the following improved the steam engine ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -16747,7 +16619,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is an example of the Ferrous Metal ? 1",
+    "en": "Which one of the following is an example of the Ferrous Metal ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -16784,13 +16656,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match the column - 1 with column - 2 and choose the correct option : 1",
+    "en": "Match the column - 1 with column - 2 and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
     "opts": [
       {
-        "en": "olumn - 1",
+        "en": "olumn -",
         "hi": ""
       },
       {
@@ -16821,7 +16693,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is correctly matched ? 1",
+    "en": "Which of the following is correctly matched ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -16872,7 +16744,7 @@ UP.socialPyq = [
     "src": "32/4/1 SST Set 1",
     "opts": [
       {
-        "en": "evelopment Index? 1",
+        "en": "evelopment Index?",
         "hi": ""
       },
       {
@@ -16907,7 +16779,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following sectors contribute highest in the GDP of India ? 1",
+    "en": "Which one of the following sectors contribute highest in the GDP of India ?",
     "hi": "",
     "twist": "",
     "src": "32/4/1 SST Set 1",
@@ -16944,7 +16816,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "The given painting is from the sixteenth century from Mughal India. Identify the work shown in this painting from the following options : 1",
+    "en": "The given painting is from the sixteenth century from Mughal India. Identify the work shown in this painting from the following options :",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 2",
@@ -16962,7 +16834,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Book making Note: The following question is for the visually impaired candidates only in lieu of Q. No. 1. Which one of the following areas in Calcutta was devoted to the printing of popular books in the 19th century? 1",
+        "en": "Book making Note: The following question is for the visually impaired candidates only in lieu of Q. No. 1. Which one of the following areas in Calcutta was devoted to the printing of popular books in the 19th century?",
         "hi": ""
       },
       {
@@ -16997,7 +16869,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following crops grows well in hot and humid climate ? 1",
+    "en": "Which one of the following crops grows well in hot and humid climate ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 2",
@@ -17034,7 +16906,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which of the following categories of ‘land-use’ has India registered an increase ? 1",
+    "en": "In which of the following categories of ‘land-use’ has India registered an increase ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 2",
@@ -17108,7 +16980,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column – I with Column – II and choose the correct option : 1",
+    "en": "Match Column – I with Column – II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 2",
@@ -17169,7 +17041,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which of the following regions did the “Beej-Bachao Andolan” of farmers begin ? 1",
+    "en": "In which of the following regions did the “Beej-Bachao Andolan” of farmers begin ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 2",
@@ -17325,7 +17197,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following pairs is correctly matched ? 1",
+    "en": "Which one of the following pairs is correctly matched ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 2",
@@ -17384,7 +17256,7 @@ UP.socialPyq = [
     "src": "32/4/2 SST Set 2",
     "opts": [
       {
-        "en": "artoon? 1",
+        "en": "artoon?",
         "hi": ""
       },
       {
@@ -17480,7 +17352,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Find the odd one out from the following : 1",
+    "en": "Find the odd one out from the following :",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 2",
@@ -17517,37 +17389,17 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : Assertion (A): The civil war in Sri Lanka resulted due to failure of political accommodation of ethnicity. Reason (R): The",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 2",
     "opts": [
       {
-        "en": "ssertion (A): The civil war in Sri Lanka resulted due to failure of political accommodation of ethnicity. Reason (R): The",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "istrust",
-        "hi": ""
-      },
-      {
-        "en": "etween the Sinhala",
-        "hi": ""
-      },
-      {
-        "en": "nd Tamil",
-        "hi": ""
-      },
-      {
-        "en": "ommunities turned into widespread conflict in Sri Lanka. Options:",
-        "hi": ""
-      },
-      {
-        "en": "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
-        "hi": ""
-      },
-      {
-        "en": "Both (A) and (R) are correct, but (R) is not the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
@@ -17711,7 +17563,7 @@ UP.socialPyq = [
     "src": "32/4/2 SST Set 2",
     "opts": [
       {
-        "en": "nd per capita income? 1",
+        "en": "nd per capita income?",
         "hi": ""
       },
       {
@@ -17746,19 +17598,11 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read Assertion (A): Silver from Peru and Mexico enhanced Europe’s wealth in the sixteenth century. Reason (R): Europe used this silver to finance its trade with Asia.",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 2",
     "opts": [
-      {
-        "en": "oth the statements and choose the correct option. 1",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A): Silver from Peru and Mexico enhanced Europe’s wealth in the sixteenth century. Reason (R): Europe used this silver to finance its trade with Asia. Options:",
-        "hi": ""
-      },
       {
         "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
@@ -17791,7 +17635,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "The removal of barriers on foreign trade and investment by the Indian government has been called as : 1",
+    "en": "The removal of barriers on foreign trade and investment by the Indian government has been called as :",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 2",
@@ -17906,13 +17750,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Study the given data carefully and answer the question that follows : 1",
+    "en": "Study the given data carefully and answer the question that follows :",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 2",
     "opts": [
       {
-        "en": "ountry Monthly income of citizens in ` I II III IV V",
+        "en": "ountry Monthly income of citizens in ₹ I II III IV V",
         "hi": ""
       },
       {
@@ -18107,7 +17951,7 @@ UP.socialPyq = [
     "src": "32/4/2 SST Set 2",
     "opts": [
       {
-        "en": "The place where Gandhiji broke the Salt Law. 1",
+        "en": "The place where Gandhiji broke the Salt Law.",
         "hi": ""
       },
       {
@@ -18203,7 +18047,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following aspects was common among the writings of Kailashbashini Debi, Tarabai Shinde and Pandita Ramabai ? 1",
+    "en": "Which one of the following aspects was common among the writings of Kailashbashini Debi, Tarabai Shinde and Pandita Ramabai ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -18240,7 +18084,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following countries has two party system ? 1",
+    "en": "Which one of the following countries has two party system ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -18277,7 +18121,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Identify the administrative level of Indian Government with the help of the information given in the box and choose the correct option : 1",
+    "en": "Identify the administrative level of Indian Government with the help of the information given in the box and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -18297,7 +18141,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match column − A with column − B and choose the correct option : 1",
+    "en": "Match column − A with column − B and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -18330,29 +18174,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below as Assertion (A) and Reason (R). Read the statements and choose the correct option : 1",
+    "en": "Two statements are given below as Assertion (A) and Reason (R). Read the statements and choose the correct option : Assertion (A): Sri Lanka adopted ‘Tamil’ as the official language of the State. Reason (R): The Govt. of Sri Lanka adopted a series of majoritarian measures.",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Sri Lanka adopted ‘Tamil’ as the official language of the State. Reason (R): The Govt. of Sri Lanka adopted a series of majoritarian measures. Options:",
-        "hi": ""
-      },
-      {
         "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "Both (A) and (R) are true but (R) is not the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "(A) is true but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "(A) is false but (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -18371,7 +18211,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following pairs is correctly matched ? 1",
+    "en": "Which one of the following pairs is correctly matched ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -18408,7 +18248,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is a developmental goal of the factory workers ? 1",
+    "en": "Which one of the following is a developmental goal of the factory workers ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -18455,7 +18295,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ppropriate option from the following:",
+        "en": "Appropriate option from the following:",
         "hi": ""
       },
       {
@@ -18490,7 +18330,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Why did the Indian government liberalize trade regulations in 1991 ? 1",
+    "en": "Why did the Indian government liberalize trade regulations in 1991 ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -18555,7 +18395,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which type of government is likely to be more acceptable to the people in the world ? 1",
+    "en": "Which type of government is likely to be more acceptable to the people in the world ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -18682,7 +18522,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following sectors contribute highest in the GDP of India ? 1",
+    "en": "Which one of the following sectors contribute highest in the GDP of India ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -18729,11 +18569,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "3 2 1",
+        "en": "3 2",
         "hi": ""
       },
       {
-        "en": "2 3 1",
+        "en": "2 3",
         "hi": ""
       },
       {
@@ -18962,7 +18802,7 @@ UP.socialPyq = [
     "src": "32/4/2 SST Set 1",
     "opts": [
       {
-        "en": "The place where Mahatma Gandhi started Satyagraha for Indigo peasants. 1",
+        "en": "The place where Mahatma Gandhi started Satyagraha for Indigo peasants.",
         "hi": ""
       },
       {
@@ -18970,15 +18810,15 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Tehri Dam 1",
+        "en": "Tehri Dam",
         "hi": ""
       },
       {
-        "en": "Naraura Atomic Power Station 1",
+        "en": "Naraura Atomic Power Station",
         "hi": ""
       },
       {
-        "en": "Pune Software Technology Park 1",
+        "en": "Pune Software Technology Park",
         "hi": ""
       },
       {
@@ -18990,7 +18830,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "TTEMPT ANY FIVE: (i) Name the place where the session of Indian National Congress was held in December, 1920. 1 (ii) Name the place where Mahatma Gandhi started Satyagraha for Indigo peasants. 1 (iii) Name the State where Naraura Nuclear Plant is located. 1 (iv) Name the State where Tehri Dam is located. 1 (v) Name the State where Mumbai Software Technology Park is located. 1 (vi) Name the State where Haldia Sea Port is located. 1",
+        "en": "TTEMPT ANY FIVE: (i) Name the place where the session of Indian National Congress was held in December, 1920. 1 (ii) Name the place where Mahatma Gandhi started Satyagraha for Indigo peasants. 1 (iii) Name the State where Naraura Nuclear Plant is located. 1 (iv) Name the State where Tehri Dam is located. 1 (v) Name the State where Mumbai Software Technology Park is located. 1 (vi) Name the State where Haldia Sea Port is located.",
         "hi": ""
       }
     ],
@@ -19015,7 +18855,7 @@ UP.socialPyq = [
     "src": "32/4/2 SST Set 1",
     "opts": [
       {
-        "en": "evelopment Index? 1",
+        "en": "evelopment Index?",
         "hi": ""
       },
       {
@@ -19087,7 +18927,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is correctly matched ? 1",
+    "en": "Which of the following is correctly matched ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -19132,13 +18972,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match the column - 1 with column - 2 and choose the correct option : 1",
+    "en": "Match the column - 1 with column - 2 and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
     "opts": [
       {
-        "en": "olumn - 1",
+        "en": "olumn -",
         "hi": ""
       },
       {
@@ -19169,7 +19009,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is an example of the Ferrous Metal ? 1",
+    "en": "Which one of the following is an example of the Ferrous Metal ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -19206,7 +19046,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Who among the following improved the steam engine ? 1",
+    "en": "Who among the following improved the steam engine ?",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -19243,7 +19083,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There were three important developments that greatly shrank the pre-modern world. Identify the incorrect one from the following options : 1",
+    "en": "There were three important developments that greatly shrank the pre-modern world. Identify the incorrect one from the following options :",
     "hi": "",
     "twist": "",
     "src": "32/4/2 SST Set 1",
@@ -19280,19 +19120,11 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read Assertion (A): Silver from Peru and Mexico enhanced Europe’s wealth in the sixteenth century. Reason (R): Europe used this silver to finance its trade with Asia.",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 3",
     "opts": [
-      {
-        "en": "oth the statements and choose the correct option. 1",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A): Silver from Peru and Mexico enhanced Europe’s wealth in the sixteenth century. Reason (R): Europe used this silver to finance its trade with Asia. Options:",
-        "hi": ""
-      },
       {
         "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
@@ -19362,7 +19194,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column – I with Column – II and choose the correct option : 1",
+    "en": "Match Column – I with Column – II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 3",
@@ -19423,7 +19255,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which of the following regions did the “Beej-Bachao Andolan” of farmers begin ? 1",
+    "en": "In which of the following regions did the “Beej-Bachao Andolan” of farmers begin ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 3",
@@ -19505,7 +19337,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following crops grows well in hot and humid climate ? 1",
+    "en": "Which one of the following crops grows well in hot and humid climate ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 3",
@@ -19542,7 +19374,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which of the following categories of ‘land-use’ has India registered an increase ? 1",
+    "en": "In which of the following categories of ‘land-use’ has India registered an increase ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 3",
@@ -19719,7 +19551,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Find the odd one out from the following : 1",
+    "en": "Find the odd one out from the following :",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 3",
@@ -19762,7 +19594,7 @@ UP.socialPyq = [
     "src": "32/4/3 SST Set 3",
     "opts": [
       {
-        "en": "artoon? 1",
+        "en": "artoon?",
         "hi": ""
       },
       {
@@ -19817,37 +19649,17 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : Assertion (A): The civil war in Sri Lanka resulted due to failure of political accommodation of ethnicity. Reason (R): The",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 3",
     "opts": [
       {
-        "en": "ssertion (A): The civil war in Sri Lanka resulted due to failure of political accommodation of ethnicity. Reason (R): The",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "istrust",
-        "hi": ""
-      },
-      {
-        "en": "etween the Sinhala",
-        "hi": ""
-      },
-      {
-        "en": "nd Tamil",
-        "hi": ""
-      },
-      {
-        "en": "ommunities turned into widespread conflict in Sri Lanka. Options:",
-        "hi": ""
-      },
-      {
-        "en": "Both (A) and (R) are correct and (R) is the correct explanation of (A).",
-        "hi": ""
-      },
-      {
-        "en": "Both (A) and (R) are correct, but (R) is not the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
@@ -19976,7 +19788,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "The removal of barriers on foreign trade and investment by the Indian government has been called as : 1",
+    "en": "The removal of barriers on foreign trade and investment by the Indian government has been called as :",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 3",
@@ -20013,7 +19825,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following pairs is correctly matched ? 1",
+    "en": "Which one of the following pairs is correctly matched ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 3",
@@ -20144,13 +19956,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Study the given data carefully and answer the question that follows : 1",
+    "en": "Study the given data carefully and answer the question that follows :",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 3",
     "opts": [
       {
-        "en": "ountry Monthly income of citizens in ` I II III IV V",
+        "en": "ountry Monthly income of citizens in ₹ I II III IV V",
         "hi": ""
       },
       {
@@ -20203,7 +20015,7 @@ UP.socialPyq = [
     "src": "32/4/3 SST Set 3",
     "opts": [
       {
-        "en": "nd per capita income? 1",
+        "en": "nd per capita income?",
         "hi": ""
       },
       {
@@ -20335,7 +20147,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "The given painting is from the sixteenth century from Mughal India. Identify the work shown in this painting from the following options : 1",
+    "en": "The given painting is from the sixteenth century from Mughal India. Identify the work shown in this painting from the following options :",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 3",
@@ -20353,7 +20165,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Book making Note: The following question is for the visually impaired candidates only in lieu of Q. No. 4. Which one of the following areas in Calcutta was devoted to the printing of popular books in the 19th century? 1",
+        "en": "Book making Note: The following question is for the visually impaired candidates only in lieu of Q. No. 4. Which one of the following areas in Calcutta was devoted to the printing of popular books in the 19th century?",
         "hi": ""
       },
       {
@@ -20439,7 +20251,7 @@ UP.socialPyq = [
     "src": "32/4/3 SST Set 3",
     "opts": [
       {
-        "en": "The place where Gandhiji broke the Salt Law. 1",
+        "en": "The place where Gandhiji broke the Salt Law.",
         "hi": ""
       },
       {
@@ -20462,7 +20274,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which type of government is likely to be more acceptable to the people in the world ? 1",
+    "en": "Which type of government is likely to be more acceptable to the people in the world ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -20519,7 +20331,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following aspects was common among the writings of Kailashbashini Debi, Tarabai Shinde and Pandita Ramabai ? 1",
+    "en": "Which one of the following aspects was common among the writings of Kailashbashini Debi, Tarabai Shinde and Pandita Ramabai ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -20556,7 +20368,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following countries has two party system ? 1",
+    "en": "Which one of the following countries has two party system ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -20593,7 +20405,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Identify the administrative level of Indian Government with the help of the information given in the box and choose the correct option : 1",
+    "en": "Identify the administrative level of Indian Government with the help of the information given in the box and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -20613,7 +20425,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match column − A with column − B and choose the correct option : 1",
+    "en": "Match column − A with column − B and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -20646,29 +20458,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below as Assertion (A) and Reason (R). Read the statements and choose the correct option : 1",
+    "en": "Two statements are given below as Assertion (A) and Reason (R). Read the statements and choose the correct option : Assertion (A): Sri Lanka adopted ‘Tamil’ as the official language of the State. Reason (R): The Govt. of Sri Lanka adopted a series of majoritarian measures.",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Sri Lanka adopted ‘Tamil’ as the official language of the State. Reason (R): The Govt. of Sri Lanka adopted a series of majoritarian measures. Options:",
-        "hi": ""
-      },
-      {
         "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "Both (A) and (R) are true but (R) is not the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "(A) is true but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "(A) is false but (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -20687,7 +20495,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following pairs is correctly matched ? 1",
+    "en": "Which one of the following pairs is correctly matched ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -20724,7 +20532,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is a developmental goal of the factory workers ? 1",
+    "en": "Which one of the following is a developmental goal of the factory workers ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -20771,7 +20579,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ppropriate option from the following:",
+        "en": "Appropriate option from the following:",
         "hi": ""
       },
       {
@@ -20806,7 +20614,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Why did the Indian government liberalize trade regulations in 1991 ? 1",
+    "en": "Why did the Indian government liberalize trade regulations in 1991 ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -21019,7 +20827,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following sectors contribute highest in the GDP of India ? 1",
+    "en": "Which one of the following sectors contribute highest in the GDP of India ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -21066,11 +20874,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "3 2 1",
+        "en": "3 2",
         "hi": ""
       },
       {
-        "en": "2 3 1",
+        "en": "2 3",
         "hi": ""
       },
       {
@@ -21287,7 +21095,7 @@ UP.socialPyq = [
     "src": "32/4/3 SST Set 1",
     "opts": [
       {
-        "en": "The place where Mahatma Gandhi started Satyagraha for Indigo peasants. 1",
+        "en": "The place where Mahatma Gandhi started Satyagraha for Indigo peasants.",
         "hi": ""
       },
       {
@@ -21295,15 +21103,15 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Tehri Dam 1",
+        "en": "Tehri Dam",
         "hi": ""
       },
       {
-        "en": "Naraura Atomic Power Station 1",
+        "en": "Naraura Atomic Power Station",
         "hi": ""
       },
       {
-        "en": "Pune Software Technology Park 1",
+        "en": "Pune Software Technology Park",
         "hi": ""
       },
       {
@@ -21315,7 +21123,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "TTEMPT ANY FIVE: (i) Name the place where the session of Indian National Congress was held in December, 1920. 1 (ii) Name the place where Mahatma Gandhi started Satyagraha for Indigo peasants. 1 (iii) Name the State where Naraura Nuclear Plant is located. 1 (iv) Name the State where Tehri Dam is located. 1 (v) Name the State where Mumbai Software Technology Park is located. 1 (vi) Name the State where Haldia Sea Port is located. 1",
+        "en": "TTEMPT ANY FIVE: (i) Name the place where the session of Indian National Congress was held in December, 1920. 1 (ii) Name the place where Mahatma Gandhi started Satyagraha for Indigo peasants. 1 (iii) Name the State where Naraura Nuclear Plant is located. 1 (iv) Name the State where Tehri Dam is located. 1 (v) Name the State where Mumbai Software Technology Park is located. 1 (vi) Name the State where Haldia Sea Port is located.",
         "hi": ""
       }
     ],
@@ -21340,7 +21148,7 @@ UP.socialPyq = [
     "src": "32/4/3 SST Set 1",
     "opts": [
       {
-        "en": "evelopment Index? 1",
+        "en": "evelopment Index?",
         "hi": ""
       },
       {
@@ -21412,7 +21220,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is correctly matched ? 1",
+    "en": "Which of the following is correctly matched ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -21457,13 +21265,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match the column - 1 with column - 2 and choose the correct option : 1",
+    "en": "Match the column - 1 with column - 2 and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
     "opts": [
       {
-        "en": "olumn - 1",
+        "en": "olumn -",
         "hi": ""
       },
       {
@@ -21494,7 +21302,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is an example of the Ferrous Metal ? 1",
+    "en": "Which one of the following is an example of the Ferrous Metal ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -21531,7 +21339,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Who among the following improved the steam engine ? 1",
+    "en": "Who among the following improved the steam engine ?",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -21568,7 +21376,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There were three important developments that greatly shrank the pre-modern world. Identify the incorrect one from the following options : 1",
+    "en": "There were three important developments that greatly shrank the pre-modern world. Identify the incorrect one from the following options :",
     "hi": "",
     "twist": "",
     "src": "32/4/3 SST Set 1",
@@ -21646,7 +21454,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which of the following States of India, has the largest area under permanent forests ? 1",
+    "en": "In which of the following States of India, has the largest area under permanent forests ?",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
@@ -21689,7 +21497,7 @@ UP.socialPyq = [
     "src": "32/5/1 SST Set 1",
     "opts": [
       {
-        "en": "ropping season in India: 1",
+        "en": "ropping season in India:",
         "hi": ""
       },
       {
@@ -21761,7 +21569,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is an example of ‘current fallow land’ ? 1",
+    "en": "Which of the following is an example of ‘current fallow land’ ?",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
@@ -21798,7 +21606,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column-I with Column-II and choose the correct option : 1",
+    "en": "Match Column-I with Column-II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
@@ -21918,7 +21726,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ccess of water on the farm and expand cultivable area under assured irrigation (har khet ko pani), improve on farm water, use efficiency to reduce wastage and increase availability both in duration and extent, irrigation and other water saving technologies (per drop more crop) and introduce sustainable water conservation practices, etc. (18.1) Explain the role of floods in land degradation. 1 (18.2) How has irrigation changed cropping pattern? 1 (18.3) Explain any two objectives of the ‘Pradhan Mantri Krishi Sinchayee Yojana’. 2 ~ ~ { } 19 ",
+        "en": "Access of water on the farm and expand cultivable area under assured irrigation (har khet ko pani), improve on farm water, use efficiency to reduce wastage and increase availability both in duration and extent, irrigation and other water saving technologies (per drop more crop) and introduce sustainable water conservation practices, etc. (18.1) Explain the role of floods in land degradation. 1 (18.2) How has irrigation changed cropping pattern? 1 (18.3) Explain any two objectives of the ‘Pradhan Mantri Krishi Sinchayee Yojana’. 2 ~ ~ { } 19 ",
         "hi": ""
       }
     ],
@@ -21962,23 +21770,11 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : Assertion (A): The discovery of sea routes to Asia and America shrank the pre-modern world in the sixteenth century. Reason (R):",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
     "opts": [
-      {
-        "en": "ssertion (A): The discovery of sea routes to Asia and America shrank the pre-modern world in the sixteenth century. Reason (R):",
-        "hi": ""
-      },
-      {
-        "en": "uring this period European entry into Indian ocean",
-        "hi": ""
-      },
-      {
-        "en": "xpanded trade. Options:",
-        "hi": ""
-      },
       {
         "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
@@ -21992,7 +21788,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "(A) is false, but (R) is true. ~ ~ { } 7 ",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -22011,13 +21807,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Belgium’s power sharing arrangements were designed to",
+        "en": "Assertion (A): Belgium’s power sharing arrangements were designed to",
         "hi": ""
       },
       {
@@ -22082,7 +21878,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Balanced economic growth amongst nations Note: The following question is for Visually Impaired Candidates only in lieu of question no. 21: Which of the following countries has a democratic government since independence? 1",
+        "en": "Balanced economic growth amongst nations Note: The following question is for Visually Impaired Candidates only in lieu of question no. 21: Which of the following countries has a democratic government since independence?",
         "hi": ""
       },
       {
@@ -22117,7 +21913,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Find the odd one out regarding the Political Parties of India : 1",
+    "en": "Find the odd one out regarding the Political Parties of India :",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
@@ -22306,7 +22102,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Study the given data and answer the question that follow : 1",
+    "en": "Study the given data and answer the question that follow :",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
@@ -22351,7 +22147,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Identify this image of the allegorical figure of a European nation during the nineteenth century from the following options : 1",
+    "en": "Identify this image of the allegorical figure of a European nation during the nineteenth century from the following options :",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
@@ -22373,7 +22169,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "andidates only in lieu of question no. 3: Who amongst the following gave the Civil Code of 1804 in France? 1",
+        "en": "andidates only in lieu of question no. 3: Who amongst the following gave the Civil Code of 1804 in France?",
         "hi": ""
       },
       {
@@ -22453,7 +22249,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the following case and choose the correct option : 1 Megha has taken a loan of ` 5 lakhs from bank to purchase a house. The",
+    "en": "Read the following case and choose the correct option : 1 Megha has taken a loan of ₹ 5 lakhs from bank to purchase a house. The",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
@@ -22494,7 +22290,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is the main purpose of a trade barrier in global trade ? Choose the correct option. 1",
+    "en": "Which of the following is the main purpose of a trade barrier in global trade ? Choose the correct option.",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
@@ -22531,7 +22327,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is an example of a renewable resource ? 1",
+    "en": "Which of the following is an example of a renewable resource ?",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
@@ -22669,7 +22465,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following pairs is correctly matched ? 1",
+    "en": "Which one of the following pairs is correctly matched ?",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
@@ -22761,7 +22557,7 @@ UP.socialPyq = [
     "src": "32/5/1 SST Set 1",
     "opts": [
       {
-        "en": "The place where Gandhiji launched satyagraha, for the Indigo planters. 1",
+        "en": "The place where Gandhiji launched satyagraha, for the Indigo planters.",
         "hi": ""
       },
       {
@@ -22866,37 +22662,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There are two statements marked as Assertion (A) and Reason (R). Read",
+    "en": "There are two statements marked as Assertion (A) and Reason (R). Read Assertion (A): India has a multiparty system. Reason (R): It is because of the social and geographical diversities in India.",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option as your answer:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): India has a multiparty system. Reason (R): It is because of the social and geographical diversities in India. Options:",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "orrect explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the correct explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true. 9",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -23241,19 +23025,19 @@ UP.socialPyq = [
     "src": "32/5/1 SST Set 1",
     "opts": [
       {
-        "en": "ccess foods across countries",
+        "en": "Access foods across countries",
         "hi": ""
       },
       {
-        "en": "ccess raw material across countries",
+        "en": "Access raw material across countries",
         "hi": ""
       },
       {
-        "en": "ccess services across countries",
+        "en": "Access services across countries",
         "hi": ""
       },
       {
-        "en": "ccess information instantly across countries SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "Access information instantly across countries",
         "hi": ""
       }
     ],
@@ -23292,7 +23076,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Suggest any two ways to create more employment in the rural sector. 2 1=2 15 SECTION C (Short Answer Type Questions) (5 3=15)",
+    "en": "Suggest any two ways to create more employment in the rural sector. 2 1=2 15",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
@@ -23318,7 +23102,7 @@ UP.socialPyq = [
     "src": "32/5/1 SST Set 1",
     "opts": [
       {
-        "en": "ach of them. 3 SECTION D (Long Answer Type Questions) (4 5=20)",
+        "en": "ach of them. 3",
         "hi": ""
       }
     ],
@@ -23598,7 +23382,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "nglish 7",
+        "en": "English 7",
         "hi": ""
       }
     ],
@@ -23662,7 +23446,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following pairs is correctly matched ? 1",
+    "en": "Which one of the following pairs is correctly matched ?",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 2",
@@ -23711,7 +23495,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column-I with Column-II and choose the correct option : 1",
+    "en": "Match Column-I with Column-II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 2",
@@ -23772,7 +23556,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is an example of ‘current fallow land’ ? 1",
+    "en": "Which of the following is an example of ‘current fallow land’ ?",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 2",
@@ -23852,7 +23636,7 @@ UP.socialPyq = [
     "src": "32/5/2 SST Set 2",
     "opts": [
       {
-        "en": "ropping season in India: 1",
+        "en": "ropping season in India:",
         "hi": ""
       },
       {
@@ -23887,7 +23671,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which of the following States of India, has the largest area under permanent forests ? 1",
+    "en": "In which of the following States of India, has the largest area under permanent forests ?",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 2",
@@ -23999,7 +23783,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ccess of water on the farm and expand cultivable area under assured irrigation (har khet ko pani), improve on farm water, use efficiency to reduce wastage and increase availability both in duration and extent, irrigation and other water saving technologies (per drop more crop) and introduce sustainable water conservation practices, etc. (18.1) Explain the role of floods in land degradation. 1 (18.2) How has irrigation changed cropping pattern? 1 (18.3) Explain any two objectives of the ‘Pradhan Mantri Krishi Sinchayee Yojana’. 2 ~ ~ { } 19 ",
+        "en": "Access of water on the farm and expand cultivable area under assured irrigation (har khet ko pani), improve on farm water, use efficiency to reduce wastage and increase availability both in duration and extent, irrigation and other water saving technologies (per drop more crop) and introduce sustainable water conservation practices, etc. (18.1) Explain the role of floods in land degradation. 1 (18.2) How has irrigation changed cropping pattern? 1 (18.3) Explain any two objectives of the ‘Pradhan Mantri Krishi Sinchayee Yojana’. 2 ~ ~ { } 19 ",
         "hi": ""
       }
     ],
@@ -24043,7 +23827,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Identify this image of the allegorical figure of a European nation during the nineteenth century from the following options : 1",
+    "en": "Identify this image of the allegorical figure of a European nation during the nineteenth century from the following options :",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 2",
@@ -24065,7 +23849,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "andidates only in lieu of question no. 2: Who amongst the following gave the Civil Code of 1804 in France? 1",
+        "en": "andidates only in lieu of question no. 2: Who amongst the following gave the Civil Code of 1804 in France?",
         "hi": ""
       },
       {
@@ -24100,7 +23884,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Find the odd one out regarding the Political Parties of India : 1",
+    "en": "Find the odd one out regarding the Political Parties of India :",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 2",
@@ -24196,7 +23980,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Balanced economic growth amongst nations Note: The following question is for Visually Impaired Candidates only in lieu of question no. 22: Which of the following countries has a democratic government since independence? 1",
+        "en": "Balanced economic growth amongst nations Note: The following question is for Visually Impaired Candidates only in lieu of question no. 22: Which of the following countries has a democratic government since independence?",
         "hi": ""
       },
       {
@@ -24231,13 +24015,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 2",
     "opts": [
       {
-        "en": "ssertion (A): Belgium’s power sharing arrangements were designed to",
+        "en": "Assertion (A): Belgium’s power sharing arrangements were designed to",
         "hi": ""
       },
       {
@@ -24395,7 +24179,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Study the given data and answer the question that follow : 1",
+    "en": "Study the given data and answer the question that follow :",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 2",
@@ -24440,23 +24224,11 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : Assertion (A): The discovery of sea routes to Asia and America shrank the pre-modern world in the sixteenth century. Reason (R):",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 2",
     "opts": [
-      {
-        "en": "ssertion (A): The discovery of sea routes to Asia and America shrank the pre-modern world in the sixteenth century. Reason (R):",
-        "hi": ""
-      },
-      {
-        "en": "uring this period European entry into Indian ocean",
-        "hi": ""
-      },
-      {
-        "en": "xpanded trade. Options:",
-        "hi": ""
-      },
       {
         "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
@@ -24489,7 +24261,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is an example of a renewable resource ? 1",
+    "en": "Which of the following is an example of a renewable resource ?",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 2",
@@ -24526,7 +24298,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is the main purpose of a trade barrier in global trade ? Choose the correct option. 1",
+    "en": "Which of the following is the main purpose of a trade barrier in global trade ? Choose the correct option.",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 2",
@@ -24563,7 +24335,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the following case and choose the correct option : 1 Megha has taken a loan of ` 5 lakhs from bank to purchase a house. The",
+    "en": "Read the following case and choose the correct option : 1 Megha has taken a loan of ₹ 5 lakhs from bank to purchase a house. The",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 2",
@@ -24793,7 +24565,7 @@ UP.socialPyq = [
     "src": "32/5/2 SST Set 2",
     "opts": [
       {
-        "en": "The place where Gandhiji launched satyagraha, for the Indigo planters. 1",
+        "en": "The place where Gandhiji launched satyagraha, for the Indigo planters.",
         "hi": ""
       },
       {
@@ -24820,37 +24592,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There are two statements marked as Assertion (A) and Reason (R). Read",
+    "en": "There are two statements marked as Assertion (A) and Reason (R). Read Assertion (A): India has a multiparty system. Reason (R): It is because of the social and geographical diversities in India.",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 1",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option as your answer:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): India has a multiparty system. Reason (R): It is because of the social and geographical diversities in India. Options:",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "orrect explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the correct explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true. 5",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -25113,7 +24873,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "nglish 13",
+        "en": "English 13",
         "hi": ""
       }
     ],
@@ -25236,7 +24996,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "s per the Constitution, religion can never be separated from politics. SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "s per the Constitution, religion can never be separated from politics.",
         "hi": ""
       }
     ],
@@ -25275,7 +25035,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Suggest any two ways to create more employment in the rural sector. 2 1=2 15 SECTION C (Short Answer Type Questions) (5 3=15)",
+    "en": "Suggest any two ways to create more employment in the rural sector. 2 1=2 15",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 1",
@@ -25340,7 +25100,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "How are primary, secondary and tertiary sectors dependent on each other ? Explain. 3 SECTION D (Long Answer Type Questions) (4 5=20)",
+    "en": "How are primary, secondary and tertiary sectors dependent on each other ? Explain. 3",
     "hi": "",
     "twist": "",
     "src": "32/5/2 SST Set 1",
@@ -25697,7 +25457,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following pairs is correctly matched ? 1",
+    "en": "Which one of the following pairs is correctly matched ?",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 3",
@@ -25746,7 +25506,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is an example of ‘current fallow land’ ? 1",
+    "en": "Which of the following is an example of ‘current fallow land’ ?",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 3",
@@ -25826,7 +25586,7 @@ UP.socialPyq = [
     "src": "32/5/3 SST Set 3",
     "opts": [
       {
-        "en": "ropping season in India: 1",
+        "en": "ropping season in India:",
         "hi": ""
       },
       {
@@ -25861,7 +25621,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which of the following States of India, has the largest area under permanent forests ? 1",
+    "en": "In which of the following States of India, has the largest area under permanent forests ?",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 3",
@@ -25939,7 +25699,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column-I with Column-II and choose the correct option : 1",
+    "en": "Match Column-I with Column-II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 3",
@@ -26034,7 +25794,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ccess of water on the farm and expand cultivable area under assured irrigation (har khet ko pani), improve on farm water, use efficiency to reduce wastage and increase availability both in duration and extent, irrigation and other water saving technologies (per drop more crop) and introduce sustainable water conservation practices, etc. (18.1) Explain the role of floods in land degradation. 1 (18.2) How has irrigation changed cropping pattern? 1 (18.3) Explain any two objectives of the ‘Pradhan Mantri Krishi Sinchayee Yojana’. 2 ~ ~ { } 19 ",
+        "en": "Access of water on the farm and expand cultivable area under assured irrigation (har khet ko pani), improve on farm water, use efficiency to reduce wastage and increase availability both in duration and extent, irrigation and other water saving technologies (per drop more crop) and introduce sustainable water conservation practices, etc. (18.1) Explain the role of floods in land degradation. 1 (18.2) How has irrigation changed cropping pattern? 1 (18.3) Explain any two objectives of the ‘Pradhan Mantri Krishi Sinchayee Yojana’. 2 ~ ~ { } 19 ",
         "hi": ""
       }
     ],
@@ -26078,7 +25838,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Identify this image of the allegorical figure of a European nation during the nineteenth century from the following options : 1",
+    "en": "Identify this image of the allegorical figure of a European nation during the nineteenth century from the following options :",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 3",
@@ -26100,7 +25860,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "andidates only in lieu of question no. 2: Who amongst the following gave the Civil Code of 1804 in France? 1",
+        "en": "andidates only in lieu of question no. 2: Who amongst the following gave the Civil Code of 1804 in France?",
         "hi": ""
       },
       {
@@ -26176,7 +25936,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Find the odd one out regarding the Political Parties of India : 1",
+    "en": "Find the odd one out regarding the Political Parties of India :",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 3",
@@ -26231,7 +25991,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Balanced economic growth amongst nations Note: The following question is for Visually Impaired Candidates only in lieu of question no. 22: Which of the following countries has a democratic government since independence? 1",
+        "en": "Balanced economic growth amongst nations Note: The following question is for Visually Impaired Candidates only in lieu of question no. 22: Which of the following countries has a democratic government since independence?",
         "hi": ""
       },
       {
@@ -26266,13 +26026,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 3",
     "opts": [
       {
-        "en": "ssertion (A): Belgium’s power sharing arrangements were designed to",
+        "en": "Assertion (A): Belgium’s power sharing arrangements were designed to",
         "hi": ""
       },
       {
@@ -26475,7 +26235,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Study the given data and answer the question that follow : 1",
+    "en": "Study the given data and answer the question that follow :",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 3",
@@ -26520,7 +26280,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is the main purpose of a trade barrier in global trade ? Choose the correct option. 1",
+    "en": "Which of the following is the main purpose of a trade barrier in global trade ? Choose the correct option.",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 3",
@@ -26557,7 +26317,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the following case and choose the correct option : 1 Megha has taken a loan of ` 5 lakhs from bank to purchase a house. The",
+    "en": "Read the following case and choose the correct option : 1 Megha has taken a loan of ₹ 5 lakhs from bank to purchase a house. The",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 3",
@@ -26598,7 +26358,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is an example of a renewable resource ? 1",
+    "en": "Which of the following is an example of a renewable resource ?",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 3",
@@ -26736,23 +26496,11 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : Assertion (A): The discovery of sea routes to Asia and America shrank the pre-modern world in the sixteenth century. Reason (R):",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 3",
     "opts": [
-      {
-        "en": "ssertion (A): The discovery of sea routes to Asia and America shrank the pre-modern world in the sixteenth century. Reason (R):",
-        "hi": ""
-      },
-      {
-        "en": "uring this period European entry into Indian ocean",
-        "hi": ""
-      },
-      {
-        "en": "xpanded trade. Options:",
-        "hi": ""
-      },
       {
         "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
@@ -26828,7 +26576,7 @@ UP.socialPyq = [
     "src": "32/5/3 SST Set 3",
     "opts": [
       {
-        "en": "The place where Gandhiji launched satyagraha, for the Indigo planters. 1",
+        "en": "The place where Gandhiji launched satyagraha, for the Indigo planters.",
         "hi": ""
       },
       {
@@ -27267,7 +27015,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "70% SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "70%",
         "hi": ""
       }
     ],
@@ -27326,7 +27074,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Why do people prefer to work in the organised sector ? Explain any three reasons. 3 1=3 SECTION D (Long Answer Type Questions) (4 5=20)",
+    "en": "Why do people prefer to work in the organised sector ? Explain any three reasons. 3 1=3",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 1",
@@ -27346,37 +27094,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There are two statements marked as Assertion (A) and Reason (R). Read",
+    "en": "There are two statements marked as Assertion (A) and Reason (R). Read Assertion (A): India has a multiparty system. Reason (R): It is because of the social and geographical diversities in India.",
     "hi": "",
     "twist": "",
     "src": "32/5/3 SST Set 1",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option as your answer:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): India has a multiparty system. Reason (R): It is because of the social and geographical diversities in India. Options:",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "orrect explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the correct explanation of the Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -27590,7 +27326,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "nglish",
+        "en": "English",
         "hi": ""
       }
     ],
@@ -27783,7 +27519,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "nvironment Management System. 1 (12.3) Explain the pro-active approach of NTPC for preserving the natural environment. 2 Page 9 SECTION E (Map-Based Question) (1+2=3)",
+        "en": "nvironment Management System. 1 (12.3) Explain the pro-active approach of NTPC for preserving the natural environment. 2 Page 9",
         "hi": ""
       }
     ],
@@ -27816,11 +27552,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ppropriate symbols:",
+        "en": "Appropriate symbols:",
         "hi": ""
       },
       {
-        "en": "(I) Noida Software Technology Park 1 OR (II) Pune Software Technology Park 1",
+        "en": "(I) Noida Software Technology Park 1 OR (II) Pune Software Technology Park",
         "hi": ""
       },
       {
@@ -27828,7 +27564,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Name the State where the Pune Software Technology Park is located. 1 (13.3) In which State is Paradwip Sea Port located? 1",
+        "en": "Name the State where the Pune Software Technology Park is located. 1 (13.3) In which State is Paradwip Sea Port located?",
         "hi": ""
       }
     ],
@@ -27867,7 +27603,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Why are transactions made in money ? Explain. 2 Page 5 SECTION B (Short-Answer Type Questions) (3 3=9)",
+    "en": "Why are transactions made in money ? Explain. 2 Page 5",
     "hi": "",
     "twist": "",
     "src": "32/6/1 SST Set 1",
@@ -27913,7 +27649,7 @@ UP.socialPyq = [
     "src": "32/6/1 SST Set 1",
     "opts": [
       {
-        "en": "xplain. 3 SECTION C (Long-Answer Type Questions) (2 5=10)",
+        "en": "xplain. 3",
         "hi": ""
       }
     ],
@@ -28027,7 +27763,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "bolish it. The British Government in India has not only deprived the Indian people of their freedom but has based itself on the exploitation of the masses, and has ruined India economically, politically, culturally, and spiritually. We believe, therefore, that India must sever the British (12.1) What was considered as an inalienable right? 1 (12.2) Why did Indian 1 (12.3) Examine the views of Indians towards the British Government in reference to this passage. 2 Page 9 SECTION E (Map-Based Question) (1+2=3)",
+        "en": "bolish it. The British Government in India has not only deprived the Indian people of their freedom but has based itself on the exploitation of the masses, and has ruined India economically, politically, culturally, and spiritually. We believe, therefore, that India must sever the British (12.1) What was considered as an inalienable right? 1 (12.2) Why did Indian 1 (12.3) Examine the views of Indians towards the British Government in reference to this passage. 2 Page 9",
         "hi": ""
       }
     ],
@@ -28060,11 +27796,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ppropriate symbols:",
+        "en": "Appropriate symbols:",
         "hi": ""
       },
       {
-        "en": "(I) Noida Software Technology Park 1 OR (II) Pune Software Technology Park 1",
+        "en": "(I) Noida Software Technology Park 1 OR (II) Pune Software Technology Park",
         "hi": ""
       },
       {
@@ -28072,7 +27808,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Name the State where the Pune Software Technology Park is located. 1 (13.3) In which State is Paradwip Sea Port located? 1",
+        "en": "Name the State where the Pune Software Technology Park is located. 1 (13.3) In which State is Paradwip Sea Port located?",
         "hi": ""
       }
     ],
@@ -28136,7 +27872,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "Mention the importance of Border roads in India. 2 Page 5 SECTION B (Short-Answer Type Questions) (3 3=9)",
+    "en": "Mention the importance of Border roads in India. 2 Page 5",
     "hi": "",
     "twist": "",
     "src": "32/6/2 SST Set 2",
@@ -28277,7 +28013,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "bolish it. The British Government in India has not only deprived the Indian people of their freedom but has based itself on the exploitation of the masses, and has ruined India economically, politically, culturally, and spiritually. We believe, therefore, that India must sever the British (12.1) What was considered as an inalienable right? 1 (12.2) 1 (12.3) Examine the views of Indians towards the British Government in reference to this passage. 2 Page 9 SECTION E (Map-Based Question) (1+2=3)",
+        "en": "bolish it. The British Government in India has not only deprived the Indian people of their freedom but has based itself on the exploitation of the masses, and has ruined India economically, politically, culturally, and spiritually. We believe, therefore, that India must sever the British (12.1) What was considered as an inalienable right? 1 (12.2) 1 (12.3) Examine the views of Indians towards the British Government in reference to this passage. 2 Page 9",
         "hi": ""
       }
     ],
@@ -28310,11 +28046,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ppropriate symbols:",
+        "en": "Appropriate symbols:",
         "hi": ""
       },
       {
-        "en": "(I) Noida Software Technology Park 1 OR (II) Pune Software Technology Park 1",
+        "en": "(I) Noida Software Technology Park 1 OR (II) Pune Software Technology Park",
         "hi": ""
       },
       {
@@ -28322,7 +28058,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Name the State where the Pune Software Technology Park is located. 1 (13.3) In which State is Paradwip Sea Port located? 1",
+        "en": "Name the State where the Pune Software Technology Park is located. 1 (13.3) In which State is Paradwip Sea Port located?",
         "hi": ""
       }
     ],
@@ -28381,7 +28117,7 @@ UP.socialPyq = [
     "m": 2,
     "kind": "short",
     "d": 2,
-    "en": "Page 5 SECTION B (Short-Answer Type Questions) (3 3=9)",
+    "en": "Page 5",
     "hi": "",
     "twist": "",
     "src": "32/6/3 SST Set 3",
@@ -28407,7 +28143,7 @@ UP.socialPyq = [
     "src": "32/6/3 SST Set 3",
     "opts": [
       {
-        "en": "xplain. 3 SECTION C (Long-Answer Type Questions) (2 5=10)",
+        "en": "xplain. 3",
         "hi": ""
       }
     ],
@@ -28426,37 +28162,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements labelled as Assertion (A) and Reason (R) are given below. Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements labelled as Assertion (A) and Reason (R) are given below. Read both the statements carefully and choose the correct option : Assertion (A): Forests play a vital role in the ecosystem. Reason (R): They are secondary producers upon which all other organisms depend.",
     "hi": "",
     "twist": "",
     "src": "32/7/1 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Forests play a vital role in the ecosystem. Reason (R): They are secondary producers upon which all other organisms depend. Options:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "orrect explanation of Assertion (A).",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the",
-        "hi": ""
-      },
-      {
-        "en": "orrect explanation of Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -28481,7 +28205,7 @@ UP.socialPyq = [
     "src": "32/7/1 SST Set 1",
     "opts": [
       {
-        "en": "ppropriate option related to crop. 1 It is a crop from an equatorial region. It requires more than 200 cm of rainfall. It requires a warm and humid climate with high temperature. Options:",
+        "en": "Appropriate option related to crop. 1 It is a crop from an equatorial region. It requires more than 200 cm of rainfall. It requires a warm and humid climate with high temperature. Options:",
         "hi": ""
       },
       {
@@ -28497,7 +28221,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Oilseeds # 13 #",
+        "en": "Oilseeds # 13",
         "hi": ""
       }
     ],
@@ -28516,7 +28240,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II related to the slash and burn agriculture system and choose the correct option : 1",
+    "en": "Match Column I with Column II related to the slash and burn agriculture system and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/7/1 SST Set 1",
@@ -28595,7 +28319,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ountry. 1 (17.2) How has urbanisation increased the demand for water? 1 (17.3) Suggest any two measures to prevent the over-exploitation of water resources. 2 # 17 #",
+        "en": "ountry. 1 (17.2) How has urbanisation increased the demand for water? 1 (17.3) Suggest any two measures to prevent the over-exploitation of water resources. 2 # 17",
         "hi": ""
       }
     ],
@@ -28632,7 +28356,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "nswer any three questions. 3 1=3 (18.1) Name the place where a major iron and steel plant is located in Tamil Nadu. (18.2) Name the state leading in tea production. (18.3) Name the place where a major sea port is located in Gujarat. (18.4) Name the place where a major international airport is located in Punjab. SECTION C (Political Science) 20",
+        "en": "nswer any three questions. 3 1=3 (18.1) Name the place where a major iron and steel plant is located in Tamil Nadu. (18.2) Name the state leading in tea production. (18.3) Name the place where a major sea port is located in Gujarat. (18.4) Name the place where a major international airport is located in Punjab.",
         "hi": ""
       }
     ],
@@ -28651,7 +28375,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the given picture carefully : Who among the following is depicted in the postage stamp of 1850 ? 1",
+    "en": "Look at the given picture carefully : Who among the following is depicted in the postage stamp of 1850 ?",
     "hi": "",
     "twist": "",
     "src": "32/7/1 SST Set 1",
@@ -28669,7 +28393,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Note: The following question is for the Visually Impaired Candidates only, in lieu of Q. No. 2. Who among the following founded the secret organisation called 1",
+        "en": "Note: The following question is for the Visually Impaired Candidates only, in lieu of Q. No. 2. Who among the following founded the secret organisation called",
         "hi": ""
       },
       {
@@ -28685,7 +28409,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ount Cavour # 7 #",
+        "en": "ount Cavour # 7",
         "hi": ""
       }
     ],
@@ -28704,13 +28428,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following languages is spoken by most people in Belgium ? 1",
+    "en": "Which of the following languages is spoken by most people in Belgium ?",
     "hi": "",
     "twist": "",
     "src": "32/7/1 SST Set 1",
     "opts": [
       {
-        "en": "nglish",
+        "en": "English",
         "hi": ""
       },
       {
@@ -28722,7 +28446,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "utch # 19 #",
+        "en": "utch # 19",
         "hi": ""
       }
     ],
@@ -28774,37 +28498,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements labelled as Assertion (A) and Reason (R) are given below. Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements labelled as Assertion (A) and Reason (R) are given below. Read both the statements carefully and choose the correct option : Assertion (A): Democracy is a legitimate form of government. Reason (R): In a democracy, all groups connect with the governance system through their participation.",
     "hi": "",
     "twist": "",
     "src": "32/7/1 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Democracy is a legitimate form of government. Reason (R): In a democracy, all groups connect with the governance system through their participation. Options:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "orrect explanation of Assertion (A).",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the",
-        "hi": ""
-      },
-      {
-        "en": "orrect explanation of Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -28833,7 +28545,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "gainst them through an affidavit? 1",
+        "en": "gainst them through an affidavit?",
         "hi": ""
       },
       {
@@ -28868,7 +28580,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "-party system is better than a single- statement. 3 # 21 #",
+    "en": "-party system is better than a single- statement. 3 # 21",
     "hi": "",
     "twist": "",
     "src": "32/7/1 SST Set 1",
@@ -28894,7 +28606,7 @@ UP.socialPyq = [
     "src": "32/7/1 SST Set 1",
     "opts": [
       {
-        "en": "rop production. Which of the following would be a major developmental goal for Swapana? Choose the most appropriate option. 1",
+        "en": "rop production. Which of the following would be a major developmental goal for Swapana? Choose the most appropriate option.",
         "hi": ""
       },
       {
@@ -28929,7 +28641,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which of the following sessions of the Congress was the demand for 1",
+    "en": "In which of the following sessions of the Congress was the demand for",
     "hi": "",
     "twist": "",
     "src": "32/7/1 SST Set 1",
@@ -28984,7 +28696,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "65,24,500 # 23 #",
+        "en": "65,24,500 # 23",
         "hi": ""
       }
     ],
@@ -29003,7 +28715,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the picture given below carefully and answer the question that follows : The given picture accurately reflects one of the following : 1",
+    "en": "Look at the picture given below carefully and answer the question that follows : The given picture accurately reflects one of the following :",
     "hi": "",
     "twist": "",
     "src": "32/7/1 SST Set 1",
@@ -29025,7 +28737,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hoose the most appropriate option. 1",
+        "en": "hoose the most appropriate option.",
         "hi": ""
       },
       {
@@ -29041,7 +28753,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "To serve their society # 25 #",
+        "en": "To serve their society # 25",
         "hi": ""
       }
     ],
@@ -29060,7 +28772,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Why is the Rupee accepted as a medium of exchange in India ? Choose the most appropriate option. 1",
+    "en": "Why is the Rupee accepted as a medium of exchange in India ? Choose the most appropriate option.",
     "hi": "",
     "twist": "",
     "src": "32/7/1 SST Set 1",
@@ -29263,7 +28975,7 @@ UP.socialPyq = [
     "src": "32/7/1 SST Set 1",
     "opts": [
       {
-        "en": "The place where the session of the Indian National Congress was held. 1",
+        "en": "The place where the session of the Indian National Congress was held.",
         "hi": ""
       },
       {
@@ -29271,7 +28983,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ongress was held in 1927. 1 (9.2) Name the place where Gandhiji broke the Salt Law. 1 # 11 # SECTION B (Geography) 20",
+        "en": "ongress was held in 1927. 1 (9.2) Name the place where Gandhiji broke the Salt Law. 1 # 11 #",
         "hi": ""
       }
     ],
@@ -29290,7 +29002,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II related to the slash and burn agriculture system and choose the correct option : 1",
+    "en": "Match Column I with Column II related to the slash and burn agriculture system and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/7/2 SST Set 1",
@@ -29361,7 +29073,7 @@ UP.socialPyq = [
     "src": "32/7/2 SST Set 1",
     "opts": [
       {
-        "en": "ppropriate option related to crop. 1 It is a crop from an equatorial region. It requires more than 200 cm of rainfall. It requires a warm and humid climate with high temperature. Options:",
+        "en": "Appropriate option related to crop. 1 It is a crop from an equatorial region. It requires more than 200 cm of rainfall. It requires a warm and humid climate with high temperature. Options:",
         "hi": ""
       },
       {
@@ -29377,7 +29089,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Oilseeds # 15 #",
+        "en": "Oilseeds # 15",
         "hi": ""
       }
     ],
@@ -29396,37 +29108,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements labelled as Assertion (A) and Reason (R) are given below. Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements labelled as Assertion (A) and Reason (R) are given below. Read both the statements carefully and choose the correct option : Assertion (A): Forests play a vital role in the ecosystem. Reason (R): They are secondary producers upon which all other organisms depend.",
     "hi": "",
     "twist": "",
     "src": "32/7/2 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Forests play a vital role in the ecosystem. Reason (R): They are secondary producers upon which all other organisms depend. Options:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "orrect explanation of Assertion (A).",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the",
-        "hi": ""
-      },
-      {
-        "en": "orrect explanation of Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -29479,7 +29179,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ountry. 1 (17.2) How has urbanisation increased the demand for water? 1 (17.3) Suggest any two measures to prevent the over-exploitation of water resources. 2 # 17 #",
+        "en": "ountry. 1 (17.2) How has urbanisation increased the demand for water? 1 (17.3) Suggest any two measures to prevent the over-exploitation of water resources. 2 # 17",
         "hi": ""
       }
     ],
@@ -29516,7 +29216,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "nswer any three questions. 3 1=3 (18.1) Name the place where a major iron and steel plant is located in Tamil Nadu. (18.2) Name the state leading in tea production. (18.3) Name the place where a major sea port is located in Gujarat. (18.4) Name the place where a major international airport is located in Punjab. SECTION C (Political Science) 20",
+        "en": "nswer any three questions. 3 1=3 (18.1) Name the place where a major iron and steel plant is located in Tamil Nadu. (18.2) Name the state leading in tea production. (18.3) Name the place where a major sea port is located in Gujarat. (18.4) Name the place where a major international airport is located in Punjab.",
         "hi": ""
       }
     ],
@@ -29545,7 +29245,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "gainst them through an affidavit? 1",
+        "en": "gainst them through an affidavit?",
         "hi": ""
       },
       {
@@ -29580,7 +29280,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which of the following sessions of the Congress was the demand for 1",
+    "en": "In which of the following sessions of the Congress was the demand for",
     "hi": "",
     "twist": "",
     "src": "32/7/2 SST Set 1",
@@ -29617,37 +29317,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements labelled as Assertion (A) and Reason (R) are given below. Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements labelled as Assertion (A) and Reason (R) are given below. Read both the statements carefully and choose the correct option : Assertion (A): Democracy is a legitimate form of government. Reason (R): In a democracy, all groups connect with the governance system through their participation.",
     "hi": "",
     "twist": "",
     "src": "32/7/2 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Democracy is a legitimate form of government. Reason (R): In a democracy, all groups connect with the governance system through their participation. Options:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "orrect explanation of Assertion (A).",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the",
-        "hi": ""
-      },
-      {
-        "en": "orrect explanation of Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true. # 19 #",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -29699,13 +29387,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following languages is spoken by most people in Belgium ? 1",
+    "en": "Which of the following languages is spoken by most people in Belgium ?",
     "hi": "",
     "twist": "",
     "src": "32/7/2 SST Set 1",
     "opts": [
       {
-        "en": "nglish",
+        "en": "English",
         "hi": ""
       },
       {
@@ -29736,7 +29424,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the given picture carefully : Who among the following is depicted in the postage stamp of 1850 ? 1",
+    "en": "Look at the given picture carefully : Who among the following is depicted in the postage stamp of 1850 ?",
     "hi": "",
     "twist": "",
     "src": "32/7/2 SST Set 1",
@@ -29754,7 +29442,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Stella d # 7 # Note: The following question is for the Visually Impaired Candidates only, in lieu of Q. No. 3. Who among the following founded the secret organisation called 1",
+        "en": "Stella d # 7 # Note: The following question is for the Visually Impaired Candidates only, in lieu of Q. No. 3. Who among the following founded the secret organisation called",
         "hi": ""
       },
       {
@@ -29789,7 +29477,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Why is the Rupee accepted as a medium of exchange in India ? Choose the most appropriate option. 1",
+    "en": "Why is the Rupee accepted as a medium of exchange in India ? Choose the most appropriate option.",
     "hi": "",
     "twist": "",
     "src": "32/7/2 SST Set 1",
@@ -29826,7 +29514,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the picture given below carefully and answer the question that follows : The given picture accurately reflects one of the following : 1",
+    "en": "Look at the picture given below carefully and answer the question that follows : The given picture accurately reflects one of the following :",
     "hi": "",
     "twist": "",
     "src": "32/7/2 SST Set 1",
@@ -29848,7 +29536,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hoose the most appropriate option. 1",
+        "en": "hoose the most appropriate option.",
         "hi": ""
       },
       {
@@ -29926,7 +29614,7 @@ UP.socialPyq = [
     "src": "32/7/2 SST Set 1",
     "opts": [
       {
-        "en": "rop production. Which of the following would be a major developmental goal for Swapana? Choose the most appropriate option. 1",
+        "en": "rop production. Which of the following would be a major developmental goal for Swapana? Choose the most appropriate option.",
         "hi": ""
       },
       {
@@ -29942,7 +29630,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "onstruction of a canal # 25 #",
+        "en": "onstruction of a canal # 25",
         "hi": ""
       }
     ],
@@ -30135,7 +29823,7 @@ UP.socialPyq = [
     "src": "32/7/2 SST Set 1",
     "opts": [
       {
-        "en": "The place where the session of the Indian National Congress was held. 1",
+        "en": "The place where the session of the Indian National Congress was held.",
         "hi": ""
       },
       {
@@ -30143,7 +29831,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ongress was held in 1927. 1 (9.2) Name the place where Gandhiji broke the Salt Law. 1 # 11 # SECTION B (Geography) 20",
+        "en": "ongress was held in 1927. 1 (9.2) Name the place where Gandhiji broke the Salt Law. 1 # 11 #",
         "hi": ""
       }
     ],
@@ -30162,7 +29850,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which of the following sessions of the Congress was the demand for 1",
+    "en": "In which of the following sessions of the Congress was the demand for",
     "hi": "",
     "twist": "",
     "src": "32/7/3 SST Set 1",
@@ -30199,7 +29887,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II related to the slash and burn agriculture system and choose the correct option : 1",
+    "en": "Match Column I with Column II related to the slash and burn agriculture system and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/7/3 SST Set 1",
@@ -30264,37 +29952,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements labelled as Assertion (A) and Reason (R) are given below. Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements labelled as Assertion (A) and Reason (R) are given below. Read both the statements carefully and choose the correct option : Assertion (A): Forests play a vital role in the ecosystem. Reason (R): They are secondary producers upon which all other organisms depend.",
     "hi": "",
     "twist": "",
     "src": "32/7/3 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Forests play a vital role in the ecosystem. Reason (R): They are secondary producers upon which all other organisms depend. Options:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "orrect explanation of Assertion (A).",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the",
-        "hi": ""
-      },
-      {
-        "en": "orrect explanation of Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true. # 13 #",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -30319,7 +29995,7 @@ UP.socialPyq = [
     "src": "32/7/3 SST Set 1",
     "opts": [
       {
-        "en": "ppropriate option related to crop. 1 It is a crop from an equatorial region. It requires more than 200 cm of rainfall. It requires a warm and humid climate with high temperature. Options:",
+        "en": "Appropriate option related to crop. 1 It is a crop from an equatorial region. It requires more than 200 cm of rainfall. It requires a warm and humid climate with high temperature. Options:",
         "hi": ""
       },
       {
@@ -30425,7 +30101,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "nswer any three questions. 3 1=3 (18.1) Name the place where a major iron and steel plant is located in Tamil Nadu. (18.2) Name the state leading in tea production. (18.3) Name the place where a major sea port is located in Gujarat. (18.4) Name the place where a major international airport is located in Punjab. SECTION C (Political Science) 20",
+        "en": "nswer any three questions. 3 1=3 (18.1) Name the place where a major iron and steel plant is located in Tamil Nadu. (18.2) Name the state leading in tea production. (18.3) Name the place where a major sea port is located in Gujarat. (18.4) Name the place where a major international airport is located in Punjab.",
         "hi": ""
       }
     ],
@@ -30477,37 +30153,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements labelled as Assertion (A) and Reason (R) are given below. Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements labelled as Assertion (A) and Reason (R) are given below. Read both the statements carefully and choose the correct option : Assertion (A): Democracy is a legitimate form of government. Reason (R): In a democracy, all groups connect with the governance system through their participation.",
     "hi": "",
     "twist": "",
     "src": "32/7/3 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Democracy is a legitimate form of government. Reason (R): In a democracy, all groups connect with the governance system through their participation. Options:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true and Reason (R) is the",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "orrect explanation of Assertion (A).",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "oth Assertion (A) and Reason (R) are true, but Reason (R) is not the",
-        "hi": ""
-      },
-      {
-        "en": "orrect explanation of Assertion (A).",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is true, but Reason (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "ssertion (A) is false, but Reason (R) is true. # 19 #",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -30536,7 +30200,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "gainst them through an affidavit? 1",
+        "en": "gainst them through an affidavit?",
         "hi": ""
       },
       {
@@ -30571,13 +30235,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following languages is spoken by most people in Belgium ? 1",
+    "en": "Which of the following languages is spoken by most people in Belgium ?",
     "hi": "",
     "twist": "",
     "src": "32/7/3 SST Set 1",
     "opts": [
       {
-        "en": "nglish",
+        "en": "English",
         "hi": ""
       },
       {
@@ -30648,7 +30312,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the picture given below carefully and answer the question that follows : The given picture accurately reflects one of the following : 1",
+    "en": "Look at the picture given below carefully and answer the question that follows : The given picture accurately reflects one of the following :",
     "hi": "",
     "twist": "",
     "src": "32/7/3 SST Set 1",
@@ -30670,7 +30334,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hoose the most appropriate option. 1",
+        "en": "hoose the most appropriate option.",
         "hi": ""
       },
       {
@@ -30686,7 +30350,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "To serve their society # 23 #",
+        "en": "To serve their society # 23",
         "hi": ""
       }
     ],
@@ -30711,7 +30375,7 @@ UP.socialPyq = [
     "src": "32/7/3 SST Set 1",
     "opts": [
       {
-        "en": "rop production. Which of the following would be a major developmental goal for Swapana? Choose the most appropriate option. 1",
+        "en": "rop production. Which of the following would be a major developmental goal for Swapana? Choose the most appropriate option.",
         "hi": ""
       },
       {
@@ -30764,7 +30428,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "65,24,500 # 25 #",
+        "en": "65,24,500 # 25",
         "hi": ""
       }
     ],
@@ -30783,7 +30447,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Why is the Rupee accepted as a medium of exchange in India ? Choose the most appropriate option. 1",
+    "en": "Why is the Rupee accepted as a medium of exchange in India ? Choose the most appropriate option.",
     "hi": "",
     "twist": "",
     "src": "32/7/3 SST Set 1",
@@ -30913,7 +30577,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the given picture carefully : Who among the following is depicted in the postage stamp of 1850 ? 1",
+    "en": "Look at the given picture carefully : Who among the following is depicted in the postage stamp of 1850 ?",
     "hi": "",
     "twist": "",
     "src": "32/7/3 SST Set 1",
@@ -30931,7 +30595,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Note: The following question is for the Visually Impaired Candidates only, in lieu of Q. No. 4. Who among the following founded the secret organisation called 1",
+        "en": "Note: The following question is for the Visually Impaired Candidates only, in lieu of Q. No. 4. Who among the following founded the secret organisation called",
         "hi": ""
       },
       {
@@ -31037,7 +30701,7 @@ UP.socialPyq = [
     "src": "32/7/3 SST Set 1",
     "opts": [
       {
-        "en": "The place where the session of the Indian National Congress was held. 1",
+        "en": "The place where the session of the Indian National Congress was held.",
         "hi": ""
       },
       {
@@ -31045,7 +30709,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ongress was held in 1927. 1 (9.2) Name the place where Gandhiji broke the Salt Law. 1 # 11 # SECTION B (Geography) 20",
+        "en": "ongress was held in 1927. 1 (9.2) Name the place where Gandhiji broke the Salt Law. 1 # 11 #",
         "hi": ""
       }
     ],
@@ -31460,7 +31124,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Protection to domestic and foreign producers SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "Protection to domestic and foreign producers",
         "hi": ""
       }
     ],
@@ -31545,7 +31209,7 @@ UP.socialPyq = [
     "src": "32/C/1 SST Set 1",
     "opts": [
       {
-        "en": "xplain. 1+2=3 SECTION D (Long Answer Type Questions) (4 5=20)",
+        "en": "xplain. 1+2=3",
         "hi": ""
       }
     ],
@@ -31652,7 +31316,7 @@ UP.socialPyq = [
     "src": "32/C/1 SST Set 1",
     "opts": [
       {
-        "en": "dam is a barrier across flowing water that obstructs, directs or retards the flow, often creating a reservoir, lake or impoundment. Dam refers to the reservoir rather than the structure. Most dams have a section called a spillway or weir over which or through which it is intended that water will flow either intermittently or continuously. Dams",
+        "en": "dam is a barrier across flowing water that obstructs, directs or retards the flow, often creating a reservoir, lake or impoundment. Dam refers to the reservoir rather than the structure. Most dams have a",
         "hi": ""
       },
       {
@@ -32451,7 +32115,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "It employs labour only from its own country. SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "It employs labour only from its own country.",
         "hi": ""
       }
     ],
@@ -32598,7 +32262,7 @@ UP.socialPyq = [
     "src": "32/C/2 SST Set 1",
     "opts": [
       {
-        "en": "dam is a barrier across flowing water that obstructs, directs or retards the flow, often creating a reservoir, lake or impoundment. Dam refers to the reservoir rather than the structure. Most dams have a section called a spillway or weir over which or through which it is intended that water will flow either intermittently or continuously. Dams",
+        "en": "dam is a barrier across flowing water that obstructs, directs or retards the flow, often creating a reservoir, lake or impoundment. Dam refers to the reservoir rather than the structure. Most dams have a",
         "hi": ""
       },
       {
@@ -33348,7 +33012,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Protection to domestic and foreign producers SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "Protection to domestic and foreign producers",
         "hi": ""
       }
     ],
@@ -33471,7 +33135,7 @@ UP.socialPyq = [
     "src": "32/C/3 SST Set 1",
     "opts": [
       {
-        "en": "dam is a barrier across flowing water that obstructs, directs or retards the flow, often creating a reservoir, lake or impoundment. Dam refers to the reservoir rather than the structure. Most dams have a section called a spillway or weir over which or through which it is intended that water will flow either intermittently or continuously. Dams",
+        "en": "dam is a barrier across flowing water that obstructs, directs or retards the flow, often creating a reservoir, lake or impoundment. Dam refers to the reservoir rather than the structure. Most dams have a",
         "hi": ""
       },
       {
@@ -33839,7 +33503,7 @@ UP.socialPyq = [
     "src": "32/S/1 SST Set 1",
     "opts": [
       {
-        "en": "hristopher Columbus’s discovery of America? 1",
+        "en": "hristopher Columbus’s discovery of America?",
         "hi": ""
       },
       {
@@ -33880,7 +33544,7 @@ UP.socialPyq = [
     "src": "32/S/1 SST Set 1",
     "opts": [
       {
-        "en": "mendment of 1992 regarding decentralisation of power in India? 1",
+        "en": "mendment of 1992 regarding decentralisation of power in India?",
         "hi": ""
       },
       {
@@ -33960,7 +33624,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "The 73rd Amendment of the Indian Constitution ensures women’s representation at which of the following levels ? 1",
+    "en": "The 73rd Amendment of the Indian Constitution ensures women’s representation at which of the following levels ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -33997,7 +33661,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the following scenario carefully and answer the question that follows : 1",
+    "en": "Read the following scenario carefully and answer the question that follows :",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34031,7 +33695,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth economic development and environmental sustainability are",
+        "en": "Both economic development and environmental sustainability are",
         "hi": ""
       },
       {
@@ -34058,7 +33722,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Study the following data and answer the question that follows : 1",
+    "en": "Study the following data and answer the question that follows :",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34103,7 +33767,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Identify the odd one out from the following options : 1",
+    "en": "Identify the odd one out from the following options :",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34177,7 +33841,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There are advancements in transportation. Which of the following is the impact of it on globalization ? 1",
+    "en": "There are advancements in transportation. Which of the following is the impact of it on globalization ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34214,7 +33878,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "How did print culture contribute to the development of a sense of Indian nationalism ? Choose the most appropriate option from the following : 1",
+    "en": "How did print culture contribute to the development of a sense of Indian nationalism ? Choose the most appropriate option from the following :",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34251,7 +33915,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is a feature of democracy ? 1",
+    "en": "Which of the following is a feature of democracy ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34269,7 +33933,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "It is difficult to establish political harmony.? # 32/S/1 SECTION B (Very Short Answer Type Questions) (4´2=8)",
+        "en": "It is difficult to establish political harmony.? # 32/S/1",
         "hi": ""
       }
     ],
@@ -34334,7 +33998,7 @@ UP.socialPyq = [
     "src": "32/S/1 SST Set 1",
     "opts": [
       {
-        "en": "xplain it with any two examples. 2 SECTION C (Short Answer Type Questions) (5´3=15)",
+        "en": "xplain it with any two examples. 2",
         "hi": ""
       }
     ],
@@ -34373,7 +34037,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the picture given below. What does the image of Bharat Mata signify ? Choose the correct option : 1",
+    "en": "Look at the picture given below. What does the image of Bharat Mata signify ? Choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34391,7 +34055,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Nationalism and democracy # 32/S/1 Note: The following question is for the Visually Impaired Candidates only, in lieu of Q. No. 3. Who among the following people established the ‘Swaraj Party’? 1",
+        "en": "Nationalism and democracy # 32/S/1 Note: The following question is for the Visually Impaired Candidates only, in lieu of Q. No. 3. Who among the following people established the ‘Swaraj Party’?",
         "hi": ""
       },
       {
@@ -34562,7 +34226,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34584,7 +34248,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "opper iii. Used in cement manufacturing",
+        "en": "Copper iii. Used in cement manufacturing",
         "hi": ""
       },
       {
@@ -34623,29 +34287,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : Assertion (A): Belgium’s ‘community government’ has the power regarding cultural, educational and language-related issues. Reason (R): The State Governments are subordinate to the Central Government in Belgium.",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
     "opts": [
       {
-        "en": "ssertion (A): Belgium’s ‘community government’ has the power regarding cultural, educational and language-related issues. Reason (R): The State Governments are subordinate to the Central Government in Belgium. Options:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "is false, but (R) is true. # 32/S/1",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -34664,7 +34324,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34725,7 +34385,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Vertical division of power is : 1",
+    "en": "Vertical division of power is :",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34772,7 +34432,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hina III. Japan IV. India Options:",
+        "en": "China III. Japan IV. India Options:",
         "hi": ""
       },
       {
@@ -34807,7 +34467,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is the majority community in Sri Lanka ? 1",
+    "en": "Which one of the following is the majority community in Sri Lanka ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34844,7 +34504,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following orders has been passed by the Supreme Court to reform political parties in India ? 1",
+    "en": "Which one of the following orders has been passed by the Supreme Court to reform political parties in India ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34885,7 +34545,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is the main source of a 1",
+    "en": "Which one of the following is the main source of a",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34922,7 +34582,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following sources meets the needs of loan of rural households in India to the maximum extent ? 1",
+    "en": "Which one of the following sources meets the needs of loan of rural households in India to the maximum extent ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34959,7 +34619,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Study the given picture. The work being done in the picture comes under which of the following sectors of the economy ? 1",
+    "en": "Study the given picture. The work being done in the picture comes under which of the following sectors of the economy ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34981,7 +34641,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "nimal husbandry comes under which of the following sectors of the economy? 1",
+        "en": "nimal husbandry comes under which of the following sectors of the economy?",
         "hi": ""
       },
       {
@@ -35016,7 +34676,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following states has the highest Human Development Index ? 1",
+    "en": "Which one of the following states has the highest Human Development Index ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -35225,33 +34885,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read Assertion (A): We need to protect forests and wildlife. Reason (R): Conservation maintains ecological diversity.",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option. 1",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): We need to protect forests and wildlife. Reason (R): Conservation maintains ecological diversity. Options:",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is false, but (R) is true.",
-        "hi": ""
-      },
-      {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A). 666 32/S/1",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -35270,7 +34922,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "In which one of the following states prominently prevalent for rainwater harvesting ? 1",
+    "en": "In which one of the following states prominently prevalent for rainwater harvesting ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -35348,7 +35000,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is a non-conventional source of energy ? 1",
+    "en": "Which one of the following is a non-conventional source of energy ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -35385,37 +35037,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read Assertion (A): Power sharing is the spirit of democracy. Reason (R):",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option. 1",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): Power sharing is the spirit of democracy. Reason (R):",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "legitimate government is one where all the groups connect with the government through their participation. Options:",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
-        "hi": ""
-      },
-      {
-        "en": "is true, but (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "is false, but (R) is true. 666 32/S/1",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -35434,7 +35074,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is a feature of democracy ? 1",
+    "en": "Which of the following is a feature of democracy ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -35514,7 +35154,7 @@ UP.socialPyq = [
     "src": "32/S/2 SST Set 2",
     "opts": [
       {
-        "en": "mendment of 1992 regarding decentralisation of power in India? 1",
+        "en": "mendment of 1992 regarding decentralisation of power in India?",
         "hi": ""
       },
       {
@@ -35557,7 +35197,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -35618,29 +35258,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : Assertion (A): Belgium’s ‘community government’ has the power regarding cultural, educational and language-related issues. Reason (R): The State Governments are subordinate to the Central Government in Belgium.",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
     "opts": [
       {
-        "en": "ssertion (A): Belgium’s ‘community government’ has the power regarding cultural, educational and language-related issues. Reason (R): The State Governments are subordinate to the Central Government in Belgium. Options:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "is false, but (R) is true. # 32/S/2",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -35659,7 +35295,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -35681,7 +35317,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "opper iii. Used in cement manufacturing",
+        "en": "Copper iii. Used in cement manufacturing",
         "hi": ""
       },
       {
@@ -35757,7 +35393,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the picture given below. What does the image of Bharat Mata signify ? Choose the correct option : 1",
+    "en": "Look at the picture given below. What does the image of Bharat Mata signify ? Choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -35775,7 +35411,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Nationalism and democracy # 32/S/2 Note: The following question is for the Visually Impaired Candidates only, in lieu of Q. No. 18. Who among the following people established the ‘Swaraj Party’? 1",
+        "en": "Nationalism and democracy # 32/S/2 Note: The following question is for the Visually Impaired Candidates only, in lieu of Q. No. 18. Who among the following people established the ‘Swaraj Party’?",
         "hi": ""
       },
       {
@@ -35810,7 +35446,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "How did print culture contribute to the development of a sense of Indian nationalism ? Choose the most appropriate option from the following : 1",
+    "en": "How did print culture contribute to the development of a sense of Indian nationalism ? Choose the most appropriate option from the following :",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -35847,7 +35483,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There are advancements in transportation. Which of the following is the impact of it on globalization ? 1",
+    "en": "There are advancements in transportation. Which of the following is the impact of it on globalization ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -35890,7 +35526,7 @@ UP.socialPyq = [
     "src": "32/S/2 SST Set 2",
     "opts": [
       {
-        "en": "hristopher Columbus’s discovery of America? 1",
+        "en": "hristopher Columbus’s discovery of America?",
         "hi": ""
       },
       {
@@ -35906,7 +35542,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "rinjal # 32/S/2 SECTION B (Very Short Answer Type Questions) (4´2=8)",
+        "en": "rinjal # 32/S/2",
         "hi": ""
       }
     ],
@@ -35970,7 +35606,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "How did the transformation of trade in the sixteenth century impact the lives of people in Europe and America ? Explain. 2 SECTION C (Short Answer Type Questions) (5´3=15)",
+    "en": "How did the transformation of trade in the sixteenth century impact the lives of people in Europe and America ? Explain. 2",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36146,7 +35782,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Identify the odd one out from the following options : 1",
+    "en": "Identify the odd one out from the following options :",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36183,7 +35819,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Study the following data and answer the question that follows : 1",
+    "en": "Study the following data and answer the question that follows :",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36228,7 +35864,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the following scenario carefully and answer the question that follows : 1",
+    "en": "Read the following scenario carefully and answer the question that follows :",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36262,7 +35898,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth economic development and environmental sustainability are",
+        "en": "Both economic development and environmental sustainability are",
         "hi": ""
       },
       {
@@ -36289,7 +35925,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "The 73rd Amendment of the Indian Constitution ensures women’s representation at which of the following levels ? 1",
+    "en": "The 73rd Amendment of the Indian Constitution ensures women’s representation at which of the following levels ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36326,7 +35962,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Vertical division of power is : 1",
+    "en": "Vertical division of power is :",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36363,37 +35999,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read Assertion (A): Power sharing is the spirit of democracy. Reason (R):",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option. 1",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): Power sharing is the spirit of democracy. Reason (R):",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "legitimate government is one where all the groups connect with the government through their participation. Options:",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
-        "hi": ""
-      },
-      {
-        "en": "is true, but (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "is false, but (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -36412,7 +36036,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is a non-conventional source of energy ? 1",
+    "en": "Which one of the following is a non-conventional source of energy ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36490,7 +36114,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "prevalent for rainwater harvesting ? 1",
+    "en": "prevalent for rainwater harvesting ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36527,33 +36151,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read Assertion (A): We need to protect forests and wildlife. Reason (R): Conservation maintains ecological diversity.",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option. 1",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): We need to protect forests and wildlife. Reason (R): Conservation maintains ecological diversity. Options:",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is false, but (R) is true.",
-        "hi": ""
-      },
-      {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -36572,7 +36188,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Study the given picture. The work being done in the picture comes under which of the following sectors of the economy ? 1",
+    "en": "Study the given picture. The work being done in the picture comes under which of the following sectors of the economy ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36594,7 +36210,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "nimal husbandry comes under which of the following sectors of the economy? 1",
+        "en": "nimal husbandry comes under which of the following sectors of the economy?",
         "hi": ""
       },
       {
@@ -36629,7 +36245,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following states has the highest Human Development Index ? 1",
+    "en": "Which one of the following states has the highest Human Development Index ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36691,7 +36307,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "s. 3 SECTION D (Long Answer Type Questions) (4 5=20)",
+    "en": "s. 3",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36793,7 +36409,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following sources meets the needs of loan of rural households in India to the maximum extent ? 1",
+    "en": "Which one of the following sources meets the needs of loan of rural households in India to the maximum extent ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36830,7 +36446,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is the main source of a b 1",
+    "en": "Which one of the following is the main source of a b",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36867,7 +36483,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following orders has been passed by the Supreme Court to reform political parties in India ? 1",
+    "en": "Which one of the following orders has been passed by the Supreme Court to reform political parties in India ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36908,7 +36524,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is the majority community in Sri Lanka ? 1",
+    "en": "Which one of the following is the majority community in Sri Lanka ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -36955,7 +36571,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hina III. Japan IV. India Options:",
+        "en": "China III. Japan IV. India Options:",
         "hi": ""
       },
       {
@@ -36996,7 +36612,7 @@ UP.socialPyq = [
     "src": "32/S/3 SST Set 3",
     "opts": [
       {
-        "en": "mendment of 1992 regarding decentralisation of power in India? 1",
+        "en": "mendment of 1992 regarding decentralisation of power in India?",
         "hi": ""
       },
       {
@@ -37045,7 +36661,7 @@ UP.socialPyq = [
     "src": "32/S/3 SST Set 3",
     "opts": [
       {
-        "en": "hristopher Columbus’s discovery of America? 1",
+        "en": "hristopher Columbus’s discovery of America?",
         "hi": ""
       },
       {
@@ -37080,7 +36696,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is a feature of democracy ? 1",
+    "en": "Which of the following is a feature of democracy ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37117,7 +36733,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "There are advancements in transportation. Which of the following is the impact of it on globalization ? 1",
+    "en": "There are advancements in transportation. Which of the following is the impact of it on globalization ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37191,7 +36807,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Identify the odd one out from the following options : 1",
+    "en": "Identify the odd one out from the following options :",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37228,7 +36844,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Study the following data and answer the question that follows : 1",
+    "en": "Study the following data and answer the question that follows :",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37273,7 +36889,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the following scenario carefully and answer the question that follows : 1",
+    "en": "Read the following scenario carefully and answer the question that follows :",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37307,7 +36923,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "oth economic development and environmental sustainability are",
+        "en": "Both economic development and environmental sustainability are",
         "hi": ""
       },
       {
@@ -37334,7 +36950,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "The 73rd Amendment of the Indian Constitution ensures women’s representation at which of the following levels ? 1",
+    "en": "The 73rd Amendment of the Indian Constitution ensures women’s representation at which of the following levels ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37371,7 +36987,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37450,7 +37066,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ravida Munnetra Kazhagam – Tamil Nadu # 32/S/3 SECTION B (Very Short Answer Type Questions) (4´2=8)",
+        "en": "ravida Munnetra Kazhagam – Tamil Nadu # 32/S/3",
         "hi": ""
       }
     ],
@@ -37495,7 +37111,7 @@ UP.socialPyq = [
     "src": "32/S/3 SST Set 3",
     "opts": [
       {
-        "en": "xplain it with any two examples. 2 SECTION C (Short Answer Type Questions) (5´3=15)",
+        "en": "xplain it with any two examples. 2",
         "hi": ""
       }
     ],
@@ -37534,29 +37150,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : 1",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read both the statements carefully and choose the correct option : Assertion (A): Belgium’s ‘community government’ has the power regarding cultural, educational and language-related issues. Reason (R): The State Governments are subordinate to the Central Government in Belgium.",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
     "opts": [
       {
-        "en": "ssertion (A): Belgium’s ‘community government’ has the power regarding cultural, educational and language-related issues. Reason (R): The State Governments are subordinate to the Central Government in Belgium. Options:",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "is false, but (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -37674,7 +37286,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Match Column I with Column II and choose the correct option : 1",
+    "en": "Match Column I with Column II and choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37696,7 +37308,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "opper iii. Used in cement manufacturing",
+        "en": "Copper iii. Used in cement manufacturing",
         "hi": ""
       },
       {
@@ -37772,7 +37384,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Look at the picture given below. What does the image of Bharat Mata signify ? Choose the correct option : 1",
+    "en": "Look at the picture given below. What does the image of Bharat Mata signify ? Choose the correct option :",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37790,7 +37402,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Nationalism and democracy Note: The following question is for the Visually Impaired Candidates only, in lieu of Q. No. 8. Who among the following people established the ‘Swaraj Party’? 1",
+        "en": "Nationalism and democracy Note: The following question is for the Visually Impaired Candidates only, in lieu of Q. No. 8. Who among the following people established the ‘Swaraj Party’?",
         "hi": ""
       },
       {
@@ -37825,7 +37437,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "How did print culture contribute to the development of a sense of Indian nationalism ? Choose the most appropriate option from the following : 1",
+    "en": "How did print culture contribute to the development of a sense of Indian nationalism ? Choose the most appropriate option from the following :",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37862,7 +37474,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Vertical division of power is : 1",
+    "en": "Vertical division of power is :",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37899,7 +37511,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following states has the highest Human Development Index ? 1",
+    "en": "Which one of the following states has the highest Human Development Index ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37936,7 +37548,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following sources meets the needs of loan of rural households in India to the maximum extent ? 1",
+    "en": "Which one of the following sources meets the needs of loan of rural households in India to the maximum extent ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37973,7 +37585,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following orders has been passed by the Supreme Court to reform political parties in India ? 1",
+    "en": "Which one of the following orders has been passed by the Supreme Court to reform political parties in India ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -38014,7 +37626,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Study the given picture. The work being done in the picture comes under which of the following sectors of the economy ? 1",
+    "en": "Study the given picture. The work being done in the picture comes under which of the following sectors of the economy ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -38036,7 +37648,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "nimal husbandry comes under which of the following sectors of the economy? 1",
+        "en": "nimal husbandry comes under which of the following sectors of the economy?",
         "hi": ""
       },
       {
@@ -38071,7 +37683,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is the majority community in Sri Lanka ? 1",
+    "en": "Which one of the following is the majority community in Sri Lanka ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -38108,37 +37720,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read Assertion (A): Power sharing is the spirit of democracy. Reason (R):",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option. 1",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): Power sharing is the spirit of democracy. Reason (R):",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "legitimate government is one where all the groups connect with the government through their participation. Options:",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
-        "hi": ""
-      },
-      {
-        "en": "is true, but (R) is false.",
-        "hi": ""
-      },
-      {
-        "en": "is false, but (R) is true.",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],
@@ -38167,7 +37767,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "hina III. Japan IV. India Options:",
+        "en": "China III. Japan IV. India Options:",
         "hi": ""
       },
       {
@@ -38183,7 +37783,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Only I and IV are correct. SECTION B (Very Short Answer Type Questions) (4 2=8)",
+        "en": "Only I and IV are correct.",
         "hi": ""
       }
     ],
@@ -38247,7 +37847,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "vsa",
     "d": 2,
-    "en": "How has liberalization of trade and investment policies helped the globalization process ? Explain with an example. 2 666 32/S/3 SECTION C (Short Answer Type Questions) (5 3=15)",
+    "en": "How has liberalization of trade and investment policies helped the globalization process ? Explain with an example. 2 666 32/S/3",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -38307,7 +37907,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following is a non-conventional source of energy ? 1",
+    "en": "Which one of the following is a non-conventional source of energy ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -38467,33 +38067,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read",
+    "en": "Two statements are given below. They are Assertion (A) and Reason (R). Read Assertion (A): We need to protect forests and wildlife. Reason (R): Conservation maintains ecological diversity.",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
     "opts": [
       {
-        "en": "oth the statements and choose the correct option. 1",
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "ssertion (A): We need to protect forests and wildlife. Reason (R): Conservation maintains ecological diversity. Options:",
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
         "hi": ""
       },
       {
-        "en": "is true, but (R) is false.",
+        "en": "(A) is true, but (R) is false.",
         "hi": ""
       },
       {
-        "en": "is false, but (R) is true.",
-        "hi": ""
-      },
-      {
-        "en": "oth (A) and (R) are true and (R) is the correct explanation of (A).",
-        "hi": ""
-      },
-      {
-        "en": "oth (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "en": "(A) is false, but (R) is true.",
         "hi": ""
       }
     ],

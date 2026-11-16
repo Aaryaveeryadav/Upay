@@ -1,4 +1,5 @@
-UP.pyq = UP.pyq.concat([
+window.UP = window.UP || {};
+UP.pyq = (UP.pyq||[]).concat([
   {
     "id": "ell26u-s1v1-01",
     "cls": 10,
@@ -57,7 +58,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Attempt any Ten of the following questions : 10  1 = 10 (i) Reena always ______ the truth. (a) speak (b) speaks (c) will speak (d) speaking (ii) Select the correct option to fill in the blank for the given line : Bread and butter ______ my favourite breakfast. (a) is (b) am (c) are (d) has been (iii) Read the conversation between two friends Ravi and Reena. Complete the sentence by reporting Reena’s reply correctly. Ravi : “Reena, lend me hundred rupees’. Reena : “I don’t have it right now, but I will arrange it for you”. Ravi asked Reena to lend him hundred rupees, to which Reena replied that _______. (iv) Select the option that identifies the error and supplies the correction for the following line : I can run fast when I was young. Option no. Error Correction a was is b run ran c can could d when whence (v) Complete the given narrative, by filling in the blank with the correct option : Heena _______ from fever since last Sunday. (a) suffered (b) will suffer (c) suffer (d) has been suffering (vi) Fill in the blank by using the correct word in the bracket. Anyas _______ (eat) all the chocolates kept in the tray. (a) ate (b) eating (c) have eaten (d) eaten (vii) Report the dialogu",
+    "en": "Attempt any Ten of the following questions : 10 × 1 = 10 (i) Reena always ______ the truth. (a) speak (b) speaks (c) will speak (d) speaking (ii) Select the correct option to fill in the blank for the given line : Bread and butter ______ my favourite breakfast. (a) is (b) am (c) are (d) has been (iii) Read the conversation between two friends Ravi and Reena. Complete the sentence by reporting Reena’s reply correctly. Ravi : “Reena, lend me hundred rupees’. Reena : “I don’t have it right now, but I will arrange it for you”. Ravi asked Reena to lend him hundred rupees, to which Reena replied that _______. (iv) Select the option that identifies the error and supplies the correction for the following line : I can run fast when I was young. Option no. Error Correction a was is b run ran c can could d when whence (v) Complete the given narrative, by filling in the blank with the correct option : Heena _______ from fever since last Sunday. (a) suffered (b) will suffer (c) suffer (d) has been suffering (vi) Fill in the blank by using the correct word in the bracket. Anyas _______ (eat) all the chocolates kept in the tray. (a) ate (b) eating (c) have eaten (d) eaten (vii) Report the dialogu",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -123,7 +124,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "(b) Mrs. Hall almost fell down the stairs in hysterics. She was convinced that the room was haunted by spirits and that the stranger had somehow caused these to enter into her furniture. 5  1 = 5 (i) Mrs. Hall tripped because ______ (a) the floor was oily. (b) she was standing on a chair. (c) she was in a state of panic. (d) the door was slammed. (ii) Mrs. Hall suspected everything in the room was put under a spell of witchcraft by ______. (iii) Fill in the blank with one word only : Mrs. Hall was afraid that spirits had entered _______. (iv) According to the extract, the feeling of Mrs. Hall can be best described as (1) stunned (2) happy (3) awestruck (4) nervous (5) outraged (6) agitated Select the correct option : (a) (2) and (4) (b) (3) and (6) (c) (5) and (6) (d) (1) and (6) (v) ‘Spirits’ in the above lines means the same as (a) ghosts (b) conscience (c) ego (d) attitude",
+    "en": "(b) Mrs. Hall almost fell down the stairs in hysterics. She was convinced that the room was haunted by spirits and that the stranger had somehow caused these to enter into her furniture. 5 × 1 = 5 (i) Mrs. Hall tripped because ______ (a) the floor was oily. (b) she was standing on a chair. (c) she was in a state of panic. (d) the door was slammed. (ii) Mrs. Hall suspected everything in the room was put under a spell of witchcraft by ______. (iii) Fill in the blank with one word only : Mrs. Hall was afraid that spirits had entered _______. (iv) According to the extract, the feeling of Mrs. Hall can be best described as (1) stunned (2) happy (3) awestruck (4) nervous (5) outraged (6) agitated Select the correct option : (a) (2) and (4) (b) (3) and (6) (c) (5) and (6) (d) (1) and (6) (v) ‘Spirits’ in the above lines means the same as (a) ghosts (b) conscience (c) ego (d) attitude",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -145,7 +146,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "(b) He stalks in his vivid stripes 5  1 = 5 The few steps of his cage, On pads of velvet quiet, In his quiet rage He should be lurking in shadow Sliding through long grass Near the water hole Where plump deer pass. (i) Complete the sentence appropriately. The vivid stripes refer to the ______. (ii) Which word from the extract is the opposite of ‘loud’ ? (iii) The use of the phrase ‘pads of velvet’ means (a) neck (b) tail (c) skin (d) paws (iv) State whether the following statement is True or False : The confinement of the cramped space of the cage has restricted the tiger’s steps. (v) The tiger was lurking in shadow _________. (a) to catch its prey (b) as the cage was dark (c) as the velvet was quiet (d) as he was in a rage",
+    "en": "(b) He stalks in his vivid stripes 5 × 1 = 5 The few steps of his cage, On pads of velvet quiet, In his quiet rage He should be lurking in shadow Sliding through long grass Near the water hole Where plump deer pass. (i) Complete the sentence appropriately. The vivid stripes refer to the ______. (ii) Which word from the extract is the opposite of ‘loud’ ? (iii) The use of the phrase ‘pads of velvet’ means (a) neck (b) tail (c) skin (d) paws (iv) State whether the following statement is True or False : The confinement of the cramped space of the cage has restricted the tiger’s steps. (v) The tiger was lurking in shadow _________. (a) to catch its prey (b) as the cage was dark (c) as the velvet was quiet (d) as he was in a rage",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -167,7 +168,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Attempt any four out of the five questions given below in 40-50 words each. 4  3 = 12 (a) What did Pranjol and Rajvir do during the journey ? Why ? (b) Who read the letter sent by Lencho ? What did he do then ? (c) Where is Coorg located ? Write any two characteristics of the people of Coorg ? (d) How does the poem ‘The Tale of Custard The Dragon’ differ from the traditional ballad ? (e) What does the Buddha say about the world ?",
+    "en": "Attempt any four out of the five questions given below in 40-50 words each. 4 × 3 = 12 (a) What did Pranjol and Rajvir do during the journey ? Why ? (b) Who read the letter sent by Lencho ? What did he do then ? (c) Where is Coorg located ? Write any two characteristics of the people of Coorg ? (d) How does the poem ‘The Tale of Custard The Dragon’ differ from the traditional ballad ? (e) What does the Buddha say about the world ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -189,7 +190,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Attempt any two out of the three questions given below in 40-50 words each : 2  3 = 6 (a) Why does Anil not hand over Hari Singh to the police ? (b) What opinion did Mr. Weiherer, Ebright’s Social Science teacher have about him ? (c) What was Mr. Herriot’s strict advice ? Did Mrs. Pumphrey agree to his advice ?",
+    "en": "Attempt any two out of the three questions given below in 40-50 words each : 2 × 3 = 6 (a) Why does Anil not hand over Hari Singh to the police ? (b) What opinion did Mr. Weiherer, Ebright’s Social Science teacher have about him ? (c) What was Mr. Herriot’s strict advice ? Did Mrs. Pumphrey agree to his advice ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -299,7 +300,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Attempt any Ten of the following questions : 10  1 = 10 (i) Fill in the blank by choosing the correct option : The electricity department will ______ the power for two hours this evening. (a) shut out (b) shut off (c) shut down (d) shut in (ii) Read the conversation between the coach and the student. Complete the sentence by reporting the reply correctly : Coach : You must attend morning practice regularly. Student : Yes, I will as I am feeling stronger now. The coach reminded the student that he must attend morning practice regularly, to which the student replied _______. (iii) Select the correct option to fill in the blank for the given line, from a newspaper report. The report read, “there ______ traffic diversion due to the student parade on the main street.” (a) cannot be (b) should be (c) must be (d) will be (iv) Select the option that identifies the error and supplies the correction for the following line from the health report : The incidence of malaria have reduced in the city. Option No. Error Correction a incidence incident b have has c reduced reduction d in on (v) Complete the given narrative by filling in the blank with the correct option : The attendant _______ seve",
+    "en": "Attempt any Ten of the following questions : 10 × 1 = 10 (i) Fill in the blank by choosing the correct option : The electricity department will ______ the power for two hours this evening. (a) shut out (b) shut off (c) shut down (d) shut in (ii) Read the conversation between the coach and the student. Complete the sentence by reporting the reply correctly : Coach : You must attend morning practice regularly. Student : Yes, I will as I am feeling stronger now. The coach reminded the student that he must attend morning practice regularly, to which the student replied _______. (iii) Select the correct option to fill in the blank for the given line, from a newspaper report. The report read, “there ______ traffic diversion due to the student parade on the main street.” (a) cannot be (b) should be (c) must be (d) will be (iv) Select the option that identifies the error and supplies the correction for the following line from the health report : The incidence of malaria have reduced in the city. Option No. Error Correction a incidence incident b have has c reduced reduction d in on (v) Complete the given narrative by filling in the blank with the correct option : The attendant _______ seve",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -365,7 +366,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "(b) Mrs. Hall almost fell down the stairs in hysterics. She was convinced that the room was haunted by spirits and that the stranger had somehow caused these to enter into her furniture. 5  1 = 5 (i) Mrs. Hall tripped because ______ (a) the floor was oily. (b) she was standing on a chair. (c) she was in a state of panic. (d) the door was slammed. (ii) Mrs. Hall suspected everything in the room was put under a spell of witchcraft by ______. (iii) Fill in the blank with one word only : Mrs. Hall was afraid that spirits had entered her _______. (iv) According to the extract, the feeling of Mrs. Hall can be best described as (1) stunned (2) happy (3) awestruck (4) nervous (5) outraged (6) agitated Select the correct option : (a) (2) and (4) (b) (3) and (6) (c) (5) and (6) (d) (1) and (6) (v) ‘Spirits’ in the above lines means the same as (a) ghosts (b) conscience (c) ego (d) attitude",
+    "en": "(b) Mrs. Hall almost fell down the stairs in hysterics. She was convinced that the room was haunted by spirits and that the stranger had somehow caused these to enter into her furniture. 5 × 1 = 5 (i) Mrs. Hall tripped because ______ (a) the floor was oily. (b) she was standing on a chair. (c) she was in a state of panic. (d) the door was slammed. (ii) Mrs. Hall suspected everything in the room was put under a spell of witchcraft by ______. (iii) Fill in the blank with one word only : Mrs. Hall was afraid that spirits had entered her _______. (iv) According to the extract, the feeling of Mrs. Hall can be best described as (1) stunned (2) happy (3) awestruck (4) nervous (5) outraged (6) agitated Select the correct option : (a) (2) and (4) (b) (3) and (6) (c) (5) and (6) (d) (1) and (6) (v) ‘Spirits’ in the above lines means the same as (a) ghosts (b) conscience (c) ego (d) attitude",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -387,7 +388,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Attempt any one of the given two extracts : (a) Though to distinguish beasts of prey 5  1 = 5 The crocodiles you always may Tell from the Hyena thus : Hyenas come with merry smiles; But if they weep they’re crocodiles. (i) Select the appropriate option to complete the sentence, according to the extract : Crocodiles can be identified by their _______. (a) tears (b) attitude (c) smiles (d) attacks (ii) State whether the following statement is True or False : Hyenas are famous for weeping. (iii) ‘Novice’ in line 2 means the same as : (a) learner (b) beast (c) tender foot (d) beginner (iv) In this extract the poet has presented two different behavioural traits of animals. They are ______. (v) The poet uses ‘A novice might nonplus” instead of the novice might get confused. How does this usage impact the poem ? (a) adds an incorrect option. (b) it is associated with beasts. (c) it rhymes and adds humour. (d) it simplifies the meaning. OR (b) He stalks in his vivid stripes 5  1 = 5 The few steps of his cage, On pads of velvet quiet, In his quiet rage He should be lurking in shadow Sliding through long grass Near the water hole Where plump deer pass. (i) Complete the sentence appropriate",
+    "en": "Attempt any one of the given two extracts : (a) Though to distinguish beasts of prey 5 × 1 = 5 The crocodiles you always may Tell from the Hyena thus : Hyenas come with merry smiles; But if they weep they’re crocodiles. (i) Select the appropriate option to complete the sentence, according to the extract : Crocodiles can be identified by their _______. (a) tears (b) attitude (c) smiles (d) attacks (ii) State whether the following statement is True or False : Hyenas are famous for weeping. (iii) ‘Novice’ in line 2 means the same as : (a) learner (b) beast (c) tender foot (d) beginner (iv) In this extract the poet has presented two different behavioural traits of animals. They are ______. (v) The poet uses ‘A novice might nonplus” instead of the novice might get confused. How does this usage impact the poem ? (a) adds an incorrect option. (b) it is associated with beasts. (c) it rhymes and adds humour. (d) it simplifies the meaning. OR (b) He stalks in his vivid stripes 5 × 1 = 5 The few steps of his cage, On pads of velvet quiet, In his quiet rage He should be lurking in shadow Sliding through long grass Near the water hole Where plump deer pass. (i) Complete the sentence appropriate",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -409,7 +410,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Attempt any four out of the five questions given below in 40-50 words each. 4  3 = 12 (a) What did Pranjol and Rajvir do during the journey ? Why ? (b) Who read the letter sent by Lencho ? What did he do then ? (c) Where is Coorg located ? Write any two characteristics of the people of Coorg ? (d) Kisa Gotami went from door to door when her son died. What was the result ? (e) What did custard look like ?",
+    "en": "Attempt any four out of the five questions given below in 40-50 words each. 4 × 3 = 12 (a) What did Pranjol and Rajvir do during the journey ? Why ? (b) Who read the letter sent by Lencho ? What did he do then ? (c) Where is Coorg located ? Write any two characteristics of the people of Coorg ? (d) Kisa Gotami went from door to door when her son died. What was the result ? (e) What did custard look like ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -431,7 +432,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Attempt any two out of the three questions given below in 40-50 words each : 2  3 = 6 (a) Why does Anil not hand over Hari Singh to the police ? (b) What opinion did Mr. Weiherer, Ebright’s Social Science teacher have about him ? (c) What was Mr. Herriot’s strict advice ? Did Mrs. Pumphrey agree to his advice ?",
+    "en": "Attempt any two out of the three questions given below in 40-50 words each : 2 × 3 = 6 (a) Why does Anil not hand over Hari Singh to the police ? (b) What opinion did Mr. Weiherer, Ebright’s Social Science teacher have about him ? (c) What was Mr. Herriot’s strict advice ? Did Mrs. Pumphrey agree to his advice ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -541,7 +542,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Attempt any Ten of the following questions : 10  1 = 10 (i) Fill in the blank by choosing the correct option to complete the online update. The burglar _______ the house when the owners were away. (a) broke up (b) broke away (c) broke into (d) broke down (ii) Read the conversation between the shopkeeper and the customer. Complete the sentence by reporting the reply correctly : The shopkeeper : Do you want to buy the bead necklace ? The customer : I am looking for a more colourful one. The shopkeeper asked the customer whether she would buy the bead necklace to which the customer responded ________. (iii) Select the correct option to fill in the blank for the given line from the weather report. The report read, “there _____ heavy rainfall due to western disturbances over the Arabian Sea”. (a) should be (b) must be (c) ought to be (d) will be *^ (iv) Select the option that identifies the error and supplies the correction for the following line from a news report. : The traffic situation in the city calls out immediate intervention by the traffic police. Option No. Error Correction a traffic traffics b out for c immediate later d by with (v) Complete the given narrative by filling in",
+    "en": "Attempt any Ten of the following questions : 10 × 1 = 10 (i) Fill in the blank by choosing the correct option to complete the online update. The burglar _______ the house when the owners were away. (a) broke up (b) broke away (c) broke into (d) broke down (ii) Read the conversation between the shopkeeper and the customer. Complete the sentence by reporting the reply correctly : The shopkeeper : Do you want to buy the bead necklace ? The customer : I am looking for a more colourful one. The shopkeeper asked the customer whether she would buy the bead necklace to which the customer responded ________. (iii) Select the correct option to fill in the blank for the given line from the weather report. The report read, “there _____ heavy rainfall due to western disturbances over the Arabian Sea”. (a) should be (b) must be (c) ought to be (d) will be *^ (iv) Select the option that identifies the error and supplies the correction for the following line from a news report. : The traffic situation in the city calls out immediate intervention by the traffic police. Option No. Error Correction a traffic traffics b out for c immediate later d by with (v) Complete the given narrative by filling in",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -607,7 +608,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "(b) Mrs. Hall almost fell down the stairs in hysterics. She was convinced that the room was haunted by spirits and that the stranger had somehow caused these to enter into her furniture. 5  1 = 5 (i) Mrs. Hall tripped because ______ (a) the floor was oily. (b) she was standing on a chair. (c) she was in a state of panic. (d) the door was slammed. (ii) Mrs. Hall suspected everything in the room was put under a spell of witchcraft by ______. (iii) Fill in the blank with one word only : Mrs. Hall was afraid that spirits had entered her _______. (iv) According to the extract, the feeling of Mrs. Hall can be best described as (1) stunned (2) happy (3) awestruck (4) nervous (5) outraged (6) agitated Select the correct option : (a) (2) and (4) (b) (3) and (6) (c) (5) and (6) (d) (1) and (6) (v) ‘Spirits’ in the above lines means the same as (a) ghosts (b) conscience (c) ego (d) attitude",
+    "en": "(b) Mrs. Hall almost fell down the stairs in hysterics. She was convinced that the room was haunted by spirits and that the stranger had somehow caused these to enter into her furniture. 5 × 1 = 5 (i) Mrs. Hall tripped because ______ (a) the floor was oily. (b) she was standing on a chair. (c) she was in a state of panic. (d) the door was slammed. (ii) Mrs. Hall suspected everything in the room was put under a spell of witchcraft by ______. (iii) Fill in the blank with one word only : Mrs. Hall was afraid that spirits had entered her _______. (iv) According to the extract, the feeling of Mrs. Hall can be best described as (1) stunned (2) happy (3) awestruck (4) nervous (5) outraged (6) agitated Select the correct option : (a) (2) and (4) (b) (3) and (6) (c) (5) and (6) (d) (1) and (6) (v) ‘Spirits’ in the above lines means the same as (a) ghosts (b) conscience (c) ego (d) attitude",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -629,7 +630,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "(b) He stalks in his vivid stripes 5  1 = 5 The few steps of his cage, On pads of velvet quiet, In his quiet rage He should be lurking in shadow Sliding through long grass Near the water hole Where plump deer pass. (i) Complete the sentence appropriately. The vivid stripes refer to the ______. (ii) Which word from the extract is the opposite of ‘loud’ ? (iii) The use of the phrase ‘pads of velvet’ means (a) neck (b) tail (c) skin (d) paws (iv) State whether the following statement is True or False : The confinement of the cramped space of the cage has restricted the tiger’s steps. (v) The tiger was lurking in shadow __________ (a) to catch its prey (b) as the cage was dark (c) as the velvet was quiet (d) as he was in a rage",
+    "en": "(b) He stalks in his vivid stripes 5 × 1 = 5 The few steps of his cage, On pads of velvet quiet, In his quiet rage He should be lurking in shadow Sliding through long grass Near the water hole Where plump deer pass. (i) Complete the sentence appropriately. The vivid stripes refer to the ______. (ii) Which word from the extract is the opposite of ‘loud’ ? (iii) The use of the phrase ‘pads of velvet’ means (a) neck (b) tail (c) skin (d) paws (iv) State whether the following statement is True or False : The confinement of the cramped space of the cage has restricted the tiger’s steps. (v) The tiger was lurking in shadow __________ (a) to catch its prey (b) as the cage was dark (c) as the velvet was quiet (d) as he was in a rage",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -651,7 +652,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Attempt any four out of the five questions given below in 40-50 words each. 4  3 = 12 (a) What did Pranjol and Rajvir do during the journey ? Why ? (b) Who read the letter sent by Lencho ? What did he do then ? (c) Where is Coorg located ? Write any two characteristics of the people of Coorg ? (d) How did the other pets celebrate Custard getting rid of the pirate ? (e) What does Kisa Gotami ask for when she goes from house to house after she speaks with Buddha ? Does she get it ? Why ? Why not ?",
+    "en": "Attempt any four out of the five questions given below in 40-50 words each. 4 × 3 = 12 (a) What did Pranjol and Rajvir do during the journey ? Why ? (b) Who read the letter sent by Lencho ? What did he do then ? (c) Where is Coorg located ? Write any two characteristics of the people of Coorg ? (d) How did the other pets celebrate Custard getting rid of the pirate ? (e) What does Kisa Gotami ask for when she goes from house to house after she speaks with Buddha ? Does she get it ? Why ? Why not ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -673,7 +674,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Attempt any two out of the three questions given below in 40-50 words each : 2  3 = 6 (a) Why does Anil not hand over Hari Singh to the police ? (b) What opinion did Mr. Weiherer, Ebright’s Social Science teacher have about him ? (c) What was Mr. Herriot’s strict advice ? Did Mrs. Pumphrey agree to his advice ?",
+    "en": "Attempt any two out of the three questions given below in 40-50 words each : 2 × 3 = 6 (a) Why does Anil not hand over Hari Singh to the police ? (b) What opinion did Mr. Weiherer, Ebright’s Social Science teacher have about him ? (c) What was Mr. Herriot’s strict advice ? Did Mrs. Pumphrey agree to his advice ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -869,30 +870,13 @@ UP.pyq = UP.pyq.concat([
     "q": 7,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Attempt any one from (A) and (B) given below : (A) Read the following extract and answer the questions that follow : 5 1=5 Or if some time when roaming round, With black stripes on a yellow ground, Just notice if he eats you. This simple rule may help you learn The Bengal Tiger to discern. (i) a (a) zebra (b) Asian Tiger (c) Asian Lion (d) Bengal Tiger (ii) Complete the sentence appropriately. It is clear that lliteration is the poetic device used for roaming round se ___________. (Clue : explain how alliteration applies here) (iii) State whether the following statement is True or False : The extract helps to identify a Royal Bengal Tiger. (iv) In the given lines, what effect does the poet create ? e if he eats you. This simple rule may help you learn The Bengal Tiger to discern. (a) irony (b) terror (c) sympathy (d) criticism (v) Which word in the extract tells you that you have recognised (a) rule (b) discern (c) roaming (d) notice OR (B) Read the following extract and answer the questions that follow : 5 1=5 He hears the last voice at night. The patrolling cars, And stares with his brilliant eyes At the brilliant stars. He stalks in his vivid stripes (i) Whose is the last voice",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "noble wild beast greets you,",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2-2-1 ENGLISH L_L.pdf",
     "course": "ENG-LL-26-U"
   },
@@ -1128,30 +1112,13 @@ UP.pyq = UP.pyq.concat([
     "q": 7,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Attempt any one from (A) and (B) given below : (A) Read the following extract and answer the questions that follow : 5 1=5 Or if some time when roaming round, With black stripes on a yellow ground, Just notice if he eats you. This simple rule may help you learn The Bengal Tiger to discern. (i) (a) zebra (b) Asian Tiger (c) Asian Lion (d) Bengal Tiger (ii) Complete the sentence appropriately. It is clear t alliteration applies here) (iii) State whether the following statement is True or False : The extract helps to identify a Royal Bengal Tiger. (iv) In the given lines, what effect does the poet create ? This simple rule may help you learn (a) irony (b) terror (c) sympathy (d) criticism (v) Which word in the extract tells you that you have recognised (a) rule (b) discern (c) roaming (d) notice OR (B) Read the following extract and answer the questions that follow : 5 1=5 He hears the last voice at night. The patrolling cars, And stares with his brilliant eyes At the brilliant stars. He stalks in his vivid stripes (i) Whose is the last voice heard by the tiger ? (a) police jeep (b) patrolling cars (c) watchmen (d) roar of lion (ii) Complete the sentence appropriately. explain how rep",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "noble wild beast greets you,",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2-2-2 ENGLISH L_L.pdf",
     "course": "ENG-LL-26-U"
   },
@@ -1387,30 +1354,13 @@ UP.pyq = UP.pyq.concat([
     "q": 7,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Attempt any one from (A) and (B) given below : (A) Read the following extract and answer the questions that follow : 5 1=5 Or if some time when roaming round, With black stripes on a yellow ground, Just notice if he eats you. This simple rule may help you learn The Bengal Tiger to discern. (i) above lines ? (a) zebra (b) Asian Tiger (c) Asian Lion (d) Bengal Tiger (ii) Complete the sentence appropriately. alliteration applies here) (iii) State whether the following statement is True or False : The extract helps to identify a Royal Bengal Tiger. (iv) In the given lines, what effect does the poet create ? This simple rule may help you learn (a) irony (b) terror (c) sympathy (d) criticism (v) Which word in the extract tells you that you have recognised (a) rule (b) discern (c) roaming (d) notice OR (B) Read the following extract and answer the questions that follow : 5 1=5 He hears the last voice at night. The patrolling cars, And stares with his brilliant eyes At the brilliant stars. He stalks in his vivid stripes (i) Whose is the last voice heard by the tiger ? (a) police jeep (b) patrolling cars (c) watchmen (d) roar of lion (ii) Complete the sentence appropriately. brilliant eyes",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "noble wild beast greets you,",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2-2-3 ENGLISH L_L.pdf",
     "course": "ENG-LL-26-U"
   },
@@ -3100,7 +3050,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "(b) He stalks in his vivid stripes 5  1 = 5 The few steps of his cage On pads of velvet quiet In his quiet rage. He should be lurking in shadow Sliding through long grass Near the water hole Where plump deer pass (i) ‘He’ is in a rage because he is (a) hungry (b) tied (c) thirsty (d) in a cage (ii) He is lurking in the shadow because _______. (iii) The above lines express the tiger’s _______. (a) resignation (b) fear (c) anger (d) acceptance (iv) Complete the sentence appropriately : It is clear that metaphor is the poetic device used for ‘pads of velvet’ – because _______. (Clue : explain how metaphor is applied here.) (v) The contrast in the above extract is between life in the forest and life in the (a) circus (b) national park (c) cave (d) zoo",
+    "en": "(b) He stalks in his vivid stripes 5 × 1 = 5 The few steps of his cage On pads of velvet quiet In his quiet rage. He should be lurking in shadow Sliding through long grass Near the water hole Where plump deer pass (i) ‘He’ is in a rage because he is (a) hungry (b) tied (c) thirsty (d) in a cage (ii) He is lurking in the shadow because _______. (iii) The above lines express the tiger’s _______. (a) resignation (b) fear (c) anger (d) acceptance (iv) Complete the sentence appropriately : It is clear that metaphor is the poetic device used for ‘pads of velvet’ – because _______. (Clue : explain how metaphor is applied here.) (v) The contrast in the above extract is between life in the forest and life in the (a) circus (b) national park (c) cave (d) zoo",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -3122,7 +3072,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Read the following questions and answer any four of the five questions given below : 4  3 = 12 (a) What did Kisa Gotami do after the death of her only son ? (b) What are the raindrops compared to and why ? (c) How is the Goan baker still an important part of the life of a Goan village ? (d) How did Chubukov react when Lomov asked for the hand of his daughter in marriage ? (e) Why does Amanda wish to be a mermaid ?",
+    "en": "Read the following questions and answer any four of the five questions given below : 4 × 3 = 12 (a) What did Kisa Gotami do after the death of her only son ? (b) What are the raindrops compared to and why ? (c) How is the Goan baker still an important part of the life of a Goan village ? (d) How did Chubukov react when Lomov asked for the hand of his daughter in marriage ? (e) Why does Amanda wish to be a mermaid ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -3144,7 +3094,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Read the following questions and answer any two of the three questions that follow : 2  3 = 6 (a) Why did Hari Singh smile in his most appealing way towards the end of the story ? (b) What excuses did Mrs. Pumphrey make about Mr. Herriot’s advice ? (c) What lesson did Ebright learn when he did not win anything at a science fair ?",
+    "en": "Read the following questions and answer any two of the three questions that follow : 2 × 3 = 6 (a) Why did Hari Singh smile in his most appealing way towards the end of the story ? (b) What excuses did Mrs. Pumphrey make about Mr. Herriot’s advice ? (c) What lesson did Ebright learn when he did not win anything at a science fair ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -3342,7 +3292,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "(b) He stalks in his vivid stripes 5  1 = 5 The few steps of his cage On pads of velvet quiet In his quiet rage. He should be lurking in shadow Sliding through long grass Near the water hole Where plump deer pass (i) ‘He’ is in a rage because he is (a) hungry (b) tied (c) thirsty (d) in a cage (ii) He is lurking in the shadow because _______. (iii) The above lines express the tiger’s _______. (a) resignation (b) fear (c) anger (d) acceptance (iv) Complete the sentence appropriately : It is clear that metaphor is the poetic device used for ‘pads of velvet’ – because _______. (Clue : explain how metaphor is applied here.) (v) The contrast in the above extract is between life in the forest and life in the (a) circus (b) national park (c) cave (d) zoo",
+    "en": "(b) He stalks in his vivid stripes 5 × 1 = 5 The few steps of his cage On pads of velvet quiet In his quiet rage. He should be lurking in shadow Sliding through long grass Near the water hole Where plump deer pass (i) ‘He’ is in a rage because he is (a) hungry (b) tied (c) thirsty (d) in a cage (ii) He is lurking in the shadow because _______. (iii) The above lines express the tiger’s _______. (a) resignation (b) fear (c) anger (d) acceptance (iv) Complete the sentence appropriately : It is clear that metaphor is the poetic device used for ‘pads of velvet’ – because _______. (Clue : explain how metaphor is applied here.) (v) The contrast in the above extract is between life in the forest and life in the (a) circus (b) national park (c) cave (d) zoo",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -3364,7 +3314,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Read the following questions and answer any four of the five questions given below : 4  3 = 12 (a) What did Kisa Gotami do after the death of her only son ? (b) What are the raindrops compared to and why ? (c) How is the Goan baker still an important part of the life of a Goan village ? (d) The quarrel over Green Meadows is finally resolved. Explain. (e) Amanda gets a list of instructions from her mother of dos and don’ts. What do these tell you about the relationship between Amanda and her mother ?",
+    "en": "Read the following questions and answer any four of the five questions given below : 4 × 3 = 12 (a) What did Kisa Gotami do after the death of her only son ? (b) What are the raindrops compared to and why ? (c) How is the Goan baker still an important part of the life of a Goan village ? (d) The quarrel over Green Meadows is finally resolved. Explain. (e) Amanda gets a list of instructions from her mother of dos and don’ts. What do these tell you about the relationship between Amanda and her mother ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -3386,7 +3336,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Read the following questions and answer any two of the three questions that follow : 2  3 = 6 (a) Why did Hari Singh smile in his most appealing way towards the end of the story ? (b) What excuses did Mrs. Pumphrey make about Mr. Herriot’s advice ? (c) What lesson did Ebright learn when he did not win anything at a science fair ?",
+    "en": "Read the following questions and answer any two of the three questions that follow : 2 × 3 = 6 (a) Why did Hari Singh smile in his most appealing way towards the end of the story ? (b) What excuses did Mrs. Pumphrey make about Mr. Herriot’s advice ? (c) What lesson did Ebright learn when he did not win anything at a science fair ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -3584,7 +3534,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "(b) He stalks in his vivid stripes 5  1 = 5 The few steps of his cage On pads of velvet quiet In his quiet rage. He should be lurking in shadow Sliding through long grass Near the water hole Where plump deer pass (i) ‘He’ is in a rage because he is (a) hungry (b) tied (c) thirsty (d) in a cage (ii) He is lurking in the shadow because _______. (iii) The above lines express the tiger’s _______. (a) resignation (b) fear (c) anger (d) acceptance (iv) Complete the sentence appropriately : It is clear that metaphor is the poetic device used for ‘pads of velvet’ – because _______. (Clue : explain how metaphor is applied here.) (v) The contrast in the above extract is between life in the forest and life in the (a) circus (b) national park (c) cave (d) zoo",
+    "en": "(b) He stalks in his vivid stripes 5 × 1 = 5 The few steps of his cage On pads of velvet quiet In his quiet rage. He should be lurking in shadow Sliding through long grass Near the water hole Where plump deer pass (i) ‘He’ is in a rage because he is (a) hungry (b) tied (c) thirsty (d) in a cage (ii) He is lurking in the shadow because _______. (iii) The above lines express the tiger’s _______. (a) resignation (b) fear (c) anger (d) acceptance (iv) Complete the sentence appropriately : It is clear that metaphor is the poetic device used for ‘pads of velvet’ – because _______. (Clue : explain how metaphor is applied here.) (v) The contrast in the above extract is between life in the forest and life in the (a) circus (b) national park (c) cave (d) zoo",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -3606,7 +3556,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Read the following questions and answer any four of the five questions given below : 4  3 = 12 (a) What did Kisa Gotami do after the death of her only son ? (b) What are the raindrops compared to and why ? (c) How is the Goan baker still an important part of the life of a Goan village ? (d) Chubokov suspicious one accused when Lomov comes to his house. Explain. (e) Amanda’s mother gives her a list of do’s and don’ts. What impact does this have on Amanda ?",
+    "en": "Read the following questions and answer any four of the five questions given below : 4 × 3 = 12 (a) What did Kisa Gotami do after the death of her only son ? (b) What are the raindrops compared to and why ? (c) How is the Goan baker still an important part of the life of a Goan village ? (d) Chubokov suspicious one accused when Lomov comes to his house. Explain. (e) Amanda’s mother gives her a list of do’s and don’ts. What impact does this have on Amanda ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -3628,7 +3578,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Read the following questions and answer any two of the three questions that follow : 2  3 = 6 (a) Why did Hari Singh smile in his most appealing way towards the end of the story ? (b) What excuses did Mrs. Pumphrey make about Mr. Herriot’s advice ? (c) What lesson did Ebright learn when he did not win anything at a science fair ?",
+    "en": "Read the following questions and answer any two of the three questions that follow : 2 × 3 = 6 (a) Why did Hari Singh smile in his most appealing way towards the end of the story ? (b) What excuses did Mrs. Pumphrey make about Mr. Herriot’s advice ? (c) What lesson did Ebright learn when he did not win anything at a science fair ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -3848,7 +3798,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions, in about 40-50 words : 4  3 = 12 (i) How are the cultural and social fabric of Goa closely knit together with the traditional baker and his bread ? (Glimpses of India) (ii) Bring out the literal and metaphorical meaning of the word “plunge” with reference to the young seagull who failed to muster up the courage to the plunge. (Stories About Flying) (iii) What lesson does “For Anne Gregory” present for youthful love ? (iv) “Dust of Snow” presents the polar opposites black and white in a colour pallet. Justify, that ‘black’ and ‘white’ signify something deeper than the superficial meaning in the poem. (v) What is the vision of freedom that comes through the speech of Nelson Mandela ? { }",
+    "en": "Answer any four of the following five questions, in about 40-50 words : 4 × 3 = 12 (i) How are the cultural and social fabric of Goa closely knit together with the traditional baker and his bread ? (Glimpses of India) (ii) Bring out the literal and metaphorical meaning of the word “plunge” with reference to the young seagull who failed to muster up the courage to the plunge. (Stories About Flying) (iii) What lesson does “For Anne Gregory” present for youthful love ? (iv) “Dust of Snow” presents the polar opposites black and white in a colour pallet. Justify, that ‘black’ and ‘white’ signify something deeper than the superficial meaning in the poem. (v) What is the vision of freedom that comes through the speech of Nelson Mandela ? { }",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -3870,7 +3820,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions, in about 40-50 words : 2  3 = 6 (i) Why was Fowler interested in meeting Ausable ? (The Midnight Visitor) (ii) Based on your understanding of the story, how do you assess Bholi’s father ? (Bholi) (iii) What vision did Ebright have in raising a flock of butterflies ? (The Making of a Scientist)",
+    "en": "Answer any two of the following three questions, in about 40-50 words : 2 × 3 = 6 (i) Why was Fowler interested in meeting Ausable ? (The Midnight Visitor) (ii) Based on your understanding of the story, how do you assess Bholi’s father ? (Bholi) (iii) What vision did Ebright have in raising a flock of butterflies ? (The Making of a Scientist)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -4090,7 +4040,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions, in about 40-50 words : 4  3 = 12 (i) Anne calls herself that she is a chatterbox in her essay. Justify. (From the Diary of Anne Frank) (ii) Why does the poet say that the world will perish twice in the poem Fire and Ice ? (Fire and Ice) (iii) Mention the peculiarities of Otters based on your understanding of “Mijbil the Otter”. (iv) According to Buddha, who are wise men ? (The Sermon at Benares) (v) What are Mandela’s views of freedom as described in his autobiography ? { }",
+    "en": "Answer any four of the following five questions, in about 40-50 words : 4 × 3 = 12 (i) Anne calls herself that she is a chatterbox in her essay. Justify. (From the Diary of Anne Frank) (ii) Why does the poet say that the world will perish twice in the poem Fire and Ice ? (Fire and Ice) (iii) Mention the peculiarities of Otters based on your understanding of “Mijbil the Otter”. (iv) According to Buddha, who are wise men ? (The Sermon at Benares) (v) What are Mandela’s views of freedom as described in his autobiography ? { }",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -4112,7 +4062,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions, in about 40-50 words : 2  3 = 6 (i) How do Griffin’s attributes as a great scientist fade before his darker traits ? (Foot prints without Feet) (ii) Why did Hari Singh approach Anil ? (The Thief ’s Story) (iii) Horace Danky’s final arrest was a blessing in disguise. Explain. (A Question of Trust)",
+    "en": "Answer any two of the following three questions, in about 40-50 words : 2 × 3 = 6 (i) How do Griffin’s attributes as a great scientist fade before his darker traits ? (Foot prints without Feet) (ii) Why did Hari Singh approach Anil ? (The Thief ’s Story) (iii) Horace Danky’s final arrest was a blessing in disguise. Explain. (A Question of Trust)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -4332,7 +4282,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions, in about 40-50 words : 4  3 = 12 (i) The people of Coorg are said to be descendants of the Arabs. Elaborate. (Glimpses of India) (ii) Valli made careful and painstaking plans for her first bus journey. What were her plans ? (Madam Rides a Bus) { } (iii) Explain the contention of the families of Lomovs and Chubukov’s over the ownership of Oxen Meadows. (The Proposal) (iv) How are the daydreams that Amanda has different from her reality ? (Amanda) (v) After achieving political emancipation, what does Mandela want to do in South Africa ? (Nelson Mandela : Long Walk to Freedom)",
+    "en": "Answer any four of the following five questions, in about 40-50 words : 4 × 3 = 12 (i) The people of Coorg are said to be descendants of the Arabs. Elaborate. (Glimpses of India) (ii) Valli made careful and painstaking plans for her first bus journey. What were her plans ? (Madam Rides a Bus) { } (iii) Explain the contention of the families of Lomovs and Chubukov’s over the ownership of Oxen Meadows. (The Proposal) (iv) How are the daydreams that Amanda has different from her reality ? (Amanda) (v) After achieving political emancipation, what does Mandela want to do in South Africa ? (Nelson Mandela : Long Walk to Freedom)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -4354,7 +4304,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions, in about 40-50 words : 2  3 = 6 (i) How does Noodle deal with Think Tank mistakes without openly contradicting him ? (The Book that Saved the Earth) (ii) Bholi had many apprehensions about going to school yet she knew that she was going to a better place than her home. Explain. (Bholi) (iii) Why was Dr. Herriot really worried about Tricki ? (A Triumph of Surgery)",
+    "en": "Answer any two of the following three questions, in about 40-50 words : 2 × 3 = 6 (i) How does Noodle deal with Think Tank mistakes without openly contradicting him ? (The Book that Saved the Earth) (ii) Bholi had many apprehensions about going to school yet she knew that she was going to a better place than her home. Explain. (Bholi) (iii) Why was Dr. Herriot really worried about Tricki ? (A Triumph of Surgery)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -4462,30 +4412,13 @@ UP.pyq = UP.pyq.concat([
     "q": 3,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Complete any ten of twelve of the following tasks, as directed : (i) blank with the correct option to complete the report : By the end of this quarter, the assistant manager _______ on this campaign for eight months. (A) will be working (B) will have been working (C) will have working (D) would have been working (ii) Read the given sentence from a sales report. Identify the error and supply the correction in the given format : Being checked all the figures twice, she was sure there were no errors. Error Correction (iii) Read the conversation between the store supervisor and the salesman : Supervisor : “Did you switch off all the lights before leaving office yesterday ?” Salesman – “Yes, I did and I also handed over the keys to the night supervisor.” all the lights before leaving the office the day before. The salesman confirmed _________. Report the salesman’s response. { } (iv) A school Principal addressed Board aspirants and said : “_______ candidates must carry their identification proof.” Fill in the blank with the appropriate option : (A) Each (B) All (C) Every (D) One (v) Isha said to her parents, “My mentor will always guide me, even after this programme ends.” Report what I",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "manager wrote a report to his seniors about his team. Fill in the",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "1161-1_2-5-1 English (Lang. & Lit.) (1).pdf",
     "course": "ENG-LL-26-R"
   },
@@ -4523,30 +4456,13 @@ UP.pyq = UP.pyq.concat([
     "q": 5,
     "ch": null,
     "m": 5,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Others (browsing, reading news, etc.,) Analyse the data provided and write a paragraph analyzing how teenagers allocate their daily screen time. Focus on the activity that occupies the largest proportion of time and on other major and minor activities in descending order, and on the balance between entertainment and educational screen use. Conclude with an observation about the overall trend. OR (B) Read the given details of a community library designed for your neighbourhood :    storytelling sessions.  for students.  Outdoor reading space under trees for senior citizens.  Book-sharing stands where people can donate and borrow books freely. Analyse the details and write an analytical paragraph in about 120 words about the suitability of this library. Focus on factors such as accessibility, reading environment, suitability for different age groups, and community engagement. { } Section – C (40 Marks)",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "well lit and ventilated reading lounge.",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "1161-1_2-5-1 English (Lang. & Lit.) (1).pdf",
     "course": "ENG-LL-26-R"
   },
@@ -4608,7 +4524,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions, in about 40-50 words each : 4  3 = 12 (i) What lesson does the poet convey about nature in ‘How to Tell Wild Animals’ ? (ii) How does the short structure of poem ‘Dust of Snow’ enhance its message about emotional renewal ? Support your answer briefly. (iii) In ‘Mijbil the Otter’, how does the narrator’s patience contrast with the reactions of fellow passengers and local people ? What does this reveal about human understanding of the unfamiliar ? (iv) In ‘Madam Rides the Bus’, how does the contrast between Valli’s boldness and her emotional response to the dead cow shape your view of her maturity ? (v) What was Chubukov’s reaction when he heard about Lomov’s proposal for his daughter’s hand ? (The Proposal)",
+    "en": "Answer any four of the following five questions, in about 40-50 words each : 4 × 3 = 12 (i) What lesson does the poet convey about nature in ‘How to Tell Wild Animals’ ? (ii) How does the short structure of poem ‘Dust of Snow’ enhance its message about emotional renewal ? Support your answer briefly. (iii) In ‘Mijbil the Otter’, how does the narrator’s patience contrast with the reactions of fellow passengers and local people ? What does this reveal about human understanding of the unfamiliar ? (iv) In ‘Madam Rides the Bus’, how does the contrast between Valli’s boldness and her emotional response to the dead cow shape your view of her maturity ? (v) What was Chubukov’s reaction when he heard about Lomov’s proposal for his daughter’s hand ? (The Proposal)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -4630,7 +4546,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions, in about 40-50 words each : 2  3 = 6 (i) Why does Griffin, despite his scientific genius, end up leading a destructive life ? (Footprints Without Feet) 3 (ii) Why does Horace Danby consider himself an honest man despite being a thief ? How does this self-perception affect his decision in the story ? (A Question of Trust) 3 { } (iii) In ‘A Triumph of Surgery’, how does Tricki’s condition reflect the consequences of pampering pets excessively ? What does this suggest about human attachment ?",
+    "en": "Answer any two of the following three questions, in about 40-50 words each : 2 × 3 = 6 (i) Why does Griffin, despite his scientific genius, end up leading a destructive life ? (Footprints Without Feet) 3 (ii) Why does Horace Danby consider himself an honest man despite being a thief ? How does this self-perception affect his decision in the story ? (A Question of Trust) 3 { } (iii) In ‘A Triumph of Surgery’, how does Tricki’s condition reflect the consequences of pampering pets excessively ? What does this suggest about human attachment ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -4738,30 +4654,13 @@ UP.pyq = UP.pyq.concat([
     "q": 3,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Complete any ten of twelve of the following tasks, as directed : (i) blank with the correct option to complete the report : By the end of this quarter, the assistant manager _______ on this campaign for eight months. (A) will be working (B) will have been working (C) will have working (D) would have been working (ii) Read the given sentence from a sales report. Identify the error and supply the correction in the given format : Being checked all the figures twice, she was sure there were no errors. Error Correction (iii) Read the conversation between the store supervisor and the salesman : Supervisor : “Did you switch off all the lights before leaving office yesterday ?” Salesman – “Yes, I did and I also handed over the keys to the night supervisor.” all the lights before leaving the office the day before. The salesman confirmed _________. Report the salesman’s response. { } (iv) A school Principal addressed Board aspirants and said : “_______ candidates must carry their identification proof.” Fill in the blank with the appropriate option : (A) Each (B) All (C) Every (D) One (v) Isha said to her parents, “My mentor will always guide me, even after this programme ends.” Report what I",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "manager wrote a report to his seniors about his team. Fill in the",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "1161-2_2-5-2 English (Lang. & Lit.) (1).pdf",
     "course": "ENG-LL-26-R"
   },
@@ -4799,30 +4698,13 @@ UP.pyq = UP.pyq.concat([
     "q": 5,
     "ch": null,
     "m": 5,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Others (browsing, reading news, etc.,) Analyse the data provided and write a paragraph analyzing how teenagers allocate their daily screen time. Focus on the activity that occupies the largest proportion of time and on other major and minor activities in descending order, and on the balance between entertainment and educational screen use. Conclude with an observation about the overall trend. OR (B) Read the given details of a community library designed for your neighbourhood :    storytelling sessions.  for students.  Outdoor reading space under trees for senior citizens.  Book-sharing stands where people can donate and borrow books freely. Analyse the details and write an analytical paragraph in about 120 words about the suitability of this library. Focus on factors such as accessibility, reading environment, suitability for different age groups, and community engagement. { } Section – C (40 Marks)",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "well lit and ventilated reading lounge.",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "1161-2_2-5-2 English (Lang. & Lit.) (1).pdf",
     "course": "ENG-LL-26-R"
   },
@@ -4884,7 +4766,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions, in about 40-50 words each : 4  3 = 12 (i) In ‘From the Diary of Anne Frank’, how does Anne’s relationship with her diary help her cope with isolation and the fear of hiding ? (ii) In ‘Fire and Ice’, how does the poet use extreme symbols to warn against self-destructive emotions ? (iii) In ‘Two Stories About Flying – Part I’, how does the young seagull’s hesitation reflect a universal human fear ? How is it eventually overcome ? (iv) While arguing with Lomov, Natalya always emerged the winner. Justify. (The Proposal) 3 (v) In ‘Glimpses of India – Part I (Goa)’, how is the baker portrayed as a symbol of cultural nostalgia and changing times ?",
+    "en": "Answer any four of the following five questions, in about 40-50 words each : 4 × 3 = 12 (i) In ‘From the Diary of Anne Frank’, how does Anne’s relationship with her diary help her cope with isolation and the fear of hiding ? (ii) In ‘Fire and Ice’, how does the poet use extreme symbols to warn against self-destructive emotions ? (iii) In ‘Two Stories About Flying – Part I’, how does the young seagull’s hesitation reflect a universal human fear ? How is it eventually overcome ? (iv) While arguing with Lomov, Natalya always emerged the winner. Justify. (The Proposal) 3 (v) In ‘Glimpses of India – Part I (Goa)’, how is the baker portrayed as a symbol of cultural nostalgia and changing times ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -4906,7 +4788,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions, in about 40-50 words each : 2  3 = 6 (i) How did education change Bholi’s personality ? (Bholi) 3 (ii) Richard Ebright’s mother gifted him a book which became the turning point in his life. Discuss. (Making of a Scientist) 3 (iii) Had Anil really forgiven Hari Singh ? Support your answer with evidence from the text. (The Thief ’s Story) { }",
+    "en": "Answer any two of the following three questions, in about 40-50 words each : 2 × 3 = 6 (i) How did education change Bholi’s personality ? (Bholi) 3 (ii) Richard Ebright’s mother gifted him a book which became the turning point in his life. Discuss. (Making of a Scientist) 3 (iii) Had Anil really forgiven Hari Singh ? Support your answer with evidence from the text. (The Thief ’s Story) { }",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -5014,30 +4896,13 @@ UP.pyq = UP.pyq.concat([
     "q": 3,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Complete any ten of twelve of the following tasks, as directed : (i) blank with the correct option to complete the report : By the end of this quarter, the assistant manager _______ on this campaign for eight months. (A) will be working (B) will have been working (C) will have working (D) would have been working (ii) Read the given sentence from a sales report. Identify the error and supply the correction in the given format : Being checked all the figures twice, she was sure there were no errors. Error Correction (iii) Read the conversation between the store supervisor and the salesman : Supervisor : “Did you switch off all the lights before leaving office yesterday ?” Salesman – “Yes, I did and I also handed over the keys to the night supervisor.” all the lights before leaving the office the day before. The salesman confirmed _________. Report the salesman’s response. { } (iv) A school Principal addressed Board aspirants and said : “_______ candidates must carry their identification proof.” Fill in the blank with the appropriate option : (A) Each (B) All (C) Every (D) One (v) Isha said to her parents, “My mentor will always guide me, even after this programme ends.” Report what I",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "manager wrote a report to his seniors about his team. Fill in the",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "1161-3_2-5-3 English (Lang. & Lit.) (1).pdf",
     "course": "ENG-LL-26-R"
   },
@@ -5075,30 +4940,13 @@ UP.pyq = UP.pyq.concat([
     "q": 5,
     "ch": null,
     "m": 5,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Others (browsing, reading news, etc.,) Analyse the data provided and write a paragraph analyzing how teenagers allocate their daily screen time. Focus on the activity that occupies the largest proportion of time and on other major and minor activities in descending order, and on the balance between entertainment and educational screen use. Conclude with an observation about the overall trend. OR (B) Read the given details of a community library designed for your neighbourhood :    storytelling sessions.  for students.  Outdoor reading space under trees for senior citizens.  Book-sharing stands where people can donate and borrow books freely. Analyse the details and write an analytical paragraph in about 120 words about the suitability of this library. Focus on factors such as accessibility, reading environment, suitability for different age groups, and community engagement. { } Section – C (40 Marks)",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "well lit and ventilated reading lounge.",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "1161-3_2-5-3 English (Lang. & Lit.) (1).pdf",
     "course": "ENG-LL-26-R"
   },
@@ -5160,7 +5008,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions, in about 40-50 words each : 4  3 = 12 (i) In ‘Two stories about Flying – Part II (Black Aeroplane)’, what does the narrator’s experience suggest about unexpected help and mystery ? (ii) In ‘Dust of Snow’, what role does the unexpected moment play in shifting the speaker’s mood ? (iii) In ‘From the Diary of Anne Frank’, Anne’s writing reflects her maturity despite her young age. Elaborate. (iv) In ‘Glimpses of India – Part III (Tea from Assam)’, how does the story connect tea with both culture and economic significance ? (v) In ‘His First Flight’, the reactions of the young seagull’s family serve as both a challenge and a catalyst for his growth. How does this dual role reflect the complexities of support systems in real life ? (Two Stories about Flying)",
+    "en": "Answer any four of the following five questions, in about 40-50 words each : 4 × 3 = 12 (i) In ‘Two stories about Flying – Part II (Black Aeroplane)’, what does the narrator’s experience suggest about unexpected help and mystery ? (ii) In ‘Dust of Snow’, what role does the unexpected moment play in shifting the speaker’s mood ? (iii) In ‘From the Diary of Anne Frank’, Anne’s writing reflects her maturity despite her young age. Elaborate. (iv) In ‘Glimpses of India – Part III (Tea from Assam)’, how does the story connect tea with both culture and economic significance ? (v) In ‘His First Flight’, the reactions of the young seagull’s family serve as both a challenge and a catalyst for his growth. How does this dual role reflect the complexities of support systems in real life ? (Two Stories about Flying)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -5182,7 +5030,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions, in about 40-50 words each : 2  3 = 6 (i) In what way was Richard Ebright’s scientific journey enhanced by the support of his mother ? (The Making of a Scientist) (ii) How does the setting of the hotel room become a tool in Ausable’s plan to defeat Max ? (The Midnight Visitor) (iii) What was the passion of Horace Danby and how did he satisfy it ? (A Question of Trust) { }",
+    "en": "Answer any two of the following three questions, in about 40-50 words each : 2 × 3 = 6 (i) In what way was Richard Ebright’s scientific journey enhanced by the support of his mother ? (The Making of a Scientist) (ii) How does the setting of the hotel room become a tool in Ausable’s plan to defeat Max ? (The Midnight Visitor) (iii) What was the passion of Horace Danby and how did he satisfy it ? (A Question of Trust) { }",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -6082,30 +5930,13 @@ UP.pyq = UP.pyq.concat([
     "q": 7,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Read the following extracts and answer the questions for any one of the given two, (a) or (b) : (a) Though to distinguish beasts of prey The Crocodile you always may Tell from the Hyena thus: Hyenas come with merry smiles; But if they weep they’re Crocodiles. The true Chameleon is small, He hasn’t any ears at all, And not a single wing. If there is nothing on the tree, ’Tis the chameleon you see. (How to Tell Wild Animals) (i) How does the poet describe the crocodile’s tears ? Choose the correct option : (A) genuine and heartfelt (B) joyful and sincere (C) false and deceptive (D) cold and indifferent [ ] (ii) What confusion will a newcomer face while distinguishing between a hyena and a crocodile, as described humorously by the poet in the above extract ? (iii) Mention any two characteristics of a chameleon on the basis of the given extract. (iv) Fill in the blank with the correct option from those given in the brackets : The tone of the poet in the above lines is __________ (playful and humorous/serious and confused). OR (b) Did you finish your homework, Amanda? Did you tidy your room, Amanda? I thought I told you to clean your shoes, Amanda! (I am an orphan, roaming the street. I",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "novice might nonplus,",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2-2-1 (1).pdf",
     "course": "ENG-LL-26-V"
   },
@@ -6123,7 +5954,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) In the poem ‘Fire and Ice’, how does the intense human emotion symbolised by fire, lead to the destruction of the world ? (ii) Mention the details that Anne provides about her family in her diary. (From the Diary of Anne Frank) (iii) Bread plays a pivotal role in Goan culture and tradition. Support the statement with evidences from the text. (Glimpses of India : A Baker from Goa) (iv) What happened when Maxwell took Mijbil to the bathroom ? (Mijbil the Otter) (v) Despite her young age, how does Valli manage to gather the subtle details about the bus journey ? (Madam Rides the Bus) [ ]",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) In the poem ‘Fire and Ice’, how does the intense human emotion symbolised by fire, lead to the destruction of the world ? (ii) Mention the details that Anne provides about her family in her diary. (From the Diary of Anne Frank) (iii) Bread plays a pivotal role in Goan culture and tradition. Support the statement with evidences from the text. (Glimpses of India : A Baker from Goa) (iv) What happened when Maxwell took Mijbil to the bathroom ? (Mijbil the Otter) (v) Despite her young age, how does Valli manage to gather the subtle details about the bus journey ? (Madam Rides the Bus) [ ]",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -6145,7 +5976,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) Why does Hari Singh find it pleasant to work for Anil, though he was a thief ? (The Thief’s Story) (ii) How does Matilda face ‘the horrible life of necessity’ ? (The Necklace) (iii) The teacher built up Bholi’s confidence on her first day at school. Discuss. (Bholi)",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) Why does Hari Singh find it pleasant to work for Anil, though he was a thief ? (The Thief’s Story) (ii) How does Matilda face ‘the horrible life of necessity’ ? (The Necklace) (iii) The teacher built up Bholi’s confidence on her first day at school. Discuss. (Bholi)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -6341,30 +6172,13 @@ UP.pyq = UP.pyq.concat([
     "q": 7,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Read the following extracts and answer the questions for any one of the given two, (a) or (b) : (a) Though to distinguish beasts of prey The Crocodile you always may Tell from the Hyena thus: Hyenas come with merry smiles; But if they weep they’re Crocodiles. The true Chameleon is small, He hasn’t any ears at all, And not a single wing. If there is nothing on the tree, ’Tis the chameleon you see. (How to Tell Wild Animals) (i) How does the poet describe the crocodile’s tears ? Choose the correct option : (A) genuine and heartfelt (B) joyful and sincere (C) false and deceptive (D) cold and indifferent [ ] (ii) What confusion will a newcomer face while distinguishing between a hyena and a crocodile, as described humorously by the poet in the above extract ? (iii) Mention any two characteristics of a chameleon on the basis of the given extract. (iv) Fill in the blank with the correct option from those given in the brackets : The tone of the poet in the above lines is __________ (playful and humorous/serious and confused). OR (b) Did you finish your homework, Amanda? Did you tidy your room, Amanda? I thought I told you to clean your shoes, Amanda! (I am an orphan, roaming the street. I",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "novice might nonplus,",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2-2-2 (1).pdf",
     "course": "ENG-LL-26-V"
   },
@@ -6382,7 +6196,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) In what ways do the symbols of ‘Fire’ and ‘Ice’ in the poem ‘Fire and Ice’ serve as metaphors for opposing human impulses ? How do they contribute to the exploration of destructive capabilities of human beings ? (ii) What was the last task assigned to Anne Frank by Mr. Keesing due to her habit of talking and how does she show her ingenuity to answer it ? (From the Diary of Anne Frank) (iii) Mention the transition in the baker’s costume from the Portuguese days to that of the author’s childhood. (Glimpses of India : A Baker from Goa) (iv) In the statement, “When I returned, there was an appalling spectacle,” which spectacle is the author referring to ? Elucidate. (Mijbil the Otter) (v) What sacrifices did Valli have to make in order to save enough money for fulfilling her long-cherished desire and how do these sacrifices reflect her strong will power ? (Madam Rides the Bus) [ ]",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) In what ways do the symbols of ‘Fire’ and ‘Ice’ in the poem ‘Fire and Ice’ serve as metaphors for opposing human impulses ? How do they contribute to the exploration of destructive capabilities of human beings ? (ii) What was the last task assigned to Anne Frank by Mr. Keesing due to her habit of talking and how does she show her ingenuity to answer it ? (From the Diary of Anne Frank) (iii) Mention the transition in the baker’s costume from the Portuguese days to that of the author’s childhood. (Glimpses of India : A Baker from Goa) (iv) In the statement, “When I returned, there was an appalling spectacle,” which spectacle is the author referring to ? Elucidate. (Mijbil the Otter) (v) What sacrifices did Valli have to make in order to save enough money for fulfilling her long-cherished desire and how do these sacrifices reflect her strong will power ? (Madam Rides the Bus) [ ]",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -6404,7 +6218,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) Why does Hari Singh find it pleasant to work for Anil, though he was a thief ? (The Thief’s Story) (ii) How does Matilda face ‘the horrible life of necessity’ ? (The Necklace) (iii) The teacher built up Bholi’s confidence on her first day at school. Discuss. (Bholi)",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) Why does Hari Singh find it pleasant to work for Anil, though he was a thief ? (The Thief’s Story) (ii) How does Matilda face ‘the horrible life of necessity’ ? (The Necklace) (iii) The teacher built up Bholi’s confidence on her first day at school. Discuss. (Bholi)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -6600,30 +6414,13 @@ UP.pyq = UP.pyq.concat([
     "q": 7,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Read the following extracts and answer the questions for any one of the given two, (a) or (b) : (a) Though to distinguish beasts of prey The Crocodile you always may Tell from the Hyena thus: Hyenas come with merry smiles; But if they weep they’re Crocodiles. The true Chameleon is small, He hasn’t any ears at all, And not a single wing. If there is nothing on the tree, ’Tis the chameleon you see. (How to Tell Wild Animals) (i) How does the poet describe the crocodile’s tears ? Choose the correct option : (A) genuine and heartfelt (B) joyful and sincere (C) false and deceptive (D) cold and indifferent [ ] (ii) What confusion will a newcomer face while distinguishing between a hyena and a crocodile, as described humorously by the poet in the above extract ? (iii) Mention any two characteristics of a chameleon on the basis of the given extract. (iv) Fill in the blank with the correct option from those given in the brackets : The tone of the poet in the above lines is __________ (playful and humorous/serious and confused). OR (b) Did you finish your homework, Amanda? Did you tidy your room, Amanda? I thought I told you to clean your shoes, Amanda! (I am an orphan, roaming the street. I",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "novice might nonplus,",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2-2-3 (1).pdf",
     "course": "ENG-LL-26-V"
   },
@@ -6641,7 +6438,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) The tone of Robert Frost in the poem ‘Fire and Ice’ reflects his attitude towards the end of the world and human behaviour. Elaborate. (ii) In her essay ‘A Chatterbox’, how does Anne Frank justify her habit of talking as an aspect of her personality ? (From the Diary of Anne Frank) (iii) Personal anecdotes and memories of the author in ‘A Baker from Goa’ display the baker’s enduring presence and significance in Goan culture. Justify. (iv) How does the author’s portrayal of the air hostess in ‘Mijbil the Otter’ unveil the theme of kindness and empathy ? (v) The conductor’s cheerful attitude and light-hearted teasing transformed Valli’s ordinary bus journey into a memorable adventure. Illustrate with evidence from the text. (Madam Rides the Bus) [ ]",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) The tone of Robert Frost in the poem ‘Fire and Ice’ reflects his attitude towards the end of the world and human behaviour. Elaborate. (ii) In her essay ‘A Chatterbox’, how does Anne Frank justify her habit of talking as an aspect of her personality ? (From the Diary of Anne Frank) (iii) Personal anecdotes and memories of the author in ‘A Baker from Goa’ display the baker’s enduring presence and significance in Goan culture. Justify. (iv) How does the author’s portrayal of the air hostess in ‘Mijbil the Otter’ unveil the theme of kindness and empathy ? (v) The conductor’s cheerful attitude and light-hearted teasing transformed Valli’s ordinary bus journey into a memorable adventure. Illustrate with evidence from the text. (Madam Rides the Bus) [ ]",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -6663,7 +6460,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) Why does Hari Singh find it pleasant to work for Anil, though he was a thief ? (The Thief’s Story) (ii) How does Matilda face ‘the horrible life of necessity’ ? (The Necklace) (iii) The teacher built up Bholi’s confidence on her first day at school. Discuss. (Bholi)",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) Why does Hari Singh find it pleasant to work for Anil, though he was a thief ? (The Thief’s Story) (ii) How does Matilda face ‘the horrible life of necessity’ ? (The Necklace) (iii) The teacher built up Bholi’s confidence on her first day at school. Discuss. (Bholi)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -6771,30 +6568,13 @@ UP.pyq = UP.pyq.concat([
     "q": 3,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
-    "en": "Complete any ten of the following twelve tasks, as directed. 101=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a report. The auto driver did not sustain injuries, though the passenger who was __________ (sit) in the auto was injured. (ii) Read the given sentence from a story. Identify the error and supply the correction in the sentence. The fisherman requested the guards to let him go to meet the king, but they demands half of the profit from his reward. Use the given format for your response. Error Correction (iii) Fill in the blank by choosing the correct option given in the brackets : ____________ (All/Many/Each) girl in the class must have her/their own book. (iv) Report the dialogue between a mother and her son by completing the sentence : Mother : What have you bought from the store ? Son : Mother : How much did you pay for it ? Son : All the money father gave me yesterday. The mother asked her son what he had bought from the store. He replied that he had bought a soft toy. Then his mother enquired how much he had paid for that. Upon this he said that __________. 2/3/1 [ ] (v) Select the option that identifies the er",
+    "en": "Complete any ten of the following twelve tasks, as directed. 10×1=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a report. The auto driver did not sustain injuries, though the passenger who was __________ (sit) in the auto was injured. (ii) Read the given sentence from a story. Identify the error and supply the correction in the sentence. The fisherman requested the guards to let him go to meet the king, but they demands half of the profit from his reward. Use the given format for your response. Error Correction (iii) Fill in the blank by choosing the correct option given in the brackets : ____________ (All/Many/Each) girl in the class must have her/their own book. (iv) Report the dialogue between a mother and her son by completing the sentence : Mother : What have you bought from the store ? Son : Mother : How much did you pay for it ? Son : All the money father gave me yesterday. The mother asked her son what he had bought from the store. He replied that he had bought a soft toy. Then his mother enquired how much he had paid for that. Upon this he said that __________. 2/3/1 [ ] (v) Select the option that identifies the er",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "soft toy, mother.",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2-3-1 (1).pdf",
     "course": "ENG-LL-26-V"
   },
@@ -6900,7 +6680,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) Why does Mandela mention that he was prevented from fulfilling his obligations as a son, a brother, a father, and a husband ? (Nelson Mandela – Long Walk to Freedom) (ii) How does the line ‘people will take balls, balls will be lost always’, justify that material losses are necessary for emotional growth and to understand the harsh realities of life ? (The Ball Poem) (iii) Why did Kisa Gotami, despite her desperate efforts to find a solution for her grief, ultimately become weary and hopeless ? (The Sermon at Benares) (iv) What was Chubukov’s reaction when he discovered the actual purpose behind Lomov’s visit ? (The Proposal) (v) The religious man’s perspective in ‘For Anne Gregory’ reinforces the concept of divine love. Illustrate.",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) Why does Mandela mention that he was prevented from fulfilling his obligations as a son, a brother, a father, and a husband ? (Nelson Mandela – Long Walk to Freedom) (ii) How does the line ‘people will take balls, balls will be lost always’, justify that material losses are necessary for emotional growth and to understand the harsh realities of life ? (The Ball Poem) (iii) Why did Kisa Gotami, despite her desperate efforts to find a solution for her grief, ultimately become weary and hopeless ? (The Sermon at Benares) (iv) What was Chubukov’s reaction when he discovered the actual purpose behind Lomov’s visit ? (The Proposal) (v) The religious man’s perspective in ‘For Anne Gregory’ reinforces the concept of divine love. Illustrate.",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -6922,7 +6702,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) Considering the emotional attachment of Mrs. Pumphrey with Tricki, state the impact of the word ‘convalescing’ on her. (A Triumph of Surgery) [ ] (ii) Ausable displayed a remarkable presence of mind combined with a good sense of humour to handle Max. Justify. (The Midnight Visitor) (iii) What makes Bholi believe that the place where she was taken was better than her home ? (Bholi)",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) Considering the emotional attachment of Mrs. Pumphrey with Tricki, state the impact of the word ‘convalescing’ on her. (A Triumph of Surgery) [ ] (ii) Ausable displayed a remarkable presence of mind combined with a good sense of humour to handle Max. Justify. (The Midnight Visitor) (iii) What makes Bholi believe that the place where she was taken was better than her home ? (Bholi)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -7030,30 +6810,13 @@ UP.pyq = UP.pyq.concat([
     "q": 3,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
-    "en": "Complete any ten of the following twelve tasks, as directed. 101=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a report. The auto driver did not sustain injuries, though the passenger who was __________ (sit) in the auto was injured. (ii) Read the given sentence from a story. Identify the error and supply the correction in the sentence. The fisherman requested the guards to let him go to meet the king, but they demands half of the profit from his reward. Use the given format for your response. Error Correction (iii) Fill in the blank by choosing the correct option given in the brackets : ____________ (All/Many/Each) girl in the class must have her/their own book. (iv) Report the dialogue between a mother and her son by completing the sentence : Mother : What have you bought from the store ? Son : Mother : How much did you pay for it ? Son : All the money father gave me yesterday. The mother asked her son what he had bought from the store. He replied that he had bought a soft toy. Then his mother enquired how much he had paid for that. Upon this he said that __________. 2/3/2 [ ] (v) Select the option that identifies the er",
+    "en": "Complete any ten of the following twelve tasks, as directed. 10×1=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a report. The auto driver did not sustain injuries, though the passenger who was __________ (sit) in the auto was injured. (ii) Read the given sentence from a story. Identify the error and supply the correction in the sentence. The fisherman requested the guards to let him go to meet the king, but they demands half of the profit from his reward. Use the given format for your response. Error Correction (iii) Fill in the blank by choosing the correct option given in the brackets : ____________ (All/Many/Each) girl in the class must have her/their own book. (iv) Report the dialogue between a mother and her son by completing the sentence : Mother : What have you bought from the store ? Son : Mother : How much did you pay for it ? Son : All the money father gave me yesterday. The mother asked her son what he had bought from the store. He replied that he had bought a soft toy. Then his mother enquired how much he had paid for that. Upon this he said that __________. 2/3/2 [ ] (v) Select the option that identifies the er",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "soft toy, mother.",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2-3-2 (1).pdf",
     "course": "ENG-LL-26-V"
   },
@@ -7159,7 +6922,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) Although Mandela cherished the illusion of freedom during his boyhood, when he realized the harsh reality, it ignited the spark for a broader and more meaningful freedom for his people. Justify. (Nelson Mandela : Long Walk to Freedom) (ii) How does the expression ‘he is learning, well behind his desperate eyes’, convey the idea that though the boy is helpless yet he is learning a deeper lesson ? (The Ball Poem) (iii) Though he knew it was impossible, why did Buddha ask Kisa Gotami to bring mustard seeds from a house untouched by death ? (The Sermon at Benares) (iv) What reasons did Lomov put forward to assert his ownership of Oxen Meadows, despite facing strong opposition from Natalya and her father ? (The Proposal) (v) How does the tone of the poet in the poem ‘For Anne Gregory’ highlight the distinction between external beauty and inner worth ?",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) Although Mandela cherished the illusion of freedom during his boyhood, when he realized the harsh reality, it ignited the spark for a broader and more meaningful freedom for his people. Justify. (Nelson Mandela : Long Walk to Freedom) (ii) How does the expression ‘he is learning, well behind his desperate eyes’, convey the idea that though the boy is helpless yet he is learning a deeper lesson ? (The Ball Poem) (iii) Though he knew it was impossible, why did Buddha ask Kisa Gotami to bring mustard seeds from a house untouched by death ? (The Sermon at Benares) (iv) What reasons did Lomov put forward to assert his ownership of Oxen Meadows, despite facing strong opposition from Natalya and her father ? (The Proposal) (v) How does the tone of the poet in the poem ‘For Anne Gregory’ highlight the distinction between external beauty and inner worth ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -7181,7 +6944,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) Considering the emotional attachment of Mrs. Pumphrey with Tricki, state the impact of the word ‘convalescing’ on her. (A Triumph of Surgery) [ ] (ii) Ausable displayed a remarkable presence of mind combined with a good sense of humour to handle Max. Justify. (The Midnight Visitor) (iii) What makes Bholi believe that the place where she was taken was better than her home ? (Bholi)",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) Considering the emotional attachment of Mrs. Pumphrey with Tricki, state the impact of the word ‘convalescing’ on her. (A Triumph of Surgery) [ ] (ii) Ausable displayed a remarkable presence of mind combined with a good sense of humour to handle Max. Justify. (The Midnight Visitor) (iii) What makes Bholi believe that the place where she was taken was better than her home ? (Bholi)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -7289,30 +7052,13 @@ UP.pyq = UP.pyq.concat([
     "q": 3,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
-    "en": "Complete any ten of the following twelve tasks, as directed. 101=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a report. The auto driver did not sustain injuries, though the passenger who was __________ (sit) in the auto was injured. (ii) Read the given sentence from a story. Identify the error and supply the correction in the sentence. The fisherman requested the guards to let him go to meet the king, but they demands half of the profit from his reward. Use the given format for your response. Error Correction (iii) Fill in the blank by choosing the correct option given in the brackets : ____________ (All/Many/Each) girl in the class must have her/their own book. (iv) Report the dialogue between a mother and her son by completing the sentence : Mother : What have you bought from the store ? Son : Mother : How much did you pay for it ? Son : All the money father gave me yesterday. The mother asked her son what he had bought from the store. He replied that he had bought a soft toy. Then his mother enquired how much he had paid for that. Upon this he said that __________. 2/3/3 [ ] (v) Select the option that identifies the er",
+    "en": "Complete any ten of the following twelve tasks, as directed. 10×1=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a report. The auto driver did not sustain injuries, though the passenger who was __________ (sit) in the auto was injured. (ii) Read the given sentence from a story. Identify the error and supply the correction in the sentence. The fisherman requested the guards to let him go to meet the king, but they demands half of the profit from his reward. Use the given format for your response. Error Correction (iii) Fill in the blank by choosing the correct option given in the brackets : ____________ (All/Many/Each) girl in the class must have her/their own book. (iv) Report the dialogue between a mother and her son by completing the sentence : Mother : What have you bought from the store ? Son : Mother : How much did you pay for it ? Son : All the money father gave me yesterday. The mother asked her son what he had bought from the store. He replied that he had bought a soft toy. Then his mother enquired how much he had paid for that. Upon this he said that __________. 2/3/3 [ ] (v) Select the option that identifies the er",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "soft toy, mother.",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2-3-3 (1).pdf",
     "course": "ENG-LL-26-V"
   },
@@ -7418,7 +7164,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) Mandela emphasizes the need to liberate the oppressor. Illustrate. (Nelson Mandela : Long Walk to Freedom) (ii) In ‘The Ball Poem’, the poet asserts, ‘A dime, another ball, is worthless’, though material possessions can be easily replaced. Justify. (iii) Why did Kisa Gotami, in her grief, fail to realize the universality of death and what does she ask for despite the impossibility of reviving the dead ? (The Sermon at Benares) (iv) How does Natalya’s behaviour in ‘The Proposal’ reflect her stubbornness and insecurity ? (v) Analyse the young woman’s mention of dyeing her hair in the poem ‘For Anne Gregory’. How does her statement support the fact that most people love only external beauty ?",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) Mandela emphasizes the need to liberate the oppressor. Illustrate. (Nelson Mandela : Long Walk to Freedom) (ii) In ‘The Ball Poem’, the poet asserts, ‘A dime, another ball, is worthless’, though material possessions can be easily replaced. Justify. (iii) Why did Kisa Gotami, in her grief, fail to realize the universality of death and what does she ask for despite the impossibility of reviving the dead ? (The Sermon at Benares) (iv) How does Natalya’s behaviour in ‘The Proposal’ reflect her stubbornness and insecurity ? (v) Analyse the young woman’s mention of dyeing her hair in the poem ‘For Anne Gregory’. How does her statement support the fact that most people love only external beauty ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -7440,7 +7186,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) Considering the emotional attachment of Mrs. Pumphrey with Tricki, state the impact of the word ‘convalescing’ on her. (A Triumph of Surgery) [ ] (ii) Ausable displayed a remarkable presence of mind combined with a good sense of humour to handle Max. Justify. (The Midnight Visitor) (iii) What makes Bholi believe that the place where she was taken was better than her home ? (Bholi)",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) Considering the emotional attachment of Mrs. Pumphrey with Tricki, state the impact of the word ‘convalescing’ on her. (A Triumph of Surgery) [ ] (ii) Ausable displayed a remarkable presence of mind combined with a good sense of humour to handle Max. Justify. (The Midnight Visitor) (iii) What makes Bholi believe that the place where she was taken was better than her home ? (Bholi)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -8230,30 +7976,13 @@ UP.pyq = UP.pyq.concat([
     "q": 2,
     "ch": null,
     "m": 1,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Read the extract given below: 10 Marks (1) The National Education Policy 2020 proposes the revision and revamping of all aspects of education, including the educational structure, regulations and governance, to create a new system which is aligned with the aspirational goals of 21st century students. According to the policy, by 2025, at least 50% of learners through the school and higher education system shall have exposure to skill education, for which a clear action plan with targets and timelines are to be developed. (2) The policy aims to overcome the social status hierarchy associated with skill education and integration of skill education into mainstream education in all educational institutions in a phased manner. Beginning with skill exposure at early ages in middle and secondary school, quality skill education will be integrated smoothly into school and higher education. 2/1/2 /31 4 Await (3) Every child will learn at least one skill and is exposed to several more. This would lead to emphasizing the dignity of labour and importance of various vocations involving Indian arts and artisanship. (4) The development of skill capacities will go hand-in-hand with the development o",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "60% 0 52% eS £5",
-        "hi": ""
-      },
-      {
-        "en": "30% >= >= — SS",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2_1_2_English L & L.pdf",
     "course": "ENG-LL-26"
   },
@@ -8836,30 +8565,13 @@ UP.pyq = UP.pyq.concat([
     "q": 10,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Answer any one of the following two questions, in 100-120 words : (a) 2/2/1/21 What does Mr. Herriot mean by “happy period” for himself and his partners ? Explain. (A Triumph of Surgery) Justify how Ebright’s mother played an important part in his becoming a scientist. (The Making of a Scientist) Martian invasion. Comment with reference to ‘The Book that Saved the Earth’. You have been asked to present an analysis of Valli’s desire and Mandela’s vision and how they are respectively fulfilled. Write this presentation draft including your insights, in about 120 words, comparing the approaches of both Valli and Mandela. You may begin like this : One acknowledges that both, Valli and Mandela however, (Reference — Nelson Mandela — A Long Walk to Freedom & Madam Rides a Bus) OR 14 TN AAA A ADAAAAAAAAAAAAAAAG 2x3= 1x6= Oho iO} (b) You have been chosen to address the student gathering from the nearby schools, to speak on “How to Deal with Loss — Personal or Material”. Prepare the speech draft in not more than 120 words, with reference to the commonality of themes in John Benyman’s. ‘The Ball Poem’ and ‘A Sermon at Benaras’. You may begin this way. Good Morning everyone. Today, I’d like to",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "well known book of nursery rhymes saved the world from a",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2_2_1_English L & L.pdf",
     "course": "ENG-LL-26"
   },
@@ -9222,30 +8934,13 @@ UP.pyq = UP.pyq.concat([
     "q": 10,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Answer any one of the following two questions, in 100-120 words : (a) 2/2/3/21 What idea does the Postmaster come up with ? What did he do to stick to his resolution ? (A Letter to God) Briefly bring out the contrast between the young seagull’s initial attempts to fly and his first successful flight. (His First Flight) Explain why Amanda wants to be an orphan. Refer to the given lines, from the text — I am an orphan, roaming the street. I pattern soft dust with my hushed, bare feet. The silence is golden, the freedom is sweet. (Amanda) The most laid back individuals become converts to the life of high- energy adventure. Elaborate with reference to Coorg. (Glimpses of India) Bring out the central idea of the poem, ‘The Tale of Custard the Dragon’. What does Mr. Herriot mean by “happy period” for himself and his partners ? Explain. (A Triumph of Surgery) Justify how Ebright’s mother played an important part in his becoming a scientist. (The Making of a Scientist) Martian invasion. Comment with reference to ‘The Book that Saved the Earth’. You have been asked to present an analysis of Valli’s desire and Mandela’s vision and how they are respectively fulfilled. Write this presentation",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "well known book of nursery rhymes saved the world from a",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2_2_3_English L & L.pdf",
     "course": "ENG-LL-26"
   },
@@ -11676,30 +11371,13 @@ UP.pyq = UP.pyq.concat([
     "q": 1,
     "ch": null,
     "m": 1,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Read the following passage carefully : (1) For most of us, a strong immune system implies fewer sick leaves and being able to avoid seasonal colds, stomach bugs or just about any infection. But research shows that a ramped up immune system goes much further : it helps us age better and live longer. (2) Lifestyle plays a crucial role in proper functioning of your immune system. Chronic stress, such as prolonged job insecurity or a difficult marriage, takes a toll on many aspects of your health, including immunity. There’s compelling evidence that this kind of stress, causes a measurable decline in the immune system’s ability to fight infections. Try activities that relax you — yoga, meditation, trekking, volunteering or learning a new skill. (3) The more physically fit and active you are, the less likely you are to fall ill. Exercise helps flush out toxins, and increases the circulation of the body’s immune system cells. You need to exercise at least 30 minutes each day. Practice yoga and pranayama that focuses on deep breathing. (4) your plate with fruits and vegetables, especially purple, blue, green, red, orange and yellow veggies that are rich in antioxidants. (5) Excessive expo",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "nutritionally balanced diet is a key for a strong immunity. Fill",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "1-S English Communitive.pdf",
     "course": "ENG-COMM"
   },
@@ -11825,30 +11503,13 @@ UP.pyq = UP.pyq.concat([
     "q": 7,
     "ch": null,
     "m": 3,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "Complete the tasks (a) – (c), as directed. (a) Fill in the blanks (i) – (iii) with the appropriate option from those given in the brackets. Solar energy (i) __________ (must/should/could) become a viable source of power generation in our near future. (ii) ___________ (Take/Taking/Taken) both environmental and economic cost, it works cheaper (iii) ____________ (then/than/those) fossil fuels. (b) In the following paragraph, one word has been omitted in each line. In your answer sheet, remember to write the missing word along with the word that comes before and after it, as shown below. The first one has been done as an example. No. Text Word before Omission Word after e.g. Wetlands are world’s most productive environment. are the world’s (i) Wetlands stretch mountains to seas. _______ _______ _______ (ii) They support variety of species of fauna. _______ _______ _______ (iii) Wetlands provide a barricade the sea and land. _______ _______ _______ (iv) They are found all the world. _______ _______ _______ 1/S (c) Do as directed. (i) Rearrange the following jumbled words/phrases in the given dialogue to create a meaningful sentence. Do you have an idea that India is the sunny belt of th",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": ":",
-        "hi": ""
-      },
-      {
-        "en": ":",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "1-S English Communitive.pdf",
     "course": "ENG-COMM"
   },
@@ -12196,7 +11857,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Complete any ten of the following twelve tasks, as directed. 10´1=10 (i) Fill in the blank by using the correct form of the word in the bracket. My sister Mona _________ (fall) down when the dog leapt at her. (ii) Read the given sentence. Identify the error and supply the correction in the sentence. In the last five decades, the Rubik Cube has become one of the much absorbing puzzles for children. Error Correction (iii) Neha and Rudra were doing a theatre presentation. Report Neha’s question. Are the costumes and props ready for the rehearsal tomorrow ? (iv) Read the dialogue below : Vinay : Did you attend the seminar on “Effective Speaking,” yesterday ? Vineeta : Yes I did. I learnt some valuable skills from the speaker. Choose the correct option to complete the dialogue. Vinay asked Vineeta __________. Vineeta responded positively and said that she had learnt valuable skills from the speaker. (A) whether she had attended the seminar on “Effective Speaking”, the day before (B) if she had attended the seminar on “Effective Speaking”, yesterday (C) whether the seminar on “Effective Speaking”, the day before was good (D) whether she will be attending the seminar on “Effective Speakin",
+    "en": "Complete any ten of the following twelve tasks, as directed. 10×1=10 (i) Fill in the blank by using the correct form of the word in the bracket. My sister Mona _________ (fall) down when the dog leapt at her. (ii) Read the given sentence. Identify the error and supply the correction in the sentence. In the last five decades, the Rubik Cube has become one of the much absorbing puzzles for children. Error Correction (iii) Neha and Rudra were doing a theatre presentation. Report Neha’s question. Are the costumes and props ready for the rehearsal tomorrow ? (iv) Read the dialogue below : Vinay : Did you attend the seminar on “Effective Speaking,” yesterday ? Vineeta : Yes I did. I learnt some valuable skills from the speaker. Choose the correct option to complete the dialogue. Vinay asked Vineeta __________. Vineeta responded positively and said that she had learnt valuable skills from the speaker. (A) whether she had attended the seminar on “Effective Speaking”, the day before (B) if she had attended the seminar on “Effective Speaking”, yesterday (C) whether the seminar on “Effective Speaking”, the day before was good (D) whether she will be attending the seminar on “Effective Speakin",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -12306,7 +11967,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 4´3=12 (i) How does Frost in his poem “Fire and Ice” use symbolism to explore the destructive forces of desire and hatred ? (ii) Discuss, with examples from the text, the role of the baker in shaping the memories and experiences of the people in Goa. (Glimpses of India) (iii) In the poem “For Anne Gregory”, how does the poet challenge or conform to the traditional notions of beauty and love ? (iv) How does Mijbil’s incident with the bathroom tap help shape the understanding of his character ? (Mijbil the Otter) (v) In what way does ‘Anne Frank’s Diary’ reflect the theme of isolation ? (From the Diary of Anne Frank)",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) How does Frost in his poem “Fire and Ice” use symbolism to explore the destructive forces of desire and hatred ? (ii) Discuss, with examples from the text, the role of the baker in shaping the memories and experiences of the people in Goa. (Glimpses of India) (iii) In the poem “For Anne Gregory”, how does the poet challenge or conform to the traditional notions of beauty and love ? (iv) How does Mijbil’s incident with the bathroom tap help shape the understanding of his character ? (Mijbil the Otter) (v) In what way does ‘Anne Frank’s Diary’ reflect the theme of isolation ? (From the Diary of Anne Frank)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -12328,7 +11989,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 2´3=6 (i) What role does Tricki’s immediate environment play in ‘‘A Triumph of Surgery’’ ? (ii) Why does Griffin in “Footprints without Feet” flee from the store in London ? (iii) M. Loisel is a caring and considerate husband. Support the statement with evidence from the text. (The Necklace) 2/S/1",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) What role does Tricki’s immediate environment play in ‘‘A Triumph of Surgery’’ ? (ii) Why does Griffin in “Footprints without Feet” flee from the store in London ? (iii) M. Loisel is a caring and considerate husband. Support the statement with evidence from the text. (The Necklace) 2/S/1",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -12438,7 +12099,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Complete any ten of the following twelve tasks, as directed. 10´1=10 (i) Fill in the blank by using the correct form of the word in the bracket. My sister Mona _________ (fall) down when the dog leapt at her. (ii) Read the given sentence. Identify the error and supply the correction in the sentence. In the last five decades, the Rubik Cube has become one of the much absorbing puzzles for children. Error Correction (iii) Neha and Rudra were doing a theatre presentation. Report Neha’s question. Are the costumes and props ready for the rehearsal tomorrow ? (iv) Read the dialogue below : Vinay : Did you attend the seminar on “Effective Speaking,” yesterday ? Vineeta : Yes I did. I learnt some valuable skills from the speaker. Choose the correct option to complete the dialogue. Vinay asked Vineeta __________. Vineeta responded positively and said that she had learnt valuable skills from the speaker. (A) whether she had attended the seminar on “Effective Speaking”, the day before (B) if she had attended the seminar on “Effective Speaking”, yesterday (C) whether the seminar on “Effective Speaking”, the day before was good (D) whether she will be attending the seminar on “Effective Speakin",
+    "en": "Complete any ten of the following twelve tasks, as directed. 10×1=10 (i) Fill in the blank by using the correct form of the word in the bracket. My sister Mona _________ (fall) down when the dog leapt at her. (ii) Read the given sentence. Identify the error and supply the correction in the sentence. In the last five decades, the Rubik Cube has become one of the much absorbing puzzles for children. Error Correction (iii) Neha and Rudra were doing a theatre presentation. Report Neha’s question. Are the costumes and props ready for the rehearsal tomorrow ? (iv) Read the dialogue below : Vinay : Did you attend the seminar on “Effective Speaking,” yesterday ? Vineeta : Yes I did. I learnt some valuable skills from the speaker. Choose the correct option to complete the dialogue. Vinay asked Vineeta __________. Vineeta responded positively and said that she had learnt valuable skills from the speaker. (A) whether she had attended the seminar on “Effective Speaking”, the day before (B) if she had attended the seminar on “Effective Speaking”, yesterday (C) whether the seminar on “Effective Speaking”, the day before was good (D) whether she will be attending the seminar on “Effective Speakin",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -12548,7 +12209,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 4´3=12 (i) How, according to Robert Frost, will the world end twice in the poem ‘‘Fire and Ice’’ ? (ii) Why was Rajvir in ‘‘Glimpses of India’’ excited ? Why did Pranjol not share his excitement ? (iii) Why does the poem ‘‘For Anne Gregory’’ use the reference of ‘an old religious man’ ? (iv) Why did Maxwell call the airhostess ‘the very queen of her kind’ ? (Mijbil the Otter) (v) Describe Anne’s relationship with her grandmother. (From the Diary of Anne Frank)",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) How, according to Robert Frost, will the world end twice in the poem ‘‘Fire and Ice’’ ? (ii) Why was Rajvir in ‘‘Glimpses of India’’ excited ? Why did Pranjol not share his excitement ? (iii) Why does the poem ‘‘For Anne Gregory’’ use the reference of ‘an old religious man’ ? (iv) Why did Maxwell call the airhostess ‘the very queen of her kind’ ? (Mijbil the Otter) (v) Describe Anne’s relationship with her grandmother. (From the Diary of Anne Frank)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -12570,7 +12231,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 2´3=6 (i) What did Mrs. Pumphrey do to bring Tricki to normal health ? Was she successful ? (A Triumph of Surgery) (ii) Describe Griffin’s room as seen by the Hall couple. (Footprints without Feet) (iii) What changes came into the life of the Loisels after the necklace was lost ? (The Necklace) 2/S/2",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) What did Mrs. Pumphrey do to bring Tricki to normal health ? Was she successful ? (A Triumph of Surgery) (ii) Describe Griffin’s room as seen by the Hall couple. (Footprints without Feet) (iii) What changes came into the life of the Loisels after the necklace was lost ? (The Necklace) 2/S/2",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -12680,7 +12341,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Complete any ten of the following twelve tasks, as directed. 10´1=10 (i) Fill in the blank by using the correct form of the word in the bracket. My sister Mona _________ (fall) down when the dog leapt at her. (ii) Read the given sentence. Identify the error and supply the correction in the sentence. In the last five decades, the Rubik Cube has become one of the much absorbing puzzles for children. Error Correction (iii) Neha and Rudra were doing a theatre presentation. Report Neha’s question. Are the costumes and props ready for the rehearsal tomorrow ? (iv) Read the dialogue below : Vinay : Did you attend the seminar on “Effective Speaking,” yesterday ? Vineeta : Yes I did. I learnt some valuable skills from the speaker. Choose the correct option to complete the dialogue. Vinay asked Vineeta __________. Vineeta responded positively and said that she had learnt valuable skills from the speaker. (A) whether she had attended the seminar on “Effective Speaking”, the day before (B) if she had attended the seminar on “Effective Speaking”, yesterday (C) whether the seminar on “Effective Speaking”, the day before was good (D) whether she will be attending the seminar on “Effective Speakin",
+    "en": "Complete any ten of the following twelve tasks, as directed. 10×1=10 (i) Fill in the blank by using the correct form of the word in the bracket. My sister Mona _________ (fall) down when the dog leapt at her. (ii) Read the given sentence. Identify the error and supply the correction in the sentence. In the last five decades, the Rubik Cube has become one of the much absorbing puzzles for children. Error Correction (iii) Neha and Rudra were doing a theatre presentation. Report Neha’s question. Are the costumes and props ready for the rehearsal tomorrow ? (iv) Read the dialogue below : Vinay : Did you attend the seminar on “Effective Speaking,” yesterday ? Vineeta : Yes I did. I learnt some valuable skills from the speaker. Choose the correct option to complete the dialogue. Vinay asked Vineeta __________. Vineeta responded positively and said that she had learnt valuable skills from the speaker. (A) whether she had attended the seminar on “Effective Speaking”, the day before (B) if she had attended the seminar on “Effective Speaking”, yesterday (C) whether the seminar on “Effective Speaking”, the day before was good (D) whether she will be attending the seminar on “Effective Speakin",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -12790,7 +12451,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 4´3=12 (i) How does Robert Frost in the poem ‘‘Fire and Ice’’ present two contrasting ideas ? (ii) What is the story about the Kodavu people’s descent in ‘‘Glimpses of India’’ ? (iii) How does the poem ‘‘For Anne Gregory’’ give importance to ‘inner beauty’ ? (iv) Why did Maxwell keep an otter as a pet ? (Mijbil the Otter) (v) Why did Mr. Keesing decide to stop punishing Anne ? (From the Diary of Anne Frank)",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) How does Robert Frost in the poem ‘‘Fire and Ice’’ present two contrasting ideas ? (ii) What is the story about the Kodavu people’s descent in ‘‘Glimpses of India’’ ? (iii) How does the poem ‘‘For Anne Gregory’’ give importance to ‘inner beauty’ ? (iv) Why did Maxwell keep an otter as a pet ? (Mijbil the Otter) (v) Why did Mr. Keesing decide to stop punishing Anne ? (From the Diary of Anne Frank)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -12812,7 +12473,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 2´3=6 (i) Why was Mr. Herriot tempted to keep Tricki on as a permanent guest ? (A Triumph of Surgery) (ii) Describe Griffin’s experience in the shop of a theatrical company. (Footprints without Feet) (iii) Why was Mme Forestier shocked to hear Matilda’s story ? (The Necklace) 2/S/3",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) Why was Mr. Herriot tempted to keep Tricki on as a permanent guest ? (A Triumph of Surgery) (ii) Describe Griffin’s experience in the shop of a theatrical company. (Footprints without Feet) (iii) Why was Mme Forestier shocked to hear Matilda’s story ? (The Necklace) 2/S/3",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -15100,7 +14761,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) Mandela in his speech says, ‘‘The policy of apartheid created a deep and lasting wound in my country and my people.’’ Explain the significance of the word ‘‘wound’’ as used by Mandela. (Nelson Mandela – Long Walk to Freedom) (ii) ‘Dust of Snow’, by Robert Frost is a poem about nature and simplicity. Elaborate. (iii) Explain the reasons for Rajvir’s excitement on seeing the plantation and Pranjol’s lack of enthusiasm. (Glimpses of India – Tea from Assam) (iv) Analyze how Wells employs humour, rhyme, and exaggerated traits to not only entertain, but also educate readers about various wild animals. Explain. (How to Tell Wild Animals) (v) Mijbil’s transportation to England was no less than a nightmare for the author. Justify the statement using incidents from the lesson. (Mijbil the Otter)",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) Mandela in his speech says, ‘‘The policy of apartheid created a deep and lasting wound in my country and my people.’’ Explain the significance of the word ‘‘wound’’ as used by Mandela. (Nelson Mandela – Long Walk to Freedom) (ii) ‘Dust of Snow’, by Robert Frost is a poem about nature and simplicity. Elaborate. (iii) Explain the reasons for Rajvir’s excitement on seeing the plantation and Pranjol’s lack of enthusiasm. (Glimpses of India – Tea from Assam) (iv) Analyze how Wells employs humour, rhyme, and exaggerated traits to not only entertain, but also educate readers about various wild animals. Explain. (How to Tell Wild Animals) (v) Mijbil’s transportation to England was no less than a nightmare for the author. Justify the statement using incidents from the lesson. (Mijbil the Otter)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -15122,7 +14783,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) Analyze how Herriot uses Tricki and Mrs. Pumphrey’s relationship to comment on societal attitudes towards pets and the responsibilities associated with their care. (A Triumph of Surgery) (ii) Today reading books is on the decline because of the prevalence of electronic media. Contrarily, earth is saved by a ‘Book’ in the chapter ‘‘The Book That Saved the Earth’’. Elaborate. (iii) Discuss the character development of Griffin, as he grapples with the repercussions of his actions and attempts to navigate a world, where his once extraordinary abilities have become a burden. (Footprints without Feet)",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) Analyze how Herriot uses Tricki and Mrs. Pumphrey’s relationship to comment on societal attitudes towards pets and the responsibilities associated with their care. (A Triumph of Surgery) (ii) Today reading books is on the decline because of the prevalence of electronic media. Contrarily, earth is saved by a ‘Book’ in the chapter ‘‘The Book That Saved the Earth’’. Elaborate. (iii) Discuss the character development of Griffin, as he grapples with the repercussions of his actions and attempts to navigate a world, where his once extraordinary abilities have become a burden. (Footprints without Feet)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -15342,7 +15003,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) Why does the author use the phrase ‘‘that drove a law-abiding citizen to become a criminal’’ to describe Mandela ? (Nelson Mandela – Long Walk to Freedom) (ii) What happened to the poet when a dust of snow fell on him ? (Dust of Snow) (iii) How does the author support the view that the people of Coorg are possibly of Arabic descent ? (Glimpses of India – Coorg) (iv) Mention two points of difference between a Bengal tiger and an Asiatic lion. (How to Tell Wild Animals) (v) What efforts did the narrator make to get his mail from Europe ? (Mijbil the Otter)",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) Why does the author use the phrase ‘‘that drove a law-abiding citizen to become a criminal’’ to describe Mandela ? (Nelson Mandela – Long Walk to Freedom) (ii) What happened to the poet when a dust of snow fell on him ? (Dust of Snow) (iii) How does the author support the view that the people of Coorg are possibly of Arabic descent ? (Glimpses of India – Coorg) (iv) Mention two points of difference between a Bengal tiger and an Asiatic lion. (How to Tell Wild Animals) (v) What efforts did the narrator make to get his mail from Europe ? (Mijbil the Otter)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -15364,7 +15025,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) Analyze how Herriot uses Tricki and Mrs. Pumphrey’s relationship to comment on societal attitudes towards pets and the responsibilities associated with their care. (A Triumph of Surgery) (ii) Today reading books is on the decline because of the prevalence of electronic media. Contrarily, earth is saved by a ‘Book’ in the chapter ‘‘The Book That Saved the Earth’’. Elaborate. (iii) Discuss the character development of Griffin, as he grapples with the repercussions of his actions and attempts to navigate a world, where his once extraordinary abilities have become a burden. (Footprints without Feet)",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) Analyze how Herriot uses Tricki and Mrs. Pumphrey’s relationship to comment on societal attitudes towards pets and the responsibilities associated with their care. (A Triumph of Surgery) (ii) Today reading books is on the decline because of the prevalence of electronic media. Contrarily, earth is saved by a ‘Book’ in the chapter ‘‘The Book That Saved the Earth’’. Elaborate. (iii) Discuss the character development of Griffin, as he grapples with the repercussions of his actions and attempts to navigate a world, where his once extraordinary abilities have become a burden. (Footprints without Feet)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -15584,7 +15245,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) Mijbil spent most of his time in play. Elaborate. (Mijbil the Otter) (ii) What according to Rajvir was the Indian legend about the origin of tea ? (Glimpses of India – Tea from Assam) (iii) How did Mandela learn the meaning of courage ? (Nelson Mandela – Long Walk to Freedom) (iv) Why is the term ‘bear hug’ ironical ? (How to Tell Wild Animals) (v) What changes the mood of the poet in the poem ‘Dust of Snow’ ?",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) Mijbil spent most of his time in play. Elaborate. (Mijbil the Otter) (ii) What according to Rajvir was the Indian legend about the origin of tea ? (Glimpses of India – Tea from Assam) (iii) How did Mandela learn the meaning of courage ? (Nelson Mandela – Long Walk to Freedom) (iv) Why is the term ‘bear hug’ ironical ? (How to Tell Wild Animals) (v) What changes the mood of the poet in the poem ‘Dust of Snow’ ?",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -15606,7 +15267,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) Analyze how Herriot uses Tricki and Mrs. Pumphrey’s relationship to comment on societal attitudes towards pets and the responsibilities associated with their care. (A Triumph of Surgery) (ii) Today reading books is on the decline because of the prevalence of electronic media. Contrarily, earth is saved by a ‘Book’ in the chapter ‘‘The Book That Saved the Earth’’. Elaborate. (iii) Discuss the character development of Griffin, as he grapples with the repercussions of his actions and attempts to navigate a world, where his once extraordinary abilities have become a burden. (Footprints without Feet)",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) Analyze how Herriot uses Tricki and Mrs. Pumphrey’s relationship to comment on societal attitudes towards pets and the responsibilities associated with their care. (A Triumph of Surgery) (ii) Today reading books is on the decline because of the prevalence of electronic media. Contrarily, earth is saved by a ‘Book’ in the chapter ‘‘The Book That Saved the Earth’’. Elaborate. (iii) Discuss the character development of Griffin, as he grapples with the repercussions of his actions and attempts to navigate a world, where his once extraordinary abilities have become a burden. (Footprints without Feet)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -15716,7 +15377,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Complete any ten of the following twelve tasks, as directed. 101=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a letter. I believe that with your support and ________ (cooperate), we can find a mutually agreeable solution that meets the expectations of all stakeholders involved. (ii) Read the given sentence from an electric cooker’s instruction manual. Identify the error and supply the correction in the sentence. For avoid damaging the appliance, do not immerse the electric cooker in water or any other liquid. Use the given format for your response. Error Correction (iii) Amit and Pallavi had a conversation about the inauguration of Pallavi’s event. Report Amit’s question. Did you manage to get any sponsors for the inauguration event scheduled for the next month ? (iv) Read the dialogue between Bharti and her mother, Geeta, regarding Geeta’s birthday plans. Bharti : Do you want to go to a hill station on your birthday ? Geeta : No, I want to stay at home and call my friends over. Select the correct option that reports the above dialogue. Bharti asked Geeta if she wanted to go to a hill station on her birthday. Geeta replie",
+    "en": "Complete any ten of the following twelve tasks, as directed. 10×1=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a letter. I believe that with your support and ________ (cooperate), we can find a mutually agreeable solution that meets the expectations of all stakeholders involved. (ii) Read the given sentence from an electric cooker’s instruction manual. Identify the error and supply the correction in the sentence. For avoid damaging the appliance, do not immerse the electric cooker in water or any other liquid. Use the given format for your response. Error Correction (iii) Amit and Pallavi had a conversation about the inauguration of Pallavi’s event. Report Amit’s question. Did you manage to get any sponsors for the inauguration event scheduled for the next month ? (iv) Read the dialogue between Bharti and her mother, Geeta, regarding Geeta’s birthday plans. Bharti : Do you want to go to a hill station on your birthday ? Geeta : No, I want to stay at home and call my friends over. Select the correct option that reports the above dialogue. Bharti asked Geeta if she wanted to go to a hill station on her birthday. Geeta replie",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -15826,7 +15487,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) The transition from the apartheid system in South Africa to a new era of equality reflects broader historical trends in the struggle for human rights and social justice. Elaborate. (Nelson Mandela – Long Walk to Freedom) (ii) How does “The Ball Poem” by John Berryman explore the theme of loss and its profound impact on an individual’s emotional state and perception of the world ? (The Ball Poem) (iii) How does the description of the baker’s lifestyle in the past evoke a sense of nostalgia ? (Glimpses of India – A Baker from Goa) (iv) What role does each of Belinda’s pets play in the narrative ? Select any two of her pets. (The Tale of Custard the Dragon) (v) Valli found joy and fascination in the simple act of watching the bus pass through her village. What does this reveal about her perspective on life and her surroundings ? (Madam Rides the Bus)",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) The transition from the apartheid system in South Africa to a new era of equality reflects broader historical trends in the struggle for human rights and social justice. Elaborate. (Nelson Mandela – Long Walk to Freedom) (ii) How does “The Ball Poem” by John Berryman explore the theme of loss and its profound impact on an individual’s emotional state and perception of the world ? (The Ball Poem) (iii) How does the description of the baker’s lifestyle in the past evoke a sense of nostalgia ? (Glimpses of India – A Baker from Goa) (iv) What role does each of Belinda’s pets play in the narrative ? Select any two of her pets. (The Tale of Custard the Dragon) (v) Valli found joy and fascination in the simple act of watching the bus pass through her village. What does this reveal about her perspective on life and her surroundings ? (Madam Rides the Bus)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -15848,7 +15509,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) How did Ausable get rid of Max ? (The Midnight Visitor) (ii) Why does Mme Loisel hastily depart from the ball when her husband places a modest wrap on her shoulders ? (The Necklace) (iii) “In time you will be more learned than anyone else in the village. Then no one will ever be able to laugh at you.’’ What effect did her teacher’s words have on Bholi ? Elaborate. (Bholi)",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) How did Ausable get rid of Max ? (The Midnight Visitor) (ii) Why does Mme Loisel hastily depart from the ball when her husband places a modest wrap on her shoulders ? (The Necklace) (iii) “In time you will be more learned than anyone else in the village. Then no one will ever be able to laugh at you.’’ What effect did her teacher’s words have on Bholi ? Elaborate. (Bholi)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -15958,7 +15619,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Complete any ten of the following twelve tasks, as directed. 101=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a letter. I believe that with your support and ________ (cooperate), we can find a mutually agreeable solution that meets the expectations of all stakeholders involved. (ii) Read the given sentence from an electric cooker’s instruction manual. Identify the error and supply the correction in the sentence. For avoid damaging the appliance, do not immerse the electric cooker in water or any other liquid. Use the given format for your response. Error Correction (iii) Amit and Pallavi had a conversation about the inauguration of Pallavi’s event. Report Amit’s question. Did you manage to get any sponsors for the inauguration event scheduled for the next month ? (iv) Read the dialogue between Bharti and her mother, Geeta, regarding Geeta’s birthday plans. Bharti : Do you want to go to a hill station on your birthday ? Geeta : No, I want to stay at home and call my friends over. Select the correct option that reports the above dialogue. Bharti asked Geeta if she wanted to go to a hill station on her birthday. Geeta replie",
+    "en": "Complete any ten of the following twelve tasks, as directed. 10×1=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a letter. I believe that with your support and ________ (cooperate), we can find a mutually agreeable solution that meets the expectations of all stakeholders involved. (ii) Read the given sentence from an electric cooker’s instruction manual. Identify the error and supply the correction in the sentence. For avoid damaging the appliance, do not immerse the electric cooker in water or any other liquid. Use the given format for your response. Error Correction (iii) Amit and Pallavi had a conversation about the inauguration of Pallavi’s event. Report Amit’s question. Did you manage to get any sponsors for the inauguration event scheduled for the next month ? (iv) Read the dialogue between Bharti and her mother, Geeta, regarding Geeta’s birthday plans. Bharti : Do you want to go to a hill station on your birthday ? Geeta : No, I want to stay at home and call my friends over. Select the correct option that reports the above dialogue. Bharti asked Geeta if she wanted to go to a hill station on her birthday. Geeta replie",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -16068,7 +15729,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) How was Mij to be transported to England ? (Mijbil the Otter) (ii) Why did Anne think that paper has more patience than people ? (From the Diary of Anne Frank) (iii) How did the baker herald his arrival every morning ? (Glimpses of India – A Baker from Goa) (iv) Describe how the poem ‘The Trees’ brings out the conflict between man and nature. (v) How did Valli manage to gather information about the bus ride she was planning ? (Madam Rides the Bus)",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) How was Mij to be transported to England ? (Mijbil the Otter) (ii) Why did Anne think that paper has more patience than people ? (From the Diary of Anne Frank) (iii) How did the baker herald his arrival every morning ? (Glimpses of India – A Baker from Goa) (iv) Describe how the poem ‘The Trees’ brings out the conflict between man and nature. (v) How did Valli manage to gather information about the bus ride she was planning ? (Madam Rides the Bus)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -16090,7 +15751,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) How did Ausable get rid of Max ? (The Midnight Visitor) (ii) Why does Mme Loisel hastily depart from the ball when her husband places a modest wrap on her shoulders ? (The Necklace) (iii) “In time you will be more learned than anyone else in the village. Then no one will ever be able to laugh at you.’’ What effect did her teacher’s words have on Bholi ? Elaborate. (Bholi)",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) How did Ausable get rid of Max ? (The Midnight Visitor) (ii) Why does Mme Loisel hastily depart from the ball when her husband places a modest wrap on her shoulders ? (The Necklace) (iii) “In time you will be more learned than anyone else in the village. Then no one will ever be able to laugh at you.’’ What effect did her teacher’s words have on Bholi ? Elaborate. (Bholi)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -16200,7 +15861,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Complete any ten of the following twelve tasks, as directed. 101=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a letter. I believe that with your support and ________ (cooperate), we can find a mutually agreeable solution that meets the expectations of all stakeholders involved. (ii) Read the given sentence from an electric cooker’s instruction manual. Identify the error and supply the correction in the sentence. For avoid damaging the appliance, do not immerse the electric cooker in water or any other liquid. Use the given format for your response. Error Correction (iii) Amit and Pallavi had a conversation about the inauguration of Pallavi’s event. Report Amit’s question. Did you manage to get any sponsors for the inauguration event scheduled for the next month ? (iv) Read the dialogue between Bharti and her mother, Geeta, regarding Geeta’s birthday plans. Bharti : Do you want to go to a hill station on your birthday ? Geeta : No, I want to stay at home and call my friends over. Select the correct option that reports the above dialogue. Bharti asked Geeta if she wanted to go to a hill station on her birthday. Geeta replie",
+    "en": "Complete any ten of the following twelve tasks, as directed. 10×1=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a letter. I believe that with your support and ________ (cooperate), we can find a mutually agreeable solution that meets the expectations of all stakeholders involved. (ii) Read the given sentence from an electric cooker’s instruction manual. Identify the error and supply the correction in the sentence. For avoid damaging the appliance, do not immerse the electric cooker in water or any other liquid. Use the given format for your response. Error Correction (iii) Amit and Pallavi had a conversation about the inauguration of Pallavi’s event. Report Amit’s question. Did you manage to get any sponsors for the inauguration event scheduled for the next month ? (iv) Read the dialogue between Bharti and her mother, Geeta, regarding Geeta’s birthday plans. Bharti : Do you want to go to a hill station on your birthday ? Geeta : No, I want to stay at home and call my friends over. Select the correct option that reports the above dialogue. Bharti asked Geeta if she wanted to go to a hill station on her birthday. Geeta replie",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -16310,7 +15971,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) What strategy did the mother adopt to teach the young seagull how to fly ? (Two Stories about Flying – His First Flight) (ii) Why does the tiger in the zoo ignore the visitors ? (A Tiger in the Zoo) (iii) Why is the baker very important to the village folk ? (Glimpses of India – A Baker from Goa) (iv) Why did the poet not console the grief-stricken boy when he lost the ball ? (The Ball Poem) (v) Saving money for the bus journey was not easy for Valli. Explain. (Madam Rides the Bus)",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) What strategy did the mother adopt to teach the young seagull how to fly ? (Two Stories about Flying – His First Flight) (ii) Why does the tiger in the zoo ignore the visitors ? (A Tiger in the Zoo) (iii) Why is the baker very important to the village folk ? (Glimpses of India – A Baker from Goa) (iv) Why did the poet not console the grief-stricken boy when he lost the ball ? (The Ball Poem) (v) Saving money for the bus journey was not easy for Valli. Explain. (Madam Rides the Bus)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -16332,7 +15993,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) How did Ausable get rid of Max ? (The Midnight Visitor) (ii) Why does Mme Loisel hastily depart from the ball when her husband places a modest wrap on her shoulders ? (The Necklace) (iii) “In time you will be more learned than anyone else in the village. Then no one will ever be able to laugh at you.’’ What effect did her teacher’s words have on Bholi ? Elaborate. (Bholi)",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) How did Ausable get rid of Max ? (The Midnight Visitor) (ii) Why does Mme Loisel hastily depart from the ball when her husband places a modest wrap on her shoulders ? (The Necklace) (iii) “In time you will be more learned than anyone else in the village. Then no one will ever be able to laugh at you.’’ What effect did her teacher’s words have on Bholi ? Elaborate. (Bholi)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -16442,7 +16103,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Complete any ten of the following twelve tasks, as directed. 101=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a letter. Please do not hesitate to contact me if there are any further questions or if I can be of __________ (assist) in any way. (ii) Read the given sentence from a travel blog. Identify the error and supply the correction in the sentence. Spend a night under the stars in a traditional camp, where you can experience the warmth of our hospitable and savour the delicious local cuisine. Use the given format for your response. Error Correction (iii) Kriva and Manish had a conversation about the engagement of Kriva’s brother. Report Manish’s question. How far is the engagement venue from your house ? (iv) Read the dialogue between Ankita and her mentor, Sharwari, about the cultural exchange programme. Ankita : Are we going to get some time off for sightseeing ? Sharwari : Oh yes! All the students will get two days for sightseeing. Select the correct option to complete the reporting of the above dialogue. Ankita asked Sharwari if they were going to get some time off for sightseeing, to which Sharwari replied in the a",
+    "en": "Complete any ten of the following twelve tasks, as directed. 10×1=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a letter. Please do not hesitate to contact me if there are any further questions or if I can be of __________ (assist) in any way. (ii) Read the given sentence from a travel blog. Identify the error and supply the correction in the sentence. Spend a night under the stars in a traditional camp, where you can experience the warmth of our hospitable and savour the delicious local cuisine. Use the given format for your response. Error Correction (iii) Kriva and Manish had a conversation about the engagement of Kriva’s brother. Report Manish’s question. How far is the engagement venue from your house ? (iv) Read the dialogue between Ankita and her mentor, Sharwari, about the cultural exchange programme. Ankita : Are we going to get some time off for sightseeing ? Sharwari : Oh yes! All the students will get two days for sightseeing. Select the correct option to complete the reporting of the above dialogue. Ankita asked Sharwari if they were going to get some time off for sightseeing, to which Sharwari replied in the a",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -16484,30 +16145,13 @@ UP.pyq = UP.pyq.concat([
     "q": 5,
     "ch": null,
     "m": 5,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "enthusiasm (A) 1 only (B) 2, 3 and 5 (C) 4 only (D) 1, 4 and 5 OR (b) Don’t bite your nails, Amanda! Don’t hunch your shoulders, Amanda! Stop that slouching and sit up straight, Amanda! (There is a languid, emerald sea, where the sole inhabitant is me — a mermaid, drifting blissfully.) (Amanda) (i) How does the poet reinforce the contrast between what the narrator wants and what Amanda desires ? (ii) What tone is conveyed through the repetition of Amanda’s name in the line ? (A) loving (B) instructive (C) indifferent (D) playful (iii) How does the imagery of the emerald sea with the mermaid contrast with Amanda’s actions ? (iv) Select the option that applies the same rhyme scheme as the lines of the given extract. (A) Sitting by the pond Waving my wand Awaiting my dearest I looked above and beyond Awaiting my love The crackle stopped, as so did my heart (B) Sitting by the pond Holding tight to my bond I looked above and beyond Awaiting my love I heard her come, a sudden sound The crackle stopped, as so did my heart (C) I sat beside the pond with her Awaiting for her to come I looked above and beyond Awaiting my love The crackle stopped, as so did my heart (D) Sitting by the pond Aw",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "sudden sound, fluttered the dove",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2-3-1_English Language and Literature.pdf",
     "course": "ENG-LL-26"
   },
@@ -16569,7 +16213,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in 40 – 50 words each : 43=12 (i) The young seagull’s fear of flying and reluctance to leave his ledge contribute to the development of the theme of independence and courage in the story. Justify. (Two Stories about Flying) (ii) In what ways does the contrast between the tiger’s natural habitat and its confinement in a concrete cell enhance the poem’s exploration of captivity and its consequences for wild animals ? (A Tiger in the Zoo) (iii) The portrayal of the baker’s attire and role in the village emphasize the cultural and social significance of bread-making within the community. Elaborate. (Glimpses of India – A Baker from Goa) (iv) What happens to the house when the trees move out of it ? Comment. (The Trees) (v) How does Valli’s desire to ride the bus reflect her aspirations and challenges in context of her daily life ? (Madam Rides the Bus)",
+    "en": "Answer any four of the following five questions in 40 – 50 words each : 4×3=12 (i) The young seagull’s fear of flying and reluctance to leave his ledge contribute to the development of the theme of independence and courage in the story. Justify. (Two Stories about Flying) (ii) In what ways does the contrast between the tiger’s natural habitat and its confinement in a concrete cell enhance the poem’s exploration of captivity and its consequences for wild animals ? (A Tiger in the Zoo) (iii) The portrayal of the baker’s attire and role in the village emphasize the cultural and social significance of bread-making within the community. Elaborate. (Glimpses of India – A Baker from Goa) (iv) What happens to the house when the trees move out of it ? Comment. (The Trees) (v) How does Valli’s desire to ride the bus reflect her aspirations and challenges in context of her daily life ? (Madam Rides the Bus)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -16591,7 +16235,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) How do Anil’s initial reaction to Hari Singh’s cooking and his subsequent actions reflect Anil’s evolving relationship with Hari Singh ? (The Thief’s Story) (ii) The unexpected encounter with the voice in the doorway affects Horace’s burglary attempt. Elaborate. (A Question of Trust) (iii) The play, ‘The Book that Saved the Earth’, uses humour and misunderstandings between the Martians and Earthlings to explore the themes of perception and cultural differences. Comment.",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) How do Anil’s initial reaction to Hari Singh’s cooking and his subsequent actions reflect Anil’s evolving relationship with Hari Singh ? (The Thief’s Story) (ii) The unexpected encounter with the voice in the doorway affects Horace’s burglary attempt. Elaborate. (A Question of Trust) (iii) The play, ‘The Book that Saved the Earth’, uses humour and misunderstandings between the Martians and Earthlings to explore the themes of perception and cultural differences. Comment.",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -16701,7 +16345,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Complete any ten of the following twelve tasks, as directed. 101=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a letter. Please do not hesitate to contact me if there are any further questions or if I can be of __________ (assist) in any way. (ii) Read the given sentence from a travel blog. Identify the error and supply the correction in the sentence. Spend a night under the stars in a traditional camp, where you can experience the warmth of our hospitable and savour the delicious local cuisine. Use the given format for your response. Error Correction (iii) Kriva and Manish had a conversation about the engagement of Kriva’s brother. Report Manish’s question. How far is the engagement venue from your house ? (iv) Read the dialogue between Ankita and her mentor, Sharwari, about the cultural exchange programme. Ankita : Are we going to get some time off for sightseeing ? Sharwari : Oh yes! All the students will get two days for sightseeing. Select the correct option to complete the reporting of the above dialogue. Ankita asked Sharwari if they were going to get some time off for sightseeing, to which Sharwari replied in the a",
+    "en": "Complete any ten of the following twelve tasks, as directed. 10×1=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a letter. Please do not hesitate to contact me if there are any further questions or if I can be of __________ (assist) in any way. (ii) Read the given sentence from a travel blog. Identify the error and supply the correction in the sentence. Spend a night under the stars in a traditional camp, where you can experience the warmth of our hospitable and savour the delicious local cuisine. Use the given format for your response. Error Correction (iii) Kriva and Manish had a conversation about the engagement of Kriva’s brother. Report Manish’s question. How far is the engagement venue from your house ? (iv) Read the dialogue between Ankita and her mentor, Sharwari, about the cultural exchange programme. Ankita : Are we going to get some time off for sightseeing ? Sharwari : Oh yes! All the students will get two days for sightseeing. Select the correct option to complete the reporting of the above dialogue. Ankita asked Sharwari if they were going to get some time off for sightseeing, to which Sharwari replied in the a",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -16743,30 +16387,13 @@ UP.pyq = UP.pyq.concat([
     "q": 5,
     "ch": null,
     "m": 5,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "enthusiasm (A) 1 only (B) 2, 3 and 5 (C) 4 only (D) 1, 4 and 5 OR (b) Don’t bite your nails, Amanda! Don’t hunch your shoulders, Amanda! Stop that slouching and sit up straight, Amanda! (There is a languid, emerald sea, where the sole inhabitant is me — a mermaid, drifting blissfully.) (Amanda) (i) How does the poet reinforce the contrast between what the narrator wants and what Amanda desires ? (ii) What tone is conveyed through the repetition of Amanda’s name in the line ? (A) loving (B) instructive (C) indifferent (D) playful (iii) How does the imagery of the emerald sea with the mermaid contrast with Amanda’s actions ? (iv) Select the option that applies the same rhyme scheme as the lines of the given extract. (A) Sitting by the pond Waving my wand Awaiting my dearest I looked above and beyond Awaiting my love The crackle stopped, as so did my heart (B) Sitting by the pond Holding tight to my bond I looked above and beyond Awaiting my love I heard her come, a sudden sound The crackle stopped, as so did my heart (C) I sat beside the pond with her Awaiting for her to come I looked above and beyond Awaiting my love The crackle stopped, as so did my heart (D) Sitting by the pond Aw",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "sudden sound, fluttered the dove",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2-3-2_English Language and Literature.pdf",
     "course": "ENG-LL-26"
   },
@@ -16828,7 +16455,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in about 40 – 50 words each : 43=12 (i) Valli did not board the bus impulsively. Justify. (Madam Rides the Bus) (ii) Describe the changing reactions of Ink, Blink and Mustard to Custard’s bravado. (The Tale of Custard the Dragon) (iii) Why, according to Mandela, was it important to learn to hate ? (Nelson Mandela : Long Walk to Freedom) (iv) Why does the author refer to Coorg as the kingdom of heaven ? (Glimpses of India – Coorg) (v) The loss of the ball is a lesson to the boy. Elaborate. (The Ball Poem)",
+    "en": "Answer any four of the following five questions in about 40 – 50 words each : 4×3=12 (i) Valli did not board the bus impulsively. Justify. (Madam Rides the Bus) (ii) Describe the changing reactions of Ink, Blink and Mustard to Custard’s bravado. (The Tale of Custard the Dragon) (iii) Why, according to Mandela, was it important to learn to hate ? (Nelson Mandela : Long Walk to Freedom) (iv) Why does the author refer to Coorg as the kingdom of heaven ? (Glimpses of India – Coorg) (v) The loss of the ball is a lesson to the boy. Elaborate. (The Ball Poem)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -16850,7 +16477,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) How do Anil’s initial reaction to Hari Singh’s cooking and his subsequent actions reflect Anil’s evolving relationship with Hari Singh ? (The Thief’s Story) (ii) The unexpected encounter with the voice in the doorway affects Horace’s burglary attempt. Elaborate. (A Question of Trust) (iii) The play, ‘The Book that Saved the Earth’, uses humour and misunderstandings between the Martians and Earthlings to explore the themes of perception and cultural differences. Comment.",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) How do Anil’s initial reaction to Hari Singh’s cooking and his subsequent actions reflect Anil’s evolving relationship with Hari Singh ? (The Thief’s Story) (ii) The unexpected encounter with the voice in the doorway affects Horace’s burglary attempt. Elaborate. (A Question of Trust) (iii) The play, ‘The Book that Saved the Earth’, uses humour and misunderstandings between the Martians and Earthlings to explore the themes of perception and cultural differences. Comment.",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -16960,7 +16587,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Complete any ten of the following twelve tasks, as directed. 101=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a letter. Please do not hesitate to contact me if there are any further questions or if I can be of __________ (assist) in any way. (ii) Read the given sentence from a travel blog. Identify the error and supply the correction in the sentence. Spend a night under the stars in a traditional camp, where you can experience the warmth of our hospitable and savour the delicious local cuisine. Use the given format for your response. Error Correction (iii) Kriva and Manish had a conversation about the engagement of Kriva’s brother. Report Manish’s question. How far is the engagement venue from your house ? (iv) Read the dialogue between Ankita and her mentor, Sharwari, about the cultural exchange programme. Ankita : Are we going to get some time off for sightseeing ? Sharwari : Oh yes! All the students will get two days for sightseeing. Select the correct option to complete the reporting of the above dialogue. Ankita asked Sharwari if they were going to get some time off for sightseeing, to which Sharwari replied in the a",
+    "en": "Complete any ten of the following twelve tasks, as directed. 10×1=10 (i) Fill in the blank by using the correct form of the word in the brackets, for the given portion of a letter. Please do not hesitate to contact me if there are any further questions or if I can be of __________ (assist) in any way. (ii) Read the given sentence from a travel blog. Identify the error and supply the correction in the sentence. Spend a night under the stars in a traditional camp, where you can experience the warmth of our hospitable and savour the delicious local cuisine. Use the given format for your response. Error Correction (iii) Kriva and Manish had a conversation about the engagement of Kriva’s brother. Report Manish’s question. How far is the engagement venue from your house ? (iv) Read the dialogue between Ankita and her mentor, Sharwari, about the cultural exchange programme. Ankita : Are we going to get some time off for sightseeing ? Sharwari : Oh yes! All the students will get two days for sightseeing. Select the correct option to complete the reporting of the above dialogue. Ankita asked Sharwari if they were going to get some time off for sightseeing, to which Sharwari replied in the a",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -17002,30 +16629,13 @@ UP.pyq = UP.pyq.concat([
     "q": 5,
     "ch": null,
     "m": 5,
-    "kind": "mcq",
+    "kind": "saq",
     "d": 1,
     "en": "enthusiasm (A) 1 only (B) 2, 3 and 5 (C) 4 only (D) 1, 4 and 5 OR (b) Don’t bite your nails, Amanda! Don’t hunch your shoulders, Amanda! Stop that slouching and sit up straight, Amanda! (There is a languid, emerald sea, where the sole inhabitant is me — a mermaid, drifting blissfully.) (Amanda) (i) How does the poet reinforce the contrast between what the narrator wants and what Amanda desires ? (ii) What tone is conveyed through the repetition of Amanda’s name in the line ? (A) loving (B) instructive (C) indifferent (D) playful (iii) How does the imagery of the emerald sea with the mermaid contrast with Amanda’s actions ? (iv) Select the option that applies the same rhyme scheme as the lines of the given extract. (A) Sitting by the pond Waving my wand Awaiting my dearest I looked above and beyond Awaiting my love The crackle stopped, as so did my heart (B) Sitting by the pond Holding tight to my bond I looked above and beyond Awaiting my love I heard her come, a sudden sound The crackle stopped, as so did my heart (C) I sat beside the pond with her Awaiting for her to come I looked above and beyond Awaiting my love The crackle stopped, as so did my heart (D) Sitting by the pond Aw",
     "hi": "",
     "ans": "",
     "fig": null,
-    "opts": [
-      {
-        "en": "sudden sound, fluttered the dove",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      },
-      {
-        "en": "",
-        "hi": ""
-      }
-    ],
+    "opts": null,
     "src": "2-3-3_English Language and Literature.pdf",
     "course": "ENG-LL-26"
   },
@@ -17087,7 +16697,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any four of the following five questions in about 40 – 50 words each : 43=12 (i) Why was Valli’s excitement on the bus dampened on her return journey ? (Madam Rides the Bus) (ii) Why does Custard long for a nice safe cage ? (The Tale of Custard the Dragon) (iii) Why did Mandela feel that liberation was important for both, the oppressor and the oppressed ? (Nelson Mandela : Long Walk to Freedom) (iv) Mention any three surprises that await visitors in Coorg. (Glimpses of India – Coorg) (v) What does the poet mean by the phrase ‘And no one buys a ball back’ ? (The Ball Poem)",
+    "en": "Answer any four of the following five questions in about 40 – 50 words each : 4×3=12 (i) Why was Valli’s excitement on the bus dampened on her return journey ? (Madam Rides the Bus) (ii) Why does Custard long for a nice safe cage ? (The Tale of Custard the Dragon) (iii) Why did Mandela feel that liberation was important for both, the oppressor and the oppressed ? (Nelson Mandela : Long Walk to Freedom) (iv) Mention any three surprises that await visitors in Coorg. (Glimpses of India – Coorg) (v) What does the poet mean by the phrase ‘And no one buys a ball back’ ? (The Ball Poem)",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -17109,7 +16719,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Answer any two of the following three questions in 40 – 50 words each : 23=6 (i) How do Anil’s initial reaction to Hari Singh’s cooking and his subsequent actions reflect Anil’s evolving relationship with Hari Singh ? (The Thief’s Story) (ii) The unexpected encounter with the voice in the doorway affects Horace’s burglary attempt. Elaborate. (A Question of Trust) (iii) The play, ‘The Book that Saved the Earth’, uses humour and misunderstandings between the Martians and Earthlings to explore the themes of perception and cultural differences. Comment.",
+    "en": "Answer any two of the following three questions in 40 – 50 words each : 2×3=6 (i) How do Anil’s initial reaction to Hari Singh’s cooking and his subsequent actions reflect Anil’s evolving relationship with Hari Singh ? (The Thief’s Story) (ii) The unexpected encounter with the voice in the doorway affects Horace’s burglary attempt. Elaborate. (A Question of Trust) (iii) The play, ‘The Book that Saved the Earth’, uses humour and misunderstandings between the Martians and Earthlings to explore the themes of perception and cultural differences. Comment.",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -19507,7 +19117,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "Fill in the blanks (i) – (iii) with the appropriate option from those given in the brackets. 31=3 Renewable energy is essential to the world’s efforts to (i) ___________ (reduce/reducing/reduced) dependence on fossil fuels. Solar and wind power (ii) ___________ (has emerged/emerge/are emerging) as the most promising alternatives. Many countries (iii) ___________ (are invest/is investing/are investing) heavily in renewable infrastructure to ensure a sustainable future for the next generation.",
+    "en": "Fill in the blanks (i) – (iii) with the appropriate option from those given in the brackets. 3×1=3 Renewable energy is essential to the world’s efforts to (i) ___________ (reduce/reducing/reduced) dependence on fossil fuels. Solar and wind power (ii) ___________ (has emerged/emerge/are emerging) as the most promising alternatives. Many countries (iii) ___________ (are invest/is investing/are investing) heavily in renewable infrastructure to ensure a sustainable future for the next generation.",
     "hi": "",
     "ans": "",
     "fig": null,
@@ -19529,7 +19139,7 @@ UP.pyq = UP.pyq.concat([
     "m": 3,
     "kind": "saq",
     "d": 1,
-    "en": "In the following paragraph, one word has been omitted in each line. In your answer sheets, remember to write the missing word along with the word that comes before and after it, as shown below. The first one has been done as an example. 41=4 S.No. Text Word before Omission Word after e.g. Greenhouse gases trap heat the earth’s heat in the i. atmosphere. They released mainly from ii. burning fossil. An increase in greenhouse iii. gases leads global warming and climate change. iv. Melting glaciers and rising sea levels effects of climate change 1 [ ]",
+    "en": "In the following paragraph, one word has been omitted in each line. In your answer sheets, remember to write the missing word along with the word that comes before and after it, as shown below. The first one has been done as an example. 4×1=4 S.No. Text Word before Omission Word after e.g. Greenhouse gases trap heat the earth’s heat in the i. atmosphere. They released mainly from ii. burning fossil. An increase in greenhouse iii. gases leads global warming and climate change. iv. Melting glaciers and rising sea levels effects of climate change 1 [ ]",
     "hi": "",
     "ans": "",
     "fig": null,

@@ -122,13 +122,15 @@
       'assets/js/data/english10-ff.js',
       'assets/js/data/english10-fp.js',
       'assets/js/data/english10.js',
-      'assets/js/data/pyq-english.js'
+      'assets/js/data/pyq-english.js',
+      'assets/js/data/mcq-english.js'
     ],
     sanskrit: [
       'assets/sanskrit/sanskrit10-ch.js',
       'assets/sanskrit/sanskrit10-rich.js',
       'assets/sanskrit/sanskrit10-q.js',
-      'assets/sanskrit/sanskrit-papers.js'
+      'assets/sanskrit/sanskrit-papers.js',
+      'assets/sanskrit/pyq-sanskrit.js'
     ],
     physics: [
       'assets/js/data/physics12.js?v=26e5',

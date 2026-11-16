@@ -5603,7 +5603,7 @@ window.UP = window.UP || {};
   function qInScope(q) {
     if (!q) return false;
     const subj = qSubject(q);
-    if (UP.languagePolicy.issue(q.subject?q:{...q,subject:subj})) return false;
+    if (UP.languagePolicy.issue({...q,subject:subj})) return false;
     if (UP.questionQuality && UP.questionQuality.inspect(q, subj)) return false;
     if (String(subj) !== String(S.subject)) return false;
     const cls = qCls(q);

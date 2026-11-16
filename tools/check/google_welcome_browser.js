@@ -11,16 +11,8 @@ const {chromium}=require('playwright');
    let enabled=false;
    await page.route('https://fynlvbtefmawisauzitu.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({external:{google:enabled}})}));
    await page.goto(base+'#/login',{waitUntil:'domcontentloaded'});
-   const welcomeMotion=await page.locator('#kritin-welcome .welcome-line').evaluate(el=>({
-    lineDelay:getComputedStyle(el).animationDelay,
-    lineDuration:getComputedStyle(el).animationDuration,
-    brandDuration:getComputedStyle(el.parentElement).animationDuration
-   }));
-   assert.equal(welcomeMotion.lineDelay,'0s','underline starts immediately');
-   assert.equal(welcomeMotion.lineDuration,'0.2s','underline uses the requested 200ms reveal');
-   assert.equal(welcomeMotion.brandDuration,'0.42s','brand reveal no longer stretches the underline');
+   assert.equal(await page.locator('#kritin-welcome').count(),0,'welcome splash animation removed for instant load');
    await page.waitForFunction(()=>window.UP&&UP.S&&document.body.classList.contains('up-ready'));
-   await page.waitForFunction(()=>!document.getElementById('kritin-welcome'));
    await page.evaluate(()=>{window.__SUPABASE__={auth:{signInWithOAuth:async args=>{window.oauthArgs=args;return {error:{message:'Test refusal'}};}}};});
    assert.equal(await page.locator('[data-action=google-signin]').count(),1);
    await page.locator('[data-action=google-signin]').click();
@@ -58,12 +50,10 @@ const {chromium}=require('playwright');
   const broken=await browser.newPage({serviceWorkers:'block'});
   await broken.route('**/assets/js/boot.js*',r=>r.abort());
   await broken.goto(base,{waitUntil:'domcontentloaded'});
-  assert.equal(await broken.locator('#kritin-welcome').count(),1,'fresh load plays welcome');
-  await broken.waitForFunction(()=>!document.getElementById('kritin-welcome'),{},{timeout:3000});
+  assert.equal(await broken.locator('#kritin-welcome').count(),0,'welcome overlay remains disabled even if boot fails');
   await broken.reload({waitUntil:'domcontentloaded'});
-  assert.equal(await broken.locator('#kritin-welcome').count(),1,'reload replays welcome');
-  await broken.waitForFunction(()=>!document.getElementById('kritin-welcome'),{},{timeout:3000});
-  console.log('PASS reduced motion and welcome cleanup despite failed app boot');
+  assert.equal(await broken.locator('#kritin-welcome').count(),0,'reload stays free of welcome overlay');
+  console.log('PASS instant load without welcome animation, including reduced motion and failed app boot');
   await broken.close();
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
