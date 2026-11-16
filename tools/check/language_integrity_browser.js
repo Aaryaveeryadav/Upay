@@ -11,9 +11,11 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
   await page.waitForFunction(()=>UP.S.subject==='sanskrit'&&UP.sanskritPapers&&UP.sanskritPapers.length===9);
   await page.evaluate(()=>location.hash='#/pyq');await page.locator('.sanskrit-source-note').waitFor();
   assert.equal(await page.locator('.sanskrit-source-note a').count(),9);
-  assert.equal(await page.locator('.q-card.pyq').count(),0,'unverified Hindi prompts must not be Sanskrit board questions');
+  assert((await page.locator('.q-card.pyq').count())>0,'verified Sanskrit board questions should render');
+  assert.equal(await page.evaluate(()=>[...document.querySelectorAll('.q-card.pyq')].filter(el=>{const q=(UP.pyq||[]).find(x=>x.id===el.id);return q&&q.sourceVerified!==true;}).length),0,'unverified Hindi prompts must not be Sanskrit board questions');
   assert(!(await page.locator('.pyq-filter').innerText()).includes('__san-div'));
-  await page.evaluate(()=>location.hash='#/test');await page.locator('.sanskrit-source-note').waitFor();assert.equal(await page.locator('.q-card').count(),0);
+  await page.evaluate(()=>location.hash='#/test');await page.locator('.sanskrit-source-note').waitFor();
+  assert.equal(await page.evaluate(()=>[...document.querySelectorAll('.q-card')].filter(el=>{const q=(UP.pyq||[]).find(x=>x.id===el.id);return q&&q.sourceVerified!==true;}).length),0,'test view must not use unverified Sanskrit prompts');
   // Reviewed synthetic Sanskrit rows prove actual filtering, without translating real sources.
   await page.evaluate(()=>{
    UP.pyq.push(...[1,2,3].map(lv=>({id:'san-verified-fixture-'+lv,cls:10,subject:'sanskrit',board:'cbse',ch:lv===3?'san10-sk02':'san10-sk01',sourceVerified:true,sa:'सन्धिं कुरुत। प्रश्नः '+lv,hi:'Wrong Hindi fallback',m:1,lv,src:'reviewed fixture'})));
