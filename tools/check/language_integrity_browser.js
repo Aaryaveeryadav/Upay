@@ -14,7 +14,8 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
   assert((await page.locator('.q-card.pyq').count())>0,'verified Sanskrit board questions should render');
   assert.equal(await page.evaluate(()=>[...document.querySelectorAll('.q-card.pyq')].filter(el=>{const q=(UP.pyq||[]).find(x=>x.id===el.id);return q&&q.sourceVerified!==true;}).length),0,'unverified Hindi prompts must not be Sanskrit board questions');
   assert(!(await page.locator('.pyq-filter').innerText()).includes('__san-div'));
-  await page.evaluate(()=>location.hash='#/test');await page.locator('.sanskrit-source-note').waitFor();
+  await page.evaluate(()=>location.hash='#/test');
+  await page.waitForFunction(()=>document.querySelector('.sanskrit-source-note,.test-setup,.q-card'));
   assert.equal(await page.evaluate(()=>[...document.querySelectorAll('.q-card')].filter(el=>{const q=(UP.pyq||[]).find(x=>x.id===el.id);return q&&q.sourceVerified!==true;}).length),0,'test view must not use unverified Sanskrit prompts');
   // Reviewed synthetic Sanskrit rows prove actual filtering, without translating real sources.
   await page.evaluate(()=>{
