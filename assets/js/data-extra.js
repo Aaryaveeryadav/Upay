@@ -403,10 +403,16 @@ function buildSocialChapters() {
   var contentMap = {};
   (window.UP && UP.socialChapters || []).forEach(function(c){ contentMap[c.b+'-'+c.ch] = c; });
   var bookOrder = ['geo','eco','hist','civ'];
-  var out = []; var gid = 1;
+  var bookShort = {
+    geo:  { en:'Geography', hi:'भूगोल' },
+    eco:  { en:'Economics', hi:'अर्थशास्त्र' },
+    hist: { en:'History', hi:'इतिहास' },
+    civ:  { en:'Civics', hi:'नागरिकशास्त्र' }
+  };
+  var out = [];
   bookOrder.forEach(function(bk){
     out.push({
-      id: gid++, subject:'social',
+      id: 'sst-book-' + bk, subject:'social',
       en: '📘 ' + bookMeta[bk].en, hi: '📘 ' + bookMeta[bk].hi,
       enDesc: 'NCERT textbook — exercise questions + CBSE board PYQs.',
       hiDesc: 'NCERT पाठ्यपुस्तक — अभ्यास प्रश्न + CBSE बोर्ड PYQ.',
@@ -421,10 +427,11 @@ function buildSocialChapters() {
       if (!chs.some(function(x){ return x.ch===c.ch; })) chs.push({book:bk,ch:c.ch,count:0});
     });
     chs.sort(function(a,b){ return a.ch-b.ch; });
-    chs.forEach(function(c){
+    chs.forEach(function(c, bookIdx){
+      var bookChNo = bookIdx + 1;
       var content = contentMap[c.book+'-'+c.ch] || {};
-      var chName = content.en || ('Chapter '+c.ch);
-      var chNameHi = content.hi || ('अध्याय '+c.ch);
+      var chName = content.en || ('Chapter '+bookChNo);
+      var chNameHi = content.hi || ('अध्याय '+bookChNo);
       var concepts = [];
       (content.concepts || []).forEach(function(pt){
         concepts.push({ t:{en:'Key idea',hi:'मुख्य बिंदु'}, b:{en:pt.en, hi:pt.hi || pt.en} });
@@ -432,24 +439,24 @@ function buildSocialChapters() {
       if (!concepts.length) concepts.push({ t:{en:'In this chapter',hi:'इस अध्याय में'}, b:{en:chName, hi:chNameHi} });
       var chPyqs = [];
       (pyqByCh[c.ch] || []).slice().sort(function(a,b){ return (a.m||1)-(b.m||1); }).slice(0,5).forEach(function(q){
-        chPyqs.push({ board:'CBSE', year: q.y||'2025', marks: q.m||1, en: q.en||'', hi: q.hi||'' });
+        chPyqs.push({ id: q.id, board:'CBSE', year: q.y||'2025', marks: q.m||1, en: q.en||'', hi: q.hi||'', ans: q.ans||'', keyVerified: !!q.keyVerified, opts: q.opts||null });
       });
       var plan = [
         { en:'Read chapter once, underline definitions; write a one-sentence summary for each section.',
           hi:'अध्याय एक बार पढ़िए, परिभाषाएँ रेखांकित कीजिए; प्रत्येक उपखंड का एक-वाक्य सार लिखिए।' },
-        { en:'Solve all NCERT exercise Qs ('+c.count+' in bank) and mark any you miss.',
-          hi:'सभी NCERT अभ्यास प्रश्न ('+c.count+') हल कीजिए और जो छूटे चिह्नित कीजिए।' },
+        { en:'Solve all NCERT exercise Qs ('+c.count+' in bank) and check against the verified answers.',
+          hi:'सभी NCERT अभ्यास प्रश्न ('+c.count+') हल कीजिए और सत्यापित उत्तरों से मिलाइए।' },
         { en:'Practise 5 board PYQs of this chapter against the clock.',
           hi:'इस अध्याय के 5 बोर्ड PYQ समय-सीमा में हल कीजिए।' }
       ];
       var kwEn = [chName].concat((content.terms||'').split(',').filter(Boolean).slice(0,8));
       out.push({
-        id: gid++, subject:'social',
-        en: 'Ch ' + c.ch + ' — ' + chName,
-        hi: 'अध्याय ' + c.ch + ' — ' + chNameHi,
+        id: c.ch, no: bookChNo, subject:'social',
+        en: bookShort[bk].en + ' Ch ' + bookChNo + ' — ' + chName,
+        hi: bookShort[bk].hi + ' अध्याय ' + bookChNo + ' — ' + chNameHi,
         enDesc: bookMeta[bk].en + ' · ' + c.count + ' NCERT Qs' + (chPyqs.length?' · '+chPyqs.length+' PYQ samples':''),
         hiDesc: bookMeta[bk].hi + ' · ' + c.count + ' NCERT प्रश्न' + (chPyqs.length?' · '+chPyqs.length+' PYQ नमूने':''),
-        weight: 5, demand: 'exercise', book: c.book, ch: c.ch,
+        weight: 5, demand: 'moderate', book: c.book, ch: c.ch,
         concepts: concepts, formulas: [], pyqs: chPyqs, plan: plan,
         keywords: { en: kwEn, hi: [chNameHi] }
       });

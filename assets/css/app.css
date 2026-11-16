@@ -214,7 +214,7 @@ img,svg{max-width:100%}
 .btn-cream:hover{background:var(--cream-300)}
 .btn-sm{padding:7px 12px;font-size:13px;border-radius:10px}
 
-.page{padding:26px clamp(16px,3vw,34px) 70px;max-width:var(--maxw);width:100%;margin:0 auto;animation:fade .38s ease both}
+.page{padding:26px clamp(16px,3vw,34px) 70px;max-width:var(--maxw);width:100%;margin:0 auto}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes slideIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
@@ -408,7 +408,7 @@ select.select option{background:#fff;color:var(--ink-800,#1d2730);font-weight:50
 .sample{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;justify-content:center}
 .sample .chip{background:#fff;box-shadow:var(--shadow-sm)}
 
-.answer{display:flex;flex-direction:column;gap:16px;margin-top:26px;animation:slideIn .4s ease both}
+.answer{display:flex;flex-direction:column;gap:16px;margin-top:26px}
 .answer-head{
   background:linear-gradient(160deg,#ffffff,var(--cream-50));border:1px solid var(--line);border-radius:var(--radius-lg);
   padding:20px 22px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
@@ -442,7 +442,7 @@ select.select option{background:#fff;color:var(--ink-800,#1d2730);font-weight:50
 .approach-head .toggle{margin-left:auto;color:var(--ink-400);transition:transform .25s}
 .approach.open .approach-head .toggle{transform:rotate(180deg)}
 .approach-body{display:none;padding:4px 20px 18px 20px;border-top:1px solid var(--cream-200)}
-.approach.open .approach-body{display:block;animation:fade .3s ease both}
+.approach.open .approach-body{display:block}
 
 .steps{list-style:none;margin:14px 0 0;padding:0;counter-reset:st}
 .steps li{position:relative;padding:0 0 14px 38px;counter-increment:st}
@@ -1107,7 +1107,7 @@ select.select option{background:#fff;color:var(--ink-800,#1d2730);font-weight:50
 
 /* Server-rendered shell is visible immediately. When app.js takes over
    (#view gets replaced via render()), JS-added content replaces the shell. */
-#shell .hero{animation:fade .5s ease both}
+#shell .hero{animation:none}
 .hero-title{font-family:var(--serif);font-size:clamp(30px,4.6vw,48px);line-height:1.08;letter-spacing:-.025em;margin:6px 0 14px;color:var(--ink-900);font-weight:600}
 .hero-title span{display:block}
 .hero-title .l2{color: var(--text-primary);font-style:italic}
@@ -1159,7 +1159,7 @@ button[disabled]{opacity:.7;cursor:progress}
 .brand-mark{flex:0 0 auto}
 
 /* Page in — hide SSR skeleton the moment JS renders */
-.page > *:not(.hero):not(.ask-card-shell):not(.shell-meta):not(.grid-4){animation:fade .3s ease both}
+.page > *:not(.hero):not(.ask-card-shell):not(.shell-meta):not(.grid-4){animation:none}
 body.up-ready .card.skel,body.up-ready .shell-meta{display:none}
 body.up-ready .ask-card-shell{display:none} /* JS renders its own styled ask form */
 body.up-ready #view > .ssr-hero{display:none}   /* only the initial static hero */
@@ -1736,23 +1736,8 @@ ol.prose-answer > li::before { content: none; display: none; }
 .auth-divider { display:flex; align-items:center; gap:12px; color:var(--ink-600); font-size:12px; margin:18px 0; }
 .auth-divider::before,.auth-divider::after { content:''; height:1px; background:var(--line); flex:1; }
 
-/* Each fresh visit gets a quiet, paper-and-red Kritin reveal. */
-.kritin-welcome { position:fixed; inset:0; z-index:10000; display:grid; place-items:center; overflow:hidden; pointer-events:none; background:rgba(255,250,250,.98); animation:welcome-backdrop .4s ease both; }
-.welcome-glow { position:absolute; width:min(72vw,560px); aspect-ratio:1; border-radius:50%; background:radial-gradient(circle,rgba(231,0,44,.10),transparent 66%); animation:welcome-glow 1.7s ease-out both; }
-.welcome-brand { position:relative; text-align:center; padding:28px; animation:welcome-brand .42s cubic-bezier(.16,1,.3,1) both; }
-.welcome-brand img { display:block; margin:0 auto 22px; object-fit:contain; filter:drop-shadow(0 8px 14px rgba(43,43,43,.10)); }
-.welcome-title { font:600 clamp(28px,5vw,42px)/1.2 var(--serif); color:#3a3a3a; letter-spacing:-.025em; }
-.welcome-brand p { color:var(--ink-600); font-size:13px; margin:18px 0 0; letter-spacing:.03em; }
-.welcome-line { height:3px; width:56px; margin:22px auto 0; background:#e7002c; border-radius:3px; transform-origin:center; animation:welcome-line .2s cubic-bezier(.16,1,.3,1) both; }
-.kritin-welcome.welcome-leaving { opacity:0; transition:opacity .45s ease; }
-@keyframes welcome-backdrop { from{opacity:0} to{opacity:1} }
-@keyframes welcome-brand { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-@keyframes welcome-glow { from{opacity:0;transform:scale(.7)} to{opacity:1;transform:scale(1.15)} }
-@keyframes welcome-line { from{transform:scaleX(0)} to{transform:scaleX(1)} }
-@media(prefers-reduced-motion:reduce) {
-  .kritin-welcome,.welcome-brand,.welcome-glow,.welcome-line { animation:none; transition:none!important; }
-}
-@media print { .kritin-welcome { display:none; } }
+/* Welcome splash animation disabled for instant page access. */
+.kritin-welcome { display:none!important; }
 
 /* Question cards: give the stem, choices and compact study controls room to breathe. */
 .q-card{padding:17px 20px;margin-bottom:16px}

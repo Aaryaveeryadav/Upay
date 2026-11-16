@@ -16,27 +16,27 @@
    ====================================================================== */
 (function () {
   const SHEMUSHI = [
-    // Shemushi Part-II — NCERT Class 10 Sanskrit (Course)
+    // Shemushi Part-II — NCERT Class 10 Sanskrit (CBSE Code 122 / Q.P. Code 52)
     { n: 1, en: 'Shuchiparyavaranam', hi: 'शुचिपर्यावरणम्',
-      topic: { en: 'Vedic benediction for a long, healthy life in a clean environment (Yajurveda 36.24; Rigveda 1.89.1).', hi: 'स्वच्छ वातावरण में दीर्घायु के लिए वैदिक आशीर्वचन (यजुर्वेद 36.24; ऋग्वेद 1.89.1)।' } },
+      topic: { en: 'Modern Sanskrit lyric by Prof. Haridatta Sharma (from Lasallatika) longing for pure nature amid urban pollution.', hi: 'प्रो० हरिदत्त शर्मा विरचित (लसल्लतिका से संकलित) आधुनिक गीत — महानगर के प्रदूषण से दूर स्वच्छ पर्यावरण की कामना।' } },
     { n: 2, en: 'Buddhirbalavati Sada', hi: 'बुद्धिर्बलवती सदा',
-      topic: { en: 'A story from the Panchatantra / Shukasaptati tradition illustrating that intelligence is the strongest power.', hi: 'बुद्धि ही सबसे बड़ा बल — पञ्चतन्त्र/शुकसप्तति कथा।' } },
-    { n: 3, en: 'Vishvashulanam', hi: 'विश्वशुलानम्',
-      topic: { en: 'Narrative from Kundamala / Natya literature on compassion.', hi: 'कुन्दमाला-आधारित नाट्यांश — करुणा।' } },
-    { n: 4, en: 'Janani Tulya Vatsala', hi: 'जननी तुल्यवत्सला',
-      topic: { en: 'Episode from the Mahabharata (Vana-parva): the cow that loved her calf as a mother loves her child.', hi: 'महाभारत के वनपर्व का प्रसंग — गाय का वत्स (बछड़े) के प्रति ममत्व।' } },
+      topic: { en: 'Story from Shukasaptati showing how wise Buddhimati outwits a tiger through presence of mind.', hi: 'शुकसप्तति से संकलित कथा — प्रत्युत्पन्नमति बुद्धिमती द्वारा व्याघ्र-भय से मुक्ति; बुद्धि ही सदा बलवती है।' } },
+    { n: 3, en: 'Shishulalanam', hi: 'शिशुलालनम्',
+      topic: { en: 'Dramatic excerpt from Dinnaga’s Kundamala (Act V): Rama’s affectionate conversation with Kusha and Lava.', hi: 'दिङ्नाग विरचित कुन्दमाला (पञ्चम अङ्क) का नाट्यांश — श्रीराम तथा कुश-लव का वात्सल्यपूर्ण संवाद।' } },
+    { n: 4, en: 'Janani Tulyavatsala', hi: 'जननी तुल्यवत्सला',
+      topic: { en: 'Episode from the Mahabharata (Vanaparva): mother cow Surabhi’s equal compassion for all children, especially a weak calf.', hi: 'महाभारत (वनपर्व) का प्रसंग — सुरभि एवं इन्द्र का संवाद; दुर्बल सुत के प्रति माता की विशेष कृपा।' } },
     { n: 5, en: 'Subhashitani', hi: 'सुभाषितानि',
-      topic: { en: 'Ten popular subhashitas (ethical verses) compiled from various classical authors.', hi: 'विभिन्न कवियों के दस नीति-श्लोक (सुभाषित)।' } },
+      topic: { en: 'Ten classical ethical verses (subhashitas) on diligence, anger, virtue, wisdom and equanimity.', hi: 'परिश्रम, क्रोध-त्याग, गुणग्राहकता, विवेक एवं समत्व विषयक दस संकलित नीति-श्लोक।' } },
     { n: 6, en: 'Sauhardam Prakriteh Shobha', hi: 'सौहार्दं प्रकृतेः शोभा',
-      topic: { en: 'Prose lesson on how harmony and friendship are the beauty of nature.', hi: 'प्रकृति की शोभा परस्पर सौहार्द में है — गद्य पाठ।' } },
-    { n: 7, en: 'Vichitraakshi Saakshini', hi: 'विचित्रा: साक्षी',
-      topic: { en: 'Short story by Omprakash Thakur on an "unusual eyewitness."', hi: 'ओमप्रकाश ठाकुर की कहानी — एक विचित्र चश्मदीद गवाह।' } },
-    { n: 8, en: 'Sooktayah', hi: 'सूक्तयः',
-      topic: { en: 'Selected Vedic suktis (good sayings) from Tamil/Tirumantiram-related tradition.', hi: 'चयनित वैदिक सूक्तियाँ / सत्कथन।' } },
+      topic: { en: 'Allegorical play on how mutual harmony and cooperation among creatures is the true beauty of nature.', hi: 'पशु-पक्षियों के संवाद पर आधारित नाट्यांश — परस्पर सौहार्द और सहयोग ही प्रकृति की शोभा है।' } },
+    { n: 7, en: 'Vichitrah Sakshi', hi: 'विचित्रः साक्षी',
+      topic: { en: 'Story by Omprakash Thakur on an unusual witness and judge Bankim Chandra Chatterjee’s keen justice.', hi: 'ओमप्रकाश ठाकुर रचित कथा — निर्धन पिता, चोरी का अभियोग तथा न्यायाधीश बङ्किमचन्द्र का सूक्ष्म न्याय।' } },
+    { n: 8, en: 'Suktayah', hi: 'सूक्तयः',
+      topic: { en: 'Sanskrit verses translated from the Tamil classic Tirukkural on truthful speech, gratitude, conduct and wisdom.', hi: 'तमिल ग्रन्थ तिरुक्कुरल् से अनूदित सूक्तियाँ — मधुर-सत्य वाणी, धर्मपरायणता, सदाचार एवं विवेक।' } },
     { n: 9, en: 'Bhukampavibhishika', hi: 'भूकम्पविभीषिका',
-      topic: { en: 'Essay on the terror of earthquakes and disaster awareness.', hi: 'भूकम्प की विभीषिका और आपदा-चेतना — निबन्ध।' } },
+      topic: { en: 'Lesson on the devastation of earthquakes (2001 Kutch/Bhuj) and natural-disaster preparedness.', hi: 'सन् २००१ के कच्छ-भुज भूकम्प की विभीषिका, कारण तथा प्राकृतिक आपदा-प्रबन्धन।' } },
     { n:10, en: 'Anyoktayah', hi: 'अन्योक्तयः',
-      topic: { en: 'Anyokti (indirect / allegorical) verses on human virtues and faults.', hi: 'अन्योक्ति शैली के श्लोक — गुण-दोषों का व्यंग्य।' } },
+      topic: { en: 'Seven allegorical (anyokti) verses praising noble character through the swan, lake, chataka, cloud and gold.', hi: 'राजहंस, सरोवर, चातक, जलद एवं सुवर्ण के माध्यम से सज्जन-प्रशंसा के सात अन्योक्ति-श्लोक।' } },
   ];
   const VYAKARAN = [
     // Vyakaranavithi — NCERT Class 10 Sanskrit Grammar (12 chapters)
