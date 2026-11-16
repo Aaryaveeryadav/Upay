@@ -57,7 +57,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
   await page.locator('#mock-answer-2').fill('A descriptive answer that needs review.');await page.locator('[data-mock-submit="2"]').click();
   assert.match(await page.locator('[data-mock-question="2"] .mock-feedback').innerText(),/review needed/);
   await page.locator('#mock-submit').click();await page.waitForFunction(()=>UP.S.mockTest.finished);
-  assert.match(await page.locator('.page-head h1').innerText(),/1 \/ 2 auto-marked marks/);
+  assert.match(await page.locator('.page-head h1').innerText(),/Your score: 1 \/ 2 marks/);
   assert.equal(await page.evaluate(()=>UP.S.mockTest.score.pending),2);
   await page.locator('[data-mock-question="1"] .mock-correction summary').click();
   await page.locator('#mock-revision-1').fill('A');await page.locator('[data-mock-recheck="1"]').click();
