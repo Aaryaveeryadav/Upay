@@ -7083,7 +7083,10 @@ function viewMockTest(params){
         const t = qText(q);
         if (t && t.length >= 15) {
           const chapters = (UP.qChapterIds ? UP.qChapterIds(q) : [q.ch]).map(id => (UP.catalogue(S.cls, subject)||[]).find(ch => String(ch.id) === String(id))).filter(Boolean).map(P);
-          pool.push({q:t, ch:q.ch || c.id, chName:chapters.join(' / ') || P(c), source:q});
+          const src = Object.assign({}, q);
+          /* CBSE MCQs are 1 mark each; only invent that standard value, never marks for theory questions. */
+          if (!(Number.isInteger(+src.m) && +src.m >= 1) && Array.isArray(src.opts) && src.opts.length >= 2) src.m = 1;
+          pool.push({q:t, ch:q.ch || c.id, chName:chapters.join(' / ') || P(c), source:src});
         }
       });
     });
@@ -7110,7 +7113,7 @@ function viewMockTest(params){
   return `<section class="page-head">
     <span class="eyebrow">${icon('clock')} ${S.lang==='hi'?'मॉक टेस्ट':'Mock test'}</span>
     <h1>${esc(P(UP.subjects[subject]))} — ${picked.length} ${S.lang==='hi'?'प्रश्न':'questions'}</h1>
-    <p>3 hours · ${score.knownTotal} known marks${score.unknownMarks ? ' · '+score.unknownMarks+' questions with marks not supplied' : ''}. Only verified objective/numeric keys are auto-marked; theory, workings and unverified keys need review. This is a practice sample, not an official board paper.</p>
+    <p>3 hours · <b>${score.knownTotal} total marks</b>${score.unknownMarks ? ' · '+score.unknownMarks+' theory questions have no marks in the source' : ''}. <b>Every question card below shows how many marks that question carries.</b> After you finish, each card also shows how much you scored on it. Verified keys are auto-marked; other answers can be checked with AI on the result page. This is a practice sample, not an official board paper.</p>
   </section>
   <div class="card flat mock-toolbar">
     <div id="mock-timer" style="font-size:22px;font-weight:700;font-variant-numeric:tabular-nums">03:00:00</div>
@@ -7125,7 +7128,7 @@ function mockQuestionCard(it,i,result){
   const test=S.mockTest,submitted=!!(test.submitted||{})[i],answer=(test.answers||{})[i]||'',a=UP.mockAssessment.assess(it,answer),m=UP.mockAssessment.marks(it);
   const detailsId='mock-info-'+i;
   return `<li class="card flat mock-question" data-mock-question="${i}">
-    <div class="meta-row"><span class="tag cream">Q${i+1}</span><span class="tag grey">${m===null?'Marks not supplied':m+' mark'+(m===1?'':'s')}</span>
+    <div class="meta-row"><span class="tag cream">Q${i+1} · ${m===null?'no marks supplied':m+' mark'+(m===1?'':'s')}</span>${result?`<span class="tag ${a.awarded===null?'grey':'cream'}">${a.awarded===null?'Your score: pending':('Your score: '+a.awarded+' / '+a.max)}</span>`:''}
     <details class="mock-info"><summary aria-label="Chapter and marks for question ${i+1}" aria-controls="${detailsId}">${icon('info')} Question info</summary><div id="${detailsId}"><b>Chapter:</b> ${esc(it.chName||'Not mapped')}<br><b>Marks:</b> ${m===null?'Not supplied by source':m}<br><b>Source:</b> ${esc(it.source && (it.source.src||it.source.paperCode)||'Practice question')}</div></details></div>
     <p class="mock-qtext">${esc(it.q)}</p>
     ${it.source&&Array.isArray(it.source.opts)?'<ul>'+it.source.opts.map((o,j)=>'<li>'+String.fromCharCode(65+j)+'. '+esc(P(o))+'</li>').join('')+'</ul>':''}
@@ -7133,6 +7136,7 @@ function mockQuestionCard(it,i,result){
     <textarea id="mock-answer-${i}" rows="3" class="mock-ans" data-i="${i}" ${submitted||result?'readonly':''}>${esc(answer)}</textarea>
     ${result?'':`<div class="pactions"><button class="btn btn-primary btn-sm" data-mock-submit="${i}" ${submitted?'disabled':''}>${submitted?'Answer submitted':'Submit answer'}</button><button class="btn btn-cream btn-sm" data-mock-edit="${i}" ${submitted?'':'disabled'}>Edit answer</button></div>`}
     ${submitted||result?mockFeedback(it,i,a,result):'<p class="muted">Draft saved on this device. Submit to check, or keep editing.</p>'}
+    ${result?mockAICheckBlock(it,i,a):''}
     ${result&&a.awarded===null&&m!==null?`<div class="mock-review"><label for="mock-review-${i}">Optional self-assessment after rubric/teacher review (not verified marks):</label><input id="mock-review-${i}" type="number" min="0" max="${m}" step="0.5" value="${esc((test.reviewMarks||{})[i]??'')}" aria-label="Self-assessed marks for question ${i+1}"><button class="btn btn-cream btn-sm" data-mock-review="${i}">Save review marks</button></div>`:''}
     ${result?`<details class="mock-correction"><summary>Practise a correction (does not change test marks)</summary><label for="mock-revision-${i}">Revised answer</label><textarea id="mock-revision-${i}" class="mock-revision" data-i="${i}" rows="3">${esc((test.revisions||{})[i]||'')}</textarea><button class="btn btn-cream btn-sm" data-mock-recheck="${i}">Check correction</button><p data-mock-revision-status="${i}" role="status"></p></details>`:''}
   </li>`;
@@ -7141,9 +7145,45 @@ function mockFeedback(it,i,a,result){
   const labels={correct:'Correct',incorrect:'Incorrect',pending:'Submitted · review needed',unattempted:'Not answered'};
   const score=a.awarded===null?'Marks pending review':a.awarded+' / '+a.max+' marks';
   let guidance=a.status==='incorrect'?'Compare your answer with the verified key, identify the differing value/option, then rework the question and check it again.':a.status==='pending'?'A verified objective key/rubric is unavailable for automatic marking. Ask a teacher to review your reasoning, required points and units; no AI score is being treated as official.':a.status==='correct'?'Your answer matches the verified key.':'Attempt the question before reviewing its solution.';
-  return `<div class="callout ${a.status==='incorrect'?'warn':'tip'} mock-feedback" role="status"><div><b>${labels[a.status]} · ${score}</b><p>${esc(guidance)}</p>${a.expected?'<p><b>Verified reference answer:</b> '+esc(a.expected)+'</p>':''}<a class="btn btn-ghost btn-sm" href="#/ask?q=${encodeURIComponent(it.q)}">Understand the solution (AI explanation, not a marking scheme)</a> ${it.ch?'<a class="btn btn-ghost btn-sm" href="#/chapter/'+encodeURIComponent(it.ch)+'">Revise chapter</a>':''}</div></div>`;
+  const wrongPrompt = 'Question: ' + it.q + '\nMy answer: ' + (((S.mockTest||{}).answers||{})[i] || '') + (a.expected ? '\nCorrect answer: ' + a.expected : '') + '\nWhere did I go wrong? Explain my mistake and show the correct solution step by step.';
+  return `<div class="callout ${a.status==='incorrect'?'warn':'tip'} mock-feedback" role="status"><div><b>${labels[a.status]} · ${score}</b><p>${esc(guidance)}</p>${a.expected?'<p><b>Verified reference answer:</b> '+esc(a.expected)+'</p>':''}${a.status==='incorrect'?`<a class="btn btn-primary btn-sm" href="#/ask?q=${encodeURIComponent(wrongPrompt)}">${icon('sparkle')} Ask AI where I went wrong</a> `:''}<a class="btn btn-ghost btn-sm" href="#/ask?q=${encodeURIComponent(it.q)}">Understand the solution (AI explanation, not a marking scheme)</a> ${it.ch?'<a class="btn btn-ghost btn-sm" href="#/chapter/'+encodeURIComponent(it.ch)+'">Revise chapter</a>':''}</div></div>`;
 }
 
+function mockAICheckBlock(it,i,a){
+  const test=S.mockTest, chk=(test.aiChecks||{})[i], answer=String((test.answers||{})[i]||'').trim();
+  if(!answer) return '';
+  if(a.reason==='verified-key' && (a.status==='correct'||a.status==='incorrect')) return '';
+  if(chk && chk.error) return `<div class="callout warn mock-ai-check" role="status"><div><b>AI check could not run.</b><p>${esc(chk.error)}</p><button class="btn btn-cream btn-sm" data-mock-ai-check="${i}">Try AI check again</button></div></div>`;
+  if(!chk) return `<div class="pactions mock-ai-actions"><button class="btn btn-cream btn-sm" data-mock-ai-check="${i}">${icon('sparkle')} Check this answer with AI</button></div>`;
+  const verdictLabels={correct:'AI check: Correct','partly-correct':'AI check: Partly correct',incorrect:'AI check: Incorrect','cannot-tell':'AI check: Could not decide'};
+  const wrongPrompt='Question: '+it.q+'\nMy answer: '+answer+(chk.correctAnswer?'\nCorrect answer: '+chk.correctAnswer:'')+'\nWhere did I go wrong? Explain my mistake and show the correct solution step by step.';
+  return `<div class="callout ${chk.verdict==='incorrect'?'warn':'tip'} mock-ai-check" role="status"><div><b>${verdictLabels[chk.verdict]||'AI check'}</b>${chk.marksHint?` <span class="tag grey">${esc(chk.marksHint)}</span>`:''}<p>${esc(chk.feedback||'')}</p>${chk.correctAnswer?'<p><b>Correct answer:</b> '+esc(chk.correctAnswer)+'</p>':''}<p class="muted">AI practice feedback — not official board marking.</p>${chk.verdict!=='correct'?`<a class="btn btn-primary btn-sm" href="#/ask?q=${encodeURIComponent(wrongPrompt)}">${icon('sparkle')} Ask AI where I went wrong</a>`:''}</div></div>`;
+}
+async function checkMockAnswerWithAI(i){
+  const test=S.mockTest; if(!test||!test.items[i])return;
+  const it=test.items[i], answer=String((test.answers||{})[i]||'').trim(); if(!answer)return;
+  test.aiChecks=test.aiChecks||{}; test.aiChecks[i]={loading:true}; store.set(mockStoreKey(),test); render();
+  try{
+    const r=await fetch('/api/ai/check-answer',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(localStorage.getItem('upay.token')||'')},body:JSON.stringify({question:it.q,studentAnswer:answer,referenceAnswer:(it.source&&it.source.ans)||'',subject:test.subject||S.subject,cls:S.cls,lang:S.lang})});
+    const j=await r.json().catch(()=>null);
+    if(!r.ok||!j||!j.verdict) throw new Error((j&&j.error)||'AI check failed. Please try again.');
+    test.aiChecks[i]={verdict:j.verdict,feedback:j.feedback||'',correctAnswer:j.correctAnswer||'',marksHint:j.marksHint||''};
+  }catch(e){ test.aiChecks[i]={error:String(e&&e.message||e||'AI check failed.')}; }
+  store.set(mockStoreKey(),test); render();
+}
+async function checkAllMockAnswersWithAI(){
+  const test=S.mockTest; if(!test||!test.finished)return;
+  const status=document.querySelector('[data-mock-ai-status]');
+  const todo=test.items.map((it,i)=>i).filter(i=>{
+    const ans=String((test.answers||{})[i]||'').trim(); if(!ans)return false;
+    const a=UP.mockAssessment.assess(test.items[i],ans);
+    if(a.reason==='verified-key'&&(a.status==='correct'||a.status==='incorrect'))return false;
+    const chk=(test.aiChecks||{})[i]; return !(chk&&chk.verdict);
+  });
+  if(!todo.length){ if(status)status.textContent='Every attempted answer is already checked.'; return; }
+  let done=0;
+  for(const i of todo){ if(status)status.textContent='Checking answer '+(done+1)+' of '+todo.length+' with AI…'; await checkMockAnswerWithAI(i); done++; }
+}
 function startMockTimer(){
   const el=document.getElementById('mock-timer'); if(!el) return;
   const end = S.mockTest.started + 3*3600*1000;
@@ -7171,9 +7211,10 @@ function viewMockResult(){
   if(!test || !test.finished)return '<div class="empty"><h3>No completed test</h3><a href="#/mock">Start a mock test</a></div>';
   const r=UP.mockAssessment.score(test);
   return `<section class="page-head"><span class="eyebrow">Test completed</span>
-    <h1>${r.gradable?r.earned+' / '+r.gradable+' auto-marked marks':'Marks pending review'}</h1>
-    <p>${r.attempted} / ${r.total} questions attempted. Known paper total: ${r.knownTotal} marks${r.unknownMarks?' · '+r.unknownMarks+' questions have no supplied marks':''}.</p>
-    <p>${r.pending} questions (${r.pendingMarks} known marks) need review. Pending marks are not counted as zero, and this is not a final board score. Descriptive answers require a marking rubric/human review.</p>
+    <h1>${r.gradable?('Your score: '+r.earned+' / '+r.gradable+' marks'):'Marks pending review'}</h1>
+    <p><b>${r.attempted} / ${r.total} questions attempted</b> · Paper total: ${r.knownTotal} marks${r.unknownMarks?' · '+r.unknownMarks+' questions have no supplied marks':''}. <b>Every question card below shows that question's marks and how much you scored on it</b> (auto-marked where a verified key exists).</p>
+    <p>${r.pending} questions (${r.pendingMarks} known marks) still need checking. Use AI to check them now — it will tell you, question by question, whether your answer is right or wrong and where you went wrong. AI checking is practice feedback, not official board marking.</p>
+    <div class="pactions"><button class="btn btn-primary" data-mock-ai-check-all>${icon('sparkle')} Check all my answers with AI</button><span data-mock-ai-status role="status"></span></div>
     ${r.selfReviewed?'<p class="mock-estimate"><b>Self-assessed practice estimate: '+(r.earned+r.selfEarned)+' / '+(r.gradable+r.selfPossible)+' reviewed marks.</b> Includes '+r.selfReviewed+' user-reviewed answers, not independently verified; other pending questions are excluded.</p>':''}
     <a class="btn btn-primary btn-sm" href="#/mock?new=1">New practice test</a></section>
     <ol class="mock-list" style="padding:0;list-style:none">${test.items.map((it,i)=>mockQuestionCard(it,i,true)).join('')}</ol>`;
@@ -7639,7 +7680,7 @@ document.addEventListener('click', function(e){
   if(act==='mock-submit' || act==='submitMock'){ e.preventDefault(); submitMockTest(); return; }
 },{capture:true});
 document.addEventListener('click',function(e){
-  const button=e.target.closest('[data-mock-submit],[data-mock-edit],[data-mock-recheck],[data-mock-review]');
+  const button=e.target.closest('[data-mock-submit],[data-mock-edit],[data-mock-recheck],[data-mock-review],[data-mock-ai-check],[data-mock-ai-check-all]');
   if(!button||!S.mockTest)return;
   e.preventDefault();const test=S.mockTest;
   if(button.hasAttribute('data-mock-review')){
@@ -7657,6 +7698,8 @@ document.addEventListener('click',function(e){
     status.textContent=a.status==='correct'?'Correction matches the verified key. Original test marks are unchanged.':a.status==='incorrect'?'Still differs from the verified key. Review the reference answer and try again.':'Correction saved. Teacher/rubric review is needed; original test marks are unchanged.';
     return;
   }
+  if(button.hasAttribute('data-mock-ai-check-all')){checkAllMockAnswersWithAI();return;}
+  if(button.hasAttribute('data-mock-ai-check')){checkMockAnswerWithAI(Number(button.dataset.mockAiCheck));return;}
   if(test.finished)return;
   if(Date.now()>=test.started+3*3600000){submitMockTest(true);return;}
   const submit=button.hasAttribute('data-mock-submit'),i=Number(submit?button.dataset.mockSubmit:button.dataset.mockEdit);
