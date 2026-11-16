@@ -1726,6 +1726,36 @@ const handleRequest = async function (req, res) {
       }
     }
 
+    /* ---------- AI: check one mock-test answer ---------- */
+    if (p === '/api/ai/check-answer' && req.method === 'POST') {
+      const err = requireRole(sess, ['student', 'teacher', 'admin']); if (err) return json(res, 403, { error: err });
+      const plain = liveKeys();
+      if (!plain.length) return json(res, 400, { error: 'The admin has not added a Google API key yet.', fallback: true });
+      const b = await readBody(req);
+      const question = String(b.question || '').trim().slice(0, 4000);
+      const studentAnswer = String(b.studentAnswer || '').trim().slice(0, 4000);
+      const reference = String(b.referenceAnswer || '').trim().slice(0, 2000);
+      if (question.length < 3) return json(res, 400, { error: 'Question is missing.' });
+      if (!studentAnswer) return json(res, 400, { error: 'Student answer is empty.' });
+      const prompt = [
+        'You are an experienced CBSE Class ' + (Number(b.cls) || 10) + ' ' + String(b.subject || 'general').slice(0, 40) + ' teacher checking a student practice-test answer.',
+        'Judge ONLY whether the student answer answers the question correctly. Strict on facts, values, units and required points; fair on wording.',
+        reference ? 'A reference answer is supplied; treat it as expected unless plainly wrong (then verdict cannot-tell).' : 'No reference answer supplied: work out the correct answer yourself first, then compare.',
+        'Reply with ONLY this JSON: {"verdict":"correct|partly-correct|incorrect|cannot-tell","correctAnswer":"<short correct answer>","feedback":"<2-3 sentences: what is right, what is wrong/missing, where the student went wrong>","marksHint":"<AI estimate only>"}',
+        'Never claim official board marking. Incomplete/ambiguous -> cannot-tell.',
+        '', 'QUESTION: ' + question, reference ? 'REFERENCE ANSWER: ' + reference : '', 'STUDENT ANSWER: ' + studentAnswer
+      ].filter(Boolean).join('\n');
+      try {
+        const out = await callGeminiResilient(prompt, plain, db.settings.geminiModel);
+        const parsed = firstJSON(out.text);
+        if (!parsed) return json(res, 502, { error: 'The AI returned an unusable response. Please try again.', fallback: true });
+        const verdicts = ['correct', 'partly-correct', 'incorrect', 'cannot-tell'];
+        return json(res, 200, { source: 'ai-check', model: out.model, verdict: verdicts.includes(parsed.verdict) ? parsed.verdict : 'cannot-tell', correctAnswer: String(parsed.correctAnswer || '').slice(0, 1200), feedback: String(parsed.feedback || '').slice(0, 1500), marksHint: String(parsed.marksHint || '').slice(0, 200), disclaimer: 'AI practice feedback - not official board marking.' });
+      } catch (e) {
+        return json(res, 502, { error: 'Could not reach the AI. Check your connection and try again.', fallback: true });
+      }
+    }
+
     /* ---------- AI: solve a typed question, several ways, with a diagram ---------- */
     if (p === '/api/ai/solve' && req.method === 'POST') {
       const err = requireRole(sess, ['student', 'teacher', 'admin']); if (err) return json(res, 403, { error: err });
