@@ -53,7 +53,7 @@ module.exports = async function handler(req, res) {
 
   let out;
   try {
-    out = await callGeminiResilient(prompt, null, 'gemini-3.5-flash-lite', null, { maxOutputTokens: 900 });
+    out = await callGeminiResilient(prompt, null, 'gemini-3.5-flash-lite', null, { attemptMs: 90000, maxOutputTokens: 900 });
   } catch (e) {
     const failure = aiFailure(e);
     if (failure.body.retryAfter) res.setHeader('retry-after', String(failure.body.retryAfter));
