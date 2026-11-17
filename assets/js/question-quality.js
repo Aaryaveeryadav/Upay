@@ -154,11 +154,32 @@
     return '';
   }
 
+  /* Test-readiness gate: a question may be a genuine source record yet still
+     be unusable in a test — it references a figure we do not have, starts
+     mid-sentence, carries marks-column debris, or lost its operators/brackets
+     in extraction. Tests and mocks must never serve those; the PYQ browser
+     still shows the source record with its warnings. */
+  function testReadyIssue(q) {
+    if (!q || typeof q !== 'object') return 'empty';
+    const text = String((q.en || q.hi || q.sa || '')).trim();
+    if (!text) return 'empty';
+    const hasFig = !!(q.fig || q.diagram || q.svg);
+    if (/\bFig\.?\s*\(?[A-Za-z0-9]/i.test(text) || /\b(?:figure|diagram)\s+(?:below|given|shown|above)\b/i.test(text)) {
+      if (!hasFig) return 'missing-figure';
+    }
+    if (/^[a-z]{1,3}\s*\(/.test(text)) return 'truncated-start';
+    if (/\?\s*\d{1,2}\s*$/.test(text)) return 'marks-debris';
+    if (/[A-Z]{2,}\/\d+\s*$/.test(text)) return 'extraction-debris';
+    if (/^Prove\s+that\b/i.test(text) && !/=/.test(text)) return 'broken-identity';
+    if (/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\ue000-\uf8ff]/.test(text)) return 'damaged-text';
+    return '';
+  }
+
   function inspectText(text, subject) {
     return inspect({ hi: String(text == null ? '' : text), subject: subject || '', kind: 'question' }, subject);
   }
 
-  const api = { activityTail, cleanActivityTail, inspect, inspectText, isGenericUncontextualized, isPaperDirections, optionIssue, textOf };
+  const api = { activityTail, cleanActivityTail, inspect, inspectText, testReadyIssue, isGenericUncontextualized, isPaperDirections, optionIssue, textOf };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.UP = root.UP || {};
   root.UP.questionQuality = api;

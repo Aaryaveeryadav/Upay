@@ -4738,7 +4738,7 @@ window.UP = window.UP || {};
     const LV = { 1: 'Basic', 2: 'Standard', 3: 'Hard' };
     const want = S.test.level;
     const sourceBank = accountancyTrack() || ['hindi','english','sanskrit'].includes(S.subject) || (+S.cls === 12 && S.subject === 'physics');
-    let pool = myBank();
+    let pool = myBank().filter(q => !(UP.questionQuality && UP.questionQuality.testReadyIssue(q)));
     if (S.test.chapters && S.test.chapters.length) {
       // Selected chapters filter. Only questions mapped to one of the chosen
       // chapters belong here. Unmapped questions (ch null/0) are *not* folded in:
@@ -7118,7 +7118,7 @@ function viewMockTest(params){
         if (q.id && seenIds.has(q.id)) return;
         if (q.id) seenIds.add(q.id);
         const t = qText(q);
-        if (t && t.length >= 15) {
+        if (t && t.length >= 15 && !(UP.questionQuality && UP.questionQuality.testReadyIssue(q))) {
           const chapters = (UP.qChapterIds ? UP.qChapterIds(q) : [q.ch]).map(id => (UP.catalogue(S.cls, subject)||[]).find(ch => String(ch.id) === String(id))).filter(Boolean).map(P);
           const src = Object.assign({}, q);
           /* CBSE MCQs are 1 mark each; only invent that standard value, never marks for theory questions. */
