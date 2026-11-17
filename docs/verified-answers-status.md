@@ -10,8 +10,13 @@ undamaged options). AI-checked answers are never counted here.
 | Sanskrit (Cl 10) | 61 | CBSE 52-series solved material | more sets welcome |
 | English (Cl 10) | 45 MCQs | CBSE 184 solved papers | marking schemes for the rest |
 | Maths (Cl 10) | 115 harvested board-key MCQs + 18 admitted from the 430-series key table (42 rows; 24 rejected as damaged/incomplete) | CBSE printed keys | solved papers for other years to grow this |
-| Social (Cl 10) | 0 (question *text* cross-verified for series 32/1–32/4 from official QPs; 43 MCQs added from them) | CBSE question papers 2025 | **CBSE marking scheme PDFs (32-series, 32/C, 32/S)** — title page says MARKING SCHEME / Strictly Confidential |
+| Social (Cl 10) | 0 (2025 32/1–32/3 and selected 32/S text; 2026 32/4 text; 47 MCQs added across the passes) | CBSE question papers 2025 and 2026 | **CBSE marking scheme PDFs (32-series, 32/C, 32/S)** — title page says MARKING SCHEME / Strictly Confidential |
 | Hindi (Cl 10) | 0 | — | **CBSE Hindi A/B marking schemes or solved papers** |
+
+The [Social follow-up](social-follow-up-nov-2026.md) identifies later
+question papers, not marking schemes. Reused paper codes can have different
+years; some existing bank year fields still need an individual audit. No
+Social keys were attached.
 
 ## How Maths admission works
 

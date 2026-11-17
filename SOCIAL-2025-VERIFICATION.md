@@ -16,16 +16,16 @@ the site's Social bank (`UP.socialPyq`, 1,036 records before this pass).
 - 7 papers (series 32/4, 32/5, 32/6) in the first upload were **image-only
   scans** with no text layer. They were not OCR'd: OCR output is exactly the
   unverified text this project refuses to present as source material.
-- Second upload (Nov 2026): the same 32/4/1–32/4/3 papers arrived **with** a
-  text layer (series LKM4N). 29 MCQs were extracted; 24 already existed in
-  the bank (their text is now cross-validated) and 5 were added. The
-  re-uploaded 32/1–32/3 papers were image-only scans of papers already
-  verified from the first upload. **None of the uploads is a marking
-  scheme** — every file is a question paper (title page: "Candidates must
-  write the Q.P. Code…"). A marking scheme instead carries "MARKING SCHEME /
-  मूल्यांकन योजना" and "Strictly Confidential" on its first page and
-  "Expected Answer / Value Points" tables inside. Social keys remain
-  unverified until those arrive.
+- Earlier report correction: the text-layer 32/4 papers (series LKM4N)
+  belong to **2026**, not 2025. They are not the same papers as a 2025
+  paper with the same Q.P. code. The earlier pass extracted 29 MCQs,
+  reported 24 existing matches, and added 5 records. The 5 added rows'
+  year fields have now been corrected to 2026; the older 24-match claim
+  needs a year-by-year re-audit. The identity is corroborated by the
+  [2026 LKM4N paper](https://edurev.in/p/542643/pyqp-class-10-social-science-2026-set-1-3241).
+- Subsequent uploads are inventoried in [the earlier file inventory](docs/social-upload-nov-2026.md)
+  and [the follow-up report](docs/social-follow-up-nov-2026.md). None of the
+  uploaded files is a marking scheme.
 
 ## Findings
 
@@ -55,9 +55,12 @@ the site's Social bank (`UP.socialPyq`, 1,036 records before this pass).
 - **Verified Hindi keys**: no Hindi source material exists yet. Upload CBSE
   Hindi A/B marking schemes or solved papers; without them Hindi answers
   stay AI-checked and unlabelled-as-board.
-- Series 32/4–32/6 verification awaits text-layer PDFs or marking schemes.
+- The 2025 32/4–32/6 papers and relevant marking schemes are still
+  needed. The 2026 LKM4N and NML5K papers use the same codes but are
+  different papers. Existing same-code bank entries include mixed years;
+  their remaining year fields need an individual audit.
 
-## After this pass
+## Historical audit after the original pass
 
 Whole-bank audit (`tools/check/question_text_audit.js`): 6,066 questions
 scanned, 714 not test-ready and excluded from test/practice pools
