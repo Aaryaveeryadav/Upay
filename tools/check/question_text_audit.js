@@ -46,4 +46,15 @@ assert(trig2 && !/AB\/\d+/.test(trig2.en), 'extraction debris must be removed fr
 assert.equal(qq.testReadyIssue(trig2), '', 'second trig row must be test-ready');
 const sticks = bank.find(q => q.id === 'y24430-3-1-q36b');
 assert(sticks && qq.testReadyIssue(sticks), 'figure-dependent sticks question must be gated out of tests');
+
+/* Reported half-questions: A.P. sequence, minus sign, Assertion-Reason fragment. */
+const ap = bank.find(q => q.id === 'imp1108670');
+assert(ap && /14, 19, 24, 29/.test(ap.en), 'A.P. question must keep its sequence');
+assert.equal(qq.testReadyIssue(ap), '', 'complete A.P. question must be test-ready');
+const ratio = bank.find(q => q.id === 'imp1108671');
+assert(ratio && /A\(2, −3\)/.test(ratio.en), 'ratio question must keep the minus sign (A(2, -3))');
+assert.equal(qq.testReadyIssue(ratio), '', 'restored ratio question must be test-ready');
+const frag = bank.find(q => q.id === 'imp11086716');
+assert(frag && qq.testReadyIssue(frag) === 'fragment', 'lone Reason (R) fragment must be gated out');
+console.log('PASS reported half-questions: sequence/minus restored, fragment gated');
 console.log('PASS question-text audit: reported questions fixed/gated, whole bank scanned');
