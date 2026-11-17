@@ -5,6 +5,7 @@ const solveTiming = require('../../assets/js/solve-timing.js');
 const taskRouting = require('../../assets/js/task-routing.js');
 const solvePolicy = require('../../lib/solve-policy.js');
 const { consumeAI } = require('../../lib/ai-usage.js');
+const { aiRateFloor } = require('../../lib/rate-limit.js');
 const { aiFailure } = require('../../lib/ai-status.js');
 const { callGeminiResilient, readBody, json, firstJSON } = require('../../lib/gemini.js');
 const { requireStudent } = require('../../lib/supabase-auth.js');
@@ -120,6 +121,7 @@ module.exports = async function handler(req, res) {
   const cached = noOfficialKey ? null : cacheGet(cacheKey);
   if (cached && !b.refresh) return json(res, 200, Object.assign({ cached: true }, cached));
 
+  if (!aiRateFloor(req, res, user)) return;
   if (!await consumeAI(user, res)) return;
 
   const isSci = ['science', 'physics', 'chemistry', 'biology'].includes(subject);

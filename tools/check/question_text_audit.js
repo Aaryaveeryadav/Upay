@@ -56,5 +56,9 @@ assert(ratio && /A\(2, −3\)/.test(ratio.en), 'ratio question must keep the min
 assert.equal(qq.testReadyIssue(ratio), '', 'restored ratio question must be test-ready');
 const frag = bank.find(q => q.id === 'imp11086716');
 assert(frag && qq.testReadyIssue(frag) === 'fragment', 'lone Reason (R) fragment must be gated out');
+const shred = bank.find(q => q.id === 'sscp-3211-11');
+assert(shred && qq.testReadyIssue(shred) === 'broken-options', 'shredded match-column record must be gated as broken-options');
+const added2025 = bank.filter(q => /^sscp-32\d{3}-\d+x?$/.test(q.id) && q.y === 2025 && q.kind === 'mcq');
+assert(added2025.length >= 30, 'official 2025 Social MCQs extracted from the supplied papers must be in the bank');
 console.log('PASS reported half-questions: sequence/minus restored, fragment gated');
 console.log('PASS question-text audit: reported questions fixed/gated, whole bank scanned');
