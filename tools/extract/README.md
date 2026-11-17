@@ -39,3 +39,28 @@ Drop the file back at the path recorded in
 `assets/js/data/english12-sources.js` / `economics-sources.js`, run the builder,
 and the summary and full text regenerate. The `bytes` and `sha256` fields in
 those catalogues describe the original uploads; update them if the file differs.
+
+## Hindi practice-paper audit
+
+`python3 tools/extract/hindi_practice_papers.py --pdf-dir <dir>` reads the
+owner-supplied Hindi PDFs and reports, per file, whether it is a question paper
+or a marking scheme, the identity it prints (code, series, set, session, marks,
+printed question and page counts), how many four-option MCQs and printed
+lettered keys it actually contains, and whether its **text layer** is a faithful
+transcription. It then attempts key-to-question matching and prints why a key
+cannot be attached. It reads PDFs only: nothing is written to the question bank,
+and the PDFs themselves stay out of the repository.
+
+The faithfulness test is mechanical rather than a judgement call. A Devanagari
+syllable cannot begin with a dependent vowel sign, virama, anusvara, visarga or
+nukta, so a word that does is proof of a font shift, not a matter of taste. The
+files here fail it for exactly that reason (`लोक` → `िोक`, `हिंदी` → `त ंदी`,
+`निर्देश` → `विदेश`), and the 2026 scans have no text layer at all. Under rule 3
+above none of that text may be shipped, and it cannot be used to confirm a
+printed key either.
+
+The findings are recorded in `docs/hindi-marking-scheme-nov-2026.md`, the
+machine-readable record in
+`tools/check/fixtures/hindi-practice-papers-2023-24.json`, and the contract in
+`tools/check/hindi_practice_papers.js`. Result of that audit: 0 keys attachable,
+0 questions added.
