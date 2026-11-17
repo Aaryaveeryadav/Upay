@@ -45,7 +45,7 @@
     'assets/js/data/pyq-2024.js',
     'assets/js/data/pyq-keys.js',
     'assets/js/data/mcq-keyed.js',
-    'assets/js/question-quality.js?v=26f9', // shared conservative activity/OCR quality gates
+    'assets/js/question-quality.js?v=26f10', // shared conservative activity/OCR quality gates
     'assets/js/question-fold.js?v=26f0', // shared Hindi/Sanskrit/English exercise folding
     'assets/js/data/question-overrides.js?v=26f0', // question-bank curation, applied once packs are in
     'assets/js/math-render.js?v=26f0', // safe inline TeX rendering for questions, options and answers
@@ -76,7 +76,6 @@
   /* --- POST_PAINT: non-critical, loaded after first render --- */
   const POST_PAINT = [
     'assets/js/data/quotes.js',
-    'assets/js/data/snippets.js',
     'assets/js/data/pyq-old.js'
   ];
 
@@ -254,7 +253,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26f9');
+    return loadScript('assets/js/app.js?v=26f10');
   }
 
   function loadPostPaint() {
@@ -301,6 +300,10 @@
   };
 
   /* Allow app.js to request post-paint assets sooner if it needs them */
+  /* Snippets (~400 KB) only power search suggestions; fetch on first use
+     instead of on every idle page load. */
+  UP.loadSnippets = function () { return loadScript('assets/js/data/snippets.js').catch(function () {}); };
+
   UP.loadPostPaint = loadPostPaint;
 })();
 

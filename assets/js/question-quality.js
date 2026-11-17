@@ -186,11 +186,37 @@
     return '';
   }
 
+  /* Strict admission for a board-key table row (paper, q, stem, opts, key).
+     A printed board key is only trusted when the row is complete and clean:
+     valid key letter, exactly four distinct options, no fraction-shred or
+     paper debris in any option, and the row itself passes the test-readiness
+     gate. Returns the key option index, or -1 when the key must NOT be used
+     for grading (the row stays unscored practice). */
+  function boardKeyAdmission(raw) {
+    if (!raw || typeof raw !== 'object') return -1;
+    const keyIndex = 'abcd'.indexOf(String(raw.key == null ? '' : raw.key).trim().toLowerCase());
+    if (keyIndex < 0) return -1;
+    const opts = (Array.isArray(raw.opts) ? raw.opts : []).map(function (o) {
+      return String((o && (o.text || o.en || o.hi)) || (typeof o === 'string' ? o : '')).trim();
+    });
+    if (opts.length !== 4) return -1;
+    const norm = function (s) { return s.normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ''); };
+    if (new Set(opts.map(norm)).size !== 4) return -1;
+    for (let i = 0; i < opts.length; i++) {
+      const v = opts[i];
+      if (!v || v.length > 80) return -1;
+      if (/\d\s+\d/.test(v)) return -1;              /* fraction shred: '8 1', '50 3' */
+      if (/\b\d{2,3}\/\d/.test(v)) return -1;       /* paper-code debris */
+    }
+    if (testReadyIssue({ en: raw.stem || raw.en || '', kind: 'mcq', opts: opts.map(function (en) { return { en }; }) })) return -1;
+    return keyIndex;
+  }
+
   function inspectText(text, subject) {
     return inspect({ hi: String(text == null ? '' : text), subject: subject || '', kind: 'question' }, subject);
   }
 
-  const api = { activityTail, cleanActivityTail, inspect, inspectText, testReadyIssue, isGenericUncontextualized, isPaperDirections, optionIssue, textOf };
+  const api = { activityTail, cleanActivityTail, inspect, inspectText, testReadyIssue, boardKeyAdmission, isGenericUncontextualized, isPaperDirections, optionIssue, textOf };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.UP = root.UP || {};
   root.UP.questionQuality = api;

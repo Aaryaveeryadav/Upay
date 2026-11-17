@@ -2262,10 +2262,22 @@ window.UP = window.UP || {};
       if (!raw) return;
       const paper = String(raw.paper || '').replace(/[^a-z0-9-]+/gi, '-');
       const id = 'legacy-' + String(raw.year || '') + '-' + paper + '-q' + String(raw.q || '');
-      add({ id, cls:10, subject:'maths', board:'cbse', kind:1, y:Number(raw.year) || null,
-        set:raw.paper || '', m:1, en:raw.stem || '', hi:'',
-        opts:(raw.opts || []).map(mcqOptionText), ans:'', keyVerified:false,
-        src:'CBSE MCQ import; no per-question verified-key flag' }, id, 'practice');
+      // The board printed these keys; trust one only when the row passes the
+      // strict admission (complete, distinct, undamaged options). Admitted
+      // rows grade like the harvested board-key set; the rest stay unscored.
+      const admittedKey = UP.questionQuality && typeof UP.questionQuality.boardKeyAdmission === 'function'
+        ? UP.questionQuality.boardKeyAdmission(raw) : -1;
+      if (admittedKey >= 0) {
+        add({ id, cls:10, subject:'maths', board:'cbse', kind:1, y:Number(raw.year) || null,
+          set:raw.paper || '', m:1, en:raw.stem || '', hi:'',
+          opts:(raw.opts || []).map(mcqOptionText), ans:String.fromCharCode(65 + admittedKey),
+          keyVerified:true, src:'CBSE board key (printed solutions)' }, id, 'board-key');
+      } else {
+        add({ id, cls:10, subject:'maths', board:'cbse', kind:1, y:Number(raw.year) || null,
+          set:raw.paper || '', m:1, en:raw.stem || '', hi:'',
+          opts:(raw.opts || []).map(mcqOptionText), ans:'', keyVerified:false,
+          src:'CBSE MCQ import; key withheld (row incomplete or damaged)' }, id, 'practice');
+      }
     });
 
     // All other source-bank MCQs are available to practice, but remain
@@ -3455,7 +3467,8 @@ window.UP = window.UP || {};
   /* ---------------------- textbook full-text search ---------------------- */
   function bookSearch(q) {
     const term = String(q || '').trim().toLowerCase();
-    if (term.length < 3 || !UP.snippets) return [];
+    if (term.length < 3) return [];
+    if (!UP.snippets) { if (UP.loadSnippets) UP.loadSnippets(); return []; }
     const words = term.split(/\s+/).filter(w => w.length > 2);
     if (!words.length) return [];
     const hits = [];
