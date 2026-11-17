@@ -60,5 +60,17 @@ const shred = bank.find(q => q.id === 'sscp-3211-11');
 assert(shred && qq.testReadyIssue(shred) === 'broken-options', 'shredded match-column record must be gated as broken-options');
 const added2025 = bank.filter(q => /^sscp-32\d{3}-\d+x?$/.test(q.id) && q.y === 2025 && q.kind === 'mcq');
 assert(added2025.length >= 30, 'official 2025 Social MCQs extracted from the supplied papers must be in the bank');
+/* Board-key admission: printed CBSE keys grade only when the row is clean. */
+const keyTable = ctx.UP.pyqMCQ || [];
+assert(Array.isArray(keyTable) && keyTable.length >= 40, 'board-key table must be loaded');
+const admittedRows = keyTable.filter(r => qq.boardKeyAdmission(r) >= 0);
+assert(admittedRows.length >= 15, 'at least 15 board-key rows must pass strict admission, got ' + admittedRows.length);
+const damagedRow = keyTable.find(r => r.paper === '430/2/1' && r.q === 3);
+assert(damagedRow && qq.boardKeyAdmission(damagedRow) === -1, 'damaged board-key row (430/2/1 Q3) must stay ungraded');
+for (const id of ['imp1108670', 'imp1108671', 'imp1108675', 'imp1108676', 'imp11086711']) {
+  const rec = bank.find(q => q.id === id);
+  assert(rec && rec.keyVerified === true && /^[a-d]$/.test(rec.ans || ''), id + ' must carry its verified board key');
+}
+console.log('PASS board-key admission: ' + admittedRows.length + '/' + keyTable.length + ' printed keys trusted, damaged rows withheld');
 console.log('PASS reported half-questions: sequence/minus restored, fragment gated');
 console.log('PASS question-text audit: reported questions fixed/gated, whole bank scanned');
