@@ -11,7 +11,16 @@ undamaged options). AI-checked answers are never counted here.
 | English (Cl 10) | 45 MCQs | CBSE 184 solved papers | marking schemes for the rest |
 | Maths (Cl 10) | 115 harvested board-key MCQs + 18 admitted from the 430-series key table (42 rows; 24 rejected as damaged/incomplete) | CBSE printed keys | solved papers for other years to grow this |
 | Social (Cl 10) | 28 MCQ keys: 2023 32/6/1 Q1–20 and 32/5/1 Q1–8 | Printed marking-scheme copies, checked against the corresponding question paper and option order | Remaining sets and years need individual source review; see [online source inventory](online-marking-schemes-nov-2026.md) |
-| Hindi (Cl 10) | 0 | — | **CBSE Hindi A/B marking schemes or solved papers** |
+| Hindi (Cl 10) | 0 | 18 Hindi practice papers/schemes audited, no key attachable ([inventory](hindi-marking-scheme-nov-2026.md)) | **CBSE Hindi A/B marking schemes together with the matching question paper** |
+
+The November 2026 Hindi uploads were practice papers (and their answer
+schemes), not board sets, and every text-bearing file has a damaged text layer,
+so **no key was attached and no question added**. The chosen approach in
+`QUESTION-REPAIR-BATCH-1.md` §6 — AI-generated keys marked unverified — was not
+started and is not used here. See
+[the Hindi audit](hindi-marking-scheme-nov-2026.md) for per-file evidence,
+including the same finding inside the shipped bank: 930 of 1,214 Hindi rows are
+served after curation, and 45 of those still contain an impossible word start.
 
 The [Social follow-up](social-follow-up-nov-2026.md) identifies later
 question papers, not marking schemes. Reused paper codes can have different
