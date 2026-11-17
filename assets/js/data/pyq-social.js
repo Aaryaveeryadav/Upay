@@ -5031,7 +5031,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/1",
     "lv": "Standard",
     "q": 12,
@@ -5068,7 +5068,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/1",
     "lv": "Standard",
     "q": 13,
@@ -5170,7 +5170,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/1",
     "lv": "Standard",
     "q": 16,
@@ -5207,7 +5207,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/1",
     "lv": "Standard",
     "q": 17,
@@ -5244,7 +5244,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/1",
     "lv": "Standard",
     "q": 18,
@@ -5281,7 +5281,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/1",
     "lv": "Standard",
     "q": 19,
@@ -5681,7 +5681,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/1",
     "lv": "Standard",
     "q": 5,
@@ -7847,7 +7847,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/2",
     "lv": "Standard",
     "q": 1,
@@ -7962,7 +7962,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/2",
     "lv": "Standard",
     "q": 13,
@@ -7999,7 +7999,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/2",
     "lv": "Standard",
     "q": 14,
@@ -8036,7 +8036,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/2",
     "lv": "Standard",
     "q": 15,
@@ -8073,7 +8073,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/2",
     "lv": "Standard",
     "q": 16,
@@ -8110,7 +8110,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/2",
     "lv": "Standard",
     "q": 17,
@@ -8147,7 +8147,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/2",
     "lv": "Standard",
     "q": 18,
@@ -8577,7 +8577,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/2",
     "lv": "Standard",
     "q": 7,
@@ -10892,7 +10892,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/3",
     "lv": "Standard",
     "q": 12,
@@ -10929,7 +10929,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/3",
     "lv": "Standard",
     "q": 13,
@@ -10966,7 +10966,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/3",
     "lv": "Standard",
     "q": 14,
@@ -11003,7 +11003,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/3",
     "lv": "Standard",
     "q": 15,
@@ -11105,7 +11105,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/3",
     "lv": "Standard",
     "q": 18,
@@ -11142,7 +11142,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/3",
     "lv": "Standard",
     "q": 19,
@@ -11540,7 +11540,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/2/3",
     "lv": "Standard",
     "q": 6,
@@ -15800,7 +15800,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/1",
     "lv": "Standard",
     "q": 13,
@@ -15837,7 +15837,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/1",
     "lv": "Standard",
     "q": 14,
@@ -15964,7 +15964,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/1",
     "lv": "Standard",
     "q": 19,
@@ -16058,7 +16058,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/1",
     "lv": "Standard",
     "q": 20,
@@ -16591,7 +16591,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/1",
     "lv": "Standard",
     "q": 5,
@@ -16751,7 +16751,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/1",
     "lv": "Standard",
     "q": 9,
@@ -18019,7 +18019,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/2",
     "lv": "Standard",
     "q": 10,
@@ -18056,7 +18056,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/2",
     "lv": "Standard",
     "q": 12,
@@ -18183,7 +18183,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/2",
     "lv": "Standard",
     "q": 17,
@@ -18363,7 +18363,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/2",
     "lv": "Standard",
     "q": 20,
@@ -18973,7 +18973,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/2",
     "lv": "Standard",
     "q": 7,
@@ -19010,7 +19010,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/2",
     "lv": "Standard",
     "q": 8,
@@ -19047,7 +19047,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/2",
     "lv": "Standard",
     "q": 9,
@@ -20238,7 +20238,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/3",
     "lv": "Standard",
     "q": 1,
@@ -20295,7 +20295,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/3",
     "lv": "Standard",
     "q": 10,
@@ -20332,7 +20332,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/3",
     "lv": "Standard",
     "q": 12,
@@ -20459,7 +20459,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/3",
     "lv": "Standard",
     "q": 17,
@@ -20496,7 +20496,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/3",
     "lv": "Standard",
     "q": 18,
@@ -21295,7 +21295,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/3",
     "lv": "Standard",
     "q": 8,
@@ -21332,7 +21332,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/4/3",
     "lv": "Standard",
     "q": 9,
@@ -22540,7 +22540,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/1",
     "lv": "Standard",
     "q": 1,
@@ -22558,11 +22558,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ultural system",
+        "en": "Cultural system",
         "hi": ""
       },
       {
-        "en": "conomic system",
+        "en": "Economic system",
         "hi": ""
       },
       {
@@ -22570,7 +22570,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-3251b-10",
@@ -22737,7 +22738,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/1",
     "lv": "Standard",
     "q": 14,
@@ -22934,7 +22935,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/1",
     "lv": "Standard",
     "q": 2,
@@ -22948,23 +22949,24 @@ UP.socialPyq = [
     "src": "32/5/1 SST Set 1",
     "opts": [
       {
-        "en": "hapbooks",
+        "en": "Chapbooks",
         "hi": ""
       },
       {
-        "en": "mar Jivan",
+        "en": "Amar Jivan",
         "hi": ""
       },
       {
-        "en": "ible",
+        "en": "Bible",
         "hi": ""
       },
       {
-        "en": "lmanac 5",
+        "en": "Almanac",
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-3251b-20",
@@ -23073,7 +23075,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/1",
     "lv": "Standard",
     "q": 3,
@@ -23087,7 +23089,7 @@ UP.socialPyq = [
     "src": "32/5/1 SST Set 1",
     "opts": [
       {
-        "en": "aba Ramchandra",
+        "en": "Baba Ramchandra",
         "hi": ""
       },
       {
@@ -23103,7 +23105,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-3251b-34",
@@ -23201,7 +23204,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/1",
     "lv": "Standard",
     "q": 4,
@@ -23231,14 +23234,15 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-3251b-6",
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/1",
     "lv": "Standard",
     "q": 6,
@@ -23262,16 +23266,21 @@ UP.socialPyq = [
       {
         "en": "1980",
         "hi": ""
+      },
+      {
+        "en": "1985",
+        "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-3251b-7",
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/1",
     "lv": "Standard",
     "q": 7,
@@ -23279,15 +23288,11 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Mention the main reason for land degradation in states like Jharkhand,",
+    "en": "Mention the main reason for land degradation in states like Jharkhand, Chhattisgarh and Odisha.",
     "hi": "",
     "twist": "",
     "src": "32/5/1 SST Set 1",
     "opts": [
-      {
-        "en": "hhattisgarh and Odisha.",
-        "hi": ""
-      },
       {
         "en": "Over-grazing",
         "hi": ""
@@ -23305,14 +23310,15 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-3251b-8",
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/1",
     "lv": "Standard",
     "q": 8,
@@ -23338,11 +23344,12 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "English 7",
+        "en": "English",
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-3251b-9",
@@ -24688,7 +24695,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/2",
     "lv": "Standard",
     "q": 14,
@@ -25200,7 +25207,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/2",
     "lv": "Standard",
     "q": 4,
@@ -26584,7 +26591,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/3",
     "lv": "Standard",
     "q": 10,
@@ -26732,7 +26739,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/3",
     "lv": "Standard",
     "q": 16,
@@ -27240,7 +27247,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2023,
     "set": "32/5/3",
     "lv": "Standard",
     "q": 6,
@@ -39679,6 +39686,804 @@ UP.socialPyq = [
       },
       {
         "en": "II, I, IV, III",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3251-5",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/5/1",
+    "lv": "Standard",
+    "q": 5,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Choose the correctly matched pair.",
+    "hi": "",
+    "twist": "",
+    "src": "32/5/1 SST Set 1 (2023 ZZYY1/5)",
+    "opts": [
+      {
+        "en": "Primitive subsistence farming – practised on large patches of land",
+        "hi": ""
+      },
+      {
+        "en": "Intensive subsistence farming – single crop production farming",
+        "hi": ""
+      },
+      {
+        "en": "Commercial farming – use of higher doses of modern inputs",
+        "hi": ""
+      },
+      {
+        "en": "Plantation farming – practised on small patches of land",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-1",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 1,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Match the following and choose the correct option. Leaders: (a) Victor Emmanuel II; (b) Guiseppe Mazzini; (c) Guiseppe Garibaldi; (d) Count Cavour. Roles: I. Chief Minister of Italy; II. Young Italy Movement; III. Conquered the Kingdom of Sicillies; IV. Proclaimed as king of Unified Italy. Options are in the order (a), (b), (c), (d).",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "I, IV, III, II",
+        "hi": ""
+      },
+      {
+        "en": "II, I, IV, III",
+        "hi": ""
+      },
+      {
+        "en": "IV, II, III, I",
+        "hi": ""
+      },
+      {
+        "en": "I, IV, II, III",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-2",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 2,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Who among the following brought out ‘Bengal Gazette; the first weekly newspaper ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "Bipin Chandra Pal",
+        "hi": ""
+      },
+      {
+        "en": "Bal Gangadhar Tilak",
+        "hi": ""
+      },
+      {
+        "en": "Gangadhar Bhattacharya",
+        "hi": ""
+      },
+      {
+        "en": "Raja Rammohan Roy",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-3",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 3,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which of the following industries increased with the expansion of railways in England from 1840s to 1860s ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "Iron and Steel",
+        "hi": ""
+      },
+      {
+        "en": "Jute and Cotton",
+        "hi": ""
+      },
+      {
+        "en": "Aluminium and Bauxite",
+        "hi": ""
+      },
+      {
+        "en": "Copper and Steel",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-4",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 4,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Why did Europeans flee to America in 19th century ? Identify the correct reason from the following options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "Poverty and diseases",
+        "hi": ""
+      },
+      {
+        "en": "Due to gold rush",
+        "hi": ""
+      },
+      {
+        "en": "To escape from the French Revolution",
+        "hi": ""
+      },
+      {
+        "en": "As an aftermath of the Vietnam War",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-5",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 5,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Identify the Crop with the help of the following information and choose the correct option. • This is the staple food crop. • This is a Kharif crop. • It requires high temperature and high humidity. • It requires above 100 cm of annual rainfall.",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "Wheat",
+        "hi": ""
+      },
+      {
+        "en": "Maize",
+        "hi": ""
+      },
+      {
+        "en": "Rice",
+        "hi": ""
+      },
+      {
+        "en": "Jwar",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-6",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 6,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Match the Column – A with Column – B and choose the correct option : Column – A (River): I. Mahanadi; II. Narmada; III. Chambal; IV. Chenab. Column – B (Dam): 1. Sardar Sarovar; 2. Hirakud; 3. Salal; 4. Rana Pratap Sagar. Options are in the order I, II, III, IV.",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "4, 3, 2, 1",
+        "hi": ""
+      },
+      {
+        "en": "3, 4, 1, 2",
+        "hi": ""
+      },
+      {
+        "en": "2, 1, 4, 3",
+        "hi": ""
+      },
+      {
+        "en": "1, 2, 3, 4",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-7",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 7,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which of the following pair is correctly matched ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "Alluvial Soil – Western Rajasthan",
+        "hi": ""
+      },
+      {
+        "en": "Black Soil – Northern Plain",
+        "hi": ""
+      },
+      {
+        "en": "Arid Soil – Deccan Plateau",
+        "hi": ""
+      },
+      {
+        "en": "Laterite Soil – Western Ghats",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-8",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 8,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which one of the following organizations prepares the ‘World Development Report’ ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "World Bank",
+        "hi": ""
+      },
+      {
+        "en": "International Monetary Fund",
+        "hi": ""
+      },
+      {
+        "en": "World Health Organisation",
+        "hi": ""
+      },
+      {
+        "en": "International Labour Organisation",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-9",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 9,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which one of the following is the preceding Government Agency of NITI Aayog ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "Planning Commission",
+        "hi": ""
+      },
+      {
+        "en": "Election Commission",
+        "hi": ""
+      },
+      {
+        "en": "University Grants Commission",
+        "hi": ""
+      },
+      {
+        "en": "Union Public Service Commission",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-10",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 10,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Assume there are four families in a locality. If the income of each family is ₹ 6,000, ₹ 4,000, ₹ 7,000 and ₹ 3,000 then find out the average income of the locality from the following options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "₹ 5,000",
+        "hi": ""
+      },
+      {
+        "en": "₹ 3,000",
+        "hi": ""
+      },
+      {
+        "en": "₹ 2,000",
+        "hi": ""
+      },
+      {
+        "en": "₹ 6,000",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-11",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 11,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which one of the following is a major benefit to a local company which goes for joint production with an MNC ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "MNC provides Money and Technology to local company.",
+        "hi": ""
+      },
+      {
+        "en": "MNC takes all decisions to reduce burden of local company.",
+        "hi": ""
+      },
+      {
+        "en": "MNC purchases all shares of local company for faster production.",
+        "hi": ""
+      },
+      {
+        "en": "MNC might ask for labour and capital investment from local company.",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-12",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 12,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which one of the following pairs is correctly matched ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "Primary Sector – Money Lender",
+        "hi": ""
+      },
+      {
+        "en": "Secondary Sector – Priest",
+        "hi": ""
+      },
+      {
+        "en": "Tertiary Sector – Bank",
+        "hi": ""
+      },
+      {
+        "en": "Manufacturing Sector – Gardener",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-13",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 13,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which one of the following is an activity of the unorganized sector ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "A teacher teaching in a school.",
+        "hi": ""
+      },
+      {
+        "en": "A worker going to work in a big factory.",
+        "hi": ""
+      },
+      {
+        "en": "A doctor treating patients in a hospital.",
+        "hi": ""
+      },
+      {
+        "en": "A daily wage labourer working under a contractor.",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-14",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 14,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Who among the following takes the decision regarding saving and loan activities in the Self Help Groups (SHGs) ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "Manager of a Bank",
+        "hi": ""
+      },
+      {
+        "en": "Members of Non-Governmental Organisation (NGO)",
+        "hi": ""
+      },
+      {
+        "en": "Local Money Lenders",
+        "hi": ""
+      },
+      {
+        "en": "Members of Self-Help Group (SHG)",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-15",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 15,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Consider the following statements on Power sharing and choose the correct option. I. Imposing the will of majority community over others. II. It helps in reducing the possibility of conflict between the social groups. III. Power sharing is a good way to ensure the stability of political order. IV. It brings socio-political opposition among parties. Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "I and III",
+        "hi": ""
+      },
+      {
+        "en": "II and III",
+        "hi": ""
+      },
+      {
+        "en": "I and IV",
+        "hi": ""
+      },
+      {
+        "en": "I and II",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-16",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 16,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Two statements are given in the question below as Assertion (A) and reason (R). Read the statements and choose the correct option. Assertion (A) : Political Parties are important in the functioning of democracy. Reason (R) : The media plays an important role in the making of Political Parties. Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "Both (A) and (R) are true and (R) is the correct explanation of (A).",
+        "hi": ""
+      },
+      {
+        "en": "Both (A) and (R) are true, but (R) is not the correct explanation of (A).",
+        "hi": ""
+      },
+      {
+        "en": "(A) is true, but (R) is false.",
+        "hi": ""
+      },
+      {
+        "en": "(A) is false, but (R) is true.",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-17",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 17,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Match Column – A with Column – B and choose the correct option. Column – A (Subjects): I. E-Programming; II. Police; III. Education; IV. Defence. Column – B (List): 1. Concurrent List; 2. Union List; 3. State List; 4. Residuary List. Options are in the order I, II, III, IV.",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "4, 3, 1, 2",
+        "hi": ""
+      },
+      {
+        "en": "3, 4, 1, 2",
+        "hi": ""
+      },
+      {
+        "en": "4, 1, 3, 2",
+        "hi": ""
+      },
+      {
+        "en": "4, 2, 1, 3",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-18",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 18,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which one of the following countries have One Party System ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "China",
+        "hi": ""
+      },
+      {
+        "en": "India",
+        "hi": ""
+      },
+      {
+        "en": "Pakistan",
+        "hi": ""
+      },
+      {
+        "en": "America",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-19",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 19,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Read the following statements and choose the correct option : I. There is no official religion in India. II. Communities have freedom to profess and practice their religion. III. State helps communities by giving aid to educational institutions run by them. IV. India believes in theocracy. Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "I, II and III",
+        "hi": ""
+      },
+      {
+        "en": "I, II and IV",
+        "hi": ""
+      },
+      {
+        "en": "II, III and IV",
+        "hi": ""
+      },
+      {
+        "en": "I, III and IV",
+        "hi": ""
+      }
+    ],
+    "ans": "",
+    "textReview": "source-verified"
+  },
+  {
+    "id": "sscp-2023-3261-20",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2023,
+    "set": "32/6/1",
+    "lv": "Standard",
+    "q": 20,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which one of the following countries has the highest representation of women in their National Parliament ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/6/1 SST Set 1 (2023 ZZYY1/6)",
+    "opts": [
+      {
+        "en": "Russia",
+        "hi": ""
+      },
+      {
+        "en": "Australia",
+        "hi": ""
+      },
+      {
+        "en": "Sweden",
+        "hi": ""
+      },
+      {
+        "en": "India",
         "hi": ""
       }
     ],
