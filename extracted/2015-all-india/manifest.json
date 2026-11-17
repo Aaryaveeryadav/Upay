@@ -1,0 +1,112 @@
+[
+  {
+    "file": "Communicative Question Paper 2015(All India).pdf",
+    "sha256": "d7c7ac3b21fdb6511e51367a15653817dcd9707668e2fb9fb37f201a7c6e8bcc",
+    "status": "extracted-not-question-verified",
+    "pages": 8,
+    "output": "communicative-question-paper-2015-all-india.json"
+  },
+  {
+    "file": "Communicative Solution 2015 (All India.pdf",
+    "sha256": "55835ef1ee9c8fa655679e9e47586b65ddcd87f14a633b35918cba7ab1fd0210",
+    "status": "extracted-not-question-verified",
+    "pages": 25,
+    "output": "communicative-solution-2015-all-india.json"
+  },
+  {
+    "file": "Hindi-A Question Paper 2015(All India).pdf",
+    "sha256": "a1c88441fcb8baa38d55e85cfce659856f526cf7ec3fde5709b27424c6e2ce0d",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Hindi-A Solution 2015(All India).pdf",
+    "sha256": "ba38339bebc6aec255b4cf592a3c648e8629502b5865203486afbc2cb0b2d600",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Hindi-B Question Paper 2015(All India).pdf",
+    "sha256": "dd7a81cae1461494865c0fa71b96d1e027255e9cdfbe8c8e15c7c5dba6ba872d",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Hindi-B Solution 2015(All India).pdf",
+    "sha256": "f559728a89b71cdddc93846b95dfd98d230101b7405825270e7ef253dbe56211",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Language & Literature Paper 2015(All India).pdf",
+    "sha256": "ef69af2692a52cb7d9fcb5515c02054be87d39c69a8641a3c6c8a5d300b46e7a",
+    "status": "extracted-not-question-verified",
+    "pages": 11,
+    "output": "language-literature-paper-2015-all-india.json"
+  },
+  {
+    "file": "Language & Literature Solution 2015(All India).pdf",
+    "sha256": "c8c08b142d5d211c5805215c225aee99b572a2cc57d05d6e2abf14c775687ef8",
+    "status": "extracted-not-question-verified",
+    "pages": 23,
+    "output": "language-literature-solution-2015-all-india.json"
+  },
+  {
+    "file": "Maths Question Paper 2015(All India).pdf",
+    "sha256": "6028c2a97d2909de9a38cd94b2eb9d3c3e6131c602134008541243977a4371ee",
+    "status": "extracted-not-question-verified",
+    "pages": 11,
+    "output": "maths-question-paper-2015-all-india.json"
+  },
+  {
+    "file": "Maths Solution 2015(All India).pdf",
+    "sha256": "eef2e5ff4c408eae347de0077a7a8c72440742b966b4d0f692e318501fc14f3e",
+    "status": "extracted-not-question-verified",
+    "pages": 25,
+    "output": "maths-solution-2015-all-india.json"
+  },
+  {
+    "file": "Sanskrit Question Paper 2015 (All India).pdf",
+    "sha256": "1fbf0fcb9ae71d9c31fe34c177e55cefcb3d5aca9b8c7dc5f4ebab684cc87e88",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Sanskrit Solution 2015(All India).pdf",
+    "sha256": "ead7c6388784955d0fe3d8307fe8e42311841571b31a82b1d4df5756c57962e8",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Science Question Paper 2015(All India.pdf",
+    "sha256": "3811fa0fbaacd163e3691808e4d69db4846222c1de3fa967ea4e862a53ecad1d",
+    "status": "extracted-not-question-verified",
+    "pages": 16,
+    "output": "science-question-paper-2015-all-india.json"
+  },
+  {
+    "file": "Science Solution 2015(All India) (1).pdf",
+    "sha256": "1265d501d0407a230aa26d7b678a070e371f28ef321bffcb3d02ffb1838a280b",
+    "status": "excluded-hindi-scan"
+  },
+  {
+    "file": "Science Solution 2015(All India) (2).pdf",
+    "sha256": "0055ebb82bec87034e397c3b0bfa2273a24f0bbaf899890f62708699b0ba2a2d",
+    "status": "extracted-not-question-verified",
+    "pages": 8,
+    "output": "science-solution-2015-all-india-2.json"
+  },
+  {
+    "file": "Science Solution 2015(All India).pdf",
+    "sha256": "1265d501d0407a230aa26d7b678a070e371f28ef321bffcb3d02ffb1838a280b",
+    "status": "excluded-hindi-scan",
+    "duplicateOf": "Science Solution 2015(All India) (1).pdf"
+  },
+  {
+    "file": "Social Science Question Paper 2015(All India).pdf",
+    "sha256": "76d2027eb6abb0c61500016b01e13862f0b24a1a5b72954ab6402c9f8bb83f61",
+    "status": "extracted-not-question-verified",
+    "pages": 11,
+    "output": "social-science-question-paper-2015-all-india.json"
+  },
+  {
+    "file": "Social Science Solution 2015(All India).pdf",
+    "sha256": "76d2027eb6abb0c61500016b01e13862f0b24a1a5b72954ab6402c9f8bb83f61",
+    "status": "duplicate-not-extracted",
+    "duplicateOf": "Social Science Question Paper 2015(All India).pdf"
+  }
+]
