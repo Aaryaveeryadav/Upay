@@ -1,0 +1,688 @@
+[
+  {
+    "id": "sscp-3221b-5",
+    "series": 2,
+    "set": 1,
+    "q": 5,
+    "page": 7,
+    "stem": "Which one of the following soils develops in an area with high temperature and heavy rainfall ?",
+    "opts": [
+      "Red and Yellow",
+      "Black",
+      "Alluvial",
+      "Laterite"
+    ]
+  },
+  {
+    "id": "sscp-3221b-12",
+    "series": 2,
+    "set": 1,
+    "q": 12,
+    "page": 11,
+    "stem": "Which of the following States is ruled by a regional party ?",
+    "opts": [
+      "Haryana",
+      "Madhya Pradesh",
+      "Odisha",
+      "Rajasthan"
+    ]
+  },
+  {
+    "id": "sscp-3221b-13",
+    "series": 2,
+    "set": 1,
+    "q": 13,
+    "page": 11,
+    "stem": "Which one of the following countries adopted multi-party system ?",
+    "opts": [
+      "USA",
+      "India",
+      "China",
+      "United Kingdom"
+    ]
+  },
+  {
+    "id": "sscp-3221b-16",
+    "series": 2,
+    "set": 1,
+    "q": 16,
+    "page": 13,
+    "stem": "Natural products being changed into other forms is known as :",
+    "opts": [
+      "Primary product",
+      "Secondary product",
+      "Tertiary product",
+      "Quarternary product"
+    ]
+  },
+  {
+    "id": "sscp-3221b-17",
+    "series": 2,
+    "set": 1,
+    "q": 17,
+    "page": 13,
+    "stem": "Which one of the following is a feature of the unorganized sector ?",
+    "opts": [
+      "Terms of employment are regular.",
+      "People have assured work.",
+      "They have some formal processes and procedures.",
+      "There are rules and regulations but not followed."
+    ]
+  },
+  {
+    "id": "sscp-3221b-18",
+    "series": 2,
+    "set": 1,
+    "q": 18,
+    "page": 13,
+    "stem": "Which one of the following is the modern form of currency ?",
+    "opts": [
+      "Paper notes",
+      "Gold coins",
+      "Silver coins",
+      "Copper coins"
+    ]
+  },
+  {
+    "id": "sscp-3221b-19",
+    "series": 2,
+    "set": 1,
+    "q": 19,
+    "page": 13,
+    "stem": "Which one of the following categories of urban households take the highest percentage of loan from the formal sector ?",
+    "opts": [
+      "Poor households",
+      "Households with few assets",
+      "Well-off households",
+      "Rich households"
+    ]
+  },
+  {
+    "id": "sscp-3222b-1",
+    "series": 2,
+    "set": 2,
+    "q": 1,
+    "page": 3,
+    "stem": "In which one of the following regions is the participation of women in public life the highest ?",
+    "opts": [
+      "Nordic countries",
+      "Arab states",
+      "European countries",
+      "Asian countries"
+    ]
+  },
+  {
+    "id": "sscp-3222b-7",
+    "series": 2,
+    "set": 2,
+    "q": 7,
+    "page": 7,
+    "stem": "Which one of the following soils develops in an area with high temperature and heavy rainfall ?",
+    "opts": [
+      "Red and Yellow",
+      "Black",
+      "Alluvial",
+      "Laterite"
+    ]
+  },
+  {
+    "id": "sscp-3222b-13",
+    "series": 2,
+    "set": 2,
+    "q": 13,
+    "page": 11,
+    "stem": "Which one of the following categories of urban households take the highest percentage of loan from the formal sector ?",
+    "opts": [
+      "Poor households",
+      "Households with few assets",
+      "Well-off households",
+      "Rich households"
+    ]
+  },
+  {
+    "id": "sscp-3222b-14",
+    "series": 2,
+    "set": 2,
+    "q": 14,
+    "page": 11,
+    "stem": "Which one of the following is the modern form of currency ?",
+    "opts": [
+      "Paper notes",
+      "Gold coins",
+      "Silver coins",
+      "Copper coins"
+    ]
+  },
+  {
+    "id": "sscp-3222b-15",
+    "series": 2,
+    "set": 2,
+    "q": 15,
+    "page": 11,
+    "stem": "Which one of the following is a feature of the unorganized sector ?",
+    "opts": [
+      "Terms of employment are regular.",
+      "People have assured work.",
+      "They have some formal processes and procedures.",
+      "There are rules and regulations but not followed."
+    ]
+  },
+  {
+    "id": "sscp-3222b-16",
+    "series": 2,
+    "set": 2,
+    "q": 16,
+    "page": 11,
+    "stem": "Natural products being changed into other forms is known as :",
+    "opts": [
+      "Primary product",
+      "Secondary product",
+      "Tertiary product",
+      "Quarternary product"
+    ]
+  },
+  {
+    "id": "sscp-3222b-17",
+    "series": 2,
+    "set": 2,
+    "q": 17,
+    "page": 11,
+    "stem": "Which of the following States is ruled by a regional party ?",
+    "opts": [
+      "Haryana",
+      "Madhya Pradesh",
+      "Odisha",
+      "Rajasthan"
+    ]
+  },
+  {
+    "id": "sscp-3222b-18",
+    "series": 2,
+    "set": 2,
+    "q": 18,
+    "page": 11,
+    "stem": "Which one of the following countries adopted multi-party system ?",
+    "opts": [
+      "USA",
+      "India",
+      "China",
+      "United Kingdom"
+    ]
+  },
+  {
+    "id": "sscp-3223b-6",
+    "series": 2,
+    "set": 3,
+    "q": 6,
+    "page": 7,
+    "stem": "Which one of the following soils develops in an area with high temperature and heavy rainfall ?",
+    "opts": [
+      "Red and Yellow",
+      "Black",
+      "Alluvial",
+      "Laterite"
+    ]
+  },
+  {
+    "id": "sscp-3223b-12",
+    "series": 2,
+    "set": 3,
+    "q": 12,
+    "page": 11,
+    "stem": "Which one of the following categories of urban households take the highest percentage of loan from the formal sector ?",
+    "opts": [
+      "Poor households",
+      "Households with few assets",
+      "Well-off households",
+      "Rich households"
+    ]
+  },
+  {
+    "id": "sscp-3223b-13",
+    "series": 2,
+    "set": 3,
+    "q": 13,
+    "page": 11,
+    "stem": "Which one of the following is the modern form of currency ?",
+    "opts": [
+      "Paper notes",
+      "Gold coins",
+      "Silver coins",
+      "Copper coins"
+    ]
+  },
+  {
+    "id": "sscp-3223b-14",
+    "series": 2,
+    "set": 3,
+    "q": 14,
+    "page": 11,
+    "stem": "Which one of the following is a feature of the unorganized sector ?",
+    "opts": [
+      "Terms of employment are regular.",
+      "People have assured work.",
+      "They have some formal processes and procedures.",
+      "There are rules and regulations but not followed."
+    ]
+  },
+  {
+    "id": "sscp-3223b-15",
+    "series": 2,
+    "set": 3,
+    "q": 15,
+    "page": 11,
+    "stem": "Natural products being changed into other forms is known as :",
+    "opts": [
+      "Primary product",
+      "Secondary product",
+      "Tertiary product",
+      "Quarternary product"
+    ]
+  },
+  {
+    "id": "sscp-3223b-18",
+    "series": 2,
+    "set": 3,
+    "q": 18,
+    "page": 13,
+    "stem": "Which one of the following countries adopted multi-party system ?",
+    "opts": [
+      "USA",
+      "India",
+      "China",
+      "United Kingdom"
+    ]
+  },
+  {
+    "id": "sscp-3223b-19",
+    "series": 2,
+    "set": 3,
+    "q": 19,
+    "page": 13,
+    "stem": "Which of the following States is ruled by a regional party ?",
+    "opts": [
+      "Haryana",
+      "Madhya Pradesh",
+      "Odisha",
+      "Rajasthan"
+    ]
+  },
+  {
+    "id": "sscp-3241b-5",
+    "series": 4,
+    "set": 1,
+    "q": 5,
+    "page": 5,
+    "stem": "Which one of the following is an example of the Ferrous Metal ?",
+    "opts": [
+      "Copper",
+      "Tin",
+      "Bauxite",
+      "Nickel"
+    ]
+  },
+  {
+    "id": "sscp-3241b-9",
+    "series": 4,
+    "set": 1,
+    "q": 9,
+    "page": 7,
+    "stem": "Which one of the following sectors contribute highest in the GDP of India ?",
+    "opts": [
+      "Primary",
+      "Secondary",
+      "Tertiary",
+      "Quaternary"
+    ]
+  },
+  {
+    "id": "sscp-3241b-13",
+    "series": 4,
+    "set": 1,
+    "q": 13,
+    "page": 9,
+    "stem": "Which one of the following is a developmental goal of the factory workers ?",
+    "opts": [
+      "Better wages",
+      "Better technology",
+      "More hours of work",
+      "More labour work"
+    ]
+  },
+  {
+    "id": "sscp-3241b-14",
+    "series": 4,
+    "set": 1,
+    "q": 14,
+    "page": 9,
+    "stem": "Which one of the following pairs is correctly matched ?",
+    "opts": [
+      "Primary Sector - Flower Cultivator",
+      "Secondary Sector - Milk Vendor",
+      "Tertiary Sector - Fisherman",
+      "Manufacturing Sector - Gardener"
+    ]
+  },
+  {
+    "id": "sscp-3241b-19",
+    "series": 4,
+    "set": 1,
+    "q": 19,
+    "page": 13,
+    "stem": "Which one of the following countries has two party system ?",
+    "opts": [
+      "China",
+      "Russia",
+      "America",
+      "India"
+    ]
+  },
+  {
+    "id": "sscp-3241b-20",
+    "series": 4,
+    "set": 1,
+    "q": 20,
+    "page": 13,
+    "stem": "Which type of government is likely to be more acceptable to the people in the world ?",
+    "opts": [
+      "Democratic",
+      "Military",
+      "Dictatorship",
+      "Theocratic SECTION – B (Very Short Answer Questions) (4×2=8)"
+    ]
+  },
+  {
+    "id": "sscp-3242b-7",
+    "series": 4,
+    "set": 2,
+    "q": 7,
+    "page": 7,
+    "stem": "Which one of the following is an example of the Ferrous Metal ?",
+    "opts": [
+      "Copper",
+      "Tin",
+      "Bauxite",
+      "Nickel"
+    ]
+  },
+  {
+    "id": "sscp-3242b-8",
+    "series": 4,
+    "set": 2,
+    "q": 8,
+    "page": 7,
+    "stem": "Who among the following improved the steam engine ?",
+    "opts": [
+      "James Watt",
+      "Thomas Edison",
+      "Benjamin Franklin",
+      "Alexander Fleming"
+    ]
+  },
+  {
+    "id": "sscp-3242b-9",
+    "series": 4,
+    "set": 2,
+    "q": 9,
+    "page": 7,
+    "stem": "There were three important developments that greatly shrank the pre-modern world. Identify the incorrect one from the following options :",
+    "opts": [
+      "The flow of trade",
+      "The flow of labour",
+      "The flow of capital",
+      "The flow of technology"
+    ]
+  },
+  {
+    "id": "sscp-3242b-10",
+    "series": 4,
+    "set": 2,
+    "q": 10,
+    "page": 7,
+    "stem": "Which one of the following aspects was common among the writings of Kailashbashini Debi, Tarabai Shinde and Pandita Ramabai ?",
+    "opts": [
+      "Demanded economic equality for masses.",
+      "Highlighted the experiences of women.",
+      "Raised awareness about cultural heritage.",
+      "Motivated Indians for their national freedom."
+    ]
+  },
+  {
+    "id": "sscp-3242b-12",
+    "series": 4,
+    "set": 2,
+    "q": 12,
+    "page": 9,
+    "stem": "Which one of the following countries has two party system ?",
+    "opts": [
+      "China",
+      "Russia",
+      "America",
+      "India"
+    ]
+  },
+  {
+    "id": "sscp-3242b-17",
+    "series": 4,
+    "set": 2,
+    "q": 17,
+    "page": 11,
+    "stem": "Which one of the following pairs is correctly matched ?",
+    "opts": [
+      "Primary Sector - Flower Cultivator",
+      "Secondary Sector - Milk Vendor",
+      "Tertiary Sector - Fisherman",
+      "Manufacturing Sector - Gardener"
+    ]
+  },
+  {
+    "id": "sscp-3242b-20",
+    "series": 4,
+    "set": 2,
+    "q": 20,
+    "page": 13,
+    "stem": "Which type of government is likely to be more acceptable to the people in the world ?",
+    "opts": [
+      "Democratic",
+      "Military",
+      "Dictatorship",
+      "Theocratic SECTION – B (Very Short Answer Questions) (4×2=8)"
+    ]
+  },
+  {
+    "id": "sscp-3243b-1",
+    "series": 4,
+    "set": 3,
+    "q": 1,
+    "page": 3,
+    "stem": "Which type of government is likely to be more acceptable to the people in the world ?",
+    "opts": [
+      "Democratic",
+      "Military",
+      "Dictatorship",
+      "Theocratic"
+    ]
+  },
+  {
+    "id": "sscp-3243b-8",
+    "series": 4,
+    "set": 3,
+    "q": 8,
+    "page": 7,
+    "stem": "Who among the following improved the steam engine ?",
+    "opts": [
+      "James Watt",
+      "Thomas Edison",
+      "Benjamin Franklin",
+      "Alexander Fleming"
+    ]
+  },
+  {
+    "id": "sscp-3243b-9",
+    "series": 4,
+    "set": 3,
+    "q": 9,
+    "page": 7,
+    "stem": "There were three important developments that greatly shrank the pre-modern world. Identify the incorrect one from the following options :",
+    "opts": [
+      "The flow of trade",
+      "The flow of labour",
+      "The flow of capital",
+      "The flow of technology"
+    ]
+  },
+  {
+    "id": "sscp-3243b-10",
+    "series": 4,
+    "set": 3,
+    "q": 10,
+    "page": 7,
+    "stem": "Which one of the following aspects was common among the writings of Kailashbashini Debi, Tarabai Shinde and Pandita Ramabai ?",
+    "opts": [
+      "Demanded economic equality for masses.",
+      "Highlighted the experiences of women.",
+      "Raised awareness about cultural heritage.",
+      "Motivated Indians for their national freedom."
+    ]
+  },
+  {
+    "id": "sscp-3243b-12",
+    "series": 4,
+    "set": 3,
+    "q": 12,
+    "page": 7,
+    "stem": "Which one of the following countries has two party system ?",
+    "opts": [
+      "China",
+      "Russia",
+      "America",
+      "India"
+    ]
+  },
+  {
+    "id": "sscp-3243b-17",
+    "series": 4,
+    "set": 3,
+    "q": 17,
+    "page": 11,
+    "stem": "Which one of the following pairs is correctly matched ?",
+    "opts": [
+      "Primary Sector - Flower Cultivator",
+      "Secondary Sector - Milk Vendor",
+      "Tertiary Sector - Fisherman",
+      "Manufacturing Sector - Gardener"
+    ]
+  },
+  {
+    "id": "sscp-3243b-18",
+    "series": 4,
+    "set": 3,
+    "q": 18,
+    "page": 11,
+    "stem": "Which one of the following is a developmental goal of the factory workers ?",
+    "opts": [
+      "Better wages",
+      "Better technology",
+      "More hours of work",
+      "More labour work"
+    ]
+  },
+  {
+    "id": "sscp-3251b-4",
+    "series": 5,
+    "set": 1,
+    "q": 4,
+    "page": 5,
+    "stem": "Which one of the following is not true about the female allegory of France ?",
+    "opts": [
+      "She was named Marianne.",
+      "She took part in the French Revolution.",
+      "She was a symbol of national unity.",
+      "Her images were marked on coins and stamps."
+    ]
+  },
+  {
+    "id": "sscp-3251b-14",
+    "series": 5,
+    "set": 1,
+    "q": 14,
+    "page": 9,
+    "stem": "What percentage of the population of Belgium lives in the Flemish region ?",
+    "opts": [
+      "40%",
+      "80%",
+      "59%",
+      "70%"
+    ]
+  },
+  {
+    "id": "sscp-3252b-4",
+    "series": 5,
+    "set": 2,
+    "q": 4,
+    "page": 5,
+    "stem": "What percentage of the population of Belgium lives in the Flemish region ?",
+    "opts": [
+      "40%",
+      "80%",
+      "59%",
+      "70%"
+    ]
+  },
+  {
+    "id": "sscp-3252b-14",
+    "series": 5,
+    "set": 2,
+    "q": 14,
+    "page": 11,
+    "stem": "Which one of the following is not true about the female allegory of France ?",
+    "opts": [
+      "She was named Marianne.",
+      "She took part in the French Revolution.",
+      "She was a symbol of national unity.",
+      "Her images were marked on coins and stamps."
+    ]
+  },
+  {
+    "id": "sscp-3253b-6",
+    "series": 5,
+    "set": 3,
+    "q": 6,
+    "page": 7,
+    "stem": "Which one of the following languages was declared as the official language of Sri Lanka by an Act passed in 1956 ?",
+    "opts": [
+      "Tamil",
+      "Sinhala",
+      "Hindi",
+      "English"
+    ]
+  },
+  {
+    "id": "sscp-3253b-10",
+    "series": 5,
+    "set": 3,
+    "q": 10,
+    "page": 9,
+    "stem": "Which one of the following is not true about the female allegory of France ?",
+    "opts": [
+      "She was named Marianne.",
+      "She took part in the French Revolution.",
+      "She was a symbol of national unity.",
+      "Her images were marked on coins and stamps."
+    ]
+  },
+  {
+    "id": "sscp-3253b-16",
+    "series": 5,
+    "set": 3,
+    "q": 16,
+    "page": 11,
+    "stem": "Which among the following organisations issues the currency notes in India ?",
+    "opts": [
+      "The Central Government of India",
+      "The NITI Aayog",
+      "The Finance Ministry",
+      "The Reserve Bank of India"
+    ]
+  }
+]

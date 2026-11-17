@@ -34,3 +34,11 @@ The audit (`tools/check/question_text_audit.js`) locks all of this in.
 Upload, in any order: Social marking schemes, Hindi A/B marking schemes,
 more solved Maths/Science papers. Each upload converts directly into
 verified keys; nothing is ever inferred or generated into a key.
+
+### November 2026: 2023 ZZYY1 Social Science upload
+
+The 15 additional 2023 papers are question papers, not marking schemes.
+This pass added 21 source-text MCQs and corrected 55 existing year fields;
+**no printed answer keys were attached**. The 21 additions have empty answers
+and are not eligible for verified-key instant grading. See
+[the source inventory and partial-audit details](social-2023-upload-nov-2026.md).

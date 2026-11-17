@@ -37,6 +37,7 @@ jobs:
       - run: node tools/check/trust_controls.js
       - run: node tools/check/question_text_audit.js
       - run: node tools/check/social_source_verification.js
+      - run: node tools/check/social_2023_verification.js
       - run: node tools/check/ai_access.js
       - run: node tools/check/security_posture.js
       - run: python3 tools/check/backend_smoke.py
