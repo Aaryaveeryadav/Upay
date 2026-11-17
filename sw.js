@@ -1,6 +1,6 @@
-/* Upay service worker — offline shell + public asset caching (v26f10).
+/* Upay service worker — offline shell + public asset caching (v26f11).
    API responses are deliberately never stored: they can be user-specific. */
-const VERSION = 'upay-v26f10';
+const VERSION = 'upay-v26f11';
 const ASSET_CACHE = VERSION + '-assets';
 const PRECACHE = [
   '/',
