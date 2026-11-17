@@ -219,7 +219,11 @@ module.exports = async function handler(req, res) {
   else topicPrompt = ['Answer the supplied Class ' + cls + ' ' + subject + ' question without inventing missing information.',
     'Reply with JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","steps":[{"t":"..."}]}],"check":"...","diagram":null}'];
 
-  const prompt = topicPrompt.concat([solvePolicy.instructions,languagePolicy.instructions,chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:'', '', 'QUESTION: ' + question]).join('\n');
+  const qualityRules = [
+    'EXPLAIN THE WHY: for every sub-part, state not only what happens but WHY it happens (the law/principle and the causal chain). A bare table of same/different answers without the reason is incomplete.',
+    'MULTI-PART FIGURES: if different parts of the question involve different setups or figures (e.g. series AND parallel circuits, two cases, two diagrams in the book), return a "diagrams" array with ONE honest figure per part, each with its own caption naming the part it belongs to. Never force several setups into one figure, and never invent a figure for a part that has none.'
+  ];
+  const prompt = topicPrompt.concat(qualityRules,[solvePolicy.instructions,languagePolicy.instructions,chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:'', '', 'QUESTION: ' + question]).join('\n');
 
   // Shared adaptive budget leaves headroom under the solve function duration.
   const providerController = new AbortController();
@@ -282,6 +286,7 @@ module.exports = async function handler(req, res) {
       steps: steps(a && a.steps), why: String((a && a.why) || ''), watch: String((a && a.watch) || '')
     })).filter(a => a.steps.length),
     diagram: solvePolicy.diagramForSubject(parsed.diagram, subject),
+    diagrams: solvePolicy.diagramsForSubject(parsed, subject),
     conceptDiagram: solvePolicy.conceptDiagram(parsed.conceptDiagram),
     check: { state: 'unchecked', note: noOfficialKey
       ? 'AI-generated; not checked against an official answer key.'
