@@ -109,7 +109,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='upay-isolated-', dir=os.environ.get('UPAY_TEST_TMP') or None) as td:
         work = Path(td)
         policy_version = subprocess.check_output(['node', '-p', "require('./lib/solve-policy.js').VERSION"], cwd=ROOT, text=True).strip()
-        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-status.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
+        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-status.js', 'lib/rate-limit.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
             (work / name).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / name, work / name)
         (work / 'index.html').write_text('<title>isolated test</title>')

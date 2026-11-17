@@ -1,5 +1,6 @@
 'use strict';
 const { consumeAI } = require('../../lib/ai-usage.js');
+const { aiRateFloor } = require('../../lib/rate-limit.js');
 const { aiFailure } = require('../../lib/ai-status.js');
 const { callGeminiResilient, readBody, json } = require('../../lib/gemini.js');
 const { requireStudent } = require('../../lib/supabase-auth.js');
@@ -21,6 +22,7 @@ module.exports = async function handler(req, res) {
     return json(res, 400, { ok: false, error: 'Send a readable JPG, PNG, WEBP or HEIC photo.' });
   }
 
+  if (!aiRateFloor(req, res, user)) return;
   if (!await consumeAI(user, res)) return;
 
   const prompt = 'This is a photo of a school question. Transcribe it exactly, including table headings, dates, amounts and debit/credit labels. Return only one complete question; do not answer it. Strip page numbers, headers, footers, and marks indicators. If none is clear, return UNREADABLE. Respond with plain text, no JSON, no quotes.';

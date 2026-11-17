@@ -345,6 +345,10 @@ async function sessionOfAsync(req) {
      * per account -- stops a botnet spreading attempts across many IPs
    Counted in memory: a restart clears them, which is acceptable because an
    attacker cannot restart the server. */
+const { createLimiter: createRateLimiter } = require('./lib/rate-limit.js');
+const aiIpLimiter = createRateLimiter({ windowMs: 60000, max: 300 });   /* loose DoS floor per address (shared school NATs stay usable) */
+const aiUserLimiter = createRateLimiter({ windowMs: 60000, max: 60 });  /* per account: a 20-question check-all run fits easily */
+
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const LOGIN_MAX_IP = 10;        /* failed attempts per 15 min from one address */
 const LOGIN_MAX_USER = 6;       /* failed attempts per 15 min against one account */
@@ -1099,6 +1103,17 @@ const handleRequest = async function (req, res) {
   }
 
   try {
+    /* Provider-spending routes get a rate ceiling: per account, plus a loose
+       per-address floor. Login has its own stricter limits above. */
+    if (req.method === 'POST' && /^\/api\/ai\/(solve|read-image|translate|check-answer|generate|index)$/.test(p)) {
+      const ipVerdict = aiIpLimiter.check(limitKey('ai-ip', clientIp(req)));
+      const userVerdict = ipVerdict.ok && sess && !openSession ? aiUserLimiter.check(limitKey('ai-user', sess.id)) : { ok: true };
+      if (!ipVerdict.ok || !userVerdict.ok) {
+        const retryAfter = Math.max(ipVerdict.retryAfter || 0, userVerdict.retryAfter || 0, 1);
+        res.setHeader('retry-after', String(retryAfter));
+        return json(res, 429, { code: 'rate_limited', error: 'Too many AI requests in a short time. Wait a few seconds and try again — your study material is unaffected.', retryAfter });
+      }
+    }
     if (process.env.UPAY_AI_ENABLED === 'false' && req.method === 'POST' && /^\/api\/ai\/(solve|read-image|translate)$/.test(p)) {
       return json(res, 503, {code:'ai_disabled', error:'AI is temporarily switched off by the administrator. Study material is still available.'});
     }

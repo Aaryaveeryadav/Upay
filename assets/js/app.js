@@ -4389,6 +4389,11 @@ window.UP = window.UP || {};
     // Preserve an explicitly shared Class 12 English chapter's scope when the
     // student follows its Books link and later reloads.
     if ((r.params.cls || r.params.sub) && english12Track()) saveState();
+    // A deep link can land in Class 12 before its lazy pack has loaded;
+    // fetch it once, then re-render with the data present.
+    if (+S.cls === 12 && UP.loadClass12 && UP.loaded && !UP.loaded.packs.class12) {
+      UP.loadClass12().then(function () { render(); });
+    }
     syncStudyScope();
     renderShell(); renderTopbar(); renderFooter();
 
@@ -6666,7 +6671,7 @@ window.UP = window.UP || {};
         S.subject = val; S.chapterId = null; resetScope = true;
         // Changing subject invalidates chapter selection (chapter IDs are per-subject)
         S.test.chapters = []; S.test.seed = 0; S.paper = null;
-        return UP.switchSubject(val).then(function () {
+        return Promise.all([UP.switchSubject(val), +S.cls === 12 && UP.loadClass12 ? UP.loadClass12() : Promise.resolve()]).then(function () {
           window.__qIndex = null; S.dailySet = null; clearMockTest(); store.remove(dailyStoreKey());
           saveState(); const r = parseHash(); if (r.name === 'chapter') go('#/syllabus'); else render();
         });
@@ -6684,8 +6689,11 @@ window.UP = window.UP || {};
       }
       // A direct Class 12 entry can select a subject without loading its lazy
       // Class 10 pack. Load the retained subject before rendering a new class.
-      if (key === 'cls' && UP.loaded && !UP.loaded.packs[S.subject]) {
-        return UP.switchSubject(S.subject).then(function () {
+      if (key === 'cls' && UP.loaded && (!UP.loaded.packs[S.subject] || (+S.cls === 12 && !UP.loaded.packs.class12))) {
+        return Promise.all([
+          UP.loaded.packs[S.subject] ? Promise.resolve() : UP.switchSubject(S.subject),
+          +S.cls === 12 && UP.loadClass12 ? UP.loadClass12() : Promise.resolve()
+        ]).then(function () {
           saveState(); const current = parseHash();
           if (current.name === 'chapter') go('#/syllabus'); else render();
         });

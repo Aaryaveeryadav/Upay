@@ -5,6 +5,7 @@
 const { callGeminiResilient, readBody, json, firstJSON } = require('../../lib/gemini.js');
 const { requireStudent } = require('../../lib/supabase-auth.js');
 const { consumeAI } = require('../../lib/ai-usage.js');
+const { aiRateFloor } = require('../../lib/rate-limit.js');
 const { aiFailure } = require('../../lib/ai-status.js');
 
 module.exports = async function handler(req, res) {
@@ -31,6 +32,7 @@ module.exports = async function handler(req, res) {
   if (question.length < 3) return json(res, 400, { error: 'Question is missing.' });
   if (!studentAnswer) return json(res, 400, { error: 'Student answer is empty.' });
 
+  if (!aiRateFloor(req, res, user)) return;
   if (!await consumeAI(user, res)) return;
 
   const prompt = [

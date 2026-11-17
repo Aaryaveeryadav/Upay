@@ -69,10 +69,6 @@ UP.pyq = UP.pyq.concat([
       {
         "en": "Tt and Tt 31",
         "hi": ""
-      },
-      {
-        "en": "/S 9",
-        "hi": ""
       }
     ]
   },
@@ -828,10 +824,6 @@ UP.pyq = UP.pyq.concat([
       {
         "en": "What is solder ? Write its main use stating the property of solder which makes it suitable for this specific use. 2 31",
         "hi": ""
-      },
-      {
-        "en": "/S 25",
-        "hi": ""
       }
     ]
   },
@@ -1572,10 +1564,6 @@ UP.pyq = UP.pyq.concat([
       },
       {
         "en": "CO",
-        "hi": ""
-      },
-      {
-        "en": "H2",
         "hi": ""
       }
     ],
@@ -2825,10 +2813,6 @@ UP.pyq = UP.pyq.concat([
       {
         "en": "(1) and",
         "hi": ""
-      },
-      {
-        "en": "7",
-        "hi": ""
       }
     ]
   },
@@ -3848,10 +3832,6 @@ UP.pyq = UP.pyq.concat([
       },
       {
         "en": "T4",
-        "hi": ""
-      },
-      {
-        "en": "T3",
         "hi": ""
       }
     ],
@@ -7252,10 +7232,6 @@ UP.pyq = UP.pyq.concat([
       {
         "en": "C3H8",
         "hi": ""
-      },
-      {
-        "en": "CH4",
-        "hi": ""
       }
     ],
     "ans": "B"
@@ -7522,10 +7498,6 @@ UP.pyq = UP.pyq.concat([
       },
       {
         "en": "C5H10",
-        "hi": ""
-      },
-      {
-        "en": "C3H8",
         "hi": ""
       }
     ],
@@ -11829,10 +11801,6 @@ UP.pyq = UP.pyq.concat([
       {
         "en": "C2H4",
         "hi": ""
-      },
-      {
-        "en": "C3H4 8",
-        "hi": ""
       }
     ],
     "ans": "D"
@@ -12012,10 +11980,6 @@ UP.pyq = UP.pyq.concat([
       },
       {
         "en": "C3H6",
-        "hi": ""
-      },
-      {
-        "en": "C2H6",
         "hi": ""
       }
     ],
@@ -12546,10 +12510,6 @@ UP.pyq = UP.pyq.concat([
       {
         "en": "4",
         "hi": ""
-      },
-      {
-        "en": "6",
-        "hi": ""
       }
     ],
     "ans": "C"
@@ -12821,10 +12781,6 @@ UP.pyq = UP.pyq.concat([
       },
       {
         "en": "40cm",
-        "hi": ""
-      },
-      {
-        "en": "30cm",
         "hi": ""
       }
     ],
@@ -13179,10 +13135,6 @@ UP.pyq = UP.pyq.concat([
       },
       {
         "en": "3",
-        "hi": ""
-      },
-      {
-        "en": "4",
         "hi": ""
       }
     ],

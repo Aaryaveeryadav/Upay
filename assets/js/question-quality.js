@@ -173,6 +173,14 @@
     if (text.split(/\s+/).length <= 14 && !/[?.:।॥)\]]\s*$/.test(text) && /\b(?:are|is|was|were|the|a|an|to|of|in|on|for|with|and|or|that|which|has|have|been|being)\s*$/i.test(text)) return 'truncated-end';
     if (/\?\s*\d{1,2}\s*$/.test(text)) return 'marks-debris';
     if (/[A-Z]{2,}\/\d+\s*$/.test(text)) return 'extraction-debris';
+    if (Array.isArray(q.opts) && q.opts.length > 4 && q.kind === 'mcq') {
+      // Shredded table questions arrive with the table rows as extra
+      // 'options' (6-10 of them). A clean 4 plus one debris tail (a page
+      // number fragment) is repairable data, not a broken question.
+      const plausible = q.opts.map(function (o) { return String((o && (o.en || o.hi || o.text)) || (typeof o === 'string' ? o : '')).trim(); })
+        .filter(function (v) { return v.length >= 2 && !/^[A-Z\d\s\/.\-\u2013\u2014]{1,7}$/i.test(v); });
+      if (plausible.length !== 4) return 'broken-options';
+    }
     if (/^Prove\s+that\b/i.test(text) && !/=/.test(text)) return 'broken-identity';
     if (/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\ue000-\uf8ff]/.test(text)) return 'damaged-text';
     return '';

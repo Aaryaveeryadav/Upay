@@ -3944,10 +3944,6 @@ UP.socialPyq = [
       {
         "en": "5",
         "hi": ""
-      },
-      {
-        "en": "8",
-        "hi": ""
       }
     ],
     "ans": ""
@@ -7000,10 +6996,6 @@ UP.socialPyq = [
       },
       {
         "en": "5",
-        "hi": ""
-      },
-      {
-        "en": "8",
         "hi": ""
       }
     ],
@@ -15799,10 +15791,6 @@ UP.socialPyq = [
       {
         "en": "38",
         "hi": ""
-      },
-      {
-        "en": "18",
-        "hi": ""
       }
     ],
     "ans": ""
@@ -16283,10 +16271,6 @@ UP.socialPyq = [
       {
         "en": "2 3",
         "hi": ""
-      },
-      {
-        "en": "1 2 3",
-        "hi": ""
       }
     ],
     "ans": ""
@@ -16597,10 +16581,6 @@ UP.socialPyq = [
       },
       {
         "en": "2 3 1 4",
-        "hi": ""
-      },
-      {
-        "en": "4 2 1 3",
         "hi": ""
       }
     ],
@@ -18309,10 +18289,6 @@ UP.socialPyq = [
       {
         "en": "38",
         "hi": ""
-      },
-      {
-        "en": "18",
-        "hi": ""
       }
     ],
     "ans": ""
@@ -18574,10 +18550,6 @@ UP.socialPyq = [
       },
       {
         "en": "2 3",
-        "hi": ""
-      },
-      {
-        "en": "1 2 3",
         "hi": ""
       }
     ],
@@ -20880,10 +20852,6 @@ UP.socialPyq = [
       {
         "en": "2 3",
         "hi": ""
-      },
-      {
-        "en": "1 2 3",
-        "hi": ""
       }
     ],
     "ans": ""
@@ -21198,10 +21166,6 @@ UP.socialPyq = [
       },
       {
         "en": "2 3 1 4",
-        "hi": ""
-      },
-      {
-        "en": "4 2 1 3",
         "hi": ""
       }
     ],
@@ -22764,10 +22728,6 @@ UP.socialPyq = [
       {
         "en": "10500",
         "hi": ""
-      },
-      {
-        "en": "10060",
-        "hi": ""
       }
     ],
     "ans": ""
@@ -23301,10 +23261,6 @@ UP.socialPyq = [
       },
       {
         "en": "1980",
-        "hi": ""
-      },
-      {
-        "en": "1985",
         "hi": ""
       }
     ],
@@ -24793,10 +24749,6 @@ UP.socialPyq = [
       {
         "en": "1980",
         "hi": ""
-      },
-      {
-        "en": "1985",
-        "hi": ""
       }
     ],
     "ans": ""
@@ -25147,10 +25099,6 @@ UP.socialPyq = [
       },
       {
         "en": "10500",
-        "hi": ""
-      },
-      {
-        "en": "10060",
         "hi": ""
       }
     ],
@@ -26259,10 +26207,6 @@ UP.socialPyq = [
       {
         "en": "16",
         "hi": ""
-      },
-      {
-        "en": "14",
-        "hi": ""
       }
     ],
     "ans": ""
@@ -26630,10 +26574,6 @@ UP.socialPyq = [
       },
       {
         "en": "10500",
-        "hi": ""
-      },
-      {
-        "en": "10060 5",
         "hi": ""
       }
     ],
@@ -27401,10 +27341,6 @@ UP.socialPyq = [
       },
       {
         "en": "1980",
-        "hi": ""
-      },
-      {
-        "en": "1985",
         "hi": ""
       }
     ],
@@ -38086,6 +38022,1413 @@ UP.socialPyq = [
       },
       {
         "en": "(A) is false, but (R) is true.",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  }
+,
+  {
+    "id": "sscp-3211-3",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/1",
+    "lv": "Standard",
+    "q": 3,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "The author of is :",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Marco Polo",
+        "hi": ""
+      },
+      {
+        "en": "Columbus",
+        "hi": ""
+      },
+      {
+        "en": "Vasco da Gama",
+        "hi": ""
+      },
+      {
+        "en": "Alfred Crosby",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3211-4",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/1",
+    "lv": "Standard",
+    "q": 4,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Assume you are doing research on 15th century print culture. Which of the following would be the most significant advantage for your research ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Easier access to rare manuscripts",
+        "hi": ""
+      },
+      {
+        "en": "Reduced need for libraries",
+        "hi": ""
+      },
+      {
+        "en": "Increase in the ability to copy text by hand",
+        "hi": ""
+      },
+      {
+        "en": "Increased speed and accuracy of print # 32/1/1 Page 6 of 27",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3211-5",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/1",
+    "lv": "Standard",
+    "q": 5,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Arrange the following categories of forests in India from the largest to the smallest in terms of area and choose the correct option : 1 I. Reserved II. Protected III. Unclassed Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/1 SST Set 1",
+    "opts": [
+      {
+        "en": "III, II, I",
+        "hi": ""
+      },
+      {
+        "en": "I, II, III",
+        "hi": ""
+      },
+      {
+        "en": "II, III, I",
+        "hi": ""
+      },
+      {
+        "en": "III, I, II",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3211-7x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/1",
+    "lv": "Standard",
+    "q": 7,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Match Column I with Column II and choose the correct option : 1 Column I (Dam) Column II (River) a. Hirakud i. Chambal b. Gandhi Sagar ii. Krishna c. Nagarjuna Sagar iii. Kaveri d. Mettur iv. Mahanadi Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/1 SST Set 1",
+    "opts": [
+      {
+        "en": "a-iv, b-i, c-iii, d-ii",
+        "hi": ""
+      },
+      {
+        "en": "a-i, b-ii, c-iv, d-iii",
+        "hi": ""
+      },
+      {
+        "en": "a-iv, b-i, c-ii, d-iii",
+        "hi": ""
+      },
+      {
+        "en": "a-i, b-ii, c-iii, d-iv # 32/1/1 Page 8 of 27",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3211-8",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/1",
+    "lv": "Standard",
+    "q": 8,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Choose the correct option regarding major states involved in the Krishna Godavari issue :",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Karnataka, Kerala and Tamil Nadu",
+        "hi": ""
+      },
+      {
+        "en": "Maharashtra, Karnataka and Andhra Pradesh",
+        "hi": ""
+      },
+      {
+        "en": "Gujarat, Maharashtra and Madhya Pradesh",
+        "hi": ""
+      },
+      {
+        "en": "Jharkhand, Andhra Pradesh and Odisha",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3211-11x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/1",
+    "lv": "Standard",
+    "q": 11,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Match Column I with Column II and choose the correct option : 1 Column I (Minerals) Column II (Major Mines) a. Iron ore i. Gaya b. Mica ii. Singarauli c. Bauxite iii. Chandrapur d. Coal iv. Maikala Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/1 SST Set 1",
+    "opts": [
+      {
+        "en": "a-iii, b-i, c-iv, d-ii",
+        "hi": ""
+      },
+      {
+        "en": "a-iii, b-i, c-ii, d-iv",
+        "hi": ""
+      },
+      {
+        "en": "a-ii, b-iii, c-i, d-iv",
+        "hi": ""
+      },
+      {
+        "en": "a-ii, b-iii, c-iv, d-i",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3211-12",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/1",
+    "lv": "Standard",
+    "q": 12,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Belgium solved its problem of majoritarianism by strengthening which of the following types of government ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Unitary",
+        "hi": ""
+      },
+      {
+        "en": "Presidential",
+        "hi": ""
+      },
+      {
+        "en": "Federal",
+        "hi": ""
+      },
+      {
+        "en": "Parliamentary",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3211-13",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/1",
+    "lv": "Standard",
+    "q": 13,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Choose the correctly matched pair from the following : 1 (Country) (System)",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Canada Unitary",
+        "hi": ""
+      },
+      {
+        "en": "Bolivia Federal",
+        "hi": ""
+      },
+      {
+        "en": "Australia Unitary",
+        "hi": ""
+      },
+      {
+        "en": "Spain Federal",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3211-14x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/1",
+    "lv": "Standard",
+    "q": 14,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which of the following are the main components of a political party ? Choose the correct option : 1 I. Leaders II. Active members III. Followers IV. Pressure groups Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Only I, II and III are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only II, III and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, III and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, II and IV are correct. # 32/1/1 Page 12 of 27",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3211-18x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/1",
+    "lv": "Standard",
+    "q": 18,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Why does it become difficult for farmers in rural areas to take loans from government banks ? Read the following reasons and choose the most appropriate option : 1 I. Lack of collateral II. Complicated procedure III. Higher cost of borrowing IV. Lack of awareness Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Only I, II and III are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only II, III and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, II and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, III and IV are correct.",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3211-20x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/1",
+    "lv": "Standard",
+    "q": 20,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Two statements I and II are given below. Read both the statements carefully and choose the correct option : 1 Statement I : Rapid improvement in technology has been one major factor to stimulate the globalisation process. Statement II : This has made much faster delivery of goods across long distances possible at lower costs. Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Both statements I and II are correct and statement II is the correct explanation of statement I.",
+        "hi": ""
+      },
+      {
+        "en": "Both statements I and II are correct, but statement II is not the correct explanation of statement I.",
+        "hi": ""
+      },
+      {
+        "en": "Statement I is correct, but statement II is incorrect.",
+        "hi": ""
+      },
+      {
+        "en": "Statement I is incorrect, but statement II is correct. # 32/1/1 Page 16 of 27 - (4 2=8)",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3212-4",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/2",
+    "lv": "Standard",
+    "q": 4,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Pakistan 150 Amongst the given countries, which one of the following countries has the",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/2 SST Set 2",
+    "opts": [
+      {
+        "en": "Pakistan",
+        "hi": ""
+      },
+      {
+        "en": "India",
+        "hi": ""
+      },
+      {
+        "en": "Nepal",
+        "hi": ""
+      },
+      {
+        "en": "Myanmar",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3212-12",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/1/2",
+    "lv": "Standard",
+    "q": 12,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "? : 1 I. II. III. IV.",
+    "hi": "",
+    "twist": "",
+    "src": "32/1/2 SST Set 2",
+    "opts": [
+      {
+        "en": "I, II III",
+        "hi": ""
+      },
+      {
+        "en": "II, III IV",
+        "hi": ""
+      },
+      {
+        "en": "I, II IV",
+        "hi": ""
+      },
+      {
+        "en": "I, III IV",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3221-4x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/2/1",
+    "lv": "Standard",
+    "q": 4,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Read the following characteristics of of Korea carefully and choose the correct option : 1 Characteristics : I. It is one of the oldest existing printed books in the world. II It contains the main beliefs of Christianity. III Its second volume is available in the National Library of France. IV. It was inscribed on the UNESCO Memory of the World Register in 2001. Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/2/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Only I, II and III are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only II, III and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, III and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, II and IV are correct.",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3221-5",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/2/1",
+    "lv": "Standard",
+    "q": 5,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Choose the correctly matched pair from the following : 1 National Park/Tiger Reserve State",
+    "hi": "",
+    "twist": "",
+    "src": "32/2/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Corbett National Park Himachal Pradesh",
+        "hi": ""
+      },
+      {
+        "en": "Bandhavgarh National Park Rajasthan",
+        "hi": ""
+      },
+      {
+        "en": "Periyar Tiger Reserve Tamil Nadu",
+        "hi": ""
+      },
+      {
+        "en": "Manas Tiger Reserve Assam",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3221-6x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/2/1",
+    "lv": "Standard",
+    "q": 6,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which of the following characteristics of the Indian Wild Life (Protection) Act are correct ? Choose the most appropriate option. 1 Characteristics : I. To make provisions for habitat for wild animals. II. To publish list of protected species. III. To ban hunting to save endangered species. IV. To include important subjects like forests and wildlife in the Union List. Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/2/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Only I, II and III are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, II and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only II, III and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, III and IV are correct. # 32/2/1 Page 6 of 27",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3221-7x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/2/1",
+    "lv": "Standard",
+    "q": 7,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Match Column I with Column II and choose the correct option : 1 Column I (River) Column II (Dam) a. Chambal i. Salal b. Ganga ii. Bhakra Nangal c. Chenab iii. Gandhi Sagar d. Satluj iv. Tehri Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/2/1 SST Set 1",
+    "opts": [
+      {
+        "en": "a-ii, b-iii, c-i, d-iv",
+        "hi": ""
+      },
+      {
+        "en": "a-ii, b-iii, c-iv, d-i",
+        "hi": ""
+      },
+      {
+        "en": "a-iii, b-iv, c-i, d-ii",
+        "hi": ""
+      },
+      {
+        "en": "a-iii, b-iv, c-ii, d-i",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3221-8",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/2/1",
+    "lv": "Standard",
+    "q": 8,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Choose the correct option of the states that have been majorly benefitted by the Sardar Sarovar Dam.",
+    "hi": "",
+    "twist": "",
+    "src": "32/2/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Rajasthan, Gujarat, Punjab and Haryana",
+        "hi": ""
+      },
+      {
+        "en": "Maharashtra, Madhya Pradesh, Gujarat and Rajasthan",
+        "hi": ""
+      },
+      {
+        "en": "Maharashtra, Madhya Pradesh, Telangana and Andhra Pradesh",
+        "hi": ""
+      },
+      {
+        "en": "Madhya Pradesh, Rajasthan, Karnataka and Chhattisgarh",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3221-13x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/2/1",
+    "lv": "Standard",
+    "q": 13,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which of the following countries is an example of sharing of power between the national and state governments to account for internal diversity ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/2/1 SST Set 1",
+    "opts": [
+      {
+        "en": "United States of America",
+        "hi": ""
+      },
+      {
+        "en": "Australia",
+        "hi": ""
+      },
+      {
+        "en": "Belgium",
+        "hi": ""
+      },
+      {
+        "en": "Switzerland",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3221-14",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/2/1",
+    "lv": "Standard",
+    "q": 14,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Choose the correctly matched pair from the following : 1 Political Party State",
+    "hi": "",
+    "twist": "",
+    "src": "32/2/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Janata Dal (Secular) Bihar",
+        "hi": ""
+      },
+      {
+        "en": "Maharashtrawadi Gomantak Party Goa",
+        "hi": ""
+      },
+      {
+        "en": "Dravida Munnetra Kazhagam Andhra Pradesh",
+        "hi": ""
+      },
+      {
+        "en": "All India Forward Bloc Punjab",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3221-16",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/2/1",
+    "lv": "Standard",
+    "q": 16,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Choose the correct option to fill in the blank : 1 The total value of all final goods and services produced within a country in a particular year is called __________.",
+    "hi": "",
+    "twist": "",
+    "src": "32/2/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Per Capita Income",
+        "hi": ""
+      },
+      {
+        "en": "Per Capita Production",
+        "hi": ""
+      },
+      {
+        "en": "Gross National Income",
+        "hi": ""
+      },
+      {
+        "en": "Gross Domestic Production",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3221-19",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/2/1",
+    "lv": "Standard",
+    "q": 19,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Arrange the following sources of credit in the most to least order to meet the credit requirement of rural households in India and choose the correct option : 1 I. Government II. Cooperative Banks and Societies III. Moneylenders IV. Relatives and friends Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/2/1 SST Set 1",
+    "opts": [
+      {
+        "en": "III, II, I, IV",
+        "hi": ""
+      },
+      {
+        "en": "III, II, IV, I",
+        "hi": ""
+      },
+      {
+        "en": "I, III, II, IV",
+        "hi": ""
+      },
+      {
+        "en": "I, III, IV, II",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3221-20x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/2/1",
+    "lv": "Standard",
+    "q": 20,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Two statements I and II are given below. Read both the statements carefully and choose the correct option : 1 Statement I : Information and communication technology stimulate the process of globalisation. Statement II : It is used to contact each other, receive information instantly and communicate with remote areas. Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/2/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Both statements I and II are correct and statement II is the correct explanation of statement I.",
+        "hi": ""
+      },
+      {
+        "en": "Both statements I and II are correct, but statement II is not the correct explanation of statement I.",
+        "hi": ""
+      },
+      {
+        "en": "Statement I is correct, but statement II is incorrect.",
+        "hi": ""
+      },
+      {
+        "en": "Statement I is incorrect, but statement II is correct. # 32/2/1 Page 16 of 27 - (4 2=8)",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3222-8",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/2/2",
+    "lv": "Standard",
+    "q": 8,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Arrange the following events in chronological order and choose the correct option : 1 I. Defeat of Napoleon in the battle of Leipzig II. Beginning of struggle for Greek independence III. Formation of customs union Zollverein IV. Signing of Treaty of Vienna Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/2/2 SST Set 2",
+    "opts": [
+      {
+        "en": "I, II, III, IV",
+        "hi": ""
+      },
+      {
+        "en": "I, II, IV, III",
+        "hi": ""
+      },
+      {
+        "en": "II, I, III, IV",
+        "hi": ""
+      },
+      {
+        "en": "II, I, IV, III",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3223-5x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/2/3",
+    "lv": "Standard",
+    "q": 5,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Match Column I with Column II and choose the correct option : 1 Column I (Thermal Power Plant) Column II (State) a. Talcher i. Telangana b. Ramagundam ii. Odisha c. Bhusawal iii. Andhra Pradesh d. Vijayawada iv. Maharashtra Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/2/3 SST Set 3",
+    "opts": [
+      {
+        "en": "a-ii, b-i, c-iv, d-iii",
+        "hi": ""
+      },
+      {
+        "en": "a-iii, b-iv, c-i, d-ii",
+        "hi": ""
+      },
+      {
+        "en": "a-iv, b-iii, c-ii, d-i",
+        "hi": ""
+      },
+      {
+        "en": "a-ii, b-i, c-iii, d-iv # 32/2/3 Page 6 of 27",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3231-3",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/1",
+    "lv": "Standard",
+    "q": 3,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Choose the correctly matched pair from the following :",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Concurrent List Education",
+        "hi": ""
+      },
+      {
+        "en": "Concurrent List Defence",
+        "hi": ""
+      },
+      {
+        "en": "Concurrent List Police",
+        "hi": ""
+      },
+      {
+        "en": "Concurrent List Trade",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3231-5x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/1",
+    "lv": "Standard",
+    "q": 5,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "To reform the party system, which of the following tasks have been made compulsory for the political parties ? Choose the most appropriate option. 1 I. It is now compulsory for all the political parties to file income tax returns. II. It is now compulsory for all parties to have one-third women candidates. III. It is now compulsory for all the political parties to hold their organisational election. IV. It is now compulsory for all candidates to disclose information about pending criminal cases against them through affidavit. Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Only I, II and III are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, II and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, III and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only II, III and IV are correct.",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3231-8",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/1",
+    "lv": "Standard",
+    "q": 8,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Data related to an imaginary country is given below. Study these data and answer the question that follows : 1 Age Total Population Net Attendance 7 and 8 years of age 1200 1000 14 and 15 years of age 1000 800 Total 2200 1800 The attendance percentage of this country of the age group of 14 and 15 years is __________.",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/1 SST Set 1",
+    "opts": [
+      {
+        "en": "90 percent",
+        "hi": ""
+      },
+      {
+        "en": "80 percent",
+        "hi": ""
+      },
+      {
+        "en": "70 percent",
+        "hi": ""
+      },
+      {
+        "en": "60 percent",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3231-9x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/1",
+    "lv": "Standard",
+    "q": 9,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Identify the sector on basis of the following characteristics and choose the correct option : 1 The objective of this sector is to earn profit. This sector is owned by a person or company. Tata Iron and Steel is a example of this sector. Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Cooperative Sector",
+        "hi": ""
+      },
+      {
+        "en": "Unorganised Sector",
+        "hi": ""
+      },
+      {
+        "en": "Public Sector",
+        "hi": ""
+      },
+      {
+        "en": "Private Sector # 32/3/1 Page 8 of 23",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3231-10x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/1",
+    "lv": "Standard",
+    "q": 10,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Why is it not easy to get loans from the formal sector ? Read the following reasons and choose the most appropriate option : 1 I. Availability of Banks II. Availability of Collateral III. Long and Complicated Loan Process IV. Awareness of Borrower Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Only I, II and III are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only II, III and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, II and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, III and IV are correct.",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3231-11",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/1",
+    "lv": "Standard",
+    "q": 11,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "By which organization is the Human Development Report published ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/1 SST Set 1",
+    "opts": [
+      {
+        "en": "World Trade Organisation",
+        "hi": ""
+      },
+      {
+        "en": "Amnesty International",
+        "hi": ""
+      },
+      {
+        "en": "United Nations Development Programme",
+        "hi": ""
+      },
+      {
+        "en": "World Health Organisation",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3231-12",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/1",
+    "lv": "Standard",
+    "q": 12,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Identify the odd one out.",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Hindustan Computers Limited",
+        "hi": ""
+      },
+      {
+        "en": "Bharti Airtel Limited",
+        "hi": ""
+      },
+      {
+        "en": "Hindustan Unilever Limited",
+        "hi": ""
+      },
+      {
+        "en": "Bharat Heavy Electricals Limited",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3231-13",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/1",
+    "lv": "Standard",
+    "q": 13,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Choose the correct option to fill in the blank : 1 The process of removing barriers on foreign trade and investment by the government is known as _________. Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Import Tax",
+        "hi": ""
+      },
+      {
+        "en": "Export Tax",
+        "hi": ""
+      },
+      {
+        "en": "Liberalisation",
+        "hi": ""
+      },
+      {
+        "en": "Industrialisation # 32/3/1 Page 10 of 23",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3231-15x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/1",
+    "lv": "Standard",
+    "q": 15,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Match Column I with Column II and choose the correct option : 1 Column I Column II a. Sariska Wildlife Sanctuary i. Uttarakhand b. Manas Tiger Reserve ii. Rajasthan c. Periyar Tiger Reserve iii. Assam d. Corbett National Park iv. Kerala Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/1 SST Set 1",
+    "opts": [
+      {
+        "en": "a-i, b-ii, c-iii, d-iv",
+        "hi": ""
+      },
+      {
+        "en": "a-ii, b-iii, c-iv, d-i",
+        "hi": ""
+      },
+      {
+        "en": "a-iv, b-i, c-iii, d-ii",
+        "hi": ""
+      },
+      {
+        "en": "a-ii, b-i, c-iv, d-iii",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3231-16x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/1",
+    "lv": "Standard",
+    "q": 16,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Mrs. Monica, along with her family, clears a piece of land and grows decreases, she prepares another piece of land for agriculture. Which of the following methods of agriculture does she use ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Plantation farming",
+        "hi": ""
+      },
+      {
+        "en": "Slash and burn farming",
+        "hi": ""
+      },
+      {
+        "en": "Intensive subsistence farming",
+        "hi": ""
+      },
+      {
+        "en": "Commercial farming # 32/3/1 Page 12 of 23",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3231-17",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/1",
+    "lv": "Standard",
+    "q": 17,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "America in the later half of the sixteenth century ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Cholera",
+        "hi": ""
+      },
+      {
+        "en": "Smallpox",
+        "hi": ""
+      },
+      {
+        "en": "Jaundice",
+        "hi": ""
+      },
+      {
+        "en": "Malaria",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3231-20",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/1",
+    "lv": "Standard",
+    "q": 20,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Arrange the following historical events in chronological order and choose the correct option : 1 I. Bardoli Satyagraha II. Rowlatt Satyagraha III. Champaran Satyagraha IV. Kheda Satyagraha Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/1 SST Set 1",
+    "opts": [
+      {
+        "en": "I, II, III, IV",
+        "hi": ""
+      },
+      {
+        "en": "III, II, I, IV",
+        "hi": ""
+      },
+      {
+        "en": "II, I, IV, III",
+        "hi": ""
+      },
+      {
+        "en": "III, IV, II, I # 32/3/1 Page 14 of 23 - (4 2=8)",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3233-3",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/3/3",
+    "lv": "Standard",
+    "q": 3,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "ve branch around the",
+    "hi": "",
+    "twist": "",
+    "src": "32/3/3 SST Set 3",
+    "opts": [
+      {
+        "en": "Being freed",
+        "hi": ""
+      },
+      {
+        "en": "Heroism and strength",
+        "hi": ""
+      },
+      {
+        "en": "Willingness to make peace",
+        "hi": ""
+      },
+      {
+        "en": "Beginning of a new era",
         "hi": ""
       }
     ],
