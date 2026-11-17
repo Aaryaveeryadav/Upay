@@ -30,7 +30,8 @@ attach keys: its questions are not the requested 2025 MCQs.
   source and **6** already matched. These counts are per bank row, not
   distinct questions. The checks and per-paper page numbers are recorded in
   `tools/check/fixtures/social-2025-s.json` and
-  `tools/check/social_source_verification.js`.
+  `tools/check/social_source_verification.js`. The 33 checked rows and four
+  additions carry `textReview: "source-verified"`; none carries a verified key.
 - **0 verified keys attached**. Remaining figure, assertion–reason, and
   table questions were not included in these counts; automated extraction
   alone cannot safely establish complete context and option order.

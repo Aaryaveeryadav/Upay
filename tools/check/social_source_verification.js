@@ -14,6 +14,7 @@ for (const expected of fixture) {
   assert.strictEqual(q.en, expected.stem, expected.id);
   assert.deepStrictEqual(q.opts.map(o => o.en), expected.opts, expected.id);
   assert.strictEqual(new Set(expected.opts).size, 4, expected.id);
+  assert.strictEqual(q.textReview, 'source-verified', expected.id);
   assert.strictEqual(q.ans, '', expected.id);
   assert.notStrictEqual(q.keyVerified, true, expected.id);
 }
@@ -22,6 +23,7 @@ const nml = UP.socialPyq.find(q => q.id === 'sscp-2026-3251-1');
 assert(nml && nml.y === 2026 && nml.set === '32/5/1' && nml.q === 1);
 assert.strictEqual(nml.en, 'Arrange the following events in chronological order and choose the correct option : I. Salt Satyagraha II. Kheda Satyagraha III. Rowlatt Satyagraha IV. Ahmedabad Mill Workers Satyagraha Options :');
 assert.deepStrictEqual(nml.opts.map(o => o.en), ['II, I, III, IV','II, IV, III, I','III, II, IV, I','II, I, IV, III']);
+assert.strictEqual(nml.textReview, 'source-verified');
 assert.strictEqual(nml.ans, '');
 assert.notStrictEqual(nml.keyVerified, true);
 // These five additions came from LKM4N, not the 2025 paper of the same code.

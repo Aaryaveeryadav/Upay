@@ -33455,7 +33455,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-10",
@@ -33492,7 +33493,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-11",
@@ -33529,7 +33531,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-13",
@@ -33566,7 +33569,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-14",
@@ -33603,7 +33607,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-15",
@@ -33685,7 +33690,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-18",
@@ -33722,7 +33728,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-19",
@@ -33759,7 +33766,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-2",
@@ -33796,7 +33804,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-20",
@@ -33833,7 +33842,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-21",
@@ -34107,7 +34117,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-7",
@@ -34992,7 +35003,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S2-10",
@@ -35029,7 +35041,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S2-11",
@@ -35066,7 +35079,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S2-12",
@@ -35262,7 +35276,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S2-18",
@@ -35352,7 +35367,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S2-2",
@@ -35389,7 +35405,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S2-20",
@@ -35426,7 +35443,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S2-22",
@@ -35548,7 +35566,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S2-34",
@@ -35684,7 +35703,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S2-6",
@@ -35766,7 +35786,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S2-8",
@@ -35803,7 +35824,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S2v-10",
@@ -36484,7 +36506,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S3-10",
@@ -36521,7 +36544,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S3-11",
@@ -36558,7 +36582,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S3-12",
@@ -36595,7 +36620,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S3-13",
@@ -36632,7 +36658,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S3-15",
@@ -36669,7 +36696,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S3-16",
@@ -36751,7 +36779,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S3-18",
@@ -36788,7 +36817,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S3-2",
@@ -36886,7 +36916,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S3-23",
@@ -37185,7 +37216,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S3-8",
@@ -37275,7 +37307,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S3v-1",
@@ -39535,7 +39568,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-5-verified-text",
@@ -39572,7 +39606,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-32S1-12-verified-text",
@@ -39609,7 +39644,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   },
   {
     "id": "sscp-2026-3251-1",
@@ -39646,7 +39682,8 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": ""
+    "ans": "",
+    "textReview": "source-verified"
   }
 ];
 UP.pyq = UP.pyq.concat(UP.socialPyq);
