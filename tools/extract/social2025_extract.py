@@ -65,7 +65,7 @@ def parse_mcqs(text):
     return [qs[k] for k in sorted(qs)]
 
 result = {}
-for f in sorted(glob.glob(os.path.join(UPLOAD_DIR, '32-*_Social Science.pdf'))):
+for f in sorted(glob.glob(os.path.join(UPLOAD_DIR, '32-*_Social*.pdf'))):
     m = re.search(r'32-(\d+)-(\d+)_', os.path.basename(f))
     code = f"32/{m.group(1)}/{m.group(2)}"
     doc = pymupdf.open(f)

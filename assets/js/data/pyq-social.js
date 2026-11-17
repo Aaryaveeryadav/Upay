@@ -39434,5 +39434,191 @@ UP.socialPyq = [
     ],
     "ans": ""
   }
+,
+  {
+    "id": "sscp-3241-1",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/4/1",
+    "lv": "Standard",
+    "q": 1,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Arrange the following events in chronological order and choose the correct option : 1 I. Second Round Table Conference II. Formation of Depressed Class Association III. Lahore Session of Indian National Congress IV. Formation of Awadh Kissan Sabha Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/4/1 SST Set 1",
+    "opts": [
+      {
+        "en": "I, II, IV, III",
+        "hi": ""
+      },
+      {
+        "en": "I, II, III, IV",
+        "hi": ""
+      },
+      {
+        "en": "IV, III, II, I",
+        "hi": ""
+      },
+      {
+        "en": "IV, III, I, II",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3241-4x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/4/1",
+    "lv": "Standard",
+    "q": 4,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Which one of the following pairs is correctly matched ? 1 Column – A (Writer) Column – B (Contribution)",
+    "hi": "",
+    "twist": "",
+    "src": "32/4/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Ram Chaddha – Bengal Gazette",
+        "hi": ""
+      },
+      {
+        "en": "Gangadhar Bhattacharya – Kesari",
+        "hi": ""
+      },
+      {
+        "en": "Jyotiba Phule – Gulamgiri",
+        "hi": ""
+      },
+      {
+        "en": "Rashsundari Devi – Padmarg ~32/4/1~ { } 8 ",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3241-10x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/4/1",
+    "lv": "Standard",
+    "q": 10,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Read the given infographics carefully and choose the correct option that identifies the soil described. 1 (1) (2) (3) Sandy in texture  Red to brown in colour  Soil lacks humus due to dry climate Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/4/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Laterite soil",
+        "hi": ""
+      },
+      {
+        "en": "Forest soil",
+        "hi": ""
+      },
+      {
+        "en": "Arid soil",
+        "hi": ""
+      },
+      {
+        "en": "Black soil",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3242-11x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/4/2",
+    "lv": "Standard",
+    "q": 11,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "  ‘-’          ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/4/2 SST Set 2",
+    "opts": [
+      {
+        "en": " ",
+        "hi": ""
+      },
+      {
+        "en": "  ",
+        "hi": ""
+      },
+      {
+        "en": "",
+        "hi": ""
+      },
+      {
+        "en": " ~32/4/2~ { } 11  P.T.O. 8.1 How did the failure of the Cripps Mission contribute to the launch of the Quit India Movement ? 1 8.2 Why was Gandhiji’s call for the ‘Quit India’ considered historic ? 1 8.3 Explain the role of women in making the Quit India Movement more inclusive. 2 (Map-Skill Based Questions) 2",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-3242-20x",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/4/2",
+    "lv": "Standard",
+    "q": 20,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "              : 1                ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/4/2 SST Set 2",
+    "opts": [
+      {
+        "en": "     ",
+        "hi": ""
+      },
+      {
+        "en": "   ",
+        "hi": ""
+      },
+      {
+        "en": "     ",
+        "hi": ""
+      },
+      {
+        "en": "      ~32/4/2~ { } 19  P.T.O. Note : The following questions are for Visually Impaired Candidates only in lieu of Question No. 19. Attempt any three of the following : (i) Name the dam built on River Chenab in India. 1 (ii) Name the place where ‘nuclear power plant’ is located in Maharashtra. 1 (iii) Name the place where software technology park is located in Tamil Nadu. 1 (iv) Name the place where international airport is located in Punjab. 1 SECTION – C (20 Marks) (Political Science)",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  }
 ];
 UP.pyq = UP.pyq.concat(UP.socialPyq);

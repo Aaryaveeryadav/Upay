@@ -13,9 +13,19 @@ the site's Social bank (`UP.socialPyq`, 1,036 records before this pass).
 - 9 papers (series 32/1, 32/2, 32/3 — all sets) have a clean English text
   layer. 146 Section-A MCQs were extracted from them
   (`tools/extract/social2025_extract.py`).
-- 7 papers (series 32/4, 32/5, 32/6) are **image-only scans** with no text
-  layer. They were not OCR'd: OCR output is exactly the unverified text this
-  project refuses to present as source material.
+- 7 papers (series 32/4, 32/5, 32/6) in the first upload were **image-only
+  scans** with no text layer. They were not OCR'd: OCR output is exactly the
+  unverified text this project refuses to present as source material.
+- Second upload (Nov 2026): the same 32/4/1–32/4/3 papers arrived **with** a
+  text layer (series LKM4N). 29 MCQs were extracted; 24 already existed in
+  the bank (their text is now cross-validated) and 5 were added. The
+  re-uploaded 32/1–32/3 papers were image-only scans of papers already
+  verified from the first upload. **None of the uploads is a marking
+  scheme** — every file is a question paper (title page: "Candidates must
+  write the Q.P. Code…"). A marking scheme instead carries "MARKING SCHEME /
+  मूल्यांकन योजना" and "Strictly Confidential" on its first page and
+  "Expected Answer / Value Points" tables inside. Social keys remain
+  unverified until those arrive.
 
 ## Findings
 
