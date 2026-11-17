@@ -3959,10 +3959,38 @@ window.UP = window.UP || {};
     return set.slice(0, 10).map((q,i)=>({...q, no:i+1, _daily:true}));
   }
   let DAILY = null;
+  /* buildDailySet returns scheduling items ({q: text, ch, label, raw?}); the
+     cards need the actual bank record — its options, its verified answer, its
+     id — otherwise each card renders as a bare sentence with no answer strip
+     that can be filled. Resolve each item back to its record by id, then by
+     text, and reset the per-set AI state so a reused slot cannot inherit the
+     previous card's verdict. */
+  function loadDailyCards() {
+    const items = buildDailySet();
+    const bank = UP.pyq || [];
+    const cards = items.map(item => {
+      const raw = (item && item.raw) || bank.find(x => x && item && x.id && x.id === item.id)
+        || bank.find(x => x && item && pyqQuestionText(x) === item.q);
+      if (!raw) return null;
+      /* `marked` lives on the stored daily item, not on the bank row, so it has
+         to be carried across explicitly or a re-render forgets the mark. */
+      return Object.assign({}, raw, { _item: item, chName: item.chName || raw.chapter,
+        sourceMeta: item.sourceMeta || '', label: item.label, marked: item.marked });
+    }).filter(Boolean);
+    if (S.dailyAISetKey !== dailySetIdentity(cards)) {
+      S.dailyAISetKey = dailySetIdentity(cards);
+      S.dailyAI = {};
+      S.dailyReveal = {};
+    }
+    return cards;
+  }
+  function dailySetIdentity(cards) {
+    return cards.map(q => String(q.id || q.no || '') + '|' + String(pyqQuestionText(q)).slice(0, 40)).join('~');
+  }
   function viewToday() {
     // buildDailySet caches by date and scope; the view must not reuse a list
     // from a subject or board the student has since left.
-    DAILY = buildDailySet();
+    DAILY = loadDailyCards();
     if (!DAILY.length) return `<section class="page-head"><h1>${S.lang==='hi'?'आज का अभ्यास':'Today\'s practice'}</h1><p class="muted">${S.lang==='hi'?'पहले कुछ प्रश्न हल कीजिए।':'Solve a few questions first.'}</p><a class="btn btn-primary" href="#/ask">${icon('sparkle')} ${S.lang==='hi'?'पहला प्रश्न पूछें':'Ask your first question'}</a></section>`;
     return `<section class="page-head">
       <span class="eyebrow">${icon('target')} ${S.lang==='hi'?'दैनिक 10':'Daily 10'}</span>
@@ -3981,9 +4009,23 @@ window.UP = window.UP || {};
         const answerId = questionControlId('daily-answer', i);
         const optionsId = questionControlId('daily-options', i);
         const verified = hasVerifiedAnswer(q);
+        /* Revealing used to print only "No verified answer key is recorded"
+           and stop there, so "Think → reveal" gave the student nothing to
+           check against. When the bank holds no key, the panel now asks the
+           AI for the answer on first open and says plainly that it is an AI
+           answer, not a board key. */
+        const aiState = dailyAnswerState(i);
         const answerText = verified
           ? `<span class="q-answer-label">${S.lang === 'hi' ? 'सत्यापित उत्तर' : 'Verified answer'}</span> <b>${mathText(q.ans)}</b>`
-          : `<span class="muted">${S.lang === 'hi' ? 'इस प्रश्न की सत्यापित उत्तर-कुंजी उपलब्ध नहीं है।' : 'No verified answer key is recorded for this question.'}</span>`;
+          : `<span class="q-answer-label">${S.lang === 'hi' ? 'एआई उत्तर (असत्यापित)' : 'AI answer (unverified)'}</span> ` +
+            (aiState.text
+              ? `<b>${mathText(aiState.text)}</b>`
+              : aiState.loading
+                ? `<span class="muted">${S.lang === 'hi' ? 'एआई उत्तर तैयार हो रहा है…' : 'Getting an AI answer…'}</span>`
+                : aiState.error
+                  ? `<span class="muted">${esc(aiState.error)}</span> <button type="button" class="btn btn-ghost btn-sm" data-action="dailyRevealAnswer" data-i="${i}">${S.lang === 'hi' ? 'फिर कोशिश करें' : 'Try again'}</button>`
+                  : `<span class="muted">${S.lang === 'hi' ? 'खोलते ही उत्तर तैयार होगा।' : 'The answer is fetched when you open this.'}</span>`) +
+            (aiState.text ? `<div class="muted" style="font-size:12px;margin-top:6px">${S.lang === 'hi' ? 'एआई अभ्यास उत्तर — आधिकारिक कुंजी नहीं।' : 'AI practice answer — not an official board key.'}</div>` : '');
         const choicesButton = hasOpts(q) ? questionPanelButton(optionsId, {
           className: 'q-inline-toggle q-options-toggle', icon: 'list',
           closedLabel: S.lang === 'hi' ? `विकल्प देखें · ${q.opts.length}` : `Show choices · ${q.opts.length}`,
@@ -3997,21 +4039,94 @@ window.UP = window.UP || {};
           <div class="q-text">${rich(txt)}</div>
           ${questionDiagramMarkup(q, 'daily-' + i)}
           ${choices}
-          <div id="${esc(answerId)}" class="q-answer-reveal" role="status" aria-live="polite" hidden>${answerText}</div>
+          <div id="${esc(answerId)}" class="q-answer-reveal" role="status" aria-live="polite" ${verified ? '' : `data-daily-ai="${i}"`} hidden>${answerText}</div>
           ${dailyAnswerBlock(q, i)}
         </article>`;
       }).join('')}
     </div>`;
   }
 
-  function dailyCheckState(q) {
+  /* Ask the solver API for a single answer, without touching the Ask view's
+     state. Used where a card must show something when the bank has no key. */
+  async function aiSolveText(question, ch) {
+    const r = await fetch('/api/ai/solve', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: 'Bearer ' + (localStorage.getItem('upay.token') || '') },
+      body: JSON.stringify({ question: question, chapter: ch || 0, chapterTitle: ch ? chapterName(ch) : '',
+        subject: S.subject, cls: S.cls, lang: S.lang })
+    });
+    const j = await r.json().catch(() => null);
+    if (!r.ok || !j) throw new Error((j && j.error) || 'AI unavailable');
+    const shaped = UP.answerFormat ? UP.answerFormat.answer(j) : j;
+    return shaped || j;
+  }
+
+  /* Per-card AI answer for a card whose bank record has no printed key. */
+  function dailyAnswerState(i) {
+    S.dailyReveal = S.dailyReveal || {};
+    return S.dailyReveal[i] || {};
+  }
+  async function fetchDailyRevealAnswer(i) {
+    const q = (DAILY || [])[i];
+    if (!q || hasVerifiedAnswer(q)) return;
+    const state = dailyAnswerState(i);
+    if (state.loading || state.text) return;
+    S.dailyReveal = S.dailyReveal || {};
+    S.dailyReveal[i] = { loading: true };
+    render({ preserveScroll: true });
+    try {
+      const question = pyqQuestionText(q) + (hasOpts(q) ? '\nOptions: ' + q.opts.map((o, j) => String.fromCharCode(65 + j) + '. ' + String((o && (o.en || o.hi)) || o || '')).join('  ') : '');
+      const body = await aiSolveText(question, q.ch);
+      const text = String((body && (body.result || body.answer)) || '').trim();
+      S.dailyReveal[i] = text
+        ? { text: text.slice(0, 1200) }
+        : { text: '', error: 'AI could not produce an answer for this question.' };
+    } catch (e) {
+      S.dailyReveal[i] = { text: '', error: 'AI answer is unavailable right now — please try again.' };
+    }
+    render({ preserveScroll: true });
+  }
+
+  /* Re-open the reveals the student had opened before a re-render. */
+  function restoreDailyPanels() {
+    const open = S.dailyOpen || {};
+    Object.keys(open).forEach(panelId => {
+      const panel = document.getElementById(panelId);
+      if (!panel || !panel.hidden) return;
+      panel.hidden = false;
+      const btn = document.querySelector('[data-action="toggle-question-panel"][data-target="' + panelId + '"]');
+      if (btn) updatePanelButton(btn, true);
+    });
+  }
+
+  function dailyCheckState(q, i) {
     S.dailyAI = S.dailyAI || {};
-    return S.dailyAI[q.id || q.no] || null;
+    /* Two daily cards can be the same bank question (a scheduled review and a
+       fresh slot). Keying the check by the question id alone made one card's
+       verdict appear on the other, and left an id-less item with the shared
+       key `undefined` so every card overwrote the same entry. The slot index is
+       part of the identity. */
+    return S.dailyAI[dailyStateKey(q, i)] || null;
+  }
+  function dailyStateKey(q, i) {
+    return 'daily|' + String(i) + '|' + String((q && (q.id || q.no)) || '');
   }
   function dailyAnswerBlock(q, i) {
-    const st = dailyCheckState(q);
+    const st = dailyCheckState(q, i);
     if (st && st.checking) return `<div class="callout tip" role="status"><div>Checking your answer with AI… please wait a few seconds.</div></div>`;
     if (st && st.verdict) {
+      /* A failed request is not a verdict. Saying "AI could not decide this
+         one" made a dead request look like a judged answer, and offering "try a
+         similar question" implied the student had got it wrong. Name the cause,
+         keep the typed answer, and offer a retry instead. */
+      if (st.failed) {
+        return `<div class="callout warn" role="alert"><div>
+          <b>${S.lang === 'hi' ? 'आपका उत्तर जाँचा नहीं जा सका' : 'Your answer was not checked'}</b>
+          <p>${esc(st.feedback || '')}</p>
+          <p class="muted">${S.lang === 'hi' ? 'आपका लिखा उत्तर सुरक्षित है।' : 'Your typed answer is kept.'}</p>
+          <div class="pactions"><button type="button" class="btn btn-cream btn-sm" data-action="dailyCheck" data-i="${i}">${icon('arrow')} ${S.lang === 'hi' ? 'फिर जाँचें' : 'Try the check again'}</button>${/sign in/i.test(String(st.feedback)) ? ` <a class="btn btn-ghost btn-sm" href="#/login">${S.lang === 'hi' ? 'साइन इन' : 'Sign in'}</a>` : ''}</div>
+        </div></div>`;
+      }
       const wrong = st.verdict === 'incorrect' || st.verdict === 'partly-correct';
       return `<div class="callout ${st.verdict === 'incorrect' ? 'warn' : 'tip'}" role="status"><div>
         <b>${st.verdict === 'correct' ? '✔ Correct — checked by AI' : st.verdict === 'incorrect' ? '✘ Incorrect — checked by AI' : st.verdict === 'partly-correct' ? 'Partly correct — checked by AI' : 'AI could not decide this one'}</b>
@@ -4030,10 +4145,14 @@ window.UP = window.UP || {};
   async function checkDailyAnswer(i) {
     const q = (DAILY || [])[i]; if (!q) return;
     const inp = document.getElementById('daily-input-' + i);
-    const answer = inp ? inp.value.trim() : '';
+    /* On a retry the textarea is gone — its place holds the failure notice — so
+       fall back to the answer kept in state. Without this, "try again" had
+       nothing to send and re-rendering silently cleared the student's work. */
+    const previous = dailyCheckState(q, i);
+    const answer = (inp ? inp.value.trim() : '') || String((previous && previous.answer) || '').trim();
     if (!answer) { toast(S.lang === 'hi' ? 'पहले अपना उत्तर लिखिए।' : 'Type your answer first.'); return; }
     S.dailyAI = S.dailyAI || {};
-    const key = q.id || q.no;
+    const key = dailyStateKey(q, i);
     S.dailyAI[key] = { checking: true, answer };
     render({ preserveScroll: true });
     try {
@@ -4045,7 +4164,7 @@ window.UP = window.UP || {};
           { status: j.verdict, awarded: j.verdict === 'correct' ? 1 : 0, max: 1, expected: j.correctAnswer || '', reason: 'ai-check' });
       }
     } catch (e) {
-      S.dailyAI[key] = { verdict: 'cannot-tell', feedback: 'AI check could not run right now — please try again.', answer };
+      S.dailyAI[key] = { verdict: 'cannot-tell', feedback: aiCheckFailureMessage(e), answer, failed: true, code: e && e.code || '' };
     }
     render({ preserveScroll: true });
   }
@@ -4508,6 +4627,7 @@ window.UP = window.UP || {};
     else html = viewHome();
 
     main.innerHTML = html;
+    if (r.name === 'today') restoreDailyPanels();
     if (r.name === 'ai-access') loadAIAccess(false);
     main.className = 'page';
     // active nav
@@ -6098,7 +6218,7 @@ window.UP = window.UP || {};
             btn.innerHTML = verdict === 'correct' ? similarButton(qq) : topicButton(qq);
             note.appendChild(btn);
           }
-        }).catch(() => { note.textContent = S.lang === 'hi' ? 'AI जाँच अभी नहीं हो सकी — कृपया फिर प्रयास करें।' : 'AI check could not run right now — please try again.'; box.querySelectorAll('[data-pick]').forEach(b => { b.disabled = false; }); });
+        }).catch(e => { note.textContent = aiCheckFailureMessage(e); box.querySelectorAll('[data-pick]').forEach(b => { b.disabled = false; }); });
         return;
       }
       /* A verified key still has to match a displayed choice exactly enough
@@ -6186,8 +6306,8 @@ window.UP = window.UP || {};
             btn.innerHTML = verdict === 'correct' ? similarButton(q) : topicButton(q);
             feedback.appendChild(btn);
           }
-        }).catch(() => {
-          if (feedback) { feedback.className = 'mcq-feedback pyq-verdict note'; feedback.textContent = S.lang === 'hi' ? 'AI जाँच अभी नहीं हो सकी — कृपया फिर प्रयास करें या नीचे हल देखें।' : 'AI check could not run right now — try again or see the solution below.'; }
+        }).catch(err => {
+          if (feedback) { feedback.className = 'mcq-feedback pyq-verdict note'; feedback.textContent = aiCheckFailureMessage(err); }
           box.querySelectorAll('[data-mcqpick]').forEach(b => { b.disabled = false; });
           delete box.dataset.done;
         });
@@ -6247,10 +6367,23 @@ window.UP = window.UP || {};
       if (!panel) return;
       const expanded = panel.hidden;
       panel.hidden = !expanded;
+      /* Remember which panels the student opened. Fetching an AI answer
+         re-renders the page, and without this the reveal they had just opened
+         snapped shut again on the answer it had just fetched. */
+      if (panel.dataset.dailyAi != null) {
+        S.dailyOpen = S.dailyOpen || {};
+        if (expanded) S.dailyOpen[panel.id] = panel.dataset.dailyAi; else delete S.dailyOpen[panel.id];
+      }
       updatePanelButton(tgt, expanded);
-      if (expanded) loadLazyQuestionFigure(panel);
+      if (expanded) {
+        loadLazyQuestionFigure(panel);
+        /* "Think → reveal" on a card with no printed key now fetches an AI
+           answer for that one card instead of showing a dead sentence. */
+        if (panel.dataset.dailyAi != null) fetchDailyRevealAnswer(+panel.dataset.dailyAi);
+      }
       return;
     }
+    if (action === 'dailyRevealAnswer') { fetchDailyRevealAnswer(+tgt.dataset.i); return; }
     if (action === 'google-signin') { e.preventDefault(); startGoogleSignIn(tgt); return; }
     if (action === 'ai-access-refresh' || action === 'ai-access-manage') { loadAIAccess(action === 'ai-access-manage'); return; }
     if (action === 'ai-access-request' || action === 'ai-access-decide') {
@@ -6600,7 +6733,7 @@ window.UP = window.UP || {};
       DAILY = null;
       S.dailySet = null;
       store.remove && store.remove(dailyStoreKey());
-      DAILY = buildDailySet();
+      DAILY = loadDailyCards();
       render();
       return;
     }
@@ -7121,11 +7254,14 @@ buildDailySet = function(){
     return [q.paperCode, q.session, q.part ? 'Part ' + q.part : '', q.option ? 'Option ' + q.option : '', q.sourcePage ? 'p. ' + q.sourcePage : ''].filter(Boolean).join(' · ');
   }
 
-  // Use the same board/class/subject gate as the Past Years view.
+  // Use the same board/class/subject gate as the Past Years view — and the same
+  // quality gate. Without it a card could be scheduled from a row the rest of
+  // the app already refuses to show (a glued option list, a mangled stem),
+  // which is how an unanswerable "question" reached the daily set.
   const pool = (UP.pyq||[])
     .filter(qInScope)
     .map(q=>({raw:q, text:pyqQuestionText(q)}))
-    .filter(x=>good(x.text));
+    .filter(x=>good(x.text) && !(UP.questionQuality && UP.questionQuality.inspect(x.raw, S.subject)));
 
   // Initialize SRS cards and expose multi-chapter OR roots in every tagged chapter.
   const chMap={};
@@ -7146,14 +7282,14 @@ buildDailySet = function(){
     const source = pool.find(x=>x.text===d.q);
     // Mastery can contain cards from another subject/board; never leak them.
     if (!source) return;
-    due.push({q:d.q, ch:d.chId, chName:(chapterById(d.chId)?P(chapterById(d.chId)):''), sourceMeta:sourceLabel(source.raw), label:S.lang==='hi'?'दोहराना':'Review'});
+    due.push({q:d.q, ch:d.chId, chName:(chapterById(d.chId)?P(chapterById(d.chId)):''), sourceMeta:sourceLabel(source.raw), label:S.lang==='hi'?'दोहराना':'Review', raw:source.raw});
   });
   // Weak/fresh by chapter
   (UP.catalogue(S.cls,S.subject)||[]).forEach(c=>{
     const m=S.mastery[c.id]||{attempted:0,correct:0};
     const qs=(chMap[c.id]||[]).filter(x=>good(x.text));
     qs.forEach(x=>{
-      const item={q:x.text,ch:c.id,chName:P(c),sourceMeta:sourceLabel(x.raw)};
+      const item={q:x.text,ch:c.id,chName:P(c),sourceMeta:sourceLabel(x.raw),raw:x.raw};
       if(m.attempted>=3 && m.correct/m.attempted<0.5) weak.push({...item,label:S.lang==='hi'?'कमज़ोर':'Weak'});
       else if(!(m.cards||[]).find(card=>card.q===x.text&&card.box>0)) fresh.push({...item,label:S.lang==='hi'?'नया':'New'});
     });
@@ -7175,7 +7311,7 @@ buildDailySet = function(){
   if (items.length < 10) {
     const filler = pool
       .filter(x=>!used.has(x.text))
-      .map(x=>({q:x.text, ch:x.raw.ch, chName:chapNameForQ(x.raw), sourceMeta:sourceLabel(x.raw), label:S.lang==='hi'?'स्ट्रेच':'Stretch'}));
+      .map(x=>({q:x.text, ch:x.raw.ch, chName:chapNameForQ(x.raw), sourceMeta:sourceLabel(x.raw), label:S.lang==='hi'?'स्ट्रेच':'Stretch', raw:x.raw}));
     pick(filler, 10-items.length).forEach(it=>{ if(!used.has(it.q)){ used.add(it.q); items.push(it); } });
   }
 
@@ -7290,9 +7426,47 @@ async function aiCheckAnswerText(question, studentAnswer, referenceAnswer){
   try {
     const r = await fetch('/api/ai/check-answer', { method:'POST', headers:{ 'content-type':'application/json', authorization:'Bearer ' + (localStorage.getItem('upay.token') || '') }, body: JSON.stringify({ question: question, studentAnswer: studentAnswer, referenceAnswer: referenceAnswer || '', subject: S.subject, cls: S.cls, lang: S.lang }), signal: controller ? controller.signal : undefined });
     const j = await r.json().catch(() => null);
-    if (!r.ok || !j || !j.verdict) throw new Error((j && j.error) || 'AI check failed. Please try again.');
+    if (!r.ok || !j || !j.verdict) {
+      /* Every failure used to collapse into one sentence — "AI check could not
+         run right now" — which told the student nothing and hid the case they
+         can act on: a lapsed sign-in, a switched-off service, a used-up daily
+         quota, or a refused answer check. Carry the server's own code and
+         message out with the error so the card can say what happened. */
+      const err = new Error((j && (j.error || j.message)) || 'AI check failed. Please try again.');
+      err.code = (j && j.code) || '';
+      err.status = r.status;
+      throw err;
+    }
     return j;
   } finally { if (timer) clearTimeout(timer); }
+}
+/* Turn an AI-check failure into one line that names the cause and the fix. */
+function aiCheckFailureMessage(err) {
+  const code = String((err && err.code) || '');
+  const status = Number(err && err.status) || 0;
+  const hi = S.lang === 'hi';
+  if (code === 'sign_in_required' || status === 401) {
+    return hi ? 'AI जाँच के लिए साइन इन करें — आपका साइन-इन समाप्त हो गया है।'
+              : 'Sign in to check answers — your sign-in has expired.';
+  }
+  if (code === 'ai_disabled') {
+    return hi ? 'व्यवस्थापक ने एआई अस्थायी रूप से बंद रखा है।'
+              : 'AI is switched off by the administrator right now.';
+  }
+  if (code === 'usage_setup_pending' || code === 'access_verification_unavailable') {
+    return hi ? 'एआई जाँच अभी सेटअप की प्रतीक्षा में है। सामग्री पढ़ाई के लिए उपलब्ध है।'
+              : 'AI checking is awaiting setup. Study material is still available.';
+  }
+  if (code === 'ai_quota_exhausted' || status === 429) {
+    return hi ? 'आज की एआई जाँच की सीमा पूरी हो गई — कल फिर जाँचें।'
+              : 'Today\'s AI checking limit is used up — try again tomorrow.';
+  }
+  if (code === 'sign_in_unavailable') {
+    return hi ? 'साइन-इन जाँच अस्थायी रूप से उपलब्ध नहीं है — थोड़ी देर बाद प्रयास करें।'
+              : 'Sign-in verification is temporarily unavailable — try again shortly.';
+  }
+  return hi ? 'एआई जाँच अभी नहीं हो सकी — कृपया फिर प्रयास करें।'
+            : 'AI check could not run right now — please try again.';
 }
 async function aiGradeTestAnswer(no){
   const q = findQ(no); const a = S.answers[no];
@@ -7309,7 +7483,7 @@ async function aiGradeTestAnswer(no){
         { status: j.verdict, awarded: j.verdict === 'correct' ? 1 : 0, max: 1, expected: a.aiCorrect || '', reason: 'ai-check' });
     }
   } catch (e) {
-    a.aiChecking = false; a.aiVerdict = 'cannot-tell'; a.aiFeedback = 'AI check could not run right now — please try again.';
+    a.aiChecking = false; a.aiVerdict = 'cannot-tell'; a.aiFeedback = aiCheckFailureMessage(e);
   }
   render({ preserveScroll: true });
 }

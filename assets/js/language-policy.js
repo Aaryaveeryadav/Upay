@@ -1,10 +1,31 @@
 /* Source/context guards: preserve original text; do not manufacture language questions. */
 (function(root){
+ const DEVANAGARI=/[\u0900-\u097f]/,LATIN=/[A-Za-z]/;
+ /* A question belongs to the language its text is printed in. Hindi is the only
+    subject that may serve Devanagari-only items: a Science, Social Science,
+    Maths or English record with no Latin-script text at all is an OCR leftover
+    of that book's Hindi edition, not an English question. Showing it under an
+    English-medium subject puts Hindi words under an English heading, which is
+    exactly the complaint this guard answers. `en` is checked first because the
+    source PDFs sometimes land the Hindi column in `en`; `hi` is the fallback
+    only when `en` is empty. */
+ function devanagariOnly(q){
+  const en=String(q&&q.en||''),hi=String(q&&q.hi||'');
+  const text=en.trim()?en:hi;
+  return DEVANAGARI.test(text)&&!LATIN.test(text);
+ }
  function issue(q){
-  if(!q||!['hindi','english','sanskrit'].includes(q.subject))return '';
+  if(!q)return '';
+  const languageSubject=['hindi','english','sanskrit'].includes(q.subject);
+  if(!languageSubject&&q.subject)
+   return devanagariOnly(q)?'Devanagari-only text in a non-Hindi subject: no English-medium wording was extracted':'';
+  if(!languageSubject)return '';
   if(['text','passage','vocabulary','glossary'].includes(q.kind))return 'Reading passage/glossary, not a standalone exam question';
   if(q.subject==='sanskrit'&&q.sourceVerified!==true)return 'Legacy Hindi study prompt: original Sanskrit wording not source-verified';
   if(/बरामदा\s*22[.।]?\s*साफ़?,?\s*शुद्ध/.test(q.hi||''))return 'Glossary/OCR fragment, not a complete question';
+  /* An English paper carries English wording. Devanagari-only text there is the
+     Hindi translation column, not the question the paper printed. */
+  if(q.subject==='english'&&devanagariOnly(q))return 'Devanagari-only text in the English subject: the English wording was never extracted';
   return '';
  }
  function contextRequest(question,subject,title){
@@ -18,11 +39,13 @@
  function usableApproach(approach,question,subject){
   if(subject!=='sanskrit'||/(?:हिन्दी|हिंदी|Hindi|English).*(?:अर्थ|अनुवाद|meaning|translation)|(?:translate|अनुवाद).*(?:हिन्दी|हिंदी|Hindi|English)/i.test(question))return true;
   const text=(approach.steps||[]).map(s=>String(s.t||'')+' '+String(s.m||'')).join(' ');
-  if(!/[\u0900-\u097f]/.test(text))return false;
+  if(!DEVANAGARI.test(text))return false;
   const hindi=text.match(/(?:^|[\s।])(?:है|हैं|क्या|क्यों|कैसे|लिखिए|बताइए|होता|करता|के अनुसार)(?=$|[\s।])/g)||[];
   return hindi.length<2;
  }
- const instructions='LANGUAGE ACCURACY: Answer Sanskrit subject questions in grammatical Sanskrit (Devanagari), not Hindi by default. Provide Hindi/English meanings only when explicitly requested. Preserve the supplied original question/verse; never translate a Hindi study prompt and claim the translation was printed on a Sanskrit board paper. For Hindi and English literature, use the named chapter and supplied extract; a chapter title is context, NOT proof that its complete source text was supplied. Do not invent quotations, authors, characters, chapter mappings, vocabulary prompts or unseen subquestions. If a question depends on a missing extract, ask for it. A passage without a task is not a solved question. Distinguish interpretation from explicit textual evidence, and state uncertainty instead of claiming verification. For questions outside the bank, general grammar/composition is allowed but source-specific claims still require adequate context.';
- const api={issue,contextRequest,instructions,usableApproach};if(typeof module==='object'&&module.exports)module.exports=api;
+ const instructions='LANGUAGE ACCURACY: Answer Sanskrit subject questions in grammatical Sanskrit (Devanagari), not Hindi by default. Provide Hindi/English meanings only when explicitly requested. Preserve the supplied original question/verse; never translate a Hindi study prompt and claim the translation was printed on a Sanskrit board paper. For Hindi and English literature, use the named chapter and supplied extract; a chapter title is context, NOT proof that its complete source text was supplied. Do not invent quotations, authors, characters, chapter mappings, vocabulary prompts or unseen subquestions. If a question depends on a missing extract, ask for it. A passage without a task is not a solved question. Distinguish interpretation from explicit textual evidence, and state uncertainty instead of claiming verification. For questions outside the bank, general grammar/composition is allowed but source-specific claims still require adequate context. Answer in the script of the subject being asked about: Hindi items in Devanagari, English items in English, and never present a Hindi rendering as an English-medium question or vice versa.';
+ const api={issue,contextRequest,instructions,usableApproach,devanagariOnly};
+ api._script={DEVANAGARI,LATIN};
+ if(typeof module==='object'&&module.exports)module.exports=api;
  else{root.UP=root.UP||{};root.UP.languagePolicy=api;}
 })(typeof window==='undefined'?globalThis:window);

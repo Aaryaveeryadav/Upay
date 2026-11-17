@@ -87,6 +87,94 @@
       || /^give\s+your\s+opinion$/i.test(clean);
   }
 
+  /* A match-the-column MCQ appears in the source as "stem — (a) option …". The
+     extractor sometimes started a fresh record at the option list, leaving a
+     row whose whole text is two options glued together with no question and no
+     options array: "Communist Party of India (Marxist) C. United Progressive
+     Alliance". No task, a bare `A.`/`B.`/`C.`/`D.` inside the text and nothing
+     to answer — that is not a question, and asking an AI to mark an answer to
+     it only wastes the student's turn. */
+  /* A record whose stem is nothing but option text, and so carries no task the
+     student could attempt: one option lifted out of a multiple-choice question
+     ("Communist Party of India (Marxist) C. United Progressive Alliance"), or a
+     run of options whose question line was lost to the import.
+     The discriminator is whether a question stem comes *before* the first option
+     marker, not whether a marker exists at all. Real papers number their parts
+     the same way options are lettered — "Assertion (A) : …", "… is : (a) 12 (b)
+     120 (C) 1200 (D) 40" — and an earlier version of this rule treated any
+     inline "(b)" as proof of a fragment, which would have withheld 460 genuine
+     Maths questions. A stem ends in a question cue (a colon, a question mark, a
+     copula, "the following") or contains a task verb; option text does not. */
+  const ASSERTION_REASON = /\bassertion\b|\breason\s*\(\s*r\s*\)|\bstatement\s*(?:-|\u2014)?\s*i\b/i;
+  const TASK_VERB = /\b(?:prove|verify|find|calculate|compute|solve|evaluate|simplify|explain|describe|define|state|write|name|give|list|draw|show|derive|determine|construct|compare|distinguish|justify|comment|identify|mention|suggest|convert|represent|rationalise|rationalize|factorise|factorize|form|label|fill|match|correct|choose|select|tick|pick)\b/i;
+  /* Locate the first option marker and take everything before it as the stem.
+     The label's own words must NOT be consumed: "In an A.P., if d = -4 … is
+     equal to 1 7 (A) 6 (B) 7" has a genuine stem in front of the marker, and
+     swallowing "A.P." into the marker made the stem read "In an" — which then
+     looked like an option fragment. */
+  /* A letter in brackets — "(A) 6" — or a letter with a full stop — "C. United
+     Progressive Alliance". NOT a capital followed by an open bracket, which is
+     ordinary notation: "B(adj B)", "A(adj A)". */
+  const OPTION_MARKER = /(?:(?<=\s)|^)(?:\([a-dA-D]\)|[A-Da-d]\.)(?=\s)/g;
+  function firstOptionIndex(t) {
+    const re = new RegExp(OPTION_MARKER.source, 'g');
+    let m;
+    while ((m = re.exec(t))) {
+      /* Skip a bare enumerated part "(a) Prove …" only when it opens the text;
+         anywhere else a letter in brackets is an option. */
+      if (m.index === 0 && /^\s*(?:\([a-dA-D]\)|[a-dA-D][.)])\s/.test(t) && !/\b(?:which|choose|select|correct|of the following)\b/i.test(t)) {
+        // an opening sub-part label — treat the rest as the stem
+        continue;
+      }
+      return m.index;
+    }
+    return -1;
+  }
+  function isOptionFragment(text, q) {
+    const t = String(text || '').normalize('NFKC').trim();
+    if (t.length < 8 || t.length > 160) return false;
+    if (q && Array.isArray(q.opts) && q.opts.length) return false;
+    if (/[?\uFF1F]/.test(t)) return false;          // it asks something
+    if (ASSERTION_REASON.test(t)) return false;      // Assertion/Reason wrapper, not options
+    /* A "Match the following" row that kept only one of its pairs has nothing to
+       match against: the import emitted each pair as its own record, so the
+       student sees "Match the following. — (ii) Agmark (b) Dealing with consumer
+       cases" with a single line. A usable matching question carries at least two
+       pairs. */
+    if (/^\s*match\s+the\s+(?:following|column|items|pairs)|^\s*match\s+column/i.test(t)) {
+      const roman = (t.match(/\((?:i{1,3}|iv|vi{0,3}|ix|x)\)/gi) || []).length;
+      /* "(b)" or "B." — but not the full stop of a preceding word ("Agmark."). */
+      const letters = (t.match(/\([a-hA-H]\)|(?<![A-Za-z])[A-H](?:\.|\))(?=\s)/g) || []).length;
+      if (roman + letters <= 2) return true;
+    }
+    if (TASK_VERB.test(t)) return false;             // it instructs the student
+    const at = firstOptionIndex(t);
+    if (at < 0) return false;
+    const stem = t.slice(0, at).trim();
+    const label = t.slice(at).replace(/^[\s(]*/, '');
+    /* No stem at all, or a stem far too short to be a question. */
+    if (stem.length < 12) return true;
+    /* A section label in front of a bare option run is not a stem. */
+    const sectionLabel = /^(?:multiple choice questions?|mcqs?|objectives?|choose the correct option|answer the following)\.?\s*(?:[\u2014\u2013-]\s*)?$/i.test(stem);
+    if (sectionLabel) return true;
+    /* A stem that asks nothing: no colon/cue ending and no copula anywhere. */
+    const endsWithCue = /[:\u2014\u2013-]\s*$/.test(stem)
+      || /(?:is|are|was|were|of|following|below|given)\s*$/i.test(stem);
+    if (endsWithCue) return false;
+    if (/\b(?:is|are|was|were)\b/i.test(stem)) return false;
+    /* Title-Case throughout is a name or a table column, never a sentence
+       ("Communist Party of India (Marxist)"). */
+    const plain = stem.replace(/[()]/g, ' ');
+    const hasLower = /\b[a-z]{3,}/.test(plain);
+    const titleRuns = (label.match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,}/g) || []).length;
+    if (!hasLower) return true;
+    if (titleRuns >= 1 && stem.split(/\s+/).filter(Boolean).length < 7) return true;
+    /* A complete-looking stem that merely lost its option bodies to the import
+       ("… is equal to (A)  (B)  (C)  (D)") is recoverable, not junk: the stem
+       alone still tells the student what to do. */
+    return false;
+  }
+
   function isPaperDirections(text, q) {
     const t = String(text || '');
     const cues = PAPER_CUES.reduce((n, re) => n + (re.test(t) ? 1 : 0), 0);
@@ -141,6 +229,7 @@
       && !/[?？.!।॥]$/.test(text) && !taskSignal(text)) return 'incomplete-source-fragment';
     if (tails.length && tails.every(tail => tail && tail.drop)) return 'activity-only';
     if (isGenericUncontextualized(text)) return 'uncontextualized-prompt';
+    if (isOptionFragment(text, q)) return 'option-fragment';
     if (isPaperDirections(text, q)) return 'paper-directions';
 
     if (CONTROL_OR_PRIVATE.test(text)) return 'ocr-damaged';
@@ -216,7 +305,7 @@
     return inspect({ hi: String(text == null ? '' : text), subject: subject || '', kind: 'question' }, subject);
   }
 
-  const api = { activityTail, cleanActivityTail, inspect, inspectText, testReadyIssue, boardKeyAdmission, isGenericUncontextualized, isPaperDirections, optionIssue, textOf };
+  const api = { activityTail, cleanActivityTail, inspect, inspectText, testReadyIssue, boardKeyAdmission, isGenericUncontextualized, isOptionFragment, isPaperDirections, optionIssue, textOf };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.UP = root.UP || {};
   root.UP.questionQuality = api;
