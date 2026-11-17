@@ -1,13 +1,17 @@
 # Hindi practice papers and marking schemes (2023-24 uploads)
 
-Audit date: 17 November 2026. Eighteen Hindi PDFs were supplied. This pass
-examined every one, matched printed answer keys against the question bank
-**only** where year, paper, question number and option order all agree, and
-added nothing that the sources do not print.
+Audit date: 17 November 2026. Thirty-six Hindi PDFs were supplied in two
+batches — eighteen practice papers and marking schemes (2023-24), then eighteen
+board sets (Course A `3/x/y`, Course B `4/S/x`). This pass examined every one,
+matched printed answer keys against the question bank **only** where year,
+paper, question number and option order all agree, and added nothing that the
+sources do not print.
 
-**Result: 0 printed keys could be attached, 0 questions added.** The uploads
-are coach-made practice papers and their answer schemes, not board sets, and
-every text-bearing file carries a damaged text layer. Details and the evidence
+**Result: 0 printed keys could be attached, 0 questions added.** The first
+batch is coach-made practice papers and their answer schemes; the second is real
+board sets, but it contains **no marking scheme at all**, so nothing in it can
+key a question. Every text-bearing file in both batches carries a text layer
+that is not a faithful transcription of the printed page. Details and the evidence
 for each decision are below; the machine-readable record is
 `tools/check/fixtures/hindi-practice-papers-2023-24.json` and the contract that
 locks it in is `tools/check/hindi_practice_papers.js`.
@@ -18,7 +22,10 @@ bank, and the PDFs themselves are not committed.
 
 ## Why nothing could be attached
 
-Three independent conditions each block a key on their own.
+Three independent conditions each block a key on their own, and the second batch
+fails the first two for a different reason than the first batch fails them.
+
+### First batch (18 practice papers, 2023-24)
 
 1. **The uploads are not board papers.** Cover headings read
    "अभ्यास प्रश्नपत्र" / "अतिरिक्त अभ्यास" (practice / extra-practice paper) and
@@ -38,6 +45,32 @@ Three independent conditions each block a key on their own.
    `लिए` as `शलए`. The rendered page reads correctly to the eye; the extracted
    string is not the printed text. Comparing a key's option text with an
    option's text is therefore comparing two corrupted strings.
+
+### Second batch (18 board sets)
+
+4. **The board sets are genuine, and that changes nothing.** `3/2/1` … `3/5/3`
+   print Series `KMLN2` / `KL3MN` / `N4KLM` / `KN5ML`; `4/S/1` … `4/S/3` print
+   Series `EFGH/S`. Each prints its own code and SET number, and their Hindi is
+   set in an embedded font whose ToUnicode table is missing or wrong.
+5. **No marking scheme was supplied with them.** The batch is question papers
+   only — zero schemes — so there is no printed key to compare against even if
+   the text were clean. This is the decisive difference from the first batch:
+   there, schemes existed but no text could be trusted; here, there is no scheme
+   to attach.
+
+The Course A sets lose nearly all their Hindi to the font (only ~400 Latin
+characters of page furniture survive — question numbers, `P.T.O.`, the series
+code). The Course B `4/S/x` sets keep ~7,400 Devanagari characters, and it is
+shifted exactly as the first batch is: **462**, **407** and **460** words begin
+with a dependent vowel sign, which no printed Hindi word can do. `3/1/1` … `3/1/3`
+are image-only scans with no text layer at all.
+
+Fifteen of these eighteen sets are already cited by **156 shipped bank rows**
+(`hca26-3a26…`). Those rows stay unkeyed: their source has no faithful text and
+the batch has no scheme, so there is nothing to verify against. The three
+Course B sets are cited by nothing.
+
+### The comparison that was run anyway
 
 The audit still ran the comparison, and reports it as unresolved rather than as
 agreement. `HindiA-PQMS` against `HindiA-PQ2` compares 43 of its 44 printed keys
@@ -77,6 +110,24 @@ session; they are not used as year proof on their own.
 | `4-8-1 … E2_26.pdf` | Board question paper, set 1 | B | 4/8/1, SET 1, series 8EFDG | 2026-05-19 | 16 | — |
 | `4-8-2 … E2_26.pdf` | Board question paper, set 2 | B | 4/8/2, SET 2, series 8EFDG | 2026-05-20 | 16 | — |
 | `4-8-3 … E2_26.pdf` | Board question paper, set 3 | B | 4/8/3, SET 3, series 8EFDG | 2026-05-20 | 16 | — |
+| `3-1-1 … (1).pdf` | Board question paper, set 1 | A | 3/1/1, SET 1 — image-only scan | — | 16 | — |
+| `3-1-2 … (1).pdf` | Board question paper, set 2 | A | 3/1/2, SET 2 — image-only scan | — | 16 | — |
+| `3-1-3 … (1).pdf` | Board question paper, set 3 | A | 3/1/3, SET 3 — image-only scan | — | 16 | — |
+| `3-2-1 … (1).pdf` | Board question paper, set 1 | A | 3/2/1, SET 1, series KMLN2 | — | 15 | — |
+| `3-2-2 … (1).pdf` | Board question paper, set 2 | A | 3/2/2, SET 2, series KMLN2 | — | 15 | — |
+| `3-2-3 … (1).pdf` | Board question paper, set 3 | A | 3/2/3, SET 3, series KMLN2 | — | 15 | — |
+| `3-3-1 … (1).pdf` | Board question paper, set 1 | A | 3/3/1, SET 1, series KL3MN | — | 16 | — |
+| `3-3-2 … (1).pdf` | Board question paper, set 2 | A | 3/3/2, SET 2, series KL3MN | — | 16 | — |
+| `3-3-3 … (1).pdf` | Board question paper, set 3 | A | 3/3/3, SET 3, series KL3MN | — | 16 | — |
+| `3-4-1 Hindi A.pdf` | Board question paper, set 1 | A | 3/4/1, SET 1, series N4KLM | — | 16 | — |
+| `3-4-2 Hindi A.pdf` | Board question paper, set 2 | A | 3/4/2, SET 2, series N4KLM | — | 16 | — |
+| `3-4-3 Hindi (A).pdf` | Board question paper, set 3 | A | 3/4/3, SET 3, series N4KLM | — | 16 | — |
+| `3-5-1 Hindi (A).pdf` | Board question paper, set 1 | A | 3/5/1, SET 1, series KN5ML | — | 16 | — |
+| `3-5-2 Hindi (A).pdf` | Board question paper, set 2 | A | 3/5/2, SET 2, series KN5ML | — | 16 | — |
+| `3-5-3 Hindi (A).pdf` | Board question paper, set 3 | A | 3/5/3, SET 3, series KN5ML | — | 16 | — |
+| `4-S-1_Hindi Course B.pdf` | Board question paper, set 1 | B | 4/S/1, SET 1, series EFGH/S | — | 11 | — |
+| `4-S-2_Hindi Course B.pdf` | Board question paper, set 2 | B | 4/S/2, SET 2, series EFGH/S | — | 11 | — |
+| `4-S-3_Hindi Course B.pdf` | Board question paper, set 3 | B | 4/S/3, SET 3, series EFGH/S | — | 11 | — |
 
 Counts, in one line: **9 practice-paper files (5 question papers, 4 marking
 schemes), 6 image-only board-paper scans, 3 KrutiDev board-paper scans; 177
