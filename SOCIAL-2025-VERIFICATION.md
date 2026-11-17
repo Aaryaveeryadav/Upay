@@ -55,7 +55,10 @@ the site's Social bank (`UP.socialPyq`, 1,036 records before this pass).
 - **Verified Hindi keys**: no Hindi source material exists yet. Upload CBSE
   Hindi A/B marking schemes or solved papers; without them Hindi answers
   stay AI-checked and unlabelled-as-board.
-- Series 32/4–32/6 verification awaits text-layer PDFs or marking schemes.
+- Series 32/5–32/6 (2025) verification awaits matching text-layer PDFs.
+  Series 32/4 was checked in the second upload. See the [later upload
+  inventory](docs/social-upload-nov-2026.md) for different-year papers
+  with reused 32/4–32/5 codes.
 
 ## After this pass
 

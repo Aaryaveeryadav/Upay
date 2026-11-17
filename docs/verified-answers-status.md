@@ -13,6 +13,10 @@ undamaged options). AI-checked answers are never counted here.
 | Social (Cl 10) | 0 (question *text* cross-verified for series 32/1–32/4 from official QPs; 43 MCQs added from them) | CBSE question papers 2025 | **CBSE marking scheme PDFs (32-series, 32/C, 32/S)** — title page says MARKING SCHEME / Strictly Confidential |
 | Hindi (Cl 10) | 0 | — | **CBSE Hindi A/B marking schemes or solved papers** |
 
+The [later Social upload inventory](social-upload-nov-2026.md) contains
+question papers, not marking schemes; its 32/5 paper is from a different
+year and does not verify the 2025 bank. No Social keys were attached.
+
 ## How Maths admission works
 
 `UP.questionQuality.boardKeyAdmission` (assets/js/question-quality.js) trusts
