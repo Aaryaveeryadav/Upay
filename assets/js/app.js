@@ -1932,7 +1932,13 @@ window.UP = window.UP || {};
     if (!a) return '';
     const concept = a.conceptDiagram && a.conceptDiagram.type === 'flow' ? a.conceptDiagram : null;
     const graphical = a.diagram && a.diagram.type !== 'flow' ? a.diagram : null;
-    let drawing = graphical ? renderSingleAIDiagram(a) : '';
+    let drawing = '';
+    if (Array.isArray(a.diagrams) && a.diagrams.length) {
+      drawing = a.diagrams.filter(d => d && d.type !== 'flow').map(d => {
+        try { return renderSingleAIDiagram(Object.assign({}, a, { diagram: d })); } catch (_) { return ''; }
+      }).join('');
+    }
+    if (!drawing && graphical) drawing = renderSingleAIDiagram(a);
     // A flow-only reply must not replace an existing question-matched local
     // drawing (e.g. the √5 number-line construction). Never borrow a stale one.
     const question = a.question || S.aiQuestion || '';
@@ -3917,7 +3923,8 @@ window.UP = window.UP || {};
      TODAY'S PRACTICE  (#6) — 10 Q daily set, feeds from mastery
      ============================================================ */
   function buildDailySet() {
-    const pool = (UP.pyq || []).filter(q => q.subject === S.subject && q.cls === +S.cls && pyqQuestionText(q).length > 12);
+    const pool = (UP.pyq || []).filter(q => q.subject === S.subject && q.cls === +S.cls && pyqQuestionText(q).length > 12
+      && (S.lang === 'hi' || String(q.en || '').trim().length >= 12));
     if (!pool.length) return [];
     // Mastery score per chapter: higher = weaker (more incorrect / less attempted)
     const chScore = {};
@@ -3946,7 +3953,7 @@ window.UP = window.UP || {};
     return `<section class="page-head">
       <span class="eyebrow">${icon('target')} ${S.lang==='hi'?'दैनिक 10':'Daily 10'}</span>
       <h1>${S.lang==='hi'?'आज के 10 प्रश्न':'Today\'s 10 practice questions'}</h1>
-      <p>${S.lang==='hi'?'उपलब्ध प्रश्नों और दोहराव का मिश्रण। अपना आकलन स्वयं करें; अंक नहीं दिए जाते।':'A mix of available questions and review. Mark your own confidence; no score is assigned.'}</p>
+      <p>${S.lang==='hi'?'उपलब्ध प्रश्नों और दोहराव का मिश्रण। हर प्रश्न का उत्तर लिखिए — AI जाँचकर बताएगा सही है या गलत।':'A mix of available questions and review. Type your answer for each question — AI will check whether it is right or wrong.'}</p>
       <div style="margin-top:12px;display:flex;gap:8px">
         <button class="btn btn-ghost btn-sm" data-action="dailyRefresh">${icon('arrow')} ${S.lang==='hi'?'नया सेट':'New set'}</button>
         <a class="btn btn-primary btn-sm" href="#/ask">${icon('sparkle')} ${S.lang==='hi'?'कुछ और पूछें':'Ask something else'}</a>
@@ -3977,13 +3984,56 @@ window.UP = window.UP || {};
           ${questionDiagramMarkup(q, 'daily-' + i)}
           ${choices}
           <div id="${esc(answerId)}" class="q-answer-reveal" role="status" aria-live="polite" hidden>${answerText}</div>
-          <div class="pactions daily-mark-actions">
-            <button class="btn btn-ghost btn-sm" data-action="dailyMark" data-i="${i}" data-ok="1" ${q.marked ? 'disabled' : ''}>${icon('check')} ${S.lang==='hi'?'आसान':'Got it'}</button>
-            <button class="btn btn-ghost btn-sm" data-action="dailyMark" data-i="${i}" data-ok="0" ${q.marked ? 'disabled' : ''}>${icon('warn')} ${S.lang==='hi'?'कठिन':'Hard'}</button>
-          </div>
+          ${dailyAnswerBlock(q, i)}
         </article>`;
       }).join('')}
     </div>`;
+  }
+
+  function dailyCheckState(q) {
+    S.dailyAI = S.dailyAI || {};
+    return S.dailyAI[q.id || q.no] || null;
+  }
+  function dailyAnswerBlock(q, i) {
+    const st = dailyCheckState(q);
+    if (st && st.checking) return `<div class="callout tip" role="status"><div>Checking your answer with AI… please wait a few seconds.</div></div>`;
+    if (st && st.verdict) {
+      const wrong = st.verdict === 'incorrect' || st.verdict === 'partly-correct';
+      return `<div class="callout ${st.verdict === 'incorrect' ? 'warn' : 'tip'}" role="status"><div>
+        <b>${st.verdict === 'correct' ? '✔ Correct — checked by AI' : st.verdict === 'incorrect' ? '✘ Incorrect — checked by AI' : st.verdict === 'partly-correct' ? 'Partly correct — checked by AI' : 'AI could not decide this one'}</b>
+        ${st.correctAnswer ? '<p><b>Correct answer:</b> ' + esc(st.correctAnswer) + '</p>' : ''}
+        ${st.feedback ? '<p>' + esc(st.feedback) + '</p>' : ''}
+        <p class="muted">AI practice marking — not an official board key.</p>
+        <div class="pactions">${wrong ? topicButton(q) : similarButton(q)}</div>
+      </div></div>`;
+    }
+    return `<div class="daily-answer-box">
+      <label class="mini-label" for="daily-input-${i}">${S.lang === 'hi' ? 'अपना उत्तर लिखिए' : 'Type your answer'}</label>
+      <textarea id="daily-input-${i}" class="mock-ans" rows="2" placeholder="${S.lang === 'hi' ? 'यहाँ अपना उत्तर लिखिए…' : 'Write your answer here…'}">${esc(st && st.answer || '')}</textarea>
+      <div class="pactions"><button class="btn btn-primary btn-sm" data-action="dailyCheck" data-i="${i}">${icon('check')} ${S.lang === 'hi' ? 'AI से जाँचें' : 'Check my answer with AI'}</button></div>
+    </div>`;
+  }
+  async function checkDailyAnswer(i) {
+    const q = (DAILY || [])[i]; if (!q) return;
+    const inp = document.getElementById('daily-input-' + i);
+    const answer = inp ? inp.value.trim() : '';
+    if (!answer) { toast(S.lang === 'hi' ? 'पहले अपना उत्तर लिखिए।' : 'Type your answer first.'); return; }
+    S.dailyAI = S.dailyAI || {};
+    const key = q.id || q.no;
+    S.dailyAI[key] = { checking: true, answer };
+    render({ preserveScroll: true });
+    try {
+      const reference = hasVerifiedAnswer(q) ? String(q.ans || '') : '';
+      const j = await aiCheckAnswerText(pyqQuestionText(q), answer, reference);
+      S.dailyAI[key] = { verdict: j.verdict, feedback: j.feedback || '', correctAnswer: j.correctAnswer || '', answer };
+      if (j.verdict === 'correct' || j.verdict === 'incorrect') {
+        rememberAssessment({ q: pyqQuestionText(q), ch: q.ch, source: { m: 1, opts: q.opts || [], ans: j.correctAnswer || answer } }, answer,
+          { status: j.verdict, awarded: j.verdict === 'correct' ? 1 : 0, max: 1, expected: j.correctAnswer || '', reason: 'ai-check' });
+      }
+    } catch (e) {
+      S.dailyAI[key] = { verdict: 'cannot-tell', feedback: 'AI check could not run right now — please try again.', answer };
+    }
+    render({ preserveScroll: true });
   }
 
   /* ============================================================
@@ -5212,7 +5262,7 @@ window.UP = window.UP || {};
       ${opts}
       ${hasOpts(q) && !graded && !(a && a.aiVerdict) ? `<div class="callout tip mcq-unscored-note" role="note" style="margin-top:10px">${S.lang === 'hi' ? 'इस प्रश्न की संग्रहीत कुंजी नहीं है — विकल्प चुनिए, AI आपका उत्तर जाँचेगा और अंक देगा। इसमें कुछ सेकंड लग सकते हैं।' : 'No stored key for this question — pick an option and AI will check it and score you. It can take a few seconds.'}</div>` : ''}
       ${a && a.aiChecking ? `<div class="callout tip" role="status"><div>Checking your answer with AI… please wait a few seconds.</div></div>` : ''}
-      ${a && a.aiVerdict ? `<div class="callout ${a.aiVerdict === 'incorrect' ? 'warn' : 'tip'}" role="status"><div><b>${a.aiVerdict === 'correct' ? '✔ Correct — checked by AI' : a.aiVerdict === 'incorrect' ? '✘ Incorrect — checked by AI' : a.aiVerdict === 'partly-correct' ? 'Partly correct — checked by AI' : 'AI could not decide this one'}</b>${a.aiCorrect ? '<p><b>Correct answer:</b> ' + esc(a.aiCorrect) + '</p>' : ''}${a.aiFeedback ? '<p>' + esc(a.aiFeedback) + '</p>' : ''}<p class="muted">AI practice marking — not an official board key.</p>${a.aiVerdict !== 'correct' ? `<a class="btn btn-primary btn-sm" href="#/ask?q=${encodeURIComponent('Question: ' + (q.en || q.hi || '') + '\nMy answer: ' + (a.pick || a.text || '') + (a.aiCorrect ? '\nCorrect answer: ' + a.aiCorrect : '') + '\nWhere did I go wrong? Explain my mistake step by step.')}">Ask AI where I went wrong</a>` : ''}</div></div>` : ''}
+      ${a && a.aiVerdict ? `<div class="callout ${a.aiVerdict === 'incorrect' ? 'warn' : 'tip'}" role="status"><div><b>${a.aiVerdict === 'correct' ? '✔ Correct — checked by AI' : a.aiVerdict === 'incorrect' ? '✘ Incorrect — checked by AI' : a.aiVerdict === 'partly-correct' ? 'Partly correct — checked by AI' : 'AI could not decide this one'}</b>${a.aiCorrect ? '<p><b>Correct answer:</b> ' + esc(a.aiCorrect) + '</p>' : ''}${a.aiFeedback ? '<p>' + esc(a.aiFeedback) + '</p>' : ''}<p class="muted">AI practice marking — not an official board key.</p><div class="pactions">${a.aiVerdict !== 'correct' ? `<a class="btn btn-primary btn-sm" href="#/ask?q=${encodeURIComponent('Question: ' + (q.en || q.hi || '') + '\nMy answer: ' + (a.pick || a.text || '') + (a.aiCorrect ? '\nCorrect answer: ' + a.aiCorrect : '') + '\nWhere did I go wrong? Explain my mistake step by step.')}">Ask AI where I went wrong</a> ${topicButton(q)}` : similarButton(q)}</div></div></div>` : ''}
       ${graded && a && a.ok !== null ? `<div class="q-verdict ${a.ok ? 'ok' : 'bad'}">${a.ok ? '✓ ' + (S.lang === 'hi' ? 'सही' : 'Correct') : '× ' + (S.lang === 'hi' ? 'सही उत्तर' : 'Correct answer') + ': ' + mathText(String(q.ans))}</div>` : ''}
       ${a && a.shown ? solutionBlock(q) : ''}
     </article>`;
@@ -6023,6 +6073,11 @@ window.UP = window.UP || {};
               { status: verdict, awarded: verdict === 'correct' ? 1 : 0, max: 1, expected: j.correctAnswer || '', reason: 'ai-check' });
             if (verdict === 'correct') pick.classList.add('right'); else pick.classList.add('wrong');
           }
+          if (verdict === 'correct' || verdict === 'incorrect' || verdict === 'partly-correct') {
+            const btn = document.createElement('div'); btn.className = 'pactions';
+            btn.innerHTML = verdict === 'correct' ? similarButton(qq) : topicButton(qq);
+            note.appendChild(btn);
+          }
         }).catch(() => { note.textContent = S.lang === 'hi' ? 'AI जाँच अभी नहीं हो सकी — कृपया फिर प्रयास करें।' : 'AI check could not run right now — please try again.'; box.querySelectorAll('[data-pick]').forEach(b => { b.disabled = false; }); });
         return;
       }
@@ -6105,6 +6160,11 @@ window.UP = window.UP || {};
                 : verdict === 'partly-correct'
                   ? (S.lang === 'hi' ? 'आंशिक रूप से सही — AI जाँच: ' : 'Partly correct — AI check: ') + (j.feedback || '')
                   : (S.lang === 'hi' ? 'AI इस उत्तर की पुष्टि नहीं कर सका; नीचे हल देखिए।' : 'The AI could not decide this one; see the solution below.') + (j.feedback ? ' ' + j.feedback : '');
+          }
+          if (feedback && (verdict === 'correct' || verdict === 'incorrect' || verdict === 'partly-correct')) {
+            const btn = document.createElement('div'); btn.className = 'pactions';
+            btn.innerHTML = verdict === 'correct' ? similarButton(q) : topicButton(q);
+            feedback.appendChild(btn);
           }
         }).catch(() => {
           if (feedback) { feedback.className = 'mcq-feedback pyq-verdict note'; feedback.textContent = S.lang === 'hi' ? 'AI जाँच अभी नहीं हो सकी — कृपया फिर प्रयास करें या नीचे हल देखें।' : 'AI check could not run right now — try again or see the solution below.'; }
@@ -6524,6 +6584,7 @@ window.UP = window.UP || {};
       render();
       return;
     }
+    if (action === 'dailyCheck') { checkDailyAnswer(+tgt.dataset.i); return; }
     if (action === 'dailyMark') {
       const i = +tgt.dataset.i, ok = tgt.dataset.ok === '1';
       const q = DAILY && DAILY[i]; if (!q || q.marked) return;
@@ -7194,8 +7255,12 @@ function mockAICheckBlock(it,i,a){
   if(!chk) return `<div class="pactions mock-ai-actions"><button class="btn btn-cream btn-sm" data-mock-ai-check="${i}">${icon('sparkle')} Check this answer with AI</button></div>`;
   const verdictLabels={correct:'AI check: Correct','partly-correct':'AI check: Partly correct',incorrect:'AI check: Incorrect','cannot-tell':'AI check: Could not decide'};
   const wrongPrompt='Question: '+it.q+'\nMy answer: '+answer+(chk.correctAnswer?'\nCorrect answer: '+chk.correctAnswer:'')+'\nWhere did I go wrong? Explain my mistake and show the correct solution step by step.';
-  return `<div class="callout ${chk.verdict==='incorrect'?'warn':'tip'} mock-ai-check" role="status"><div><b>${verdictLabels[chk.verdict]||'AI check'}</b>${chk.marksHint?` <span class="tag grey">${esc(chk.marksHint)}</span>`:''}<p>${esc(chk.feedback||'')}</p>${chk.correctAnswer?'<p><b>Correct answer:</b> '+esc(chk.correctAnswer)+'</p>':''}<p class="muted">AI practice feedback — not official board marking.</p>${chk.verdict!=='correct'?`<a class="btn btn-primary btn-sm" href="#/ask?q=${encodeURIComponent(wrongPrompt)}">${icon('sparkle')} Ask AI where I went wrong</a>`:''}</div></div>`;
+  return `<div class="callout ${chk.verdict==='incorrect'?'warn':'tip'} mock-ai-check" role="status"><div><b>${verdictLabels[chk.verdict]||'AI check'}</b>${chk.marksHint?` <span class="tag grey">${esc(chk.marksHint)}</span>`:''}<p>${esc(chk.feedback||'')}</p>${chk.correctAnswer?'<p><b>Correct answer:</b> '+esc(chk.correctAnswer)+'</p>':''}<p class="muted">AI practice feedback — not official board marking.</p><div class="pactions">${chk.verdict!=='correct'?`<a class="btn btn-primary btn-sm" href="#/ask?q=${encodeURIComponent(wrongPrompt)}">${icon('sparkle')} Ask AI where I went wrong</a> ${topicButton(it)}`:similarButton(it)}</div></div></div>`;
 }
+function topicHrefFor(q){ return q && q.ch ? '#/chapter/' + encodeURIComponent(q.ch) : '#/syllabus'; }
+function similarHrefFor(q){ return q && q.ch ? '#/pyq?ch=' + encodeURIComponent(q.ch) : '#/mcq'; }
+function topicButton(q, label){ return `<a class="btn btn-ghost btn-sm" href="${topicHrefFor(q)}">${icon('book')} ${label || (S.lang === 'hi' ? 'पुस्तक में यह टॉपिक पढ़ें' : 'Learn this topic in the book')}</a>`; }
+function similarButton(q){ return `<a class="btn btn-primary btn-sm" href="${similarHrefFor(q)}">${icon('sparkle')} ${S.lang === 'hi' ? 'इसी तरह का एक और प्रश्न' : 'Try a similar question'}</a>`; }
 async function aiCheckAnswerText(question, studentAnswer, referenceAnswer){
   const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
   const timer = controller ? setTimeout(() => controller.abort(), 120000) : null;

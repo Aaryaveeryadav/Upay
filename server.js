@@ -1931,7 +1931,11 @@ const handleRequest = async function (req, res) {
       else topicPrompt = ['Answer the supplied Class ' + cls + ' ' + subject + ' question without inventing missing information.',
         'Reply with JSON: {"question_understood":"...","answer":"...","summary":"...","approaches":[{"name":"...","steps":[{"t":"..."}]}],"check":"...","diagram":null}'];
 
-      const prompt = topicPrompt.concat([solvePolicy.instructions, languagePolicy.instructions, chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:'',
+      const qualityRules = [
+        'EXPLAIN THE WHY: for every sub-part, state not only what happens but WHY it happens (the law/principle and the causal chain). A bare table of same/different answers without the reason is incomplete.',
+        'MULTI-PART FIGURES: if different parts of the question involve different setups or figures (e.g. series AND parallel circuits, two cases, two diagrams in the book), return a "diagrams" array with ONE honest figure per part, each with its own caption naming the part it belongs to. Never force several setups into one figure, and never invent a figure for a part that has none.'
+      ];
+      const prompt = topicPrompt.concat(qualityRules,[solvePolicy.instructions, languagePolicy.instructions, chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:'',
         '',
         'QUESTION: ' + question,
         near ? ('\nFor calibration — real CBSE questions of the same chapter (do not answer these):\n' + near) : ''
@@ -2008,6 +2012,7 @@ const handleRequest = async function (req, res) {
           };
         }).filter(function (a) { return a.steps.length; }),
         diagram: solvePolicy.diagramForSubject(parsed.diagram, subject),
+        diagrams: solvePolicy.diagramsForSubject(parsed, subject),
         conceptDiagram: solvePolicy.conceptDiagram(parsed.conceptDiagram)
       };
 
@@ -2154,7 +2159,7 @@ const handleRequest = async function (req, res) {
           owner: aiCacheOwner(sess), at: now(), model: out.model, questionUnderstood: answer.questionUnderstood,
           result: settledByMath ? String(check.yourAnswer) : answer.result,
           summary: answer.summary, verify: answer.verify,
-          policyVersion: solvePolicy.VERSION, approaches: answer.approaches, diagram: answer.diagram, conceptDiagram: answer.conceptDiagram, check: check,
+          policyVersion: solvePolicy.VERSION, approaches: answer.approaches, diagram: answer.diagram, diagrams: answer.diagrams, conceptDiagram: answer.conceptDiagram, check: check,
           methodCount: answer.approaches.length,
           methodsShort: answer.methodsShort ? true : undefined,
           methodsNote: answer.methodsNote || undefined,

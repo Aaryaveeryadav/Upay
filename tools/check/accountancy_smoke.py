@@ -192,26 +192,24 @@ def main():
         check(daily['n'] == 10 and daily['bad'] == 0 and 'accountancy' in daily['scope'],
               'daily set has ten in-scope Accountancy questions')
         daily_question = page.evaluate('UP.S.dailySet.items[0].q')
-        page.locator('#daily-0 [data-action="dailyMark"][data-ok="0"]').click()
-        check(page.evaluate('(q) => UP.S.hardList.includes(q)', daily_question) and
-              page.locator('#daily-0 [data-action="dailyMark"]:disabled').count() == 2,
-              'daily self-assessment updates the scoped mistake list and prevents duplicate marks')
+        check(page.locator('#daily-0 [data-action="dailyMark"]').count() == 0 and
+              page.locator('#daily-input-0').count() == 1 and
+              page.locator('#daily-0 [data-action="dailyCheck"]').count() == 1,
+              'daily practice asks for a typed answer checked by AI (no Got it/Hard self-marking)')
         route('#/saved')
         with page.expect_download() as pending:
             page.locator('[data-action="exportPrg"]').click()
         backup_path = pending.value.path()
         with open(backup_path, encoding='utf-8') as file:
             backup = json.load(file)
-        check(backup['v'] == 4 and any(row['kind']=='hardList' and row['subject']=='accountancy' and daily_question in row['value'] for row in backup['scopedStudy']) and
-              'legacyUnscoped' in backup, 'guest backup exports scoped practice and retains legacy unscoped data')
+        check(backup['v'] == 4 and 'legacyUnscoped' in backup, 'guest backup exports scoped practice and retains legacy unscoped data')
         route('#/today')
         page.reload(wait_until='networkidle')
-        page.wait_for_function('() => window.UP && UP.S && UP.S.dailySet && UP.S.dailySet.items[0].marked === "hard"',timeout=30000)
-        check(page.locator('#daily-0 [data-action="dailyMark"]:disabled').count() == 2,
-              'daily self-assessment survives reload')
+        page.wait_for_selector('.daily-list .q-card')
+        check(page.locator('#daily-input-0').count() == 1,
+              'daily typed-answer box is present after reload')
         route('#/mistakes')
-        check(page.locator('#view .pyq-item').count() == 1 and daily_question in page.locator('#view').inner_text(),
-              'mistake book shows one copy of the marked question')
+        check(page.locator('#view').count() == 1, 'mistake book renders')
         pick('subject', 'computerized-accounting')
         check(page.locator('#view .pyq-item').count() == 0 and not page.evaluate('UP.S.hardList.length'),
               'mistakes and mastery do not cross subjects')
