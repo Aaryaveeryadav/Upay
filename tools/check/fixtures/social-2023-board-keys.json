@@ -1,0 +1,226 @@
+[
+  {
+    "id": "sscp-2023-3261-1",
+    "set": "32/6/1",
+    "q": 1,
+    "key": "C",
+    "keyText": "IV, II, III, I",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-2",
+    "set": "32/6/1",
+    "q": 2,
+    "key": "C",
+    "keyText": "Gangadhar Bhattacharya",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-3",
+    "set": "32/6/1",
+    "q": 3,
+    "key": "A",
+    "keyText": "Iron and Steel",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-4",
+    "set": "32/6/1",
+    "q": 4,
+    "key": "A",
+    "keyText": "Poverty and diseases",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-5",
+    "set": "32/6/1",
+    "q": 5,
+    "key": "C",
+    "keyText": "Rice",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-6",
+    "set": "32/6/1",
+    "q": 6,
+    "key": "C",
+    "keyText": "2, 1, 4, 3",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-7",
+    "set": "32/6/1",
+    "q": 7,
+    "key": "D",
+    "keyText": "Laterite Soil – Western Ghats",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-8",
+    "set": "32/6/1",
+    "q": 8,
+    "key": "A",
+    "keyText": "World Bank",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-9",
+    "set": "32/6/1",
+    "q": 9,
+    "key": "A",
+    "keyText": "Planning Commission",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-10",
+    "set": "32/6/1",
+    "q": 10,
+    "key": "A",
+    "keyText": "₹ 5,000",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-11",
+    "set": "32/6/1",
+    "q": 11,
+    "key": "A",
+    "keyText": "MNC provides Money and Technology to local company.",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-12",
+    "set": "32/6/1",
+    "q": 12,
+    "key": "C",
+    "keyText": "Tertiary Sector – Bank",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-13",
+    "set": "32/6/1",
+    "q": 13,
+    "key": "D",
+    "keyText": "A daily wage labourer working under a contractor.",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-14",
+    "set": "32/6/1",
+    "q": 14,
+    "key": "D",
+    "keyText": "Members of Self-Help Group (SHG)",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-15",
+    "set": "32/6/1",
+    "q": 15,
+    "key": "B",
+    "keyText": "II and III",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-16",
+    "set": "32/6/1",
+    "q": 16,
+    "key": "C",
+    "keyText": "(A) is true, but (R) is false.",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-17",
+    "set": "32/6/1",
+    "q": 17,
+    "key": "A",
+    "keyText": "4, 3, 1, 2",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-18",
+    "set": "32/6/1",
+    "q": 18,
+    "key": "A",
+    "keyText": "China",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-19",
+    "set": "32/6/1",
+    "q": 19,
+    "key": "A",
+    "keyText": "I, II and III",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-2023-3261-20",
+    "set": "32/6/1",
+    "q": 20,
+    "key": "C",
+    "keyText": "Sweden",
+    "keyPage": 3
+  },
+  {
+    "id": "sscp-3251b-1",
+    "set": "32/5/1",
+    "q": 1,
+    "key": "C",
+    "keyText": "Economic system",
+    "keyPage": 1
+  },
+  {
+    "id": "sscp-3251b-2",
+    "set": "32/5/1",
+    "q": 2,
+    "key": "C",
+    "keyText": "Bible",
+    "keyPage": 1
+  },
+  {
+    "id": "sscp-3251b-3",
+    "set": "32/5/1",
+    "q": 3,
+    "key": "D",
+    "keyText": "Vallabhbhai Patel",
+    "keyPage": 1
+  },
+  {
+    "id": "sscp-3251b-4",
+    "set": "32/5/1",
+    "q": 4,
+    "key": "B",
+    "keyText": "She took part in the French Revolution.",
+    "keyPage": 1
+  },
+  {
+    "id": "sscp-2023-3251-5",
+    "set": "32/5/1",
+    "q": 5,
+    "key": "C",
+    "keyText": "Commercial farming – use of higher doses of modern inputs",
+    "keyPage": 1
+  },
+  {
+    "id": "sscp-3251b-6",
+    "set": "32/5/1",
+    "q": 6,
+    "key": "A",
+    "keyText": "1972",
+    "keyPage": 1
+  },
+  {
+    "id": "sscp-3251b-7",
+    "set": "32/5/1",
+    "q": 7,
+    "key": "B",
+    "keyText": "Mining",
+    "keyPage": 1
+  },
+  {
+    "id": "sscp-3251b-8",
+    "set": "32/5/1",
+    "q": 8,
+    "key": "B",
+    "keyText": "Sinhala",
+    "keyPage": 1
+  }
+]

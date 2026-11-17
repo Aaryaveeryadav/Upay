@@ -10,7 +10,7 @@ undamaged options). AI-checked answers are never counted here.
 | Sanskrit (Cl 10) | 61 | CBSE 52-series solved material | more sets welcome |
 | English (Cl 10) | 45 MCQs | CBSE 184 solved papers | marking schemes for the rest |
 | Maths (Cl 10) | 115 harvested board-key MCQs + 18 admitted from the 430-series key table (42 rows; 24 rejected as damaged/incomplete) | CBSE printed keys | solved papers for other years to grow this |
-| Social (Cl 10) | 0 (2025 32/1–32/3 and selected 32/S text; 2026 32/4 text; 47 MCQs added across the passes) | CBSE question papers 2025 and 2026 | **CBSE marking scheme PDFs (32-series, 32/C, 32/S)** — title page says MARKING SCHEME / Strictly Confidential |
+| Social (Cl 10) | 28 MCQ keys: 2023 32/6/1 Q1–20 and 32/5/1 Q1–8 | Printed marking-scheme copies, checked against the corresponding question paper and option order | Remaining sets and years need individual source review; see [online source inventory](online-marking-schemes-nov-2026.md) |
 | Hindi (Cl 10) | 0 | — | **CBSE Hindi A/B marking schemes or solved papers** |
 
 The [Social follow-up](social-follow-up-nov-2026.md) identifies later
@@ -39,6 +39,7 @@ verified keys; nothing is ever inferred or generated into a key.
 
 The 15 additional 2023 papers are question papers, not marking schemes.
 This pass added 21 source-text MCQs and corrected 55 existing year fields;
-**no printed answer keys were attached**. The 21 additions have empty answers
-and are not eligible for verified-key instant grading. See
+**no printed answer keys were attached**. At the time of that pass, the 21 additions had empty answers; the later online
+source pass found printed matching schemes and admitted 28 keys, including
+those 21 additions. See
 [the source inventory and partial-audit details](social-2023-upload-nov-2026.md).
