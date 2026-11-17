@@ -1,0 +1,470 @@
+[
+  {
+    "id": "sscp-32S1-1",
+    "set": 1,
+    "q": 1,
+    "page": 3,
+    "stem": "Which of the following food products came to Europe and Asia after Christopher Columbus’s discovery of America ?",
+    "opts": [
+      "Wheat",
+      "Rice",
+      "Potatoes",
+      "Brinjal"
+    ]
+  },
+  {
+    "id": "sscp-32S1-2",
+    "set": 1,
+    "q": 2,
+    "page": 5,
+    "stem": "How did print culture contribute to the development of a sense of Indian nationalism ? Choose the most appropriate option from the following :",
+    "opts": [
+      "By providing a platform to western culture",
+      "By propagating European languages",
+      "By providing a platform for shared feelings of oppression",
+      "By propagating the supremacy of imperialism"
+    ]
+  },
+  {
+    "id": "sscp-32S1-6",
+    "set": 1,
+    "q": 6,
+    "page": 7,
+    "stem": "Identify the fibre crop with the help of the following information : • It is known as Golden fibre. • It is extensively cultivated in Odisha and parts of Meghalaya.",
+    "opts": [
+      "Jute",
+      "Cotton",
+      "Silk",
+      "Linen"
+    ]
+  },
+  {
+    "id": "sscp-32S1-10",
+    "set": 1,
+    "q": 10,
+    "page": 11,
+    "stem": "Which of the following is a positive outcome of the Constitutional Amendment of 1992 regarding decentralisation of power in India ?",
+    "opts": [
+      "Empowering communities by ensuring fair and regular local elections.",
+      "Increasing reliance on state governments for local decision-making roles.",
+      "Centralizing of power to maintain uniformity across the nation.",
+      "Unlimited rights to the local representatives in decision-making matters."
+    ]
+  },
+  {
+    "id": "sscp-32S1-11",
+    "set": 1,
+    "q": 11,
+    "page": 11,
+    "stem": "Which one of the following pairs is correctly matched ? (Regional Parties) (Region)",
+    "opts": [
+      "All India Forward Bloc – Gujarat",
+      "Rashtriya Janata Dal – West Bengal",
+      "People’s Democratic Party – Uttar Pradesh",
+      "Dravida Munnetra Kazhagam – Tamil Nadu"
+    ]
+  },
+  {
+    "id": "sscp-32S1-13",
+    "set": 1,
+    "q": 13,
+    "page": 13,
+    "stem": "The 73rd Amendment of the Indian Constitution ensures women’s representation at which of the following levels ?",
+    "opts": [
+      "Lok Sabha",
+      "Rajya Sabha",
+      "State Assembly",
+      "Zilla Panchayat"
+    ]
+  },
+  {
+    "id": "sscp-32S1-14",
+    "set": 1,
+    "q": 14,
+    "page": 13,
+    "stem": "Read the following scenario carefully and answer the question that follows : A government-funded project aims to improve the living standards of a rural community. The project focuses on increasing average income through agricultural development. However, some community members express concerns about the potential environmental impact of the project. Based on the above scenario, which of the following statement is most appropriate ?",
+    "opts": [
+      "Economic development is non-essential for sustainability.",
+      "Environmental sustainability is the essential base of economic development.",
+      "Both economic development and environmental sustainability are essential.",
+      "Community concerns are irrelevant to development goals."
+    ]
+  },
+  {
+    "id": "sscp-32S1-16",
+    "set": 1,
+    "q": 16,
+    "page": 13,
+    "stem": "Identify the odd one out from the following options :",
+    "opts": [
+      "Agriculture, Fishing, Mining",
+      "Forestry, Trading, Dairy",
+      "Teachers, Doctors, Lawyers",
+      "Making sugar, Cotton textile, Iron and Steel Industry"
+    ]
+  },
+  {
+    "id": "sscp-32S1-18",
+    "set": 1,
+    "q": 18,
+    "page": 15,
+    "stem": "Read the information given below and choose the correct option : Rahul wants to buy a car but he does not have enough money. For this, he needs ₹ 1,00,000. From which of the following would it be appropriate for Rahul to take a loan ?",
+    "opts": [
+      "Commercial bank",
+      "Moneylender",
+      "Relatives",
+      "Trader"
+    ]
+  },
+  {
+    "id": "sscp-32S1-19",
+    "set": 1,
+    "q": 19,
+    "page": 15,
+    "stem": "There are advancements in transportation. Which of the following is the impact of it on globalization ?",
+    "opts": [
+      "Increased shipping costs",
+      "Reduces the speed of trade",
+      "International trade has been limited",
+      "Facilitates faster movement of goods"
+    ]
+  },
+  {
+    "id": "sscp-32S1-20",
+    "set": 1,
+    "q": 20,
+    "page": 15,
+    "stem": "Which of the following is a feature of democracy ?",
+    "opts": [
+      "It is based on decentralisation of power.",
+      "It is based on centralisation of power.",
+      "It is difficult to establish social harmony.",
+      "It is difficult to establish political harmony."
+    ]
+  },
+  {
+    "id": "sscp-32S2-1",
+    "set": 2,
+    "q": 1,
+    "page": 3,
+    "stem": "Which of the following is a feature of democracy ?",
+    "opts": [
+      "It is based on decentralisation of power.",
+      "It is based on centralisation of power.",
+      "It is difficult to establish social harmony.",
+      "It is difficult to establish political harmony."
+    ]
+  },
+  {
+    "id": "sscp-32S2-2",
+    "set": 2,
+    "q": 2,
+    "page": 5,
+    "stem": "There are advancements in transportation. Which of the following is the impact of it on globalization ?",
+    "opts": [
+      "Increased shipping costs",
+      "Reduces the speed of trade",
+      "International trade has been limited",
+      "Facilitates faster movement of goods"
+    ]
+  },
+  {
+    "id": "sscp-32S2-3",
+    "set": 2,
+    "q": 3,
+    "page": 5,
+    "stem": "Read the information given below and choose the correct option : Rahul wants to buy a car but he does not have enough money. For this, he needs ₹ 1,00,000. From which of the following would it be appropriate for Rahul to take a loan ?",
+    "opts": [
+      "Commercial bank",
+      "Moneylender",
+      "Relatives",
+      "Trader"
+    ]
+  },
+  {
+    "id": "sscp-32S2-5",
+    "set": 2,
+    "q": 5,
+    "page": 5,
+    "stem": "Identify the odd one out from the following options :",
+    "opts": [
+      "Agriculture, Fishing, Mining",
+      "Forestry, Trading, Dairy",
+      "Teachers, Doctors, Lawyers",
+      "Making sugar, Cotton textile, Iron and Steel Industry"
+    ]
+  },
+  {
+    "id": "sscp-32S2-7",
+    "set": 2,
+    "q": 7,
+    "page": 7,
+    "stem": "Read the following scenario carefully and answer the question that follows : A government-funded project aims to improve the living standards of a rural community. The project focuses on increasing average income through agricultural development. However, some community members express concerns about the potential environmental impact of the project. Based on the above scenario, which of the following statement is most appropriate ?",
+    "opts": [
+      "Economic development is non-essential for sustainability.",
+      "Environmental sustainability is the essential base of economic development.",
+      "Both economic development and environmental sustainability are essential.",
+      "Community concerns are irrelevant to development goals."
+    ]
+  },
+  {
+    "id": "sscp-32S2-8",
+    "set": 2,
+    "q": 8,
+    "page": 7,
+    "stem": "The 73rd Amendment of the Indian Constitution ensures women’s representation at which of the following levels ?",
+    "opts": [
+      "Lok Sabha",
+      "Rajya Sabha",
+      "State Assembly",
+      "Zilla Panchayat"
+    ]
+  },
+  {
+    "id": "sscp-32S2-10",
+    "set": 2,
+    "q": 10,
+    "page": 9,
+    "stem": "Which one of the following pairs is correctly matched ? (Regional Parties) (Region)",
+    "opts": [
+      "All India Forward Bloc – Gujarat",
+      "Rashtriya Janata Dal – West Bengal",
+      "People’s Democratic Party – Uttar Pradesh",
+      "Dravida Munnetra Kazhagam – Tamil Nadu"
+    ]
+  },
+  {
+    "id": "sscp-32S2-11",
+    "set": 2,
+    "q": 11,
+    "page": 9,
+    "stem": "Which of the following is a positive outcome of the Constitutional Amendment of 1992 regarding decentralisation of power in India ?",
+    "opts": [
+      "Empowering communities by ensuring fair and regular local elections.",
+      "Increasing reliance on state governments for local decision-making roles.",
+      "Centralizing of power to maintain uniformity across the nation.",
+      "Unlimited rights to the local representatives in decision-making matters."
+    ]
+  },
+  {
+    "id": "sscp-32S2-15",
+    "set": 2,
+    "q": 15,
+    "page": 11,
+    "stem": "Identify the fibre crop with the help of the following information : • It is known as Golden fibre. • It is extensively cultivated in Odisha and parts of Meghalaya.",
+    "opts": [
+      "Jute",
+      "Cotton",
+      "Silk",
+      "Linen"
+    ]
+  },
+  {
+    "id": "sscp-32S2-19",
+    "set": 2,
+    "q": 19,
+    "page": 15,
+    "stem": "How did print culture contribute to the development of a sense of Indian nationalism ? Choose the most appropriate option from the following :",
+    "opts": [
+      "By providing a platform to western culture",
+      "By propagating European languages",
+      "By providing a platform for shared feelings of oppression",
+      "By propagating the supremacy of imperialism"
+    ]
+  },
+  {
+    "id": "sscp-32S2-20",
+    "set": 2,
+    "q": 20,
+    "page": 15,
+    "stem": "Which of the following food products came to Europe and Asia after Christopher Columbus’s discovery of America ?",
+    "opts": [
+      "Wheat",
+      "Rice",
+      "Potatoes",
+      "Brinjal"
+    ]
+  },
+  {
+    "id": "sscp-32S3-1",
+    "set": 3,
+    "q": 1,
+    "page": 3,
+    "stem": "Which of the following is a positive outcome of the Constitutional Amendment of 1992 regarding decentralisation of power in India ?",
+    "opts": [
+      "Empowering communities by ensuring fair and regular local elections.",
+      "Increasing reliance on state governments for local decision-making roles.",
+      "Centralizing of power to maintain uniformity across the nation.",
+      "Unlimited rights to the local representatives in decision-making matters."
+    ]
+  },
+  {
+    "id": "sscp-32S3-5",
+    "set": 3,
+    "q": 5,
+    "page": 7,
+    "stem": "Identify the fibre crop with the help of the following information : • It is known as Golden fibre. • It is extensively cultivated in Odisha and parts of Meghalaya.",
+    "opts": [
+      "Jute",
+      "Cotton",
+      "Silk",
+      "Linen"
+    ]
+  },
+  {
+    "id": "sscp-32S3-9",
+    "set": 3,
+    "q": 9,
+    "page": 11,
+    "stem": "How did print culture contribute to the development of a sense of Indian nationalism ? Choose the most appropriate option from the following :",
+    "opts": [
+      "By providing a platform to western culture",
+      "By propagating European languages",
+      "By providing a platform for shared feelings of oppression",
+      "By propagating the supremacy of imperialism"
+    ]
+  },
+  {
+    "id": "sscp-32S3-10",
+    "set": 3,
+    "q": 10,
+    "page": 11,
+    "stem": "Which of the following food products came to Europe and Asia after Christopher Columbus’s discovery of America ?",
+    "opts": [
+      "Wheat",
+      "Rice",
+      "Potatoes",
+      "Brinjal"
+    ]
+  },
+  {
+    "id": "sscp-32S3-11",
+    "set": 3,
+    "q": 11,
+    "page": 11,
+    "stem": "Which of the following is a feature of democracy ?",
+    "opts": [
+      "It is based on decentralisation of power.",
+      "It is based on centralisation of power.",
+      "It is difficult to establish social harmony.",
+      "It is difficult to establish political harmony."
+    ]
+  },
+  {
+    "id": "sscp-32S3-12",
+    "set": 3,
+    "q": 12,
+    "page": 11,
+    "stem": "There are advancements in transportation. Which of the following is the impact of it on globalization ?",
+    "opts": [
+      "Increased shipping costs",
+      "Reduces the speed of trade",
+      "International trade has been limited",
+      "Facilitates faster movement of goods"
+    ]
+  },
+  {
+    "id": "sscp-32S3-13",
+    "set": 3,
+    "q": 13,
+    "page": 13,
+    "stem": "Read the information given below and choose the correct option : Rahul wants to buy a car but he does not have enough money. For this, he needs ₹ 1,00,000. From which of the following would it be appropriate for Rahul to take a loan ?",
+    "opts": [
+      "Commercial bank",
+      "Moneylender",
+      "Relatives",
+      "Trader"
+    ]
+  },
+  {
+    "id": "sscp-32S3-15",
+    "set": 3,
+    "q": 15,
+    "page": 13,
+    "stem": "Identify the odd one out from the following options :",
+    "opts": [
+      "Agriculture, Fishing, Mining",
+      "Forestry, Trading, Dairy",
+      "Teachers, Doctors, Lawyers",
+      "Making sugar, Cotton textile, Iron and Steel Industry"
+    ]
+  },
+  {
+    "id": "sscp-32S3-17",
+    "set": 3,
+    "q": 17,
+    "page": 15,
+    "stem": "Read the following scenario carefully and answer the question that follows : A government-funded project aims to improve the living standards of a rural community. The project focuses on increasing average income through agricultural development. However, some community members express concerns about the potential environmental impact of the project. Based on the above scenario, which of the following statement is most appropriate ?",
+    "opts": [
+      "Economic development is non-essential for sustainability.",
+      "Environmental sustainability is the essential base of economic development.",
+      "Both economic development and environmental sustainability are essential.",
+      "Community concerns are irrelevant to development goals."
+    ]
+  },
+  {
+    "id": "sscp-32S3-18",
+    "set": 3,
+    "q": 18,
+    "page": 15,
+    "stem": "The 73rd Amendment of the Indian Constitution ensures women’s representation at which of the following levels ?",
+    "opts": [
+      "Lok Sabha",
+      "Rajya Sabha",
+      "State Assembly",
+      "Zilla Panchayat"
+    ]
+  },
+  {
+    "id": "sscp-32S3-20",
+    "set": 3,
+    "q": 20,
+    "page": 15,
+    "stem": "Which one of the following pairs is correctly matched ? (Regional Parties) (Region)",
+    "opts": [
+      "All India Forward Bloc – Gujarat",
+      "Rashtriya Janata Dal – West Bengal",
+      "People’s Democratic Party – Uttar Pradesh",
+      "Dravida Munnetra Kazhagam – Tamil Nadu"
+    ]
+  },
+  {
+    "id": "sscp-32S1-4-verified-text",
+    "set": 1,
+    "q": 4,
+    "page": 7,
+    "stem": "Arrange the following in chronological order and choose the correct option. I. The Treaty of Constantinople II. The defeat of Napoleon III. The granting of more autonomy to Hungarians by the Habsburg rulers IV. The Napoleonic Civil Code Options :",
+    "opts": [
+      "III, I, II, IV",
+      "II, III, IV, I",
+      "I, IV, III, II",
+      "IV, II, I, III"
+    ]
+  },
+  {
+    "id": "sscp-32S1-5-verified-text",
+    "set": 1,
+    "q": 5,
+    "page": 7,
+    "stem": "A farmer is planning to grow cotton crops in a high temperature area with light rainfall and frost-free days. Which of the following soils is suitable for it ?",
+    "opts": [
+      "Black soil",
+      "Laterite soil",
+      "Alluvial soil",
+      "Yellow soil"
+    ]
+  },
+  {
+    "id": "sscp-32S1-12-verified-text",
+    "set": 1,
+    "q": 12,
+    "page": 11,
+    "stem": "Choose the most appropriate option related to developmental goals of landless rural labourers. I. More days of work II. Better wages III. Higher support prices for their crops IV. End of social discrimination Options :",
+    "opts": [
+      "Only I, II and III are correct.",
+      "Only II, III and IV are correct.",
+      "Only I, II and IV are correct.",
+      "Only I, III and IV are correct."
+    ]
+  }
+]

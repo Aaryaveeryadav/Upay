@@ -33433,15 +33433,11 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following food products came to Europe and Asia after",
+    "en": "Which of the following food products came to Europe and Asia after Christopher Columbus’s discovery of America ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
     "opts": [
-      {
-        "en": "hristopher Columbus’s discovery of America?",
-        "hi": ""
-      },
       {
         "en": "Wheat",
         "hi": ""
@@ -33455,7 +33451,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "rinjal # 32/S/1",
+        "en": "Brinjal",
         "hi": ""
       }
     ],
@@ -33474,21 +33470,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is a positive outcome of the Constitutional",
+    "en": "Which of the following is a positive outcome of the Constitutional Amendment of 1992 regarding decentralisation of power in India ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
     "opts": [
       {
-        "en": "mendment of 1992 regarding decentralisation of power in India?",
-        "hi": ""
-      },
-      {
-        "en": "mpowering communities by ensuring fair and regular local",
-        "hi": ""
-      },
-      {
-        "en": "lections.",
+        "en": "Empowering communities by ensuring fair and regular local elections.",
         "hi": ""
       },
       {
@@ -33496,15 +33484,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "entralizing of power to maintain uniformity across the nation.",
+        "en": "Centralizing of power to maintain uniformity across the nation.",
         "hi": ""
       },
       {
-        "en": "Unlimited rights to the local representatives in",
-        "hi": ""
-      },
-      {
-        "en": "ecision-making matters.",
+        "en": "Unlimited rights to the local representatives in decision-making matters.",
         "hi": ""
       }
     ],
@@ -33523,13 +33507,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following pairs is correctly matched ? 1 (Regional Parties) (Region)",
+    "en": "Which one of the following pairs is correctly matched ? (Regional Parties) (Region)",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
     "opts": [
       {
-        "en": "ll India Forward Bloc – Gujarat",
+        "en": "All India Forward Bloc – Gujarat",
         "hi": ""
       },
       {
@@ -33541,7 +33525,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ravida Munnetra Kazhagam – Tamil Nadu",
+        "en": "Dravida Munnetra Kazhagam – Tamil Nadu",
         "hi": ""
       }
     ],
@@ -33597,49 +33581,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the following scenario carefully and answer the question that follows :",
+    "en": "Read the following scenario carefully and answer the question that follows : A government-funded project aims to improve the living standards of a rural community. The project focuses on increasing average income through agricultural development. However, some community members express concerns about the potential environmental impact of the project. Based on the above scenario, which of the following statement is most appropriate ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
     "opts": [
       {
-        "en": "government-funded project aims to improve the living standards of a rural community. The project focuses on increasing average income through agricultural development. However, some community members",
+        "en": "Economic development is non-essential for sustainability.",
         "hi": ""
       },
       {
-        "en": "xpress concerns about the potential environmental impact of the project.",
+        "en": "Environmental sustainability is the essential base of economic development.",
         "hi": ""
       },
       {
-        "en": "ased on the above scenario, which of the following statement is most",
+        "en": "Both economic development and environmental sustainability are essential.",
         "hi": ""
       },
       {
-        "en": "ppropriate?",
-        "hi": ""
-      },
-      {
-        "en": "conomic development is non-essential for sustainability.",
-        "hi": ""
-      },
-      {
-        "en": "nvironmental sustainability is the essential base of economic",
-        "hi": ""
-      },
-      {
-        "en": "evelopment.",
-        "hi": ""
-      },
-      {
-        "en": "Both economic development and environmental sustainability are",
-        "hi": ""
-      },
-      {
-        "en": "ssential.",
-        "hi": ""
-      },
-      {
-        "en": "ommunity concerns are irrelevant to development goals.",
+        "en": "Community concerns are irrelevant to development goals.",
         "hi": ""
       }
     ],
@@ -33709,7 +33669,7 @@ UP.socialPyq = [
     "src": "32/S/1 SST Set 1",
     "opts": [
       {
-        "en": "griculture, Fishing, Mining",
+        "en": "Agriculture, Fishing, Mining",
         "hi": ""
       },
       {
@@ -33721,7 +33681,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Making sugar, Cotton textile, Iron and Steel Industry # 32/S/1",
+        "en": "Making sugar, Cotton textile, Iron and Steel Industry",
         "hi": ""
       }
     ],
@@ -33740,13 +33700,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the information given below and choose the correct option : 1 Rahul wants to buy a car but he does not have enough money. For this, he needs ₹ 1,00,000. From which of the following would it be appropriate for Rahul to take a loan ?",
+    "en": "Read the information given below and choose the correct option : Rahul wants to buy a car but he does not have enough money. For this, he needs ₹ 1,00,000. From which of the following would it be appropriate for Rahul to take a loan ?",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
     "opts": [
       {
-        "en": "ommercial bank",
+        "en": "Commercial bank",
         "hi": ""
       },
       {
@@ -33820,19 +33780,19 @@ UP.socialPyq = [
     "src": "32/S/1 SST Set 1",
     "opts": [
       {
-        "en": "y providing a platform to western culture",
+        "en": "By providing a platform to western culture",
         "hi": ""
       },
       {
-        "en": "y propagating European languages",
+        "en": "By propagating European languages",
         "hi": ""
       },
       {
-        "en": "y providing a platform for shared feelings of oppression",
+        "en": "By providing a platform for shared feelings of oppression",
         "hi": ""
       },
       {
-        "en": "y propagating the supremacy of imperialism",
+        "en": "By propagating the supremacy of imperialism",
         "hi": ""
       }
     ],
@@ -33869,7 +33829,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "It is difficult to establish political harmony.? # 32/S/1",
+        "en": "It is difficult to establish political harmony.",
         "hi": ""
       }
     ],
@@ -34125,7 +34085,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Identify the fibre crop with the help of the following information : 1 • It is known as Golden fibre. • It is extensively cultivated in Odisha and parts of Meghalaya.",
+    "en": "Identify the fibre crop with the help of the following information : • It is known as Golden fibre. • It is extensively cultivated in Odisha and parts of Meghalaya.",
     "hi": "",
     "twist": "",
     "src": "32/S/1 SST Set 1",
@@ -34135,7 +34095,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "otton",
+        "en": "Cotton",
         "hi": ""
       },
       {
@@ -34143,7 +34103,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Linen # 32/S/1",
+        "en": "Linen",
         "hi": ""
       }
     ],
@@ -35028,7 +34988,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "It is difficult to establish political harmony. # 32/S/2",
+        "en": "It is difficult to establish political harmony.",
         "hi": ""
       }
     ],
@@ -35047,13 +35007,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following pairs is correctly matched ? 1 (Regional Parties) (Region)",
+    "en": "Which one of the following pairs is correctly matched ? (Regional Parties) (Region)",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
     "opts": [
       {
-        "en": "ll India Forward Bloc – Gujarat",
+        "en": "All India Forward Bloc – Gujarat",
         "hi": ""
       },
       {
@@ -35065,7 +35025,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ravida Munnetra Kazhagam – Tamil Nadu",
+        "en": "Dravida Munnetra Kazhagam – Tamil Nadu",
         "hi": ""
       }
     ],
@@ -35084,21 +35044,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is a positive outcome of the Constitutional",
+    "en": "Which of the following is a positive outcome of the Constitutional Amendment of 1992 regarding decentralisation of power in India ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
     "opts": [
       {
-        "en": "mendment of 1992 regarding decentralisation of power in India?",
-        "hi": ""
-      },
-      {
-        "en": "mpowering communities by ensuring fair and regular local",
-        "hi": ""
-      },
-      {
-        "en": "lections.",
+        "en": "Empowering communities by ensuring fair and regular local elections.",
         "hi": ""
       },
       {
@@ -35106,15 +35058,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "entralizing of power to maintain uniformity across the nation.",
+        "en": "Centralizing of power to maintain uniformity across the nation.",
         "hi": ""
       },
       {
-        "en": "Unlimited rights to the local representatives in",
-        "hi": ""
-      },
-      {
-        "en": "ecision-making matters.",
+        "en": "Unlimited rights to the local representatives in decision-making matters.",
         "hi": ""
       }
     ],
@@ -35292,7 +35240,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Identify the fibre crop with the help of the following information : 1 • It is known as Golden fibre. • It is extensively cultivated in Odisha and parts of Meghalaya.",
+    "en": "Identify the fibre crop with the help of the following information : • It is known as Golden fibre. • It is extensively cultivated in Odisha and parts of Meghalaya.",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
@@ -35302,7 +35250,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "otton",
+        "en": "Cotton",
         "hi": ""
       },
       {
@@ -35388,19 +35336,19 @@ UP.socialPyq = [
     "src": "32/S/2 SST Set 2",
     "opts": [
       {
-        "en": "y providing a platform to western culture",
+        "en": "By providing a platform to western culture",
         "hi": ""
       },
       {
-        "en": "y propagating European languages",
+        "en": "By propagating European languages",
         "hi": ""
       },
       {
-        "en": "y providing a platform for shared feelings of oppression",
+        "en": "By providing a platform for shared feelings of oppression",
         "hi": ""
       },
       {
-        "en": "y propagating the supremacy of imperialism",
+        "en": "By propagating the supremacy of imperialism",
         "hi": ""
       }
     ],
@@ -35456,15 +35404,11 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following food products came to Europe and Asia after",
+    "en": "Which of the following food products came to Europe and Asia after Christopher Columbus’s discovery of America ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
     "opts": [
-      {
-        "en": "hristopher Columbus’s discovery of America?",
-        "hi": ""
-      },
       {
         "en": "Wheat",
         "hi": ""
@@ -35478,7 +35422,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "rinjal # 32/S/2",
+        "en": "Brinjal",
         "hi": ""
       }
     ],
@@ -35582,13 +35526,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the information given below and choose the correct option : 1 Rahul wants to buy a car but he does not have enough money. For this, he needs ₹ 1,00,000. From which of the following would it be appropriate for Rahul to take a loan ?",
+    "en": "Read the information given below and choose the correct option : Rahul wants to buy a car but he does not have enough money. For this, he needs ₹ 1,00,000. From which of the following would it be appropriate for Rahul to take a loan ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
     "opts": [
       {
-        "en": "ommercial bank",
+        "en": "Commercial bank",
         "hi": ""
       },
       {
@@ -35724,7 +35668,7 @@ UP.socialPyq = [
     "src": "32/S/2 SST Set 2",
     "opts": [
       {
-        "en": "griculture, Fishing, Mining",
+        "en": "Agriculture, Fishing, Mining",
         "hi": ""
       },
       {
@@ -35736,7 +35680,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Making sugar, Cotton textile, Iron and Steel Industry? # 32/S/2",
+        "en": "Making sugar, Cotton textile, Iron and Steel Industry",
         "hi": ""
       }
     ],
@@ -35800,49 +35744,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the following scenario carefully and answer the question that follows :",
+    "en": "Read the following scenario carefully and answer the question that follows : A government-funded project aims to improve the living standards of a rural community. The project focuses on increasing average income through agricultural development. However, some community members express concerns about the potential environmental impact of the project. Based on the above scenario, which of the following statement is most appropriate ?",
     "hi": "",
     "twist": "",
     "src": "32/S/2 SST Set 2",
     "opts": [
       {
-        "en": "government-funded project aims to improve the living standards of a rural community. The project focuses on increasing average income through agricultural development. However, some community members",
+        "en": "Economic development is non-essential for sustainability.",
         "hi": ""
       },
       {
-        "en": "xpress concerns about the potential environmental impact of the project.",
+        "en": "Environmental sustainability is the essential base of economic development.",
         "hi": ""
       },
       {
-        "en": "ased on the above scenario, which of the following statement is most",
+        "en": "Both economic development and environmental sustainability are essential.",
         "hi": ""
       },
       {
-        "en": "ppropriate?",
-        "hi": ""
-      },
-      {
-        "en": "conomic development is non-essential for sustainability.",
-        "hi": ""
-      },
-      {
-        "en": "nvironmental sustainability is the essential base of economic",
-        "hi": ""
-      },
-      {
-        "en": "evelopment.",
-        "hi": ""
-      },
-      {
-        "en": "Both economic development and environmental sustainability are",
-        "hi": ""
-      },
-      {
-        "en": "ssential.",
-        "hi": ""
-      },
-      {
-        "en": "ommunity concerns are irrelevant to development goals.",
+        "en": "Community concerns are irrelevant to development goals.",
         "hi": ""
       }
     ],
@@ -36542,21 +36462,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following is a positive outcome of the Constitutional",
+    "en": "Which of the following is a positive outcome of the Constitutional Amendment of 1992 regarding decentralisation of power in India ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
     "opts": [
       {
-        "en": "mendment of 1992 regarding decentralisation of power in India?",
-        "hi": ""
-      },
-      {
-        "en": "mpowering communities by ensuring fair and regular local",
-        "hi": ""
-      },
-      {
-        "en": "lections.",
+        "en": "Empowering communities by ensuring fair and regular local elections.",
         "hi": ""
       },
       {
@@ -36564,15 +36476,11 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "entralizing of power to maintain uniformity across the nation.",
+        "en": "Centralizing of power to maintain uniformity across the nation.",
         "hi": ""
       },
       {
-        "en": "Unlimited rights to the local representatives in",
-        "hi": ""
-      },
-      {
-        "en": "ecision-making matters. # 32/S/3",
+        "en": "Unlimited rights to the local representatives in decision-making matters.",
         "hi": ""
       }
     ],
@@ -36591,15 +36499,11 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which of the following food products came to Europe and Asia after",
+    "en": "Which of the following food products came to Europe and Asia after Christopher Columbus’s discovery of America ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
     "opts": [
-      {
-        "en": "hristopher Columbus’s discovery of America?",
-        "hi": ""
-      },
       {
         "en": "Wheat",
         "hi": ""
@@ -36613,7 +36517,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "rinjal",
+        "en": "Brinjal",
         "hi": ""
       }
     ],
@@ -36687,7 +36591,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "Facilitates faster movement of goods # 32/S/3",
+        "en": "Facilitates faster movement of goods",
         "hi": ""
       }
     ],
@@ -36706,13 +36610,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the information given below and choose the correct option : 1 Rahul wants to buy a car but he does not have enough money. For this, he needs ₹ 1,00,000. From which of the following would it be appropriate for Rahul to take a loan ?",
+    "en": "Read the information given below and choose the correct option : Rahul wants to buy a car but he does not have enough money. For this, he needs ₹ 1,00,000. From which of the following would it be appropriate for Rahul to take a loan ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
     "opts": [
       {
-        "en": "ommercial bank",
+        "en": "Commercial bank",
         "hi": ""
       },
       {
@@ -36749,7 +36653,7 @@ UP.socialPyq = [
     "src": "32/S/3 SST Set 3",
     "opts": [
       {
-        "en": "griculture, Fishing, Mining",
+        "en": "Agriculture, Fishing, Mining",
         "hi": ""
       },
       {
@@ -36825,49 +36729,25 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Read the following scenario carefully and answer the question that follows :",
+    "en": "Read the following scenario carefully and answer the question that follows : A government-funded project aims to improve the living standards of a rural community. The project focuses on increasing average income through agricultural development. However, some community members express concerns about the potential environmental impact of the project. Based on the above scenario, which of the following statement is most appropriate ?",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
     "opts": [
       {
-        "en": "government-funded project aims to improve the living standards of a rural community. The project focuses on increasing average income through agricultural development. However, some community members",
+        "en": "Economic development is non-essential for sustainability.",
         "hi": ""
       },
       {
-        "en": "xpress concerns about the potential environmental impact of the project.",
+        "en": "Environmental sustainability is the essential base of economic development.",
         "hi": ""
       },
       {
-        "en": "ased on the above scenario, which of the following statement is most",
+        "en": "Both economic development and environmental sustainability are essential.",
         "hi": ""
       },
       {
-        "en": "ppropriate?",
-        "hi": ""
-      },
-      {
-        "en": "conomic development is non-essential for sustainability.",
-        "hi": ""
-      },
-      {
-        "en": "nvironmental sustainability is the essential base of economic",
-        "hi": ""
-      },
-      {
-        "en": "evelopment.",
-        "hi": ""
-      },
-      {
-        "en": "Both economic development and environmental sustainability are",
-        "hi": ""
-      },
-      {
-        "en": "ssential.",
-        "hi": ""
-      },
-      {
-        "en": "ommunity concerns are irrelevant to development goals.",
+        "en": "Community concerns are irrelevant to development goals.",
         "hi": ""
       }
     ],
@@ -36984,13 +36864,13 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Which one of the following pairs is correctly matched ? 1 (Regional Parties) (Region)",
+    "en": "Which one of the following pairs is correctly matched ? (Regional Parties) (Region)",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
     "opts": [
       {
-        "en": "ll India Forward Bloc – Gujarat",
+        "en": "All India Forward Bloc – Gujarat",
         "hi": ""
       },
       {
@@ -37002,7 +36882,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "ravida Munnetra Kazhagam – Tamil Nadu # 32/S/3",
+        "en": "Dravida Munnetra Kazhagam – Tamil Nadu",
         "hi": ""
       }
     ],
@@ -37283,7 +37163,7 @@ UP.socialPyq = [
     "m": 1,
     "kind": "mcq",
     "d": 2,
-    "en": "Identify the fibre crop with the help of the following information : 1 • It is known as Golden fibre. • It is extensively cultivated in Odisha and parts of Meghalaya.",
+    "en": "Identify the fibre crop with the help of the following information : • It is known as Golden fibre. • It is extensively cultivated in Odisha and parts of Meghalaya.",
     "hi": "",
     "twist": "",
     "src": "32/S/3 SST Set 3",
@@ -37293,7 +37173,7 @@ UP.socialPyq = [
         "hi": ""
       },
       {
-        "en": "otton",
+        "en": "Cotton",
         "hi": ""
       },
       {
@@ -37379,19 +37259,19 @@ UP.socialPyq = [
     "src": "32/S/3 SST Set 3",
     "opts": [
       {
-        "en": "y providing a platform to western culture",
+        "en": "By providing a platform to western culture",
         "hi": ""
       },
       {
-        "en": "y propagating European languages",
+        "en": "By propagating European languages",
         "hi": ""
       },
       {
-        "en": "y providing a platform for shared feelings of oppression",
+        "en": "By providing a platform for shared feelings of oppression",
         "hi": ""
       },
       {
-        "en": "y propagating the supremacy of imperialism",
+        "en": "By propagating the supremacy of imperialism",
         "hi": ""
       }
     ],
@@ -39440,7 +39320,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2026,
     "set": "32/4/1",
     "lv": "Standard",
     "q": 1,
@@ -39477,7 +39357,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2026,
     "set": "32/4/1",
     "lv": "Standard",
     "q": 4,
@@ -39514,7 +39394,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2026,
     "set": "32/4/1",
     "lv": "Standard",
     "q": 10,
@@ -39551,7 +39431,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2026,
     "set": "32/4/2",
     "lv": "Standard",
     "q": 11,
@@ -39588,7 +39468,7 @@ UP.socialPyq = [
     "cls": 10,
     "subject": "social",
     "board": "cbse",
-    "y": 2025,
+    "y": 2026,
     "set": "32/4/2",
     "lv": "Standard",
     "q": 20,
@@ -39615,6 +39495,154 @@ UP.socialPyq = [
       },
       {
         "en": "      ~32/4/2~ { } 19  P.T.O. Note : The following questions are for Visually Impaired Candidates only in lieu of Question No. 19. Attempt any three of the following : (i) Name the dam built on River Chenab in India. 1 (ii) Name the place where ‘nuclear power plant’ is located in Maharashtra. 1 (iii) Name the place where software technology park is located in Tamil Nadu. 1 (iv) Name the place where international airport is located in Punjab. 1 SECTION – C (20 Marks) (Political Science)",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-32S1-4-verified-text",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/S/1",
+    "lv": "Standard",
+    "q": 4,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Arrange the following in chronological order and choose the correct option. I. The Treaty of Constantinople II. The defeat of Napoleon III. The granting of more autonomy to Hungarians by the Habsburg rulers IV. The Napoleonic Civil Code Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/S/1 SST Set 1",
+    "opts": [
+      {
+        "en": "III, I, II, IV",
+        "hi": ""
+      },
+      {
+        "en": "II, III, IV, I",
+        "hi": ""
+      },
+      {
+        "en": "I, IV, III, II",
+        "hi": ""
+      },
+      {
+        "en": "IV, II, I, III",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-32S1-5-verified-text",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/S/1",
+    "lv": "Standard",
+    "q": 5,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "A farmer is planning to grow cotton crops in a high temperature area with light rainfall and frost-free days. Which of the following soils is suitable for it ?",
+    "hi": "",
+    "twist": "",
+    "src": "32/S/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Black soil",
+        "hi": ""
+      },
+      {
+        "en": "Laterite soil",
+        "hi": ""
+      },
+      {
+        "en": "Alluvial soil",
+        "hi": ""
+      },
+      {
+        "en": "Yellow soil",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-32S1-12-verified-text",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2025,
+    "set": "32/S/1",
+    "lv": "Standard",
+    "q": 12,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Choose the most appropriate option related to developmental goals of landless rural labourers. I. More days of work II. Better wages III. Higher support prices for their crops IV. End of social discrimination Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/S/1 SST Set 1",
+    "opts": [
+      {
+        "en": "Only I, II and III are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only II, III and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, II and IV are correct.",
+        "hi": ""
+      },
+      {
+        "en": "Only I, III and IV are correct.",
+        "hi": ""
+      }
+    ],
+    "ans": ""
+  },
+  {
+    "id": "sscp-2026-3251-1",
+    "cls": 10,
+    "subject": "social",
+    "board": "cbse",
+    "y": 2026,
+    "set": "32/5/1",
+    "lv": "Standard",
+    "q": 1,
+    "ch": 0,
+    "m": 1,
+    "kind": "mcq",
+    "d": 2,
+    "en": "Arrange the following events in chronological order and choose the correct option : I. Salt Satyagraha II. Kheda Satyagraha III. Rowlatt Satyagraha IV. Ahmedabad Mill Workers Satyagraha Options :",
+    "hi": "",
+    "twist": "",
+    "src": "32/5/1 SST Set 1 (2026 NML5K)",
+    "opts": [
+      {
+        "en": "II, I, III, IV",
+        "hi": ""
+      },
+      {
+        "en": "II, IV, III, I",
+        "hi": ""
+      },
+      {
+        "en": "III, II, IV, I",
+        "hi": ""
+      },
+      {
+        "en": "II, I, IV, III",
         "hi": ""
       }
     ],
