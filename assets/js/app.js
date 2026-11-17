@@ -3316,7 +3316,7 @@ window.UP = window.UP || {};
     params = params || {};
     const all = mcqRows();
     const year = params.y ? Number(params.y) : null;
-    const list = all.filter(q => !year || Number(q.y) === year);
+    const list = all.filter(q => (!year || Number(q.y) === year) && !(UP.questionQuality && UP.questionQuality.testReadyIssue({ en: q.stem, hi: '', opts: q.optionTexts, fig: q.fig })));
     const years = [...new Set(all.map(q => Number(q.y)).filter(Number.isFinite))].sort((a, b) => b - a);
     const pageSize = 30;
     const pageCount = Math.max(1, Math.ceil(list.length / pageSize));
@@ -3924,7 +3924,8 @@ window.UP = window.UP || {};
      ============================================================ */
   function buildDailySet() {
     const pool = (UP.pyq || []).filter(q => q.subject === S.subject && q.cls === +S.cls && pyqQuestionText(q).length > 12
-      && (S.lang === 'hi' || String(q.en || '').trim().length >= 12));
+      && (S.lang === 'hi' || String(q.en || '').trim().length >= 12)
+      && !(UP.questionQuality && UP.questionQuality.testReadyIssue(q)));
     if (!pool.length) return [];
     // Mastery score per chapter: higher = weaker (more incorrect / less attempted)
     const chScore = {};
@@ -5206,8 +5207,9 @@ window.UP = window.UP || {};
     s = s.replace(/\b\d\s*[/।|\]]\s*अथवा/g, 'अथवा');
     s = s.replace(/\b\d+\]\s*(?=अथवा|आप|सिद्ध|निम्न|सिद्ध)/g, ' ');
     s = s.replace(/[Pp]\.?\s*[Tt]\.?\s*[Oo]\.?/g, ' ');
-    // 5) Drop pure punctuation/digit runs (OCR noise: "/||| ] 792o 5 o7 6 40/")
-    s = s.replace(/(^|[\s।॥])[0-9०-९\s/\\|[\](){}<>%@#$^*+=~`'".,;:!?-]{8,}/g, '$1');
+    // 5) Drop OCR-noise runs — but ONLY when the run contains a real noise symbol (/ | ] [ % # etc.).
+    // A plain digit/punctuation run is usually a genuine number sequence (an A.P., a data list) and must survive.
+    s = s.replace(/(^|[\s।॥])[0-9०-९\s/\\|[\](){}<>%@#$^*+=~`'".,;:!?-]*[/\\|[\]%#$^*~`<>][0-9०-९\s/\\|[\](){}<>%@#$^*+=~`'".,;:!?-]*/g, '$1');
     s = s.replace(/\s+/g, ' ').trim();
     return s;
   }
@@ -5742,7 +5744,7 @@ window.UP = window.UP || {};
     const lvl = params.lvl || '';
     const board = params.board || S.board || 'cbse';
     const bank = (UP.pyq || []).filter(q => qInScope(q) && qBoard(q) === board);
-    const list = bank.filter(q => (!year || +q.y === year) && (!ch || qHasChapter(q, ch)) && (!lvl || String(q.lv) === String(lvl)));
+    const list = bank.filter(q => (!year || +q.y === year) && (!ch || qHasChapter(q, ch)) && (!lvl || String(q.lv) === String(lvl)) && !(UP.questionQuality && UP.questionQuality.testReadyIssue(q)));
     const years = [...new Set(bank.map(q => +q.y).filter(Boolean))].sort((a, b) => b - a);
     const byYear = {};
     bank.forEach(q => { if (q.y) byYear[q.y] = (byYear[q.y] || 0) + 1; });

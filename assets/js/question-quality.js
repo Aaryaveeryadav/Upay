@@ -168,6 +168,9 @@
       if (!hasFig) return 'missing-figure';
     }
     if (/^[a-z]{1,3}\s*\(/.test(text)) return 'truncated-start';
+    if (/^(?:Reason|Assertion)\s*\([AR]\)\s*:/i.test(text) && !(/Assertion\s*\(A\)/i.test(text) && /Reason\s*\(R\)/i.test(text))) return 'fragment';
+    if (/(?:given below|following)\s*[:?]?\s*$/i.test(text) && !(Array.isArray(q.opts) && q.opts.length)) return 'missing-content';
+    if (text.split(/\s+/).length <= 14 && !/[?.:।॥)\]]\s*$/.test(text) && /\b(?:are|is|was|were|the|a|an|to|of|in|on|for|with|and|or|that|which|has|have|been|being)\s*$/i.test(text)) return 'truncated-end';
     if (/\?\s*\d{1,2}\s*$/.test(text)) return 'marks-debris';
     if (/[A-Z]{2,}\/\d+\s*$/.test(text)) return 'extraction-debris';
     if (/^Prove\s+that\b/i.test(text) && !/=/.test(text)) return 'broken-identity';
