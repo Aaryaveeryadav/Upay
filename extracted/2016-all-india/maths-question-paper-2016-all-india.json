@@ -1,0 +1,115 @@
+{
+  "source": "Maths Question Paper 2016(All India).pdf",
+  "year": 2016,
+  "sha256": "9dab65e9941e90a8749317f16bef6bfe1bfec9ca13782f82aa259ef75ba9f71c",
+  "kind": "question-paper",
+  "status": "extracted-not-question-verified",
+  "warning": "OCR, formulas, tables, figures and maps require original-PDF review. No automatic answer pairing.",
+  "pages": [
+    {
+      "page": 1,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 15,
+      "text": "Series JSR\nSET-1\nCode No. 30/1\nrounoL\n|\n[Lt\nTt |\nCandidates must write the Code on the\ntitle page of the answer-book.\ne\ne\ne\ne\ne\n°\nPlease check that this question paper contains 15 printed pages.\ne\nCode number given on the right hand side of the question paper should be written\non the title page of the answer-book by the candidate.\ne\nPlease check that this question paper contains 31 questions.\ne\nPlease write down the Serial Number of the question before attempting\nit.\n°\n15 minute time has been allotted to read this question paper. The question paper\nwill be distributed at 10.15 a.m. From 10.15 a.m. to 10.30 a.m., the students will\nread the question paper only and will not write any answer on the answer-book\nduring this period.\nSUMMATIVE ASSESSMENT - II\nTime allowed : 3 hours\nMaximum Marks : 90\n30/1\n1\nP.T.O.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 2,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 7,
+      "text": "0)\n(w)\nGeneral Instructions :\n(i)\nAll questions are compulsory.\n(iu)\nThe question paper consists of 31 questions divided into four sections — A, B, C\nand D.\n(iii)\nSection A contains 4 questions of\n1 mark each.\nSection B contains 6 questions of\n2 marks each, Section C contains 10 questions of 3 marks each and Section D\ncontains 11 questions of4 marks each.\n(wv)\nUse of calculators is not permitted.\n30/1\n2",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 3,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 8,
+      "text": "SECTION -A\nQuestion numbers 1 to 4 carry 1 mark each.\n1.\nP\nl\n‘\nIn fig.1, PQ is a tangent at a point C to a circle with centre O.\nIf ABisa\ndiameter and ZCAB=30*, find ZPCA.\nP\nL\n‘\nFigure 1\n2.\nFor what value of k will k+9, 2k—1 and 2k+7\nare the consecutive terms of\nan A.P. ?\n3.\nA ladder, leaning against a wall, makes an angle of 60° with the horizontal.\nIf the foot of the ladder is 2.5 m away from the wall, find the length of the\nladder.\n30/1\n3\nP.T.O.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 4,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 12,
+      "text": "4,\nA card is drawn at random from a well shuffled pack of 52 playing cards. Find\nthe probability of getting neither a red card nor a queen.\nSECTION - B\nQuestion numbers 5 to 10 carry 2 marks each.\n5.\nIf —5 is a root of the quadratic equation 2x?+px—15=0 and the quadratic\nequation p(x2+x)+k=0 has equal roots, find the value of k.\n6.\nLet P and Q be the points of trisection of the line segment joining the points\nA(2, —2) and B(-—7, 4) such that P is nearer to A.\nFind the coordinates of\nP and Q.\n7.\nR_C\nA\nP\nB\n30/1\n4",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 5,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 6,
+      "text": "In Fig.2, a quadrilateral ABCD is drawn to circumscribe a\ncircle, with\ncentre O, in such a way that the sides AB, BC, CD and DA touch the circle at\nthe points P, Q,\nR and S respectively. Prove that. AB+CD=BC+DA.\nR_C\nA\nP\nB\nFigure 2\n8.\nProve that the points (8, 0), (6, 4) and (—1, 3) are the vertices of a right angled\nisosceles triangle.\n9.\nThe 4h term of an A.P. is zero. Prove that the 25*® term of the AP. is three\ntimes its 11* term.\nT\niS)\n30/1\n5\nP.T.O.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 6,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 5,
+      "text": "In Fig. 3, from an external point P, two tangents PT and PS are drawn to a\ncircle with centre O and radius r.\nIf OP=2r, show that ZOTS = ZOST= 30°.\nT\niS)\nFigure 3\nSECTION - C\nQuestion numbers 11 to 20 carry 3 marks each.\nB\nBZ\n5\nA\nZA\nBoC\nIn fig.4, O is the centre of a circle such that diameter AB=13 cm and\nAC=12 cm. BC is joined. Find the area of the shaded region. (Take m= 3.14)\na2\nZA\nAl\nBoC\nFigure 4\n30/1\n6",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 7,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 6,
+      "text": "NE\nLIS\n-\ny\na;\nm\nct |\n<—3 m—\nIn fig. 5, a tent is in the shape of a cylinder surmounted by a conical top of\nsame diameter.\nIf the height and diameter of cylindrical part are 2.1 m and\n3 m respectively and the slant height of conical part is 2.8 m, find the cost of\ncanvas needed to make the tent if the canvas is available at the rate of\n22\n% 500/sq.metre. (Use T= 7?\nNE\nLIS\n-\ny\na;\nm\nct |\n<—3 m—\nFigure 5\n30/1\n7\nP.T.O.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 8,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 8,
+      "text": "If the point P(x, y) is equidistant from the points A(a+b, b—a) and\nB(a—b, a+b). Prove that bx=ay.\nAA\"\n/A\nFo\nABA\n26\ne2\n& ) 3B\nA\nCc\nIn fig. 6, find the area of the shaded region, enclosed between two concentric\n.\n.\n22\ncircles of radii\n7 cm and 14 cm where ZAOC = 40°. (Use T= 7?\nZa\n(a|»\nFo\nABA\n=\n=\nBAAE\nA\nCc\nFigure 6\nIf the ratio of the sum of first n terms of two A.P’s is (7n +1)\n: (4n+ 27), find\nthe ratio of their m4 terms.\n30/1\n8",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 9,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 12,
+      "text": "1\n1\n2\n.\n————. + ————_ = -,\n1,2,3\n16\nx-I(x-2) | (x-2)(x-3)\n3B’\n1\n1\n2\nBoom Otomo ooo\n1,2,3\nSolve for x:\nay@-2) > (e-a(r-3)\n8B’\n**\nA conical vessel, with base radius 5 cm and height 24 cm, is full of water. This\nwater is emptied into a cylindrical vessel of base radius 10 cm. Find the height\nto which the water will rise in the cylindrical vessel. (Use 7 = 7?\n18.\nA sphere of diameter 12 cm, is dropped in a right circular cylindrical vessel,\npartly filled with water. If the sphere is completely submerged in water, the\nwater level in the cylindrical vessel rises by 32 cm. Find the diameter of the\ncylindrical vessel.\nA man standing on the deck of a ship, which is 10 m above water level, observes\nthe angle of elevation of the top of a hill as 60° and the angle of depression of\nthe base of hill as 30°.\nFind the distance of the hill from the ship and the\nheight of the hill.\n30/1\n9\nP.T.O.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 10,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 12,
+      "text": "Three different coins are tossed together.\nFind the probability\nof getting\n(i) exactly two heads (ii) at least two heads\n(iii) at least two tails.\nSECTION - D\nQuestion numbers 21 to 31 carry 4 marks each.\nDue to heavy floods in a state, thousands were rendered homeless. 50 schools\ncollectively offered to the state government to provide place and the canvas\nfor 1500 tents to be fixed by the government and decided to share the whole\nexpenditure equally. The lower part of each tent is cylindrical of base radius\n2.8 m and height 3.5 m, with conical upper part of same base radius but of\nheight 2.1m. Ifthe canvas used to make the tents costs = 120 per sq.m, find\nthe amount shared by each school to set up the tents. What value is generated\n22\nby the above problem ? (Use T= 7)\n30/1\n10",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 11,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 7,
+      "text": "Prove that the lengths of the tangents drawn from an external point toa circle\nare equal.\n23.\n60° @\n|\nDrawa circle of radius 4 cm. Draw two tangents to the circle inclined at an\nangle of 60° to each other.\nC\nIn Fig. 7, two equal circles, with centres O and O'\", touch each other at X.OO'\nproduced meets the circle with centre O' at A. AC is tangent to the circle with\n.\n.\n.\n.\nDO'\ncentre O, at the point C. O'D is perpendicular to AC. Find the value ofa\nC\nfigure 7\n30/1\n11\nP.T.O.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 12,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 7,
+      "text": "25.\n+t,\n2 4 yy 1-2-4\nxt+l\nx+2\nx4+4\nSolve for x: — + — 4 x#—-1,-2,-4\nxtl\nx+2\nx4+4\nThe angle of elevation of the top Q of a vertical tower PQ from a point X on\nthe ground is 60°.\nFrom a point Y, 40 m vertically above X, the angle of\nelevation of the top Q of tower is 45°. Find the height of the tower PQ and the\ndistance PX. ( Use V8 =1.73 )\nThe houses in a row are numbered consecutively from 1 to 49. Show that there\nexists a value of X such that sum of numbers of houses proceeding the house\nnumbered X is equal to sum of the numbers of houses following X.\n30/1\n12",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 13,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 6,
+      "text": "AD _ AE _\nAB\nAC\nA(4, 6)\n/\\ E\nBd, 5)\nC(7, 2)\nIn fig. 8, the vertices of AABC are A(4, 6), B(1, 5) and C(7, 2). A line-segment\nDE is drawn to intersect the sides AB and AC at D and E\nrespectively such\nAD\nAE\n1\nwoe\nthat AB\nAG\n3° Calculate the area of AADE and compare it with area of\nAABC.\nA(4, 6)\n/\\ E\nBC, 5)\nC(7, 2)\nFigure 8\n30/1\n13\nP.T.O.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 14,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 6,
+      "text": "cal\nA number x is selected at random from the numbers 1, 2, 3 and 4. Another\nnumber y is selected at random from the numbers 1, 4, 9 and 16. Find the\nprobability that product of x and y is less than 16.\ntan@ + sec + ao | ral\n180\n,B\nPe\not\nIn Fig. 9, is shown a sector OAP of a circle with centre O, containing 78. AB\nis perpendicular to the radius OA and meets OP produced at B. Prove that\nthe perimeter of shaded region is r [tano + secO + ae - 1]\n,B\nPe\not\nFigure 9\n30/1\n14",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 15,
+      "method": "english-ocr-unverified",
+      "maskedHindiLines": 3,
+      "text": "A motor boat whose speed is 24 km/h in still water takes 1 hour more to go\n32 km upstream than to return downstream to the same spot. Find the speed\nof the stream.\n30/1\n15",
+      "requiresVisualReview": true
+    }
+  ]
+}

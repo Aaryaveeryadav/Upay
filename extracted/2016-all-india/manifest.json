@@ -1,0 +1,128 @@
+[
+  {
+    "file": "Communicative Question Paper 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "4ccb1edcec7a8f5cc36f72750bada13fcaf9bb6f423a6c4e1f82f109cb6639bb",
+    "status": "extracted-not-question-verified",
+    "kind": "question-paper",
+    "pages": 8,
+    "output": "communicative-question-paper-2016-all-india.json"
+  },
+  {
+    "file": "Communicative Solution 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "be047df4375db7617f4e8846f952784111d422542e1f5ceffc26e486f42c3906",
+    "status": "extracted-not-question-verified",
+    "kind": "marking-scheme",
+    "pages": 26,
+    "output": "communicative-solution-2016-all-india.json"
+  },
+  {
+    "file": "Hindi-A Question Paper 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "5a32a8da3b3ac18f645d6aece15157bc53a4a86a207cade9ae85797304264b21",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Hindi-A Solution 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "69866a89a2396cf9e228e3f721869647be73d7ef142ae5dae2ba7a9384ac8859",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Hindi-B Question Paper 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "548e31c5b18ce5124b2c77be49a5586d6838a946f527b81e7e124ab7180f26eb",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Hindi-B Solution 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "52196b8e3ef78647e1da99fbb44f3f236615e5a504a7deb14d5dcf72bbedad8e",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Language & Literature Paper 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "70486c02508f3e46ff2b34aa1fffab163286eededf1072194ff610ff8ab20844",
+    "status": "extracted-not-question-verified",
+    "kind": "question-paper",
+    "pages": 8,
+    "output": "language-literature-paper-2016-all-india.json"
+  },
+  {
+    "file": "Language & Literature Solution 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "12285830c5edcdc8ca8fb11b67ae734812f546460270515e9617b458a429d073",
+    "status": "extracted-not-question-verified",
+    "kind": "marking-scheme",
+    "pages": 25,
+    "output": "language-literature-solution-2016-all-india.json"
+  },
+  {
+    "file": "Maths Question Paper 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "9dab65e9941e90a8749317f16bef6bfe1bfec9ca13782f82aa259ef75ba9f71c",
+    "status": "extracted-not-question-verified",
+    "kind": "question-paper",
+    "pages": 15,
+    "output": "maths-question-paper-2016-all-india.json"
+  },
+  {
+    "file": "Maths Solution 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "9228ce58a0326155423883f1c168c8151cbf68ac4d8811819f2db4950945d6c6",
+    "status": "extracted-not-question-verified",
+    "kind": "marking-scheme",
+    "pages": 22,
+    "output": "maths-solution-2016-all-india.json"
+  },
+  {
+    "file": "Sanskrit Question Paper 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "810f10c2710686a997442e8f54cbc7d09847bf67c340ae9c04cbc06ae2fdaed5",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Sanskrit Solution 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "7dc6fd71ed0cc6083edacc38e50af546bdd30421f312bdeaa27484ff27243361",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Science Question Paper 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "2edefe96c05768f52750de623a845f05a6874f5158e0d3e1cc52c68906aba494",
+    "status": "extracted-not-question-verified",
+    "kind": "question-paper",
+    "pages": 16,
+    "output": "science-question-paper-2016-all-india.json"
+  },
+  {
+    "file": "Science Solution 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "d64ba2e201b9c456e58647f1f2f4d480c3fea8465f137a915c05323a19a0e91c",
+    "status": "extracted-not-question-verified",
+    "kind": "marking-scheme",
+    "pages": 8,
+    "output": "science-solution-2016-all-india.json"
+  },
+  {
+    "file": "Social Science Question Paper 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "fb87b2ccb9432e0f38142f50cdcc4e0ff940e8ab88bf60a9b2aa25a9e51c34db",
+    "status": "extracted-not-question-verified",
+    "kind": "question-paper",
+    "pages": 11,
+    "output": "social-science-question-paper-2016-all-india.json"
+  },
+  {
+    "file": "Social Science Solution 2016(All India).pdf",
+    "year": 2016,
+    "sha256": "4a8e825510de6323f7bf04e2ab154b2f088999564c657a7397bdaab7abc53fb4",
+    "status": "extracted-not-question-verified",
+    "kind": "marking-scheme",
+    "pages": 14,
+    "output": "social-science-solution-2016-all-india.json"
+  }
+]
