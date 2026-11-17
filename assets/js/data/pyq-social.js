@@ -22570,8 +22570,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "C",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/6556-32_5_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 1
   },
   {
     "id": "sscp-3251b-10",
@@ -22965,8 +22968,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "C",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/6556-32_5_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 1
   },
   {
     "id": "sscp-3251b-20",
@@ -23105,8 +23111,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "D",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/6556-32_5_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 1
   },
   {
     "id": "sscp-3251b-34",
@@ -23234,8 +23243,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "B",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/6556-32_5_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 1
   },
   {
     "id": "sscp-3251b-6",
@@ -23272,8 +23284,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "A",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/6556-32_5_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 1
   },
   {
     "id": "sscp-3251b-7",
@@ -23310,8 +23325,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "B",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/6556-32_5_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 1
   },
   {
     "id": "sscp-3251b-8",
@@ -23348,8 +23366,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "B",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/6556-32_5_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 1
   },
   {
     "id": "sscp-3251b-9",
@@ -39727,8 +39748,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "C",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/6556-32_5_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 1
   },
   {
     "id": "sscp-2023-3261-1",
@@ -39765,8 +39789,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "C",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-2",
@@ -39803,8 +39830,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "C",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-3",
@@ -39841,8 +39871,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "A",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-4",
@@ -39879,8 +39912,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "A",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-5",
@@ -39917,8 +39953,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "C",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-6",
@@ -39955,8 +39994,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "C",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-7",
@@ -39993,8 +40035,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "D",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-8",
@@ -40031,8 +40076,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "A",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-9",
@@ -40069,8 +40117,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "A",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-10",
@@ -40107,8 +40158,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "A",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-11",
@@ -40145,8 +40199,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "A",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-12",
@@ -40183,8 +40240,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "C",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-13",
@@ -40221,8 +40281,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "D",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-14",
@@ -40259,8 +40322,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "D",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-15",
@@ -40297,8 +40363,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "B",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-16",
@@ -40335,8 +40404,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "C",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-17",
@@ -40373,8 +40445,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "A",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-18",
@@ -40411,8 +40486,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "A",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-19",
@@ -40449,8 +40527,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "A",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   },
   {
     "id": "sscp-2023-3261-20",
@@ -40487,8 +40568,11 @@ UP.socialPyq = [
         "hi": ""
       }
     ],
-    "ans": "",
-    "textReview": "source-verified"
+    "ans": "C",
+    "textReview": "source-verified",
+    "keyVerified": true,
+    "keySource": "https://cdn.savemyexams.com/uploads/2026/01/52805-32_6_1%20SOCIAL%20SCIENCE%20Feb%202023%20CBSE%20class%2010%20MS.pdf",
+    "keyPage": 3
   }
 ];
 UP.pyq = UP.pyq.concat(UP.socialPyq);
