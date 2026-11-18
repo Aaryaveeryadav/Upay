@@ -64,8 +64,9 @@
     'assets/js/solver-route.js?v=26e5',
     'assets/js/answer-format.js?v=26e5',
     'assets/js/teacher-voice.js?v=26e5',
-    'assets/js/figures.js?v=26f17',
-    'assets/js/worked-figure.js?v=26f17', // answer-labelled figures computed from the question
+    'assets/js/figures.js?v=26f18',
+    'assets/js/matrices.js?v=26f18', // matrix questions: exact solve + the matrices drawn
+    'assets/js/worked-figure.js?v=26f18', // answer-labelled figures computed from the question
     'assets/js/checker.js',
     'assets/js/testgen.js?v=26f14',
     'assets/js/mock-assessment.js?v=26f15',
@@ -254,7 +255,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26f17');
+    return loadScript('assets/js/app.js?v=26f18');
   }
 
   function loadPostPaint() {

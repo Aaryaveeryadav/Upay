@@ -11,7 +11,8 @@ the total current and the current in each branch.
 
 The same idea now covers five families — heights and distances, resistor
 networks, mensuration solids, two points on a plane, and a lens or mirror ray
-diagram. This is what `assets/js/worked-figure.js` plus the renderers in
+diagram. (Matrix equations have their own engine and their own document:
+[`matrix-questions.md`](matrix-questions.md).) This is what `assets/js/worked-figure.js` plus the renderers in
 `assets/js/figures.js` do.
 
 ![A tower with two angles of elevation and the computed height and distances](images/worked-figure-tower.png)

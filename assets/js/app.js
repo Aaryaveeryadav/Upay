@@ -1777,6 +1777,23 @@ window.UP = window.UP || {};
   function aiScope() { return JSON.stringify([S.savedKey, +S.cls, S.board, S.subject]); }
   function askAI(q) {
     S.aiErrorCode = ''; S.aiRetryAt = 0;
+    /* A matrix question is values and one operation. If the paste kept the
+       values, restate it in an unambiguous form before ANY reader — model or
+       solver — sees it; the flattened OCR text ("2 1 -1 41 : 2 1 | X = …")
+       is what made the model call a 3×3 matrix a 2×2 one. If the values did
+       not survive, ask the student instead of guessing them. */
+    let matrixBlock = '';
+    try {
+      const routeSubject = UP.taskRouting ? UP.taskRouting.resolve(q, S.subject).subject : S.subject;
+      if (UP.matrices && ['maths', 'applied-maths'].includes(routeSubject) && UP.matrices.isMatrixQuestion(q)) {
+        const mx = UP.matrices.solve(q);
+        if (mx && mx.solved) q = mx.canonical;
+        else if (mx && mx.singular) matrixBlock = 'matrix-singular';
+        else matrixBlock = 'matrix-repair';
+      }
+    } catch (_) {}
+    S.aiQuestion = q;
+    if (S.answer && S.answer.question) S.answer.question = q;
     const routing = UP.taskRouting.resolve(q, S.subject);
     const responseLang = routing.language || S.lang;
     const timing = UP.solveTiming.forQuestion(q,routing.subject);
@@ -1791,6 +1808,12 @@ window.UP = window.UP || {};
       const thinking = document.getElementById('aiThinking');
       if (thinking && S.aiState !== 'loading') thinking.remove();
     };
+    if (matrixBlock) {
+      S.aiState = 'local'; S.aiAnswer = null; S.aiRetry = false;
+      S.answer = { kind: matrixBlock, question: q };
+      paint();
+      return;
+    }
     const matches=(UP.pyq||[]).filter(row=>qInScope(row)&&pyqQuestionText(row)===q);
     const mappedChapters=[...new Set(matches.map(row=>String(row.ch)).filter(Boolean))];
     const chapterContext=mappedChapters.length===1?chapterById(mappedChapters[0]):chapterById(S.chapterId);
@@ -1943,11 +1966,21 @@ window.UP = window.UP || {};
        question asked while Science is selected still gets its figure. Language,
        Social and Commerce answers never do. */
     if (['hindi', 'english', 'sanskrit', 'social', 'accountancy', 'computerized-accounting', 'economics', 'business-studies'].includes(subject)) return '';
+    if (spec.type === 'matrix') return ['maths', 'applied-maths'].includes(subject) ? subject : '';
     if (spec.type === 'circuit') return ['physics', 'science', 'chemistry', 'biology'].includes(subject) ? subject : '';
     return subject;
   }
   function workedFigureFor(question) {
     if (!UP.workedFigure || !question) return null;
+    /* A matrix equation is solved here first: the figure carries the very
+       values the answer was computed from, so a misread paste cannot turn
+       into a drawing of some other matrix. */
+    try {
+      if (UP.matrices && UP.matrices.isMatrixQuestion(question)) {
+        const mx = UP.matrices.figureFor(question);
+        if (mx && mx.solved && workedFigureSubject(mx, question)) return mx;
+      }
+    } catch (_) {}
     try {
       const spec = UP.workedFigure.forQuestion(question);
       if (!spec || !workedFigureSubject(spec, question)) return null;
@@ -1977,7 +2010,11 @@ window.UP = window.UP || {};
        drawing itself. */
     const diffVal = spec.computed ? (spec.type === 'elevation' ? spec.computed.height
       : spec.type === 'optics' ? spec.computed.v : null) : null;
-    const differs = diffVal != null && !spelled && !answerMentions(text, diffVal);
+    /* A matrix answer should repeat the entries computed here; when none of
+       them appears, the written answer is solving something else. */
+    const matrixDiffers = spec.type === 'matrix' && (spec.checkText || []).length > 0 &&
+      !(spec.checkText || []).some((v) => text.includes(v));
+    const differs = (diffVal != null && !spelled && !answerMentions(text, diffVal)) || matrixDiffers;
     return '<figure class="figure-card worked-figure">' +
       '<div class="figure-head"><span class="mini-label">' + (hi ? 'हल का चित्र' : 'Worked diagram') + '</span>' +
       '<span class="tag grey">' + (hi ? 'प्रश्न के अंकों से बना; मान यहीं निकाले गए' : 'Drawn from the question’s numbers; values calculated here') + '</span></div>' +
@@ -2489,7 +2526,34 @@ window.UP = window.UP || {};
     </div>`;
   }
 
+  /* The matrices could not be read out of the paste. Nothing is guessed: the
+     student confirms the values and those exact values are then solved and
+     drawn. */
+  function matrixRepairCard(ans) {
+    const hi = S.lang === 'hi';
+    return `<div class="callout warn matrix-repair"><div>
+      <h3>${hi ? 'आव्यूह के मान साफ़ नहीं पढ़े जा सके' : 'The matrix values could not be read'}</h3>
+      <p>${hi
+        ? 'प्रश्न के अंकों से आव्यूह का आकार और मान पक्के तौर पर नहीं निकले, इसलिए मैंने अनुमान नहीं लगाया। नीचे मान ठीक करके लिखिए — हल और चित्र ठीक इन्हीं मानों से बनेंगे।'
+        : 'The shape and values did not survive the paste, so nothing was guessed. Type or correct the matrices below — the solution and its figure are built from exactly these numbers.'}</p>
+      <p class="muted">${hi ? 'जैसा पढ़ा गया:' : 'As read from the question:'} ${esc(String(ans.question || ''))}</p>
+      <label class="mini-label" for="matrix-repair-input">${hi ? 'आव्यूह लिखिए' : 'Matrices'}</label>
+      <textarea id="matrix-repair-input" rows="4" spellcheck="false" style="width:100%;margin-top:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace"
+        placeholder="A = [[2, 1, -1], [1, 2, 1], [3, -1, 2]]&#10;B = [[4, 1], [7, 0], [8, 5]]"></textarea>
+      <p class="muted">${hi ? 'यह रूप भी चलेगा:' : 'Also accepted:'} <code>A = [2 1 -1; 1 2 1; 3 -1 2]</code></p>
+      <p class="muted">${hi ? 'केवल A और B लिखने पर प्रश्न A X = B माना जाएगा; X A = B, |A| या A⁻¹ के लिए वह शब्द भी लिखिए।' : 'With only A and B, the question is taken as A X = B; write X A = B, |A| or A⁻¹ to ask for those.'}</p>
+      <button class="btn btn-primary" data-action="matrix-repair-solve">${hi ? 'इन मानों से हल करें' : 'Solve with these values'}</button>
+    </div></div>`;
+  }
+
   function renderAnswer(ans) {
+    if(ans.kind==='matrix-repair')return matrixRepairCard(ans);
+    if(ans.kind==='matrix-singular')return `<div class="callout warn"><div>
+      <h3>${S.lang === 'hi' ? 'A का व्युत्क्रम नहीं है' : 'A has no inverse'}</h3>
+      <p>${S.lang === 'hi'
+        ? '|A| = 0 है, इसलिए A X = B का अद्वितीय हल नहीं है। मान जाँच लीजिए; यदि सही हैं तो उत्तर है — कोई अद्वितीय X नहीं।'
+        : '|A| = 0, so A X = B has no unique solution. Check the values; if they are right, the answer is that there is no unique X.'}</p>
+    </div></div>`;
     if(ans.kind==='language-context')return `<div class="callout warn language-context"><div><h3>More context needed</h3><p>${rich(ans.question)}</p><p>${rich(ans.error)}</p>${aiRecovery(ans.question)}</div></div>`;
     if(ans.kind==='question-clarification')return `<div class="callout warn question-clarification"><div><h3>Confirm the question first</h3><p>${rich(ans.question)}</p><p>${rich(ans.error)}</p><p><b>Possible intended question (please check):</b> ${rich(ans.suggestedQuestion)}</p><a class="btn btn-primary" href="#/ask?q=${encodeURIComponent(ans.suggestedQuestion)}">Yes, solve this corrected question</a></div></div>`;
 
@@ -8060,6 +8124,16 @@ document.addEventListener('click', function(e){
   const a = e.target.closest('[data-action]');
   if(!a) return;
   const act = a.dataset.action;
+  if(act==='matrix-repair-solve'){
+    e.preventDefault();
+    const ta=document.getElementById('matrix-repair-input');
+    const text=ta?String(ta.value||'').trim():'';
+    if(!text){toast(S.lang==='hi'?'पहले आव्यूह लिखें':'Enter the matrices first');return;}
+    let mx=null; try{mx=UP.matrices&&UP.matrices.solve(text,{defaultOp:'AX'});}catch(_){}
+    if(!mx||!mx.solved){toast(S.lang==='hi'?'मान पढ़े नहीं जा सके — A = [[1, 2], [3, 4]] जैसा रूप लिखें':'Could not read that — write it as A = [[1, 2], [3, 4]]');return;}
+    go('#/ask?q='+encodeURIComponent(mx.canonical),true);
+    return;
+  }
   if(act==='exportPrg'){ e.preventDefault(); exportProgress(); return; }
   if(act==='shareStory'){ e.preventDefault(); shareAnswerAsStory(); return; }
   if(act==='shareSheet'){ e.preventDefault(); const ch=a.dataset.ch; go(`#/cheatsheet/${ch}`); return; }

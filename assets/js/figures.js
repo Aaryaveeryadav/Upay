@@ -869,6 +869,100 @@ UP.figures = (function () {
   }
 
   /* =========================================================
+     Matrix equation figure — the values the question states and the X the
+     app computed. spec = {op:'AX'|'XA'|'det'|'inverse'|'product',
+     plainA:[[..]], plainB:[[..]], plainX:[[..]], det:'18'}
+     ========================================================= */
+  function matrixFig(p) {
+    const W = 660;
+    const A = p.plainA || [];
+    if (!A.length || !A[0]) return wrap(W, 180, '');
+    const cellWidth = (m) => {
+      let longest = 1;
+      m.forEach((row) => row.forEach((v) => { longest = Math.max(longest, String(v).length); }));
+      return Math.max(52, longest * 9.4 + 18);
+    };
+    const rowH = 34;
+    const grid = (m, x, y) => {
+      const cols = m[0].length, rows = m.length;
+      const cw = cellWidth(m);
+      const w = cols * cw + 26, h = rows * rowH;
+      let body = `<path d="M${num(x + 11)} ${num(y)} L${num(x)} ${num(y)} L${num(x)} ${num(y + h)} L${num(x + 11)} ${num(y + h)}"` +
+        ` fill="none" stroke="${C.ink}" stroke-width="2.2"/>` +
+        `<path d="M${num(x + w - 11)} ${num(y)} L${num(x + w)} ${num(y)} L${num(x + w)} ${num(y + h)} L${num(x + w - 11)} ${num(y + h)}"` +
+        ` fill="none" stroke="${C.ink}" stroke-width="2.2"/>`;
+      m.forEach((row, r) => row.forEach((v, c) => {
+        body += label(x + 15 + c * cw + cw / 2 - 2, y + r * rowH + rowH * 0.66, String(v),
+          { size: 13, mono: true, weight: 600, fill: C.ink });
+      }));
+      return { svg: body, w: w, h: h };
+    };
+
+    /* One horizontal line of [matrix] [text] [matrix], centred. Two passes:
+       the text sits on the vertical centre of the tallest block on the line,
+       so "X = A⁻¹B =" lines up with the matrix beside it. */
+    const line = (items, y) => {
+      const parts = items.map((it) => it.m ? grid(it.m, 0, 0) : { w: it.text.length * 8.2 + 12, h: rowH });
+      const gap = 30;
+      let total = parts.reduce((t, q) => t + q.w, 0) + gap * Math.max(0, items.length - 1);
+      let x = Math.max(18, (W - total) / 2);
+      const h = Math.max.apply(null, parts.map((q) => q.h));
+      let svg = '';
+      items.forEach((it, i) => {
+        if (it.m) {
+          svg += grid(it.m, x, y + (h - parts[i].h) / 2).svg;
+          if (it.tag) svg += label(x + parts[i].w / 2, y + (h - parts[i].h) / 2 - 12, it.tag,
+            { size: 12, weight: 700, fill: C.inkSoft });
+        } else {
+          svg += label(x + 4, y + h / 2 + 5, it.text, { anchor: 'start', size: 14.5, weight: 700, fill: C.ink });
+        }
+        x += parts[i].w + gap;
+      });
+      return { svg: svg, h: h };
+    };
+
+    const firstLine = [];
+    if (p.op === 'det') {
+      firstLine.push({ m: A, tag: 'A' });
+      firstLine.push({ text: '|A| = ' + (p.det || '?') });
+    } else if (p.op === 'inverse') {
+      firstLine.push({ m: A, tag: 'A' });
+      firstLine.push({ text: 'A⁻¹ =' });
+      if (p.plainX) firstLine.push({ m: p.plainX });
+    } else if (p.op === 'product') {
+      firstLine.push({ m: A, tag: 'A' });
+      firstLine.push({ text: 'AB =' });
+      if (p.plainX) firstLine.push({ m: p.plainX });
+    } else {
+      firstLine.push({ m: A, tag: 'A' });
+      firstLine.push({ text: p.op === 'XA' ? '× X =' : 'X =' });
+      if (p.plainB) firstLine.push({ m: p.plainB, tag: 'B' });
+    }
+    const y0 = 62;
+    const top = line(firstLine, y0);
+    let svg = top.svg;
+    let y = y0 + top.h + 50;
+    if (p.op === 'AX' || p.op === 'XA') {
+      const second = line([
+        { text: p.op === 'XA' ? 'X = B A⁻¹ =' : 'X = A⁻¹B =' },
+        { m: p.plainX, tag: 'X' }
+      ], y);
+      svg += second.svg;
+      y += second.h;
+    }
+    const H = Math.max(250, y + 52);
+    return wrap(W, H, `
+      ${svg}
+      <g transform="translate(18, 16)">
+        <rect x="0" y="0" width="216" height="40" rx="9" fill="${C.cream}" stroke="${C.creamMid}"/>
+        ${label(12, 25, (p.op === 'det' ? 'determinant' : p.op === 'inverse' ? 'inverse' : p.op === 'product' ? 'product AB' : 'solve for X') +
+          (p.det && p.op !== 'det' && p.op !== 'inverse' ? ' · |A| = ' + esc(p.det) : ''),
+          { anchor: 'start', size: 11.5, fill: C.creamDeep })}
+      </g>
+      ${label(W / 2, H - 14, 'exact fractions computed here; every entry is checked by substituting back', { size: 10, fill: C.inkSoft })}`);
+  }
+
+  /* =========================================================
      Generic diagram — draws any shape the AI describes.
      spec = {
        type: 'plane' | 'triangle' | 'circle' | 'bars',
@@ -894,6 +988,10 @@ UP.figures = (function () {
     }
     if (spec.type === 'optics' && spec.verified) {
       return opticsWorkedFig(spec);
+    }
+
+    if (spec.type === 'matrix' && spec.verified) {
+      return matrixFig(spec);
     }
 
     /* A solid described as a STACK of parts goes straight to compositeSolid.
@@ -2185,5 +2283,5 @@ UP.figures = (function () {
     return wrap(W,H,inner);
   }
 
-  return { circuitForQuestion, heightDistanceFig, networkFig, copperRefiningFig, autoFigureFor, autoSolid, autoComposite, figure, generic, compositeSolid, twoHemispheres, parabola, twoLines, distance, rightTriangle, elevation, sector, solid, diceGrid, similarTriangles, bpt, tangent, diamTangents, apLadder, meanLine, factorVenn, factorTree, sqrtLine, conceptMap, bars, opticsWorkedFig, apparatusFig, opticsFig, circuitFig, mechanicsFig, biologyFig };
+  return { circuitForQuestion, heightDistanceFig, networkFig, copperRefiningFig, autoFigureFor, autoSolid, autoComposite, figure, generic, compositeSolid, twoHemispheres, parabola, twoLines, distance, rightTriangle, elevation, sector, solid, diceGrid, similarTriangles, bpt, tangent, diamTangents, apLadder, meanLine, factorVenn, factorTree, sqrtLine, conceptMap, bars, opticsWorkedFig, matrixFig, apparatusFig, opticsFig, circuitFig, mechanicsFig, biologyFig };
 })();

@@ -44,11 +44,14 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       await page.goto(BASE, { waitUntil: 'networkidle' });
       await page.waitForFunction(() => window.UP && UP.S && document.body.classList.contains('up-ready'));
 
-      const ask = async (question, subject, answer, diagram) => {
+      const arm = (question, answer, diagram) => {
         reply = {
           source: 'ai', question, result: answer, summary: 'Mock summary for the figure regression.',
           approaches: four(), diagram: diagram === undefined ? null : diagram, check: 'Mock check'
         };
+      };
+      const ask = async (question, subject, answer, diagram) => {
+        arm(question, answer, diagram);
         await page.evaluate(([q, s]) => { UP.S.subject = s; location.hash = '#/ask?q=' + encodeURIComponent(q); }, [question, subject]);
       };
 
@@ -107,8 +110,52 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       assert.equal(await page.locator('.ai-answer .worked-figure').count(), 0, 'no worked figure for a ladder');
       assert(await page.locator('.ai-answer .figure-body svg polygon').count() >= 1, 'the ordinary AI triangle still renders');
 
+      /* 5. A matrix equation is values and one operation. The app solves it in
+            exact fractions and draws the matrices it actually used, so the
+            AI's misreading of the grid cannot become the picture. */
+      const MATRIX_Q = 'Find the matrix X if A X = B, where A = [[2,1,-1],[1,2,1],[3,-1,2]] and B = [[4,1],[7,0],[8,5]].';
+      await ask(MATRIX_Q, 'maths', 'X = [[-1/5, 12/5, 6/5], [-1/5, 8/5, -7/5]]', null);
+      await page.waitForFunction(() => {
+        const figure = document.querySelector('.ai-answer .worked-figure');
+        return figure && /37\/18/.test(figure.textContent);
+      });
+      const matrixFigure = page.locator('.ai-answer .worked-figure');
+      const matrixText = await matrixFigure.innerText();
+      for (const token of ['37/18', '10/9', '-7/9', '|A| = 18', '3×3']) {
+        assert(matrixText.includes(token), `matrix figure must show "${token}", got: ${matrixText.replace(/\s+/g, ' ')}`);
+      }
+      const matrixSvg = matrixFigure.locator('.figure-body svg');
+      assert(await matrixSvg.count() === 1);
+      const matrixSvgText = await matrixSvg.innerHTML();
+      assert(!/NaN|undefined/.test(matrixSvgText), 'no broken numbers in the matrix drawing');
+      assert((matrixSvgText.match(/<path/g) || []).length >= 6, 'each matrix needs its bracket strokes');
+      assert(matrixSvgText.includes('37/18') && matrixSvgText.includes('8'), 'the values and X are drawn');
+      assert.equal(await page.locator('.ai-answer .worked-figure').count(), 1, 'exactly one matrix figure');
+      assert.equal(await page.locator('.worked-figure-mismatch').count(), 1,
+        'an answer with different entries is called out');
+
+      /* 6. A paste that lost the grid gets no invented values: the student is
+            asked for the matrices, and their values are then solved and drawn. */
+      const MANGLED = 'Hard Matrix Question: 2 1 -1 41 : 2 1 | X = : 0]. 3 -1 2 8 5';
+      await page.evaluate((q) => { UP.S.subject = 'maths'; location.hash = '#/ask?q=' + encodeURIComponent(q); }, MANGLED);
+      await page.locator('.matrix-repair textarea').waitFor();
+      assert.equal(await page.locator('.ai-answer .worked-figure').count(), 0, 'nothing is drawn from unreadable text');
+      assert.equal(await page.locator('.ai-answer .figure-body svg').count(), 0, 'and no generic figure either');
+      await page.fill('.matrix-repair textarea',
+        'A = [[2,1,-1],[1,2,1],[3,-1,2]]\nB = [[4,1],[7,0],[8,5]]');
+      arm(MATRIX_Q, 'X = [[37/18, 10/9], [29/18, -7/9], [31/18, 4/9]]', null);
+      await page.locator('[data-action="matrix-repair-solve"]').click();
+      await page.waitForFunction(() => {
+        const figure = document.querySelector('.ai-answer .worked-figure');
+        return figure && /37\/18/.test(figure.textContent);
+      });
+      assert(/37\/18/.test(await page.locator('.ai-answer .worked-figure').innerText()),
+        'the confirmed matrices are solved and drawn');
+      assert.equal(await page.locator('.worked-figure-mismatch').count(), 0,
+        'an answer that repeats X raises no warning');
+
       assert.deepEqual(errors, []);
-      console.log(`PASS ${width}px: tower figure 10√3/30/10 m, mismatch warning, verified 6 Ω network replaces a wrong AI circuit, ladder refused, no invented values`);
+      console.log(`PASS ${width}px: tower figure 10√3/30/10 m, mismatch warning, verified 6 Ω network replaces a wrong AI circuit, ladder refused, matrix X = 37/18 drawn from exact fractions with a mismatch warning, mangled matrix paste refused and repaired, no invented values`);
       await context.close();
     }
   } finally { await browser.close(); }
