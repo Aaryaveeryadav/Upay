@@ -359,12 +359,260 @@
     return computeNetwork(layout, values, pairIdx, battery);
   }
 
+  /* ------------------------------------------------- mensuration solids
+
+     One plain solid, drawn at its own r and h, with the volume and the
+     surface areas computed here. Composite objects (a cone on a cylinder, a
+     cavity, a melted-and-recast sphere) are refused: their surface area is
+     not the sum of the parts, so a labelled stack would still be a guess. */
+
+  function piFor(r, t) {
+    /* "take π = 3.14" wins; otherwise 22/7 when the radius is a multiple of
+       7 or 3.5 (the CBSE convention: a radius the sevens cancel), else 3.14. */
+    const stated = t.match(/(?:π|pi)\s*(?:=|is|take)\s*(3\.14|22\s*\/\s*7)/i);
+    if (stated) return stated[1].replace(/\s+/g, '') === '3.14' ? 3.14 : 22 / 7;
+    return Math.abs(r / 3.5 - Math.round(r / 3.5)) < 1e-9 ? 22 / 7 : 3.14;
+  }
+
+  function lengthIn(t, words) {
+    /* "[word] ... 7 cm" -- the unit is required, so a bare number in an
+       option list cannot be mistaken for a measurement. */
+    const re = new RegExp('(?:' + words + ')[^0-9.;]{0,24}(\\d+(?:\\.\\d+)?)\\s*(cm|centimetres?|centimeters?|m|metres?|meters?|सेमी|मीटर)', 'i');
+    const m = t.match(re);
+    if (!m) return null;
+    return { value: Number(m[1]), unit: /^(m|metres?|meters?|मीटर)$/i.test(m[2]) ? 'm' : 'cm' };
+  }
+
+  function mensurationSolid(text) {
+    const t = normalise(text);
+    const cyl = /cylind|बेलन/i.test(t);
+    const cone = /\bcone\b|conical|शंकु/i.test(t);
+    /* "hemispherical" contains "spherical", and "अर्धगोला" contains "गोला";
+       read the hemisphere first and let it claim the word. */
+    const hemi = /hemispher|अर्ध\s*गोल/i.test(t);
+    const sph = !hemi && /sphere|spherical|गोल[ाे]/i.test(t);
+    const named = [cyl, cone, hemi, sph].filter(Boolean).length;
+    if (!named) return null;
+    if (named > 1) return null;                       /* composite: not drawn */
+    if (/frustum|छिन्नक|cavit|hollowed|melted|melt\b|recast|remould|reshap|dropped|immersed|submerged|converted|vessel|overflow/i.test(t)) return null;
+    if (/slant\s*height|तिर्यक\s*ऊँचाई/i.test(t)) return null;
+    const kind = sph ? 'sphere' : hemi ? 'hemisphere' : cone ? 'cone' : 'cylinder';
+
+    let unit = null, r = null;
+    const R = lengthIn(t, 'radius|radii|त्रिज्या');
+    if (R) { r = R.value; unit = R.unit; }
+    if (r == null) {
+      const d = lengthIn(t, 'diameter|व्यास');
+      if (!d) return null;
+      r = d.value / 2; unit = d.unit;
+    }
+    let h = null;
+    if (kind === 'cylinder' || kind === 'cone') {
+      const hh = lengthIn(t, 'height|ऊँचाई|tall');
+      if (!hh) {
+        const eq = t.match(/\bh\s*=\s*(\d+(?:\.\d+)?)\s*(cm|सेमी)/i);
+        if (!eq) return null;
+        h = Number(eq[1]);
+      } else {
+        if (unit && hh.unit !== unit) return null;    /* mixed units: refuse */
+        h = hh.value; unit = hh.unit;
+      }
+      if (!(h > 0) || h / r > 40 || h / r < 0.05) return null;
+    }
+    if (!(r > 0) || r > 500) return null;
+    const U1 = unit, U2 = unit + '²', U3 = unit + '³';
+    const pi = piFor(r, t);
+    const piText = Math.abs(pi - 22 / 7) < 1e-9 ? '22/7' : '3.14';
+    const sq = (v) => v * v;
+    let vol, csa, tsa, extra = [];
+    if (kind === 'cylinder') {
+      vol = pi * sq(r) * h; csa = 2 * pi * r * h; tsa = 2 * pi * r * (r + h);
+    } else if (kind === 'cone') {
+      const l = Math.sqrt(sq(r) + sq(h));
+      vol = (pi * sq(r) * h) / 3; csa = pi * r * l; tsa = pi * r * (l + r);
+      extra.push('l = √(r² + h²) = ' + decimal(l) + ' ' + U1);
+    } else if (kind === 'sphere') {
+      vol = (4 * pi * Math.pow(r, 3)) / 3; csa = 4 * pi * sq(r); tsa = csa;
+    } else {
+      vol = (2 * pi * Math.pow(r, 3)) / 3; csa = 2 * pi * sq(r); tsa = 3 * pi * sq(r);
+    }
+    const volume = 'V = ' + decimal(vol) + ' ' + U3;
+    const curved = (kind === 'sphere' ? 'Surface area' : 'Curved surface area') + ' = ' + decimal(csa) + ' ' + U2;
+    const total = (kind === 'sphere' ? '' : 'Total surface area = ' + decimal(tsa) + ' ' + U2);
+
+    /* Put the quantity the question asks for first; the others follow. */
+    const asked = /volume|घनफल|आयतन/i.test(t) ? 0
+      : /total|whole|सम्पूर्ण|संपूर्ण|कुल/i.test(t) ? 2
+      : /curved|lateral|surface\s*area|वक्र|पार्श्व|पृष्ठीय|सतह/i.test(t) ? 1 : 0;
+    const all = [volume, curved].concat(total ? [total] : []).concat(extra.slice(0, 1));
+    const ordered = [all[asked] || all[0]].concat(all.filter((_, i) => i !== asked));
+
+    const dims = 'r = ' + decimal(r) + ' ' + U1 + (h != null ? ', h = ' + decimal(h) + ' ' + U1 : '');
+    return {
+      type: 'solid', verified: true, solid: kind,
+      r: decimal(r) + ' ' + U1, h: h == null ? undefined : decimal(h) + ' ' + U1,
+      formulas: ordered.slice(0, 3),
+      answer: ordered,
+      caption: 'Drawn from the measurements in the question (' + dims + '); volume and areas are calculated here with π = ' +
+        piText + '. Not to scale.'
+    };
+  }
+
+  /* ---------------------------------------------- two points on a plane */
+
+  function coordinatePoints(text) {
+    const t = normalise(text);
+    /* The section formula, a ratio, three vertices, collinearity and
+       "equidistant from" are all different questions with different
+       answers; only the plain two-point distance/midpoint is drawn. */
+    if (/equidistant|समदूरस्थ|section\s*formula|विभाजन\s*सूत्र|ratio|अनुपात|collinear|संरेख|area\s+of\s+the\s+triangle|त्रिभुज\s+का\s+क्षेत्रफल/i.test(t)) return null;
+    if (!/distance|दूरी|mid-?point|मध्य\s*-?\s*बिंदु/i.test(t)) return null;
+    const pts = [];
+    const re = /\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\)/g;
+    let m;
+    while ((m = re.exec(t))) pts.push({ x: Number(m[1]), y: Number(m[2]) });
+    if (pts.length !== 2) return null;
+    const dx = pts[1].x - pts[0].x, dy = pts[1].y - pts[0].y;
+    const d = Math.hypot(dx, dy);
+    if (!(d > 0)) return null;
+    const mid = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 };
+    const answer = [];
+    if (/mid-?point|मध्य\s*-?\s*बिंदु/i.test(t)) {
+      answer.push('midpoint = (' + decimal(mid.x) + ', ' + decimal(mid.y) + ')');
+      answer.push('PQ = ' + decimal(d));
+    } else {
+      answer.push('PQ = ' + decimal(d));
+      answer.push('midpoint = (' + decimal(mid.x) + ', ' + decimal(mid.y) + ')');
+    }
+    return {
+      type: 'distance', verified: true,
+      x1: pts[0].x, y1: pts[0].y, x2: pts[1].x, y2: pts[1].y,
+      answer: answer,
+      caption: 'Plotted from the two points named in the question; PQ and the midpoint are calculated here. ' +
+        'Each grid square is one unit.'
+    };
+  }
+
+  /* --------------------------------------------------- lens / mirror ray */
+
+  function opticsRay(text) {
+    const t = normalise(text);
+    const lens = /lens|लेंस/i.test(t), mirror = /mirror|दर्पण/i.test(t);
+    if (lens === mirror) return null;                  /* both or neither */
+    if (/combination|two\s+lenses|two\s+mirrors|संयोजन|दो\s+लेंस|दो\s+दर्पण/i.test(t)) return null;
+    const convex = /convex|converging|उत्तल|अभिसारी/i.test(t);
+    const concave = /concave|diverging|अवतल|अपसारी/i.test(t);
+    if (convex === concave) return null;               /* no stated kind */
+
+    /* "focal length 15 cm" (English) and "15 सेमी फोकस दूरी" (Hindi) state the
+       same thing in opposite word order, so the number closest to the words
+       wins -- otherwise the loose "up to 25 characters" gap reads the object
+       distance as the focal length. */
+    const focalLength = (str) => {
+      const phrase = str.match(/focal\s*length|फोकस\s*दूरी/i);
+      const at = phrase ? phrase.index : -1;
+      const cands = [];
+      const patterns = [
+        /(?:focal\s*length|फोकस\s*दूरी)[^0-9.;]{0,25}(\d+(?:\.\d+)?)/i,
+        /(\d+(?:\.\d+)?)\s*(?:cm|सेमी)?\s*(?:की\s*)?(?:focal\s*length|फोकस\s*दूरी)/i,
+        /\bf\s*=\s*(\d+(?:\.\d+)?)\s*(?:cm|सेमी)/i
+      ];
+      for (const re of patterns) {
+        const m = str.match(re);
+        if (!m) continue;
+        cands.push({ v: Number(m[1]), dist: at >= 0 ? Math.abs(m.index + m[0].indexOf(m[1]) - at) : 0 });
+      }
+      cands.sort((a, b) => a.dist - b.dist);
+      return cands.length ? cands[0].v : null;
+    };
+    const F = focalLength(t);
+    if (F == null || !(F > 0) || F > 500) return null;
+
+    /* Distances with the words around them, so "the image is formed at
+       30 cm" can never be read as the object distance. Hindi puts the number
+       before the noun ("15 सेमी फोकस दूरी"), English after it, so both sides
+       of the number are inspected. */
+    const dists = [];
+    const re = /(\d+(?:\.\d+)?)\s*(?:cm|centimetres?|centimeters?|सेमी)/gi;
+    const clauseOf = (at) => {
+      let start = 0, end = t.length;
+      for (const sep of ['.', '।', ';']) {
+        const before = t.lastIndexOf(sep, at);
+        if (before > start) start = before;
+        const after = t.indexOf(sep, at);
+        if (after >= 0 && after < end) end = after;
+      }
+      return t.slice(start, end);
+    };
+    let m;
+    while ((m = re.exec(t))) {
+      const start = m.index, end = re.lastIndex;
+      const before = t.slice(Math.max(0, start - 50), start);
+      const after = t.slice(end, end + 30);
+      /* the focal length is the lens's, not the object's; an object's height
+         is a length but not a distance along the axis */
+      if (/^\s*(?:focal|फोकस|tall|ऊँचाई|लंबा|लम्बा)|^\s*(?:is\s+the\s+)?focal/i.test(after)) continue;
+      dists.push({ v: Number(m[1]), start: start, before: before, after: after, clause: clauseOf(start) });
+    }
+    const hasObject = (str) => /object|वस्तु/i.test(str);
+    const hasImage = (str) => /image|प्रतिबिम्ब|screen|स्क्रीन/i.test(str);
+    const objectish = dists.filter(d => hasObject(d.before) && !hasImage(d.before));
+    const byClause = dists.filter(d => hasObject(d.clause) && !hasImage(d.clause));
+    const candidate = objectish.length === 1 ? objectish : (objectish.length === 0 && byClause.length === 1 ? byClause : []);
+    if (candidate.length !== 1) return null;
+    const d = candidate[0].v;
+    if (!(d > 0) || d > 2000) return null;
+    if (Math.abs(d - F) < 1e-9) return null;           /* image at infinity */
+    /* "find where the object must be placed for the image at 40 cm" is the
+       inverse question; the object distance is not one of the given values */
+    if (/image\s+(?:is\s+)?(?:formed|obtained)|प्रतिबिम्ब\s+(?:बनता|प्राप्त)/i.test(t) &&
+        !/find|ज्ञात|determine|calculate/i.test(t)) return null;
+
+    let v, mm;
+    if (lens) {
+      const f = convex ? F : -F;
+      v = (f * d) / (d - f);
+      mm = -v / d;                                     /* m = v/u, u = -d */
+    } else {
+      const f = concave ? -F : F;
+      v = (f * d) / (d + f);
+      mm = v / d;                                      /* m = -v/u, u = -d */
+    }
+    if (!isFinite(v) || Math.abs(v) > 5000) return null;
+    const real = lens ? v > 0 : v < 0;
+    const inverted = mm < 0;
+    const side = lens
+      ? (real ? 'opposite side of the lens' : 'same side as the object')
+      : (real ? 'in front of the mirror' : 'behind the mirror');
+
+    const answer = [
+      'v = ' + decimal(Math.abs(v)) + ' cm (' + (real ? 'real' : 'virtual') + ', ' + side + ')',
+      'm = ' + (mm < 0 ? '−' : '') + decimal(Math.abs(mm)) + ' (' + (inverted ? 'inverted' : 'erect') + ', ' +
+        (Math.abs(mm) > 1 ? 'enlarged' : Math.abs(mm) < 1 ? 'diminished' : 'same size') + ')'
+    ];
+    return {
+      type: 'optics', verified: true, device: lens ? 'lens' : 'mirror',
+      kind: convex ? 'convex' : 'concave', f: F, u: d, v: v, m: mm,
+      real: real, inverted: inverted,
+      /* |v| is what a written answer should repeat; used only for a note. */
+      checkText: [decimal(Math.abs(v)), decimal(Math.abs(v)).replace('.', ',')].filter(Boolean),
+      computed: { v: Math.abs(v), m: mm },
+      answer: answer,
+      caption: 'Distances are drawn to scale from the question (' + (lens ? 'lens' : 'mirror') + ', f = ' + decimal(F) +
+        ' cm, object at ' + decimal(d) + ' cm); image distance and magnification are calculated here. Arrow heights show ' +
+        'direction and relative size, not distance.'
+    };
+  }
+
   function forQuestion(question) {
     const text = normalise(question);
     if (!text || text.length > 900) return null;
     let spec = null;
     try { spec = heightsAndDistances(text); } catch (_) { spec = null; }
     if (!spec) { try { spec = resistorNetwork(text); } catch (_) { spec = null; } }
+    if (!spec) { try { spec = mensurationSolid(text); } catch (_) { spec = null; } }
+    if (!spec) { try { spec = coordinatePoints(text); } catch (_) { spec = null; } }
+    if (!spec) { try { spec = opticsRay(text); } catch (_) { spec = null; } }
     return spec && spec.answer && spec.answer.length ? spec : null;
   }
 
@@ -372,6 +620,7 @@
     normalise: normalise, decimal: decimal, exact: exact, withUnit: withUnit,
     withUnitExactFirst: withUnitExactFirst,
     heightsAndDistances: heightsAndDistances, resistorNetwork: resistorNetwork,
+    mensurationSolid: mensurationSolid, coordinatePoints: coordinatePoints, opticsRay: opticsRay,
     computeNetwork: computeNetwork, forQuestion: forQuestion
   };
   if (typeof module === 'object' && module.exports) module.exports = api;

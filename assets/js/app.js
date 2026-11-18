@@ -1972,15 +1972,19 @@ window.UP = window.UP || {};
     /* A written answer may give the exact surd ("10√3 m") or the decimal;
        either counts, and a rounded decimal is inside the tolerance. */
     const spelled = (spec.checkText || []).some(t => t && t.length > 2 && text.includes(t));
-    const differs = spec.type === 'elevation' && spec.computed
-      && !spelled && !answerMentions(text, spec.computed.height);
+    /* The one value the written answer must agree with: the height of the
+       tower, or the image distance. Other families carry their numbers on the
+       drawing itself. */
+    const diffVal = spec.computed ? (spec.type === 'elevation' ? spec.computed.height
+      : spec.type === 'optics' ? spec.computed.v : null) : null;
+    const differs = diffVal != null && !spelled && !answerMentions(text, diffVal);
     return '<figure class="figure-card worked-figure">' +
       '<div class="figure-head"><span class="mini-label">' + (hi ? 'हल का चित्र' : 'Worked diagram') + '</span>' +
       '<span class="tag grey">' + (hi ? 'प्रश्न के अंकों से बना; मान यहीं निकाले गए' : 'Drawn from the question’s numbers; values calculated here') + '</span></div>' +
       '<div class="figure-body">' + svg + '</div>' +
       (spec.answer && spec.answer.length ? '<figcaption>' + spec.answer.map(v => esc(String(v))).join(' · ') + '</figcaption>' : '') +
       (spec.caption ? '<p class="muted">' + esc(spec.caption) + '</p>' : '') +
-      (differs ? '<p class="muted worked-figure-mismatch">' + (hi ? 'लिखे उत्तर में ये गणना किए मान नहीं दोहराए गए हैं — उत्तर को ऊपर के चित्र से मिलाइए।' : 'The written answer does not repeat the calculated height shown here — check it against this working.') + '</p>' : '') +
+      (differs ? '<p class="muted worked-figure-mismatch">' + (hi ? 'लिखे उत्तर में यहाँ निकाला गया मान नहीं दोहराया गया है — उत्तर को ऊपर के चित्र से मिलाइए।' : 'The written answer does not repeat the value calculated here — check it against this drawing.') + '</p>' : '') +
       '</figure>';
   }
   function renderAIDiagram(a) {

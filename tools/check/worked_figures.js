@@ -121,6 +121,105 @@ for (const text of [
   assert.equal(wf.resistorNetwork(text), null, 'must refuse: ' + text.slice(0, 60));
 }
 
+/* ------------------------------------------- 2b. mensuration solids */
+
+const cyl = wf.forQuestion('Find the volume of a cylinder of radius 7 cm and height 10 cm.');
+assert(cyl && cyl.type === 'solid' && cyl.solid === 'cylinder' && cyl.verified);
+assert(cyl.answer.some(a => a === 'V = 1540 cm³'), 'volume must be 1540 cm³: ' + cyl.answer);
+assert(cyl.answer.some(a => a.includes('440')), 'curved surface must be 440 cm²: ' + cyl.answer);
+assert(cyl.answer.some(a => a.includes('748')), 'total surface must be 748 cm²: ' + cyl.answer);
+assert(svgOf(cyl).includes('V = 1540 cm³') && clean(svgOf(cyl)), 'the answer must be on the drawing');
+
+/* The same question in Hindi must produce the same numbers. */
+const cylHi = wf.forQuestion('एक बेलन की त्रिज्या 7 सेमी और ऊँचाई 10 सेमी है। आयतन ज्ञात कीजिए।');
+assert(cylHi && cylHi.answer[0] === 'V = 1540 cm³', 'Hindi wording must parse: ' + JSON.stringify(cylHi && cylHi.answer));
+
+/* The quantity asked for comes first; a cone states its own slant height. */
+const cone = wf.forQuestion('A cone has radius 6 cm and height 8 cm. Find its total surface area.');
+assert(cone.answer[0].startsWith('Total surface area = 301.4'), cone.answer[0]);
+assert(cone.answer.some(a => a.includes('l = √(r² + h²) = 10 cm')), 'slant height must be derived, not invented');
+
+const hemi = wf.forQuestion('Find the total surface area of a hemisphere of radius 7 cm.');
+assert(hemi && hemi.solid === 'hemisphere', 'hemisphere must not be read as a sphere');
+assert(hemi.answer[0] === 'Total surface area = 462 cm²', hemi.answer[0]);
+assert(hemi.answer.some(a => a.includes('308')), 'curved surface must be 308 cm²: ' + hemi.answer);
+
+const sphere = wf.forQuestion('A sphere has a diameter of 14 cm. Find its surface area.');
+assert(sphere.answer[0] === 'Surface area = 616 cm²', sphere.answer[0]);
+
+/* Metres are kept as metres rather than quietly converted. */
+const tank = wf.forQuestion('A cylindrical tank has radius 2 m and height 5 m. Find its volume.');
+assert(tank.answer[0] === 'V = 62.8 m³', tank.answer[0]);
+
+for (const text of [
+  'A cone of slant height 13 cm and radius 5 cm has a volume to be found.',
+  'A cylinder with a conical cavity of the same height has radius 7 cm and height 10 cm.',
+  'A metal sphere of radius 6 cm is melted and recast into a cylinder of radius 3 cm.',
+  'A cylinder has radius 7 m and height 10 cm; find its volume.',
+  'A cylinder and a cone have the same radius 7 cm and height 10 cm.'
+]) {
+  assert.equal(wf.mensurationSolid(text), null, 'must refuse: ' + text.slice(0, 60));
+}
+
+/* ------------------------------------------- 2c. two points on a plane */
+
+const pq = wf.forQuestion('Find the distance between the points A(3, 4) and B(7, 1).');
+assert(pq && pq.type === 'distance' && pq.verified);
+assert(pq.answer[0] === 'PQ = 5', pq.answer[0]);
+assert(pq.answer[1] === 'midpoint = (5, 2.5)', pq.answer[1]);
+assert(svgOf(pq).includes('PQ = 5') && clean(svgOf(pq)));
+
+const pqHi = wf.forQuestion('बिंदुओं (3, 4) और (7, 1) के बीच की दूरी ज्ञात कीजिए।');
+assert(pqHi && pqHi.answer[0] === 'PQ = 5', 'Hindi wording must parse: ' + JSON.stringify(pqHi && pqHi.answer));
+
+const mid = wf.forQuestion('Find the midpoint of the line segment joining (2, 3) and (6, 7).');
+assert(mid.answer[0] === 'midpoint = (4, 5)' && near(Number(mid.answer[1].replace('PQ = ', '')), Math.sqrt(32), 1e-3));
+
+for (const text of [
+  'Find the point on the x-axis which is equidistant from (2, -5) and (-2, 9).',
+  'Find the area of the triangle with vertices (1, 2), (4, 6) and (7, 2).',
+  'Find the coordinates of the point which divides the join of (1, 2) and (4, 5) in the ratio 2 : 3.',
+  'Find the distance between the points.'
+]) {
+  assert.equal(wf.coordinatePoints(text), null, 'must refuse: ' + text.slice(0, 60));
+}
+
+/* ------------------------------------------------ 2d. lens / mirror ray */
+
+const lens = wf.forQuestion('An object is placed 30 cm from a convex lens of focal length 15 cm. Find the position and nature of the image.');
+assert(lens && lens.type === 'optics' && lens.verified);
+assert(near(lens.v, 30) && near(lens.m, -1), 'convex lens: v = 30 cm, m = -1');
+assert(lens.answer[0].includes('real') && lens.answer[1].includes('inverted'));
+const lensSvg = svgOf(lens);
+assert(lensSvg.includes('principal axis') && lensSvg.includes('f = 15 cm') && lensSvg.includes('v = 30 cm') && clean(lensSvg));
+
+/* Hindi states the focal length before the words: "15 सेमी फोकस दूरी".
+   Reading the nearest number is what keeps 30 cm the object, not the focus. */
+const lensHi = wf.forQuestion('15 सेमी फोकस दूरी के उत्तल लेंस से 30 सेमी की दूरी पर एक वस्तु रखी है। प्रतिबिम्ब की स्थिति ज्ञात कीजिए।');
+assert(lensHi && near(lensHi.f, 15) && near(lensHi.u, 30) && near(lensHi.v, 30), 'Hindi lens: f = 15, u = 30, v = 30');
+
+const concaveMirror = wf.forQuestion('An object is placed 20 cm from a concave mirror of focal length 15 cm. Find the position, nature and size of the image.');
+assert(near(concaveMirror.v, -60) && near(concaveMirror.m, -3), 'concave mirror: v = -60 cm, m = -3');
+assert(concaveMirror.answer[0].includes('in front of the mirror'));
+
+const convexMirror = wf.forQuestion('An object is placed 20 cm in front of a convex mirror of focal length 15 cm.');
+assert(near(convexMirror.v, 60 / 7) && near(convexMirror.m, 3 / 7), 'convex mirror: v = 8.57 cm, m = 0.43');
+assert(convexMirror.answer[0].includes('virtual') && convexMirror.answer[0].includes('behind the mirror'));
+
+const concaveLens = wf.forQuestion('An object is placed 10 cm from a concave lens of focal length 15 cm.');
+assert(near(concaveLens.v, -6) && near(concaveLens.m, 0.6), 'concave lens: v = -6 cm, m = 0.6');
+
+for (const text of [
+  'Where should an object be placed in front of a convex lens of focal length 20 cm so that the image is formed at 40 cm?',
+  'An object is placed at the focus of a convex lens of focal length 15 cm.',
+  'An object is placed 30 cm from a lens of focal length 15 cm.',
+  'An object is placed 30 cm from a convex lens and a concave mirror of focal length 15 cm.',
+  'Two lenses of focal length 10 cm and 20 cm are placed in contact.',
+  'An image is formed 30 cm from a convex lens of focal length 15 cm. Find where the object is placed.'
+]) {
+  assert.equal(wf.opticsRay(text), null, 'must refuse: ' + text.slice(0, 60));
+}
+
 /* A missing or nonsensical value must not become a label. */
 assert.equal(figures.generic({ type: 'circuit', network: true, battery: 12,
   blocks: [{ kind: 'series', resistors: [{ label: 'R₁', value: 0 }] }] }), '');
@@ -139,5 +238,6 @@ assert.equal(svgOf(wf.forQuestion(tower)), towerSvg);
 assert.equal(svgOf(wf.forQuestion(circuit)), circuitSvg);
 
 console.log('PASS worked figures: tower 10√3 m/30 m/10 m, mixed 6 Ω network 2 A with 2/3 and 4/3 A branches, ' +
-  'series/parallel chains, refusals for ladders, depression, mirror networks and unsupported components, ' +
-  'and the older AI/2-resistor renderers unchanged');
+  'series/parallel chains, mensuration 1540 cm³/440 cm²/748 cm², two-point distance 5 and midpoint (5, 2.5), ' +
+  'lens v = 30 cm m = −1 and mirror v = −60 cm m = −3, refusals for ladders, depression, mirror networks, ' +
+  'composite solids, ratios and inverse-optics wording, and the older AI/2-resistor renderers unchanged');
