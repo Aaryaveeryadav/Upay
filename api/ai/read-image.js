@@ -25,7 +25,13 @@ module.exports = async function handler(req, res) {
   if (!aiRateFloor(req, res, user)) return;
   if (!await consumeAI(user, res)) return;
 
-  const prompt = 'This is a photo of a school question. Transcribe it exactly, including table headings, dates, amounts and debit/credit labels. Return only one complete question; do not answer it. Strip page numbers, headers, footers, and marks indicators. If none is clear, return UNREADABLE. Respond with plain text, no JSON, no quotes.';
+  /* The old prompt asked for a flat transcript. A printed "AX = B" is three
+     visual lines, each holding a row of A and a row of B; flattened, it became
+     "2 1 -1 41 / : 2 1|X= : 0]. / 3 -1 2 8 5" and neither the solver nor the
+     model could tell where A ended and B began. Keep the grid. */
+  const prompt = 'This is a photo of a school question. Transcribe it exactly, including table headings, dates, amounts and debit/credit labels. Return only one complete question; do not answer it. Strip page numbers, headers, footers, and marks indicators. ' +
+    'If the question contains a matrix, determinant or a grid of numbers, keep its shape: write each matrix on its own line with its label, as A = [[2, 1, -1], [1, 2, 1], [3, -1, 2]] — one row of the matrix per pair of inner brackets. Never flatten a grid into loose numbers, never put two matrices on one line, and never run adjacent entries together ("-1 41" must not become "-141"). ' +
+    'Copy every digit exactly as printed; if one is genuinely illegible write ? in its place rather than guessing. If none is clear, return UNREADABLE. Respond with plain text, no JSON, no quotes.';
   try {
     const out = await callGeminiResilient(prompt, null, 'gemini-3.5-flash-lite', { data, mime: mime === 'image/jpg' ? 'image/jpeg' : mime });
     const txt = (out.text || '').trim().replace(/^["']|["']$/g, '');

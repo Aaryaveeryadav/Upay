@@ -694,6 +694,100 @@
     });
   }
 
+  /* ------------------------------------------------- reading a flattened grid
+     A photo, or a copy out of a PDF, often loses the grid and keeps only the
+     numbers, one visual line per line of the printed page:
+        2 1 -1 41
+        : 2 1|X= : 0].
+        3 -1 2 8 5
+     Guessing here would be worse than refusing, so a reconstruction is offered
+     only when the numbers themselves force one answer and that answer solves
+     with a passing substitution check. Otherwise the student is asked. */
+  function numberRows(t) {
+    const out = [];
+    String(t == null ? '' : t).split(/\n+/).forEach((line) => {
+      const nums = line.replace(/[|:;]/g, ' ').match(/-?\d+(?:\.\d+)?/g);
+      if (nums && nums.length >= 2) out.push(nums.map(Number));
+    });
+    return out;
+  }
+
+  function sameCount(rows) {
+    return rows.every((r) => r.length === rows[0].length);
+  }
+
+  /* Build A and B from lines that each hold one row of A followed by one row
+     of B; accepted only if the resulting equation solves and checks. */
+  function trySplit(rows, aCols) {
+    /* A square A, and a B with at least one column: the rest is decided by
+       whether the reconstructed equation actually solves and checks. */
+    if (aCols !== rows.length) return null;
+    if (rows[0].length <= aCols) return null;
+    const a = rows.map((r) => r.slice(0, aCols));
+    const b = rows.map((r) => r.slice(aCols));
+    if (!sameCount(a) || !sameCount(b)) return null;
+    const text = 'Find the matrix X if A X = B, where A = ' + rowsText(a) + ' and B = ' + rowsText(b) + '.';
+    const res = solve(text);
+    if (!res || !res.solved || res.check !== true) return null;
+    return { text: text, A: a, B: b, res: res };
+  }
+
+  const rowsText = (rows) => '[' + rows.map((r) => '[' + r.map(String).join(', ') + ']').join(', ') + ']';
+
+  /* Loose numbers are only treated as a matrix when the question itself says
+     so — a "matrix", a determinant, X in an equation, or the leftovers of
+     brackets from the scan. A shopping list of numbers must never turn into
+     A and B. */
+  function matrixSignal(t) {
+    const s = String(t == null ? '' : t);
+    return /matrix|matrices|आव्यूह|determinant|inverse|transpose|adjoint/i.test(s) ||
+      /\[\s*\[|\]\s*\]/.test(s) ||
+      /(^|[^A-Za-z])X\s*[=:]|[=:]\s*X([^A-Za-z]|$)|\bAX\b|\bXA\b/.test(s) ||
+      (s.match(/(^|\n)\s*[A-Z]\s*[:=]/g) || []).length >= 2;
+  }
+
+  function fromRows(t) {
+    const rows = numberRows(t);
+    if (rows.length < 2) return { ok: false, reason: 'nothing', rows: rows };
+    if (!matrixSignal(t)) return { ok: false, reason: 'no-signal', rows: rows };
+    const counts = {};
+    rows.forEach((r) => { counts[r.length] = (counts[r.length] || 0) + 1; });
+    const sizes = Object.keys(counts).map(Number).sort((x, y) => x - y);
+
+    /* One clean block: every visual line holds a row of A and a row of B. */
+    if (sizes.length === 1 && sameCount(rows)) {
+      const m = rows[0].length;
+      for (let aCols = m - 1; aCols >= 1; aCols--) {
+        const got = trySplit(rows, aCols);
+        if (got) return { ok: true, text: got.text, A: got.A, B: got.B, res: got.res };
+      }
+      /* A single square block: a determinant or an inverse, if the text says so */
+      if (m === rows.length && /det|inverse|⁻¹|\|\s*[A-Z]\s*\||transpose/i.test(String(t))) {
+        const mtrx = rowsText(rows);
+        const want = /inverse|⁻¹/.test(t) ? 'inverse' : 'det';
+        const text = want === 'inverse'
+          ? 'Find the inverse of the matrix A = ' + mtrx + '.'
+          : 'Find the determinant of the matrix A = ' + mtrx + '.';
+        const res = solve(text);
+        if (res && res.solved) return { ok: true, text: text, A: rows, res: res };
+      }
+      return { ok: false, reason: 'no-passing-split', rows: rows };
+    }
+
+    /* Two ragged groups: A's rows all read n numbers, B's rows all read k. */
+    if (sizes.length === 2) {
+      const aSize = sizes[1], bSize = sizes[0];
+      const aRows = rows.filter((r) => r.length === aSize);
+      const bRows = rows.filter((r) => r.length === bSize);
+      if (aRows.length === aSize && bRows.length === aRows.length) {
+        const text = 'Find the matrix X if A X = B, where A = ' + rowsText(aRows) + ' and B = ' + rowsText(bRows) + '.';
+        const res = solve(text);
+        if (res && res.solved && res.check === true) return { ok: true, text: text, A: aRows, B: bRows, res: res };
+      }
+    }
+    return { ok: false, reason: 'ragged', rows: rows };
+  }
+
   /* Is this a matrix question at all? The word plus at least one number --
      "explain matrix multiplication" is theory and must not be intercepted. */
   /* Students paste the two blocks and one line of instruction — often without
@@ -718,6 +812,7 @@
 
   const api = {
     isMatrixQuestion: isMatrixQuestion, answerFor: answerFor, matrixHTML: matrixHTML,
+    fromRows: fromRows, numberRows: numberRows, matrixSignal: matrixSignal,
     determinant: determinant, adjugate: adjugate, inverseOf: inverseOf,
     solve: solve, figureFor: figureFor, canonical: canonical,
     parseBlock: parseBlock, clean: clean, blocks: blocks, operation: operation,

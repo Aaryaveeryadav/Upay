@@ -161,6 +161,21 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       assert(/-2|−2/.test(detText), 'the determinant value is shown: ' + detText.slice(0, 120));
       assert(!/-6/.test(detText), 'the wrong AI determinant is not shown');
 
+      /* 5c. The same numbers with the grid lost (a PDF copy, a flattened scan):
+             the rows are rebuilt into [[…], […]] and the answer is still exact. */
+      const FLAT = 'Find X such that A X = B\n2 1 -1 4 1\n1 2 1 7 0\n3 -1 2 8 5';
+      const beforeFlat = aiCalls;
+      await ask(FLAT, 'maths', 'X = [[0, 0], [0, 0], [0, 0]]', null);
+      await page.waitForFunction(() => {
+        const fig = document.querySelector('.ai-answer .worked-figure');
+        return fig && /37\/18/.test(fig.textContent);
+      });
+      assert.equal(aiCalls, beforeFlat, 'a flat paste is rebuilt and solved locally');
+      const flatText = await page.locator('.ai-answer').innerText();
+      assert(/\[\[2, 1, -1\], \[1, 2, 1\], \[3, -1, 2\]\]/.test(flatText),
+        'the question is shown in the readable [[row], [row]] form: ' + flatText.slice(0, 200));
+      assert(/37\/18/.test(flatText), 'and answered with the exact X');
+
       /* 6. A paste that lost the grid gets no invented values: the student is
             asked for the matrices, and their values are then solved and drawn. */
       const MANGLED = 'Hard Matrix Question: 2 1 -1 41 : 2 1 | X = : 0]. 3 -1 2 8 5';
