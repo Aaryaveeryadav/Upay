@@ -1,0 +1,128 @@
+[
+  {
+    "file": "Communicative Question Paper 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "5f2c943e91e971d198dffede8a58d9b5a3e397ed94ae09533ea2fdd53ac29e4e",
+    "status": "extracted-not-question-verified",
+    "kind": "question-paper",
+    "pages": 12,
+    "output": "communicative-question-paper-2018-all-india.json"
+  },
+  {
+    "file": "Communicative Solution 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "9feea93562a03752f483a8fe84915a940ffcf91eeb19a892951ed8873c971fe7",
+    "status": "extracted-not-question-verified",
+    "kind": "marking-scheme",
+    "pages": 37,
+    "output": "communicative-solution-2018-all-india.json"
+  },
+  {
+    "file": "Hindi-A Question Paper 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "8d3d6981ca60a9f53ab4074dc0f06e7f7994520db273c78666b74b04efc31008",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Hindi-A Solution 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "fa87a46d4597bfeb950e4911609a02ae38380320999f5ee84ccff1ea551765a4",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Hindi-B Question Paper 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "c02eaedef6ca4e3cb8306a2cfabf7bd179dbbcc5094d6946cc1013ac03de7ca1",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Hindi-B Solution 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "da4c2103e4144baf7a108de1c293e2b740cc294ee221d52c8a48b4daafc4eb9b",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Language & Literature Paper 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "7140821e15f92b70635db79bb15f454363b322b6baf7ff9a118f45ddf4e74325",
+    "status": "extracted-not-question-verified",
+    "kind": "question-paper",
+    "pages": 8,
+    "output": "language-literature-paper-2018-all-india.json"
+  },
+  {
+    "file": "Language & Literature Solution 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "24dfee096540410cd16ed36a26be65f26e782e8aba80135bb990073f88113540",
+    "status": "extracted-not-question-verified",
+    "kind": "marking-scheme",
+    "pages": 10,
+    "output": "language-literature-solution-2018-all-india.json"
+  },
+  {
+    "file": "Maths Question Paper 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "b0585ed12ac6f7cf7cac8485dfcd7c3da798db418ad462607623617221bfe534",
+    "status": "extracted-not-question-verified",
+    "kind": "question-paper",
+    "pages": 12,
+    "output": "maths-question-paper-2018-all-india.json"
+  },
+  {
+    "file": "Maths Solution 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "b00f893511b196563a30b072499cc56c23f0c5bfab5b002ee41356a51deb72ec",
+    "status": "extracted-not-question-verified",
+    "kind": "marking-scheme",
+    "pages": 12,
+    "output": "maths-solution-2018-all-india.json"
+  },
+  {
+    "file": "Sanskrit Question Paper 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "65c4c0dd7bcc0ee2cb70b93cee7b865d879c85b2df7c1862fbc0be2642cf24ee",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Sanskrit Solution 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "922da4f324c17b6c6da7d273de2fd0cc28f32f5912dc13982bc4fbd38f45f619",
+    "status": "excluded-subject"
+  },
+  {
+    "file": "Science Question Paper 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "d1d83a9a0e69864b47178d040d1af47bd78613e9e54ec8f91e52f124c108e3e2",
+    "status": "extracted-not-question-verified",
+    "kind": "question-paper",
+    "pages": 12,
+    "output": "science-question-paper-2018-all-india.json"
+  },
+  {
+    "file": "Science Solution 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "b56ff7be7691c5285bac07ef018218e12e88f87dad2c1386a36ba0a2dc8c1570",
+    "status": "extracted-not-question-verified",
+    "kind": "marking-scheme",
+    "pages": 9,
+    "output": "science-solution-2018-all-india.json"
+  },
+  {
+    "file": "Social Science Question Paper 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "472d099bdf7bd23994cfd8c195c0fb33134095575760381c69cb1d76cad0f5bd",
+    "status": "extracted-not-question-verified",
+    "kind": "question-paper",
+    "pages": 12,
+    "output": "social-science-question-paper-2018-all-india.json"
+  },
+  {
+    "file": "Social Science Solution 2018(All India).pdf",
+    "year": 2018,
+    "sha256": "0b83884ac5886e54a24c303e343598701fa905ad24581b862fe90ede463c71bd",
+    "status": "extracted-not-question-verified",
+    "kind": "marking-scheme",
+    "pages": 12,
+    "output": "social-science-solution-2018-all-india.json"
+  }
+]
