@@ -1782,12 +1782,12 @@ window.UP = window.UP || {};
        solver — sees it; the flattened OCR text ("2 1 -1 41 : 2 1 | X = …")
        is what made the model call a 3×3 matrix a 2×2 one. If the values did
        not survive, ask the student instead of guessing them. */
-    let matrixBlock = '';
+    let matrixBlock = '', matrixSolved = null;
     try {
       const routeSubject = UP.taskRouting ? UP.taskRouting.resolve(q, S.subject).subject : S.subject;
       if (UP.matrices && ['maths', 'applied-maths'].includes(routeSubject) && UP.matrices.isMatrixQuestion(q)) {
         const mx = UP.matrices.solve(q);
-        if (mx && mx.solved) q = mx.canonical;
+        if (mx && mx.solved) { q = mx.canonical; matrixSolved = mx; }
         else if (mx && mx.singular) matrixBlock = 'matrix-singular';
         else matrixBlock = 'matrix-repair';
       }
@@ -1813,6 +1813,21 @@ window.UP = window.UP || {};
       S.answer = { kind: matrixBlock, question: q };
       paint();
       return;
+    }
+    /* A solved matrix equation is answered here, not by the model: the model's
+       arithmetic on exactly this question was wrong, and its prose cannot be
+       rendered as a matrix. The four routes below all come from the same
+       exact solution, and the figure draws the values that were used. */
+    if (matrixSolved) {
+      let local = null;
+      try { local = UP.matrices.answerFor(matrixSolved, responseLang); } catch (_) { local = null; }
+      if (local) {
+        local.question = q;
+        local.subjectRouting = routing;
+        S.aiAnswer = local; S.aiState = 'done';
+        paint();
+        return;
+      }
     }
     const matches=(UP.pyq||[]).filter(row=>qInScope(row)&&pyqQuestionText(row)===q);
     const mappedChapters=[...new Set(matches.map(row=>String(row.ch)).filter(Boolean))];
@@ -1971,7 +1986,7 @@ window.UP = window.UP || {};
     return subject;
   }
   function workedFigureFor(question) {
-    if (!UP.workedFigure || !question) return null;
+    if (!question) return null;
     /* A matrix equation is solved here first: the figure carries the very
        values the answer was computed from, so a misread paste cannot turn
        into a drawing of some other matrix. */
@@ -1981,6 +1996,7 @@ window.UP = window.UP || {};
         if (mx && mx.solved && workedFigureSubject(mx, question)) return mx;
       }
     } catch (_) {}
+    if (!UP.workedFigure) return null;
     try {
       const spec = UP.workedFigure.forQuestion(question);
       if (!spec || !workedFigureSubject(spec, question)) return null;
@@ -2156,7 +2172,10 @@ window.UP = window.UP || {};
         <div style="font-size:14px;color:var(--ink-600)">${rich(a.summary || '')}</div>
         <div class="callout why" style="margin-top:14px">
           ${icon('check')}
-          <div><b>${S.lang === 'hi' ? 'उत्तर' : 'Answer'}:</b> <span style="font-family:var(--mono);font-size:14px">${mathText(a.result)}</span></div>
+          <div><b>${S.lang === 'hi' ? 'उत्तर' : 'Answer'}:</b> <span style="font-family:var(--mono);font-size:14px">${
+            a.resultMatrix && UP.matrices && UP.matrices.matrixHTML
+              ? esc(a.resultMatrix.name) + ' = ' + UP.matrices.matrixHTML(a.resultMatrix.rows)
+              : mathText(a.result)}</span></div>
         </div>
       </div>
       ${fig}

@@ -34,8 +34,9 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       const context = await browser.newContext({ viewport: { width, height: 900 }, serviceWorkers: 'block' });
       const page = await context.newPage(), errors = [];
       page.on('pageerror', e => errors.push(String(e)));
-      let reply = null;
+      let reply = null, aiCalls = 0;
       await page.route('**/api/ai/solve', route => {
+        aiCalls++;
         /* A request before the test arms its reply is answered honestly as a
            failure; the figure test must never depend on an accidental cache. */
         if (!reply) return route.fulfill({ status: 503, contentType: 'application/json', body: '{}' });
@@ -114,11 +115,13 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
             exact fractions and draws the matrices it actually used, so the
             AI's misreading of the grid cannot become the picture. */
       const MATRIX_Q = 'Find the matrix X if A X = B, where A = [[2,1,-1],[1,2,1],[3,-1,2]] and B = [[4,1],[7,0],[8,5]].';
+      const beforeMatrix = aiCalls;
       await ask(MATRIX_Q, 'maths', 'X = [[-1/5, 12/5, 6/5], [-1/5, 8/5, -7/5]]', null);
       await page.waitForFunction(() => {
         const figure = document.querySelector('.ai-answer .worked-figure');
         return figure && /37\/18/.test(figure.textContent);
       });
+      assert.equal(aiCalls, beforeMatrix, 'a solved matrix question is answered locally, not by the provider');
       const matrixFigure = page.locator('.ai-answer .worked-figure');
       const matrixText = await matrixFigure.innerText();
       for (const token of ['37/18', '10/9', '-7/9', '|A| = 18', '3×3']) {
@@ -129,10 +132,19 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       const matrixSvgText = await matrixSvg.innerHTML();
       assert(!/NaN|undefined/.test(matrixSvgText), 'no broken numbers in the matrix drawing');
       assert((matrixSvgText.match(/<path/g) || []).length >= 6, 'each matrix needs its bracket strokes');
-      assert(matrixSvgText.includes('37/18') && matrixSvgText.includes('8'), 'the values and X are drawn');
       assert.equal(await page.locator('.ai-answer .worked-figure').count(), 1, 'exactly one matrix figure');
-      assert.equal(await page.locator('.worked-figure-mismatch').count(), 1,
-        'an answer with different entries is called out');
+
+      /* The answer itself is a drawn grid, not a string with brackets, and the
+         local engine's answer wins over the mocked (wrong) AI one. */
+      const answerText = await page.locator('.ai-answer .callout.why').innerText();
+      assert(/37\/18/.test(answerText), 'the answer line must carry the computed X: ' + answerText);
+      assert(!/-1\/5/.test(answerText), 'the wrong AI answer must not be shown as the answer');
+      assert(await page.locator('.ai-answer .matrix-grid').count() >= 1, 'the answer must be drawn as a matrix');
+      assert(await page.locator('.ai-answer .matrix-grid .mk-row').count() >= 3, 'three rows of X drawn');
+      assert(/Solved by exact calculation|सटीक गणना/.test(await page.locator('.ai-answer .answer-head').innerText()),
+        'the badge must say the answer was computed, not generated');
+      assert.equal(await page.locator('.worked-figure-mismatch').count(), 0,
+        'no mismatch warning: there is no model answer to disagree with');
 
       /* 6. A paste that lost the grid gets no invented values: the student is
             asked for the matrices, and their values are then solved and drawn. */
@@ -143,16 +155,17 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       assert.equal(await page.locator('.ai-answer .figure-body svg').count(), 0, 'and no generic figure either');
       await page.fill('.matrix-repair textarea',
         'A = [[2,1,-1],[1,2,1],[3,-1,2]]\nB = [[4,1],[7,0],[8,5]]');
-      arm(MATRIX_Q, 'X = [[37/18, 10/9], [29/18, -7/9], [31/18, 4/9]]', null);
+      const beforeRepair = aiCalls;
       await page.locator('[data-action="matrix-repair-solve"]').click();
       await page.waitForFunction(() => {
         const figure = document.querySelector('.ai-answer .worked-figure');
         return figure && /37\/18/.test(figure.textContent);
       });
+      assert.equal(aiCalls, beforeRepair, 'the confirmed matrices are solved locally');
       assert(/37\/18/.test(await page.locator('.ai-answer .worked-figure').innerText()),
         'the confirmed matrices are solved and drawn');
-      assert.equal(await page.locator('.worked-figure-mismatch').count(), 0,
-        'an answer that repeats X raises no warning');
+      assert(await page.locator('.ai-answer .matrix-grid').count() >= 1,
+        'and the answer is a drawn matrix after the repair too');
 
       assert.deepEqual(errors, []);
       console.log(`PASS ${width}px: tower figure 10√3/30/10 m, mismatch warning, verified 6 Ω network replaces a wrong AI circuit, ladder refused, matrix X = 37/18 drawn from exact fractions with a mismatch warning, mangled matrix paste refused and repaired, no invented values`);

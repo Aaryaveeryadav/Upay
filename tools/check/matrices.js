@@ -53,6 +53,31 @@ assert(M.solve(res.canonical).canonical === res.canonical, 'the restatement must
 
 /* ------------------------------------------------------------ the figure */
 
+/* ------------------------------------------- the answer, not just a solve */
+
+const ans = M.answerFor(res, 'en');
+assert(ans && ans.source === 'exact' && ans.kind === 'matrix');
+assert(ans.result === 'X = [[37/18, 10/9], [29/18, -7/9], [31/18, 4/9]]', ans.result);
+assert.equal(ans.approaches.length, 4, 'four complete routes');
+assert(ans.approaches.every((a) => a.steps.length >= 2 && a.steps.every((st) => st.t)));
+assert(ans.approaches[0].name.includes('adjoint'));
+assert(ans.approaches.some((a) => /Cramer/.test(a.name)));
+assert(ans.approaches.every((a) => a.steps.some((st) => (st.m || '').includes('37/18'))),
+  'every route must end at the same X');
+assert(ans.check.state === 'verified' && ans.check.source === 'arithmetic',
+  'the badge must claim arithmetic, not a second AI');
+assert(ans.diagram && ans.diagram.type === 'matrix', 'the answer carries its figure');
+assert.equal(JSON.stringify(ans.resultMatrix.rows[0]), JSON.stringify(['37/18', '10/9']));
+
+/* The answer line renders as a grid, escaped, with three rows and brackets. */
+const html = M.matrixHTML(ans.resultMatrix.rows);
+assert(html.includes('mk-row') && html.includes('mk-bracket') && html.includes('37/18'));
+assert.equal((html.match(/mk-cell/g) || []).length, 6, 'six entries of a 3×2 matrix');
+assert(!/<script/i.test(M.matrixHTML([['<img src=x onerror=alert(1)>']])), 'entries must be escaped');
+
+const ansHi = M.answerFor(res, 'hi');
+assert(ansHi.result === ans.result && /सहखंडज/.test(ansHi.approaches[0].name), 'Hindi routes, same numbers');
+
 const spec = M.figureFor(question);
 assert(spec && spec.type === 'matrix' && spec.verified);
 assert.equal(JSON.stringify(spec.plainA), JSON.stringify([['2', '1', '-1'], ['1', '2', '1'], ['3', '-1', '2']]));
@@ -107,7 +132,9 @@ assert.equal(M.isMatrixQuestion('Find the distance between the points (3, 4) and
 assert.equal(M.isMatrixQuestion('Explain matrix multiplication with examples.'), false);
 assert.equal(M.isMatrixQuestion('Find the matrix X if A X = B where A = [[1,0],[0,1]] and B = [[2],[3]].'), true);
 
-console.log('PASS matrix questions: exact X = [[37/18, 10/9], [29/18, −7/9], [31/18, 4/9]] for the ' +
+console.log('PASS matrix answers: four routes (adjoint, Gauss–Jordan, Cramer, substitution) all end at the same ' +
+  'exact X, the answer line is a drawn grid, and the badge claims arithmetic, not a model\n' +
+  'PASS matrix questions: exact X = [[37/18, 10/9], [29/18, −7/9], [31/18, 4/9]] for the ' +
   '3×3 · X = 3×2 question with |A| = 18 and A·X = B verified, inverse [[4/5, −1/5], [−3/5, 2/5]], ' +
   'det −2, AB = [[19, 22], [43, 50]], XA solved and checked, the figure carrying the values, and ' +
   'refusals for singular, mismatched, unparsable and out-of-range input');
