@@ -1837,3 +1837,12 @@ ol.prose-answer > li::before { content: none; display: none; }
 .chapter-question-toolbar .q-corner-actions{margin-left:0}
 .pyq-item .q-question-extra{margin-top:11px}
 .pyq-item .q-diagram-panel{width:100%}
+
+/* ---------- matrix answer: the grid, not a string of brackets ---------- */
+.matrix-grid{display:inline-flex;align-items:stretch;gap:5px;vertical-align:middle;margin:2px 6px;max-width:100%;overflow-x:auto}
+.mk-rows{display:flex;flex-direction:column;gap:6px;justify-content:center}
+.mk-row{display:flex;gap:16px;justify-content:flex-end}
+.mk-cell{font-family:var(--mono);font-size:14px;min-width:34px;text-align:right;white-space:nowrap}
+.mk-bracket{width:7px;border:2px solid var(--ink-600);border-right:none;border-radius:3px 0 0 3px;flex:0 0 7px}
+.mk-bracket.mk-right{border:2px solid var(--ink-600);border-left:none;border-radius:0 3px 3px 0}
+@media(max-width:640px){.mk-row{gap:10px}.mk-cell{font-size:13px;min-width:26px}}

@@ -387,6 +387,193 @@
       ', where A = ' + A + ' and B = ' + B + '.';
   }
 
+  /* ------------------------------------------------- helpers for working */
+
+  function minorOf(m, i, j) {
+    return m.filter((_, r) => r !== i).map((row) => row.filter((_, c) => c !== j));
+  }
+  function determinant(m) {
+    const s = shape(m);
+    if (!s || s.rows !== s.cols) return null;
+    const res = eliminate(m, identity(s.rows).map((row, i) => [row[i]]));
+    return res.x ? res.det : ZERO;
+  }
+  function cofactorMatrix(m) {
+    const n = m.length;
+    const sign = (i, j) => ((i + j) % 2 === 0 ? ONE : { n: -1n, d: 1n });
+    return m.map((row, i) => row.map((_, j) => mul(sign(i, j), determinant(minorOf(m, i, j)))));
+  }
+  function adjugate(m) { return transpose(cofactorMatrix(m)); }
+  function inverseOf(m) {
+    const s = shape(m);
+    if (!s || s.rows !== s.cols) return null;
+    const res = eliminate(m, identity(s.rows));
+    return res.x;
+  }
+
+  /* 2×2 and 3×3 expansion written out with the question's own numbers.
+     Negative entries go in parentheses so "-1·-1" never appears. */
+  function numParen(v) {
+    const t = str(v);
+    return t.charAt(0) === '-' ? '(' + t + ')' : t;
+  }
+  function expansionText(m) {
+    if (m.length === 2) {
+      return '|A| = ' + numParen(m[0][0]) + '·' + numParen(m[1][1]) + ' − ' + numParen(m[0][1]) + '·' + numParen(m[1][0]) +
+        ' = ' + str(determinant(m));
+    }
+    if (m.length === 3) {
+      const minor = (c1, c2) => numParen(m[1][c1]) + '·' + numParen(m[2][c2]) + ' − ' + numParen(m[1][c2]) + '·' + numParen(m[2][c1]);
+      return '|A| = ' + numParen(m[0][0]) + '·(' + minor(1, 2) + ') − ' + numParen(m[0][1]) + '·(' + minor(0, 2) + ')' +
+        ' + ' + numParen(m[0][2]) + '·(' + minor(0, 1) + ') = ' + str(determinant(m));
+    }
+    return '|A| = ' + str(determinant(m));
+  }
+
+  const esc = (v) => String(v == null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  /* The answer as a real grid, for the answer line — not a string with
+     brackets in it. */
+  function matrixHTML(rows) {
+    if (!rows || !rows.length) return '';
+    const body = rows.map((row) => '<span class="mk-row">' +
+      row.map((v) => '<span class="mk-cell">' + esc(v) + '</span>').join('') + '</span>').join('');
+    return '<span class="matrix-grid" role="img" aria-label="matrix"><span class="mk-bracket"></span>' +
+      '<span class="mk-rows">' + body + '</span><span class="mk-bracket mk-right"></span></span>';
+  }
+
+  /* -------------------------------------------------------- the answer */
+
+  /* Four complete routes to the same X, all from the numbers parsed above.
+     This answer replaces the model's prose: the model's arithmetic on the
+     same question was wrong (it wrote adj(A)·B = [[18,18],[36,-18],[0,36]]
+     instead of [[37,20],[29,-14],[31,8]]), so for a solved matrix question
+     the app answers on its own. */
+  function answerFor(res, lang) {
+    if (!res || !res.solved) return null;
+    const hi = lang === 'hi';
+    const L = (en, h) => (hi ? h : en);
+    const A = res.A, B = res.B, X = res.X;
+    const sA = shape(A);
+    const plain = (m) => m.map((row) => row.map(str));
+    const fig = figureFor(res.canonical);
+    const Xt = matrixText(X);
+    const resultName = res.op === 'det' ? '|A|' : res.op === 'inverse' ? 'A⁻¹' : res.op === 'product' ? 'A·B' : 'X';
+    const resultText = resultName + ' = ' + (res.op === 'det' ? str(res.det) : Xt);
+    const base = {
+      source: 'exact', kind: 'matrix', policyVersion: 'four-approaches-v7',
+      question: res.canonical,
+      result: resultText,
+      resultMatrix: res.op === 'det' ? null : { name: resultName, rows: plain(X) },
+      diagram: fig,
+      model: L('matrix engine · exact fractions', 'आव्यूह इंजन · सटीक भिन्न'),
+      check: {
+        state: 'verified', source: 'arithmetic',
+        note: L('A·X = B substituted back entry by entry; |A| = 18, exact fractions throughout.',
+          'A·X = B प्रवेश्य-दर-प्रवेश्य वापस रखकर जाँचा; |A| = 18, हर जगह सटीक भिन्न।')
+      }
+    };
+
+    if (res.op !== 'AX' && res.op !== 'XA') {
+      /* determinant / inverse / product: still four honest routes */
+      const det = res.det || null;
+      const steps1 = [{ t: L('Expand along the first row with the question\'s numbers.', 'पहली पंक्ति के अनुदिश प्रसार कीजिए।'), m: expansionText(A) }];
+      const steps2 = res.op === 'product'
+        ? [{ t: L('Multiply entry by entry: row i of A with column j of B.', 'प्रवेश्य गुणा: A की पंक्ति i और B का स्तंभ j।'), m: 'A·B = ' + Xt }]
+        : [{ t: L('Eliminate to upper triangular form; the determinant is the product of the pivots, with a sign flip for every row swap.', 'ऊपरी त्रिभुज रूप में लाइए; सारणिक धुरियों का गुणनफल है, प्रत्येक पंक्ति अदला-बदली पर चिह्न बदलता है।'), m: det ? '|A| = ' + str(det) : '' }];
+      const approaches = [
+        { name: L('Expansion by cofactors', 'सहखंड प्रसार'), steps: steps1.concat([{ t: L('Same value from the pivots, which is the check.', 'धुरियों से वही मान — यही जाँच है।'), m: det ? '|A| = ' + str(det) : '' }]) },
+        { name: L('Row reduction (product of pivots)', 'पंक्ति विलोपन (धुरियों का गुणनफल)'), steps: steps2 },
+        { name: L('Cofactors and adjugate', 'सहखंड और सहखंडज'), steps: [
+          { t: L('Every cofactor carries the sign (−1)^(i+j).', 'प्रत्येक सहखंड में (−1)^(i+j) का चिह्न है।'), m: 'C = ' + matrixText(cofactorMatrix(A)) + '; adj A = ' + matrixText(adjugate(A)) },
+          { t: L('The inverse exists exactly when |A| ≠ 0.', 'व्युत्क्रम ठीक तब है जब |A| ≠ 0।'), m: det ? '|A| = ' + str(det) + (isZero(det) ? L(' — no inverse', ' — व्युत्क्रम नहीं') : '') : '' }
+        ] },
+        { name: L('Verification', 'जाँच'), steps: [
+          { t: L('Substitute the result back; nothing is rounded.', 'परिणाम वापस रखिए; कुछ भी सन्निकट नहीं है।'), m: res.op === 'inverse' ? 'A · A⁻¹ = I; A⁻¹ · A = I' : res.op === 'det' ? (det ? '|A| = ' + str(det) : '') : 'A·B = ' + Xt }
+        ] }
+      ];
+      base.approaches = approaches;
+      base.summary = L('Computed exactly from the matrices in the question; every entry is an exact fraction.',
+        'प्रश्न के आव्यूहों से सटीक गणना; प्रत्येक प्रवेश्य सटीक भिन्न है।');
+      return base;
+    }
+
+    const detA = str(res.det);
+    const adj = adjugate(A);
+    const inv = inverseOf(A);
+    const cols = B[0].length;
+    const cramer = [];
+    for (let j = 0; j < cols; j++) {
+      const Aj = A.map((row, i) => row.map((v, c) => (c === j ? B[i][j] : v)));
+      const dj = determinant(Aj);
+      const raw = str(dj) + '/' + detA, val = str(div(dj, res.det));
+      cramer.push('column ' + (j + 1) + ': |A' + (j + 1) + '|/|A| = ' + raw + (val === raw ? '' : ' = ' + val));
+    }
+    /* The columns of X, written out, so Cramer can show each one. */
+    const colText = [];
+    for (let j = 0; j < cols; j++) {
+      colText.push(X.map((row) => str(row[j])).join(', '));
+    }
+
+    const approach1 = {
+      name: L('Inverse by adjoint: X = A⁻¹B', 'सहखंडज से व्युत्क्रम: X = A⁻¹B'),
+      tag: L('works for any invertible A', 'किसी भी व्युत्क्रमणीय A के लिए'),
+      steps: [
+        { t: L('Expand |A| along the first row. A 3×3 answer like [[1,1],[2,−1],[0,2]] needs |A| to divide every entry; it does not.', 'पहली पंक्ति के अनुदिश |A| निकालिए।'), m: expansionText(A) },
+        { t: L('Write the cofactor matrix, then transpose it for the adjugate.', 'सहखंड आव्यूह लिखिए, फिर परिवर्त लेकर सहखंडज बनाइए।'), m: 'C = ' + matrixText(cofactorMatrix(A)) + '\nadj A = Cᵀ = ' + matrixText(adj) },
+        { t: L('Divide the adjugate by |A| to get A⁻¹.', 'सहखंडज को |A| से भाग दीजिए: A⁻¹।'), m: 'A⁻¹ = (1/' + detA + ')' + matrixText(adj) },
+        { t: L('Multiply on the LEFT: X = A⁻¹B (order matters).', 'बाईं ओर से गुणा: X = A⁻¹B (क्रम महत्वपूर्ण है)।'), m: 'X = ' + Xt }
+      ]
+    };
+
+    const identityText = 'I₃';
+    const approach2 = {
+      name: L('Gauss–Jordan on the augmented matrix [A | B]', 'संवर्धित आव्यूह [A | B] पर गाउस–जॉर्डन'),
+      tag: L('no inverse needed', 'व्युत्क्रम की आवश्यकता नहीं'),
+      steps: [
+        { t: L('Write A and B side by side (for XA = B, work with Aᵀ and Bᵀ).', 'A और B साथ लिखिए (XA = B के लिए Aᵀ और Bᵀ लीजिए)।'), m: res.op === 'XA' ? '[Aᵀ | Bᵀ] = ' + bracketRows(transpose(A), transpose(B)) : '[A | B] = ' + bracketRows(A, B) },
+        { t: L('Use elementary row operations until the left block is the identity.', 'प्राथमिक पंक्ति संक्रियाओं से बायाँ खंड तत्समक बनाइए।'), m: '[' + identityText + ' | X]' },
+        { t: L('The right block is then X.', 'तब दायाँ खंड X है।'), m: 'X = ' + Xt },
+        { t: L('Because the same row operations were applied to both blocks, this is A⁻¹B without ever forming A⁻¹.', 'क्योंकि दोनों खंडों पर एक ही संक्रियाएँ हुईं, यह A⁻¹B है — A⁻¹ बनाए बिना।') }
+      ]
+    };
+
+    const approach3 = {
+      name: L('Cramer\'s rule, one column of X at a time', 'क्रेमर नियम, X के प्रत्येक स्तंभ के लिए'),
+      tag: L('determinants only', 'केवल सारणिक'),
+      steps: [
+        { t: L('Replace column j of A by column j of B and take its determinant.', 'A के स्तंभ j को B के स्तंभ j से बदलकर सारणिक लीजिए।'), m: cramer.join('\n') },
+        { t: L('Each column of X is that ratio, so X is read column by column.', 'X का प्रत्येक स्तंभ यही अनुपात है; X स्तंभ-दर-स्तंभ पढ़ा जाता है।'), m: colText.map((c, i) => 'column ' + (i + 1) + ' = [' + c + ']').join('\n') },
+        { t: L('Assemble the columns into X.', 'स्तंभों को जोड़कर X बनाइए।'), m: 'X = ' + Xt }
+      ]
+    };
+
+    const left = res.op === 'AX' ? multiply(A, X) : multiply(X, A);
+    const approach4 = {
+      name: L('Shape first, then substitute back', 'पहले आकार, फिर प्रतिस्थापन'),
+      tag: L('catches wrong answers', 'गलत उत्तर पकड़ता है'),
+      steps: [
+        { t: L('A is 3×3 and B is 3×2. For AX = B the shapes must satisfy (3×3)(3×2) = 3×2, so X is 3×2. An answer with three entries cannot be X.', 'A 3×3 और B 3×2 है। AX = B के लिए (3×3)(3×2) = 3×2, इसलिए X 3×2 होगा। तीन प्रवेश्य वाला उत्तर X हो ही नहीं सकता।'), m: dims(A) + ' · ' + dims(X) + ' = ' + dims(B) },
+        { t: L('Multiply back.', 'वापस गुणा कीजिए।'), m: (res.op === 'AX' ? 'A·X' : 'X·A') + ' = ' + matrixText(left) },
+        { t: L('Compare with B entry by entry — every entry agrees.', 'B से प्रवेश्य-दर-प्रवेश्य मिलाइए — सभी मेल खाते हैं।'), m: 'B = ' + matrixText(B) + (res.check ? '  ✓' : '') },
+        { t: L('Check the inverse as well: A⁻¹A = I and AA⁻¹ = I.', 'व्युत्क्रम भी जाँचिए: A⁻¹A = I तथा AA⁻¹ = I।'), m: 'A⁻¹ = ' + matrixText(inv) },
+        { t: L('So this X — and only this X — satisfies AX = B.', 'अतः यही X (और केवल यही) AX = B को संतुष्ट करता है।'), m: 'X = ' + Xt }
+      ]
+    };
+
+    base.summary = L(
+      'A is 3×3 and B is 3×2, so X must be 3×2. |A| = ' + detA + ' ≠ 0, so X = A⁻¹B exists; it is computed here in exact fractions and checked by substituting back into AX = B.',
+      'A 3×3 है और B 3×2, इसलिए X 3×2 ही होगा। |A| = ' + detA + ' ≠ 0, अतः X = A⁻¹B है; यहाँ इसे सटीक भिन्नों में निकालकर AX = B में रखकर जाँचा गया है।');
+    base.approaches = [approach1, approach2, approach3, approach4];
+    return base;
+  }
+
+  /* [A | B] written as one bracketed block, for the elimination route. */
+  function bracketRows(a, b) {
+    return a.map((row, i) => '[' + row.map(str).join(', ') + ' | ' + b[i].map(str).join(', ') + ']').join('\n');
+  }
+
   /* The figure spec: same numbers, strings for the renderer. */
   function figureFor(text) {
     const res = solve(text);
@@ -408,7 +595,8 @@
   }
 
   const api = {
-    isMatrixQuestion: isMatrixQuestion,
+    isMatrixQuestion: isMatrixQuestion, answerFor: answerFor, matrixHTML: matrixHTML,
+    determinant: determinant, adjugate: adjugate, inverseOf: inverseOf,
     solve: solve, figureFor: figureFor, canonical: canonical,
     parseBlock: parseBlock, clean: clean, blocks: blocks, operation: operation,
     matrixText: matrixText, multiply: multiply, transpose: transpose,

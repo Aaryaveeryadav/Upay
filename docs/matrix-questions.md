@@ -22,6 +22,13 @@ matrices it used.
 1. **`UP.matrices.isMatrixQuestion(text)`** — the word *matrix* (or आव्यूह) plus
    at least one number. Theory questions ("explain matrix multiplication") are
    left to the model.
+0. **If the equation parses, the app answers it itself** — no provider call, no
+   model prose. The answer line shows X as a drawn grid, the badge says
+   *Solved by exact calculation*, and four routes (adjoint, Gauss–Jordan,
+   Cramer, substitution) all come from the one exact solution. This exists
+   because the model's arithmetic on exactly this question was wrong: it wrote
+   `adj(A)·B = [[18,18],[36,−18],[0,36]]` instead of `[[37,20],[29,−14],[31,8]]`
+   and answered `[[1,1],[2,−1],[0,2]]`.
 2. **`UP.matrices.solve(text)`** parses every bracketed block — `[[1,2],[3,4]]`,
    `[1 2; 3 4]`, `((1,2),(3,4))`, one row per line — and reads the operation
    from the words: `A X = B`, `X A = B`, `|A|`, `A⁻¹`, `AB`.
@@ -33,9 +40,10 @@ matrices it used.
    and B = [[4, 1], [7, 0], [8, 5]].
    ```
 
-   The model's prose is written against that sentence, and the figure below is
-   drawn from the same numbers. If the written answer does not repeat any entry
-   of the computed X, the figure says so (`worked-figure-mismatch`).
+   (If the engine could not answer for some reason, the model's prose is still
+   written against that sentence and the figure is drawn from the same numbers;
+   an answer that does not repeat any entry of the computed X then raises
+   `worked-figure-mismatch`.)
 4. **If it could not**, nothing is guessed. The student gets a card with the
    text as it was read and two grids to fill (or the `A = [1 2; 3 4]` form).
    Those values are solved and drawn, and the question is then asked normally.
@@ -86,10 +94,12 @@ A·X = B                                        (checked entry by entry)
 ## Tests
 
 - `node tools/check/matrices.js` — the exact X and |A| for the reported
-  question, substitution check, inverse/determinant/product/`XA` cases, the
-  figure contents, and the refusals (singular, mismatched, unparsable,
-  five-row blocks, non-matrix text).
+  question, the four answer routes (each ending at the same X), the drawn
+  answer grid, the badge, substitution check,
+  inverse/determinant/product/`XA` cases, the figure contents, and the refusals
+  (singular, mismatched, unparsable, five-row blocks, non-matrix text).
 - `tools/check/worked_figure_browser.js` — at 1280 px and 390 px: the matrix
-  figure is drawn with `37/18`, a wrong AI answer raises the mismatch note, a
-  flattened paste produces the repair card with no figure, and the confirmed
-  values are then solved and drawn.
+  question is answered **without a provider call**, the answer line carries a
+  drawn grid, the badge says the answer was computed, the figure shows
+  `37/18`, a flattened paste produces the repair card with no figure, and the
+  confirmed values are then solved and drawn.

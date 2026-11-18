@@ -1,6 +1,6 @@
-/* Upay service worker — offline shell + public asset caching (v26f18).
+/* Upay service worker — offline shell + public asset caching (v26f19).
    API responses are deliberately never stored: they can be user-specific. */
-const VERSION = 'upay-v26f18';
+const VERSION = 'upay-v26f19';
 const ASSET_CACHE = VERSION + '-assets';
 const PRECACHE = [
   '/',
@@ -9,16 +9,16 @@ const PRECACHE = [
   '/assets/brand/kritin-logo.png',
   '/assets/brand/kritin-icon-192.png',
   '/assets/brand/kritin-icon-512.png',
-  '/assets/css/app.css?v=26f12',
-  '/assets/js/boot.js?v=26f18',
+  '/assets/css/app.css?v=26f19',
+  '/assets/js/boot.js?v=26f19',
   '/assets/js/question-quality.js?v=26f15',
   '/assets/js/data/question-overrides.js?v=26f15',
   '/assets/js/testgen.js?v=26f14',
   '/assets/js/mock-assessment.js?v=26f15',
-  '/assets/js/figures.js?v=26f18',
-  '/assets/js/matrices.js?v=26f18',
-  '/assets/js/worked-figure.js?v=26f18',
-  '/assets/js/app.js?v=26f18',
+  '/assets/js/figures.js?v=26f19',
+  '/assets/js/matrices.js?v=26f19',
+  '/assets/js/worked-figure.js?v=26f19',
+  '/assets/js/app.js?v=26f19',
 ];
 
 self.addEventListener('install', ev => {
