@@ -70,5 +70,18 @@ with sync_playwright() as p:
         page.evaluate('() => location.hash="#/pyq?y=2097"')
         page.wait_for_selector('#'+ar)
         print(f'PASS {width}px: source AR options/type, ungraded picks, withheld rows absent from bank/test, compact accessible three-dot loading and error recovery')
+    # The AR bank rows have no chapter mapping: Daily can use them; the mock
+    # samples mapped Physics rows. Neither may send pending stems for marking.
+    page.evaluate('''id => {window.allPhysicsTestRows=UP.pyq; UP.pyq=UP.pyq.filter(q=>q.id===id); UP.S.dailySet=null; location.hash='#/today';}''', ar)
+    page.wait_for_selector('#daily-0')
+    assert page.locator('#daily-0 .q-opt').count()==4 and page.locator('[data-action="dailyCheck"]').count()==0
+    page.evaluate('() => {UP.pyq=window.allPhysicsTestRows;location.hash="#/mock?new=1";}')
+    page.locator('#mock-answer-0').fill('B')
+    assert page.evaluate('UP.S.mockTest.items.every(it=>it.source.textReview==="awaiting-source-review")')
+    page.locator('#mock-submit').click(); page.wait_for_function('() => UP.S.mockTest.finished')
+    page.locator('[data-mock-ai-check-all]').click()
+    assert page.locator('[data-mock-ai-check]').count()==0 and not checks
+    assert page.evaluate('UP.S.mockTest.score.gradable===0')
+    print('PASS same-paper Physics AR in Daily and mapped Physics mock: no AI marking or confirmed score')
     assert not errors,errors
     context.close();browser.close()

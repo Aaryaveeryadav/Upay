@@ -196,6 +196,10 @@ def main():
               page.locator('#daily-input-0').count() == 1 and
               page.locator('#daily-0 [data-action="dailyCheck"]').count() == 1,
               'daily practice asks for a typed answer checked by AI (no Got it/Hard self-marking)')
+        # An unanswered card does not create a mistake. Seed *previously saved*
+        # hard-list history for the backup/owner isolation checks below.
+        page.evaluate('''q => {const key = 'upay.hardList.scope.'+encodeURIComponent(JSON.stringify(
+          [UP.S.savedKey,UP.S.board,+UP.S.cls,UP.S.subject])); localStorage.setItem(key,JSON.stringify([q]));}''', daily_question)
         route('#/saved')
         with page.expect_download() as pending:
             page.locator('[data-action="exportPrg"]').click()
@@ -214,7 +218,7 @@ def main():
         check(page.locator('#view .pyq-item').count() == 0 and not page.evaluate('UP.S.hardList.length'),
               'mistakes and mastery do not cross subjects')
         pick('subject', 'accountancy')
-        check(page.locator('#view .pyq-item').count() == 1 and daily_question in page.locator('#view').inner_text(),
+        check(page.locator('#view .pyq-item').count() == 1 and page.locator('#view .pyq-item [data-action="removeMistake"]').get_attribute('data-q') == daily_question,
               'returning to a subject restores its own mistakes')
         page.locator('[data-action="removeMistake"]').click()
         check(page.locator('#view .pyq-item').count() == 0, 'a mistake can be removed without deleting its practice card')

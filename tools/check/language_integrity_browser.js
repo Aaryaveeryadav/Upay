@@ -27,6 +27,9 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
   await page.evaluate(()=>location.hash='#/pyq?lvl=2&ch=san10-sk01');await page.locator('#san-verified-fixture-2').waitFor();assert.equal(await page.locator('.q-card.pyq').count(),1);
   await page.evaluate(()=>location.hash='#/pyq?lvl=3&ch=san10-sk02');await page.locator('#san-verified-fixture-3').waitFor();assert.equal(await page.locator('.q-card.pyq').count(),1);
   await page.locator('#topbar select[data-key="subject"]').selectOption('hindi');await page.waitForFunction(()=>UP.S.subject==='hindi'&&UP.hindi10Chapters);
+  await page.waitForFunction(()=>UP.pyq.some(q=>q.id==='hind10-kr01-q01' && q.__curated));
+  assert.deepEqual(await page.evaluate(()=>UP.pyq.filter(q=>['hbp26v2-4b26v213-702','hbpsup2-4S22-701','hcan-3n83-601'].includes(q.id)).map(q=>q.id)),[],
+    'curated browser bank withholds the three torn Hindi MCQs, not the whole subject');
   await page.evaluate(()=>location.hash='#/pyq?ch=hind10-kr01&lvl=2');
   await page.waitForFunction(()=>location.hash.includes('hind10-kr01'));await page.waitForTimeout(100);
   assert.equal(await page.locator('#hind10-kr01-q02').count(),0,'glossary fragment withheld');

@@ -43,6 +43,14 @@ const { chromium } = require('playwright');
     const workings = await page.locator('#q2 .q-solution').innerText();
     assert.match(workings, /819 − 3×7 = 798/);
     assert.doesNotMatch(workings, /\b(?:28|49|196|175)\b/);
+    for (const [answer,ok] of [['5°',false], ['5.0000001 cm',false], ['50 mm',true]]) {
+      await paper(1, [], 'radius-'+encodeURIComponent(answer));
+      const card = page.locator('#q14');
+      assert.match(await card.locator('.q-text').innerText(), /tangent of length 12 cm.*13 cm.*radius/i);
+      await card.locator('input[data-answer]').fill(answer);
+      await card.locator('[data-action="test-check"]').click();
+      assert.equal(await page.evaluate(() => UP.S.answers[14].ok), ok, answer);
+    }
     assert.equal(requests.length, 0, 'generated workings and local scoring need no provider');
 
     await page.locator('#topbar select[data-key="subject"]').selectOption('science');

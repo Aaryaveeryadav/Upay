@@ -1,20 +1,53 @@
 /* Conservative practice marking: no AI/unknown key is silently treated as official. */
 (function(root){
  'use strict';
- function marks(item){const n=Number(item.source && item.source.m);return Number.isInteger(n)&&n>=1&&n<=5?n:null;}
+ function marks(item){const m=item.source?.m;return (typeof m==='number'||typeof m==='string')&&/^[1-5]$/.test(String(m).trim())?Number(m):null;}
  const text=v=>typeof v==='string'?v:v&&v.en||'';
  const norm=v=>text(v).normalize('NFC').replace(/[−–]/g,'-').replace(/\s+/g,' ').trim().toLowerCase();
+ // Compare bounded decimal/fraction inputs exactly: a nearby decimal (or an
+ // integer beyond Number's precision) must not become the answer to an exact sum.
+ function decimal(s){
+  if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(s))return null;
+  const [whole,frac='']=s.split('.');
+  return {n:BigInt((whole+frac).replace(/^\+/,'')),d:10n**BigInt(frac.length)};
+ }
  function numeric(s){
-  const m=norm(s).match(/^([+-]?\d+(?:\.\d+)?)(?:\s*\/\s*([+-]?\d+(?:\.\d+)?))?$/);
-  if(!m)return null;const n=Number(m[1])/(m[2]===undefined?1:Number(m[2]));return Number.isFinite(n)?n:null;
+  const t=norm(s);if(!t||t.length>100)return null;
+  const parts=t.split('/').map(v=>decimal(v.trim()));
+  if(parts.length===1)return parts[0];
+  if(parts.length!==2||!parts[0]||!parts[1]||parts[1].n===0n)return null;
+  return {n:parts[0].n*parts[1].d,d:parts[0].d*parts[1].n};
+ }
+ const equalNumber=(a,b)=>!!a&&!!b&&a.n*b.d===b.n*a.d;
+ const tidy=v=>String(v??'').normalize('NFC').replace(/[−–—]/g,'-').trim().replace(/[.,;]$/,'').replace(/\s*([=+*/(),;-])\s*/g,'$1').replace(/\s+/g,' ').trim();
+ function quantity(s){
+  // Only interpret a complete scalar with a known suffix. Never erase unit
+  // substrings from symbolic answers or collapse internal digits/operators.
+  const m=/(mm|cm|km|m)(?:\^([23])|([²³]))?$|(?:°|degrees?|units?)$/.exec(s);
+  const v=numeric(m?s.slice(0,m.index):s);if(!v)return null;
+  if(!m)return {...v,unit:'',scale:1n};
+  if(!m[1])return {...v,unit:/degree|°/.test(m[0])?'angle':'unit',scale:1n};
+  const power=m[2]||({'²':'2','³':'3'}[m[3]])||'1';
+  return {...v,unit:'length'+power,scale:({mm:1n,cm:10n,m:1000n,km:1000000n}[m[1]])**BigInt(power)};
+ }
+ function samePracticeAnswer(given,want){
+  const g=tidy(given),w=tidy(want);if(!g||!w)return false;
+  const b=quantity(w);if(!b)return g===w;
+  const a=quantity(g);if(!a)return false;
+  // A bare number can use the unit implied by the question. If a student
+  // explicitly supplies a unit, both dimension and scale must match.
+  if(!a.unit)return equalNumber(a,b);
+  return a.unit===b.unit&&a.n*a.scale*b.d===b.n*b.scale*a.d;
  }
  const quality=typeof module==='object'&&module.exports?require('./question-quality'):root.UP.questionQuality;
  function key(item){
   const s=item.source||{};
   if(s.keyVerified!==true||!quality.keyMetadataAllows(s)||s.paperCode||s.raw?.paperCode)return '';
   const expected=text(s.ans).trim();
+  if(s.opts!=null&&!Array.isArray(s.opts))return '';
+  if(!s.opts?.length&&(s.raw?.opts?.length||quality.declaredMcq(s.raw)))return '';
   if(s.opts?.length||quality.declaredMcq(s)){
-   if(!Array.isArray(s.opts)||s.opts.length<(quality.declaredMcq(s)?4:2)||s.opts.length>6||quality.choiceIndex(s.opts,expected)<0)return '';
+   if(quality.sourceOptionIssue(s)||quality.choiceIndex(s.opts,expected)<0)return '';
   }
   return expected;
  }
@@ -29,7 +62,7 @@
    canMark=target>=0&&(!value||picked>=0);
   }else if(expected&&max===1&&numeric(expected)!==null){canMark=!value||numeric(answer)!==null;target=numeric(expected);picked=numeric(answer);}
   if(!canMark)return {status:value?'pending':'unattempted',awarded:null,max,expected,reason:'review'};
-  const ok=value!==''&&picked===target;
+  const ok=value!==''&&(mcq?picked===target:equalNumber(picked,target));
   return {status:!value?'unattempted':ok?'correct':'incorrect',awarded:max===null?null:ok?max:0,max,expected,reason:'verified-key'};
  }
  function score(test){
@@ -48,6 +81,6 @@
    else{r.earned+=a.awarded;r.gradable+=a.max;}
   });return r;
  }
- const api={marks,key,assess,score};if(typeof module==='object'&&module.exports)module.exports=api;
+ const api={marks,key,assess,score,samePracticeAnswer};if(typeof module==='object'&&module.exports)module.exports=api;
  else{root.UP=root.UP||{};root.UP.mockAssessment=api;}
 })(typeof window==='undefined'?globalThis:window);

@@ -199,32 +199,32 @@ const keyed = bank.filter(q => q.keyVerified);
 assert.equal(keyed.length, 0,
   'no Hindi row may be marked keyVerified without a printed, matched marking scheme');
 
-/* Damage already present in the shipped Hindi bank (a finding, not a licence to
-   add keys). A Devanagari syllable cannot begin with a dependent vowel sign or
-   an anusvara, so a word that does is a font/OCR shift. The sidecar already
-   withholds many damaged rows; count what is still served and ratchet it so the
-   figure may shrink but never grow. */
-const drop = new Set([...((ctx.UP.questionOverrides || {}).drop || []),
-                      ...((ctx.UP.questionOverrides || {}).duplicates || [])]);
-const served = bank.filter(q => !drop.has(q.id));
-const impossibleStart = /[\u0900-\u097f\u200d]/;
-const badStart = w => /[\u093e\u093f\u0940\u0941\u0942\u0943\u0944\u0947\u0948\u094b\u094c\u0902\u0903\u0901\u094d\u093c]/.test(w[0]);
-const damaged = served.filter(q => {
-  const words = `${q.hi || ''} ${q.en || ''}`.match(/[\u0900-\u097f\u200d]+/g) || [];
-  return words.some(w => impossibleStart.test(w[0]) && badStart(w));
-});
-assert.equal(served.length, 930, 'curation must leave 930 Hindi rows served');
-assert(damaged.length <= 45,
-  `Hindi rows with an impossible word start may not exceed 45, found ${damaged.length}`);
-/* Three MCQ rows carry a damaged fragment and are still offered for practice
-   (none of them has a printed key, so no answer is at stake). Recorded here as
-   a known, bounded defect so a new one shows up as a test failure. */
-const damagedMcq = damaged.filter(q => q.kind === 'mcq').map(q => q.id).sort();
-assert.deepEqual(damagedMcq,
-  ['hbp26v2-4b26v213-702', 'hbpsup2-4S22-701', 'hcan-3n83-601'],
-  'the known damaged MCQ rows must not grow without a matching record');
+/* Re-run the original broad signal independently against the raw imports and
+   the generated sidecar. Reading passages are retained as reading material,
+   not standalone questions. No damaged practice row may slip through. */
+const quality = require('../../assets/js/question-quality');
+const language = require('../../assets/js/language-policy');
+const overrides = ctx.UP.questionOverrides;
+const excluded = new Set([...overrides.drop, ...overrides.duplicates]);
+const curated = bank.filter(q => !excluded.has(q.id));
+const signal = /(?:^|[^\u0900-\u097f\u200d])[ािीुूृॄेैोौंःँ़्]/u;
+const flagged = curated.filter(q => signal.test(`${q.hi || ''} ${q.en || ''}`));
+assert.equal(curated.length, 898, 'the sidecar retains the other imported rows');
+assert(flagged.length <= 13, 'the remaining passage flags may shrink, not grow');
+assert(flagged.every(q => q.kind === 'text' && language.issue(q)), 'no flagged row offered for practice');
+for (const id of ['hbp26v2-4b26v213-702', 'hbpsup2-4S22-701', 'hcan-3n83-601']) {
+  const row = bank.find(q => q.id === id);
+  assert(row && !row.keyVerified, 'original unkeyed source retained: ' + id);
+  assert.equal(quality.inspect(row), 'ocr-damaged');
+  assert.equal(overrides.dropReasons[id], 'ocr-damaged');
+}
+for (const text of ['“्मृति” का अर्थ लिखिए।', 'उत्तर (ंए) में से चुनिए।', 'अर्थ लिखिए: ्र्ठ ग्वालियर।'])
+  assert.equal(quality.inspectText(text, 'hindi'), 'ocr-damaged');
+for (const text of ['स्मृति शब्द का अर्थ लिखिए।', '“ि” और “◌ा” मात्राओं का प्रयोग समझाइए।', 'उत्तर लिखिए ः कौन आया?', 'क्‍ष और क्‌ष में अंतर बताइए।'])
+  assert.equal(quality.inspectText(text, 'hindi'), '', 'keep intact words and isolated signs: ' + text);
+assert(quality.optionIssue([{en:'water',hi:'्मृति'}, 'रंग', 'नदी', 'मार्ग'], 'hindi'), 'also check the displayed Hindi choice');
 
 const boardCount = fx.files.filter(f => /^(?:3-|4-S-)/.test(f.file)).length;
 console.log(`PASS ${fx.files.length} Hindi uploads audited (${fx.files.length - boardCount} practice papers, ` +
   `${boardCount} board sets): ${fx.pairs.length} schemes tested, 0 keys attachable, ` +
-  `0 of ${bank.length} bank rows keyed; ${damaged.length} served rows carry a damaged word start`);
+  `0 of ${bank.length} bank rows keyed; 0 word-start flags admitted to standalone practice`);

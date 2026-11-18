@@ -208,25 +208,32 @@ The exact printed question counts ("17 प्रश्न हैं", "10 प्
 
 ## Finding: damage already inside the shipped Hindi bank
 
-This audit also checked the bank the site serves today, and reports the result
-as a finding — no bank row was edited in this pass, and none of these rows has a
-printed key.
+Of the 1,214 imported Hindi rows, the original sidecar retained 930. The broad
+word-start scan flagged 45 of these. They were **not** all practice questions:
+13 were reading passages already excluded from standalone practice. The other
+32, including the three unkeyed MCQs `hcan-3n83-601` (`्मृति`),
+`hbp26v2-4b26v213-702` (`(ंए)`) and `hbpsup2-4S22-701` (`्र्ठ`), could
+still reach students.
 
-- 1,214 Hindi rows exist; the curation sidecar in `assets/js/data/question-overrides.js`
-  withholds 284, so 930 are served.
-- **45 served rows contain an impossible word start** (a word beginning with a
-  vowel sign), i.e. the same font/OCR shift, now shipped. Three of them are MCQs:
-  `hcan-3n83-601` (`्मृति`), `hbp26v2-4b26v213-702` (`(ंए)`), and
-  `hbpsup2-4S22-701` (`्र्ठ`). None carries a verified key.
+The revised sidecar retains **898** of the 1,214. It withholds those 32
+questions without rewriting their wording or attaching any key. A leading
+dependent sign attached to a word is evidence of lost letters; an isolated
+matra used in a grammar question, a dotted-circle example or a visarga used
+as punctuation is not. Six flagged stems without an attached word were held
+for their actual torn words, missing word limit, damaged choice table or
+merged debris. The same holds apply to duplicate transcriptions. The 13
+passages remain reading material. This is not a semantic audit of the 898.
+
 - The `4-6-1` rows (`hbplitb-4blit6x-*`) show the KrutiDev failure mode in full:
   paper instructions promoted to MCQs (`…-04`), essay topics recorded as 3-mark
   questions (`…-401/402/403`), an empty stem (`…-501`), and `आमपके` (`…-601`).
   The `4_1_1` rows fold the options into the stem. Some of these are already
   withheld by the sidecar; the tool lists which rows cite each file.
 
-`tools/check/hindi_practice_papers.js` ratchets both figures: 930 served rows and
-at most 45 damaged ones, with the three known MCQ ids pinned, so a new damaged
-row fails the check instead of arriving unnoticed.
+`tools/check/hindi_practice_papers.js` checks the raw imports, the generated
+sidecar and the language gate separately. No standalone practice question
+among these imports may retain the audit's word-start flag, and the three
+reported MCQs must remain unkeyed in the source.
 
 ## How to use this tool
 

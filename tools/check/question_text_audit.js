@@ -59,6 +59,15 @@ assert(frag && qq.testReadyIssue(frag) === 'fragment', 'lone Reason (R) fragment
 const shred = bank.find(q => q.id === 'sscp-3211-11');
 assert(shred && qq.testReadyIssue(shred) === 'broken-options', 'shredded match-column record must be gated as broken-options');
 
+// A complete theorem does not need an equals sign. Do not release coordinate
+// corruption, dropped radicals, truncated or joined papers alongside it.
+for (const id of ['imp908923153','o6','r4','n16','s3_8','lg15538917','y2085465513'])
+  assert.equal(qq.testReadyIssue(bank.find(q=>q.id===id)), '', 'intact proof: '+id);
+for (const id of ['imp11086724','imp90892394','y24430-B-q27','rbse-s09-2025b-q33','rbse-p09-2020s-q25'])
+  assert.equal(qq.testReadyIssue(bank.find(q=>q.id===id)), 'broken-identity', 'suspect proof: '+id);
+for (const en of ['Prove that 3√4 is irrational.', 'Prove that √ is irrational.', 'Prove that 1/√3 is irrational, given that √5 is irrational.'])
+  assert.equal(qq.testReadyIssue({en}), 'broken-identity', en);
+
 /* Exercise the actual upstream gate, not just the per-option validator. A
    short value isn't a page number, and a fifth source choice isn't debris. */
 const choiceRow = { kind: 'mcq', subject: 'maths', en: 'Choose the correct value:' };

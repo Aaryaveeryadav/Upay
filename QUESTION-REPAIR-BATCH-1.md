@@ -128,3 +128,16 @@ These need real source material, so inventing them is out of bounds:
   chapter tests. Mapping them needs a source that ties each item to a chapter.
 * **Empty areas** — Class 12 English and Economics have 0 questions despite 191
   test papers; Class 11 has 0; Class 12 Biology is a name-only stub.
+
+## Subsequent practice audit — November 2026
+
+The figures above describe batch 1, not the current student-facing inventory.
+`node tools/check/question_text_audit.js` now reports **692 not test-ready out
+of 6,096 audited** (previously 715). The 23 newly eligible records were intact
+geometry theorems or radical proofs: their statements do not need an equals
+sign. Torn identities, missing roots and merged questions remain withheld;
+no answer key was added. The largest outstanding categories in that audit
+are 304 broken choice lists and 118 missing figures. Restore those from the
+matching source, not by guessing options or generating a replacement key.
+The [Hindi word-start audit](docs/hindi-marking-scheme-nov-2026.md#finding-damage-already-inside-the-shipped-hindi-bank)
+covers a different set of records; its counts are not additive.
