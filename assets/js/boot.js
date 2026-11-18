@@ -45,7 +45,7 @@
     'assets/js/data/pyq-2024.js',
     'assets/js/data/pyq-keys.js',
     'assets/js/data/mcq-keyed.js',
-    'assets/js/question-quality.js?v=26f11', // shared conservative activity/OCR quality gates
+    'assets/js/question-quality.js?v=26f13', // shared conservative activity/OCR quality gates
     'assets/js/question-fold.js?v=26f0', // shared Hindi/Sanskrit/English exercise folding
     'assets/js/data/question-overrides.js?v=26f0', // question-bank curation, applied once packs are in
     'assets/js/math-render.js?v=26f0', // safe inline TeX rendering for questions, options and answers
@@ -90,7 +90,7 @@
     social: [
       'assets/js/data/social-chapters.js',
       'assets/js/data/social10-q.js',
-      'assets/js/data/pyq-social.js'
+      'assets/js/data/pyq-social.js?v=26f13'
     ],
     hindi: [
       'assets/science/hindi10-ch.js',
@@ -253,7 +253,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26f12');
+    return loadScript('assets/js/app.js?v=26f13');
   }
 
   function loadPostPaint() {

@@ -1,3 +1,4 @@
+const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 const questionQuality = require('../../assets/js/question-quality.js');
 const BASE = process.env.UPAY_BASE || 'http://127.0.0.1:8090';
@@ -57,15 +58,16 @@ for (const prompt of [
   const launchOptions = { headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] };
   if (process.env.UPAY_CHROMIUM) launchOptions.executablePath = process.env.UPAY_CHROMIUM;
   const b = await chromium.launch(launchOptions);
-  const pg = await (await b.newContext({ viewport: { width: 1280, height: 1000 } })).newPage();
+  const pg = await (await b.newContext({ viewport: { width: 1280, height: 1000 }, serviceWorkers: 'block' })).newPage();
   const errs = [];
   pg.on('pageerror', e => errs.push('PAGEERROR ' + e));
   pg.on('console', m => { if (m.type() === 'error') errs.push('CONSOLE ' + m.text()); });
   await pg.route('https://fonts.googleapis.com/**', r => r.fulfill({status:200,contentType:'text/css',body:''}));
   await pg.route('https://**/auth/v1/health', r => r.fulfill({status:200,contentType:'application/json',body:'{}'}));
   await pg.route('**/api/ai/solve', r => r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({error:'AI is outside this regression check.',approaches:[]})}));
+  await pg.route('**/api/ai/check-answer', r => r.fulfill({ json: { verdict: 'uncertain', feedback: 'Practice check only.' } }));
   await pg.goto(BASE, { waitUntil: 'networkidle' });
-  await pg.waitForTimeout(900);
+  await pg.waitForFunction(() => window.UP?.loaded?.core && UP.S);
 
   const totals = await pg.evaluate(() => {
     const all = window.UP.pyq || [];
@@ -111,15 +113,15 @@ for (const prompt of [
     UP.pyq.push({
       id: 'pyq-test-five-choice', cls: 10, subject: 'maths', board: 'cbse', y: 2031,
       set: 'test-only', q: 901, ch: 1, m: 1, kind: 'mcq', d: 1,
-      en: 'Test fixture: select one of five separate answer choices.', hi: '', ans: '', keyVerified: false,
-      opts: ['First answer', 'Second answer', 'Third answer', 'Fourth answer', 'Fifth answer']
+      en: 'Test fixture: select one of five separate answer choices.', hi: '', ans: 'E', keyVerified: false,
+      opts: ['First answer', { en: 'Second answer' }, { hi: 'Third answer' }, { text: 'Fourth answer' }, { value: 'Fifth answer' }]
     });
     UP.pyq.push({
       id: 'pyq-test-verified-fallback', cls: 10, subject: 'maths', board: 'cbse', y: 2031,
       set: 'test-only', q: 905, ch: 1, m: 1, kind: 'mcq', d: 1,
       en: 'Test fixture: a verified key may use its nonblank raw answer.', hi: '', ans: '',
-      keyVerified: true, raw: { ans: 'C' },
-      opts: ['First answer', 'Second answer', 'Third answer', 'Fourth answer']
+      keyVerified: true, raw: { ans: 'F' },
+      opts: ['First answer', 'Second answer', 'Third answer', 'Fourth answer', 'Fifth answer', 'Sixth answer']
     });
     UP.pyq.push({
       id: 'pyq-test-math-signs', cls: 10, subject: 'maths', board: 'cbse', y: 2031,
@@ -141,17 +143,20 @@ for (const prompt of [
   });
   const fiveChoice = pg.locator('#pyq-test-five-choice');
   await fiveChoice.waitFor({ state: 'attached' });
-  if (await fiveChoice.locator('.q-opt').count() !== 5)
-    throw new Error('clean five-choice fixture should retain all source options');
   await fiveChoice.locator('.q-options-toggle').click();
-  await fiveChoice.locator('.q-opt').nth(4).click();
-  if (await fiveChoice.locator('.q-opt.right,.q-opt.wrong').count() ||
-      !/AI/i.test(await fiveChoice.innerText()))
-    throw new Error('five-choice fixture without a verified key must be AI-checked');
+  assert.deepEqual(await fiveChoice.locator('.q-opt > span').allTextContents(),
+    ['First answer', 'Second answer', 'Third answer', 'Fourth answer', 'Fifth answer'], 'keep all five source texts in order');
+  const fifth = fiveChoice.locator('.q-opt').nth(4);
+  const [check] = await Promise.all([pg.waitForRequest('**/api/ai/check-answer'), fifth.click()]);
+  assert.equal(check.postDataJSON().studentAnswer, 'E. Fifth answer');
+  assert.equal(check.postDataJSON().referenceAnswer, '', 'do not send an unverified key as the reference');
+  await fiveChoice.locator('.pyq-verdict').filter({ hasText: 'Practice check only.' }).waitFor();
+  assert.equal(await fifth.getAttribute('aria-pressed'), 'true');
+  assert.equal(await fiveChoice.locator('.q-opt.right,.q-opt.wrong').count(), 0, 'an unverified E must not key-grade the selection');
   const verifiedFallback = pg.locator('#pyq-test-verified-fallback');
   await verifiedFallback.waitFor({ state: 'attached' });
   await verifiedFallback.locator('.q-options-toggle').click();
-  await verifiedFallback.locator('.q-opt').nth(2).click();
+  await verifiedFallback.locator('.q-opt').nth(5).click();
   if (await verifiedFallback.locator('.q-opt.right').count() !== 1
       || !/Correct/i.test(await verifiedFallback.innerText()))
     throw new Error('an explicitly verified raw answer should score against its displayed option');
@@ -225,7 +230,7 @@ for (const prompt of [
       .some(href => !/^\/assets\/papers\/.+\.pdf$/i.test(href || '')))
     throw new Error('Economics source-paper link is not a local PDF path');
 
-  console.log('PASS: source-matched choices, withheld and unverified-choice handling, compact image/SVG zoom, and populated/empty Class 12 source links');
+  console.log('PASS: source-matched choices, ungraded fifth and verified sixth choices, suspect choices withheld, compact image zoom and Class 12 source links');
 
   await pg.locator('#topbar select[data-key="board"]').selectOption('cbse');
   await pg.waitForFunction(() => UP.S.board === 'cbse');
@@ -246,8 +251,9 @@ for (const prompt of [
       !/AI/i.test(await unverified.innerText()))
     throw new Error('an unverified imported answer letter must be AI-checked, never key-scored');
 
-  // This source diagram is beyond the first 60 grouped questions for 2026.
-  await pg.evaluate(() => { location.hash = '#/pyq?y=2026&page=2'; });
+  // Filter to the diagram's chapter; its page in the full year changes when
+  // damaged records elsewhere in the bank are withheld.
+  await pg.evaluate(() => { location.hash = '#/pyq?y=2026&ch=7'; });
 
   // Lazy source SVGs stay compact in the card and remain zoomable in the same
   // lightbox as the original page-image previews.

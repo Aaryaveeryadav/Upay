@@ -2192,16 +2192,12 @@ window.UP = window.UP || {};
   }
 
   function mcqRecordIssue(q) {
-    const kind = String(q && q.kind != null ? q.kind : '').toLowerCase();
-    if (!q || !['mcq','1','2','assertion-reason','assertion_reason','assertion reason'].includes(kind)) return 'not-mcq';
-    if (!Array.isArray(q.opts) || q.opts.length < 4 || q.opts.length > 6) return 'option-count';
-    const rows = [q, q.raw].filter(Boolean);
-    if (rows.some(row => row.qualityStatus === 'withheld' || row.optionReview === 'awaiting-source-review'
-      || row.textReview === 'awaiting-source-review' || (Array.isArray(row.qualityReasons) && row.qualityReasons.length))) return 'quality-review';
+    if (!UP.questionQuality.declaredMcq(q)) return 'not-mcq';
     const subject = q.subject || S.subject;
+    const choiceIssue = UP.questionQuality.sourceOptionIssue(q, q.opts, subject);
+    if (choiceIssue) return choiceIssue;
     const text = pyqQuestionText(q).trim();
     if (text.length < 8 || (UP.questionQuality && UP.questionQuality.inspect(q, subject))) return 'question-quality';
-    if (pyqOptionIssue(q.opts, q)) return 'option-quality';
     if (UP.corrupt) {
       const expectHindi = !!(q.hi && (S.lang === 'hi' || !q.en));
       const why = UP.corrupt.why(text, { expectHindi });
@@ -2215,6 +2211,10 @@ window.UP = window.UP || {};
     if (typeof option === 'string') return option.trim();
     if (!option || typeof option !== 'object') return '';
     return String(option.text || option.en || option.hi || option.value || '').trim();
+  }
+
+  function displayedChoiceText(option) {
+    return P(option) || mcqOptionText(option);
   }
 
   function mcqSignature(stem, options) {
@@ -2938,7 +2938,7 @@ window.UP = window.UP || {};
         openLabel: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide choices',
         closedAria: S.lang === 'hi' ? `${choices.length} बहुविकल्पीय विकल्प दिखाएँ` : `Reveal the ${choices.length} multiple-choice options`,
         openAria: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide the multiple-choice options'
-      })}<div id="${esc(optionsId)}" class="q-opts" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" hidden>${choices.map((o, i) => `<div class="q-opt q-opt-static"><b>${String.fromCharCode(65 + i)}</b><span>${rich(P(o))}</span></div>`).join('')}</div></div>`
+      })}<div id="${esc(optionsId)}" class="q-opts" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" hidden>${choices.map((o, i) => `<div class="q-opt q-opt-static"><b>${String.fromCharCode(65 + i)}</b><span>${rich(displayedChoiceText(o))}</span></div>`).join('')}</div></div>`
         : writtenAnswerBox(p, { key: p.id || `chapter:${questionKey}:${p.en || p.hi}`, text });
       const questionToolbar = questionActionBar(text, thinkFirstButton(answerId));
       const questionTools = `${questionDiagramMarkup(p, 'chapter-' + questionKey)}${optionsMarkup}<div id="${esc(answerId)}" class="q-answer-reveal" role="status" aria-live="polite" hidden>${answerMarkup}</div>`;
@@ -4039,7 +4039,7 @@ window.UP = window.UP || {};
           closedAria: S.lang === 'hi' ? `${q.opts.length} बहुविकल्पीय विकल्प दिखाएँ` : `Reveal the ${q.opts.length} multiple-choice options`,
           openAria: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide the multiple-choice options'
         }) : '';
-        const choices = hasOpts(q) ? `<div class="q-question-extra q-options-extra">${choicesButton}<div id="${esc(optionsId)}" class="q-opts" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" hidden>${q.opts.map((o, oi) => `<div class="q-opt q-opt-static"><b>${String.fromCharCode(65 + oi)}</b><span>${rich(P(o))}</span></div>`).join('')}</div></div>` : '';
+        const choices = hasOpts(q) ? `<div class="q-question-extra q-options-extra">${choicesButton}<div id="${esc(optionsId)}" class="q-opts" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" hidden>${q.opts.map((o, oi) => `<div class="q-opt q-opt-static"><b>${String.fromCharCode(65 + oi)}</b><span>${rich(displayedChoiceText(o))}</span></div>`).join('')}</div></div>` : '';
         return `<article class="q-card pyq" id="daily-${i}" ${q.marked ? 'style="opacity:.65"' : ''}>
           <div class="q-top"><span class="q-no">${i+1}</span><div class="q-meta">${ch?`<span class="tag grey">${esc(ch)}</span>`:''}${sourceMeta?`<span class="tag">${esc(sourceMeta)}</span>`:''}${q.label?`<span class="tag cream">${esc(q.label)}</span>`:(q.lv?`<span class="tag">${esc(q.lv)}</span>`:'')}</div>${questionActionBar(txt, thinkFirstButton(answerId))}</div>
           <div class="q-text">${rich(txt)}</div>
@@ -5033,7 +5033,7 @@ window.UP = window.UP || {};
         <div>
           <p>${rich(q.en)}</p>
           ${choices.length ? `<ul class="sci-opts">${choices.map((o, oi) =>
-            `<li><b>(${esc(q.optLetters && q.optLetters[oi] || String.fromCharCode(97 + oi))})</b> ${esc(o.en || o)}</li>`).join('')}</ul>` : ''}
+            `<li><b>(${esc(q.optLetters && q.optLetters[oi] || String.fromCharCode(97 + oi))})</b> ${esc(displayedChoiceText(o))}</li>`).join('')}</ul>` : ''}
           ${q.fig ? `<figure class="sci-fig"><img src="${esc(q.fig.src)}" alt="${esc(q.fig.cap)}" loading="lazy">
             <figcaption><b>Figure ${esc(q.fig.num)}</b> ${esc(q.fig.cap)}</figcaption></figure>` : ''}
           ${choices.length ? '' : writtenAnswerBox(q, { text: q.en })}
@@ -5383,12 +5383,12 @@ window.UP = window.UP || {};
     }) : '';
     const opts = hasOpts(q) ? `<div class="q-question-extra q-options-extra">${optionsToggle}<div id="${esc(optionsId)}" class="q-opts" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" ${choicesOpen ? '' : 'hidden'}>${q.opts.map((o, i) => {
       const label = String.fromCharCode(65 + i);
-      const value = typeof o === 'string' ? o : String((o && (o.en || o.hi)) || P(o) || '');
+      const value = mcqOptionText(o);
       const picked = a && (a.pickIndex === i || a.pick === value);
       const correct = rightIndex === i;
       const cls = a && a.pick !== undefined ? (!graded ? (picked ? 'chosen' : '') : (correct ? 'right' : picked ? 'wrong' : '')) : '';
       return `<button class="q-opt ${cls}" data-action="test-pick" data-q="${q.no}" data-i="${i}" data-opt="${esc(value)}" ${graded && a && a.pick !== undefined ? 'disabled' : ''}>
-        <b>${label}</b><span>${rich(P(o))}</span></button>`;
+        <b>${label}</b><span>${rich(displayedChoiceText(o))}</span></button>`;
     }).join('')}</div></div>` : !graded ? `<div class="callout tip q-unscored-note"><div>${S.lang === 'hi' ? 'उत्तर-पत्र पर स्वयं हल करें। इस प्रश्न की सत्यापित उत्तर-कुंजी उपलब्ध नहीं है; नीचे AI से व्याख्या माँगी जा सकती है।' : 'Work it out on paper. No verified answer key is available for this question; use the button below to request an AI explanation.'}</div></div>` : `<div class="q-answer">
         ${a && Object.prototype.hasOwnProperty.call(a, 'text') ? `<div class="q-given">${S.lang === 'hi' ? 'आपका उत्तर' : 'Your answer'}: <b>${mathText(a.text || '—')}</b></div>` : `
         <div class="q-input">
@@ -5672,57 +5672,6 @@ window.UP = window.UP || {};
      before the board field existed, so a missing board means CBSE. */
   const qBoard = q => q.board || 'cbse';
 
-  function pyqDeclaredMcq(q) {
-    const kind = String(q && q.kind != null ? q.kind : '').toLowerCase();
-    return ['mcq', '1', '2', 'assertion-reason', 'assertion_reason', 'assertion reason'].includes(kind);
-  }
-
-  function pyqOptionIssue(options, q) {
-    if (!Array.isArray(options) || options.length < 2 || options.length > 6) return 'option-count';
-    if (pyqDeclaredMcq(q) && options.length < 4) return 'option-count';
-    const rows = [q, q && q.raw].filter(Boolean);
-    if (rows.some(row => row.qualityStatus === 'withheld' || row.optionReview === 'awaiting-source-review'
-      || row.textReview === 'awaiting-source-review' || (Array.isArray(row.qualityReasons) && row.qualityReasons.length)))
-      return 'source-review';
-    const subject = (q && q.subject) || S.subject;
-    const issue = UP.questionQuality && UP.questionQuality.optionIssue(options, subject);
-    if (issue) return issue;
-
-    /* Five- and six-choice arrays are not rejected just for being longer than
-       the usual four. Still withhold obvious cross-question extraction where
-       several entries are themselves question prompts, rather than answer
-       choices. Raw OCR text is never split into options here. */
-    if (options.length > 4) {
-      const texts = options.map(mcqOptionText).map(text => text.normalize('NFKC').trim());
-      if (texts.some(text => /\boptions\s*:/i.test(text)
-        || /\b(?:list\s*[-–]?\s*i|list\s*[-–]?\s*ii|column\s+i|column\s+ii)\b/i.test(text)
-        || /#\s*SECTION\s+[A-E]\b|\bP\.?\s*T\.?\s*O\.?\b/i.test(text)
-        || /^(?:assertion|reason\s*\(?r\)?)[,:.]?$/i.test(text)
-        || /^is\s+(?:true|false)\s*,?\s*but\s+reason\b/i.test(text)
-        // Repeated source-pack artefacts where the first glyph of a word was
-        // dropped at a page/column boundary (not a generic lowercase test).
-        || /^(?:etween|iversity|ustralia|elgium|riven|onservatism|ppropriate|ssertion|oth(?=\s|\(|$)|anks\b|hhattisgarh|ropping|xplanation|urrency|ducation|ommunication|lections|gainst|rop\b|xtension|onstruction|emand\b|xchange|ccount|heque|xplain|omparative|ge of\b|xample\b)/i.test(text)))
-        return 'cross-question-extraction';
-      const prompts = texts.filter(text => /[?？]/.test(text)
-        || /^\s*(?:name|write|define|list|describe|explain|calculate|find|what|which|how|why|give reason|state|mention|compare|justify|identify|analyse|analyze|choose|read|study|answer|select)\b/i.test(text)
-        || /^\s*(?:कौन|क्यों|कैसे|क्या|बताइए|लिखिए|समझाइए|ज्ञात|सिद्ध|गणना|वर्णन|स्पष्ट|दीजिए)/u.test(text));
-      if (prompts.length >= 2) return 'cross-question-extraction';
-      const stem = String(q && (q.en || q.hi || q.sa) || '').trim();
-      const first = texts[0] || '';
-      const lowerLeads = texts.filter(text => /^[a-z]/.test(text)).length;
-      const abruptStem = stem && !/[.?!।॥]$/.test(stem);
-      // Imported social-science PDFs sometimes split a stem across the first
-      // array entries (e.g. “... Jharkhand,” / “hhattisgarh and Odisha.”).
-      // Require both an abrupt stem and a continuation clue; lowercase answer
-      // text alone is not grounds to reject a five-choice set.
-      if (/^[a-z]/.test(first) && abruptStem
-        && (/[?？]\s*(?:\d+)?$/.test(first) || /[,;:]$/.test(stem)
-          || /_{3,}/.test(first) || (lowerLeads >= 2 && /[a-z]{1,3}$/.test(stem))))
-        return 'cross-question-extraction';
-    }
-    return '';
-  }
-
   function pyqOptions(q) {
     if (!q) return [];
     let options = hasOpts(q) ? q.opts : [];
@@ -5743,7 +5692,7 @@ window.UP = window.UP || {};
       if (source && Array.isArray(source.opts) && source.opts.length >= 2 && source.opts.length <= 4)
         options = source.opts.map(option => ({ en: mcqOptionText(option), hi: '' }));
     }
-    return pyqOptionIssue(options, q) ? [] : options;
+    return UP.questionQuality.sourceOptionIssue(q, options, q.subject || S.subject) ? [] : options;
   }
 
   // Called only when the card has no usable choices. Some of these are real
@@ -5755,7 +5704,7 @@ window.UP = window.UP || {};
     if (damaged === undefined) damaged = UP.questionQuality?.inspect(q, S.subject)
       || UP.questionQuality?.testReadyIssue(q) || UP.corrupt?.why(text);
     const rows = [q, q.raw].filter(Boolean);
-    const missingChoices = rows.some(row => pyqDeclaredMcq(row) || hasOpts(row)
+    const missingChoices = rows.some(row => UP.questionQuality.declaredMcq(row) || hasOpts(row)
       || (row.opts && !Array.isArray(row.opts)) || row.optionReview === 'awaiting-source-review');
     const needsReview = damaged || rows.some(row => row.qualityStatus === 'withheld' || row.textReview === 'awaiting-source-review'
       || (Array.isArray(row.qualityReasons) && row.qualityReasons.length));
@@ -6103,7 +6052,7 @@ window.UP = window.UP || {};
         });
         out += '<div class="q-question-extra q-options-extra">' + choicesToggle;
         out += '<div id="' + esc(optionsId) + '" class="q-opts" data-quiz="' + esc(q.id) + '" role="group" aria-label="' + (S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices') + '" hidden>';
-        out += choices.map((o, i) => '<button type="button" class="q-opt" data-pick="' + esc(q.id) + '" data-i="' + i + '"><b>' + String.fromCharCode(65 + i) + '</b><span>' + rich(P(o)) + '</span></button>').join('');
+        out += choices.map((o, i) => '<button type="button" class="q-opt" data-pick="' + esc(q.id) + '" data-i="' + i + '"><b>' + String.fromCharCode(65 + i) + '</b><span>' + rich(displayedChoiceText(o)) + '</span></button>').join('');
         out += '</div></div>';
       } else {
         out += writtenAnswerBox(q, { text: questionText, damaged: !!why });
@@ -6292,9 +6241,9 @@ window.UP = window.UP || {};
         let note = box.parentNode.querySelector('.pyq-verdict.note');
         if (!note) { note = document.createElement('div'); note.className = 'pyq-verdict note'; box.parentNode.insertBefore(note, box.nextSibling); }
         note.textContent = S.lang === 'hi' ? 'AI से आपका उत्तर जाँचा जा रहा है… इसमें कुछ सेकंड लग सकते हैं।' : 'Checking your answer with AI… this can take a few seconds.';
-        const chosenText = String((choices[i] || {}).en || choices[i] || '');
-        const fullQuestion = pyqQuestionText(qq) + '\nOptions: ' + choices.map((o, j) => String.fromCharCode(65 + j) + '. ' + String((o || {}).en || o || '')).join('  ');
-        aiCheckAnswerText(fullQuestion, String.fromCharCode(65 + i) + '. ' + chosenText, answerText || '').then(j => {
+        const chosenText = displayedChoiceText(choices[i]);
+        const fullQuestion = pyqQuestionText(qq) + '\nOptions: ' + choices.map((o, j) => String.fromCharCode(65 + j) + '. ' + displayedChoiceText(o)).join('  ');
+        aiCheckAnswerText(fullQuestion, String.fromCharCode(65 + i) + '. ' + chosenText, '').then(j => {
           const verdict = j.verdict;
           note.className = 'pyq-verdict ' + (verdict === 'correct' ? 'ok' : verdict === 'incorrect' ? 'no' : 'note');
           note.textContent = verdict === 'correct'

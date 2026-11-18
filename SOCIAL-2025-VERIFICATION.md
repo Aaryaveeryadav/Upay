@@ -67,3 +67,13 @@ scanned, 714 not test-ready and excluded from test/practice pools
 (306 broken-options, 118 missing-figure, 87 truncated-end, 62 broken-identity,
 62 damaged-text, 54 debris, 10 missing-content, 7 fragment, 6 empty,
 2 truncated-start).
+
+## Follow-up: distinguishing a fifth choice from a split option
+
+Five or six distinct source choices are supported; the count alone no longer
+withholds a question. The readiness filter and the choice renderer now use the
+same checks for extraction damage. Seventeen Social imports also have a
+`qualityReasons` note for a broken boundary that can look like a separate
+answer. For example, `sscp-32S2v-6` has `ffidavit.` as its own option after a
+statement ending in `on`. These notes leave the text, option order and keys
+untouched. Clear them only after checking the choices against the paper.
