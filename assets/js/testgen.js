@@ -8,8 +8,7 @@
 
    make(rng, d) returns
      { en, hi, opts?, ans, ansHi?, steps:[{en,hi}], fig, raw }
-   `raw` holds the numbers used, so tools/testgen-check.js can recompute
-   every answer independently and prove the generator is not lying.
+   `raw` holds the instance parameters for diagrams and regression checks.
    ===================================================================== */
 window.UP = window.UP || {};
 
@@ -55,7 +54,6 @@ UP.testgen = (function () {
       seen[v] = 1;
       opts.push({ en: v, hi: v });
     }
-    while (opts.length < 4) { var f = String(opts.length + 1) + '·0'; if (!seen[f]) { seen[f] = 1; opts.push({ en: f, hi: f }); } }
     return shuffle(rng, opts);
   }
 
@@ -63,644 +61,8 @@ UP.testgen = (function () {
      TEMPLATES
      marks = mark value · dmin/dmax = difficulty band it can serve
      ================================================================ */
-  /* Extra, computation-checked working appended to the shorter templates.
-   Each entry was accepted only after its numbers were re-derived from raw{}.
-   Nothing here can change an answer: make() still returns the same ans. */
-var EXTRA_STEPS = {
- "hcf-lcm": [
-  {
-   "en": "Euclid: 28 = 7×4 and 49 = 7×7, so m = HCF = 7.",
-   "hi": "यूक्लिड: 28 = 7×4 तथा 49 = 7×7, अतः m = HCF = 7।"
-  },
-  {
-   "en": "HCF × LCM = product of the numbers: 7 × n = 28 × 49 = 1372, so n = LCM = 196.",
-   "hi": "HCF × LCM = संख्याओं का गुणनफल: 7 × n = 28 × 49 = 1372, अतः n = LCM = 196।"
-  },
-  {
-   "en": "Now n − 3m = 196 − 3×7 = 196 − 21 = 175.",
-   "hi": "अब n − 3m = 196 − 3×7 = 196 − 21 = 175।"
-  }
- ],
- "hcf-find": [
-  {
-   "en": "HCF divides both numbers: 36 ÷ 9 = 4 and 63 ÷ 9 = 7, both whole.",
-   "hi": "HCF दोनों को विभाजित करता है: 36 ÷ 9 = 4 तथा 63 ÷ 9 = 7, दोनों पूर्णांक।"
-  },
-  {
-   "en": "Use HCF × LCM = product: 9 × 252 = 2268 = 36 × 63.",
-   "hi": "HCF × LCM = गुणनफल: 9 × 252 = 2268 = 36 × 63।"
-  }
- ],
- "irrational": [
-  {
-   "en": "Assume √5 = a/b with a, b coprime whole numbers, b ≠ 0.",
-   "hi": "मान लीजिए √5 = a/b जहाँ a, b सह-अभाज्य पूर्णांक हैं, b ≠ 0।"
-  },
-  {
-   "en": "Squaring: 5b² = a², so 5 divides a², hence 5 divides a.",
-   "hi": "वर्ग करने पर: 5b² = a², अतः 5 a² को विभाजित करता है, इसलिए 5 a को विभाजित करता है।"
-  },
-  {
-   "en": "Write a = 5k, then 5b² = 5²k², so b² = 5k² and 5 divides b too — contradicting \"coprime\".",
-   "hi": "a = 5k रखिए, तब 5b² = 5²k², अतः b² = 5k² और 5 b को भी विभाजित करता है — जो \"सह-अभाज्य\" का विरोध है।"
-  },
-  {
-   "en": "The contradiction means no such a/b exists, so √5 is irrational.",
-   "hi": "यह विरोधाभास दर्शाता है कि ऐसा a/b नहीं है, अतः √5 अपरिमेय है।"
-  }
- ],
- "poly-zeroes": [
-  {
-   "en": "A quadratic with zeroes α and β is k(x − α)(x − β).",
-   "hi": "α और β मूलों वाला द्विघात k(x − α)(x − β) है।"
-  },
-  {
-   "en": "Sum of zeroes = 0.333 and product = 0.667 — these must match the coefficients.",
-   "hi": "मूलों का योग = 0.333 तथा गुणनफल = 0.667 — ये गुणांकों से मेल खाने चाहिए।"
-  }
- ],
- "poly-relation": [
-  {
-   "en": "Sum of zeroes α + β = 8 + 4 = 12, which must equal −(coefficient of x)/(coefficient of x²).",
-   "hi": "मूलों का योग α + β = 8 + 4 = 12, जो −(x का गुणांक)/(x² का गुणांक) के बराबर होना चाहिए।"
-  },
-  {
-   "en": "Product αβ = 8 × 4 = 32, which must equal (constant)/(coefficient of x²).",
-   "hi": "गुणनफल αβ = 8 × 4 = 32, जो (अचर)/(x² का गुणांक) के बराबर होना चाहिए।"
-  }
- ],
- "poly-graph": [
-  {
-   "en": "A graph that touches the x-axis at one point has exactly one repeated zero, so the discriminant is zero.",
-   "hi": "x-अक्ष को एक ही बिंदु पर स्पर्श करने वाले ग्राफ का ठीक एक आवृत्त मूल होता है, अतः विविक्तकर शून्य है।"
-  }
- ],
- "linear-k": [
-  {
-   "en": "Compare the ratios: a₁/a₂ = 3/9 and b₁/b₂ = 3/9.",
-   "hi": "अनुपात तुलना कीजिए: a₁/a₂ = 3/9 तथा b₁/b₂ = 3/9।"
-  },
-  {
-   "en": "No solution needs a₁/a₂ = b₁/b₂ but c₁/c₂ different: here 3/9 = 0.333 and c₁/c₂ = 6/18.",
-   "hi": "कोई हल नहीं के लिए a₁/a₂ = b₁/b₂ पर c₁/c₂ भिन्न चाहिए: यहाँ 3/9 = 0.333 तथा c₁/c₂ = 6/18।"
-  }
- ],
- "linear-invest": [
-  {
-   "en": "Let the two parts be x and y; x + y = 21000.",
-   "hi": "दोनों भाग x और y मानिए; x + y = 21000।"
-  },
-  {
-   "en": "Interest: 7% of 12000 = 840 and 8% of 9000 = 720, total 1560.",
-   "hi": "ब्याज: 12000 का 7% = 840 तथा 9000 का 8% = 720, कुल 1560।"
-  }
- ],
- "quad-roots": [
-  {
-   "en": "Sum of roots = 6 and product = 9, so the equation is x² − 6x + 9 = 0.",
-   "hi": "मूलों का योग = 6 तथा गुणनफल = 9, अतः समीकरण x² − 6x + 9 = 0 है।"
-  },
-  {
-   "en": "Factorising: (x − 3)(x − 3) = 0, giving x = 3 and x = 3.",
-   "hi": "गुणनखंडन: (x − 3)(x − 3) = 0, अतः x = 3 तथा x = 3।"
-  }
- ],
- "quad-disc": [
-  {
-   "en": "For ax² + bx + c = 0, the discriminant is D = b² − 4ac.",
-   "hi": "ax² + bx + c = 0 के लिए विविक्तकर D = b² − 4ac है।"
-  },
-  {
-   "en": "D = 4² − 4(2)(2) = 16 − 16 = 0.",
-   "hi": "D = 4² − 4(2)(2) = 16 − 16 = 0।"
-  },
-  {
-   "en": "D = 0 means the roots are real and equal.",
-   "hi": "D = 0 का अर्थ है मूल वास्तविक और बराबर हैं।"
-  }
- ],
- "quad-triangle": [
-  {
-   "en": "The two legs a and b satisfy a² + b² = c², and a + b = P − c = 34.",
-   "hi": "दोनों भुजाएँ a और b संतुष्ट करती हैं a² + b² = c², तथा a + b = P − c = 34।"
-  },
-  {
-   "en": "Check: 10² + 24² = 100 + 576 = 676 = 26².",
-   "hi": "जाँच: 10² + 24² = 100 + 576 = 676 = 26²।"
-  },
-  {
-   "en": "Area = ½ × 10 × 24 = 120 cm².",
-   "hi": "क्षेत्रफल = ½ × 10 × 24 = 120 cm²।"
-  }
- ],
- "ap-nth": [
-  {
-   "en": "aₙ = a + (n − 1)d with a = 9, d = 5, n = 10.",
-   "hi": "aₙ = a + (n − 1)d जहाँ a = 9, d = 5, n = 10।"
-  },
-  {
-   "en": "aₙ = 9 + (10 − 1) × 5 = 9 + 45 = 54.",
-   "hi": "aₙ = 9 + (10 − 1) × 5 = 9 + 45 = 54।"
-  }
- ],
- "ap-sum-quad": [
-  {
-   "en": "Sₙ = 2n² + 4n, so the second term is S₂ − S₁.",
-   "hi": "Sₙ = 2n² + 4n, अतः दूसरा पद S₂ − S₁ है।"
-  },
-  {
-   "en": "S₁ = 6, S₂ = 16, so a₂ = 16 − 6 = 10.",
-   "hi": "S₁ = 6, S₂ = 16, अतः a₂ = 16 − 6 = 10।"
-  }
- ],
- "ap-sum": [
-  {
-   "en": "Number of terms n = 15, first term a = 14, common difference d = 6.",
-   "hi": "पदों की संख्या n = 15, प्रथम पद a = 14, सार्व अंतर d = 6।"
-  },
-  {
-   "en": "aₙ = a + (n − 1)d = 14 + 84 = 98.",
-   "hi": "aₙ = a + (n − 1)d = 14 + 84 = 98।"
-  },
-  {
-   "en": "Sₙ = n/2 (a + l) = n/2 × (first + last); here 15/2 (14 + 98) = 840, and the direct formula n/2 [2a + (n − 1)d] gives the same number.",
-   "hi": "Sₙ = n/2 (a + l) = n/2 × (प्रथम + अंतिम); यहाँ 15/2 (14 + 98) = 840, तथा सीधा सूत्र n/2 [2a + (n − 1)d] भी वही देता है।"
-  }
- ],
- "ap-case": [
-  {
-   "en": "With a = 250 and d = 50: a₄ = 250+3×50 = 400, a₅ = 450, a₆ = 500.",
-   "hi": "a = 250 तथा d = 50: a₄ = 250+3×50 = 400, a₅ = 450, a₆ = 500।"
-  },
-  {
-   "en": "a₈ = 250 + 7×50 = 600.",
-   "hi": "a₈ = 250 + 7×50 = 600।"
-  },
-  {
-   "en": "S₁₀ = 10/2 (2×250 + 9×50) = 5(500 + 450) = 4750.",
-   "hi": "S₁₀ = 10/2 (2×250 + 9×50) = 5(500 + 450) = 4750।"
-  }
- ],
- "ap-which": [
-  {
-   "en": "aₙ = 7 + (n−1)×5; we need 77.",
-   "hi": "aₙ = 7 + (n−1)×5; हमें 77 चाहिए।"
-  },
-  {
-   "en": "(77 − 7) ÷ 5 = 14, so n − 1 = 14 and n = 15.",
-   "hi": "(77 − 7) ÷ 5 = 14, अतः n − 1 = 14 तथा n = 15।"
-  }
- ],
- "tri-similar": [
-  {
-   "en": "Areas of similar triangles are in the ratio of the squares of corresponding sides.",
-   "hi": "समरूप त्रिभुजों के क्षेत्रफल उनकी संगत भुजाओं के वर्गों के अनुपात में होते हैं।"
-  },
-  {
-   "en": "Ratio of areas = 3² : 1² = 9 : 1.",
-   "hi": "क्षेत्रफलों का अनुपात = 3² : 1² = 9 : 1।"
-  }
- ],
- "tri-bpt": [
-  {
-   "en": "By the Basic Proportionality Theorem, AD/DB = AE/EC.",
-   "hi": "आधारभूत समानुपातिकता प्रमेय से, AD/DB = AE/EC।"
-  },
-  {
-   "en": "Check: 15/9 = 1.667 and 25/15 = 1.667 — equal, so DE ∥ BC.",
-   "hi": "जाँच: 15/9 = 1.667 तथा 25/15 = 1.667 — बराबर, अतः DE ∥ BC।"
-  },
-  {
-   "en": "So AB = 15 + 9 = 24 cm and AC = 25 + 15 = 40 cm.",
-   "hi": "अतः AB = 15 + 9 = 24 cm तथा AC = 25 + 15 = 40 cm।"
-  }
- ],
- "coord-mid": [
-  {
-   "en": "Midpoint = ((x₁+x₂)/2, (y₁+y₂)/2) = ((-3+1)/2, (-3+3)/2) = (-1, 0).",
-   "hi": "मध्य-बिंदु = ((x₁+x₂)/2, (y₁+y₂)/2) = ((-3+1)/2, (-3+3)/2) = (-1, 0)।"
-  },
-  {
-   "en": "The midpoint has y = 0, so it lies on the x-axis.",
-   "hi": "मध्य-बिंदु का y = 0 है, अतः यह x-axis पर स्थित है।"
-  }
- ],
- "coord-section": [
-  {
-   "en": "Section formula: P = ((m₁x₂ + m₂x₁)/(m₁+m₂), (m₁y₂ + m₂y₁)/(m₁+m₂)).",
-   "hi": "विभाजन सूत्र: P = ((m₁x₂ + m₂x₁)/(m₁+m₂), (m₁y₂ + m₂y₁)/(m₁+m₂))।"
-  },
-  {
-   "en": "y = (4×10 + 3×4)/(4+3) = 7.429.",
-   "hi": "y = (4×10 + 3×4)/(4+3) = 7.429।"
-  }
- ],
- "coord-dist": [
-  {
-   "en": "d² = (x₂−x₁)² + (y₂−y₁)² = (2−(-3))² + (6−(-2))² = 25 + 64 = 89.",
-   "hi": "d² = (x₂−x₁)² + (y₂−y₁)² = (2−(-3))² + (6−(-2))² = 25 + 64 = 89।"
-  },
-  {
-   "en": "d = √89, which simplifies to √89.",
-   "hi": "d = √89, जो √89 तक सरल होता है।"
-  }
- ],
- "trig-angle": [
-  {
-   "en": "Only the standard angles have known exact values, so the equation forces θ to a standard angle.",
-   "hi": "केवल मानक कोणों के यथार्थ मान ज्ञात हैं, अतः समीकरण θ को मानक कोण बनने पर विवश करता है।"
-  },
-  {
-   "en": "Checking θ = 45°: the equation holds, so θ = 45° is the acute solution.",
-   "hi": "θ = 45° रखने पर: समीकरण संतुष्ट होता है, अतः θ = 45° न्यून कोण हल है।"
-  }
- ],
- "trig-eval": [
-  {
-   "en": "Put in the standard values: tan 60° = √3 so tan²60° = 3, and sin 45° = 1/√2 so sin²45° = 1/2.",
-   "hi": "मानक मान रखिए: tan 60° = √3 अतः tan²60° = 3, तथा sin 45° = 1/√2 अतः sin²45° = 1/2।"
-  },
-  {
-   "en": "So tan²60° − 2sin²45° = 3 − 2×1/2 = 3 − 1 = 2.",
-   "hi": "अतः tan²60° − 2sin²45° = 3 − 2×1/2 = 3 − 1 = 2।"
-  }
- ],
- "trig-ratio": [
-  {
-   "en": "In a 5-12-13 triangle, sin = 5/13, cos = 12/13, tan = 5/12.",
-   "hi": "5-12-13 त्रिभुज में, sin = 5/13, cos = 12/13, tan = 5/12।"
-  },
-  {
-   "en": "cosec is the reciprocal link, so cosec = 13/5.",
-   "hi": "cosec व्युत्क्रम संबंध है, अतः cosec = 13/5।"
-  },
-  {
-   "en": "Check with the Pythagorean triple: 5² + 12² = 25 + 144 = 13² ✓.",
-   "hi": "पाइथागोरस त्रिक से जाँच: 5² + 12² = 25 + 144 = 13² ✓।"
-  }
- ],
- "trig-identity": [
-  {
-   "en": "Start from the fundamental identity sin²θ + cos²θ = 1 and divide through by cos²θ.",
-   "hi": "मूल सर्वसमिका sin²θ + cos²θ = 1 से आरंभ कीजिए और cos²θ से भाग दीजिए।"
-  },
-  {
-   "en": "That gives tan²θ + 1 = sec²θ, i.e. sec²θ − tan²θ = 1 — the first part.",
-   "hi": "इससे tan²θ + 1 = sec²θ, अर्थात् sec²θ − tan²θ = 1 — पहला भाग।"
-  },
-  {
-   "en": "For the second part, sec²θ + tan²θ = sec²θ + (sec²θ − 1) = 2sec²θ − 1, which is exactly what was asked.",
-   "hi": "दूसरे भाग के लिए, sec²θ + tan²θ = sec²θ + (sec²θ − 1) = 2sec²θ − 1, जो ठीक वही है जो पूछा गया।"
-  }
- ],
- "height-one": [
-  {
-   "en": "The tower, the ground distance and the line of sight form a right triangle with the angle at the ground.",
-   "hi": "मीनार, भूमि की दूरी और दृष्टि-रेखा भूमि पर बने कोण के साथ एक समकोण त्रिभुज बनाते हैं।"
-  },
-  {
-   "en": "Using tan θ = opposite/adjacent: height = ground distance × tan θ. With the distance given and the angle taken from the question, this gives the tower height quoted in the answer.",
-   "hi": "tan θ = सम्मुख/संलग्न का उपयोग: ऊँचाई = भूमि की दूरी × tan θ। प्रश्न में दी गई दूरी तथा कोण से वही ऊँचाई मिलती है जो उत्तर में दी है।"
-  }
- ],
- "circ-tangent": [
-  {
-   "en": "The radius to the point of contact is perpendicular to the tangent, so △OTP is right-angled at T.",
-   "hi": "स्पर्श-बिंदु पर त्रिज्या स्पर्श-रेखा के लंबवत है, अतः △OTP, T पर समकोण है।"
-  },
-  {
-   "en": "OT² + TP² = OP²: 8² + 15² = 64 + 225 = 289 = 17² ✓.",
-   "hi": "OT² + TP² = OP²: 8² + 15² = 64 + 225 = 289 = 17² ✓।"
-  }
- ],
- "circ-angle": [
-  {
-   "en": "The radius OA is perpendicular to the tangent PA, so ∠OAP = 90°.",
-   "hi": "त्रिज्या OA स्पर्श-रेखा PA के लंबवत है, अतः ∠OAP = 90°।"
-  },
-  {
-   "en": "In △OAP, ∠APO = 180° − 90° − ∠AOP = 90° − 118°/2, since OA bisects the angle between the two tangents: ∠AOP = ∠POB/2 = 59°.",
-   "hi": "△OAP में, ∠APO = 180° − 90° − ∠AOP = 90° − 118°/2, क्योंकि OA दोनों स्पर्श-रेखाओं के बीच के कोण को समद्विभाजित करता है: ∠AOP = ∠POB/2 = 59°।"
-  },
-  {
-   "en": "So ∠APO = 90° − 59° = 31°... check: ∠APO = 90° − ∠AOP, and with ∠AOP = 59° this gives 31°. The answer recorded is 28°, so the printed pair must be re-derived: 90° − 118°/2 = 31°, hence the stored answer and angle are not compatible.",
-   "hi": "अतः ∠APO = 90° − 59° = 31°।"
-  }
- ],
- "circ-proof": [
-  {
-   "en": "Given: Prove that the tangents drawn at the ends of a diameter of a circle are parallel.",
-   "hi": "दिया है: Prove that the tangents drawn at the ends of a diameter of a circle are parallel."
-  },
-  {
-   "en": "Construction: draw the radii to the two ends of the diameter and the tangents there.",
-   "hi": "रचना: व्यास के दोनों सिरों तक त्रिज्याएँ तथा वहाँ स्पर्श-रेखाएँ खींचिए।"
-  },
-  {
-   "en": "Each radius is perpendicular to its tangent, so both tangents make 90° with the SAME line — equal corresponding angles.",
-   "hi": "प्रत्येक त्रिज्या अपनी स्पर्श-रेखा के लंबवत है, अतः दोनों स्पर्श-रेखाएँ उसी रेखा से 90° बनाती हैं — संगत कोण बराबर।"
-  },
-  {
-   "en": "Equal corresponding angles mean the two tangents are parallel. Hence proved.",
-   "hi": "संगत कोण बराबर होने का अर्थ है कि दोनों स्पर्श-रेखाएँ समांतर हैं। इति सिद्धम्।"
-  }
- ],
- "area-sector": [
-  {
-   "en": "Area of a sector = (θ/360) × πr².",
-   "hi": "त्रिज्यखंड का क्षेत्रफल = (θ/360) × πr²।"
-  },
-  {
-   "en": "= (60/360) × π × 20² = 66.667π sq units.",
-   "hi": "= (60/360) × π × 20² = 66.667π वर्ग इकाई।"
-  }
- ],
- "area-arc": [
-  {
-   "en": "Arc length = (θ/360) × 2πr, so θ/360 = arc/(2πr).",
-   "hi": "चाप लंबाई = (θ/360) × 2πr, अतः θ/360 = चाप/(2πr)।"
-  },
-  {
-   "en": "Here θ/360 = 4.667/14 × 1/(2π), giving θ = 60°.",
-   "hi": "यहाँ θ/360 = 4.667/14 × 1/(2π), अतः θ = 60°।"
-  }
- ],
- "area-case": [
-  {
-   "en": "Each of the 8 sectors has central angle 360°/8 = 45°.",
-   "hi": "8 में से प्रत्येक त्रिज्यखंड का केंद्रीय कोण 360°/8 = 45° है।"
-  },
-  {
-   "en": "Radius = diameter/2 = 35/2 = 17.5 mm, so arc = (45/360)×2π×17.5 ≈ 13.744 mm.",
-   "hi": "त्रिज्या = व्यास/2 = 35/2 = 17.5 mm, अतः चाप = (45/360)×2π×17.5 ≈ 13.744 mm।"
-  },
-  {
-   "en": "Area = (45/360)×π×17.5² ≈ 120.264 mm².",
-   "hi": "क्षेत्रफल = (45/360)×π×17.5² ≈ 120.264 mm²।"
-  },
-  {
-   "en": "Wire needed = 8 arcs + 4 diameters = 8×13.744 + 4×35 ≈ 249.956 mm.",
-   "hi": "आवश्यक तार = 8 चाप + 4 व्यास = 8×13.744 + 4×35 ≈ 249.956 mm।"
-  }
- ],
- "solid-dome": [
-  {
-   "en": "A dome is a hemisphere on a cylinder: volume = πr²h + (2/3)πr³.",
-   "hi": "गुंबद बेलन पर अर्धगोला है: आयतन = πr²h + (2/3)πr³।"
-  },
-  {
-   "en": "= π×4²×8 + (2/3)π×4³ ≈ 536.165 m³.",
-   "hi": "= π×4²×8 + (2/3)π×4³ ≈ 536.165 m³।"
-  }
- ],
- "solid-mix": [
-  {
-   "en": "Volume of a cylinder = πr²h = π×7²×10 ≈ 1539.38 cm³.",
-   "hi": "बेलन का आयतन = πr²h = π×7²×10 ≈ 1539.38 cm³।"
-  },
-  {
-   "en": "1 litre = 1000 cm³, so 1539.38 cm³ ≈ 1.539 L.",
-   "hi": "1 लीटर = 1000 cm³, अतः 1539.38 cm³ ≈ 1.539 L।"
-  }
- ],
- "stat-relation": [
-  {
-   "en": "The empirical relation between the three averages is: 3 Median = Mode + 2 Mean.",
-   "hi": "तीनों माध्यों का अनुभवजन्य संबंध है: 3 माध्यक = बहुलक + 2 माध्य।"
-  },
-  {
-   "en": "So Mode = 3×24 − 2×26 = 72 − 52 = 20.",
-   "hi": "अतः बहुलक = 3×24 − 2×26 = 72 − 52 = 20।"
-  }
- ],
- "stat-missing": [
-  {
-   "en": "Class marks: 13.5, 18.5, 23.5, 28.5, 33.5, 38.5.",
-   "hi": "वर्ग-चिह्न: 13.5, 18.5, 23.5, 28.5, 33.5, 38.5।"
-  },
-  {
-   "en": "Using mean = Σfx/Σf with one frequency unknown x, solving gives x = 6.",
-   "hi": "माध्य = Σfx/Σf में एक आवृत्ति x अज्ञात रखकर हल करने पर x = 6।"
-  }
- ],
- "prob-card": [
-  {
-   "en": "A pack has 52 cards, equally likely.",
-   "hi": "गड्डी में 52 पत्ते हैं, सभी समप्रायिक।"
-  },
-  {
-   "en": "Count of favourable cards = 2, so P = 2/52 = 1/26.",
-   "hi": "अनुकूल पत्तों की संख्या = 2, अतः P = 2/52 = 1/26।"
-  }
- ],
- "prob-dice": [
-  {
-   "en": "Two dice give 6 × 6 = 36 equally likely outcomes.",
-   "hi": "दो पासे 6 × 6 = 36 समप्रायिक परिणाम देते हैं।"
-  },
-  {
-   "en": "Counting the pairs that give a sum of 7: there are 6.",
-   "hi": "7 योग देने वाले जोड़े: 6 हैं।"
-  },
-  {
-   "en": "P = 6/36 = 1/6.",
-   "hi": "P = 6/36 = 1/6।"
-  }
- ],
- "prob-bag": [
-  {
-   "en": "Total balls = 5 + 6 + 4 = 15.",
-   "hi": "कुल गेंदें = 5 + 6 + 4 = 15।"
-  },
-  {
-   "en": "P(red) = 5/15 and P(not white) = (15 − 6)/15 = 9/15.",
-   "hi": "P(लाल) = 5/15 तथा P(श्वेत नहीं) = (15 − 6)/15 = 9/15।"
-  }
- ],
- "quad-train": [
-  {
-   "en": "Let the usual speed be v km/h. At 40 km/h the 480 km trip takes 480/40 h.",
-   "hi": "मान लीजिए सामान्य चाल v km/h है। 40 km/h पर 480 km की यात्रा 480/40 घंटे लेती है।"
-  },
-  {
-   "en": "The delay is the difference in times: 480/40 vs the planned 480/(40+8), a gap of 3 h.",
-   "hi": "विलंब समयों का अंतर है: 480/40 तथा नियोजित 480/(40+8), अंतर 3 घंटे।"
-  }
- ],
- "ap-multiples": [
-  {
-   "en": "The multiples form an AP with first term 4×... and common difference 4.",
-   "hi": "गुणज एक समांतर श्रेणी बनाते हैं जिसका सार्व अंतर 4 है।"
-  },
-  {
-   "en": "There are n = 15 such multiples, and their sum is 480.",
-   "hi": "ऐसे n = 15 गुणज हैं, और उनका योग 480 है।"
-  }
- ],
- "stat-mean": [
-  {
-   "en": "Mid-points of the classes:",
-   "hi": "प्रत्येक वर्ग का मध्य-बिंदु xᵢ निकालिए, फिर उसे आवृत्ति से गुणा कीजिए।"
-  },
-  {
-   "en": "Σfᵢ = 20 and Σfᵢxᵢ = 500, so mean = 500/20 = 25.",
-   "hi": "Σfᵢ = 20 तथा Σfᵢxᵢ = 500, अतः माध्य = 500/20 = 25।"
-  }
- ],
- "solid-toy": [
-  {
-   "en": "Slant height l = √(r² + h²) = √(10² + 24²) = √(100 + 576) = √676 = 26 cm.",
-   "hi": "तिर्यक ऊँचाई l = √(r² + h²) = √(10² + 24²) = √(100 + 576) = √676 = 26 cm।"
-  },
-  {
-   "en": "TSA = πrl + 2πrh + ... = 1445.133 cm².",
-   "hi": "TSA = 1445.133 cm²।"
-  }
- ],
- "circ-quad": [
-  {
-   "en": "Tangents from the same external point are equal: the four sides AB, BC, CD, DA come in equal pairs.",
-   "hi": "एक ही बाह्य बिंदु से स्पर्श-रेखाएँ बराबर होती हैं: चारों भुजाएँ AB, BC, CD, DA बराबर जोड़ों में आती हैं।"
-  },
-  {
-   "en": "With the given pairs, AD = 3 cm and the perimeter = 4 + 6 + 5 + 3 = 18 cm.",
-   "hi": "दिए गए जोड़ों से, AD = 3 cm तथा परिमाप = 4 + 6 + 5 + 3 = 18 cm।"
-  }
- ],
- "prob-case": [
-  {
-   "en": "Total = 4 + 3 + 3 + 3 = 13.",
-   "hi": "कुल = 4 + 3 + 3 + 3 = 13।"
-  },
-  {
-   "en": "P(red) = 4/13, P(not white) = 10/13, P(red or green) = 7/13.",
-   "hi": "P(लाल) = 4/13, P(श्वेत नहीं) = 10/13, P(लाल या हरा) = 7/13।"
-  }
- ],
- "tri-area": [
-  {
-   "en": "For similar triangles, area ratio = (side ratio)² = 3² = 9.",
-   "hi": "समरूप त्रिभुजों के लिए, क्षेत्रफल अनुपात = (भुजा अनुपात)² = 3² = 9।"
-  },
-  {
-   "en": "So A₂ = 9 × A₁ = 9 × 24 = 216 cm².",
-   "hi": "अतः A₂ = 9 × A₁ = 9 × 24 = 216 cm²।"
-  }
- ],
- "solid-scoop": [
-  {
-   "en": "Volume of n hemispherical scoops = n × (2/3)πr³.",
-   "hi": "n अर्धगोलाकार स्कूप का आयतन = n × (2/3)πr³।"
-  },
-  {
-   "en": "Volume of the cone = (1/3)πr²h with h = 1.5r.",
-   "hi": "शंकु का आयतन = (1/3)πr²h जहाँ h = 1.5r।"
-  },
-  {
-   "en": "Ratio = 3×(2/3) : (1/3)×1.5 = undefined.",
-   "hi": "अनुपात = 3×(2/3) : (1/3)×1.5 = undefined।"
-  }
- ],
- "area-angle": [
-  {
-   "en": "Area of a sector = (θ/360) × πr².",
-   "hi": "त्रिज्यखंड का क्षेत्रफल = (θ/360) × πr²।"
-  },
-  {
-   "en": "With r = 14 and area ≈ 239.56, θ/360 = 239.56/(π×14²), giving θ ≈ 140°.",
-   "hi": "r = 14 तथा क्षेत्रफल ≈ 239.56 के साथ, θ/360 = 239.56/(π×14²), अतः θ ≈ 140°।"
-  }
- ],
- "seg-perimeter": [
-  {
-   "en": "Chord of a 90° sector: chord = 2r sin(θ/2) = 2×14×sin 45° ≈ 19.799 cm.",
-   "hi": "90° त्रिज्यखंड की जीवा: जीवा = 2r sin(θ/2) = 2×14×sin 45° ≈ 19.799 cm।"
-  },
-  {
-   "en": "Perimeter of the segment = arc + chord = 22 + 19.799 ≈ 41.799 cm.",
-   "hi": "वृत्तखंड का परिमाप = चाप + जीवा = 22 + 19.799 ≈ 41.799 cm।"
-  }
- ],
- "quad-stream": [
-  {
-   "en": "Let the stream speed be x km/h. Downstream speed = 14 + x, upstream = 14 − x... with the trip times adding to 4 h.",
-   "hi": "मान लीजिए धारा की चाल x km/h है। धारा के अनुकूल = 14 + x, प्रतिकूल = 14 − x... यात्रा समयों का योग 4 घंटे।"
-  },
-  {
-   "en": "Solving gives x = 3 km/h.",
-   "hi": "हल करने पर x = 3 km/h।"
-  }
- ],
- "quad-squares": [
-  {
-   "en": "Let the smaller be s and the greater be g: s² = 8g and g² − s² = 180.",
-   "hi": "मान लीजिए छोटी s तथा बड़ी g है: s² = 8g और g² − s² = 180।"
-  },
-  {
-   "en": "Substituting gives g = 18 and s = 12; check 18² − 12² = 324 − 144 = 180 ✓.",
-   "hi": "मान रखने पर g = 18 तथा s = 12; जाँच 18² − 12² = 324 − 144 = 180 ✓।"
-  }
- ],
- "circ-pt2": [
-  {
-   "en": "OP = x + 4 and OT = 4; OT ⟂ PT so PT² = OP² − OT².",
-   "hi": "OP = x + 4 तथा OT = 4; OT ⟂ PT अतः PT² = OP² − OT²।"
-  },
-  {
-   "en": "PT² = (x + 4)² − 4² = x² + 8x + 16 − 16 = x² + 8x.",
-   "hi": "PT² = (x + 4)² − 4² = x² + 8x + 16 − 16 = x² + 8x।"
-  }
- ],
- "bpt-ratio": [
-  {
-   "en": "By the Basic Proportionality Theorem, a line parallel to one side divides the other two proportionally.",
-   "hi": "आधारभूत समानुपातिकता प्रमेय से, एक भुजा के समांतर रेखा अन्य दो को समानुपात में विभाजित करती है।"
-  },
-  {
-   "en": "With m = 3 and n = 5 the ratio simplifies to 3 : 2.",
-   "hi": "m = 3 तथा n = 5 के साथ अनुपात 3 : 2 हो जाता है।"
-  }
- ],
- "lcm-from-hcf": [
-  {
-   "en": "Euclid: 75 = 25×3 and 125 = 25×5, so HCF = 25.",
-   "hi": "यूक्लिड: 75 = 25×3 तथा 125 = 25×5, अतः HCF = 25।"
-  },
-  {
-   "en": "HCF × LCM = 75 × 125 = 9375, so LCM = 9375/25 = 375.",
-   "hi": "HCF × LCM = 75 × 125 = 9375, अतः LCM = 9375/25 = 375।"
-  }
- ],
- "ap-two-terms": [
-  {
-   "en": "From aₘ = 16 and aₙ = 4: subtract to get d = -2.",
-   "hi": "aₘ = 16 तथा aₙ = 4 से: घटाने पर d = -2।"
-  },
-  {
-   "en": "Then a = 20, so the term that becomes zero is a_k with k = 11.",
-   "hi": "तब a = 20, अतः शून्य होने वाला पद a_k है जहाँ k = 11।"
-  },
-  {
-   "en": "S₁₀ = 10/2 (2×20 + 9×-2) = 110.",
-   "hi": "S₁₀ = 10/2 (2×20 + 9×-2) = 110।"
-  }
- ]
-};
-
-function withExtra(id, steps) {
-  var more = EXTRA_STEPS[id];
-  if (!more || !more.length) return steps;
-  var seen = {}, out = [];
-  steps.concat(more).forEach(function (s) {
-    var k = (s && s.en) ? s.en.slice(0, 60) : "";
-    if (k && seen[k]) return;
-    if (k) seen[k] = 1;
-    out.push(s);
-  });
-  return out;
-}
-
-var T = [];
+  // Build the workings from this instance, never from a separate worked example.
+  var T = [];
 
   /* ---------- 1. Real numbers · HCF-LCM relation ---------- */
   T.push({ id: 'hcf-lcm', ch: 1, marks: 1, dmin: 1, dmax: 2, fig: null,
@@ -717,12 +79,14 @@ var T = [];
         hi: 'यदि HCF(' + a + ', ' + b + ') = m तथा LCM(' + a + ', ' + b + ') = n है, तो n − ' + k + 'm का मान है :',
         opts: mcq(rng, fmt(ans), wrong.map(fmt)),
         ans: fmt(ans),
-        steps: withExtra('hcf-lcm', [
-          st('HCF(' + a + ', ' + b + ') = ' + h + ' and LCM(' + a + ', ' + b + ') = ' + lcm + ', because LCM × HCF = product of the two numbers.',
-             'HCF = ' + h + ' तथा LCM = ' + lcm + ', क्योंकि LCM × HCF = दोनों संख्याओं का गुणनफल।'),
+        steps: [
+          st(a + ' = ' + h + '×' + x + ' and ' + b + ' = ' + h + '×' + y + '. The remaining factors are coprime, so m = ' + h + '.',
+             a + ' = ' + h + '×' + x + ' और ' + b + ' = ' + h + '×' + y + '। शेष गुणनखंड सह-अभाज्य हैं, इसलिए m = ' + h + '।'),
+          st('HCF × LCM = product of the two numbers, so n = ' + a + '×' + b + ' ÷ ' + h + ' = ' + lcm + '.',
+             'म.स. × ल.स. = दोनों संख्याओं का गुणनफल, इसलिए n = ' + a + '×' + b + ' ÷ ' + h + ' = ' + lcm + '।'),
           st('n − ' + k + 'm = ' + lcm + ' − ' + k + '×' + h + ' = ' + ans + '.',
              'n − ' + k + 'm = ' + lcm + ' − ' + k + '×' + h + ' = ' + ans + '।')
-        ]),
+        ],
         raw: { a: a, b: b, h: h, lcm: lcm, k: k, ans: ans }
       };
     } });
@@ -738,12 +102,12 @@ var T = [];
         en: 'The HCF of two numbers is ' + h + ' and their LCM is ' + L + '. If one number is ' + a + ', find the other number.',
         hi: 'दो संख्याओं का HCF ' + h + ' तथा LCM ' + L + ' है। यदि एक संख्या ' + a + ' है, तो दूसरी संख्या ज्ञात कीजिए।',
         ans: String(b),
-        steps: withExtra('hcf-find', [
+        steps: [
           st('For any two positive integers, HCF × LCM = product of the numbers.',
              'किन्हीं दो धन पूर्णांकों के लिए, HCF × LCM = संख्याओं का गुणनफल।'),
           st('Other number = (' + h + ' × ' + L + ') ÷ ' + a + ' = ' + b + '.',
              'दूसरी संख्या = (' + h + ' × ' + L + ') ÷ ' + a + ' = ' + b + '।')
-        ]),
+        ],
         raw: { h: h, a: a, b: b, L: L, ans: b }
       };
     } });
@@ -759,14 +123,14 @@ var T = [];
         hi: 'सिद्ध कीजिए कि ' + f + ' एक अपरिमेय संख्या है।',
         ans: 'Irrational (proof by contradiction)',
         ansHi: 'अपरिमेय (विरोधाभास द्वारा)',
-        steps: withExtra('irrational', [
+        steps: [
           st('Assume the opposite: suppose ' + f + ' = p/q where p, q are coprime integers and q ≠ 0.',
              'विपरीत मानिए : मान लीजिए ' + f + ' = p/q जहाँ p, q सह-अभाज्य पूर्णांक हैं और q ≠ 0।'),
           st('Rearrange so that √' + p + ' alone stands on one side, then square both sides.',
              'पुनर्व्यवस्थित कीजिए ताकि एक ओर केवल √' + p + ' रहे, फिर दोनों पक्षों का वर्ग कीजिए।'),
           st('This forces the prime ' + p + ' to divide both p and q, contradicting "coprime". Hence the number is irrational.',
              'इससे अभाज्य ' + p + ' p और q दोनों को विभाजित करता है, जो "सह-अभाज्य" के विपरीत है। अतः संख्या अपरिमेय है।')
-        ]),
+        ],
         raw: { p: p, ans: 'irrational' }
       };
     } });
@@ -788,14 +152,14 @@ var T = [];
         en: 'Find the zeroes of the polynomial p(x) = ' + poly + '.',
         hi: 'बहुपद p(x) = ' + poly + ' के शून्यक ज्ञात कीजिए।',
         ans: 'x = ' + roots,
-        steps: withExtra('poly-zeroes', [
+        steps: [
           st('Split the middle term (or use the quadratic formula) on ' + poly + ' = 0.',
              poly + ' = 0 पर मध्य पद को विभाजित कीजिए (या द्विघात सूत्र लगाइए)।'),
           st('The two zeroes are x = ' + roots + '.',
              'दोनों शून्यक x = ' + roots + ' हैं।'),
-          st('Check: sum = ' + fr(-sN, sD) + ' and product = ' + fr(pN, pD) + ', matching the coefficients.',
-             'जाँच : योग = ' + fr(-sN, sD) + ' तथा गुणनफल = ' + fr(pN, pD) + ', जो गुणांकों से मेल खाते हैं।')
-        ]),
+          st('Check: sum = ' + fr(sN, sD) + ' and product = ' + fr(pN, pD) + ', matching the coefficients.',
+             'जाँच : योग = ' + fr(sN, sD) + ' तथा गुणनफल = ' + fr(pN, pD) + ', जो गुणांकों से मेल खाते हैं।')
+        ],
         raw: { r1n: r1n, r1d: r1d, r2: r2, sumN: sN, sumD: sD, prodN: pN, prodD: pD }
       };
     } });
@@ -810,14 +174,14 @@ var T = [];
         en: 'One zero of a quadratic polynomial is ' + k + ' times the other. If the sum of the zeroes is ' + S + ', find the polynomial.',
         hi: 'एक द्विघात बहुपद का एक शून्यक दूसरे का ' + k + ' गुना है। यदि शून्यकों का योग ' + S + ' है, तो बहुपद ज्ञात कीजिए।',
         ans: 'x² − ' + S + 'x + ' + P,
-        steps: withExtra('poly-relation', [
+        steps: [
           st('Let the zeroes be α and ' + k + 'α. Then α + ' + k + 'α = ' + S + ' ⟹ α = ' + beta + '.',
              'मान लीजिए शून्यक α तथा ' + k + 'α हैं। तब α + ' + k + 'α = ' + S + ' ⟹ α = ' + beta + '।'),
           st('So the zeroes are ' + alpha + ' and ' + beta + '; their product is ' + P + '.',
              'अतः शून्यक ' + alpha + ' तथा ' + beta + ' हैं; उनका गुणनफल ' + P + ' है।'),
           st('Polynomial = x² − (sum)x + (product) = x² − ' + S + 'x + ' + P + '.',
              'बहुपद = x² − (योग)x + (गुणनफल) = x² − ' + S + 'x + ' + P + '।')
-        ]),
+        ],
         raw: { k: k, beta: beta, alpha: alpha, S: S, P: P }
       };
     } });
@@ -832,13 +196,13 @@ var T = [];
           + (touch ? ' and touches it at 1 more point' : '') + '. The number of zeroes of p(x) is:',
         hi: 'एक बहुपद p(x) का ग्राफ x-अक्ष को ' + t + ' भिन्न बिंदुओं पर काटता है'
           + (touch ? ' तथा 1 और बिंदु पर स्पर्श करता है' : '') + '। p(x) के शून्यकों की संख्या है :',
-        opts: mcq(rng, String(ans), [String(ans + 1), String(Math.max(1, ans - 1)), String(ans + 2)]),
+        opts: mcq(rng, String(ans), [String(ans + 1), String(ans - 1), String(ans + 2)]),
         ans: String(ans),
-        steps: withExtra('poly-graph', [
+        steps: [
           st('Every point where the graph meets the x-axis is a zero; a touching point counts once (it is a repeated zero).',
              'ग्राफ x-अक्ष से जहाँ-जहाँ मिलता है वहाँ शून्यक होता है; स्पर्श बिंदु एक ही बार गिना जाता है (वह दोहरा शून्यक है)।'),
           st('Number of zeroes = ' + ans + '.', 'शून्यकों की संख्या = ' + ans + '।')
-        ]),
+        ],
         raw: { t: t, touch: touch, ans: ans }
       };
     } });
@@ -859,12 +223,12 @@ var T = [];
           hi: 'समीकरण युग्म ' + a1 + 'x + ' + b1 + 'y = ' + c1 + ' तथा ' + a2 + 'x + ' + b2u + 'y = ' + c1 + ' के कितने हल हैं?',
           opts: mcq(rng, 'Exactly one', ['No solution', 'Infinitely many', 'Exactly two']),
           ans: 'Exactly one',
-          steps: withExtra('linear-k', [
+          steps: [
             st('Compare a₁/a₂ = ' + fr(a1, a2) + ' and b₁/b₂ = ' + fr(b1, b2u) + '. They are unequal.',
                'तुलना कीजिए : a₁/a₂ = ' + fr(a1, a2) + ' तथा b₁/b₂ = ' + fr(b1, b2u) + '। ये असमान हैं।'),
             st('Unequal ratios of coefficients ⟹ the lines intersect at exactly one point, so there is exactly one solution.',
                'गुणांकों के अनुपात असमान हैं ⟹ रेखाएँ एक ही बिंदु पर मिलती हैं, अतः ठीक एक हल है।')
-          ]),
+          ],
           raw: { a1: a1, b1: b1, a2: a2, b2: b2u, kind: 'unique' }
         };
       }
@@ -876,7 +240,7 @@ var T = [];
         ans: kind === 'no' ? 'k ≠ ' + c2big : 'k = ' + c2big,
         opts: mcq(rng, kind === 'no' ? 'k ≠ ' + c2big : 'k = ' + c2big,
           [kind === 'no' ? 'k = ' + c2big : 'k ≠ ' + c2big, 'k = ' + c1, 'k = 0']),
-        steps: withExtra('linear-k', [
+        steps: [
           st('Compare a₁/a₂ = ' + fr(a1, a2) + ', b₁/b₂ = ' + fr(b1, b2) + ' and c₁/c₂.',
              'a₁/a₂ = ' + fr(a1, a2) + ', b₁/b₂ = ' + fr(b1, b2) + ' तथा c₁/c₂ की तुलना कीजिए।'),
           st(kind === 'no'
@@ -887,7 +251,7 @@ var T = [];
             ? 'प्रथम दो अनुपात बराबर हैं, अतः रेखाएँ समांतर या संपाती होंगी। k ≠ ' + c2big
               + ' चुनने पर c-अनुपात टूट जाता है और रेखाएँ समांतर हो जाती हैं — कोई हल नहीं।'
             : 'संपाती रेखाओं के लिए तीनों अनुपात बराबर होने चाहिए: k = ' + c2big + ' पर अपरिमित हल मिलते हैं।')
-        ]),
+        ],
         raw: { a1: a1, b1: b1, a2: a2, b2: b2, c1: c1, m: m, c2big: c2big, kind: kind }
       };
     } });
@@ -908,13 +272,13 @@ var T = [];
         hi: 'एक व्यक्ति ने दो योजनाओं में क्रमशः ' + r1 + '% तथा ' + r2 + '% वार्षिक ब्याज की दर से कुछ धनराशि निवेश की। राशियाँ बदल देने पर उसे ₹' + gap
           + ' अधिक ब्याज मिलता है। ज्ञात कीजिए कि ' + r1 + '% पर तथा ' + r2 + '% पर कितनी राशि निवेश की गई।',
         ans: '₹' + x + ' at ' + r1 + '% and ₹' + y + ' at ' + r2 + '%',
-        steps: withExtra('linear-invest', [
+        steps: [
           st('Let the amounts be ₹x at ' + r1 + '% and ₹y at ' + r2 + '%. First condition: ' + r1 + 'x/100 + ' + r2 + 'y/100 = ' + I + '.',
              'मान लीजिए ' + r1 + '% पर ₹x तथा ' + r2 + '% पर ₹y निवेशित हैं। पहली शर्त : ' + r1 + 'x/100 + ' + r2 + 'y/100 = ' + I + '।'),
           st('Swapping adds ' + gap + ', and the gap equals (' + r2 + ' − ' + r1 + ')% of (x − y) = ' + (r2 - r1) + '% of (x − y) ⟹ x − y = ' + diff + '.',
              'राशियाँ बदलने पर ' + gap + ' अधिक मिलता है, और यह अंतर (' + r2 + ' − ' + r1 + ')% × (x − y) = ' + diff + ' देता है।'),
           st('Solving the two equations: x = ₹' + x + ', y = ₹' + y + '.', 'दोनों समीकरण हल करने पर : x = ₹' + x + ', y = ₹' + y + '।')
-        ]),
+        ],
         raw: { x: x, y: y, r1: r1, r2: r2, I: I, gap: gap }
       };
     } });
@@ -930,11 +294,11 @@ var T = [];
         en: 'Find the roots of the quadratic equation ' + eq + '.',
         hi: 'द्विघात समीकरण ' + eq + ' के मूल ज्ञात कीजिए।',
         ans: 'x = ' + p + ' and x = ' + q,
-        steps: withExtra('quad-roots', [
+        steps: [
           st('Factorise: x² − ' + s + 'x + ' + c + ' = (x − ' + p + ')(x − ' + q + ') = 0.',
              'गुणनखंड कीजिए : x² − ' + s + 'x + ' + c + ' = (x − ' + p + ')(x − ' + q + ') = 0।'),
           st('Therefore x = ' + p + ' or x = ' + q + '.', 'अतः x = ' + p + ' या x = ' + q + '।')
-        ]),
+        ],
         raw: { p: p, q: q, s: s, c: c }
       };
     } });
@@ -953,14 +317,14 @@ var T = [];
       return {
         en: 'The quadratic equation ' + (a === 1 ? '' : a) + 'x² + ' + b + 'x + ' + c + ' = 0 has:',
         hi: 'द्विघात समीकरण ' + (a === 1 ? '' : a) + 'x² + ' + b + 'x + ' + c + ' = 0 के मूल हैं :',
-        opts: mcq(rng, truth, ['two distinct real roots', 'two equal real roots', 'no real roots', 'exactly one real root']),
+        opts: mcq(rng, truth, ['two distinct real roots', 'two equal real roots', 'no real roots', 'infinitely many real roots']),
         ans: truth,
-        steps: withExtra('quad-disc', [
+        steps: [
           st('Discriminant D = b² − 4ac = ' + b + '² − 4×' + a + '×' + c + ' = ' + fmt(disc) + '.',
              'विविक्तकर D = b² − 4ac = ' + b + '² − 4×' + a + '×' + c + ' = ' + fmt(disc) + '।'),
           st((disc > 0 ? 'D > 0, so the roots are real and distinct.' : disc === 0 ? 'D = 0, so the roots are real and equal.' : 'D < 0, so there are no real roots.'),
              (disc > 0 ? 'D > 0, अतः मूल वास्तविक तथा भिन्न हैं।' : disc === 0 ? 'D = 0, अतः मूल वास्तविक तथा बराबर हैं।' : 'D < 0, अतः कोई वास्तविक मूल नहीं है।'))
-        ]),
+        ],
         raw: { a: a, b: b, c: c, disc: disc, truth: truth }
       };
     } });
@@ -978,13 +342,13 @@ var T = [];
           + ' cm. Find the lengths of the other two sides (and hence its area).',
         hi: 'एक समकोण त्रिभुज का परिमाप ' + P + ' cm तथा कर्ण ' + c + ' cm है। अन्य दो भुजाओं की लंबाइयाँ (और उससे क्षेत्रफल) ज्ञात कीजिए।',
         ans: a + ' cm and ' + b + ' cm; area = ' + area + ' cm²',
-        steps: withExtra('quad-triangle', [
+        steps: [
           st('Let the legs be x and ' + (P - c) + ' − x. Pythagoras gives x² + (' + (P - c) + ' − x)² = ' + c + '².',
              'मान लीजिए भुजाएँ x तथा ' + (P - c) + ' − x हैं। पाइथागोरस से x² + (' + (P - c) + ' − x)² = ' + c + '²।'),
           st('This simplifies to a quadratic whose roots are ' + a + ' and ' + b + '.',
              'सरलीकरण से प्राप्त द्विघात के मूल ' + a + ' तथा ' + b + ' हैं।'),
           st('Area = ½ × ' + a + ' × ' + b + ' = ' + area + ' cm².', 'क्षेत्रफल = ½ × ' + a + ' × ' + b + ' = ' + area + ' cm²।')
-        ]),
+        ],
         raw: { a: a, b: b, c: c, P: P, area: area }
       };
     } });
@@ -999,14 +363,14 @@ var T = [];
       return {
         en: 'The first terms of an AP are ' + terms.join(', ') + ', … . Its ' + n + 'th term is:',
         hi: 'किसी A.P. के प्रथम पद ' + terms.join(', ') + ', … हैं। इसका ' + n + 'वाँ पद है :',
-        opts: mcq(rng, fmt(ans), [fmt(ans + dd), fmt(ans - dd), fmt(a + n * dd)]),
+        opts: mcq(rng, fmt(ans), [fmt(ans + dd), fmt(ans - dd), fmt(ans + 2 * dd)]),
         ans: fmt(ans),
-        steps: withExtra('ap-nth', [
+        steps: [
           st('First term a = ' + a + ', common difference d = ' + fmt(dd) + '.',
              'प्रथम पद a = ' + a + ', सार्व अंतर d = ' + fmt(dd) + '।'),
           st('aₙ = a + (n − 1)d = ' + a + ' + (' + n + ' − 1)(' + fmt(dd) + ') = ' + fmt(ans) + '.',
              'aₙ = a + (n − 1)d = ' + a + ' + (' + n + ' − 1)(' + fmt(dd) + ') = ' + fmt(ans) + '।')
-        ]),
+        ],
         raw: { a: a, d: dd, n: n, ans: ans }
       };
     } });
@@ -1026,12 +390,12 @@ var T = [];
         hi: 'यदि किसी A.P. के प्रथम m पदों का योग ' + A + 'm² + ' + B + 'm है, तो इसका ' + q + ' पद है :',
         opts: mcq(rng, String(ans), [String(ans + 1), String(ans - 1), String(ans + 2)]),
         ans: String(ans),
-        steps: withExtra('ap-sum-quad', [
+        steps: [
           st('Use aₙ = Sₙ − Sₙ₋₁.', 'aₙ = Sₙ − Sₙ₋₁ का प्रयोग कीजिए।'),
           st('a₁ = ' + S(1) + ', a₂ = ' + S(2) + ' → a₂ = ' + (S(2) - S(1)) + '; in general aₙ = ' + A + '(2n − 1) + ' + B + '.',
              'a₁ = ' + S(1) + ', a₂ = ' + S(2) + ' → a₂ = ' + (S(2) - S(1)) + '; सामान्यतः aₙ = ' + A + '(2n − 1) + ' + B + '।'),
           st('So the ' + q + ' term is ' + ans + '.', 'अतः ' + q + ' पद ' + ans + ' है।')
-        ]),
+        ],
         raw: { A: A, B: B, q: q, ans: ans }
       };
     } });
@@ -1047,13 +411,13 @@ var T = [];
         en: 'Find the sum of the first ' + n + ' terms of the AP ' + a + ', ' + (a + dd) + ', ' + (a + 2 * dd) + ', … .',
         hi: 'A.P. ' + a + ', ' + (a + dd) + ', ' + (a + 2 * dd) + ', … के प्रथम ' + n + ' पदों का योग ज्ञात कीजिए।',
         ans: fmt(S),
-        steps: withExtra('ap-sum', [
+        steps: [
           st('a = ' + a + ', d = ' + fmt(dd) + ', n = ' + n + '.', 'a = ' + a + ', d = ' + fmt(dd) + ', n = ' + n + '।'),
           st('Sₙ = n/2 [2a + (n − 1)d] = ' + n + '/2 [2×' + a + ' + (' + n + ' − 1)(' + fmt(dd) + ')] = ' + fmt(S) + '.',
              'Sₙ = n/2 [2a + (n − 1)d] = ' + n + '/2 [2×' + a + ' + (' + n + ' − 1)(' + fmt(dd) + ')] = ' + fmt(S) + '।'),
           st('(Cross-check with the last term ' + fmt(last) + ': Sₙ = n/2 (a + l) gives the same value.)',
              '(अंतिम पद ' + fmt(last) + ' से जाँच : Sₙ = n/2 (a + l) भी वही मान देता है।)')
-        ]),
+        ],
         raw: { a: a, d: dd, n: n, S: S, last: last }
       };
     } });
@@ -1073,13 +437,13 @@ var T = [];
         hi: 'एक दान अभियान में प्रत्येक चक्कर ' + a + ' m का है और हर अगला चक्कर ' + dd + ' m अधिक; कुल ' + n
           + ' चक्कर हैं। (i) a₄, a₅, a₆ लिखिए। (ii) आठवें चक्कर की दूरी ज्ञात कीजिए। (iii) सभी ' + n + ' चक्करों की कुल दूरी ज्ञात कीजिए।',
         ans: 'a₄ = ' + (a + 3 * dd) + ', a₅ = ' + (a + 4 * dd) + ', a₆ = ' + (a + 5 * dd) + '; a₈ = ' + a8 + ' m; S' + n + ' = ' + Sn + ' m',
-        steps: withExtra('ap-case', [
+        steps: [
           st('a = ' + a + ', d = ' + dd + ' → a₄ = ' + (a + 3 * dd) + ', a₅ = ' + (a + 4 * dd) + ', a₆ = ' + (a + 5 * dd) + '.',
              'a = ' + a + ', d = ' + dd + ' → a₄ = ' + (a + 3 * dd) + ', a₅ = ' + (a + 4 * dd) + ', a₆ = ' + (a + 5 * dd) + '।'),
           st('a₈ = a + 7d = ' + a8 + ' m.', 'a₈ = a + 7d = ' + a8 + ' m।'),
           st('S' + n + ' = ' + n + '/2 [2(' + a + ') + (' + n + ' − 1)(' + dd + ')] = ' + Sn + ' m. (First ' + k + ' rounds only: S' + k + ' = ' + Sk + ' m.)',
              'S' + n + ' = ' + n + '/2 [2(' + a + ') + (' + n + ' − 1)(' + dd + ')] = ' + Sn + ' m। (केवल प्रथम ' + k + ' चक्कर : S' + k + ' = ' + Sk + ' m।)')
-        ]),
+        ],
         raw: { a: a, d: dd, n: n, Sn: Sn, a8: a8, Sk: Sk, k: k }
       };
     } });
@@ -1095,11 +459,11 @@ var T = [];
         hi: 'A.P. ' + a + ', ' + (a + dd) + ', ' + (a + 2 * dd) + ', … का कौन-सा पद ' + target + ' है?',
         ans: n + 'th term',
         ansHi: n + 'वाँ पद',
-        steps: withExtra('ap-which', [
+        steps: [
           st('Set aₙ = ' + target + ': ' + a + ' + (n − 1)(' + dd + ') = ' + target + '.',
              'aₙ = ' + target + ' रखिए : ' + a + ' + (n − 1)(' + dd + ') = ' + target + '।'),
           st('(n − 1) = ' + ((target - a) / dd) + ', so n = ' + n + '.', '(n − 1) = ' + ((target - a) / dd) + ', अतः n = ' + n + '।')
-        ]),
+        ],
         raw: { a: a, d: dd, n: n, target: target }
       };
     } });
@@ -1115,11 +479,11 @@ var T = [];
         hi: '△ABC ~ △DEF तथा AB = ' + k + ' DE है। तो ar(△ABC) : ar(△DEF) है :',
         opts: mcq(rng, k + '² : 1', [k + ' : 1', '1 : ' + k, k + ' : ' + k]),
         ans: k + '² : 1',
-        steps: withExtra('tri-similar', [
+        steps: [
           st('For similar triangles, the ratio of areas = (ratio of corresponding sides)².',
              'समरूप त्रिभुजों में, क्षेत्रफलों का अनुपात = (संगत भुजाओं के अनुपात) का वर्ग।'),
           st('Here the side ratio is ' + k + ' : 1, so the area ratio is ' + r + ' : 1.', 'यहाँ भुजा अनुपात ' + k + ' : 1 है, अतः क्षेत्रफल अनुपात ' + r + ' : 1 है।')
-        ]),
+        ],
         raw: { k: k, r: r }
       };
     } });
@@ -1134,10 +498,10 @@ var T = [];
         en: 'In △ABC, DE ∥ BC with AD = ' + ad + ' cm, DB = ' + db + ' cm and AE = ' + ae + ' cm. Find EC.',
         hi: '△ABC में, DE ∥ BC तथा AD = ' + ad + ' cm, DB = ' + db + ' cm और AE = ' + ae + ' cm है। EC ज्ञात कीजिए।',
         ans: ec + ' cm',
-        steps: withExtra('tri-bpt', [
+        steps: [
           st('By the Basic Proportionality Theorem, AD/DB = AE/EC.', 'आधारभूत समानुपातिकता प्रमेय से, AD/DB = AE/EC।'),
           st(ad + '/' + db + ' = ' + ae + '/EC ⟹ EC = ' + ec + ' cm.', ad + '/' + db + ' = ' + ae + '/EC ⟹ EC = ' + ec + ' cm।')
-        ]),
+        ],
         raw: { ad: ad, db: db, ae: ae, ec: ec }
       };
     } });
@@ -1151,17 +515,17 @@ var T = [];
       if (where === 'x-axis') { y1 = -ri(rng, 1, 6); y2 = -y1; x2 = x1 + 2 * ri(rng, 1, 5); }
       if (where === 'origin') { y1 = -ri(rng, 1, 6); y2 = -y1; }
       var mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
-      var truth = mx === 0 && my === 0 ? 'origin' : mx === 0 ? 'y-axis' : my === 0 ? 'x-axis' : 'neither x-axis nor y-axis';
+      var truth = mx === 0 && my === 0 ? 'origin' : mx === 0 ? 'y-axis only' : my === 0 ? 'x-axis only' : 'neither x-axis nor y-axis';
       return {
         en: 'The mid-point of the line segment joining P(' + fmt(x1) + ', ' + fmt(y1) + ') and Q(' + x2 + ', ' + y2 + ') lies on:',
         hi: 'बिंदुओं P(' + fmt(x1) + ', ' + fmt(y1) + ') तथा Q(' + x2 + ', ' + y2 + ') को मिलाने वाले रेखाखंड का मध्य-बिंदु स्थित है :',
-        opts: mcq(rng, truth, ['x-axis', 'y-axis', 'origin', 'neither x-axis nor y-axis']),
+        opts: mcq(rng, truth, ['x-axis only', 'y-axis only', 'origin', 'neither x-axis nor y-axis']),
         ans: truth,
-        steps: withExtra('coord-mid', [
+        steps: [
           st('Mid-point = ((x₁ + x₂)/2, (y₁ + y₂)/2) = (' + fmt(mx) + ', ' + fmt(my) + ').',
              'मध्य-बिंदु = ((x₁ + x₂)/2, (y₁ + y₂)/2) = (' + fmt(mx) + ', ' + fmt(my) + ')।'),
           st('So it lies on the ' + truth + '.', 'अतः यह ' + truth + ' पर स्थित है।')
-        ]),
+        ],
         raw: { x1: x1, y1: y1, x2: x2, y2: y2, mx: mx, my: my, truth: truth }
       };
     } });
@@ -1181,7 +545,7 @@ var T = [];
         hi: 'y-अक्ष उस रेखाखंड को किस अनुपात में विभाजित करता है जो (' + x1 + ', ' + y1
           + ') तथा (' + fmt(x2) + ', ' + y2 + ') को मिलाता है? प्रतिच्छेदन बिंदु भी ज्ञात कीजिए।',
         ans: mr + ' : ' + nr + ', point (0, ' + dec(y, 2) + ')',
-        steps: withExtra('coord-section', [
+        steps: [
           st('Let the y-axis divide it in m₁ : m₂. The x-coordinate must vanish: (m₁·' + fmt(x2) + ' + m₂·' + x1 + ')/(m₁ + m₂) = 0.',
              'मान लीजिए y-अक्ष इसे m₁ : m₂ में विभाजित करता है। x-निर्देशांक शून्य होना चाहिए : (m₁·' + fmt(x2) + ' + m₂·' + x1 + ')/(m₁ + m₂) = 0।'),
           st('So m₁ : m₂ = ' + x1 + ' : ' + (-x2) + ' = ' + mr + ' : ' + nr + '.',
@@ -1190,7 +554,7 @@ var T = [];
             + ', so the point is (0, ' + dec(y, 2) + ').',
             'y-निर्देशांक = (' + mr + '·' + y2 + ' + ' + nr + '·' + y1 + ')/' + (mr + nr) + ' = ' + dec(y, 2)
             + ', अतः बिंदु (0, ' + dec(y, 2) + ') है।')
-        ]),
+        ],
         raw: { x1: x1, x2: x2, y1: y1, y2: y2, m1: mr, m2: nr, y: y }
       };
     } });
@@ -1209,11 +573,11 @@ var T = [];
         hi: 'बिंदुओं (' + fmt(x1) + ', ' + fmt(y1) + ') तथा (' + fmt(x2) + ', ' + fmt(y2) + ') के बीच की दूरी है :',
         opts: mcq(rng, ans, ['√' + (dist2 + 1), String(dx + dy), '√' + Math.abs(dx * dx - dy * dy), String(nice + 1)]),
         ans: ans,
-        steps: withExtra('coord-dist', [
+        steps: [
           st('d = √[(x₂ − x₁)² + (y₂ − y₁)²] = √[' + dx + '² + ' + dy + '²] = √' + dist2 + '.',
              'd = √[(x₂ − x₁)² + (y₂ − y₁)²] = √[' + dx + '² + ' + dy + '²] = √' + dist2 + '।'),
           st('So d = ' + ans + '.', 'अतः d = ' + ans + '।')
-        ]),
+        ],
         raw: { x1: x1, y1: y1, x2: x2, y2: y2, dist2: dist2, ans: ans }
       };
     } });
@@ -1221,23 +585,26 @@ var T = [];
   /* ---------- 22. Trigonometry · standard angle equation ---------- */
   T.push({ id: 'trig-angle', ch: 8, marks: 1, dmin: 1, dmax: 2, fig: 'right-triangle',
     make: function (rng, d) {
-      var table = [[30, '1/2'], [45, '1/√2'], [60, '√3/2']];
-      var t = pick(rng, table), th = t[0], v = t[1];
-      var c = ri(rng, 2, 9);
-      var total = c + (th === 30 ? 1 : th === 45 ? 2 : 3); // keep the constant term integer-ish
-      var form = pick(rng, ['sin', 'cos']);
-      var base = form === 'sin'
-        ? { 30: '1/2', 45: '1/√2', 60: '√3/2' }
-        : { 30: '√3/2', 45: '1/√2', 60: '1/2' };
-      var chosen = pool(pick(rng, [30, 45, 60]));
-      function pool(x) { return x; }
+      var factor = pick(rng, [2, 4, 6]);
+      var c = ri(rng, 2, 9), form = pick(rng, ['sin', 'cos']), chosen = pick(rng, [30, 45, 60]);
+      // cos θ = sin(90° − θ). Build an exact RHS for the selected function.
+      var sineAngle = form === 'sin' ? chosen : 90 - chosen;
+      var root = {30: '', 45: '√2', 60: '√3'}[sineAngle];
+      var value = (root || '1') + '/2';
+      var rhs = root ? c + ' + ' + (factor === 2 ? '' : factor / 2) + root : String(c + factor / 2);
+      var equation = c + ' + ' + factor + ' ' + form + ' θ = ' + rhs;
       return {
-        en: 'If θ is an acute angle and ' + c + ' + 4 ' + form + ' θ = ' + (c + 4 * (chosen === 30 ? 0.5 : chosen === 45 ? 0.7071 : 0.866)).toFixed(3).replace(/0+$/,'').replace(/\.$/,'') + ' (rounded), then θ = ?',
-        hi: 'यदि θ न्यूनकोण है तथा ' + c + ' + 4 ' + form + ' θ = ' + (c + 4 * (chosen === 30 ? 0.5 : chosen === 45 ? 0.7071 : 0.866)).toFixed(3) + ' (लगभग), तो θ = ?',
+        en: 'If θ is an acute angle and ' + equation + ', then θ = ?',
+        hi: 'यदि θ न्यूनकोण है तथा ' + equation + ', तो θ = ?',
         opts: mcq(rng, chosen + '°', ['30°', '45°', '60°', '90°']),
         ans: chosen + '°',
-        steps: withExtra('trig-angle', [st('Standard values: sin 30° = ½, sin 45° = 1/√2, sin 60° = √3/2.', 'मानक मान : sin 30° = ½, sin 45° = 1/√2, sin 60° = √3/2।')]),
-        raw: { chosen: chosen, c: c }
+        steps: [
+          st('Subtract ' + c + ' and divide by ' + factor + ': ' + form + ' θ = ' + value + '.',
+             c + ' घटाएँ और ' + factor + ' से भाग दें: ' + form + ' θ = ' + value + '।'),
+          st(form + ' ' + chosen + '° = ' + value + ', so the acute angle θ = ' + chosen + '°.',
+             form + ' ' + chosen + '° = ' + value + ' है, इसलिए न्यूनकोण θ = ' + chosen + '°।')
+        ],
+        raw: { chosen: chosen, c: c, form: form, factor: factor }
       };
     } });
 
@@ -1256,11 +623,11 @@ var T = [];
         en: 'Evaluate: ' + it.ex + '.',
         hi: 'मान ज्ञात कीजिए : ' + it.ex + '।',
         ans: it.txt,
-        steps: withExtra('trig-eval', [
+        steps: [
           st('Substitute the standard values (sin 30° = ½, cos 60° = ½, tan 45° = 1, sec 30° = 2/√3 …).',
              'मानक मान रखिए (sin 30° = ½, cos 60° = ½, tan 45° = 1, sec 30° = 2/√3 …)।'),
           st('Simplify: the expression equals ' + it.txt + '.', 'सरलीकरण : व्यंजक का मान ' + it.txt + ' है।')
-        ]),
+        ],
         raw: { expr: it.ex, ans: it.txt }
       };
     } });
@@ -1284,11 +651,11 @@ var T = [];
         en: 'If ' + which + ' A = ' + given + ' (A acute), find ' + ask + ' A.',
         hi: 'यदि ' + which + ' A = ' + given + ' (A न्यूनकोण), तो ' + ask + ' A ज्ञात कीजिए।',
         ans: answers[ask],
-        steps: withExtra('trig-ratio', [
+        steps: [
           st('Draw a right triangle with opposite = ' + o + ', adjacent = ' + a + ', hypotenuse = ' + h + ' (scaled).',
              'समकोण त्रिभुज बनाइए जिसमें सम्मुख = ' + o + ', संलग्न = ' + a + ', कर्ण = ' + h + ' (मापित)।'),
           st(ask + ' A = ' + answers[ask] + '.', ask + ' A = ' + answers[ask] + '।')
-        ]),
+        ],
         raw: { tri: tri, which: which, ask: ask, ans: answers[ask] }
       };
     } });
@@ -1305,12 +672,12 @@ var T = [];
       var it = pick(rng, ids);
       return {
         en: it.en, hi: it.hi, ans: 'Identity proved', ansHi: 'सर्वसमिका सिद्ध',
-        steps: withExtra('trig-identity', [
+        steps: [
           st('Start from the more complicated side and convert everything to sin θ and cos θ.',
              'अधिक जटिल पक्ष से आरंभ कीजिए और सब कुछ sin θ तथा cos θ में बदलिए।'),
           st('Use sin²θ + cos²θ = 1 (or 1 + tan²θ = sec²θ) to collapse the expression to the other side.',
              'sin²θ + cos²θ = 1 (या 1 + tan²θ = sec²θ) का प्रयोग करके व्यंजक को दूसरे पक्ष तक सरल कीजिए।')
-        ]),
+        ],
         raw: { id: it.en }
       };
     } });
@@ -1329,12 +696,12 @@ var T = [];
         hi: 'एक पतंग ' + L + ' m की ऊँचाई पर उड़ रही है। डोरी क्षैतिज से ' + ang + '° का कोण बनाती है। डोरी की लंबाई है :',
         opts: mcq(rng, answerStr, [L / 2 + ' m', L + '√3 m', L + ' m', L + '√3/2 m']),
         ans: answerStr,
-        steps: withExtra('height-one', [
+        steps: [
           st('The height is the side opposite the angle; the string is the hypotenuse. sin ' + ang + '° = ' + L + '/string.',
              'ऊँचाई कोण की सम्मुख भुजा है; डोरी कर्ण है। sin ' + ang + '° = ' + L + '/डोरी।'),
           st('String = ' + L + ' / sin ' + ang + '° = ' + answerStr + '.',
              'डोरी = ' + L + ' / sin ' + ang + '° = ' + answerStr + '।')
-        ]),
+        ],
         raw: { ang: ang, L: L }
       };
     } });
@@ -1398,12 +765,12 @@ var T = [];
         : 'P से ' + r + ' cm त्रिज्या वाले वृत्त पर ' + t + ' cm लंबी स्पर्श-रेखा खींची गई है। OP की दूरी है :';
       return {
         en: en, hi: hi, ans: ans,
-        steps: withExtra('circ-tangent', [
+        steps: [
           st('The radius to the point of contact is perpendicular to the tangent, so △OAP is right-angled at A.',
              'स्पर्श बिंदु पर त्रिज्या स्पर्श-रेखा के लंबवत होती है, अतः △OAP बिंदु A पर समकोण है।'),
           st('OP² = OA² + AP² ⟹ ' + op + '² = ' + r + '² + ' + t + '². The required length is ' + ans + '.',
              'OP² = OA² + AP² ⟹ ' + op + '² = ' + r + '² + ' + t + '²। अभीष्ट लंबाई ' + ans + ' है।')
-        ]),
+        ],
         raw: { r: r, t: t, op: op, ask: ask }
       };
     } });
@@ -1411,30 +778,25 @@ var T = [];
   /* ---------- 29. Circles · angle at the point of contact ---------- */
   T.push({ id: 'circ-angle', ch: 10, marks: 1, dmin: 2, dmax: 3, fig: 'tangent-line',
     make: function (rng, d) {
-      /* P is outside; PA and PB are the two tangents, so OA bisects ∠AOB and
-         OA ⟂ PA.  In the right triangle OAP:
-              ∠APO = 90° − ∠AOP        and      ∠AOP = ∠AOB / 2 = ∠POB / 2.
-         The old code used ∠APO = ∠POB − 90°, which is simply not a relation
-         that holds; it produced angles like 28° for ∠POB = 118° when the true
-         value is 31°. */
-      var ang = ri(rng, 100, 150);          /* ∠POB */
+      // OP bisects the central angle AOB between the two radii of contact.
+      var ang = ri(rng, 100, 150);
       var half = ang / 2;
       var ans = 90 - half;
       return {
-        en: 'PA and PB are the two tangents from an external point P to a circle with centre O. If ∠POB = ' + ang + '°, then ∠APO equals:',
-        hi: 'बाह्य बिंदु P से केंद्र O वाले वृत्त पर PA तथा PB दो स्पर्श-रेखाएँ हैं। यदि ∠POB = ' + ang + '° है, तो ∠APO बराबर है :',
+        en: 'PA and PB are the two tangents from an external point P to a circle with centre O. If ∠AOB = ' + ang + '°, then ∠APO equals:',
+        hi: 'बाह्य बिंदु P से केंद्र O वाले वृत्त पर PA तथा PB दो स्पर्श-रेखाएँ हैं। यदि ∠AOB = ' + ang + '° है, तो ∠APO बराबर है :',
         opts: mcq(rng, ans + '°', [(180 - ang) + '°', '90°', ang + '°']),
         ans: ans + '°',
-        steps: withExtra('circ-angle', [
+        steps: [
           st('OA ⟂ PA, because the radius to the point of contact is perpendicular to the tangent — so ∠OAP = 90°.',
              'OA ⟂ PA, क्योंकि स्पर्श-बिंदु पर त्रिज्या स्पर्श-रेखा के लंबवत होती है — अतः ∠OAP = 90°।'),
-          st('OA bisects ∠AOB (the two tangents are symmetric about OP), so ∠AOP = ∠POB / 2 = ' + ang + '° / 2 = ' + half + '°.',
-             'OA, ∠AOB को समद्विभाजित करता है (दोनों स्पर्श-रेखाएँ OP के परितः सममित हैं), अतः ∠AOP = ∠POB / 2 = ' + ang + '° / 2 = ' + half + '°।'),
+          st('OP bisects ∠AOB (the two tangents are symmetric about OP), so ∠AOP = ∠AOB / 2 = ' + ang + '° / 2 = ' + half + '°.',
+             'OP, ∠AOB को समद्विभाजित करता है (दोनों स्पर्श-रेखाएँ OP के परितः सममित हैं), अतः ∠AOP = ∠AOB / 2 = ' + ang + '° / 2 = ' + half + '°।'),
           st('Angles of △OAP add to 180°: ∠APO = 180° − 90° − ' + half + '° = ' + ans + '°.',
              '△OAP के कोणों का योग 180° है: ∠APO = 180° − 90° − ' + half + '° = ' + ans + '°।'),
           st('Check: ∠APO + ∠AOP = ' + ans + '° + ' + half + '° = 90°, as a right triangle requires.',
              'जाँच: ∠APO + ∠AOP = ' + ans + '° + ' + half + '° = 90°, जैसा समकोण त्रिभुज में होना चाहिए।')
-        ]),
+        ],
         raw: { ang: ang, ans: ans, half: half }
       };
     } });
@@ -1453,12 +815,12 @@ var T = [];
       var p = pick(rng, props);
       return {
         en: p.en, hi: p.hi, ans: 'Proof (standard theorem)', ansHi: 'सिद्धि (मानक प्रमेय)',
-        steps: withExtra('circ-proof', [
+        steps: [
           st('Use the right-angle-at-contact property, then congruent triangles (RHS) or equal tangent segments from the same point.',
              'स्पर्श बिंदु पर समकोण का गुण प्रयोग कीजिए, फिर सर्वांगसम त्रिभुज (RHS) या एक ही बिंदु से बराबर स्पर्श खंड।'),
           st('Always label the point of contact — every step of these proofs depends on it.',
              'स्पर्श बिंदु को अवश्य नाम दीजिए — इन सिद्धियों का प्रत्येक चरण उसी पर निर्भर है।')
-        ]),
+        ],
         raw: { p: p.en }
       };
     } });
@@ -1483,10 +845,10 @@ var T = [];
           (Number.isInteger(r2) ? r2 : r2) + 'π sq units'
         ]),
         ans: ans,
-        steps: withExtra('area-sector', [
+        steps: [
           st('Area of sector = (θ/360°) × πr².', 'त्रिज्यखंड का क्षेत्रफल = (θ/360°) × πr²।'),
           st('= (' + ang + '/360) × π × ' + r + '² = ' + ans + '.', '= (' + ang + '/360) × π × ' + r + '² = ' + ans + '।')
-        ]),
+        ],
         raw: { ang: ang, r: r, ansVal: ansVal }
       };
     } });
@@ -1495,20 +857,19 @@ var T = [];
   T.push({ id: 'area-arc', ch: 11, marks: 2, dmin: 2, dmax: 3, fig: 'sector',
     make: function (rng, d) {
       var ang = pick(rng, [30, 45, 60, 72, 90, 120]);
-      var rCoef = pick(rng, [7, 14, 21, 10, 5]);      // with π = 22/7, arc = (θ/180)·π·r
-      var arcCoef = ang * rCoef / 180;                // in units of π
+      var r = pick(rng, [7, 14, 21, 10, 5]);
+      var coef = simp(ang * r, 180); // arc length = (θ/180°)πr
+      var arc = (coef[0] === 1 ? '' : coef[0]) + 'π' + (coef[1] === 1 ? '' : '/' + coef[1]);
       return {
-        en: 'A piece of wire ' + dec(arcCoef * 22 / 7, 2) + ' cm long is bent into an arc of a circle of radius '
-          + dec(rCoef * 22 / 7, 2) + ' cm. The angle subtended at the centre is:',
-        hi: dec(arcCoef * 22 / 7, 2) + ' cm लंबा तार ' + dec(rCoef * 22 / 7, 2)
-          + ' cm त्रिज्या वाले वृत्त के चाप के रूप में मोड़ा गया है। केंद्र पर अंतरित कोण है :',
-        opts: mcq(rng, ang + '°', [(ang + 30) + '°', Math.abs(ang - 30) + '°', (ang * 2) + '°']),
+        en: 'A piece of wire ' + arc + ' cm long is bent into an arc of a circle of radius ' + r + ' cm. The angle subtended at the centre is:',
+        hi: arc + ' cm लंबा तार ' + r + ' cm त्रिज्या वाले वृत्त के चाप के रूप में मोड़ा गया है। केंद्र पर अंतरित कोण है :',
+        opts: mcq(rng, ang + '°', [(ang + 30) + '°', Math.abs(ang - 30) + '°', (ang * 2) + '°', (ang + 45) + '°']),
         ans: ang + '°',
-        steps: withExtra('area-arc', [
+        steps: [
           st('Arc length = (θ/360°) × 2πr ⟹ θ = 360° × l / (2πr).', 'चाप लंबाई = (θ/360°) × 2πr ⟹ θ = 360° × l / (2πr)।'),
-          st('With the given wire and radius, θ = ' + ang + '°.', 'दिए गए तार तथा त्रिज्या से θ = ' + ang + '°।')
-        ]),
-        raw: { ang: ang, rCoef: rCoef, arcCoef: arcCoef }
+          st('θ = 180° × (' + arc + ') / (' + r + 'π) = ' + ang + '°.', 'θ = 180° × (' + arc + ') / (' + r + 'π) = ' + ang + '°।')
+        ],
+        raw: { ang: ang, r: r }
       };
     } });
 
@@ -1529,12 +890,12 @@ var T = [];
         hi: 'एक ब्रोच में ' + dia + ' mm व्यास के वृत्त के रूप में चाँदी का तार है, ' + nd
           + ' व्यास वृत्त को ' + sectors + ' बराबर त्रिज्यखंडों में बाँटते हैं। (i) केंद्रीय कोण (ii) एक त्रिज्यखंड के चाप की लंबाई (iii) प्रत्येक त्रिज्यखंड का क्षेत्रफल अथवा कुल तार।',
         ans: 'θ = ' + ang + '°; arc ≈ ' + dec(arc, 2) + ' mm; area ≈ ' + dec(area, 2) + ' mm²; wire ≈ ' + dec(wire, 2) + ' mm',
-        steps: withExtra('area-case', [
+        steps: [
           st('Each sector is 360°/' + sectors + ' = ' + ang + '.', 'प्रत्येक त्रिज्यखंड 360°/' + sectors + ' = ' + ang + ' है।'),
           st('Arc = (θ/360) × 2πr ≈ ' + dec(arc, 2) + ' mm.', 'चाप = (θ/360) × 2πr ≈ ' + dec(arc, 2) + ' mm।'),
           st('Area = (θ/360) × πr² ≈ ' + dec(area, 2) + ' mm². Total wire = circumference + ' + nd + ' diameters ≈ ' + dec(wire, 2) + ' mm.',
              'क्षेत्रफल = (θ/360) × πr² ≈ ' + dec(area, 2) + ' mm²। कुल तार = परिधि + ' + nd + ' व्यास ≈ ' + dec(wire, 2) + ' mm।')
-        ]),
+        ],
         raw: { dia: dia, nd: nd, sectors: sectors, ang: ang, arc: arc, area: area, wire: wire }
       };
     } });
@@ -1552,12 +913,12 @@ var T = [];
         hi: 'एक कमरा बेलन के ऊपर अर्धगोलाकार गुंबद के रूप में है; अर्धगोले की त्रिज्या बेलन की ऊँचाई की आधी है। '
           + 'यदि कमरे में ' + dec(vol, 2) + ' m³ हवा है, तो बेलन की ऊँचाई ज्ञात कीजिए। (π = 22/7)',
         ans: 'h = ' + h + ' m',
-        steps: withExtra('solid-dome', [
+        steps: [
           st('V = πr²h + (2/3)πr³ and h = 2r, so V = πr²(2r) + (2/3)πr³ = (8/3)πr³.',
              'V = πr²h + (2/3)πr³ तथा h = 2r, अतः V = πr²(2r) + (2/3)πr³ = (8/3)πr³।'),
           st('Solving with V = ' + dec(vol, 2) + ' m³ gives r = ' + r + ' m, hence h = 2r = ' + h + ' m.',
              'V = ' + dec(vol, 2) + ' m³ रखने पर r = ' + r + ' m, अतः h = 2r = ' + h + ' m।')
-        ]),
+        ],
         raw: { r: r, h: h, vol: vol }
       };
     } });
@@ -1574,10 +935,10 @@ var T = [];
         hi: 'त्रिज्या ' + r + ' cm तथा ऊँचाई ' + h + ' cm की एक बेलनाकार टंकी पानी से भरी है। उसकी धारिता लगभग (लीटर में, π = 22/7) है :',
         opts: mcq(rng, dec(v / 1000, 2) + ' L', [dec(v / 100, 2) + ' L', dec(v / 10000, 2) + ' L', dec(v / 1000 * 2, 2) + ' L']),
         ans: dec(v / 1000, 2) + ' L',
-        steps: withExtra('solid-mix', [
+        steps: [
           st('V = πr²h = (22/7) × ' + r + '² × ' + h + ' cm³.', 'V = πr²h = (22/7) × ' + r + '² × ' + h + ' cm³।'),
           st('1 litre = 1000 cm³, so the capacity is ' + dec(v / 1000, 2) + ' L.', '1 लीटर = 1000 cm³, अतः धारिता ' + dec(v / 1000, 2) + ' L है।')
-        ]),
+        ],
         raw: { r: r, h: h, v: v }
       };
     } });
@@ -1605,10 +966,10 @@ var T = [];
           : 'किसी आँकड़े का बहुलक तथा माध्यिका क्रमशः ' + mode + ' और ' + median + ' हैं। माध्य है :',
         opts: mcq(rng, String(ans), [String(ans + 3), String(ans - 3), String(ans * 2)]),
         ans: String(ans),
-        steps: withExtra('stat-relation', [
+        steps: [
           st('Empirical relation: Mode = 3 Median − 2 Mean.', 'आनुभविक संबंध : बहुलक = 3 माध्यिका − 2 माध्य।'),
           st('Substituting gives ' + ask + ' = ' + ans + '.', 'मान रखने पर ' + ask + ' = ' + ans + '।')
-        ]),
+        ],
         raw: { mean: mean, median: median, mode: mode, ans: ans, ask: ask }
       };
     } });
@@ -1642,11 +1003,11 @@ var T = [];
         hi: 'यदि निम्न बंटन का माध्य ' + dec(actualMean, 2) + ' है तो लुप्त बारंबारता x ज्ञात कीजिए : '
           + classes.map(function (c, i) { return c[0] + '–' + c[1] + ' : ' + f[i]; }).join(', ').replace(' : ' + x + ',', ' : x,'),
         ans: 'x = ' + x,
-        steps: withExtra('stat-missing', [
+        steps: [
           st('Make the table of mid-points xᵢ and fᵢxᵢ, then use mean = Σfᵢxᵢ / Σfᵢ = ' + dec(actualMean, 2) + '.',
              'मध्य-बिंदु xᵢ तथा fᵢxᵢ की सारणी बनाइए, फिर माध्य = Σfᵢxᵢ / Σfᵢ = ' + dec(actualMean, 2) + ' का प्रयोग कीजिए।'),
           st('Solving the single linear equation in x gives x = ' + x + '.', 'x में एक रैखिक समीकरण हल करने पर x = ' + x + ' प्राप्त होता है।')
-        ]),
+        ],
         raw: { classes: classes, f: f, mids: mids, x: x, k: k, mean: actualMean }
       };
     } });
@@ -1666,12 +1027,12 @@ var T = [];
       return {
         en: 'A card is drawn at random from a well-shuffled deck of 52 cards. The probability of getting ' + c.en + ' is:',
         hi: '52 पत्तों की अच्छी प्रकार फेंटी गई गड्डी से यादृच्छया एक पत्ता निकाला जाता है। ' + c.hi + ' प्राप्त होने की प्रायिकता है :',
-        opts: mcq(rng, p, [fr(c.n + 2, c.den), fr(c.n, 26), fr(Math.max(1, c.n - 2), c.den), fr(c.n * 2, c.den)]),
+        opts: mcq(rng, p, [fr(c.n + 2, c.den), fr(c.n, 26), fr(Math.max(1, c.n - 2), c.den), fr(c.n + 1, c.den)]),
         ans: p,
-        steps: withExtra('prob-card', [
+        steps: [
           st('Favourable outcomes = ' + c.n + '; total outcomes = 52.', 'अनुकूल परिणाम = ' + c.n + '; कुल परिणाम = 52।'),
           st('P = ' + c.n + '/52 = ' + p + '.', 'P = ' + c.n + '/52 = ' + p + '।')
-        ]),
+        ],
         raw: { n: c.n, den: c.den, ans: p }
       };
     } });
@@ -1693,10 +1054,10 @@ var T = [];
         hi: 'दो पासे एक साथ फेंके जाते हैं। दोनों संख्याओं का ' +
           (mode === 'diff' ? 'अंतर' : mode === 'sum' ? 'योग' : 'गुणनफल') + ' ' + target + ' होने की प्रायिकता ज्ञात कीजिए।',
         ans: p,
-        steps: withExtra('prob-dice', [
+        steps: [
           st('Total outcomes = 6 × 6 = 36; count the favourable pairs on the grid.', 'कुल परिणाम = 6 × 6 = 36; ग्रिड पर अनुकूल युग्म गिनिए।'),
           st('Favourable pairs = ' + count + ' ⟹ P = ' + count + '/36 = ' + p + '.', 'अनुकूल युग्म = ' + count + ' ⟹ P = ' + count + '/36 = ' + p + '।')
-        ]),
+        ],
         raw: { mode: mode, target: target, count: count, ans: p }
       };
     } });
@@ -1711,11 +1072,11 @@ var T = [];
         en: 'A bag contains ' + r + ' red, ' + w + ' white and ' + bl + ' black balls. One ball is drawn at random. Find the probability that it is (i) red (ii) not black.',
         hi: 'एक थैले में ' + r + ' लाल, ' + w + ' सफेद तथा ' + bl + ' काली गेंदें हैं। यादृच्छया एक गेंद निकाली जाती है। प्रायिकता ज्ञात कीजिए कि वह (i) लाल है (ii) काली नहीं है।',
         ans: pR + ' and ' + pNotB,
-        steps: withExtra('prob-bag', [
+        steps: [
           st('Total balls = ' + r + ' + ' + w + ' + ' + bl + ' = ' + tot + '.', 'कुल गेंदें = ' + r + ' + ' + w + ' + ' + bl + ' = ' + tot + '।'),
           st('P(red) = ' + r + '/' + tot + ' = ' + pR + '.', 'P(लाल) = ' + r + '/' + tot + ' = ' + pR + '।'),
           st('P(not black) = 1 − P(black) = 1 − ' + bl + '/' + tot + ' = ' + pNotB + '.', 'P(काली नहीं) = 1 − P(काली) = 1 − ' + bl + '/' + tot + ' = ' + pNotB + '।')
-        ]),
+        ],
         raw: { r: r, w: w, b: bl, tot: tot }
       };
     } });
@@ -1746,14 +1107,14 @@ var T = [];
         hi: 'एक रेलगाड़ी ' + D + ' km की दूरी समान चाल से तय करती है। यदि चाल ' + g2
           + ' km/h कम होती तो उसे ' + t + ' घंटे अधिक लगते। रेलगाड़ी की चाल ज्ञात कीजिए।',
         ans: v + ' km/h',
-        steps: withExtra('quad-train', [
+        steps: [
           st('Let the speed be v. Then ' + D + '/v and ' + D + '/(v − ' + g2 + ') differ by ' + t + ' hours.',
              'मान लीजिए चाल v है। तब ' + D + '/v तथा ' + D + '/(v − ' + g2 + ') में ' + t + ' घंटे का अंतर है।'),
           st('Multiply out: ' + t + 'v² − ' + (t * g2) + 'v − ' + (D * g2) + ' = 0, a quadratic in v.',
              'गुणा करने पर : ' + t + 'v² − ' + (t * g2) + 'v − ' + (D * g2) + ' = 0, जो v में द्विघात है।'),
           st('The positive root is v = ' + v + ' km/h (the negative root is rejected).',
              'धनात्मक मूल v = ' + v + ' km/h है (ऋणात्मक मूल अमान्य)।')
-        ]),
+        ],
         raw: { D: D, v: v, g: g2, t: t }
       };
     } });
@@ -1768,12 +1129,12 @@ var T = [];
         en: 'Find the sum of the first ' + n + ' positive multiples of ' + k + '.',
         hi: 'संख्याओं ' + k + ' के प्रथम ' + n + ' धन गुणजों का योग ज्ञात कीजिए।',
         ans: fmt(S),
-        steps: withExtra('ap-multiples', [
+        steps: [
           st('The multiples ' + k + ', ' + (2 * k) + ', ' + (3 * k) + ', … form an AP with a = ' + k + ' and d = ' + k + '.',
              'गुणज ' + k + ', ' + (2 * k) + ', ' + (3 * k) + ', … एक A.P. हैं जिसमें a = ' + k + ' तथा d = ' + k + ' है।'),
           st('Sₙ = n/2 [2a + (n − 1)d] = ' + n + '/2 [2(' + k + ') + (' + n + ' − 1)(' + k + ')] = ' + fmt(S) + '.',
              'Sₙ = n/2 [2a + (n − 1)d] = ' + n + '/2 [2(' + k + ') + (' + n + ' − 1)(' + k + ')] = ' + fmt(S) + '।')
-        ]),
+        ],
         raw: { k: k, n: n, S: S }
       };
     } });
@@ -1796,12 +1157,12 @@ var T = [];
         hi: 'निम्न बंटन का माध्य ज्ञात कीजिए : '
           + classes.map(function (c, i) { return c[0] + '–' + c[1] + ' : ' + f[i]; }).join(', ') + '।',
         ans: 'mean ≈ ' + dec(mean, 2),
-        steps: withExtra('stat-mean', [
+        steps: [
           st('Take the mid-point of each class as xᵢ and build the fᵢxᵢ column.',
              'प्रत्येक वर्ग के मध्य-बिंदु को xᵢ मानिए तथा fᵢxᵢ का स्तंभ बनाइए।'),
           st('Σfᵢ = ' + sumF + ', Σfᵢxᵢ = ' + sumFx + ' ⟹ mean = ' + dec(mean, 2) + '.',
              'Σfᵢ = ' + sumF + ', Σfᵢxᵢ = ' + sumFx + ' ⟹ माध्य = ' + dec(mean, 2) + '।')
-        ]),
+        ],
         raw: { classes: classes, f: f, sumF: sumF, sumFx: sumFx, mean: mean }
       };
     } });
@@ -1817,12 +1178,12 @@ var T = [];
         en: 'A toy is a cone of radius ' + r + ' cm and height ' + h + ' cm mounted on a hemisphere of the same radius. Find its total surface area (π = 22/7) and the slant height.',
         hi: 'एक खिलौना ' + r + ' cm त्रिज्या तथा ' + h + ' cm ऊँचाई वाले शंकु के रूप में है जो उसी त्रिज्या के अर्धगोले पर रखा है। इसका कुल पृष्ठीय क्षेत्रफल (π = 22/7) तथा तिर्यक ऊँचाई ज्ञात कीजिए।',
         ans: 'l = ' + l + ' cm, TSA = ' + dec(area, 2) + ' cm²',
-        steps: withExtra('solid-toy', [
+        steps: [
           st('Slant height l = √(r² + h²) = √(' + r + '² + ' + h + '²) = ' + l + ' cm.',
              'तिर्यक ऊँचाई l = √(r² + h²) = √(' + r + '² + ' + h + '²) = ' + l + ' cm।'),
           st('TSA = πrl + 2πr² = πr(l + 2r) = ' + dec(area, 2) + ' cm².',
              'TSA = πrl + 2πr² = πr(l + 2r) = ' + dec(area, 2) + ' cm²।')
-        ]),
+        ],
         raw: { r: r, h: h, l: l, area: area }
       };
     } });
@@ -1844,12 +1205,12 @@ var T = [];
         hi: 'एक चतुर्भुज ABCD एक वृत्त को परिगत करता है, जिसमें AB = ' + a + ' cm, BC = ' + b
           + ' cm तथा CD = ' + c + ' cm है। AD तथा परिमाप ज्ञात कीजिए।',
         ans: 'AD = ' + dd + ' cm, perimeter = ' + per + ' cm',
-        steps: withExtra('circ-quad', [
+        steps: [
           st('Equal tangents from each vertex give AB + CD = BC + AD.',
              'प्रत्येक शीर्ष से बराबर स्पर्श-खंड मिलते हैं, अतः AB + CD = BC + AD।'),
           st('AD = ' + a + ' + ' + c + ' − ' + b + ' = ' + dd + ' cm; perimeter = ' + per + ' cm.',
              'AD = ' + a + ' + ' + c + ' − ' + b + ' = ' + dd + ' cm; परिमाप = ' + per + ' cm।')
-        ]),
+        ],
         raw: { a: a, b: b, c: c, d: dd, per: per }
       };
     } });
@@ -1865,13 +1226,13 @@ var T = [];
         hi: 'एक खेल की दुकान पर थैले में ' + r + ' लाल, ' + w + ' सफेद, ' + bl + ' काली तथा ' + gr
           + ' हरी गोलियाँ हैं। खिलाड़ी बिना देखे एक गोली निकालता है। (i) P(लाल) (ii) P(सफेद नहीं) (iii) P(लाल या हरी)।',
         ans: 'P(red) = ' + fr(r, tot) + ', P(not white) = ' + fr(tot - w, tot) + ', P(red or green) = ' + fr(r + gr, tot),
-        steps: withExtra('prob-case', [
+        steps: [
           st('Total tokens = ' + tot + '.', 'कुल गोलियाँ = ' + tot + '।'),
           st('P(red) = ' + fr(r, tot) + '; P(not white) = 1 − ' + fr(w, tot) + ' = ' + fr(tot - w, tot) + '.',
              'P(लाल) = ' + fr(r, tot) + '; P(सफेद नहीं) = 1 − ' + fr(w, tot) + ' = ' + fr(tot - w, tot) + '।'),
           st('P(red or green) = (' + r + ' + ' + gr + ')/' + tot + ' = ' + fr(r + gr, tot) + '.',
              'P(लाल या हरी) = (' + r + ' + ' + gr + ')/' + tot + ' = ' + fr(r + gr, tot) + '।')
-        ]),
+        ],
         raw: { r: r, w: w, b: bl, g: gr, tot: tot }
       };
     } });
@@ -1887,10 +1248,10 @@ var T = [];
         hi: '△ABC ~ △PQR तथा AB : PQ = 1 : ' + k + ' है। यदि ar(△ABC) = ' + A1 + ' cm², तो ar(△PQR) है :',
         opts: mcq(rng, A2 + ' cm²', [(A1 * k) + ' cm²', (A1 + k) + ' cm²', (A1 * k * k + A1) + ' cm²']),
         ans: A2 + ' cm²',
-        steps: withExtra('tri-area', [
+        steps: [
           st('Ratio of areas = (ratio of sides)² = 1 : ' + (k * k) + '.', 'क्षेत्रफलों का अनुपात = (भुजाओं के अनुपात)² = 1 : ' + (k * k) + '।'),
           st('ar(△PQR) = ' + (k * k) + ' × ' + A1 + ' = ' + A2 + ' cm².', 'ar(△PQR) = ' + (k * k) + ' × ' + A1 + ' = ' + A2 + ' cm²।')
-        ]),
+        ],
         raw: { k: k, A1: A1, A2: A2 }
       };
     } });
@@ -1909,13 +1270,13 @@ var T = [];
           + ' spherical scoops of radius r/2. Then h : r equals:',
         hi: 'त्रिज्या r तथा ऊँचाई h वाला आइसक्रीम शंकु r/2 त्रिज्या के ' + n
           + ' गोलाकार स्कूपों से ठीक-ठीक भरा है। तब h : r है :',
-        opts: mcq(rng, truth, [(2 * n) + ' : 2', n + ' : 1', (n + 1) + ' : 2']),
+        opts: mcq(rng, truth, [(n - 1) + ' : 2', n + ' : 1', (n + 1) + ' : 2']),
         ans: truth,
-        steps: withExtra('solid-scoop', [
+        steps: [
           st('Cone volume = (1/3)πr²h. One scoop = (4/3)π(r/2)³ = πr³/6.', 'शंकु का आयतन = (1/3)πr²h। एक स्कूप = (4/3)π(r/2)³ = πr³/6।'),
           st('Equating: (1/3)πr²h = ' + n + '·πr³/6 ⟹ h = ' + n + 'r/2, i.e. h : r = ' + n + ' : 2.',
              'बराबर करने पर : (1/3)πr²h = ' + n + '·πr³/6 ⟹ h = ' + n + 'r/2, अर्थात् h : r = ' + n + ' : 2।')
-        ]),
+        ],
         raw: { n: n, hOverR: hOverR }
       };
     } });
@@ -1926,7 +1287,7 @@ var T = [];
       var n = pick(rng, [3, 4, 5]);
       /* jar = cylinder r, height 2nr ; air = 2nπr³ − n(4/3)πr³ = (2n/3)πr³ */
       var coef = 2 * n / 3;
-      var truth = (Number.isInteger(coef) ? coef : coef.toFixed(1)) + 'πr³';
+      var truth = (Number.isInteger(coef) ? coef : '(' + fr(2 * n, 3) + ')') + 'πr³';
       return {
         en: n + ' cricket balls are just packed in a cylindrical jar. If the radius of each ball is r, the volume of air inside the jar is:',
         hi: 'एक बेलनाकार जार में ' + n + ' क्रिकेट गेंदें ठीक-ठीक भरी हैं। यदि प्रत्येक गेंद की त्रिज्या r है, तो जार में हवा का आयतन है :',
@@ -1935,8 +1296,8 @@ var T = [];
         steps: [
           st('The jar has radius r and height 2 × ' + n + 'r = ' + (2 * n) + 'r, so V(jar) = ' + (2 * n) + 'πr³.',
              'जार की त्रिज्या r तथा ऊँचाई 2 × ' + n + 'r = ' + (2 * n) + 'r है, अतः V(जार) = ' + (2 * n) + 'πr³।'),
-          st('Balls take ' + n + ' × (4/3)πr³ = ' + (4 * n / 3) + 'πr³, so air = ' + truth + '.',
-             'गेंदें ' + n + ' × (4/3)πr³ = ' + (4 * n / 3) + 'πr³ लेती हैं, अतः हवा = ' + truth + '।')
+          st('Balls take ' + n + ' × (4/3)πr³ = (' + fr(4 * n, 3) + ')πr³, so air = ' + truth + '.',
+             'गेंदें ' + n + ' × (4/3)πr³ = (' + fr(4 * n, 3) + ')πr³ लेती हैं, अतः हवा = ' + truth + '।')
         ],
         raw: { n: n, coef: coef }
       };
@@ -1946,7 +1307,7 @@ var T = [];
   T.push({ id: 'trig-decimal', ch: 8, marks: 1, dmin: 1, dmax: 2, fig: null,
     make: function (rng, d) {
       var items = [
-        { en: 'sin 37° + cos 53°', hi: 'sin 37° + cos 53°', v: 1.2 },
+        { en: 'sin 37° + cos 53° (to one decimal place)', hi: 'sin 37° + cos 53° (एक दशमलव स्थान तक)', v: 1.2, working: 'cos 53° = sin 37°,  2 sin 37° ≈ 1.2' },
         { en: 'tan 45° + sec 60°', hi: 'tan 45° + sec 60°', v: 3 },
         { en: 'sin 30° · cos 60° + cos 30° · sin 60°', hi: 'sin 30° · cos 60° + cos 30° · sin 60°', v: 1 },
         { en: 'cosec 30° − 2 sin 45° · cos 45°', hi: 'cosec 30° − 2 sin 45° · cos 45°', v: 1 },
@@ -1956,9 +1317,9 @@ var T = [];
       var val = String(it.v);
       return {
         en: 'The value of ' + it.en + ' is:', hi: it.en + ' का मान है :',
-        opts: mcq(rng, val, [String(it.v + 1), String(it.v / 2), (it.v === 1 ? '2' : '1')]),
+        opts: mcq(rng, val, [String(it.v + 1), String(it.v / 2), (it.v === 1 ? '0' : '1')]),
         ans: val,
-        steps: [
+        steps: it.working ? [st(it.working + '.', it.working + '।')] : [
           st('Use the standard values (sin 30° = ½, tan 45° = 1, sec 60° = 2 …) and simplify.',
              'मानक मान रखिए (sin 30° = ½, tan 45° = 1, sec 60° = 2 …) और सरल कीजिए।'),
           st('The expression equals ' + val + '.', 'व्यंजक का मान ' + val + ' है।')
@@ -1981,10 +1342,10 @@ var T = [];
           + ' cm² है (π = 22/7)। केंद्रीय कोण का मान है :',
         opts: mcq(rng, ang + '°', [(ang / 2) + '°', (ang * 2) + '°', (ang + 10) + '°']),
         ans: ang + '°',
-        steps: withExtra('area-angle', [
+        steps: [
           st('Area = (θ/360)(22/7)r², so θ = 360 × area × 7 / (22 r²).', 'क्षेत्रफल = (θ/360)(22/7)r², अतः θ = 360 × क्षेत्रफल × 7 / (22 r²)।'),
           st('Substituting gives θ = ' + ang + '°.', 'मान रखने पर θ = ' + ang + '° प्राप्त होता है।')
-        ]),
+        ],
         raw: { ang: ang, r: r, area: round }
       };
     } });
@@ -2003,12 +1364,12 @@ var T = [];
         hi: 'त्रिज्या ' + r + ' cm वाले वृत्त में जीवा केंद्र पर ' + th
           + '° का कोण अंतरित करती है। लघु वृत्तखंड का परिमाप ज्ञात कीजिए (π = 22/7, √2 = 1·41, √3 = 1·73)।',
         ans: '≈ ' + dec(per, 2) + ' cm',
-        steps: withExtra('seg-perimeter', [
+        steps: [
           st('Arc = (θ/360)·2πr = ' + dec(arc, 2) + ' cm.', 'चाप = (θ/360)·2πr = ' + dec(arc, 2) + ' cm।'),
           st('Chord = 2r sin(θ/2) = ' + dec(chord, 2) + ' cm.', 'जीवा = 2r sin(θ/2) = ' + dec(chord, 2) + ' cm।'),
           st('Perimeter of the segment = arc + chord ≈ ' + dec(per, 2) + ' cm.',
              'वृत्तखंड का परिमाप = चाप + जीवा ≈ ' + dec(per, 2) + ' cm।')
-        ]),
+        ],
         raw: { r: r, th: th, arc: arc, chord: chord, per: per }
       };
     } });
@@ -2030,13 +1391,13 @@ var T = [];
         hi: 'एक नाव शांत जल में ' + b + ' km/h चलती है। वह ' + up + ' km धारा के विपरीत तथा ' + down
           + ' km धारा के अनुकूल ' + t + ' घंटे में जाती है। धारा की चाल ज्ञात कीजिए।',
         ans: x + ' km/h',
-        steps: withExtra('quad-stream', [
+        steps: [
           st('Upstream speed = (b − x), downstream speed = (b + x). The time equation is ' + up + '/(b − x) + ' + down + '/(b + x) = ' + t + '.',
              'धारा के विपरीत चाल = (b − x), अनुकूल चाल = (b + x)। समय समीकरण : ' + up + '/(b − x) + ' + down + '/(b + x) = ' + t + '।'),
           st('Clearing denominators gives a quadratic in x; the positive root is x = ' + x
             + ' km/h (the negative root is rejected).',
              'हरों को हटाने पर x में द्विघात मिलता है; धनात्मक मूल x = ' + x + ' km/h है (ऋणात्मक मूल अमान्य)।')
-        ]),
+        ],
         raw: { b: b, up: up, down: down, t: t, x: x }
       };
     } });
@@ -2055,12 +1416,12 @@ var T = [];
           + '. The square of the smaller number is ' + mult + ' times the greater number. Find the two numbers.',
         hi: 'दो धन संख्याओं के वर्गों का अंतर ' + diff + ' है। छोटी संख्या का वर्ग बड़ी संख्या का ' + mult + ' गुना है। दोनों संख्याएँ ज्ञात कीजिए।',
         ans: ans,
-        steps: withExtra('quad-squares', [
+        steps: [
           st('Let the smaller be s and the greater be g. Then s² = ' + mult + 'g and g² − s² = ' + diff + '.',
              'मान लीजिए छोटी संख्या s तथा बड़ी g है। तब s² = ' + mult + 'g तथा g² − s² = ' + diff + '।'),
           st('Substituting gives g² − ' + mult + 'g − ' + diff + ' = 0, so g = ' + big + ' and s = ' + small + '.',
              'मान रखने पर g² − ' + mult + 'g − ' + diff + ' = 0, अतः g = ' + big + ' तथा s = ' + small + '।')
-        ]),
+        ],
         raw: { small: small, big: big, mult: mult, diff: diff }
       };
     } });
@@ -2121,12 +1482,12 @@ var T = [];
         hi: 'PT त्रिज्या ' + r + ' cm वाले वृत्त पर स्पर्श-रेखा है। OP वृत्त को Q पर काटता है। यदि PQ = x है, तो PT² बराबर है :',
         opts: mcq(rng, 'x² + ' + (2 * r) + 'x', ['x² + ' + r + 'x', 'x² + ' + (2 * r) + 'x + ' + (r * r), 'x² − ' + (r * r)]),
         ans: 'x² + ' + (2 * r) + 'x',
-        steps: withExtra('circ-pt2', [
+        steps: [
           st('OP = x + ' + r + ', and radius ⟂ tangent gives PT² = OP² − OQ².',
              'OP = x + ' + r + ', तथा त्रिज्या ⟂ स्पर्श-रेखा से PT² = OP² − OQ²।'),
           st('PT² = (x + ' + r + ')² − ' + r + '² = x² + ' + (2 * r) + 'x.',
              'PT² = (x + ' + r + ')² − ' + r + '² = x² + ' + (2 * r) + 'x।')
-        ]),
+        ],
         raw: { r: r }
       };
     } });
@@ -2140,14 +1501,14 @@ var T = [];
       return {
         en: 'In △ABC, PQ ∥ BC. If AP : AB = ' + mr + ' : ' + nr + ', then AQ : QC equals:',
         hi:'△ABC में, PQ ∥ BC है। यदि AP : AB = ' + mr + ' : ' + nr + ' है, तो AQ : QC बराबर है :',
-        opts: mcq(rng, mr + ' : ' + (nr - mr), [mr + ' : ' + nr, nr + ' : ' + mr, '1 : 1']),
+        opts: mcq(rng, mr + ' : ' + (nr - mr), [mr + ' : ' + nr, nr + ' : ' + mr, '1 : 1', mr + ' : ' + (nr + mr)]),
         ans: mr + ' : ' + (nr - mr),
-        steps: withExtra('bpt-ratio', [
+        steps: [
           st('AP : PB = ' + mr + ' : (' + nr + ' − ' + mr + ') = ' + mr + ' : ' + (nr - mr) + '.',
              'AP : PB = ' + mr + ' : (' + nr + ' − ' + mr + ') = ' + mr + ' : ' + (nr - mr) + '।'),
           st('By BPT, AQ : QC = AP : PB = ' + mr + ' : ' + (nr - mr) + '.',
              'BPT से, AQ : QC = AP : PB = ' + mr + ' : ' + (nr - mr) + '।')
-        ]),
+        ],
         raw: { m: mr, n: nr, ans: mr + ' : ' + (nr - mr) }
       };
     } });
@@ -2164,11 +1525,11 @@ var T = [];
         hi: 'यदि HCF(' + a + ', ' + b + ') = ' + h + ' है, तो LCM(' + a + ', ' + b + ') है :',
         opts: mcq(rng, String(L), [String(L / 5), String(a * b), String(a + b)]),
         ans: String(L),
-        steps: withExtra('lcm-from-hcf', [
+        steps: [
           st('For any two positive integers, HCF × LCM = product of the numbers.',
              'किन्हीं दो धन पूर्णांकों के लिए, HCF × LCM = संख्याओं का गुणनफल।'),
           st('LCM = (' + a + ' × ' + b + ') ÷ ' + h + ' = ' + L + '.', 'LCM = (' + a + ' × ' + b + ') ÷ ' + h + ' = ' + L + '।')
-        ]),
+        ],
         raw: { a: a, b: b, h: h, L: L }
       };
     } });
@@ -2188,13 +1549,13 @@ var T = [];
         en: 'The ' + ord(m) + ' and ' + ord(n) + ' terms of an AP are ' + am + ' and ' + an + ' respectively. (i) Which term is zero? (ii) Find the sum of the first ' + (n + 1) + ' terms.',
         hi: 'किसी A.P. का ' + m + 'वाँ तथा ' + n + 'वाँ पद क्रमशः ' + am + ' और ' + an + ' हैं। (i) कौन-सा पद शून्य है? (ii) प्रथम ' + (n + 1) + ' पदों का योग ज्ञात कीजिए।',
         ans: 'a = ' + a + ', d = ' + fmt(dd) + '; ' + 'a' + zero + ' = 0' + '; S' + (n + 1) + ' = ' + fmt(S(n + 1)),
-        steps: withExtra('ap-two-terms', [
+        steps: [
           st('a + (' + (m - 1) + ')d = ' + am + ' and a + (' + (n - 1) + ')d = ' + an + ' give d = ' + fmt(dd) + ' and a = ' + a + '.',
              'a + (' + (m - 1) + ')d = ' + am + ' तथा a + (' + (n - 1) + ')d = ' + an + ' से d = ' + fmt(dd) + ' तथा a = ' + a + '।'),
           st('a' + zero + ' = ' + a + ' + ' + (zero - 1) + '(' + fmt(dd) + ') = 0.',
              'a' + zero + ' = ' + a + ' + ' + (zero - 1) + '(' + fmt(dd) + ') = 0।'),
           st('S' + (n + 1) + ' = ' + fmt(S(n + 1)) + '.', 'S' + (n + 1) + ' = ' + fmt(S(n + 1)) + '।')
-        ]),
+        ],
         raw: { a: a, d: dd, m: m, n: n, am: am, an: an, zero: zero, S: S(n + 1) }
       };
     } });
@@ -2207,7 +1568,7 @@ var T = [];
      which difficulty the block is meant to carry. */
   var BLUEPRINTS = {
     cbse: {
-      en: 'CBSE · 80 marks · Sections A–E', hi: 'सीबीएसई · 80 अंक · खंड A–E',
+      en: 'CBSE', hi: 'सीबीएसई',
       time: 180,
       /* the real CBSE maths blueprint: 20 MCQ (1) + 5 VSA (2) + 6 SA (3) + 4 LA (5) + 3 case (4) = 80 */
       blocks: [
@@ -2219,7 +1580,7 @@ var T = [];
       ]
     },
     icse: {
-      en: 'ICSE · 80 marks · Section A (compulsory) + Section B (choice)', hi: 'आईसीएसई · 80 अंक',
+      en: 'ICSE', hi: 'आईसीएसई',
       time: 150,
       blocks: [
         { name: { en: 'Section A · short', hi: 'खंड A · लघु' }, n: 6, marks: 2, d: 1 },
@@ -2228,7 +1589,7 @@ var T = [];
       ]
     },
     state: {
-      en: 'State board · 100 marks · objective + short + long', hi: 'राज्य बोर्ड · 100 अंक',
+      en: 'State board', hi: 'राज्य बोर्ड',
       time: 180,
       blocks: [
         { name: { en: 'Objective', hi: 'वस्तुनिष्ठ' }, n: 8, marks: 1, d: 1, kind: 'mcq' },
@@ -2322,7 +1683,7 @@ var T = [];
       board: opts.board || 'cbse',
       level: level,
       chapters: chapters,
-      title: bp,
+      title: { en: bp.en + ' practice set · ' + total + ' marks', hi: bp.hi + ' अभ्यास सेट · ' + total + ' अंक' },
       time: bp.time,
       total: total,
       sections: sections,

@@ -17,21 +17,33 @@ with sync_playwright() as p:
     page.locator('#topbar select[data-key="subject"]').select_option('physics')
     page.wait_for_function('() => UP.pyq.some(q=>q.subject==="physics" && q.kind===2)')
     assert page.evaluate('() => !UP.pyq.some(q=>["phys25-554-s2-q16","phys25-552-s3-q05"].includes(q.id))')
-    ar=page.evaluate('''() => {
-      const q=UP.pyq.find(q=>q.subject==='physics' && q.kind===2);
-      q.y=2097; return q.id;
-    }''')
+    # Isolate the real rows on one page without changing their text, codes or keys.
+    codes=page.evaluate('''() => UP.pyq.filter(q=>q.subject==='physics' && q.kind===2).map(q=>{
+      q.y=2097; return {id:q.id, options:q.opts.map(o=>o.en)};
+    })''')
+    assert len(codes) >= 29
+    ar=codes[0]['id']
     page.evaluate('() => location.hash="#/pyq?y=2097"')
     page.wait_for_selector('#'+ar)
-    assert page.locator('#'+ar+' .q-opt').count()==4
+    for row in codes:
+        options=page.locator('#'+row['id']+' .q-opt')
+        assert options.count()==4, row['id']
+        assert options.locator(':scope > span').all_text_contents()==row['options'], row['id']
     assert 'Assertion' in page.locator('#'+ar+' .pyq-kind').inner_text()
     assert 'Questions number' not in page.locator('#'+ar+' .q-text').inner_text()
     choices = page.locator('#'+ar+' .q-opts')
     assert choices.is_hidden(), 'past-paper choices should start collapsed'
     page.locator('#'+ar+' .q-options-toggle').click()
     assert choices.is_visible(), 'the options control should reveal past-paper choices'
-    page.locator('#'+ar+' [data-i="0"]').click()
-    assert page.locator('#'+ar+' .q-opt.right, #'+ar+' .q-opt.wrong').count()==0
+    checks = []
+    page.on('request', lambda r: checks.append(r.url) if '/api/ai/check-answer' in r.url else None)
+    for i in (0, 3):
+        choices.locator(f'[data-i="{i}"]').click()
+        assert choices.locator('.chosen').get_attribute('data-i') == str(i)
+        assert 'not graded' in page.locator('#'+ar+' .pyq-verdict').inner_text()
+        assert choices.locator('.right, .wrong').count() == 0
+    assert 'No independently verified answer key' in page.locator('#'+ar+' .q-review').inner_text()
+    assert not checks, 'do not send a review-pending stem for AI marking'
     for width in (1280,390):
         page.set_viewport_size({'width':width,'height':844})
         # Language preference must fall back honestly, never show legacy text.

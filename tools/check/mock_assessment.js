@@ -12,6 +12,14 @@ assert.equal(a.assess({source:{m:3,keyVerified:true,ans:'2'}},'2').awarded,null,
 assert.equal(a.assess({source:{m:1,keyVerified:true,ans:'Photosynthesis'}},'Plants make food').awarded,null,'semantic grading cannot be exact word matching');
 for(const m of [null,undefined,0,6,'bad'])assert.equal(a.marks({source:{m}}),null);
 assert.equal(a.assess({source:{m:1,keyVerified:true,ans:'B',opts:mcq.source.opts,qualityStatus:'withheld'}},'B').awarded,null);
+for(const flags of [{keyVerified:false},{textReview:'awaiting-source-review'},{qualityReasons:['damaged']},
+  {raw:{keyVerified:false}},{raw:{paperCode:'fixture'}},{kind:1,opts:[]},{ans:'unmatched choice'}]){
+ const it={source:{...mcq.source,...flags}};
+ assert.equal(a.key(it),'','do not send an untrusted reference to the AI checker');
+ assert.equal(a.assess(it,'B').status,'pending');
+}
+const signed={source:{m:1,keyVerified:true,ans:'−40',opts:['−44','−36','4·0','−40']}};
+assert.equal(a.assess(signed,'D').awarded,1);assert.equal(a.assess(signed,'4·0').awarded,0);
 const items=[numeric,mcq,{source:{m:3,keyVerified:false,ans:'fake key'}},{source:{}}];
 const s=a.score({items,answers:{0:'0.5',1:'red',2:'essay'}});
 assert.deepEqual(s,{earned:1,gradable:2,knownTotal:5,unknownMarks:1,pendingMarks:3,pending:2,attempted:3,total:4,selfEarned:0,selfPossible:0,selfReviewed:0});

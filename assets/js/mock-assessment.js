@@ -8,7 +8,16 @@
   const m=norm(s).match(/^([+-]?\d+(?:\.\d+)?)(?:\s*\/\s*([+-]?\d+(?:\.\d+)?))?$/);
   if(!m)return null;const n=Number(m[1])/(m[2]===undefined?1:Number(m[2]));return Number.isFinite(n)?n:null;
  }
- function key(item){const s=item.source||{};return s.keyVerified===true&&s.qualityStatus!=='withheld'&&s.optionReview!=='awaiting-source-review'?text(s.ans).trim():'';}
+ const quality=typeof module==='object'&&module.exports?require('./question-quality'):root.UP.questionQuality;
+ function key(item){
+  const s=item.source||{};
+  if(s.keyVerified!==true||!quality.keyMetadataAllows(s)||s.paperCode||s.raw?.paperCode)return '';
+  const expected=text(s.ans).trim();
+  if(s.opts?.length||quality.declaredMcq(s)){
+   if(!Array.isArray(s.opts)||s.opts.length<(quality.declaredMcq(s)?4:2)||s.opts.length>6||quality.choiceIndex(s.opts,expected)<0)return '';
+  }
+  return expected;
+ }
  function assess(item,answer){
   const s=item.source||{},max=marks(item),expected=key(item),value=norm(answer);
   const options=Array.isArray(s.opts)?s.opts:[];
@@ -16,9 +25,8 @@
   // Multi-mark workings, essays and semantic theory answers need human rubric review.
   let target=norm(expected),picked=value,canMark=false;
   if(expected&&mcq){
-   const optionIndex=v=>{const letter=v.match(/^\(?([a-f])\)?[.)]?$/i);if(letter)return letter[1].toLowerCase().charCodeAt(0)-97;return options.findIndex(o=>norm(o)===v||o&&norm(o.hi)===v);};
-   const ki=optionIndex(target),ai=optionIndex(picked);
-   if(ki>=0&&ki<options.length){canMark=true;target=String(ki);picked=ai>=0?String(ai):'';}
+   target=quality.choiceIndex(options,expected);picked=quality.choiceIndex(options,answer);
+   canMark=target>=0&&(!value||picked>=0);
   }else if(expected&&max===1&&numeric(expected)!==null){canMark=!value||numeric(answer)!==null;target=numeric(expected);picked=numeric(answer);}
   if(!canMark)return {status:value?'pending':'unattempted',awarded:null,max,expected,reason:'review'};
   const ok=value!==''&&picked===target;
