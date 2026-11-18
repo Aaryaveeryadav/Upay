@@ -210,6 +210,54 @@
     return '';
   }
 
+  function declaredMcq(q) {
+    const kind = String(q && q.kind != null ? q.kind : '').toLowerCase();
+    return ['mcq', '1', '2', 'assertion-reason', 'assertion_reason', 'assertion reason'].includes(kind);
+  }
+
+  // One admission rule for source choices, used both before a record enters a
+  // practice pool and when rendering it. Never trim the array or infer a key.
+  // `options` may come from a separately source-matched legacy table.
+  function sourceOptionIssue(q, options = q?.opts, subject = q?.subject) {
+    if (!q) return 'source-review';
+    if (Array.isArray(options) && options.length < 4 && declaredMcq(q)) return 'option-count';
+    if ([q, q.raw].some(row => row && (row.qualityStatus === 'withheld' || row.optionReview === 'awaiting-source-review'
+      || row.textReview === 'awaiting-source-review' || (Array.isArray(row.qualityReasons) && row.qualityReasons.length))))
+      return 'source-review';
+    const issue = optionIssue(options, subject);
+    if (issue || options.length <= 4) return issue;
+
+    // Five or six separate answers are valid. Table headings, directions and
+    // pieces of other questions in the array are evidence of extraction damage.
+    const texts = options.map(option => asText(option).normalize('NFKC').trim().replace(/\s+/g, ' '));
+    // A name such as “State Bank of India” or a label such as “Answer A” is
+    // not an instruction. For ambiguous verbs, require an instructional phrase.
+    const promptLead = /^(?:(?:write|define|describe|explain|calculate|find|draw|what|which|how|why|give reason|mention|compare|justify|identify|analyse|analyze|choose|select)\s+\S|(?:name|list|state|read|study|answer)\s+(?:the|an?|any|one|two|three|whether|which|why|how)\s+\S)/i;
+    if (texts.some(text => {
+      const numbered = /(?:^|\s)(?:\(\d+\.\d+\)|(?:Q(?:uestion)?\.?\s*)?\d+[.):])\s+(.+)/i.exec(text);
+      return (numbered && promptLead.test(numbered[1])) || /\boptions\s*:/i.test(text)
+        || /\b(?:list|column)\s*[-–]?\s*ii?\b/i.test(text)
+        || /^(?:(?:choose|select) the )?(?:most )?(?:appropriate|correct) (?:option|answer)(?: from the following)?\s*[:.]?$/i.test(text)
+        || /#\s*SECTION\s+[A-E]\b|\bP\.?\s*T\.?\s*O\.?\b/i.test(text)
+        || /^(?:assertion|reason\s*\(?r\)?)[,:.]?$/i.test(text)
+        || /^is\s+(?:true|false)\s*,?\s*but\s+reason\b/i.test(text)
+        // Repeated source-pack artefacts where the first glyph was dropped
+        // at a page/column boundary, not a general ban on lowercase answers.
+        || /^(?:etween|iversity|ustralia|elgium|riven|onservatism|ppropriate|ssertion|oth(?=\s|\(|$)|anks\b|hhattisgarh|ropping|xplanation|urrency|ducation|ommunication|lections|gainst|rop\b|xtension|onstruction|emand\b|xchange|ccount|heque|xplain|omparative|ge of\b|xample\b)/i.test(text);
+    })) return 'cross-question-extraction';
+    const prompts = texts.filter(text => /[?？]/.test(text) || promptLead.test(text)
+      || /^(?:कौन|क्यों|कैसे|क्या|बताइए|लिखिए|समझाइए|ज्ञात|सिद्ध|गणना|वर्णन|स्पष्ट|दीजिए)/u.test(text));
+    // Four answers followed by a new question can have only one prompt in
+    // the array. Require both question wording and a question mark in its tail.
+    if (prompts.length >= 2 || texts.slice(4).some(text => promptLead.test(text) && /[?？]\s*\d*$/.test(text)))
+      return 'cross-question-extraction';
+    const stem = asText(q.en || q.hi || q.sa).trim();
+    const first = texts[0];
+    if (stem && !/[.?!।॥]$/.test(stem) && /^[a-z]/.test(first) && (/[?？]\s*\d*$/.test(first) || /_{3,}/.test(first)))
+      return 'cross-question-extraction';
+    return '';
+  }
+
   function inspect(q, subject) {
     if (!q || typeof q !== 'object') return '';
     const kind = q.kind;
@@ -246,8 +294,8 @@
   /* Test-readiness gate: a question may be a genuine source record yet still
      be unusable in a test — it references a figure we do not have, starts
      mid-sentence, carries marks-column debris, or lost its operators/brackets
-     in extraction. Tests and mocks must never serve those; the PYQ browser
-     still shows the source record with its warnings. */
+     in extraction. The PYQ list, test and mock pools use this gate before
+     rendering; withholding a record here does not modify the source bank. */
   function testReadyIssue(q) {
     if (!q || typeof q !== 'object') return 'empty';
     const text = String((q.en || q.hi || q.sa || '')).trim();
@@ -262,14 +310,9 @@
     if (text.split(/\s+/).length <= 14 && !/[?.:।॥)\]]\s*$/.test(text) && /\b(?:are|is|was|were|the|a|an|to|of|in|on|for|with|and|or|that|which|has|have|been|being)\s*$/i.test(text)) return 'truncated-end';
     if (/\?\s*\d{1,2}\s*$/.test(text)) return 'marks-debris';
     if (/[A-Z]{2,}\/\d+\s*$/.test(text)) return 'extraction-debris';
-    if (Array.isArray(q.opts) && q.opts.length > 4 && q.kind === 'mcq') {
-      // Shredded table questions arrive with the table rows as extra
-      // 'options' (6-10 of them). A clean 4 plus one debris tail (a page
-      // number fragment) is repairable data, not a broken question.
-      const plausible = q.opts.map(function (o) { return String((o && (o.en || o.hi || o.text)) || (typeof o === 'string' ? o : '')).trim(); })
-        .filter(function (v) { return v.length >= 2 && !/^[A-Z\d\s\/.\-\u2013\u2014]{1,7}$/i.test(v); });
-      if (plausible.length !== 4) return 'broken-options';
-    }
+    // Missing/short lists still reach the written/withheld-choice fallback.
+    // For extended MCQs check the source array itself, not a count of long words.
+    if (Array.isArray(q.opts) && q.opts.length > 4 && declaredMcq(q) && sourceOptionIssue(q)) return 'broken-options';
     if (/^Prove\s+that\b/i.test(text) && !/=/.test(text)) return 'broken-identity';
     if (/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\ue000-\uf8ff]/.test(text)) return 'damaged-text';
     return '';
@@ -305,7 +348,7 @@
     return inspect({ hi: String(text == null ? '' : text), subject: subject || '', kind: 'question' }, subject);
   }
 
-  const api = { activityTail, cleanActivityTail, inspect, inspectText, testReadyIssue, boardKeyAdmission, isGenericUncontextualized, isOptionFragment, isPaperDirections, optionIssue, textOf };
+  const api = { activityTail, cleanActivityTail, inspect, inspectText, testReadyIssue, boardKeyAdmission, isGenericUncontextualized, isOptionFragment, isPaperDirections, declaredMcq, optionIssue, sourceOptionIssue, textOf };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.UP = root.UP || {};
   root.UP.questionQuality = api;

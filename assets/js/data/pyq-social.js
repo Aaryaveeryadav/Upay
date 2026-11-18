@@ -9844,6 +9844,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-32232-16",
+    "qualityReasons": ["First option continues the mineral analogy from the stem (nergyMineral)."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -16662,6 +16663,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-3241b-7",
+    "qualityReasons": ["Soil labels and their descriptions were split into separate options."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -18888,6 +18890,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-3242b-5",
+    "qualityReasons": ["Soil labels and their descriptions were split into separate options."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -21173,6 +21176,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-3243b-5",
+    "qualityReasons": ["Soil labels and their descriptions were split into separate options."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -21366,6 +21370,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-3251-10",
+    "qualityReasons": ["First option continues the stem with instructions and soil clues."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -22578,6 +22583,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-3251b-10",
+    "qualityReasons": ["Fourth option is the clipped end of the third statement (ommunities)."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -23681,6 +23687,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-3252-15",
+    "qualityReasons": ["First option continues the stem with instructions and soil clues."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -24943,6 +24950,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-3252b-20",
+    "qualityReasons": ["Fourth option is the clipped end of the third statement (ommunities)."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -27179,6 +27187,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-3253b-4",
+    "qualityReasons": ["Fourth option is the clipped end of the third statement (ommunities)."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -31181,6 +31190,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-32C1-3",
+    "qualityReasons": ["First option continues the stem (uring 1558); subsequent options have clipped words."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -31746,6 +31756,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-32C2-13",
+    "qualityReasons": ["First option continues the stem (ommunity Government); paper footer in last option."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -31935,6 +31946,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-32C2-18",
+    "qualityReasons": ["Co-operative societies statement split across options."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -32127,6 +32139,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-32C2-3",
+    "qualityReasons": ["First option continues the stem (uring 1558); subsequent options have clipped words."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -33189,6 +33202,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-32C3-5",
+    "qualityReasons": ["First option continues the stem (uring 1558); subsequent options have clipped words."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -34428,6 +34442,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-32S1v-14",
+    "qualityReasons": ["Fourth option is the clipped end of the third statement (ffidavit)."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -36378,6 +36393,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-32S2v-6",
+    "qualityReasons": ["Fourth option is the clipped end of the third statement (ffidavit)."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",
@@ -37451,6 +37467,7 @@ UP.socialPyq = [
   },
   {
     "id": "sscp-32S3v-16",
+    "qualityReasons": ["Fourth option is the clipped end of the third statement (ffidavit)."],
     "cls": 10,
     "subject": "social",
     "board": "cbse",

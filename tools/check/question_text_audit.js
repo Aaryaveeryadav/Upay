@@ -58,6 +58,31 @@ const frag = bank.find(q => q.id === 'imp11086716');
 assert(frag && qq.testReadyIssue(frag) === 'fragment', 'lone Reason (R) fragment must be gated out');
 const shred = bank.find(q => q.id === 'sscp-3211-11');
 assert(shred && qq.testReadyIssue(shred) === 'broken-options', 'shredded match-column record must be gated as broken-options');
+
+/* Exercise the actual upstream gate, not just the per-option validator. A
+   short value isn't a page number, and a fifth source choice isn't debris. */
+const choiceRow = { kind: 'mcq', subject: 'maths', en: 'Choose the correct value:' };
+const five = ['0', '1', '−1', '1/2', '2'];
+for (const opts of [five, ['red', 'blue', 'green', 'black', 'white'],
+  ['State Bank of India', 'State Bank of Mysore', 'Indian Bank', 'Union Bank', 'Indian Overseas Bank'],
+  ['A', 'B', 'C', 'D', 'E', 'F'].map(en => ({ en }))]) {
+  assert.equal(qq.testReadyIssue({ ...choiceRow, opts }), '', 'keep every clean source choice: ' + JSON.stringify(opts));
+}
+assert.equal(qq.boardKeyAdmission({ stem: choiceRow.en, opts: five, key: 'a' }), -1,
+  'showing five choices must not admit a key from the four-choice printed table');
+for (const opts of [five.concat('3', '4'), [...five, ''], [...five, '−1'], [...five, '/S 9'],
+  [...five, 'Choose the correct option:'], [...five, 'Q. 12. Explain the result.'],
+  [...five.slice(0, 4), 'What is the mass of the block?'],
+  ['Name two factors.', 'Describe the process.', 'Yes', 'No', 'Sometimes'],
+  ['Column I', 'Column II', 'Iron ore', 'Mica', 'Gaya']]) {
+  assert.equal(qq.testReadyIssue({ ...choiceRow, kind: 1, opts }), 'broken-options', 'hold damaged choices: ' + JSON.stringify(opts));
+}
+assert.equal(qq.testReadyIssue({ ...choiceRow, opts: five, raw: { optionReview: 'awaiting-source-review' } }), 'broken-options');
+// Real imports with five/six nonempty, distinct strings, but not five/six answers.
+for (const id of ['sscp-3221-9', 'sscp-3241b-7', 'sscp-3251b-10', 'sscp-32S1-35', 'sscp-32S2v-6', 'scp-31BS-39']) {
+  const q = bank.find(row => row.id === id);
+  assert(q && qq.testReadyIssue(q) === 'broken-options', id + ': instruction, split word, subquestion or footer in choices');
+}
 const added2025 = bank.filter(q => /^sscp-32\d{3}-\d+x?$/.test(q.id) && q.y === 2025 && q.kind === 'mcq');
 assert(added2025.length >= 30, 'official 2025 Social MCQs extracted from the supplied papers must be in the bank');
 /* Board-key admission: printed CBSE keys grade only when the row is clean. */
