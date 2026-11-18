@@ -17,6 +17,9 @@ UP.figures = (function () {
   };
 
   const num = (v) => (typeof v === 'number' && isFinite(v)) ? Number(v.toFixed(2)) : 0;
+  /* UP.num lives in the solver bundle; the figure module must still work
+     standalone (tests, previews) -- so fall back to a plain decimal. */
+  const fmtNum = (v) => (UP.num && typeof UP.num.fmt === 'function') ? UP.num.fmt(v) : String(Number(Number(v).toFixed(2)));
   /* two stacked <text> nodes: a white outline behind, the coloured fill in front.
      Paint-order is avoided because some renderers ignore it and hide the glyphs. */
   const label = (x, y, text, o) => {
@@ -188,7 +191,7 @@ UP.figures = (function () {
       ${label(px2, py2 - 12, `Q(${neg(x2)}, ${neg(y2)})`, { size: 11.5, weight: 700 })}
       ${label((px1 + px2) / 2, py1 + 18, `Δx = ${neg(Math.abs(x2 - x1))}`, { fill: C.creamDeep, size: 11, weight: 600 })}
       ${label(px2 + 10, (py1 + py2) / 2, `Δy = ${neg(Math.abs(y2 - y1))}`, { fill: C.creamDeep, size: 11, weight: 600, anchor: 'start' })}
-      ${label((px1 + px2) / 2 - 6, (py1 + py2) / 2 - 10, `PQ = ${UP.num.fmt(d)}`, { fill: C.skyDeep, size: 12, weight: 700 })}
+      ${label((px1 + px2) / 2 - 6, (py1 + py2) / 2 - 10, `PQ = ${fmtNum(d)}`, { fill: C.skyDeep, size: 12, weight: 700 })}
       ${label(300, 318, 'the two dashed gaps are the legs of a right triangle; PQ is the hypotenuse', { size: 10.5, fill: C.inkSoft })}`);
   }
 
@@ -766,6 +769,104 @@ UP.figures = (function () {
       style="width:100%;height:auto;display:block">${inner}</svg>`;
   }
 
+  /* =========================================================
+     A lens or a mirror with the object, the image and F / 2F on the
+     principal axis. Distances along the axis are drawn to scale from the
+     numbers the question gives (u, f) and the values computed from them
+     (v, m); the arrow heights show direction and relative size, not
+     distance. spec = {device:'lens'|'mirror', kind, f, u, v, m, real}
+     ========================================================= */
+  function opticsWorkedFig(p) {
+    const W = 660, H = 380, axisY = 208, cx = 330;
+    const f = Number(p.f), u = Number(p.u), v = Number(p.v), m = Number(p.m);
+    if (![f, u, v, m].every(isFinite) || !(f > 0) || !(u > 0)) return wrap(W, H, '');
+    const mirror = p.device === 'mirror';
+    const span = Math.max(u, Math.abs(v), 2 * f, 1);
+    const scale = Math.min(250 / span, 6);
+    const X = (cm) => cx + cm * scale;                  /* signed cm -> px */
+    const ox = X(-u), ix = X(v);
+    const top = axisY - 84, bottom = axisY + 84;
+
+    /* Arrow heights keep the object/image ratio (the magnification) but are
+       pulled in together when an enlarged image would leave the canvas. */
+    const maxH = Math.min(122, axisY - 66, H - axisY - 70);
+    let hObj = 52, hImg = 52 * Math.abs(m);
+    if (hImg > maxH) { hImg = maxH; hObj = Math.max(12, maxH / Math.abs(m)); }
+    if (hObj > maxH) { hObj = maxH; hImg = Math.min(maxH, maxH * Math.abs(m)); }
+
+    const arrow = (x, y1, y2, colour, dashed) => {
+      const dir = y2 < y1 ? -1 : 1;
+      return `<line x1="${num(x)}" y1="${num(y1)}" x2="${num(x)}" y2="${num(y2)}" stroke="${colour}" stroke-width="2.6"` +
+        (dashed ? ' stroke-dasharray="6 4"' : '') + `/>` +
+        `<path d="M${num(x - 5)} ${num(y2 - dir * 9)} L${num(x)} ${num(y2)} L${num(x + 5)} ${num(y2 - dir * 9)}"` +
+        ` fill="none" stroke="${colour}" stroke-width="2.4" stroke-linejoin="round"/>`;
+    };
+    let device = '';
+    if (mirror) {
+      const arc = p.kind === 'concave'
+        ? `M${cx + 16} ${top} Q${cx - 24} ${axisY} ${cx + 16} ${bottom}`
+        : `M${cx - 16} ${top} Q${cx + 24} ${axisY} ${cx - 16} ${bottom}`;
+      device = `<path d="${arc}" fill="none" stroke="${C.sky}" stroke-width="4"/>` +
+        `<path d="${arc}" fill="none" stroke="${C.skyMid}" stroke-width="1.4" stroke-dasharray="3 4" transform="translate(${p.kind === 'concave' ? 9 : -9} 0)"/>`;
+    } else if (p.kind === 'concave') {
+      device = `<path d="M${cx - 14} ${top} Q${cx} ${axisY} ${cx - 14} ${bottom} L${cx + 14} ${bottom} Q${cx} ${axisY} ${cx + 14} ${top} Z"` +
+        ` fill="${C.skySoft}" stroke="${C.sky}" stroke-width="2.4"/>`;
+    } else {
+      device = `<path d="M${cx} ${top} Q${cx + 18} ${axisY} ${cx} ${bottom} Q${cx - 18} ${axisY} ${cx} ${top} Z"` +
+        ` fill="${C.skySoft}" stroke="${C.sky}" stroke-width="2.4"/>`;
+    }
+
+    /* F and 2F (C for a mirror) on the axis. A mirror has them on one side
+       only -- the side the light comes from, or behind it for a convex one. */
+    const fn = mirror ? (p.kind === 'concave' ? -f : f) : f;
+    const marks = mirror
+      ? [{ at: fn, tag: 'F' }, { at: 2 * fn, tag: 'C' }]
+      : [{ at: -f, tag: 'F' }, { at: -2 * f, tag: '2F' }, { at: f, tag: 'F′' }, { at: 2 * f, tag: '2F′' }];
+    const markSvg = marks.map(mk => {
+      const x = X(mk.at), above = /′/.test(mk.tag);
+      /* An object or an image can sit exactly on F or 2F (u = 2f is the
+         commonest question of all); slide that label aside so the arrows do
+         not bury it. */
+      let tx = x;
+      if (Math.abs(x - ox) < 26) tx = x - 26;
+      else if (Math.abs(x - ix) < 26) tx = x + 26;
+      tx = Math.max(26, Math.min(W - 26, tx));
+      return `<line x1="${num(x)}" y1="${axisY - 6}" x2="${num(x)}" y2="${axisY + 6}" stroke="${C.inkSoft}" stroke-width="1.6"/>` +
+        label(tx, above ? axisY - 14 : axisY + 20, mk.tag, { size: 11.5, fill: C.inkSoft });
+    }).join('');
+
+    const objectTop = axisY - hObj;
+    const imageTop = p.inverted ? axisY + hImg : axisY - hImg;
+    const vText = fmtNum(Math.abs(v));
+    const objectLabel = 'object, u = ' + fmtNum(u) + ' cm';
+    const imageLabel = 'image, v = ' + vText + ' cm';
+    /* Below a downward arrow, above an upward one -- and never off the canvas. */
+    /* A virtual image stands on the same side as the object, so its label
+       goes below the axis where the object's label cannot reach it. */
+    const imageLabelY = p.real
+      ? Math.max(22, Math.min(H - 26, p.inverted ? imageTop + 18 : imageTop - 10))
+      : axisY + 36;
+    const objectLabelY = Math.max(22, objectTop - 10);
+    let imageNudge = Math.abs(ix - ox) < 96 ? (ix < ox ? -38 : 38) : 0;
+    if (ix + imageNudge < 66) imageNudge = 62 - ix;                 /* keep the label on the canvas */
+    if (ix + imageNudge > W - 66) imageNudge = W - 62 - ix;
+    return wrap(W, H, `
+      <line x1="24" y1="${axisY}" x2="${W - 20}" y2="${axisY}" stroke="${C.inkSoft}" stroke-width="1.4"/>
+      <path d="M${W - 20} ${axisY - 4} L${W - 10} ${axisY} L${W - 20} ${axisY + 4}" fill="none" stroke="${C.inkSoft}" stroke-width="1.4"/>
+      ${label(34, axisY - 9, 'principal axis', { anchor: 'start', size: 10, fill: C.inkSoft })}
+      ${markSvg}
+      ${device}
+      ${arrow(ox, axisY, objectTop, C.creamDeep, false)}
+      ${label(ox, objectLabelY, objectLabel, { size: 11, weight: 600, fill: C.creamDeep })}
+      ${arrow(ix, axisY, imageTop, p.real ? C.skyDeep : C.violet, !p.real)}
+      ${label(ix + imageNudge, imageLabelY, imageLabel, { size: 11, weight: 600, fill: p.real ? C.skyDeep : C.violet })}
+      <g transform="translate(20, 16)">
+        <rect x="0" y="0" width="214" height="66" rx="10" fill="${C.cream}" stroke="${C.creamMid}"/>
+        ${label(12, 22, (p.kind || 'convex') + ' ' + (mirror ? 'mirror' : 'lens'), { anchor: 'start', size: 10.5, fill: C.inkSoft })}
+        ${label(12, 44, 'f = ' + fmtNum(f) + ' cm', { anchor: 'start', size: 13, weight: 700, fill: C.creamDeep, mono: true })}
+      </g>
+      ${label(W / 2, H - 12, 'distances along the axis are to scale; a dashed arrow is a virtual image', { size: 10, fill: C.inkSoft })}`);
+  }
 
   /* =========================================================
      Generic diagram — draws any shape the AI describes.
@@ -781,6 +882,19 @@ UP.figures = (function () {
      ========================================================= */
   function generic(spec) {
     spec = spec || {};
+
+    /* Worked figures computed from the question itself. These carry their own
+       verified numbers, so they are drawn directly instead of being run
+       through the loose "any shape the model describes" path. */
+    if (spec.type === 'solid' && spec.verified && spec.solid && !(spec.parts || []).length) {
+      return solid(spec);
+    }
+    if (spec.type === 'distance' && spec.verified) {
+      return distance(spec);
+    }
+    if (spec.type === 'optics' && spec.verified) {
+      return opticsWorkedFig(spec);
+    }
 
     /* A solid described as a STACK of parts goes straight to compositeSolid.
        Before this channel existed the model had no way to say "cylinder with a
@@ -2071,5 +2185,5 @@ UP.figures = (function () {
     return wrap(W,H,inner);
   }
 
-  return { circuitForQuestion, heightDistanceFig, networkFig, copperRefiningFig, autoFigureFor, autoSolid, autoComposite, figure, generic, compositeSolid, twoHemispheres, parabola, twoLines, distance, rightTriangle, elevation, sector, solid, diceGrid, similarTriangles, bpt, tangent, diamTangents, apLadder, meanLine, factorVenn, factorTree, sqrtLine, conceptMap, bars, apparatusFig, opticsFig, circuitFig, mechanicsFig, biologyFig };
+  return { circuitForQuestion, heightDistanceFig, networkFig, copperRefiningFig, autoFigureFor, autoSolid, autoComposite, figure, generic, compositeSolid, twoHemispheres, parabola, twoLines, distance, rightTriangle, elevation, sector, solid, diceGrid, similarTriangles, bpt, tangent, diamTangents, apLadder, meanLine, factorVenn, factorTree, sqrtLine, conceptMap, bars, opticsWorkedFig, apparatusFig, opticsFig, circuitFig, mechanicsFig, biologyFig };
 })();
