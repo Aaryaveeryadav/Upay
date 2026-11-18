@@ -36,6 +36,15 @@ Per-question submission state, original answers, corrections and review marks us
   is not the paper total. Old sessions are reconciled against matching source
   rows without resetting the timer or discarding actual attempts. Missing or
   changed source lists are held for review. Saved AI feedback is not marks.
+- An AI check sends the whole card — stem, ordered choices and typed answer —
+  or refuses locally with a clear message when it exceeds the endpoint's
+  limits (4,000 characters per text, 2,000 for a reference). Nothing is
+  silently truncated mid-question. Bulk checks name the answer being checked,
+  disable their button, and stop when the learner leaves or starts a new test.
+- Numerical answers in Ask also get a worked figure computed from the question
+  itself — heights & distances, and series/parallel resistor networks — with
+  the answer labelled on the drawing rather than copied from the AI text. See
+  [worked figures](worked-figures.md).
 
 ## Tests
 

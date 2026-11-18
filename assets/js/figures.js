@@ -854,6 +854,15 @@ UP.figures = (function () {
     if (spec.type === 'lens' || spec.type === 'mirror' || spec.type === 'ray') {
       return opticsFig(spec);
     }
+    /* Worked figures: the answer is computed from the question's own
+       numbers, so the drawing can label it. Both are refused rather than
+       guessed when a required value is missing. */
+    if (spec.type === 'elevation' && spec.verified) {
+      return heightDistanceFig(spec);
+    }
+    if (spec.type === 'circuit' && spec.network) {
+      return networkFig(spec);
+    }
     if (spec.type === 'circuit') {
       return circuitFig(spec);
     }
@@ -1796,6 +1805,199 @@ UP.figures = (function () {
     return wrap(W,H,inner);
   }
 
+
+  /* =========================================================
+     WORKED FIGURES — a labelled drawing of the answer itself.
+
+     Two families only: heights & distances, and resistor networks.
+     The caller (assets/js/worked-figure.js) computes every number from
+     the question; nothing here invents a value. If a measurement is
+     missing or nonsensical the renderer returns '' and the answer is
+     shown without a picture.
+     ========================================================= */
+
+  function distanceBracket(x1, x2, y, text, colour) {
+    const col = colour || C.inkSoft;
+    const mid = (x1 + x2) / 2;
+    return `<line x1="${num(x1)}" y1="${num(y)}" x2="${num(x2)}" y2="${num(y)}" stroke="${col}" stroke-width="1.3"/>` +
+      `<line x1="${num(x1)}" y1="${num(y - 6)}" x2="${num(x1)}" y2="${num(y + 6)}" stroke="${col}" stroke-width="1.3"/>` +
+      `<line x1="${num(x2)}" y1="${num(y - 6)}" x2="${num(x2)}" y2="${num(y + 6)}" stroke="${col}" stroke-width="1.3"/>` +
+      label(mid, y + 16, text, { size: 10.8, weight: 600, fill: col });
+  }
+
+  function heightDistanceFig(spec) {
+    const h = Number(spec.height), far = Number(spec.farDistance);
+    const near = spec.nearDistance == null ? null : Number(spec.nearDistance);
+    if (!(h > 0) || !(far > 0) || (near != null && !(near > 0 && near < far))) return '';
+    const W = 726, H = 420, groundY = 300, footX = 556;
+    const scale = Math.min((footX - 120) / far, 190 / h);
+    if (!(scale > 0) || !isFinite(scale)) return '';
+    const topY = groundY - h * scale;
+    const towerW = 30;
+    const observers = [];
+    if (Number(spec.angleFar) > 0 && !spec.heightGiven) {
+      observers.push({ x: footX - far * scale, angle: Number(spec.angleFar), name: 'P' });
+    }
+    if (Number(spec.angleNear) > 0) {
+      /* The height-given case has one observation, and its distance is the
+         answer, so it shares the "far" position. */
+      const d = near != null ? near : far;
+      observers.push({ x: footX - d * scale, angle: Number(spec.angleNear), name: 'Q' });
+    }
+
+    let inner = '';
+    /* ground, tower, rays */
+    inner += `<line x1="40" y1="${groundY}" x2="${W - 24}" y2="${groundY}" stroke="${C.inkSoft}" stroke-width="1.5"/>`;
+    for (let gx = 52; gx < W - 30; gx += 18) {
+      inner += `<line x1="${gx}" y1="${groundY}" x2="${gx - 7}" y2="${groundY + 7}" stroke="${C.line}" stroke-width="1"/>`;
+    }
+    inner += `<rect x="${footX - towerW / 2}" y="${num(topY)}" width="${towerW}" height="${num(groundY - topY)}" fill="${C.cream}" stroke="${C.creamDeep}" stroke-width="2"/>`;
+    inner += `<line x1="${footX}" y1="${num(topY)}" x2="${footX}" y2="${groundY}" stroke="${C.creamDeep}" stroke-width="1" stroke-dasharray="4 4" opacity="0.55"/>`;
+    inner += dot(footX, groundY, 3.6, C.creamDeep);
+    inner += label(footX, groundY + 16, 'base', { size: 9.8, fill: C.inkSoft });
+
+    observers.forEach((o, i) => {
+      const r = 52 + i * 8;
+      const rad = o.angle * Math.PI / 180;
+      inner += `<line x1="${footX}" y1="${num(topY)}" x2="${num(o.x)}" y2="${groundY}" stroke="${C.sky}" stroke-width="2.4"/>`;
+      inner += dot(o.x, groundY, 4, C.sky);
+      inner += `<path d="M ${num(o.x + r)} ${groundY} A ${r} ${r} 0 0 0 ${num(o.x + r * Math.cos(rad))} ${num(groundY - r * Math.sin(rad))}" fill="none" stroke="${C.red}" stroke-width="2"/>`;
+      inner += label(o.x + r * 0.74, groundY - r * 0.3, o.angle + '°', { fill: C.red, size: 12, weight: 700 });
+      inner += label(o.x - 4, groundY + 17, o.name, { size: 11, weight: 700, anchor: 'end' });
+    });
+    /* horizontal sight line from the top, the reference for the angle */
+    const farthest = observers[observers.length - 1];
+    if (farthest) {
+      inner += `<line x1="${footX}" y1="${num(topY)}" x2="${num(farthest.x)}" y2="${num(topY)}" stroke="${C.line}" stroke-width="1" stroke-dasharray="5 4"/>`;
+    }
+    inner += label(footX, num(topY) - 10, 'top', { size: 10, fill: C.creamDeep });
+
+    /* measured brackets below the ground line */
+    if (observers.length === 2) {
+      const P = observers[0], Q = observers[1];
+      inner += distanceBracket(P.x, Q.x, groundY + 24, 'given: ' + Number(spec.walked) + ' m walked', C.creamDeep);
+      inner += distanceBracket(Q.x, footX, groundY + 56, spec.nearDistance != null ? (UP.workedFigure ? UP.workedFigure.decimal(near) : Number(near).toFixed(1)) + ' m' : '', C.skyDeep);
+      inner += distanceBracket(P.x, footX, groundY + 88, (UP.workedFigure ? UP.workedFigure.decimal(far) : Number(far).toFixed(1)) + ' m', C.skyDeep);
+    } else if (observers.length === 1) {
+      inner += distanceBracket(observers[0].x, footX, groundY + 24,
+        (spec.heightGiven ? 'd = ' : 'given: ') + (UP.workedFigure ? UP.workedFigure.decimal(far) : Number(far).toFixed(1)) + ' m', C.skyDeep);
+    }
+
+    /* the height, labelled with the answer (or with "given" when it is) */
+    const wf = UP.workedFigure;
+    const exactH = wf ? wf.exact(h) : '';
+    const decH = wf ? wf.decimal(h) : Number(h).toFixed(2);
+    inner += label(footX + towerW / 2 + 10, (topY + groundY) / 2 - 8, 'h = ' + (exactH || decH) + ' m', { size: 11.5, weight: 700, fill: C.skyDeep, anchor: 'start' });
+    inner += label(footX + towerW / 2 + 10, (topY + groundY) / 2 + 8, (exactH && exactH !== decH ? '≈ ' + decH + ' m' : ''), { size: 10, fill: C.inkSoft, anchor: 'start' });
+    inner += label(footX + towerW / 2 + 10, (topY + groundY) / 2 + 24, spec.heightGiven ? '(given)' : '(found)', { size: 9.5, fill: C.inkSoft, anchor: 'start' });
+
+    /* answer chip: the answer itself, so the picture explains the result */
+    const lines = (spec.chip || spec.answer || []).slice(0, 3);
+    const chipH = 22 + lines.length * 15;
+    inner += `<g><rect x="14" y="10" width="300" height="${chipH}" rx="10" fill="${C.cream}" stroke="${C.creamMid}"/>` +
+      label(26, 27, 'Calculated from the given values', { anchor: 'start', size: 10, fill: C.inkSoft });
+    lines.forEach((line, i) => {
+      inner += label(26, 44 + i * 15, String(line), { anchor: 'start', size: 11, weight: 600, fill: C.creamDeep });
+    });
+    inner += '</g>';
+    return wrap(W, H, inner);
+  }
+
+  function resistorZigzag(x, y, len) {
+    let pts = `${x},${y} `;
+    for (let j = 1; j < 10; j++) pts += `${num(x + j * (len / 10))},${y + (j % 2 ? -9 : 9)} `;
+    pts += `${num(x + len)},${y}`;
+    return `<polyline points="${pts}" fill="none" stroke="${C.ink}" stroke-width="2"/>`;
+  }
+
+  function networkFig(spec) {
+    if (!spec || !Array.isArray(spec.blocks) || !spec.blocks.length) return '';
+    const wf = UP.workedFigure;
+    const resistors = spec.blocks.reduce((all, b) => all.concat(b.resistors || []), []);
+    if (!resistors.length) return '';
+    if (resistors.some(r => !r || !(Number(r.value) > 0))) return '';
+    const battery = Number(spec.battery) > 0 ? Number(spec.battery) : null;
+    const W = 680, H = 352, left = 96, right = 596, top = 132, bottom = 300;
+    const wire = (x1, y1, x2, y2) => `<line x1="${num(x1)}" y1="${num(y1)}" x2="${num(x2)}" y2="${num(y2)}" stroke="${C.ink}" stroke-width="2"/>`;
+    const fmtV = v => wf ? wf.decimal(Number(v)) : String(Number(v));
+    const fmtUnit = (v, u) => wf ? wf.withUnitExactFirst(Number(v), u) : fmtV(v) + ' ' + u;
+
+    /* one resistor symbol, with its given value and its computed current */
+    function part(r, x, y, len) {
+      const value = ' = ' + fmtV(r.value) + ' Ω';
+      let g = resistorZigzag(x, y, len);
+      g += label(x + len / 2, y - 14, String(r.label) + value, { size: 11, weight: 700 });
+      if (r.current != null && isFinite(r.current)) {
+        g += label(x + len / 2, y + 24, 'I = ' + fmtUnit(r.current, 'A'), { size: 10.5, weight: 600, fill: C.skyDeep });
+      }
+      return `<g class="circuit-resistor">${g}</g>`;
+    }
+
+    let inner = '';
+    const blocks = spec.blocks;
+    const parallel = blocks.find(b => b.kind === 'parallel');
+    const seriesOnly = blocks.length === 1 && blocks[0].kind === 'series';
+    const parallelOnly = blocks.length === 1 && blocks[0].kind === 'parallel';
+
+    if (parallelOnly) {
+      const rs = blocks[0].resistors;
+      const ys = rs.length === 2 ? [top, bottom] : rs.length === 3 ? [top, (top + bottom) / 2, bottom] : null;
+      if (!ys) return '';
+      inner += wire(left, top, 330, top);
+      rs.forEach((r, i) => { inner += wire(330, ys[i], 372, ys[i]); inner += part(r, 372, ys[i], 84); inner += wire(456, ys[i], right, ys[i]); });
+      inner += wire(330, top, 330, bottom) + wire(right, top, right, bottom);
+      inner += wire(left, bottom, 330, bottom);
+      if (rs.length === 3) inner += wire(330, (top + bottom) / 2, 330, (top + bottom) / 2);
+      inner += dot(330, top, 3.4) + dot(330, bottom, 3.4) + label(318, (top + bottom) / 2, 'A', { anchor: 'end' }) + label(right + 12, (top + bottom) / 2, 'B', { anchor: 'start' });
+    } else if (seriesOnly) {
+      const rs = blocks[0].resistors;
+      const starts = rs.length === 2 ? [180, 380] : rs.length === 3 ? [148, 300, 452] : [];
+      if (!starts.length) return '';
+      inner += wire(left, top, starts[0], top);
+      rs.forEach((r, i) => { inner += part(r, starts[i], top, 84); inner += wire(starts[i] + 84, top, i + 1 < rs.length ? starts[i + 1] : right, top); });
+      inner += wire(right, top, right, bottom) + wire(left, bottom, right, bottom);
+    } else {
+      /* one series resistor, then the parallel pair — the commonest mixed
+         combination in Class 10 papers. */
+      const s = blocks.find(b => b.kind === 'series' && b.resistors.length === 1);
+      const p = parallel;
+      if (!s || !p || p.resistors.length !== 2) return '';
+      inner += wire(left, top, 168, top) + part(s.resistors[0], 168, top, 84) + wire(252, top, 330, top);
+      const pairYs = [top, bottom];
+      p.resistors.forEach((r, i) => {
+        inner += wire(330, pairYs[i], 372, pairYs[i]) + part(r, 372, pairYs[i], 84) + wire(456, pairYs[i], right, pairYs[i]);
+      });
+      inner += wire(330, top, 330, bottom) + wire(right, top, right, bottom) + wire(left, bottom, 330, bottom);
+      inner += dot(330, top, 3.4) + dot(330, bottom, 3.4);
+      inner += label(318, (top + bottom) / 2 + 4, 'A', { anchor: 'end', size: 11 }) + label(right + 12, (top + bottom) / 2, 'B', { anchor: 'start', size: 11 });
+    }
+
+    /* battery on the left rail, with a real gap between the plates */
+    const bTop = 204, bBot = 232;
+    inner += wire(left, top, left, bTop) + wire(left, bBot, left, bottom);
+    inner += `<line x1="${left - 17}" y1="${bTop}" x2="${left + 17}" y2="${bTop}" stroke="${C.ink}" stroke-width="2.6"/>`;
+    inner += `<line x1="${left - 9}" y1="${bBot}" x2="${left + 9}" y2="${bBot}" stroke="${C.ink}" stroke-width="2.6"/>`;
+    inner += label(left - 24, bTop + 4, '+', { size: 12, fill: C.red, anchor: 'end' });
+    inner += label(left - 24, bBot + 4, '−', { size: 12, fill: C.inkSoft, anchor: 'end' });
+    if (battery) {
+      inner += label(left + 26, (bTop + bBot) / 2 + 4, fmtV(battery) + ' V', { size: 11.5, weight: 700, anchor: 'start' });
+      if (spec.totalCurrent != null) {
+        inner += label(left + 26, (bTop + bBot) / 2 + 22, 'I = ' + fmtUnit(spec.totalCurrent, 'A'), { size: 10.5, weight: 600, fill: C.skyDeep, anchor: 'start' });
+      }
+    }
+
+    /* answer chip */
+    const lines = (spec.chip || spec.answer || []).slice(0, 5);
+    const chipH = 22 + lines.length * 15;
+    inner += `<g><rect x="14" y="10" width="330" height="${chipH}" rx="10" fill="${C.cream}" stroke="${C.creamMid}"/>` +
+      label(26, 27, 'Calculated from the given values', { anchor: 'start', size: 10, fill: C.inkSoft });
+    lines.forEach((line, i) => {
+      inner += label(26, 44 + i * 15, String(line), { anchor: 'start', size: 10.5, weight: 600, fill: C.creamDeep });
+    });
+    inner += '</g>';
+    return wrap(W, H, inner);
+  }
+
   function copperRefiningFig() {
     let inner=`<path d="M130 115 V285 H470 V115" fill="${C.skySoft}" stroke="${C.ink}" stroke-width="2"/>`;
     inner+=`<rect x="195" y="105" width="28" height="125" fill="${C.creamDeep}" stroke="${C.ink}"/><rect x="381" y="105" width="8" height="125" fill="${C.sky}" stroke="${C.ink}"/>`;
@@ -1869,5 +2071,5 @@ UP.figures = (function () {
     return wrap(W,H,inner);
   }
 
-  return { circuitForQuestion, copperRefiningFig, autoFigureFor, autoSolid, autoComposite, figure, generic, compositeSolid, twoHemispheres, parabola, twoLines, distance, rightTriangle, elevation, sector, solid, diceGrid, similarTriangles, bpt, tangent, diamTangents, apLadder, meanLine, factorVenn, factorTree, sqrtLine, conceptMap, bars, apparatusFig, opticsFig, circuitFig, mechanicsFig, biologyFig };
+  return { circuitForQuestion, heightDistanceFig, networkFig, copperRefiningFig, autoFigureFor, autoSolid, autoComposite, figure, generic, compositeSolid, twoHemispheres, parabola, twoLines, distance, rightTriangle, elevation, sector, solid, diceGrid, similarTriangles, bpt, tangent, diamTangents, apLadder, meanLine, factorVenn, factorTree, sqrtLine, conceptMap, bars, apparatusFig, opticsFig, circuitFig, mechanicsFig, biologyFig };
 })();
