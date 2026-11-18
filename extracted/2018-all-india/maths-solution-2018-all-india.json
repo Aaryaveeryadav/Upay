@@ -1,0 +1,107 @@
+{
+  "source": "Maths Solution 2018(All India).pdf",
+  "year": 2018,
+  "yearBasis": "upload label and accompanying dated marking scheme; not every paper prints a year",
+  "sha256": "b00f893511b196563a30b072499cc56c23f0c5bfab5b002ee41356a51deb72ec",
+  "kind": "marking-scheme",
+  "status": "extracted-not-question-verified",
+  "warning": "Review original PDFs for formulas, Symbol glyphs, OCR, figures, maps and ordering. No automatic answer pairing.",
+  "pages": [
+    {
+      "page": 1,
+      "method": "english-ocr-unverified",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "Strictly Confidential — (For Internal and Restricted Use Only)\nbsvA\nSecondary School Examination\nx\nMarch 2018\nMarking Scheme — Mathematics 30/1, 30/2, 30/3\nGeneral Instructions:\n1.\nThe Marking Scheme provides general guidelines to reduce subjectivity in the marking, The answers\ngiven in the Marking Scheme are suggested answers. The content is thus indicative. If a student has\ngivenany otheranswer which is different from the one given in the Marking Scheme, but conveys the\nmeaning, such answers should be given full weightage\n2.\nEvaluation is to be done as per instructions provided in the marking scheme. It should not be done\naccording to one’s own interpretation or any other consideration — Marking Scheme should be\nstrictly adhered to and religiously followed.\n3.\nAlternative methods are accepted. Proportional marks are to be awarded.\n4.\nIfacandidate has attempted an extra question, marks obtained in the question attempted first should\nbe retained and the other answer should be scored out.\n5. A full scale ofmarks - 0 to 80 has to beused. Please do not hesitate to award full marks ifthe answer\ndeserves it.\n6.\nSeparate Marking Scheme for all the three sets has been given.\n7.\nAs per orders ofthe Hon'ble Supreme Court, the candidates would now be permitted to obtain\nphotocopy ofthe Answer book on request on payment ofthe prescribed fee. All examiners/Head\nExaminers are once again reminded that they must ensure that evaluation is carried out strictly as per\nvalue points for each answer as given in the Marking Scheme.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 2,
+      "method": "english-ocr-unverified",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\nQUESTION PAPER CODE 30/1\nEXPECTED ANSWER/VALUE POINTS\nSECTIONA\n1.\nx=3 is one root ofthe equation\n2.\n9-6k-6=0\nVA\n1\n=> k=\nA\n2\n2.\nThe required numbers are 2 and 4.\nVA\nHCF of 2 and 4 is 2.\n%\n3.\nOP= yx? +y?\n1\n4.\na+6(-4)=4\nM\n=>\na=28\nVA\n5.\ncos 67° =sin 23°\ncos 67° — sin? 23 = 0\n|\n6,\nar AABC _ AB?\nar APQR = PQ?\n-(3}-3\n~\\3)\n9\nSECTION B\n7.\nLetusassume 5 + 3,/2 is arational number.\n“\n543V¥2=2 where q # O and p and q are integers.\nA\nq\np—5q\n1\n=~\n~2<-/\n3q\nM\n=>\n2 isarational numberas RHS isrational\nVA\nThis contradicts the given fact that J2 is irrational.\nHence § + 3,/2 isan irrational number.\nvA\n@)\n30/1",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 3,
+      "method": "english-ocr-unverified",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "301\n8\nAB=DC and\nBC =AD\n=>\nxt+y=30\n1\nand\nx-y=14\nSolving to get x = 22 and y =8.\nK+\n9\nS=3+6+9+124+...4+24\n=3(1+2+3+..4+8)\nVA\n= 3x8x3\n|\n2\n= 108\n%\n10.\nLet\nAP: PB=k:1\nt\n&( 6,3)\n6k +2\npos\n(\n‘\nk+1\nAta, 3)\n=>\nk=l,ratiois1:1\nVA\n-3 +3\nHence m= a\na 0\nVA\nIl.\nTotal number ofpossible outcomes = 36\n(i)\nDoublets are (1, 1) (2, 2) (3, 3) (4, 4) (5, 5) (6, 6)\nTotal number ofdoublets = 6\nMs\n*,\nProb (getting\na\ndoublet)= Bs or 4\nA\nit\ngetting\nado\na6\nSe\n5\n(i)\nFavourable outcomes are (4, 6) (5, 5) (6, 4) i.e., 3\n¥%\n.\nProb\ni\n10)= 2 or cn\n“Prob (getting\na sum\n10)= 36\nDD\n¥\n12.\nTotal number ofoutcomes = 98\n(i)\nFavourable outcomes are 8, 16, 24, ..., 96 i.e., 12\nK\n*.\nProb (int\nSME By eK ee oF\n..\nProb (integeris\ndivisible\nby 8) = 93\n49\nl\nG)\n301",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 4,
+      "method": "english-ocr-unverified",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\n:\n.\net\n6\n(i)\nProb (integer is not divisible by 8) = 1- 49\n43\nSECTIONC\n13.\n404=22* 101 =2?x 101\n96=2x2x2x2x2x3=2%\nx3\n..\nHCF of 404 and 96 = 27 = 4\nl\nLCMof 404 and 96 = 101 x 2° x 3 = 9696\n1\nHCF = LCM = 4 = 9696 = 38784\nAlso 404 x 96 = 38784\nHence HCF x LCM = Product of 404 and 96.\n1\n14.\np(x) = 2x4 — 9x? + 5x? + 3x -1\n24/3 and 2—./3 are zeroes of p(x)\n“\np(x) = (x — 2-4/3) (x -2+43) x g(x)\n= (x?\n- 4x + 1) g(x)\nI\n(2x* — 9x? + 5x? + 3x — 1) + (x?\n— 4x + 1) = 2x?-x-1\nl\n“\n9(x)=2x?-x-1\n=(2x+ 1I)(x—1)\n]\nTherefore other zeroes are x = “3 and x = ]\n1\n-.\nTherefore\nall zeroes are 2+ V3, 2-3, mie and |\n|\n(4)\n30/1\n»\nft\nk\nal\ncor",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 5,
+      "method": "english-ocr-unverified",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\n15.\nABCD isa parallelogram\nwh\n.\ndiagonals AC and BD bisect each other\npi\n(ub)\nTherefore\nMid point of BD is same\nas mid point\nof AC\nM\np,\n(a\nA (-2,\\5\nBon)\n[: +1 2\\-(3 4 st)\n7\ne 2\n2°\n2\n+1\nb+1\n= Aceh and\n1\n=> a=1,b=1. Therefore length of sides are ,/]9 units each.\nM+\nOR\nArea of quad ABCD = ArAABD + Ar ABCD\n¥\npl4s)\n© ¢-1,-6)\nl\n\\\nArea ofAABD = a (-5)(-5 — 5) + (-4) (5-7) + (4)(7+5)|\n§C5.7)\n@ u,-5)\n= 53 sq units\n]\n1\nArea\nof ABCD = 5 (AC6-5) + (D6 +5)+4(-5+6)|\n= 19 sq units\nI\nHence area of quad. ABCD = 53 + 19 = 72 sq units\nVA\n16.\nLet the usual speed ofthe plane be x km/hr.\n.\n1500 1500\n_ 30\n,\nx\nx+100\n60\n=>\nx’ + 100x — 300000 = 0\n=>\nx’+600x —500x — 300000 = 0\n=\n(x +600)(x —500)=0\n]\nx#-600,\nx= 500\nVA\nSpeed of plane = 500 km/hr\nVA\n(5)\n30/1",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 6,
+      "method": "english-ocr-unverified",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\n17.\nLet the side ofthe square be ‘a’ units\nw\nAC? =a? +a? = 2a?\noO\nv3\nArea of\nequilateral ABCF = ——a* $q.u\nrs\n&\n;\n4\nhs\nArea of equilateral AACE =a (/2a) i‘3 sq.u\nl\nl\n=f\n=> Area ABCF = 5 Ar AACE\nA\nOR\nLet\nAABC ~ APQR.\n_\narAABC\nAB? BC? — AC?\n|\nar APQR\n=PQ?-\nQR?\nPR?\nGiven ar AABC = ar APOR\nAB?\nBo\nLAC?\nPQ?\nQR?\nPR?\n=\nAB= PQ, BC =QR, AC =PR\n=\nTherefore AABC = APQR. (sss congruence rule)\nl\n18.\nCorrect given, To prove, Figure, Construction\nyy x4=2\nCorrect proof\n1\n19.\n4tan@=3\n3\n=>\ntanO= 4\nsates\nax\n=>\nsin @ = = and cos @ = ~\ny+Vy\n3\n4\n_\n 4sin 6-cosd+1 te a\n1\n4sin@+cosO-1\n4/34 -\n5\n5\n3\nil\n(6)\n30/1\nmie\n2\naf he Eh aa\nc =—\nA\n+\nff",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 7,
+      "method": "english-ocr-unverified",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\nOR\ntan 2A = cot (A — 18°)\n=>\n90°-2A=A-—\n18°\nH\n=>\n3A=108°\nl\n=>\nA=36°\nl\n20.\nRadius of each are drawn = 6 cm\n%\n36\nArea of one quadrant = (3.14) x4\nArea\nof four quadrants\n= 3.14 x 36= 113.04 em?\n]\nArea of square ABCD = 12 x 12 = 144 cm?\n1\nHence Area of shaded region = 144 — 113.04\n= 30.96 cm?\nvA\n21.\nTotal surface Area ofarticle = CSA ofcylinder+CSA of2 hemispheres\nCSA ofcylinder = 2nrh\n= 2xZe x3.5x10\n7\n= 220 em?\n1\nSurface Area oftwo hemispherical scoops = 4x= x3.5%3,5\n= 154 em?\n1\nTotal surface Area of article = 220 + 154\n= 374 cm?\n1\nOR\nRadius ofconical heap = 12 m\nVA\n.\ni.\n23\n,\nVolume\nof rice = \" 7 x12x12«3.5m°\n= 528 m*\nl\nArea ofcanvas cloth required = ar/\n(7)\n30/1\na\neee\nae oth\na. «\n7",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 8,
+      "method": "english-ocr-unverified",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "301\n[= J12? + (3.5)? =12.5m\n¥,\n22\n“.\nArea ofcanvas required = > * 12x 12.5\n= 471.4 m?\n1\n22.\nSalary (in thousand Rs)\nNo. ofpersons (f)\nef\n5-10\n49\n49\n10-15\n133\n182\n15-20\n63\n245\n20-25\n15\n260\n25-30\n6\n266\n30-35\n7\n273\n35-40\n4\n277\n40-45\n2\n279\n45-50\n1\n280\n]\nN\n280 _ 140\n2\n2\nMedian classis 10-15\nMedian = 1+F(2-c]\nf\\2\n= 10+ >_(140-49)\n133\nI\n= 704 5x9]\n133\n= 13.42\nMedian salary is Rs 13.42 thousand or Rs 13420 (approx)\n1\n(8)\n30/1\nAe\natthe\nphe\nCC. ow",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 9,
+      "method": "english-ocr-unverified",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\nSECTION D\n23,\nLet the speed ofstream be x km/hr.\n”.\nThe speed of the boat upstream = (18 — x) km/hr\ni\nand\nSpeed of the boat downstream = (18 + x) km/hr\nAs given in the question,\n24 24\n;\n18-x\n184+x\n=>\nx?+48x—324=0\nVA\n=>\n(x +54)(x-6)=0\nx#—54,\n..x=6\n1\n“Speed ofthe stream = 6 km/hr.\nVA\nOR\nLet the original average speed oftrain be x km/hr.\nTherefore a42 =3\n1\n=>\nx?-39x-126=0\n|\n=>\n(x—42)(x+3)=0\nx#—3\n«x =42\nl\nOriginal speed oftrain is 42 ka/hr.\nyy\n24.\nLet the four consecutive terms ofthe A.P, be\na-—3d,a-—d,a+d,a+t+ 3d.\nK\nBy given conditions\n(a — 3d) + (a —d) + (a + d) + (a + 3d) = 32\n=>\n4a=32\n=>\na=8\nl\nea\n(a—3d)(a+3d) exit\n;\n(a—d)(a+d)\n15\n=>\n8a\" = 128d?\n(9)\n30/1\n1",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 10,
+      "method": "english-ocr-unverified",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\n=> ?=4\nX%\n=>\nd=12\nl\n“. Numbers are 2, 6, 10, 14 or 14, 10, 6, 2.\n25.\nDraw AE 1 BC\nA\nAAEB = AAEC\n (RHS congruence rule)\n:.\nBE=EC=+BC=+AB\n2\n2\nLet AB = BC = AC =x\nB\nDE\nG\nx\nNow BE = 3 and DE=BE-—BD\n= ee\n2\n3\n-%\ni\nNow AB? =AE*+BE?\n. (1)\nI\nand\nAD* = AE*+DE?\n(2)\nFrom (1) and (2)\nAB? — AD? = BE? — DE?\n5\nxV\n{xyY\n=\n-ant=(3) -(§)\n2\nx?\nox\n= AD*=x° \"a\nSe\n28\n=> AD= 36\"\n|\n=\n9AD?=7AB?\nOR\nGiven, to Prove, Construction and Figure\nA x4=2\nCorrect Proof\n2\n26.\nCorrect Construction ofAABC\n2\nCorrect construction ofsimilar to AABC.\n2\n(10)\n30/1\nfs",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 11,
+      "method": "english-ocr-unverified",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\nsin A-2sin?A\n27. =\nme\n2cos’\nA—cosA\n__\nsin A(1—2sin?A)\n’\ncos A(2cos”A — 1)\nsi sin A(1—2(1—cos* A))\nf\ncosA(2cos*\nA -1)\n2\n_ tan 4 {2008 AI)\n(2cos”\nA—1)\n= tan A= RHS\n|\n28.\nHerer, = 15 cm, r,=\n5 cm and\nh = 24 cm\n(i)\nArea of metal sheet = CSA of the bucket + area of lower end\n= al(r, +r) + 7\nwhere\n/ = ./24?\n+ (15-5)? =26 em\n|\n”. Surface area of metal sheet = 3.14(26 x 20 + 25) cm?\n= 1711.3 em?\n1\nWe should avoid use ofplastic because it is non-degradable or similar value.\n1\n29,\nFigure\n1\n-\nLet AB be the tower and ships are at points C and D.\n= hag\nA\n4s\nP\ntan 45° = AB\nwe. 4\nen\nBC\na\nos\nAB\no*\n“NYS\n— =]\n=> AB=BC\n1\n1\nAB\nAlso\ntan 30° = —= = ———_\n=\nv3\nBC+CD\n1\nAB\n=>\n— =\nl\nV3\nAB+CD\n=> AB+CD= ,3AB\n=> CD= AB(V3-1)\n= 100 x (1.732 — 1)\n]\n= 73.2 m.\n(11)\n30/1",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 12,
+      "method": "english-ocr-unverified",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\n30.\nClass\nx\nf\nfk\n11-13\n12\n3\n36\n13-15\n14\n6\n84\n15-17\n16\n9\n144\n17-19\n18\n13\n234\n19-21\n20\nf\n20f\n21-23\n22\n5\n110\nFor x\n¥\n23-25\n24\n4\n96\nxf\nVA\n40+f = 704+ 20f\nSk\nI\n704 +\n20f\nMean = 18 =as\n]\n=>\n720+ 18f= 704 + 20f\n=\nf=8\n1\nOR\nCumulative frequency distribution table ofless than type is\nDaily income\nCumulative frequency\nLess than 100\n0\nLess than 120\n12\nLess than 140\n26\nLess than 160\n34\nLess than 180\n40\nLess than 200\n50\n1%\n¥\n-\nCit ,yp)_¥ C200, 50)\nEy *\n(140,26) 9 (ho,4y9\n2,\nod\nnt\n(138) 42)\nz\n100 128 j4a }é0 190 280 eaiky ‘brace\n(12)\n30/1",
+      "requiresVisualReview": true
+    }
+  ]
+}

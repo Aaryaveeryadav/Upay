@@ -1,0 +1,107 @@
+{
+  "source": "Maths Question Paper 2018(All India).pdf",
+  "year": 2018,
+  "yearBasis": "upload label and accompanying dated marking scheme; not every paper prints a year",
+  "sha256": "b0585ed12ac6f7cf7cac8485dfcd7c3da798db418ad462607623617221bfe534",
+  "kind": "question-paper",
+  "status": "extracted-not-question-verified",
+  "warning": "Review original PDFs for formulas, Symbol glyphs, OCR, figures, maps and ordering. No automatic answer pairing.",
+  "pages": [
+    {
+      "page": 1,
+      "method": "text-layer",
+      "omittedHindiLines": 10,
+      "unmappedSymbolGlyphs": 10,
+      "text": "30/1\n1\n[P.T.O.\nRoll No.\nMATHEMATICS\n3\n80\nTime allowed : 3 hours\nMaximum Marks : 80\nSeries : TYM\nCode No. 30/1\n\n\n\n\n\n\nPlease check that this question paper contains  11 printed pages.\n\nCode number given on the right hand side of the question paper should be written on\nthe title page of the answer-book by the candidate.\n\nPlease check that this question paper contains 30 questions.\n\nPlease write down the Serial Number of the question before attempting it.\n\n15 minute time has been allotted to read this question paper. The question paper will\nbe distributed at 10.15 a.m. From 10.15 a.m. to 10.30 a.m., the students will read the\nquestion paper only and will not write any answer on the answer-book during this\nperiod.\nCandidates must write the Code on\nthe title page of the answer-book.\nSET – 1",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 2,
+      "method": "text-layer",
+      "omittedHindiLines": 12,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\n2\n(i)\nGeneral Instructions :\n(i)\nAll questions are compulsory.\n(ii)\nThis question paper consists of 30 questions divided into four sections – A, B, C\nand D.\n(iii) Section A contains 6 questions of 1 mark each. Section B contains 6 questions of\n2 marks each, Section C contains 10 questions of 3 marks each.  Section D contains\n8 questions of 4 marks each.\n(iv) There is no overall choice. However, an internal choice has been provided in four\nquestions of 3 marks each and 3 questions of 4 marks each. You have to attempt only\none of the alternatives in all such questions.\n(v)\nUse of calculator is not permitted.\nSECTION – A\nQuestion numbers 1 to 6 carry 1 mark each.\n1.\nIf x = 3 is one root of the quadratic equation x2 – 2kx – 6 = 0, then find the value of k.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 3,
+      "method": "text-layer",
+      "omittedHindiLines": 11,
+      "unmappedSymbolGlyphs": 6,
+      "text": "30/1\n3\n[P.T.O.\n2.\nWhat is the HCF of smallest prime number and the smallest composite number ?\n3.\nFind the distance of a point P(x, y) from the origin.\n4.\nIn an AP, if the common difference (d) = –4, and the seventh term (a7) is 4, then find the\nfirst term.\n5.\nWhat is the value of (cos2 67° – sin2 23°) ?\n6.\nPQ = 1\nGiven  ABC ~  PQR, if  AB\nPQ = 1\n3, then find ar ABC\nar PQR .\nSECTION – B\nQuestion numbers 7 to 12 carry 2 marks each.\n7.\nGiven that 2 is irrational,  prove that (5 + 3 2) is an irrational number.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 4,
+      "method": "text-layer",
+      "omittedHindiLines": 8,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\n4\n8.\nIn Fig. 1, ABCD is a rectangle. Find the values of x and y.\nFig. – 1\n9.\nFind the sum of first 8 multiples of 3.\nFind the ratio in which P(4, m) divides the line segment joining the points A(2, 3) and\nB(6, –3). Hence find m.\n(i)\nTwo different dice are tossed together. Find the probability :\n(i)\nof getting a doublet\n(ii)\nof getting a sum 10, of the numbers on the two dice.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 5,
+      "method": "text-layer",
+      "omittedHindiLines": 17,
+      "unmappedSymbolGlyphs": 1,
+      "text": "30/1\n5\n[P.T.O.\n(i)\n(ii)\nAn integer is chosen at random between 1 and 100. Find the probability that it is :\n(i)\ndivisible by 8.\n(ii)\nnot divisible by 8.\nSECTION – C\nQuestion numbers 13 to 22 carry 3 marks each.\n13.\nFind HCF and LCM of 404 and 96 and verify that HCF  LCM = Product of the two\ngiven numbers.\nFind all zeroes of the polynomial (2x4 – 9x3 + 5x2 + 3x – 1) if two of its zeroes are\n(2 + 3) and (2 – 3).\nIf A(–2, 1), B(a, 0), C(4, b) and D(1, 2) are the vertices of a parallelogram ABCD, find\nthe values of a and b. Hence find the lengths of its sides.\nOR\nIf A(–5, 7), B(–4, –5), C(–1, –6) and D(4, 5) are the vertices of a quadrilateral, find the\narea of the quadrilateral ABCD.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 6,
+      "method": "text-layer",
+      "omittedHindiLines": 12,
+      "unmappedSymbolGlyphs": 31,
+      "text": "30/1\n6\nA plane left 30 minutes late than its scheduled time and in order to reach the destination\n1500 km away in time, it had to increase its speed by 100 km/h from the usual speed.\nFind its usual speed.\nProve that the area of an equilateral triangle described on one side of the square is equal\nto half the area of the equilateral triangle described on one of its diagonal.\nOR\nIf the area of two similar triangles are equal, prove that they are congruent.\nProve that the lengths of tangents drawn from an external point to a circle are equal.\n\n4 sin – cos \nIf 4 tan  = 3, evaluate \n\n4 sin – cos \n4 sin + cos –\nOR\nIf tan 2A = cot (A – 18°), where 2A is an acute angle, find the value of A.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 7,
+      "method": "text-layer",
+      "omittedHindiLines": 11,
+      "unmappedSymbolGlyphs": 1,
+      "text": "30/1\n7\n[P.T.O.\nFind the area of the shaded region in Fig. 2, where arcs drawn with centres A, B, C\nand D intersect in pairs at mid-points P, Q, R and S of the sides AB, BC, CD and DA\nrespectively of a square ABCD of side 12 cm. [Use  = 3.14]\nFig. – 2",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 8,
+      "method": "text-layer",
+      "omittedHindiLines": 4,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\n8\nA wooden article was made by scooping out a hemisphere from each end of a solid\ncylinder, as shown in Fig. 3. If the height of the cylinder is 10 cm and its base is of\nradius 3.5 cm. Find the total surface area of the article.\nFig. 3\nOR\nA heap of rice is in the form of a cone of base diameter 24 m and height 3.5 m. Find\nthe volume of the rice. How much canvas cloth is required to just cover the heap ?\n5 – 10\n49\n10 – 15\n133\n15 – 20\n63\n20 – 25\n15\n25 – 30\n6\n30 – 35\n7\n35 – 40\n4\n40 – 45\n2\n45 – 50\n1\nThe table below shows the salaries of 280 persons :\nSalary (In thousand ₹)\nNo. of Persons\n5 – 10\n49\n10 – 15\n133\n15 – 20\n63\n20 – 25\n15\n25 – 30\n6\n30 – 35\n7\n35 – 40\n4\n40 – 45\n2\n45 – 50\n1\nCalculate the median salary of the data.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 9,
+      "method": "text-layer",
+      "omittedHindiLines": 14,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\n9\n[P.T.O.\nSECTION – D\nQuestion numbers 23 to 30 carry 4 marks each.\nA motor boat whose speed is 18 km/hr in still water takes 1hr more to go 24 km\nupstream than to return downstream to the same spot. Find the speed of the stream.\nOR\nA train travels at a certain average speed for a distance of 63 km and then travels at a\ndistance of 72 km at an average speed of 6 km/hr more than its original speed. If it\ntakes 3 hours to complete total journey, what is the original average speed ?\nThe sum of four consecutive numbers in an AP is 32 and the ratio of the product of the\nfirst and the last term to the product of two middle terms is 7 : 15. Find the numbers.\n9(AD)2 = 7(AB)2",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 10,
+      "method": "text-layer",
+      "omittedHindiLines": 8,
+      "unmappedSymbolGlyphs": 5,
+      "text": "30/1\n10\nIn an equilateral  ABC, D is a point on side BC such that BD = 1\n3 BC. Prove that\n9(AD)2 = 7(AB)2\nOR\nProve that, in a right triangle, the square on the hypotenuse is equal to the sum of the\nsquares on the other two sides.\nDraw a triangle ABC with BC = 6 cm, AB = 5 cm and ABC = 60°. Then construct a\ntriangle whose sides are 3\n4 of the corresponding sides of the  ABC.\n2 cos3 A – cos A = tan A\nProve that : sin A – 2 sin3 A\n2 cos3 A – cos A = tan A.\n(i)\nThe diameters of the lower and upper ends of a bucket in the form of a frustum of a\ncone are 10 cm and 30 cm respectively. If its height is 24 cm, find :\n(i)\nThe area of the metal sheet used to make the bucket.\n(ii)\nWhy  we should avoid the bucket made by ordinary plastic ?  [Use  = 3.14]",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 11,
+      "method": "text-layer",
+      "omittedHindiLines": 11,
+      "unmappedSymbolGlyphs": 2,
+      "text": "30/1\n11\n[P.T.O.\nAs observed from the top of a 100 m high light house from the sea-level, the angles of\ndepression of two ships are 30 and 45. If one ship is exactly behind the other on the\nsame side of the light house, find the distance between the two ships. [Use 3 = 1.732]\n11 – 13\n13 – 15\n15 – 17\n17 – 19\n19 – 21\n21 – 23\n23 – 25\n3\n6\n9\n13\nf\n5\n4\n100 – 120\n120 – 140\n140 – 160\n160 – 180\n180 – 200\n12\n14\n8\n6\n10\nThe mean of the following distribution is 18. Find the frequency f of the class 19 – 21.\nClass\n11-13\n13-15\n15-17\n17-19\n19-21\n21-23\n23-25\nFrequency\n3\n6\n9\n13\nf\n5\n4\nOR\nThe following distribution gives the daily income of 50 workers of a factory :\nDaily Income (in ₹)\n100-120\n120-140\n140-160\n160-180\n180-200\nNumber of workers\n12\n14\n8\n6\n10\nConvert the distribution above to a less than type cumulative frequency distribution\nand draw its ogive.\n__________",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 12,
+      "method": "text-layer",
+      "omittedHindiLines": 0,
+      "unmappedSymbolGlyphs": 0,
+      "text": "30/1\n12",
+      "requiresVisualReview": true
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "year": 2018,
+  "scope": "Limited review examples, not a full paper verification or a live answer-bank import.",
+  "maths": {
+    "paper": "Maths Question Paper 2018(All India).pdf",
+    "scheme": "Maths Solution 2018(All India).pdf",
+    "schemePdfPage": 2,
+    "reviewBasis": "Scheme page visually inspected; question stems compared with the paper text layer. Reasoning independently calculated. Full visual question-paper transcription not certified.",
+    "examples": [
+      {"q": 1, "paperPdfPage": 2, "answer": "k = 1/2", "reasoning": "Substitute x = 3 into x^2 - 2kx - 6 = 0: 9 - 6k - 6 = 0, so k = 1/2."},
+      {"q": 2, "paperPdfPage": 3, "answer": "2", "reasoning": "The smallest prime is 2 and the smallest composite is 4. Their highest common factor is 2; 1 is neither prime nor composite."},
+      {"q": 3, "paperPdfPage": 3, "answer": "sqrt(x^2 + y^2)", "reasoning": "Apply the distance formula from P(x,y) to (0,0). The radical covers the sum of both squares."},
+      {"q": 4, "paperPdfPage": 3, "answer": "28", "reasoning": "a7 = a + 6d = 4 and d = -4, hence a - 24 = 4 and a = 28."},
+      {"q": 5, "paperPdfPage": 3, "answer": "0", "reasoning": "cos(67 degrees) = sin(23 degrees), so their squares are equal and the difference is zero."},
+      {"q": 6, "paperPdfPage": 3, "answer": "1/9", "reasoning": "For similar triangles, area ratio is the square of corresponding side ratio: (1/3)^2 = 1/9."}
+    ]
+  },
+  "science": {
+    "scheme": "Science Solution 2018(All India).pdf",
+    "schemePdfPage": 2,
+    "q": "4(a)",
+    "reviewBasis": "Ambiguity instruction visually confirmed on scheme PDF page 2.",
+    "sourceInstruction": "Due to ambiguity in the question award 1 mark whether attempted or not.",
+    "handling": "Preserve this as an evaluation instruction, not a factual answer or an automatic learner-score rule. No single mandatory response inferred."
+  },
+  "communicative": {
+    "paperPdfPage": 2,
+    "schemePdfPage": 2,
+    "sample": "Q1 GLOBALIZATION",
+    "reviewBasis": "Text-layer comparison only: title, topic and initial value points agree.",
+    "warning": "Scheme cover says Delhi; filenames say All India. This sample does not establish complete paper/scheme equivalence."
+  }
+}

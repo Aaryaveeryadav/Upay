@@ -1,0 +1,107 @@
+{
+  "source": "Science Question Paper 2018(All India).pdf",
+  "year": 2018,
+  "yearBasis": "upload label and accompanying dated marking scheme; not every paper prints a year",
+  "sha256": "d1d83a9a0e69864b47178d040d1af47bd78613e9e54ec8f91e52f124c108e3e2",
+  "kind": "question-paper",
+  "status": "extracted-not-question-verified",
+  "warning": "Review original PDFs for formulas, Symbol glyphs, OCR, figures, maps and ordering. No automatic answer pairing.",
+  "pages": [
+    {
+      "page": 1,
+      "method": "text-layer",
+      "omittedHindiLines": 14,
+      "unmappedSymbolGlyphs": 5,
+      "text": "31/1\n1\n[P.T.O.\nRoll No.\nSCIENCE\nTime allowed : 3 hours\nMaximum Marks : 80\nSeries : TYM\n31/1\nCode No.\nCandidates must write the Code on\nthe title page of the answer-book.\nSET – 1\n\nPlease check that this question paper contains 12 printed pages.\n\nCode number given on the right hand side of the question paper should be written on the\ntitle page of the answer-book by the candidate.\n\nPlease check that this question paper contains 27 questions.\n\nPlease write down the Serial Number of the question before attempting it.\n\n15 minute time has been allotted to read this question paper. The question paper will be\ndistributed at 10.15 a.m. From 10.15 a.m. to 10.30 a.m., the students will read the\nquestion paper only and will not write any answer on the answer-book during this period.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 2,
+      "method": "text-layer",
+      "omittedHindiLines": 14,
+      "unmappedSymbolGlyphs": 0,
+      "text": "31/1\n2\n(i)\n(v)\nGeneral Instructions :\n(i)\nThe question paper comprises two Sections, A and B. You are to attempt both the\nsections.\n(ii)\nAll questions are compulsory.\n(iii) All questions of Section A and Section B are to be attempted separately.\n(iv) There is an internal choice in three questions of three marks each, two questions of\nfive marks each in Section A and in one question of two marks in Section B.\n(v)\nQuestion numbers 1 and 2 in Section A are one-mark questions. They are to be\nanswered in one word or in one sentence.\n(vi) Question numbers 3 to 5 in Section A are two-marks questions. These are to be\nanswered in about 30 words each.\n(vii) Question numbers 6 to 15 in Section A are three-marks questions. These are to be\nanswered in about 50 words each.\n(viii) Question numbers 16 to 21 in Section A are five-marks questions. These are to be\nanswered in about 70 words each.\n(ix) Question numbers 22 to 27 in Section B are based on practical skills. Each\nquestion is a two-marks question. These are to be answered in brief.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 3,
+      "method": "text-layer",
+      "omittedHindiLines": 13,
+      "unmappedSymbolGlyphs": 12,
+      "text": "31/1\n3\n[P.T.O.\nSection – A\n1.\n1\nA Mendelian experiment consisted of breeding pea plants bearing violet flowers with\npea plants bearing white flowers. What will be the result in F1 progeny ?\n2.\n1\nWrite the energy conversion that takes place in a hydropower plant.\n3.\n2\nA compound ‘X’ on heating with excess conc. sulphuric acid at 443 K gives an\nunsaturated compound ‘Y’. ‘X’ also reacts with sodium metal to evolve a colourless\ngas ‘Z’. Identify ‘X’, ‘Y’ and ‘Z’. Write the equation of the chemical reaction of\nformation of ‘Y’ and also write the role of sulphuric acid in the reaction.\n4.\n2\n\na\n\nb\n\n(a)\nName one gustatory receptor and one olfactory receptor present in human beings.\n(b)\nWrite a and b in the given flow chart of neuron through which information\ntravels as an electrical impulse.\nDendrite\n\na\n\nb\n\nEnd point of Neuron",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 4,
+      "method": "text-layer",
+      "omittedHindiLines": 15,
+      "unmappedSymbolGlyphs": 0,
+      "text": "31/1\n4\n5.\n2\nIf the image formed by a spherical mirror for all positions of the object placed in front\nof it is always erect and diminished, what type of mirror is it ? Draw a labelled ray\ndiagram to support your answer.\n6.\n3\nDecomposition reactions require energy either in the form of heat or light or electricity\nfor breaking down the reactants. Write one equation each for decomposition reactions\nwhere energy is supplied in the form of heat, light and electricity.\n7.\n3\n2 mL of sodium hydroxide solution is added to a few pieces of granulated zinc metal\ntaken in a test tube. When the contents are warmed, a gas evolves which is bubbled\nthrough a soap solution before testing. Write the equation of the chemical reaction\ninvolved and the test to detect the gas. Name the gas which will be evolved when the\nsame metal reacts with dilute solution of a strong acid.\nOR\nThe pH of a salt used to make tasty and crispy pakoras is 14. Identify the salt and\nwrite a chemical equation for its formation. List its two uses.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 5,
+      "method": "text-layer",
+      "omittedHindiLines": 16,
+      "unmappedSymbolGlyphs": 0,
+      "text": "31/1\n5\n[P.T.O.\n8.\n3\n(a)\nWhy are most carbon compounds poor conductors of electricity ?\n(b)\nWrite the name and structure of a saturated compound in which the carbon\natoms are arranged in a ring. Give the number of single bonds present in this\ncompound.\n9.\n3\n(a)\n(c)\nName the hormones secreted by the following endocrine glands and specify one\nfunction of each :\n(a)\nThyroid\n(b)\nPituitary\n(c)\nPancreas\n3\nWrite one main difference between asexual and sexual mode of reproduction. Which\nspecies is likely to have comparatively better chances of survival – the one reproducing\nasexually or the one reproducing sexually ? Give reason to justify your answer.\n3",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 6,
+      "method": "text-layer",
+      "omittedHindiLines": 11,
+      "unmappedSymbolGlyphs": 4,
+      "text": "31/1\n6\nState the laws of refraction of light. Explain the term ‘absolute refractive index of a\nmedium’ and write an expression to relate it with the speed of light in vacuum.\nOR\nWhat is meant by power of a lens ? Write its SI unit. A student uses a lens of focal\nlength 40 cm and another of –20 cm. Write the nature and power of each lens.\n3\nShow how would you join three resistors, each of resistance 9  so that the\nequivalent resistance of the combination is (i) 13.5  (ii) 6  ?\nOR\n(a)\nWrite Joule’s law of heating.\n(b)\nTwo lamps, one rated 100 W; 220 V, and the other 60 W; 220 V, are connected\nin parallel to electric mains supply. Find the current drawn by two bulbs from\nthe line, if the supply voltage is 220 V.\n13.\n3\n(a)\nList the factors on which the resistance of a conductor in the shape of a wire\ndepends.\n(b)\nWhy are metals good conductors of electricity whereas glass is a bad\nconductor of electricity ? Give reason.\n(c)\nWhy are alloys commonly used in electrical heating devices ? Give reason.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 7,
+      "method": "text-layer",
+      "omittedHindiLines": 12,
+      "unmappedSymbolGlyphs": 0,
+      "text": "31/1\n7\n[P.T.O.\n3\nStudents in a school listened to the news read in the morning assembly that the\nmountain of garbage in Delhi, suddenly exploded and various vehicles got buried\nunder it. Several people were also injured and there was traffic jam all around. In the\nbrain storming session the teacher also discussed this issue and asked the students to\nfind out a solution to the problem of garbage. Finally they arrived at two main points\n– one is self management of the garbage we produce and the second is to generate\nless garbage at individual level.\n(a)\nSuggest two measures to manage the garbage we produce.\n(b)\nAs an individual, what can we do to generate the least garbage ? Give two\npoints.\n(c)\nList two values the teacher instilled in his students in this episode.\n3\nWhat is a dam ? Why do we seek to build large dams ? While building large dams,\nwhich three main problems should particularly be addressed to maintain peace among\nlocal people ? Mention them.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 8,
+      "method": "text-layer",
+      "omittedHindiLines": 15,
+      "unmappedSymbolGlyphs": 0,
+      "text": "31/1\n8\n16.\n5\n(a)\nWrite the steps involved in the extraction of pure metals in the middle of the\nactivity series from their carbonate ores.\n(b)\nHow is copper extracted from its sulphide ore ? Explain the various steps\nsupported by chemical equations. Draw labelled diagram for the electrolytic\nrefining of copper.\n17.\n5\n(a)\nThe modern periodic table has been evolved through the early attempts of\nDobereiner, Newland and Mendeleev. List one advantage and one limitation of\nall the three attempts.\n(b)\nName the scientist who first of all showed that atomic number of an element is a\nmore fundamental property than its atomic mass.\n(c)\nState Modern periodic law.\n18.\n5",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 9,
+      "method": "text-layer",
+      "omittedHindiLines": 10,
+      "unmappedSymbolGlyphs": 0,
+      "text": "31/1\n9\n[P.T.O.\n(i)\n(a)\nMention any two components of blood.\n(b)\nTrace the movement of oxygenated blood in the body.\n(c)\nWrite the function of valves present in between atria and ventricles.\n(d)\nWrite one structural difference between the composition of artery and veins.\nOR\n(a)\nDefine excretion.\n(b)\nName the basic filtration unit present in the kidney.\n(c)\nDraw excretory system in human beings and label the following organs of\nexcretory system which perform following functions :\n(i)\nform urine.\n(ii)\nis a long tube which collects urine from kidney.\n(iii) store urine until it is passed out.\n19.\n5\n(a)\nWrite the function of following parts in human female reproductive system :\n(i)\nOvary\n(ii)  Oviduct\n(iii)  Uterus\n(b)\nDescribe in brief the structure and function of placenta.",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 10,
+      "method": "text-layer",
+      "omittedHindiLines": 14,
+      "unmappedSymbolGlyphs": 0,
+      "text": "31/1\n10\n5\n(a)\nA student is unable to see clearly the words written on the black board placed at\na distance of approximately 3 m from him. Name the defect of vision the boy is\nsuffering from. State the possible causes of this defect and explain the method\nof correcting it.\n(b)\nWhy do stars twinkle ? Explain.\nOR\n(a)\nWrite the function of each of the following parts of human eye :\n(i)\nCornea  (ii)  Iris\n(iii)  Crystalline lens  (iv)  Ciliary muscles\n(b)\nWhy does the sun appear reddish early in the morning ? Will this phenomenon\nbe observed by an astronaut on the Moon ? Give reason to justify your answer.\n21.\n(i)\n5\n(a)\nState Fleming’s left hand rule.\n(b)\nWrite the principle of working of an electric motor.\n(c)\nExplain the function of the following parts of an electric motor.\n(i)  Armature  (ii)  Brushes  (iii)  Split ring",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 11,
+      "method": "text-layer",
+      "omittedHindiLines": 16,
+      "unmappedSymbolGlyphs": 0,
+      "text": "31/1\n11\n[P.T.O.\nSection – B\n2\nA student added few pieces of aluminium metal to two test tubes A and B containing\naqueous solutions of iron sulphate and copper sulphate. In the second part of her\nexperiment, she added iron metal to another test tubes C and D containing aqueous\nsolutions of aluminium sulphate and copper sulphate.\nIn which test tube or test tubes will she observe colour change ? On the basis of this\nexperiment, state which one is the most reactive metal and why.\n2\nWhat is observed when a solution of sodium sulphate is added to a solution of barium\nchloride taken in a test tube ? Write equation for the chemical reaction involved and\nname the type of reaction in this case.\n2\nList the steps of preparation of temporary mount of a leaf peel to observe stomata.\n2",
+      "requiresVisualReview": true
+    },
+    {
+      "page": 12,
+      "method": "text-layer",
+      "omittedHindiLines": 9,
+      "unmappedSymbolGlyphs": 0,
+      "text": "31/1\n12\nName the process by which an amoeba reproduces. Draw the various stages of its\nreproduction in a proper sequence.\nOR\nA student is viewing under  a microscope a permanent slide showing various stages\nof asexual reproduction by budding in yeast. Draw diagrams of what he observes.\n(in proper sequence)\n26.\n2\nAn object of height 4.0 cm is placed at a distance of 30 cm from the optical centre\n‘O’ of a convex lens of focal length 20 cm. Draw a ray diagram to find the position\nand size of the image formed. Mark optical centre ‘O’ and principal focus ‘F’ on the\ndiagram. Also find the approximate ratio of size of the image to the size of the object.\n0.5\n1.0\n1.5\n2.0\n2.5\n3.0\n4.0\n5.0\n0.1\n0.2\n0.3\n0.4\n0.5\n0.6\n0.8\n1.0\n2\nThe values of current (I) flowing through a given resistor of resistance (R), for\nthe corresponding values of potential difference (V) across the resistor are as given\nbelow :\nV (volts)\n0.5\n1.0\n1.5\n2.0\n2.5\n3.0\n4.0\n5.0\nI (amperes)\n0.1\n0.2\n0.3\n0.4\n0.5\n0.6\n0.8\n1.0\nPlot a graph between current (I) and potential difference (V) and determine the\nresistance (R) of the resistor.\n____________",
+      "requiresVisualReview": true
+    }
+  ]
+}
