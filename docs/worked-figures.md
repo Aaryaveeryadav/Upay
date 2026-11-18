@@ -12,6 +12,10 @@ the total current and the current in each branch.
 This is what `assets/js/worked-figure.js` plus two renderers in
 `assets/js/figures.js` do.
 
+![A tower with two angles of elevation and the computed height and distances](images/worked-figure-tower.png)
+
+![A 6 Ω and 3 Ω parallel pair in series with 4 Ω across a 12 V battery, with currents labelled](images/worked-figure-circuit.png)
+
 ## Why it is a calculator, not a drawing model
 
 The figure is only honest if its numbers are right. So the flow has no model
