@@ -24,7 +24,11 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
   await page.evaluate(()=>{UP.S.subject='science';location.hash='#/mistakes?other=1';});await page.waitForFunction(()=>UP.S.mistakeQueue.length===0);
   await page.evaluate(()=>{UP.S.subject='maths';location.hash='#/mistakes?return=1';});await page.waitForFunction(()=>UP.S.mistakeQueue.length===1);
   // Merely viewing a solution must not resolve a checked wrong answer.
-  await page.locator('[data-action="sample"]').first().click();await page.waitForFunction(()=>UP.S.aiState==='loading');await page.waitForTimeout(50);
+  await page.locator('[data-action="sample"]').first().click();await page.waitForFunction(()=>UP.S.aiState==='loading');
+  // The routed request arrives a tick after the loading state; wait for it
+  // rather than sleeping, so a loaded machine cannot make this flaky.
+  for(let i=0;i<250&&!requests.length;i++) await page.waitForTimeout(20);
+  assert(requests.length,'the sample solution must reach the AI endpoint');
   await requests.pop().fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',result:'2',approaches:[1,2,3,4].map(i=>({name:'Mock explanation '+i,steps:[{t:'This is a UI test fixture.'}]}))})});
   await page.waitForFunction(()=>UP.S.aiState==='done');assert.equal(await page.evaluate(()=>UP.S.mistakeQueue.length),1);
   await page.evaluate(()=>location.hash='#/mistakes');await page.locator('[data-action="recheckMistake"]').waitFor();

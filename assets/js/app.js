@@ -2195,6 +2195,22 @@ window.UP = window.UP || {};
     return P(option) || mcqOptionText(option);
   }
 
+  function questionWithChoices(stem, options) {
+    return stem + (Array.isArray(options) && options.length ? '\nOptions: ' + options.map((o,i) => String.fromCharCode(65+i) + '. ' + displayedChoiceText(o)).join('  ') : '');
+  }
+
+  // Sampling is stricter than browsing a source page: don't assign a broken
+  // task, show raw OCR options, or turn a separately matched list into a key.
+  function sampledSource(q) {
+    const quality = UP.questionQuality;
+    if (quality.testReadyIssue(q) || [q,q.raw].some(row => row && (row.qualityStatus === 'withheld'
+      || row.qualityReasons?.length || row.optionReview === 'awaiting-source-review'))) return null;
+    if (!hasOpts(q) && !quality.declaredMcq(q) && (!q.opts || Array.isArray(q.opts))) return q;
+    const choices = pyqOptions(q);
+    return !choices.length ? null : choices === q.opts ? q : {...q, opts:choices, ans:'', keyVerified:false};
+  }
+  function sourceNeedsReview(q) { return [q,q?.raw].some(row => row?.textReview === 'awaiting-source-review'); }
+
   function mcqSignature(stem, options) {
     return JSON.stringify([stem, ...options].map(UP.questionQuality.choiceText));
   }
@@ -3891,67 +3907,32 @@ window.UP = window.UP || {};
   /* ============================================================
      TODAY'S PRACTICE  (#6) — 10 Q daily set, feeds from mastery
      ============================================================ */
-  function buildDailySet() {
-    const pool = (UP.pyq || []).filter(q => q.subject === S.subject && q.cls === +S.cls && pyqQuestionText(q).length > 12
-      && (S.lang === 'hi' || String(q.en || '').trim().length >= 12)
-      && !(UP.questionQuality && UP.questionQuality.testReadyIssue(q)));
-    if (!pool.length) return [];
-    // Mastery score per chapter: higher = weaker (more incorrect / less attempted)
-    const chScore = {};
-    (UP.catalogue(S.cls, S.subject) || []).forEach(c => {
-      const m = S.mastery[c.id] || { attempted:0, correct:0, at:0 };
-      chScore[c.id] = { weak: m.attempted > 0 && m.correct/m.attempted < 0.5 ? 2 : (m.attempted === 0 ? 1 : 0), ch: c };
-    });
-    const weak = pool.filter(q => chScore[q.ch] && chScore[q.ch].weak === 2);
-    const newCh = pool.filter(q => chScore[q.ch] && chScore[q.ch].weak === 1);
-    const done = pool.filter(q => chScore[q.ch] && chScore[q.ch].weak === 0);
-    function pick(arr, n){ const s = arr.slice().sort(()=>Math.random()-0.5); return s.slice(0, n); }
-    const set = [];
-    // 5 from attempted+wrong, 3 from untouched chapters, 2 from done chapters (stretch)
-    set.push(...pick(weak, 5));
-    set.push(...pick(newCh, Math.max(0, 3 - Math.max(0,5-set.length === 5 ? 0 : 5-set.length))));
-    const need = 10 - set.length;
-    set.push(...pick(done, need));
-    return set.slice(0, 10).map((q,i)=>({...q, no:i+1, _daily:true}));
+  let DAILY = null, activeDailySet = null, activeDailyOwner = null, validatedDailySet = null;
+  function dailyScope() { return [S.board, String(S.cls), S.subject, S.lang].join('|'); }
+  function currentDailySet(set) {
+    return set && set === S.dailySet && set === activeDailySet && activeDailyOwner === S.savedKey
+      && set.scope === dailyScope() && set.date === todayKey();
   }
-  let DAILY = null;
-  /* buildDailySet returns scheduling items ({q: text, ch, label, raw?}); the
-     cards need the actual bank record — its options, its verified answer, its
-     id — otherwise each card renders as a bare sentence with no answer strip
-     that can be filled. Resolve each item back to its record by id, then by
-     text, and reset the per-set AI state so a reused slot cannot inherit the
-     previous card's verdict. */
   function loadDailyCards() {
     const items = buildDailySet();
-    const bank = UP.pyq || [];
-    const cards = items.map(item => {
-      const raw = (item && item.raw) || bank.find(x => x && item && x.id && x.id === item.id)
-        || bank.find(x => x && item && pyqQuestionText(x) === item.q);
-      if (!raw) return null;
-      /* `marked` lives on the stored daily item, not on the bank row, so it has
-         to be carried across explicitly or a re-render forgets the mark. */
-      return Object.assign({}, raw, { _item: item, chName: item.chName || raw.chapter,
-        sourceMeta: item.sourceMeta || '', label: item.label, marked: item.marked });
-    }).filter(Boolean);
-    if (S.dailyAISetKey !== dailySetIdentity(cards)) {
-      S.dailyAISetKey = dailySetIdentity(cards);
-      S.dailyAI = {};
-      S.dailyReveal = {};
+    // A new draw, date, language or owner can have exactly the same first
+    // question (or even the same entire set). Card text is not session identity.
+    if (activeDailySet !== S.dailySet || activeDailyOwner !== S.savedKey) {
+      activeDailySet = S.dailySet; activeDailyOwner = S.savedKey;
+      S.dailyAI = {}; S.dailyReveal = {}; S.dailyOpen = {};
     }
-    return cards;
-  }
-  function dailySetIdentity(cards) {
-    return cards.map(q => String(q.id || q.no || '') + '|' + String(pyqQuestionText(q)).slice(0, 40)).join('~');
+    return items.map(item => ({ ...item.raw, chName: item.chName || item.raw.chapter,
+      sourceMeta: item.sourceMeta || '', label: item.label, marked: item.marked }));
   }
   function viewToday() {
     // buildDailySet caches by date and scope; the view must not reuse a list
     // from a subject or board the student has since left.
     DAILY = loadDailyCards();
-    if (!DAILY.length) return `<section class="page-head"><h1>${S.lang==='hi'?'आज का अभ्यास':'Today\'s practice'}</h1><p class="muted">${S.lang==='hi'?'पहले कुछ प्रश्न हल कीजिए।':'Solve a few questions first.'}</p><a class="btn btn-primary" href="#/ask">${icon('sparkle')} ${S.lang==='hi'?'पहला प्रश्न पूछें':'Ask your first question'}</a></section>`;
+    if (!DAILY.length) return `<section class="page-head"><h1>${S.lang==='hi'?'आज का अभ्यास':'Today\'s practice'}</h1><p class="muted">${S.lang==='hi'?'इन विकल्पों के लिए अभी अभ्यास योग्य प्रश्न नहीं हैं।':'No practice-ready questions are available for this selection.'}</p><a class="btn btn-primary" href="#/ask">${icon('sparkle')} ${S.lang==='hi'?'पहला प्रश्न पूछें':'Ask your first question'}</a></section>`;
     return `<section class="page-head">
       <span class="eyebrow">${icon('target')} ${S.lang==='hi'?'दैनिक 10':'Daily 10'}</span>
-      <h1>${S.lang==='hi'?'आज के 10 प्रश्न':'Today\'s 10 practice questions'}</h1>
-      <p>${S.lang==='hi'?'उपलब्ध प्रश्नों और दोहराव का मिश्रण। हर प्रश्न का उत्तर लिखिए — AI जाँचकर बताएगा सही है या गलत।':'A mix of available questions and review. Type your answer for each question — AI will check whether it is right or wrong.'}</p>
+      <h1>${S.lang==='hi'?`आज के ${DAILY.length} प्रश्न`:`Today's ${DAILY.length} practice question${DAILY.length===1?'':'s'}`}</h1>
+      <p>${S.lang==='hi'?'नए और दोहराने वाले प्रश्न। जहाँ AI जाँच उपलब्ध है, वहाँ अपना उत्तर लिखकर अभ्यास की प्रतिक्रिया पाएँ।':'A mix of new and review questions. Where a check is available, type your answer for AI practice feedback.'}</p>
       <div style="margin-top:12px;display:flex;gap:8px">
         <button class="btn btn-ghost btn-sm" data-action="dailyRefresh">${icon('arrow')} ${S.lang==='hi'?'नया सेट':'New set'}</button>
         <a class="btn btn-primary btn-sm" href="#/ask">${icon('sparkle')} ${S.lang==='hi'?'कुछ और पूछें':'Ask something else'}</a>
@@ -3965,6 +3946,7 @@ window.UP = window.UP || {};
         const answerId = questionControlId('daily-answer', i);
         const optionsId = questionControlId('daily-options', i);
         const verified = hasVerifiedAnswer(q);
+        const reviewOnly = sourceNeedsReview(q);
         /* Revealing used to print only "No verified answer key is recorded"
            and stop there, so "Think → reveal" gave the student nothing to
            check against. When the bank holds no key, the panel now asks the
@@ -3991,12 +3973,12 @@ window.UP = window.UP || {};
         }) : '';
         const choices = hasOpts(q) ? `<div class="q-question-extra q-options-extra">${choicesButton}<div id="${esc(optionsId)}" class="q-opts" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" hidden>${q.opts.map((o, oi) => `<div class="q-opt q-opt-static"><b>${String.fromCharCode(65 + oi)}</b><span>${rich(displayedChoiceText(o))}</span></div>`).join('')}</div></div>` : '';
         return `<article class="q-card pyq" id="daily-${i}" ${q.marked ? 'style="opacity:.65"' : ''}>
-          <div class="q-top"><span class="q-no">${i+1}</span><div class="q-meta">${ch?`<span class="tag grey">${esc(ch)}</span>`:''}${sourceMeta?`<span class="tag">${esc(sourceMeta)}</span>`:''}${q.label?`<span class="tag cream">${esc(q.label)}</span>`:(q.lv?`<span class="tag">${esc(q.lv)}</span>`:'')}</div>${questionActionBar(txt, thinkFirstButton(answerId))}</div>
+          <div class="q-top"><span class="q-no">${i+1}</span><div class="q-meta">${ch?`<span class="tag grey">${esc(ch)}</span>`:''}${sourceMeta?`<span class="tag">${esc(sourceMeta)}</span>`:''}${q.label?`<span class="tag cream">${esc(q.label)}</span>`:(q.lv?`<span class="tag">${esc(q.lv)}</span>`:'')}</div>${questionActionBar(txt, reviewOnly ? '' : thinkFirstButton(answerId))}</div>
           <div class="q-text">${rich(txt)}</div>
           ${questionDiagramMarkup(q, 'daily-' + i)}
           ${choices}
           <div id="${esc(answerId)}" class="q-answer-reveal" role="status" aria-live="polite" ${verified ? '' : `data-daily-ai="${i}"`} hidden>${answerText}</div>
-          ${dailyAnswerBlock(q, i)}
+          ${reviewOnly ? `<p class="muted">${S.lang === 'hi' ? 'पाठ की स्रोत-जाँच बाकी है। इस प्रश्न की जाँच नहीं होगी।' : 'Text pending source review. This question is not graded.'}</p>` : dailyAnswerBlock(q, i)}
         </article>`;
       }).join('')}
     </div>`;
@@ -4024,23 +4006,25 @@ window.UP = window.UP || {};
   }
   async function fetchDailyRevealAnswer(i) {
     const q = (DAILY || [])[i];
-    if (!q || hasVerifiedAnswer(q)) return;
+    const set = activeDailySet;
+    if (!q || !currentDailySet(set) || sourceNeedsReview(q) || hasVerifiedAnswer(q)) return;
     const state = dailyAnswerState(i);
     if (state.loading || state.text) return;
     S.dailyReveal = S.dailyReveal || {};
     S.dailyReveal[i] = { loading: true };
     render({ preserveScroll: true });
     try {
-      const question = pyqQuestionText(q) + (hasOpts(q) ? '\nOptions: ' + q.opts.map((o, j) => String.fromCharCode(65 + j) + '. ' + String((o && (o.en || o.hi)) || o || '')).join('  ') : '');
-      const body = await aiSolveText(question, q.ch);
+      const body = await aiSolveText(questionWithChoices(pyqQuestionText(q), q.opts), q.ch);
+      if (!currentDailySet(set)) return;
       const text = String((body && (body.result || body.answer)) || '').trim();
       S.dailyReveal[i] = text
         ? { text: text.slice(0, 1200) }
         : { text: '', error: 'AI could not produce an answer for this question.' };
     } catch (e) {
+      if (!currentDailySet(set)) return;
       S.dailyReveal[i] = { text: '', error: 'AI answer is unavailable right now — please try again.' };
     }
-    render({ preserveScroll: true });
+    if (parseHash().name === 'today') render({ preserveScroll: true });
   }
 
   /* Re-open the reveals the student had opened before a re-render. */
@@ -4052,6 +4036,7 @@ window.UP = window.UP || {};
       panel.hidden = false;
       const btn = document.querySelector('[data-action="toggle-question-panel"][data-target="' + panelId + '"]');
       if (btn) updatePanelButton(btn, true);
+      loadLazyQuestionFigure(panel);
     });
   }
 
@@ -4080,6 +4065,8 @@ window.UP = window.UP || {};
           <b>${S.lang === 'hi' ? 'आपका उत्तर जाँचा नहीं जा सका' : 'Your answer was not checked'}</b>
           <p>${esc(st.feedback || '')}</p>
           <p class="muted">${S.lang === 'hi' ? 'आपका लिखा उत्तर सुरक्षित है।' : 'Your typed answer is kept.'}</p>
+          <label class="mini-label" for="daily-input-${i}">${S.lang === 'hi' ? 'अपना उत्तर बदलें' : 'Edit your answer'}</label>
+          <textarea id="daily-input-${i}" data-daily-input="${i}" class="mock-ans" rows="2">${esc(st.answer)}</textarea>
           <div class="pactions"><button type="button" class="btn btn-cream btn-sm" data-action="dailyCheck" data-i="${i}">${icon('arrow')} ${S.lang === 'hi' ? 'फिर जाँचें' : 'Try the check again'}</button>${/sign in/i.test(String(st.feedback)) ? ` <a class="btn btn-ghost btn-sm" href="#/login">${S.lang === 'hi' ? 'साइन इन' : 'Sign in'}</a>` : ''}</div>
         </div></div>`;
       }
@@ -4094,18 +4081,18 @@ window.UP = window.UP || {};
     }
     return `<div class="daily-answer-box">
       <label class="mini-label" for="daily-input-${i}">${S.lang === 'hi' ? 'अपना उत्तर लिखिए' : 'Type your answer'}</label>
-      <textarea id="daily-input-${i}" class="mock-ans" rows="2" placeholder="${S.lang === 'hi' ? 'यहाँ अपना उत्तर लिखिए…' : 'Write your answer here…'}">${esc(st && st.answer || '')}</textarea>
+      <textarea id="daily-input-${i}" data-daily-input="${i}" class="mock-ans" rows="2" placeholder="${S.lang === 'hi' ? 'यहाँ अपना उत्तर लिखिए…' : 'Write your answer here…'}">${esc(st && st.answer || '')}</textarea>
       <div class="pactions"><button class="btn btn-primary btn-sm" data-action="dailyCheck" data-i="${i}">${icon('check')} ${S.lang === 'hi' ? 'AI से जाँचें' : 'Check my answer with AI'}</button></div>
     </div>`;
   }
   async function checkDailyAnswer(i) {
-    const q = (DAILY || [])[i]; if (!q) return;
+    const set = activeDailySet, q = (DAILY || [])[i];
+    if (!q || !currentDailySet(set) || sourceNeedsReview(q)) return;
     const inp = document.getElementById('daily-input-' + i);
-    /* On a retry the textarea is gone — its place holds the failure notice — so
-       fall back to the answer kept in state. Without this, "try again" had
-       nothing to send and re-rendering silently cleared the student's work. */
+    // Retries use the current edit, or the kept answer if the control is absent.
     const previous = dailyCheckState(q, i);
-    const answer = (inp ? inp.value.trim() : '') || String((previous && previous.answer) || '').trim();
+    if (previous?.checking) return;
+    const answer = inp ? inp.value.trim() : String(previous?.answer || '').trim();
     if (!answer) { toast(S.lang === 'hi' ? 'पहले अपना उत्तर लिखिए।' : 'Type your answer first.'); return; }
     S.dailyAI = S.dailyAI || {};
     const key = dailyStateKey(q, i);
@@ -4113,16 +4100,14 @@ window.UP = window.UP || {};
     render({ preserveScroll: true });
     try {
       const reference = hasVerifiedAnswer(q) ? String(q.ans || '') : '';
-      const j = await aiCheckAnswerText(pyqQuestionText(q), answer, reference);
+      const j = await aiCheckAnswerText(questionWithChoices(pyqQuestionText(q), q.opts), answer, reference);
+      if (!currentDailySet(set)) return;
       S.dailyAI[key] = { verdict: j.verdict, feedback: j.feedback || '', correctAnswer: j.correctAnswer || '', answer };
-      if (j.verdict === 'correct' || j.verdict === 'incorrect') {
-        rememberAssessment({ q: pyqQuestionText(q), ch: q.ch, source: { m: 1, opts: q.opts || [], ans: j.correctAnswer || answer } }, answer,
-          { status: j.verdict, awarded: j.verdict === 'correct' ? 1 : 0, max: 1, expected: j.correctAnswer || '', reason: 'ai-check' });
-      }
     } catch (e) {
+      if (!currentDailySet(set)) return;
       S.dailyAI[key] = { verdict: 'cannot-tell', feedback: aiCheckFailureMessage(e), answer, failed: true, code: e && e.code || '' };
     }
-    render({ preserveScroll: true });
+    if (parseHash().name === 'today') render({ preserveScroll: true });
   }
 
   /* ============================================================
@@ -4572,8 +4557,7 @@ window.UP = window.UP || {};
         params.delete('new');
         history.replaceState(history.state, '', '#/mock' + (params.toString() ? '?' + params.toString() : ''));
       }
-      const mockScope = [S.board, String(S.cls), S.subject].join('|');
-      if (S.mockTest && S.mockTest.scope !== mockScope) clearMockTest();
+      if (S.mockTest && S.mockTest.scope !== mockScope()) clearMockTest();
       html = S.mockTest && S.mockTest.finished ? viewMockResult() : viewMockTest({subject:S.subject});
       setTimeout(startMockTimer,50);
     }
@@ -4851,7 +4835,7 @@ window.UP = window.UP || {};
   function buildPaper(force) {
     // A cached paper is only valid for the scope and filters that built it.
     // Otherwise switching board/class/subject can display the previous paper.
-    const paperScope = JSON.stringify([S.board, +S.cls, S.subject, S.test.board, S.test.level, S.test.chapters || []]);
+    const paperScope = JSON.stringify([S.savedKey, S.board, +S.cls, S.subject, S.test.board, S.test.level, S.test.chapters || []]);
     if (!force && S.paper && S.paper._scope === paperScope) return S.paper;
     S.answers = {};
     const seed = S.test.seed || (Math.floor(Date.now() / 1000) % 99991);
@@ -4925,9 +4909,10 @@ window.UP = window.UP || {};
     const eShuf = exercises.slice().sort(() => rnd() - 0.5);
     const boardQuota = Math.min(bShuf.length, 15);   // up to 15 board PYQs
     const picked = bShuf.slice(0, boardQuota).concat(eShuf.slice(0, 20 - boardQuota)).slice(0, 20);
-    picked.sort((a, b) => (+a.m || (sourceBank ? 0 : 1)) - (+b.m || (sourceBank ? 0 : 1)));
+    const weight = q => Number.isInteger(+q.m) && +q.m > 0 ? +q.m : 0;
+    picked.sort((a, b) => weight(a) - weight(b));
     const groups = {};
-    picked.forEach(q => { const m = +q.m || (sourceBank ? 0 : 1); (groups[m] = groups[m] || []).push(q); });
+    picked.forEach(q => { const m = weight(q); (groups[m] = groups[m] || []).push(q); });
     let questionNumber = 0;
     const sections = Object.keys(groups).sort((a, b) => a - b).map(key => {
       const m = +key;
@@ -4935,7 +4920,7 @@ window.UP = window.UP || {};
         name: { en: m ? m + '-mark questions' : 'Selected source questions', hi: m ? m + '-अंक प्रश्न' : 'चुने हुए स्रोत-प्रश्न' },
         marks: m || null,
         questions: groups[key].map(q => ({
-          no: ++questionNumber, ch: q.ch, marks: +q.m > 0 ? +q.m : (sourceBank ? null : +m), tid: q.id, d: q.lv,
+          no: ++questionNumber, ch: q.ch, marks: m || null, tid: q.id, d: q.lv,
           keyVerified:q.keyVerified===true, en: q.sa || q.en, hi: q.sa || q.hi || '', opts: hasOpts(q) && !UP.questionQuality.sourceOptionIssue(q) ? q.opts : null, ans: q.ans || '',
           steps: null, fig: q.fig || null, raw: q
         }))
@@ -4944,7 +4929,7 @@ window.UP = window.UP || {};
     return {
       title: { en: (UP.subjects[S.subject] || { en: S.subject }).en + ' practice set',
                hi: ((UP.subjects[S.subject] || {}).hi || S.subject) + ' अभ्यास-सेट' },
-      total: sourceBank ? null : picked.reduce((a, q) => a + (+q.m || 1), 0),
+      total: sourceBank || picked.some(q => !weight(q)) ? null : picked.reduce((a, q) => a + weight(q), 0),
       time: Math.max(20, picked.length * 3),
       seed: seed, sections: sections
     };
@@ -5286,33 +5271,12 @@ window.UP = window.UP || {};
     </section>`;
   }
 
-  /* Strip OCR garbage that leaked into Hindi past-paper questions:
-     "00 शब्दों" placeholder for word count, page/set codes like "4//2 3 2886 44",
-     stray "5]", "56" page numbers, P.T.O., etc. Called on display only so the
-     raw bank stays unchanged. */
+  // Remove a labelled print footer, not the neighbouring run of numbers and
+  // symbols. It may be the entire data table, a fraction, a ratio or ||.
+  // In particular, never "repair" a Hindi word limit or supply missing text.
   function cleanQText(t) {
-    if (!t) return t;
-    let s = String(t);
-    // 1) Strip pdfminer / embedded control tokens like "]%4<4" or "] 2 < 4"
-    s = s.replace(/\]%?\d+\s*<\s*\d+/g, ' ');
-    // 2) Fix OCR'd orphan pre-base matras: explicit common-word repair
-    s = s.replace(/(^|[\s।॥,:;!?"')(])\s*ि\s*म्नलिखित/g, '$1निम्नलिखित');
-    // Generic: drop orphan pre/post matras sitting at the start of a word
-    // (ि/ु/ू directly after whitespace/punctuation but with no base consonant before them)
-    s = s.replace(/(^|[\s।॥,:;!?"')(])[िुूेैोौॅॉ]+(?=[\u0915-\u0939])/g, '$1');
-    // 3) 00 शब्दों → लगभग 100 शब्दों
-    s = s.replace(/00\s*शब्दों/g, 'लगभग 100 शब्दों');
-    // 4) Set-code / roll-no remnants
-    s = s.replace(/[134][/\u2215][/\\2S]?\s*\d+\s+\d{4,5}\b/g, ' ');
-    // Standalone numbers can be real physical quantities (1000 W, 2025 Hz).
-    s = s.replace(/\b\d\s*[/।|\]]\s*अथवा/g, 'अथवा');
-    s = s.replace(/\b\d+\]\s*(?=अथवा|आप|सिद्ध|निम्न|सिद्ध)/g, ' ');
-    s = s.replace(/[Pp]\.?\s*[Tt]\.?\s*[Oo]\.?/g, ' ');
-    // 5) Drop OCR-noise runs — but ONLY when the run contains a real noise symbol (/ | ] [ % # etc.).
-    // A plain digit/punctuation run is usually a genuine number sequence (an A.P., a data list) and must survive.
-    s = s.replace(/(^|[\s।॥])[0-9०-९\s/\\|[\](){}<>%@#$^*+=~`'".,;:!?-]*[/\\|[\]%#$^*~`<>][0-9०-९\s/\\|[\](){}<>%@#$^*+=~`'".,;:!?-]*/g, '$1');
-    s = s.replace(/\s+/g, ' ').trim();
-    return s;
+    return String(t || '').replace(/\s+(?:\.?\d{1,3}\/\d+\/\d+\s+\d{1,3}\s+)?P\.\s*T\.\s*O\.(?=\s|$)/gi, ' ')
+      .replace(/\s+/g, ' ').trim();
   }
 
   function questionCard(q) {
@@ -5593,28 +5557,6 @@ window.UP = window.UP || {};
     if (idx < 0) return;
     const next = cards.slice(idx + 1, idx + 4).map(c => c.id);
     UP.answers.warm(next, S.subject);
-  }
-
-  /* forgiving answer comparison: numbers, fractions, units, surds */
-  function sameAnswer(given, want) {
-    const clean = (x) => String(x == null ? '' : x)
-      .toLowerCase()
-      .replace(/[−–—]/g, '-')
-      .replace(/\s+/g, '')
-      .replace(/cm|m²|cm²|m\^?2|units?|°/g, '')
-      .replace(/[.,;]+$/, '');
-    const g = clean(given), w = clean(want);
-    if (!g) return false;
-    if (g === w) return true;
-    /* numeric equivalence: "0.4" vs "2/5" */
-    const val = (t) => {
-      if (/^-?\d+\/\d+$/.test(t)) { const [a, b] = t.split('/').map(Number); return a / b; }
-      if (/^-?\d*\.?\d+$/.test(t)) return parseFloat(t);
-      return null;
-    };
-    const a = val(g), b = val(w);
-    if (a !== null && b !== null && Math.abs(a - b) < 1e-6) return true;
-    return false;
   }
 
   /* ============================== PAST YEARS ============================== */
@@ -6377,9 +6319,9 @@ window.UP = window.UP || {};
       /* Remember which panels the student opened. Fetching an AI answer
          re-renders the page, and without this the reveal they had just opened
          snapped shut again on the answer it had just fetched. */
-      if (panel.dataset.dailyAi != null) {
+      if (panel.closest('.daily-list')) {
         S.dailyOpen = S.dailyOpen || {};
-        if (expanded) S.dailyOpen[panel.id] = panel.dataset.dailyAi; else delete S.dailyOpen[panel.id];
+        if (expanded) S.dailyOpen[panel.id] = true; else delete S.dailyOpen[panel.id];
       }
       updatePanelButton(tgt, expanded);
       if (expanded) {
@@ -6503,7 +6445,7 @@ window.UP = window.UP || {};
       const text = (inp ? inp.value : '').trim();
       const graded = hasVerifiedAnswer(q);
       if (graded) practiceAttempt(q,text);
-      S.answers[no] = { text, ok: graded ? sameAnswer(text, q.ans) : null, shown: true, aiChecking: !graded };
+      S.answers[no] = { text, ok: graded ? UP.mockAssessment.samePracticeAnswer(text, q.ans) : null, shown: true, aiChecking: !graded };
       render(); if (!graded) aiGradeTestAnswer(no); return;
     }
     if (action === 'test-reveal') {
@@ -6738,10 +6680,7 @@ window.UP = window.UP || {};
     if (action === 'voiceInput') { e.preventDefault(); startVoiceInput(); return; }
     if (action === 'cameraOCR') { e.preventDefault(); triggerCameraOCR(); return; }
     if (action === 'dailyRefresh') {
-      DAILY = null;
-      S.dailySet = null;
-      store.remove && store.remove(dailyStoreKey());
-      DAILY = loadDailyCards();
+      buildDailySet(true);
       render();
       return;
     }
@@ -7229,9 +7168,8 @@ function srsMark(q, gotIt){
   });
   saveMastery();
 }
-/* Rebuild buildDailySet to be date-seeded and SRS-aware */
-function _stableDailyPick(){
-  const seed = todayKey();
+function _stableDailyPick(draw){
+  const seed = todayKey() + (draw ? ':' + draw : '');
   let h = 0; for (let i=0;i<seed.length;i++) h = (h*31 + seed.charCodeAt(i)) >>> 0;
   // An unsigned 32-bit value must be divided by 2^32, not 2^31-1:
   // array selection needs a number in [0,1), even on a fresh install.
@@ -7243,17 +7181,26 @@ function chapNameForQ(q){
   if (ch) return P(ch);
   return (q.src||'').split('·')[0].trim() || '';
 }
-buildDailySet = function(){
-  const today = todayKey();
-  const scope = [S.board, String(S.cls), S.subject, S.lang].join('|');
-  // Invalidate stale/old-format or differently scoped daily sets.
-  if (S.dailySet && S.dailySet.date === today && S.dailySet.scope === scope && Array.isArray(S.dailySet.items) && S.dailySet.items.length) {
-    const ok = S.dailySet.items.every(it => it && typeof it === 'object' && (it.q||'').trim().length > 5);
-    if (ok) return S.dailySet.items;
+function buildDailySet(refresh = false){
+  const today = todayKey(), scope = dailyScope(), cached = S.dailySet;
+  const sameDay = cached && cached.date === today && cached.scope === scope;
+  if (!refresh && sameDay && Array.isArray(cached.items) && cached.items.length) {
+    if (cached === validatedDailySet) return cached.items;
+    // Rehydrate an old saved set against the current curated bank. Never let
+    // a removed row or a stale key in a local snapshot back into practice.
+    const bank = UP.pyq || [];
+    const sources = cached.items.map(it => {
+      const id = it?.raw?.id || it?.id;
+      const row = bank.find(q => (id ? q.id === id : it && pyqQuestionText(q) === it.q) && qInScope(q));
+      return row && pyqQuestionText(row) === it.q && sampledSource(row);
+    });
+    if (sources.every(Boolean)) {
+      cached.items.forEach((it,i) => { it.raw = sources[i]; });
+      validatedDailySet = cached; return cached.items;
+    }
   }
-  // Discard broken set
-  S.dailySet = null; store.remove(dailyStoreKey());
-  const rand = _stableDailyPick();
+  const draw = (sameDay && Number.isSafeInteger(cached.draw) ? cached.draw : 0) + (refresh ? 1 : 0);
+  const rand = _stableDailyPick(draw);
   const pick=(arr,n)=>{ const a=arr.slice(); const out=[]; while(out.length<n && a.length){ const idx=Math.floor(rand()*a.length); out.push(a.splice(idx,1)[0]); } return out; };
   const MIN_Q = 20;
   function good(q){ return q && String(q).trim().length >= MIN_Q; }
@@ -7267,9 +7214,8 @@ buildDailySet = function(){
   // the app already refuses to show (a glued option list, a mangled stem),
   // which is how an unanswerable "question" reached the daily set.
   const pool = (UP.pyq||[])
-    .filter(qInScope)
-    .map(q=>({raw:q, text:pyqQuestionText(q)}))
-    .filter(x=>good(x.text) && !(UP.questionQuality && UP.questionQuality.inspect(x.raw, S.subject)));
+    .filter(qInScope).map(sampledSource).filter(Boolean)
+    .map(q=>({raw:q, text:pyqQuestionText(q)})).filter(x=>good(x.text));
 
   // Initialize SRS cards and expose multi-chapter OR roots in every tagged chapter.
   const chMap={};
@@ -7317,18 +7263,49 @@ buildDailySet = function(){
 
   // If we still don't have 10 (cold start with no mastery data), fill with random pool Qs
   if (items.length < 10) {
-    const filler = pool
+    const filler = Array.from(new Map(pool.map(x=>[x.text,x])).values())
       .filter(x=>!used.has(x.text))
       .map(x=>({q:x.text, ch:x.raw.ch, chName:chapNameForQ(x.raw), sourceMeta:sourceLabel(x.raw), label:S.lang==='hi'?'स्ट्रेच':'Stretch', raw:x.raw}));
     pick(filler, 10-items.length).forEach(it=>{ if(!used.has(it.q)){ used.add(it.q); items.push(it); } });
   }
 
-  S.dailySet = { date: today, scope, items: items.slice(0,10) };
+  S.dailySet = validatedDailySet = { date: today, scope, draw, items: items.slice(0,10) };
   store.set(dailyStoreKey(), S.dailySet);
   return S.dailySet.items;
-};
+}
 
 /* ---------- #4 Mock test mode ---------- */
+function mockScope(){ return [S.board, String(S.cls), S.subject].join('|'); }
+function restoreMockMetadata(test){
+  if (!test || test.sourceVersion === 1 || !Array.isArray(test.items)) return;
+  const bank = new Map((UP.pyq || []).filter(qInScope).map(q => [q.id, q]));
+  for (const [i, it] of test.items.entries()) {
+    const s = it.source;
+    if (!s?.id) continue;
+    const row = bank.get(s.id);
+    const ready = row && row.en === s.en && row.hi === s.hi && sampledSource(row);
+    // Old checks of choice letters lacked the list that gave the letter its
+    // meaning. Discard that feedback, not the student's answer or edits.
+    if (hasOpts(s) && test.aiChecks) delete test.aiChecks[i];
+    if (ready && JSON.stringify(ready.opts || []) === JSON.stringify(s.opts || [])) {
+      it.source = {...ready}; // current supplied marks and key status, not the old inferred 1
+      it.q = pyqQuestionText(ready);
+    } else {
+      // Keep the attempt, but an absent/changed source list cannot verify it.
+      if (hasOpts(s) && s.m === 1) s.m = null;
+      s.qualityStatus = 'withheld'; s.keyVerified = false;
+    }
+  }
+  if (test.answers) delete test.answers.NaN; // old Daily textareas wrote a phantom mock answer
+  test.sourceVersion = 1;
+  if (test.finished) test.score = UP.mockAssessment.score(test);
+  store.set(mockStoreKey(), test);
+}
+function mockMarksSummary(score){
+  if (!score.unknownMarks) return `${score.knownTotal} total marks`;
+  const n = score.unknownMarks;
+  return `${score.knownTotal ? 'Known marks: '+score.knownTotal+' (subtotal)' : 'Total marks not supplied'} · ${n} question${n===1?' has':'s have'} no supplied marks`;
+}
 function viewMockTest(params){
   const subject = params.subject || S.subject;
   const N = 80;
@@ -7337,21 +7314,16 @@ function viewMockTest(params){
   if (!S.mockTest || !Array.isArray(S.mockTest.items) || !S.mockTest.items.length || !S.mockTest.started) {
     const pool=[];
     const seenIds = new Set();
-    function qText(q){ return pyqQuestionText(q); }
+    const eligible = myBank().map(sampledSource).filter(Boolean);
     (UP.catalogue(S.cls, subject)||[]).forEach(c=>{
-      const qs = (UP.pyq||[]).filter(function(q){
-        return qInScope(q) && qSubject(q)===subject && UP.qHasChapter(q, c.id);
-      });
+      const qs = eligible.filter(q => UP.qHasChapter(q, c.id));
       qs.forEach(function(q){
         if (q.id && seenIds.has(q.id)) return;
         if (q.id) seenIds.add(q.id);
-        const t = qText(q);
-        if (t && t.length >= 15 && !(UP.questionQuality && UP.questionQuality.testReadyIssue(q))) {
+        const t = pyqQuestionText(q);
+        if (t && t.length >= 15) {
           const chapters = (UP.qChapterIds ? UP.qChapterIds(q) : [q.ch]).map(id => (UP.catalogue(S.cls, subject)||[]).find(ch => String(ch.id) === String(id))).filter(Boolean).map(P);
-          const src = Object.assign({}, q);
-          /* CBSE MCQs are 1 mark each; only invent that standard value, never marks for theory questions. */
-          if (!(Number.isInteger(+src.m) && +src.m >= 1) && Array.isArray(src.opts) && src.opts.length >= 2) src.m = 1;
-          pool.push({q:t, ch:q.ch || c.id, chName:chapters.join(' / ') || P(c), source:src});
+          pool.push({q:t, ch:q.ch || c.id, chName:chapters.join(' / ') || P(c), source:{...q}});
         }
       });
     });
@@ -7366,23 +7338,22 @@ function viewMockTest(params){
     while(picked.length<count){ picked.push(copy.splice(Math.floor(Math.random()*copy.length),1)[0]); }
     // Complete, verified keys are not available for every question.
     const ungraded = true;
-    S.mockTest = { subject, scope:[S.board, String(S.cls), subject].join('|'), started:Date.now(), items:picked, answers:{}, durations:{}, finished:false, ungraded };
+    S.mockTest = { sourceVersion:1, subject, scope:mockScope(), started:Date.now(), items:picked, answers:{}, durations:{}, finished:false, ungraded };
     store.set(mockStoreKey(), S.mockTest);
   }
-  // Old imported keys remain ungraded unless explicitly verified and supported.
+  restoreMockMetadata(S.mockTest);
   const picked = S.mockTest.items;
-  const answers = S.mockTest.answers || (S.mockTest.answers = {});
+  S.mockTest.answers = S.mockTest.answers || {};
   S.mockTest.submitted = S.mockTest.submitted || {};
-  const attempted = Object.values(answers).filter(v => String(v || '').trim()).length;
   const score = UP.mockAssessment.score(S.mockTest);
   return `<section class="page-head">
     <span class="eyebrow">${icon('clock')} ${S.lang==='hi'?'मॉक टेस्ट':'Mock test'}</span>
     <h1>${esc(P(UP.subjects[subject]))} — ${picked.length} ${S.lang==='hi'?'प्रश्न':'questions'}</h1>
-    <p>3 hours · <b>${score.knownTotal} total marks</b>${score.unknownMarks ? ' · '+score.unknownMarks+' theory questions have no marks in the source' : ''}. <b>Every question card below shows how many marks that question carries.</b> After you finish, each card also shows how much you scored on it. Verified keys are auto-marked; other answers can be checked with AI on the result page. This is a practice sample, not an official board paper.</p>
+    <p>3 hours · <b>${mockMarksSummary(score)}</b>. Each card shows its supplied marks, if known. After you finish, each card also shows how much you scored on it. Verified keys are auto-marked; other answers can be checked with AI on the result page. This is a practice sample, not an official board paper.</p>
   </section>
   <div class="card flat mock-toolbar">
     <div id="mock-timer" style="font-size:22px;font-weight:700;font-variant-numeric:tabular-nums">03:00:00</div>
-    <span id="mock-progress" class="tag grey">${attempted} / ${picked.length}</span>
+    <span id="mock-progress" class="tag grey">${score.attempted} / ${picked.length}</span>
     <button class="btn btn-primary btn-sm" id="mock-submit">${icon('check')} ${S.lang==='hi'?'टेस्ट समाप्त करें':'Finish test & see marks'}</button>
   </div>
   <ol class="mock-list" id="mock-list" style="padding:0;margin:12px 0;list-style:none">
@@ -7395,8 +7366,8 @@ function mockQuestionCard(it,i,result){
   return `<li class="card flat mock-question" data-mock-question="${i}">
     <div class="meta-row"><span class="tag cream">Q${i+1} · ${m===null?'no marks supplied':m+' mark'+(m===1?'':'s')}</span>${result?`<span class="tag ${a.awarded===null?'grey':'cream'}">${a.awarded===null?'Your score: pending':('Your score: '+a.awarded+' / '+a.max)}</span>`:''}
     <details class="mock-info"><summary aria-label="Chapter and marks for question ${i+1}" aria-controls="${detailsId}">${icon('info')} Question info</summary><div id="${detailsId}"><b>Chapter:</b> ${esc(it.chName||'Not mapped')}<br><b>Marks:</b> ${m===null?'Not supplied by source':m}<br><b>Source:</b> ${esc(it.source && (it.source.src||it.source.paperCode)||'Practice question')}</div></details></div>
-    <p class="mock-qtext">${esc(it.q)}</p>
-    ${it.source&&Array.isArray(it.source.opts)?'<ul>'+it.source.opts.map((o,j)=>'<li>'+String.fromCharCode(65+j)+'. '+esc(P(o))+'</li>').join('')+'</ul>':''}
+    <p class="mock-qtext">${it.source?.qualityStatus==='withheld'?'Saved question withheld pending source review. Your answer is kept.':esc(it.q)}</p>
+    ${it.source?.qualityStatus!=='withheld'&&hasOpts(it.source||{})?'<ul>'+it.source.opts.map((o,j)=>'<li>'+String.fromCharCode(65+j)+'. '+esc(displayedChoiceText(o))+'</li>').join('')+'</ul>':''}
     <label class="mini-label" for="mock-answer-${i}">Your answer</label>
     <textarea id="mock-answer-${i}" rows="3" class="mock-ans" data-i="${i}" ${submitted||result?'readonly':''}>${esc(answer)}</textarea>
     ${result?'':`<div class="pactions"><button class="btn btn-primary btn-sm" data-mock-submit="${i}" ${submitted?'disabled':''}>${submitted?'Answer submitted':'Submit answer'}</button><button class="btn btn-cream btn-sm" data-mock-edit="${i}" ${submitted?'':'disabled'}>Edit answer</button></div>`}
@@ -7410,18 +7381,27 @@ function mockFeedback(it,i,a,result){
   const labels={correct:'Correct',incorrect:'Incorrect',pending:'Submitted · review needed',unattempted:'Not answered'};
   const score=a.awarded===null?'Marks pending review':a.awarded+' / '+a.max+' marks';
   let guidance=a.status==='incorrect'?'Compare your answer with the verified key, identify the differing value/option, then rework the question and check it again.':a.status==='pending'?'A verified objective key/rubric is unavailable for automatic marking. Ask a teacher to review your reasoning, required points and units; no AI score is being treated as official.':a.status==='correct'?'Your answer matches the verified key.':'Attempt the question before reviewing its solution.';
-  const wrongPrompt = 'Question: ' + it.q + '\nMy answer: ' + (((S.mockTest||{}).answers||{})[i] || '') + (a.expected ? '\nCorrect answer: ' + a.expected : '') + '\nWhere did I go wrong? Explain my mistake and show the correct solution step by step.';
-  return `<div class="callout ${a.status==='incorrect'?'warn':'tip'} mock-feedback" role="status"><div><b>${labels[a.status]} · ${score}</b><p>${esc(guidance)}</p>${a.expected?'<p><b>Verified reference answer:</b> '+esc(a.expected)+'</p>':''}${a.status==='incorrect'?`<a class="btn btn-primary btn-sm" href="#/ask?q=${encodeURIComponent(wrongPrompt)}">${icon('sparkle')} Ask AI where I went wrong</a> `:''}<a class="btn btn-ghost btn-sm" href="#/ask?q=${encodeURIComponent(it.q)}">Understand the solution (AI explanation, not a marking scheme)</a> ${it.ch?'<a class="btn btn-ghost btn-sm" href="#/chapter/'+encodeURIComponent(it.ch)+'">Revise chapter</a>':''}</div></div>`;
+  if (it.source?.qualityStatus === 'withheld') return '<p class="muted">This saved question cannot be graded.</p>';
+  const prompt = questionWithChoices(it.q, it.source?.opts);
+  const wrongPrompt = 'Question: ' + prompt + '\nMy answer: ' + (((S.mockTest||{}).answers||{})[i] || '') + (a.expected ? '\nCorrect answer: ' + a.expected : '') + '\nWhere did I go wrong? Explain my mistake and show the correct solution step by step.';
+  return `<div class="callout ${a.status==='incorrect'?'warn':'tip'} mock-feedback" role="status"><div><b>${labels[a.status]} · ${score}</b><p>${esc(guidance)}</p>${a.expected?'<p><b>Verified reference answer:</b> '+esc(a.expected)+'</p>':''}${a.status==='incorrect'?`<a class="btn btn-primary btn-sm" href="#/ask?q=${encodeURIComponent(wrongPrompt)}">${icon('sparkle')} Ask AI where I went wrong</a> `:''}<a class="btn btn-ghost btn-sm" href="#/ask?q=${encodeURIComponent(prompt)}">Understand the solution (AI explanation, not a marking scheme)</a> ${it.ch?'<a class="btn btn-ghost btn-sm" href="#/chapter/'+encodeURIComponent(it.ch)+'">Revise chapter</a>':''}</div></div>`;
 }
 
+// Pending requests are transient. Reloading a result must allow retry, not
+// restore a fictitious verdict or an eternal persisted "loading" flag.
+const pendingMockChecks = new WeakMap(), mockBatches = new WeakMap();
+function canCheckMock(it,answer,a){
+  return !!answer && it.source?.qualityStatus !== 'withheld' && !sourceNeedsReview(it.source)
+    && !(a.reason === 'verified-key' && (a.status === 'correct' || a.status === 'incorrect'));
+}
 function mockAICheckBlock(it,i,a){
   const test=S.mockTest, chk=(test.aiChecks||{})[i], answer=String((test.answers||{})[i]||'').trim();
-  if(!answer) return '';
-  if(a.reason==='verified-key' && (a.status==='correct'||a.status==='incorrect')) return '';
+  if(!canCheckMock(it,answer,a)) return '';
+  if(pendingMockChecks.get(test)?.has(i)) return '<p class="muted mock-ai-pending" role="status">Checking your answer with AI…</p>';
   if(chk && chk.error) return `<div class="callout warn mock-ai-check" role="status"><div><b>AI check could not run.</b><p>${esc(chk.error)}</p><button class="btn btn-cream btn-sm" data-mock-ai-check="${i}">Try AI check again</button></div></div>`;
-  if(!chk) return `<div class="pactions mock-ai-actions"><button class="btn btn-cream btn-sm" data-mock-ai-check="${i}">${icon('sparkle')} Check this answer with AI</button></div>`;
+  if(!chk?.verdict) return `<div class="pactions mock-ai-actions"><button class="btn btn-cream btn-sm" data-mock-ai-check="${i}">${icon('sparkle')} Check this answer with AI</button></div>`;
   const verdictLabels={correct:'AI check: Correct','partly-correct':'AI check: Partly correct',incorrect:'AI check: Incorrect','cannot-tell':'AI check: Could not decide'};
-  const wrongPrompt='Question: '+it.q+'\nMy answer: '+answer+(chk.correctAnswer?'\nCorrect answer: '+chk.correctAnswer:'')+'\nWhere did I go wrong? Explain my mistake and show the correct solution step by step.';
+  const wrongPrompt='Question: '+questionWithChoices(it.q, it.source?.opts)+'\nMy answer: '+answer+(chk.correctAnswer?'\nCorrect answer: '+chk.correctAnswer:'')+'\nWhere did I go wrong? Explain my mistake and show the correct solution step by step.';
   return `<div class="callout ${chk.verdict==='incorrect'?'warn':'tip'} mock-ai-check" role="status"><div><b>${verdictLabels[chk.verdict]||'AI check'}</b>${chk.marksHint?` <span class="tag grey">${esc(chk.marksHint)}</span>`:''}<p>${esc(chk.feedback||'')}</p>${chk.correctAnswer?'<p><b>Correct answer:</b> '+esc(chk.correctAnswer)+'</p>':''}<p class="muted">AI practice feedback — not official board marking.</p><div class="pactions">${chk.verdict!=='correct'?`<a class="btn btn-primary btn-sm" href="#/ask?q=${encodeURIComponent(wrongPrompt)}">${icon('sparkle')} Ask AI where I went wrong</a> ${topicButton(it)}`:similarButton(it)}</div></div></div>`;
 }
 function topicHrefFor(q){ return q && q.ch ? '#/chapter/' + encodeURIComponent(q.ch) : '#/syllabus'; }
@@ -7429,6 +7409,9 @@ function similarHrefFor(q){ return q && q.ch ? '#/pyq?ch=' + encodeURIComponent(
 function topicButton(q, label){ return `<a class="btn btn-ghost btn-sm" href="${topicHrefFor(q)}">${icon('book')} ${label || (S.lang === 'hi' ? 'पुस्तक में यह टॉपिक पढ़ें' : 'Learn this topic in the book')}</a>`; }
 function similarButton(q){ return `<a class="btn btn-primary btn-sm" href="${similarHrefFor(q)}">${icon('sparkle')} ${S.lang === 'hi' ? 'इसी तरह का एक और प्रश्न' : 'Try a similar question'}</a>`; }
 async function aiCheckAnswerText(question, studentAnswer, referenceAnswer){
+  if (question.length > 4000 || studentAnswer.length > 4000 || (referenceAnswer || '').length > 2000) {
+    throw Object.assign(new Error('Answer check is too long.'), {code:'check_text_too_long'});
+  }
   const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
   const timer = controller ? setTimeout(() => controller.abort(), 120000) : null;
   try {
@@ -7453,6 +7436,7 @@ function aiCheckFailureMessage(err) {
   const code = String((err && err.code) || '');
   const status = Number(err && err.status) || 0;
   const hi = S.lang === 'hi';
+  if (code === 'check_text_too_long') return hi ? 'पूरा प्रश्न या उत्तर AI जाँच की सीमा से लंबा है। आंशिक जाँच नहीं हुई।' : 'The full question or answer exceeds the AI check limit. No partial answer was checked.';
   if (code === 'sign_in_required' || status === 401 || (status === 403 && !S.user)) {
     return hi ? 'AI से उत्तर जाँचने के लिए साइन इन करें।' : 'Sign in to check answers with AI.';
   }
@@ -7481,44 +7465,70 @@ function aiCheckFailureMessage(err) {
 async function aiGradeTestAnswer(no){
   const q = findQ(no); const a = S.answers[no];
   if (!q || !a) return;
-  const studentAnswer = a.pick || a.text || '';
+  const paper = S.paper, owner = S.savedKey;
+  const current = () => S.paper === paper && S.answers[no] === a && S.savedKey === owner;
+  const studentAnswer = a.pickIndex != null && hasOpts(q) ? String.fromCharCode(65+a.pickIndex)+'. '+displayedChoiceText(q.opts[a.pickIndex]) : a.text || '';
   if (!String(studentAnswer).trim()) { a.aiChecking = false; return; }
-  const questionText = (q.en || q.hi || '') + (Array.isArray(q.opts) && q.opts.length ? '\nOptions: ' + q.opts.map((o, j) => String.fromCharCode(65 + j) + '. ' + String((o || {}).en || o || '')).join('  ') : '');
   try {
-    const j = await aiCheckAnswerText(questionText, studentAnswer, '');
+    const j = await aiCheckAnswerText(questionWithChoices(P(q), q.opts), studentAnswer, '');
+    if (!current()) return;
     a.aiChecking = false; a.aiVerdict = j.verdict; a.aiFeedback = j.feedback || ''; a.aiCorrect = j.correctAnswer || '';
     a.ok = j.verdict === 'correct' ? true : j.verdict === 'incorrect' ? false : null;
-    if (j.verdict === 'correct' || j.verdict === 'incorrect') {
-      rememberAssessment({ q: q.en || q.hi || '', ch: q.ch, source: { m: 1, opts: q.opts || [], ans: a.aiCorrect || studentAnswer } }, studentAnswer,
-        { status: j.verdict, awarded: j.verdict === 'correct' ? 1 : 0, max: 1, expected: a.aiCorrect || '', reason: 'ai-check' });
-    }
   } catch (e) {
+    if (!current()) return;
     a.aiChecking = false; a.aiVerdict = 'cannot-tell'; a.aiFeedback = aiCheckFailureMessage(e);
   }
-  render({ preserveScroll: true });
+  if(parseHash().name === 'test') render({ preserveScroll: true });
 }
-async function checkMockAnswerWithAI(i){
-  const test=S.mockTest; if(!test||!test.items[i])return;
-  const it=test.items[i], answer=String((test.answers||{})[i]||'').trim(); if(!answer)return;
-  test.aiChecks=test.aiChecks||{}; test.aiChecks[i]={loading:true}; store.set(mockStoreKey(),test); render();
-  try{
-    const j=await aiCheckAnswerText(it.q,answer,UP.mockAssessment.key(it));
-    test.aiChecks[i]={verdict:j.verdict,feedback:j.feedback||'',correctAnswer:j.correctAnswer||'',marksHint:j.marksHint||''};
-  }catch(e){ test.aiChecks[i]={error:String(e&&e.message||e||'AI check failed.')}; }
-  store.set(mockStoreKey(),test); render();
+function currentMock(test, owner){
+  return test === S.mockTest && test?.finished && test.scope === mockScope() && owner === mockStoreKey();
+}
+function onMockPage(){return ['mock','mockresult'].includes(parseHash().name);}
+async function checkMockAnswerWithAI(i, test = S.mockTest){
+  const owner = mockStoreKey();
+  if (!currentMock(test, owner) || !test.items[i]) return;
+  const it = test.items[i], answer = String(test.answers?.[i] || '').trim();
+  if (!canCheckMock(it, answer, UP.mockAssessment.assess(it,answer)) || test.aiChecks?.[i]?.verdict) return;
+  const pending = pendingMockChecks.get(test) || new Set();
+  if (pending.has(i)) return;
+  pendingMockChecks.set(test, pending); pending.add(i);
+  render({ preserveScroll:true });
+  let result;
+  try {
+    const j = await aiCheckAnswerText(questionWithChoices(it.q, it.source?.opts), answer, UP.mockAssessment.key(it));
+    result = {verdict:j.verdict,feedback:j.feedback||'',correctAnswer:j.correctAnswer||'',marksHint:j.marksHint||''};
+  } catch(e) { result = {error:aiCheckFailureMessage(e)}; }
+  finally { pending.delete(i); }
+  if (!currentMock(test, owner)) return;
+  (test.aiChecks ||= {})[i] = result;
+  store.set(owner, test);
+  if (onMockPage()) render({ preserveScroll:true });
 }
 async function checkAllMockAnswersWithAI(){
-  const test=S.mockTest; if(!test||!test.finished)return;
-  const status=document.querySelector('[data-mock-ai-status]');
-  const todo=test.items.map((it,i)=>i).filter(i=>{
-    const ans=String((test.answers||{})[i]||'').trim(); if(!ans)return false;
-    const a=UP.mockAssessment.assess(test.items[i],ans);
-    if(a.reason==='verified-key'&&(a.status==='correct'||a.status==='incorrect'))return false;
-    const chk=(test.aiChecks||{})[i]; return !(chk&&chk.verdict);
+  const test = S.mockTest, owner = mockStoreKey();
+  if (!currentMock(test, owner)) return;
+  const todo = test.items.map((_,i)=>i).filter(i=>{
+    const answer = String(test.answers?.[i] || '').trim();
+    return canCheckMock(test.items[i],answer,UP.mockAssessment.assess(test.items[i],answer)) && !test.aiChecks?.[i]?.verdict;
   });
-  if(!todo.length){ if(status)status.textContent='Every attempted answer is already checked.'; return; }
-  let done=0;
-  for(const i of todo){ if(status)status.textContent='Checking answer '+(done+1)+' of '+todo.length+' with AI…'; await checkMockAnswerWithAI(i); done++; }
+  if (!todo.length) {
+    const status = document.querySelector('[data-mock-ai-status]');
+    if (status) status.textContent='No attempted answers need an AI check.';
+    return;
+  }
+  if (mockBatches.has(test)) return;
+  const batch = {number:0, total:todo.length};
+  mockBatches.set(test,batch);
+  try {
+    for (const i of todo) {
+      if (!currentMock(test, owner) || !onMockPage()) return;
+      batch.number++;
+      await checkMockAnswerWithAI(i,test);
+    }
+  } finally {
+    mockBatches.delete(test);
+    if (currentMock(test,owner) && onMockPage()) render({preserveScroll:true});
+  }
 }
 function startMockTimer(){
   const el=document.getElementById('mock-timer'); if(!el) return;
@@ -7544,13 +7554,14 @@ function submitMockTest(auto){
 }
 function viewMockResult(){
   const test=S.mockTest;
-  if(!test || !test.finished)return '<div class="empty"><h3>No completed test</h3><a href="#/mock">Start a mock test</a></div>';
-  const r=UP.mockAssessment.score(test);
+  if(!test || !test.finished || test.scope !== mockScope())return '<div class="empty"><h3>No completed test</h3><a href="#/mock">Start a mock test</a></div>';
+  restoreMockMetadata(test);
+  const r=UP.mockAssessment.score(test), batch=mockBatches.get(test);
   return `<section class="page-head"><span class="eyebrow">Test completed</span>
     <h1>${r.gradable?('Your score: '+r.earned+' / '+r.gradable+' marks'):'Marks pending review'}</h1>
-    <p><b>${r.attempted} / ${r.total} questions attempted</b> · Paper total: ${r.knownTotal} marks${r.unknownMarks?' · '+r.unknownMarks+' questions have no supplied marks':''}. <b>Every question card below shows that question's marks and how much you scored on it</b> (auto-marked where a verified key exists).</p>
-    <p>${r.pending} questions (${r.pendingMarks} known marks) still need checking. Use AI to check them now — it will tell you, question by question, whether your answer is right or wrong and where you went wrong. AI checking is practice feedback, not official board marking.</p>
-    <div class="pactions"><button class="btn btn-primary" data-mock-ai-check-all>${icon('sparkle')} Check all my answers with AI</button><span data-mock-ai-status role="status"></span></div>
+    <p><b>${r.attempted} / ${r.total} questions attempted</b> · ${mockMarksSummary(r)}. Each card shows the confirmed score or indicates what is still pending.</p>
+    <p>${r.pending} questions (${r.pendingMarks} known marks) still need review. AI feedback on attempted answers is for practice, not a final board score. It cannot supply missing marks or change your confirmed score.</p>
+    <div class="pactions"><button class="btn btn-primary" data-mock-ai-check-all ${batch?'disabled':''}>${icon('sparkle')} Check all my answers with AI</button><span data-mock-ai-status role="status">${batch?`Checking answer ${batch.number} of ${batch.total}…`:''}</span></div>
     ${r.selfReviewed?'<p class="mock-estimate"><b>Self-assessed practice estimate: '+(r.earned+r.selfEarned)+' / '+(r.gradable+r.selfPossible)+' reviewed marks.</b> Includes '+r.selfReviewed+' user-reviewed answers, not independently verified; other pending questions are excluded.</p>':''}
     <a class="btn btn-primary btn-sm" href="#/mock?new=1">New practice test</a></section>
     <ol class="mock-list" style="padding:0;list-style:none">${test.items.map((it,i)=>mockQuestionCard(it,i,true)).join('')}</ol>`;
@@ -8062,8 +8073,13 @@ document.addEventListener('input',function(e){
     if(!S.mockTest||!S.mockTest.finished)return;
     S.mockTest.revisions=S.mockTest.revisions||{};S.mockTest.revisions[+e.target.dataset.i]=e.target.value;store.set(mockStoreKey(),S.mockTest);return;
   }
-  if(e.target.classList && e.target.classList.contains('mock-ans')){
-    const i=+e.target.dataset.i; if(!S.mockTest || S.mockTest.finished || (S.mockTest.submitted||{})[i]) return;
+  if(e.target.matches('textarea[data-daily-input]') && currentDailySet(activeDailySet)){
+    const i=Number(e.target.dataset.dailyInput), q=DAILY?.[i];
+    if(q) S.dailyAI[dailyStateKey(q,i)]={answer:e.target.value};
+    return;
+  }
+  if(e.target.matches('#mock-list textarea.mock-ans[data-i]')){
+    const i=Number(e.target.dataset.i); if(!Number.isInteger(i) || !S.mockTest?.items[i] || S.mockTest.finished || (S.mockTest.submitted||{})[i]) return;
     if(Date.now()>=S.mockTest.started+3*3600000){submitMockTest(true);return;}
     S.mockTest.answers[i] = e.target.value;
     store.set(mockStoreKey(), S.mockTest);

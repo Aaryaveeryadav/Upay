@@ -237,7 +237,7 @@ Scope is a JSON key: `["<savedKey>","<board>","<cls>","<subject>"]`, so real key
 | `upay.mastery.scope.*` | `{ [chapterId]: { attempted:number, correct:number, at:number, cards?: SrsCard[] } }` |
 | `upay.hardList.scope.*` | `string[]` |
 | `upay.dailyProgress.scope.*` | `{ [questionKey]: boolean }` |
-| `upay.dailySet` | `{ date:'YYYY-MM-DD', scope:string, items:[{ q, ch, chName, sourceMeta, label? }] }` (10 items) |
+| `upay.dailySet` | `{ date:string, scope:string, draw:number, items:[{ q, ch, chName, sourceMeta, label?, raw }] }` (up to 10 unique question texts; `draw` advances on explicit refresh) |
 | `upay.mockTest` | see §2.3 |
 | `upay.mockLast` | last finished mock result |
 
@@ -250,11 +250,12 @@ Scope is a JSON key: `["<savedKey>","<board>","<cls>","<subject>"]`, so real key
   subject: string,
   scope: string,                 // "cbse|10|maths"
   started: number,               // epoch ms
-  items: Question[],             // picked questions
+  sourceVersion: 1,              // source marks/choices preserved, no inferred MCQ mark
+  items: { q:string, ch, chName:string, source:BankRecord }[],
   answers: { [qno: number]: string },
   durations: { [qno: number]: number },
   finished: boolean,
-  ungraded: true                 // always true — no verified keys exist
+  ungraded: true                 // legacy flag; per-item key/marks determine actual grading
 }
 ```
 

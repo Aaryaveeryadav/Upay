@@ -26,6 +26,18 @@
   const CONTROL_OR_PRIVATE = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\ue000-\uf8ff]/;
   const HINDI_OCR_MARKS = /[#@$]|(?:॥\s*){5,}|^\s*\*\s*\*/;
 
+  // An initial dependent sign attached to letters (e.g. ्मृति) has lost its
+  // base. Do not reject an isolated sign discussed in a grammar question, a
+  // dotted-circle example, or a valid conjunct containing a joiner.
+  const BROKEN_HINDI_WORD = /(?:^|[^\u0900-\u097f\u200c\u200d◌])[ािीुूृॄेैोौंःँ़्][\u0900-\u0963\u200c\u200d]*[\u0904-\u0939\u0958-\u0961]/u;
+
+  // Six reviewed stems also contain isolated marks. Those marks can be
+  // legitimate punctuation; it is the lost word limit, torn words/table or
+  // joined debris in these transcriptions (including duplicate copies) that
+  // makes them unusable. No attempt to reconstruct them or their keys.
+  const HINDI_REVIEW_FRAGMENTS = ['उत्तर लगभग शब्दों लिखिए ः', 'किन््हीं ढ्गो', 'किन््हीं ढ्ो',
+    'विकल्प : ] , , ता)', '। ्ि रे .', '। च ि ( , ?'];
+
   function asText(value) {
     if (typeof value === 'string') return value;
     if (value && typeof value === 'object') return String(value.text || value.en || value.hi || value.value || '');
@@ -232,6 +244,7 @@
       const key = choiceText(option).toLowerCase();
       if (!key || seen.has(key)) return 'damaged-option';
       seen.add(key);
+      if (subject === 'hindi' && [asText(option), option?.hi, option?.en].some(v => v && BROKEN_HINDI_WORD.test(v))) return 'ocr-damaged-option';
       if (['hindi','sanskrit'].includes(subject) && /[\u0900-\u097f]/.test(text)
         && (HINDI_OCR_MARKS.test(text) || hasUnbalancedSquareBrackets(text)
           || /(?:[०-९\d]\s*){4,}/.test(text))) return 'ocr-damaged-option';
@@ -316,6 +329,7 @@
     if (isPaperDirections(text, q)) return 'paper-directions';
 
     if (CONTROL_OR_PRIVATE.test(text)) return 'ocr-damaged';
+    if (actualSubject === 'hindi' && (BROKEN_HINDI_WORD.test(text) || HINDI_REVIEW_FRAGMENTS.some(s => text.includes(s)))) return 'ocr-damaged';
     if (['hindi','sanskrit'].includes(actualSubject)) {
       if (/[\u0900-\u097f]/.test(text) && HINDI_OCR_MARKS.test(text)) return 'ocr-damaged';
       if (Array.isArray(q.opts) && q.opts.length >= 2) {
@@ -324,6 +338,20 @@
       }
     }
     return '';
+  }
+
+  // The absence of '=' is evidence of a torn identity, not a requirement of
+  // every proof. Admit complete single-sentence geometry claims written in
+  // words and simple intact irrationality claims. Keep numeric-coordinate,
+  // fragmented formula and joined-question imports on the conservative side.
+  function intactNonIdentityProof(text) {
+    const claim = text.replace(/^Prove\s+that\s+/i, '').trim();
+    if (/^[a-z][a-z ,'-]+\.$/i.test(claim) && !/\b(?:prove|construct|examination)\b/i.test(claim)
+      && /\b(?:circles?|tangents?|triangles?|quadrilateral|parallelogram|hypotenuse)\b/i.test(claim)
+      && /\b(?:are|is|subtend)\b/i.test(claim)
+      && /\b(?:equal(?: length)?|parallel(?: to each other)?|congruent|rhombus|supplementary|point of contact|at the centre|corresponding (?:sides|medians)|other two sides|remaining sides)\.$/i.test(claim)) return true;
+    const surd = /^(?:1\/|(?:\d+\s*[+−-]\s*)?(?:[1-9]\d*)?)√([1-9]\d{0,3}) is (?:an irrational number|irrational)(?:, given that √(\d+) is irrational)?\.$/i.exec(claim);
+    return !!surd && (!surd[2] || surd[2] === surd[1]) && !Number.isInteger(Math.sqrt(Number(surd[1])));
   }
 
   /* Test-readiness gate: a question may be a genuine source record yet still
@@ -348,7 +376,7 @@
     // Missing/short lists still reach the written/withheld-choice fallback.
     // For extended MCQs check the source array itself, not a count of long words.
     if (Array.isArray(q.opts) && q.opts.length > 4 && declaredMcq(q) && sourceOptionIssue(q)) return 'broken-options';
-    if (/^Prove\s+that\b/i.test(text) && !/=/.test(text)) return 'broken-identity';
+    if (/^Prove\s+that\b/i.test(text) && !text.includes('=') && !intactNonIdentityProof(text)) return 'broken-identity';
     if (/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\ue000-\uf8ff]/.test(text)) return 'damaged-text';
     return '';
   }

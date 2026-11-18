@@ -21,6 +21,22 @@ After finishing, learners can save and check separate correction attempts withou
 
 Per-question submission state, original answers, corrections and review marks use the existing owner-scoped session persistence. Scope/new-test behavior is preserved. This is local practice, not a tamper-proof proctored exam.
 
+### Practice follow-up (November 2026)
+
+- Daily and mock draws reject non-test-ready stems and unusable choice lists.
+  A list matched from a separate source is display context, never a key. AI
+  checks receive the same ordered choices and language as the card, not just
+  a stem and the student's letter. Review-pending Physics stems stay ungraded.
+- Daily drafts, open answer panels and pending feedback belong to one draw and
+  learner. A same-day **New set** redraws the sample; ordinary rerenders and
+  reloads keep the selected questions. Mock checks run against their starting
+  session: a late success or failure cannot overwrite a new test or another
+  learner. Typing in Daily no longer changes an unfinished mock's progress.
+- Mock creation preserves the supplied mark or leaves it unknown. A subtotal
+  is not the paper total. Old sessions are reconciled against matching source
+  rows without resetting the timer or discarding actual attempts. Missing or
+  changed source lists are held for review. Saved AI feedback is not marks.
+
 ## Tests
 
 `mock_assessment.js`: verified-only scoring, numeric/fraction equivalence, MCQ matching, unknown marks, review-required theory, refusal to flatten exponents, bounded self-assessment and pending totals.
@@ -28,3 +44,5 @@ Per-question submission state, original answers, corrections and review marks us
 `share_mock_browser.js` passes at 1280px and 390px: non-overlapping canvas baselines and working lines; preview with no download; explicit download; canceled native sharing; per-question submit/edit/reload; info disclosure; correct/wrong feedback; pending theory; total marks; separate corrections/self-review and timer expiry. The parallel-resistor preview was visually inspected. Synthetic verified test keys do not certify real source keys.
 
 Existing serverless, provider-budget, prose, routing and radical regressions plus desktop/mobile science-timeout recovery pass. No claim of all CI or live deployment success is made.
+
+`daily_mock_browser.js` exercises these cases at desktop and mobile widths with deferred provider replies. It also checks that source fractions, ratios, parallel lines and table entries survive display.

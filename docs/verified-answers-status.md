@@ -19,8 +19,9 @@ so **no key was attached and no question added**. The chosen approach in
 `QUESTION-REPAIR-BATCH-1.md` §6 — AI-generated keys marked unverified — was not
 started and is not used here. See
 [the Hindi audit](hindi-marking-scheme-nov-2026.md) for per-file evidence,
-including the same finding inside the shipped bank: 930 of 1,214 Hindi rows are
-served after curation, and 45 of those still contain an impossible word start.
+including the 32 damaged practice rows now withheld. The sidecar retains 898
+of 1,214 imported Hindi records; all 13 remaining word-start flags are in
+reading passages, not standalone practice questions.
 
 The [Social follow-up](social-follow-up-nov-2026.md) identifies later
 question papers, not marking schemes. Reused paper codes can have different
