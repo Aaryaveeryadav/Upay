@@ -420,14 +420,14 @@ Produced by `api/ai/solve.js` and the local server route; consumed by `app.js` a
 ```js
 {
   board: string, level: 'easy'|'medium'|'hard'|'mixed',
-  chapters: number[]|null, title: string, time: string, total: number,
+  chapters: number[]|null, title: {en, hi}, time: number, total: number, // minutes; actual practice marks
   seed: number|null,
   sections: [{
-    name: string, marks: number,
+    name: {en, hi}, marks: number,
     questions: [{
       no: number, ch: number, marks: number, tid: string, d: 1|2|3,
-      en: string, hi: string, opts?: string[], ans: string, ansHi?: string,
-      steps: [{…}], fig?: FigureRef, raw: object   // raw = the numeric parameters
+      en: string, hi: string, opts?: [{en, hi}], ans: string, ansHi?: string,
+      steps: [{en, hi}], fig?: FigureRef, raw: object   // workings use this instance’s parameters
     }]
   }]
 }

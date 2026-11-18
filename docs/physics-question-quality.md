@@ -11,7 +11,12 @@ Other subjects and source figure crops are unchanged.
 - 29 intact English Assertion–Reason stems are typed as kind 2, with four
   options recovered from instruction text for the same paper series/set.
   Paper-specific D variants are preserved, not replaced with a guessed default.
+  Past Years displays these four choices in source order for ungraded practice:
+  selecting one neither awards marks nor calls the AI checker. This does not
+  change the stem’s pending source review or verify an answer key.
 - 88 inline option sets are separated into four choices without inventing text.
+  These do not have the same-paper instruction provenance and are not released
+  by the AR display exception.
 - The two reported rows (`phys25-554-s2-q16` and `phys25-552-s3-q05`)
   are withheld: the former has corrupted Hindi mixed with English instructions;
   the latter contains legacy-font text and multiple joined questions. Their

@@ -2,6 +2,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
+const quality = require('../../assets/js/question-quality');
 const UP = {pyq: []};
 const ctx = vm.createContext({UP, window: {UP}});
 for (const name of ['physics12', 'pyq-physics-2025']) {
@@ -28,8 +29,18 @@ for (const q of UP.pyq) {
     assert(/Reason\s*\(R\)/.test(q.en), q.id);
     assert.equal(q.opts.length, 4);
     assert.equal(q.optionReview, 'same-paper-instructions');
+    assert.equal(quality.sourceOptionIssue(q), '', q.id + ': display this paper’s recovered codes');
+    assert.equal(q.textReview, 'awaiting-source-review');
+    assert.equal(quality.keyMetadataAllows({ ...q, keyVerified:true }), false, 'option provenance is not a key or a stem review');
+    for (const change of [{ qualityStatus:'withheld' }, { raw:{ optionReview:'awaiting-source-review' } },
+      { qualityReasons:['damaged'] }, { optionReview:'inline-text-recovered' }, { opts:[...q.opts.slice(0,3), q.opts[0]] }]) {
+      assert(quality.sourceOptionIssue({ ...q, ...change }), 'never override a damage/review hold');
+    }
   }
-  if (q.kind === 1) assert.equal(q.opts.length, 4);
+  if (q.kind === 1) {
+    assert.equal(q.opts.length, 4);
+    assert(quality.sourceOptionIssue(q), q.id + ': inline extractions are still awaiting source review');
+  }
 }
 assert(UP.pyq.filter(q => q.kind === 2).length >= 29);
 console.log(`PASS: all 1181 Physics imports audited, ${UP.pyq.length} structurally screened rows published; reported damaged rows withheld, AR types/codes recovered, no invented keys`);

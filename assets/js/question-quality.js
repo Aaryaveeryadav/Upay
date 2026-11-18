@@ -186,6 +186,35 @@
     return false;
   }
 
+  // Option identity is not a word-search fingerprint: x², x2, +2, −2,
+  // 2·0 and 20 must remain distinct. NFC preserves superscripts and subscripts.
+  function choiceText(value) {
+    return asText(value).normalize('NFC').replace(/[−–—]/g, '-').replace(/\s+/g, ' ').trim();
+  }
+
+  function keyMetadataAllows(q) {
+    if (!q || q.keyVerified === false || (q.raw && q.raw.keyVerified === false)) return false;
+    const rows = [q, q.raw].filter(Boolean);
+    return !rows.some(row => row.qualityStatus === 'withheld' || row.optionReview === 'awaiting-source-review'
+      || row.textReview === 'awaiting-source-review' || (Array.isArray(row.qualityReasons) && row.qualityReasons.length));
+  }
+
+  function choiceIndex(options, answer) {
+    const target = choiceText(answer);
+    if (!target || !Array.isArray(options)) return -1;
+    const label = /^(?:\(([a-f])\)|([a-f])[.)]?)$/i.exec(target);
+    const index = label ? (label[1] || label[2]).toUpperCase().charCodeAt(0) - 65 : -1;
+    let match = -1;
+    for (let i = 0; i < options.length; i++) {
+      const o = options[i];
+      if (![o, o?.en, o?.hi].some(v => choiceText(v) === target)) continue;
+      if (match >= 0) return -1; // An answer text must identify just one option.
+      match = i;
+    }
+    if (!label) return match;
+    return index < options.length && (match < 0 || match === index) ? index : -1;
+  }
+
   function optionIssue(options, subject) {
     if (!Array.isArray(options) || options.length < 2 || options.length > 6) return 'option-count';
     const seen = new Set();
@@ -200,7 +229,7 @@
       // Preserve mathematical operators and punctuation when detecting exact
       // duplicates. Stripping every symbol made distinct choices such as 1
       // and −1, or x + y and x − y, collide and falsely withheld valid MCQs.
-      const key = text.toLowerCase().replace(/[−–—]/g, '-').replace(/\s+/g, ' ').trim();
+      const key = choiceText(option).toLowerCase();
       if (!key || seen.has(key)) return 'damaged-option';
       seen.add(key);
       if (['hindi','sanskrit'].includes(subject) && /[\u0900-\u097f]/.test(text)
@@ -221,8 +250,14 @@
   function sourceOptionIssue(q, options = q?.opts, subject = q?.subject) {
     if (!q) return 'source-review';
     if (Array.isArray(options) && options.length < 4 && declaredMcq(q)) return 'option-count';
+    // The Physics curation ledger recovers AR codes from instructions in the
+    // SAME series/set. This clears only that row's own four choices for display;
+    // it does not clear the stem, an inline extraction, or any answer key.
+    const ownPaperCodes = row => row.subject === 'physics' && +row.cls === 12 && row.kind === 2
+      && row.qualityStatus === 'structurally-screened' && row.optionReview === 'same-paper-instructions'
+      && options === row.opts && options?.length === 4;
     if ([q, q.raw].some(row => row && (row.qualityStatus === 'withheld' || row.optionReview === 'awaiting-source-review'
-      || row.textReview === 'awaiting-source-review' || (Array.isArray(row.qualityReasons) && row.qualityReasons.length))))
+      || (row.textReview === 'awaiting-source-review' && !ownPaperCodes(row)) || (Array.isArray(row.qualityReasons) && row.qualityReasons.length))))
       return 'source-review';
     const issue = optionIssue(options, subject);
     if (issue || options.length <= 4) return issue;
@@ -326,8 +361,9 @@
      for grading (the row stays unscored practice). */
   function boardKeyAdmission(raw) {
     if (!raw || typeof raw !== 'object') return -1;
-    const keyIndex = 'abcd'.indexOf(String(raw.key == null ? '' : raw.key).trim().toLowerCase());
-    if (keyIndex < 0) return -1;
+    const letter = typeof raw.key === 'string' ? raw.key.trim().toLowerCase() : '';
+    if (!/^[a-d]$/.test(letter)) return -1;
+    const keyIndex = letter.charCodeAt(0) - 97;
     const opts = (Array.isArray(raw.opts) ? raw.opts : []).map(function (o) {
       return String((o && (o.text || o.en || o.hi)) || (typeof o === 'string' ? o : '')).trim();
     });
@@ -348,7 +384,7 @@
     return inspect({ hi: String(text == null ? '' : text), subject: subject || '', kind: 'question' }, subject);
   }
 
-  const api = { activityTail, cleanActivityTail, inspect, inspectText, testReadyIssue, boardKeyAdmission, isGenericUncontextualized, isOptionFragment, isPaperDirections, declaredMcq, optionIssue, sourceOptionIssue, textOf };
+  const api = { activityTail, cleanActivityTail, inspect, inspectText, testReadyIssue, boardKeyAdmission, isGenericUncontextualized, isOptionFragment, isPaperDirections, declaredMcq, keyMetadataAllows, choiceIndex, choiceText, optionIssue, sourceOptionIssue, textOf };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.UP = root.UP || {};
   root.UP.questionQuality = api;

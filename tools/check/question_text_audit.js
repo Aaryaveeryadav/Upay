@@ -88,6 +88,11 @@ assert(added2025.length >= 30, 'official 2025 Social MCQs extracted from the sup
 /* Board-key admission: printed CBSE keys grade only when the row is clean. */
 const keyTable = ctx.UP.pyqMCQ || [];
 assert(Array.isArray(keyTable) && keyTable.length >= 40, 'board-key table must be loaded');
+const printedRow = { stem: 'Choose the correct answer:', opts: ['one', 'two', 'three', 'four'] };
+for (const key of [undefined, null, '', '  ', 'ab', 'BC', 'abcd', 'E', 0, ['a']]) {
+  assert.equal(qq.boardKeyAdmission({ ...printedRow, key }), -1, `reject malformed printed key ${JSON.stringify(key)}`);
+}
+for (const [i, key] of ['a', ' B ', 'c', 'D'].entries()) assert.equal(qq.boardKeyAdmission({ ...printedRow, key }), i);
 const admittedRows = keyTable.filter(r => qq.boardKeyAdmission(r) >= 0);
 assert(admittedRows.length >= 15, 'at least 15 board-key rows must pass strict admission, got ' + admittedRows.length);
 const damagedRow = keyTable.find(r => r.paper === '430/2/1' && r.q === 3);

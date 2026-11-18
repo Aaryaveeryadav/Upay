@@ -2141,7 +2141,7 @@ window.UP = window.UP || {};
   }
 
   /* ---- reveal the detailed solution for one past-year question ---- */
-  const pyqCache = {};
+  const pyqCache = new Map();
   /* An EMPTY options array is truthy in JS, so `q.opts ?` treated an imported
      question with opts:[] as an MCQ and skipped the "reveal the answer" button
      entirely — the question showed but could not be answered. Always test the
@@ -2150,49 +2150,27 @@ window.UP = window.UP || {};
     return Array.isArray(q.opts) && q.opts.length > 0;
   }
 
-  function keyMetadataAllows(q) {
-    if (!q || q.keyVerified === false || (q.raw && q.raw.keyVerified === false)) return false;
-    const rows = [q, q.raw].filter(Boolean);
-    return !rows.some(row => row.qualityStatus === 'withheld' || row.optionReview === 'awaiting-source-review'
-      || row.textReview === 'awaiting-source-review' || (Array.isArray(row.qualityReasons) && row.qualityReasons.length));
-  }
-
   function trustedKeyRecord(q) {
-    if (!keyMetadataAllows(q)) return false;
+    if (!UP.questionQuality.keyMetadataAllows(q)) return false;
     if (q.keyVerified === true || (q.raw && q.raw.keyVerified === true)) return true;
     return !!(q.tid && UP.testgen && UP.testgen.templates.some(template => template.id === q.tid)
       && !(q.raw && q.raw.paperCode));
   }
 
-  function rawChoiceIndex(q) {
-    if (!hasOpts(q) || !String(q.ans == null ? '' : q.ans).trim()) return -1;
-    const answer = String(q.ans).normalize('NFKC').trim().toLowerCase();
-    const letter = answer.match(/^\(?([a-f])\)?[.)]?$/i);
-    if (letter) {
-      const i = letter[1].toLowerCase().charCodeAt(0) - 97;
-      return i >= 0 && i < q.opts.length ? i : -1;
-    }
-    const norm = text => String(text == null ? '' : text).normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
-    const target = norm(answer);
-    if (!target) return -1;
-    return q.opts.findIndex(option => {
-      const choices = typeof option === 'string' ? [option] : [option && option.en, option && option.hi];
-      return choices.some(value => value && norm(value) === target);
-    });
-  }
-
   function verifiedChoiceIndex(q) {
-    return trustedKeyRecord(q) ? rawChoiceIndex(q) : -1;
+    return trustedKeyRecord(q) ? UP.questionQuality.choiceIndex(q.opts, q.ans) : -1;
   }
 
   function hasVerifiedAnswer(q) {
     if (!trustedKeyRecord(q) || !String(q.ans == null ? '' : q.ans).trim()
-      || (q.raw && q.raw.paperCode)) return false;
-    return !hasOpts(q) || rawChoiceIndex(q) >= 0;
+      || q.paperCode || q.raw?.paperCode) return false;
+    return hasOpts(q) ? UP.questionQuality.choiceIndex(q.opts, q.ans) >= 0
+      : ![q, q.raw].some(row => row && (UP.questionQuality.declaredMcq(row) || hasOpts(row)));
   }
 
   function mcqRecordIssue(q) {
     if (!UP.questionQuality.declaredMcq(q)) return 'not-mcq';
+    if (q.textReview === 'awaiting-source-review' || q.raw?.textReview === 'awaiting-source-review') return 'source-review';
     const subject = q.subject || S.subject;
     const choiceIssue = UP.questionQuality.sourceOptionIssue(q, q.opts, subject);
     if (choiceIssue) return choiceIssue;
@@ -2218,8 +2196,7 @@ window.UP = window.UP || {};
   }
 
   function mcqSignature(stem, options) {
-    const norm = value => String(value || '').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
-    return [norm(stem)].concat((options || []).map(norm)).join('|');
+    return JSON.stringify([stem, ...options].map(UP.questionQuality.choiceText));
   }
 
   function mcqRows() {
@@ -2252,8 +2229,8 @@ window.UP = window.UP || {};
 
     // This list is explicitly source-checked against the board's printed key.
     (UP.mcqKeyed || []).forEach(raw => {
-      const key = Number(raw && raw.key);
-      if (!raw || !Number.isInteger(key) || key < 0 || key >= (raw.opts || []).length) return;
+      const key = raw && raw.key;
+      if (!raw || !Array.isArray(raw.opts) || raw.opts.length !== 4 || !Number.isInteger(key) || key < 0 || key >= raw.opts.length) return;
       add({ id:raw.id, cls:10, subject:'maths', board:'cbse', kind:1, y:raw.y,
         set:raw.paper, m:1, en:raw.stem, hi:'', opts:raw.opts, ans:String.fromCharCode(65 + key),
         keyVerified:true, src:raw.src }, 'board-' + raw.id, 'board-key');
@@ -2294,16 +2271,25 @@ window.UP = window.UP || {};
     return rows.sort((a, b) => (+b.y || 0) - (+a.y || 0) || String(a.viewId).localeCompare(String(b.viewId), undefined, { numeric:true }));
   }
 
-  function renderCachedAnswer(j, qq, sol, ansBox, id) {
-    const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
-    j = UP.answerFormat.answer(exact || j);
-    if (!j || j.policyVersion !== 'four-approaches-v4' || !j.approaches || j.approaches.length < 4) return false;
-    if(S.subject==='sanskrit'&&(!UP.languagePolicy.usableApproach({steps:[{t:j.answer||j.result||''}]},pyqQuestionText(qq),'sanskrit')||j.approaches.some(a=>!UP.languagePolicy.usableApproach(a,pyqQuestionText(qq),'sanskrit'))))return false;
-    const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
+  function hasPyqApproaches(j) {
+    return Array.isArray(j?.approaches) && j.approaches.length >= 4
+      && j.approaches.every(a => Array.isArray(a?.steps) && a.steps.length && a.steps.every(s => s && typeof s === 'object'));
+  }
+
+  // Only the bank key can populate .pyq-ans. All other answers (including
+  // exact arithmetic) live in the explanation panel with their provenance.
+  function renderPyqExplanation(j, qq, sol, origin) {
+    const hi = S.lang === 'hi';
+    const title = origin === 'exact' ? (hi ? 'सटीक गणना' : 'Exact calculation')
+      : origin === 'cached' ? (hi ? 'सहेजी हुई AI व्याख्या' : 'Saved AI explanation')
+      : (hi ? 'AI द्वारा चरण-दर-चरण हल' : 'AI-generated step-by-step solution');
+    const note = origin === 'exact' ? (hi ? 'यहाँ गणना की गई है; यह मुद्रित उत्तर-कुंजी नहीं है।' : 'Calculated here, not a printed answer key.')
+      : (hi ? 'यह AI हल आधिकारिक उत्तर-कुंजी से सत्यापित नहीं है।' : 'This AI solution has not been verified against an official answer key.');
+    sol.innerHTML = '<div class="sol-head">' + title + '</div><p class="muted">' + note + '</p>' +
       (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + rich(j.questionUnderstood) + '</div>' : '') +
       '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + mathText(j.answer || j.result) + '</div>' +
       (j.summary ? '<p class="sol-sum">' + rich(j.summary) + '</p>' : '') +
-      renderAIDiagram(Object.assign({}, j, {question:qq.en || ''})) +
+      renderAIDiagram(Object.assign({}, j, {question:qq.en || qq.hi || ''})) +
       j.approaches.map((a, i) => '<div class="sol-method"><div class="sol-mname">' +
         (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i+1) + ' — ' : '') + rich(a.name) + '</div>' +
         '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + (a.steps||[]).map(st => '<li>' + rich(st.t || '') +
@@ -2311,14 +2297,7 @@ window.UP = window.UP || {};
           (st.note ? '<span class="st-note">' + rich(st.note) + '</span>' : '') + '</li>').join('') + '</ol>' +
         (a.watch ? '<div class="callout warn">' + icon('warn') + '<div><b>' + t('watchOut') + ':</b> ' + rich(a.watch) + '</div></div>' : '') +
         '</div>').join('') +
-      (j.verify ? '<div class="sol-check"><b>' + t('checkIt') + ':</b> ' + rich(j.verify) + '</div>' : '') +
-      '<div class="sol-cached">' + icon('check') + ' ' + (S.lang==='hi'?'सहेजा हुआ उत्तर':'Saved answer') + '</div>';
-    pyqCache[id] = html;
-    sol.innerHTML = html;
-    const bEl = ansBox && ansBox.querySelector('b');
-    if (bEl) bEl.innerHTML = mathText(j.answer || j.result || bEl.textContent);
-    UP.answers.set(id, j);
-    return true;
+      (j.verify ? '<div class="sol-check"><b>' + t('checkIt') + ':</b> ' + rich(j.verify) + '</div>' : '');
   }
 
   function setPyqRevealState(id, expanded) {
@@ -2333,40 +2312,39 @@ window.UP = window.UP || {};
 
   function revealPyq(id) {
     const sol = document.getElementById('sol-' + id);
-    const ansBox = document.getElementById('ans-' + id);
     if (!sol) return;
     setPyqRevealState(id, true);
     const qq = (UP.pyq || []).find(x => x.id === id);
     if (!qq) return;
-    if (ansBox && UP.taskRouting.resolve(qq.en || qq.hi || '', S.subject).task === 'writing') {
-      const answerText = ansBox.querySelector('b');
-      if (answerText) answerText.textContent = S.lang === 'hi' ? 'इस लेखन कार्य के लिए नीचे व्याख्या देखें।' : 'See the writing response below; a numeric key is not applicable.';
-    }
     const exact = ['maths','applied-maths'].includes(S.subject) && UP.squareInteger.solve(qq.en || '', S.lang);
-    if (exact) { renderCachedAnswer(exact, qq, sol, ansBox, id); return; }
+    if (exact) { renderPyqExplanation(UP.answerFormat.answer(exact), qq, sol, 'exact'); return; }
 
-    if (pyqCache[id]) { sol.innerHTML = pyqCache[id]; warmNextQuestions(id); return; }
-
-    // Check answer cache first
-    // Old locally cached AI replies may have been made with a maths prompt.
-    // Never reuse them as an Accountancy answer or official answer key.
-    const sourceTrack = qq.subject === 'accountancy' || qq.subject === 'computerized-accounting' || qq.keyVerified === false || UP.taskRouting.resolve(qq.en || qq.hi || '', S.subject).task === 'writing';
-    const cached = sourceTrack ? null : UP.answers.get(id);
-    if (cached && renderCachedAnswer(cached, qq, sol, ansBox, id)) { warmNextQuestions(id); return; }
+    // Old persisted replies can be out of scope. Preserve the stricter cache
+    // admission for writing tasks and source imports with explicitly unverified keys.
+    const sourceTrack = ['accountancy','computerized-accounting'].includes(qq.subject) || !UP.questionQuality.keyMetadataAllows(qq)
+      || UP.taskRouting.resolve(qq.en || qq.hi || '', S.subject).task === 'writing';
+    const cacheKey = JSON.stringify([id, S.lang]);
+    const saved = pyqCache.get(cacheKey);
+    if (saved) { renderPyqExplanation(saved, qq, sol, 'cached'); warmNextQuestions(id); return; }
+    const cached = !sourceTrack && UP.answerFormat.answer(UP.answers.get(id));
+    if (cached && cached.policyVersion === 'four-approaches-v4' && hasPyqApproaches(cached)
+      && (S.subject !== 'sanskrit' || (UP.languagePolicy.usableApproach({steps:[{t:cached.answer || cached.result || ''}]},pyqQuestionText(qq),'sanskrit')
+        && cached.approaches.every(a => UP.languagePolicy.usableApproach(a,pyqQuestionText(qq),'sanskrit'))))) {
+      renderPyqExplanation(cached, qq, sol, 'cached'); warmNextQuestions(id); return;
+    }
 
     const stored = '<div class="sol-head">' + (S.lang === 'hi' ? 'चरण-दर-चरण हल' : 'Step-by-step solution') + '</div>' +
       '<div class="sol-steps"><p>' + rich(qq.twist || '') + '</p></div>';
     sol.innerHTML = '<div class="sol-loading">' + loadingDots() + '</div>' + stored;
 
-    const ask = 'Solve this ' + String(S.board || 'CBSE').toUpperCase() + ' Class ' + S.cls + ' ' + S.subject + ' question completely, showing every step:\n\n' +
-      pyqQuestionText(qq) + (hasOpts(qq) ? '\n\nOptions: ' + qq.opts.map((o, i) => String.fromCharCode(65 + i) + ') ' + (o.en || P(o))).join('  ') : '');
+    const choices = pyqOptions(qq);
     fetch('/api/ai/solve', {
       method: 'POST',
       headers: { 'content-type': 'application/json', authorization: 'Bearer ' + (localStorage.getItem('upay.token') || '') },
       /* imported:true turns on the corrupt gate.  Without it the server
          happily spent a model call answering a question whose fraction was
          lost in extraction -- and then showed that answer as a solution. */
-      body: JSON.stringify({ question: pyqQuestionText(qq) + (hasOpts(qq) ? '\nOptions: ' + qq.opts.map(o=>o.en || P(o)).join('; ') : ''), chapter: qq.ch, chapterTitle:chapterName(qq.ch), imported: true, options: hasOpts(qq) ? qq.opts.length : 0, subject: S.subject, cls: S.cls, lang: S.lang })
+      body: JSON.stringify({ question: pyqQuestionText(qq) + (choices.length ? '\nOptions: ' + choices.map(displayedChoiceText).join('; ') : ''), chapter: qq.ch, chapterTitle:chapterName(qq.ch), imported: true, options: choices.length, subject: S.subject, cls: S.cls, lang: S.lang })
     }).then(r => {
       /* A non-2xx reply used to be thrown away unread (`.then(r => r.ok ? r.json()
          : null)`), so EVERY failure -- a timed-out session, the daily quota, a
@@ -2387,17 +2365,17 @@ window.UP = window.UP || {};
                                      : 'The server\'s reply could not be read (HTTP ' + reply.status + '). Try again.') + '</div></div>';
         return;
       }
-      if (!j.approaches || j.approaches.length < 4) {
+      if (!reply.ok || !hasPyqApproaches(j)) {
         /* 401/403 = the sign-in lapsed or there is no API key. Show the LOCAL
            solver answer underneath the sign-in banner so the student still gets
            help, instead of a dead panel they cannot read. */
-        const accTrack = needsAIOnly() || qq.keyVerified === false || UP.taskRouting.resolve(qq.en || qq.hi || '', S.subject).task === 'writing';
-        const localAns = accTrack ? null : ((UP.answerQuestion && UP.answerQuestion(qq))
+        const mathsFallback = !sourceTrack && ['maths','applied-maths'].includes(qq.subject || S.subject);
+        const localAns = !mathsFallback ? null : ((UP.answerQuestion && UP.answerQuestion(pyqQuestionText(qq)))
                        || (UP.fallbackAnswer && UP.fallbackAnswer(qq.en + ' ' + (qq.hi || ''), S.lang))
                        || null);
         const isAuthFail = (reply.status === 401 || reply.status === 403);
-        const msg = accTrack
-          ? (j.error || (S.lang === 'hi' ? 'एआई हल उपलब्ध नहीं है। आधिकारिक उत्तर-कुंजी भी उपलब्ध नहीं है।' : 'The AI solution is unavailable. An official answer key is not included.'))
+        const msg = !localAns
+          ? (j.error || (S.lang === 'hi' ? 'AI व्याख्या अभी उपलब्ध नहीं है।' : 'The AI explanation is unavailable.'))
           : isAuthFail
           ? (S.lang === 'hi' ? 'आपका साइन-इन समाप्त हो गया है (या कोई API कुंजी सेट नहीं है)। नीचे स्थानीय हल दिया है।'
                              : 'Your sign-in has expired (or no AI key is set). A local solution is shown below.')
@@ -2412,37 +2390,9 @@ window.UP = window.UP || {};
              (S.lang === 'hi' ? 'साइन इन' : 'Sign in') + '</a></div>' : '') + '</div>' + localHtml;
         return;
       }
-      const html = '<div class="sol-head">' + (S.lang === 'hi' ? 'एआई द्वारा चरण-दर-चरण हल' : 'AI-generated step-by-step solution') + '</div>' +
-        (sourceTrack ? '<div class="callout warn"><div>' + (S.lang === 'hi' ? 'यह एआई हल आधिकारिक उत्तर-कुंजी से सत्यापित नहीं है।' : 'This AI solution has not been verified against an official answer key.') + '</div></div>' : '') +
-        (j.questionUnderstood ? '<div class="sol-understood"><b>' + (S.lang === 'hi' ? 'प्रश्न' : 'The question') + ':</b> ' + rich(j.questionUnderstood) + '</div>' : '') +
-        '<div class="sol-answer"><b>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + ':</b> ' + mathText(j.result) + '</div>' +
-        (j.summary ? '<p class="sol-sum">' + rich(j.summary) + '</p>' : '') +
-      renderAIDiagram(Object.assign({}, j, {question:qq.en || ''})) +
-        j.approaches.map((a, i) => '<div class="sol-method"><div class="sol-mname">' +
-          (j.approaches.length > 1 ? (S.lang === 'hi' ? 'विधि ' : 'Method ') + (i + 1) + ' — ' : '') + esc(a.name) + '</div>' +
-          '<ol class="sol-ol ' + (a.format === 'prose' ? 'prose-answer' : '') + '">' + a.steps.map(st => '<li>' + rich(st.t) +
-            (st.m ? '<div class="st-m">' + mathText(st.m) + '</div>' : '') +
-            (st.note ? '<span class="st-note">' + rich(st.note) + '</span>' : '') + '</li>').join('') + '</ol>' +
-          (a.watch ? '<div class="callout warn">' + icon('warn') + '<div><b>' + t('watchOut') + ':</b> ' + rich(a.watch) + '</div></div>' : '') +
-          '</div>').join('') +
-        (j.verify ? '<div class="sol-check"><b>' + t('checkIt') + ':</b> ' + rich(j.verify) + '</div>' : '') +
-        /* the figure the AI drew from this question's own numbers -- rendered
-           here too, because a bank question with a worked solution but no
-           diagram is exactly the gap the student complained about */
-        renderAIDiagram(Object.assign({}, j, {question: qq.en || qq.hi || ''}));
-      pyqCache[id] = html;
-      sol.innerHTML = html;
-      /* Persist this AI answer so next visit is instant */
-      if (!sourceTrack) { j._subj = S.subject; UP.answers.set(id, j); }
-      /* The card used to say "this paper's key is not entered yet" in the
-         answer strip while the worked solution directly below it gave the
-         answer. Two contradictory statements about the same question. If the
-         paper has no printed key, the solved answer fills that strip. */
-      const bEl = ansBox && ansBox.querySelector('b');
-      if (!sourceTrack && bEl && !String(qq.ans || '').trim() && (j.result || j.answer)) {
-        bEl.innerHTML = mathText(j.answer || j.result);
-        ansBox.hidden = false;
-      }
+      renderPyqExplanation(j, qq, sol, 'ai');
+      pyqCache.set(cacheKey, j);
+      if (!sourceTrack) { j._subj = qq.subject; UP.answers.set(id, j); }
       warmNextQuestions(id);
     }).catch(function (err) {
       /* never leave the spinner running: say what happened */
@@ -3362,8 +3312,8 @@ window.UP = window.UP || {};
         ? `इस चयन में ${verifiedCount} प्रश्नों की उत्तर-कुंजी सत्यापित है; शेष प्रश्नों का उत्तर चुनते ही AI जाँचकर अंक देगा।`
         : `${verifiedCount} questions in this selection have a verified answer key; for the rest, AI checks your answer as soon as you pick one and scores it.`}</p>
       <p class="muted">${S.lang === 'hi'
-        ? 'केवल चार स्पष्ट विकल्पों वाले, संरचनात्मक जाँच में पास प्रश्न दिखते हैं। स्रोत-जाँच लंबित या क्षतिग्रस्त प्रश्न रोक दिए गए हैं।'
-        : 'Only structurally screened four-option items are shown. Damaged items and records awaiting source review are withheld.'}</p>
+        ? 'चार से छह स्पष्ट विकल्पों वाले, संरचनात्मक जाँच में पास प्रश्न दिखते हैं। स्रोत-जाँच लंबित या क्षतिग्रस्त प्रश्न रोक दिए गए हैं।'
+        : 'Only structurally screened questions with four to six choices are shown. Damaged items and records awaiting source review are withheld.'}</p>
     </section>
     ${years.length ? `<section class="card pyq-filter"><div class="filter-line">
         <span class="filter-label">${S.lang === 'hi' ? 'वर्ष' : 'Year'}</span>
@@ -3373,8 +3323,8 @@ window.UP = window.UP || {};
     <div class="pyq-count">${list.length ? `${(page - 1) * pageSize + 1}–${Math.min(page * pageSize, list.length)} / ${list.length}` : '0'} ${S.lang === 'hi' ? 'प्रश्न' : 'questions'}</div>
     ${pageNav}
     ${!list.length ? `<div class="empty">${icon('clock')}<h3>${S.lang === 'hi'
-      ? 'इस कक्षा, विषय और बोर्ड के लिए अभी कोई साफ़ चार-विकल्पीय प्रश्न उपलब्ध नहीं है'
-      : 'No clean four-option questions are available for this class, subject and board yet'}</h3>
+      ? 'इस कक्षा, विषय और बोर्ड के लिए अभी कोई साफ़ बहुविकल्पीय प्रश्न उपलब्ध नहीं है'
+      : 'No clean multiple-choice questions are available for this class, subject and board yet'}</h3>
       <p>${S.lang === 'hi'
         ? 'क्षतिग्रस्त पाठ, संदिग्ध विकल्प और स्रोत-जाँच की प्रतीक्षा वाले प्रश्न यहाँ रोक दिए जाते हैं। यह वास्तविक परीक्षा में MCQ न होने का दावा नहीं है।'
         : 'Damaged stems, suspect options and items awaiting source review are withheld here. This does not claim the actual exam has no MCQs.'}</p>
@@ -4570,7 +4520,7 @@ window.UP = window.UP || {};
               kind: 'seeded',
               question: pyq.en || q,
               summary: (S.lang === 'hi' ? 'तीन विधियाँ दी गई हैं — विस्तृत हल के लिए एआई चल रहा है।' : 'Three starter methods are shown below — AI is filling in step-by-step math.'),
-              result: (pyq.ans || ''),
+              result: hasVerifiedAnswer(pyq) ? pyq.ans : '',
               approaches: pyq.approaches,
               chapter: pyq.ch || null,
               _chId: S.chapterId || 0,
@@ -4986,7 +4936,7 @@ window.UP = window.UP || {};
         marks: m || null,
         questions: groups[key].map(q => ({
           no: ++questionNumber, ch: q.ch, marks: +q.m > 0 ? +q.m : (sourceBank ? null : +m), tid: q.id, d: q.lv,
-          keyVerified:q.keyVerified===true, en: q.sa || q.en, hi: q.sa || q.hi || '', opts: q.opts || null, ans: q.ans || '',
+          keyVerified:q.keyVerified===true, en: q.sa || q.en, hi: q.sa || q.hi || '', opts: hasOpts(q) && !UP.questionQuality.sourceOptionIssue(q) ? q.opts : null, ans: q.ans || '',
           steps: null, fig: q.fig || null, raw: q
         }))
       };
@@ -5211,6 +5161,7 @@ window.UP = window.UP || {};
     if(+S.cls===10&&S.subject==='sanskrit'&&!(p.sections||[]).length)return renderSanskritSources()+'<div class="empty">No source-verified Sanskrit questions are indexed for this filter yet. Original PDFs are available above.</div>';
     const isAccountancyTest = +S.cls === 12 && (S.subject === 'accountancy' || S.subject === 'computerized-accounting');
     const isPhysicsTest = +S.cls === 12 && S.subject === 'physics';
+    const isGeneratedTest = +S.cls === 10 && S.subject === 'maths';
     const totalQ = (p.sections || []).reduce((a, sec) => a + sec.questions.length, 0);
     const lvlLabel = isAccountancyTest
       ? (S.lang === 'hi' ? 'स्रोत-प्रश्न' : 'source questions')
@@ -5258,9 +5209,10 @@ window.UP = window.UP || {};
         ? (S.lang === 'hi'
           ? 'अध्याय चुनिए और दिए गए CBSE प्रश्नपत्रों से स्रोत-चिह्नित प्रश्नों का अभ्यास सेट बनाइए। ये मूल प्रश्न हैं — नए अंकों से बनाए गए प्रश्न नहीं। उत्तर-कुंजी और अंक-वितरण इस बैंक में शामिल नहीं हैं।'
           : 'Choose chapters to build a practice set from the source-tagged CBSE papers. These are original questions, not newly generated variants; answer keys and marks are not included in this bank.')
+        : !isGeneratedTest ? (S.lang === 'hi' ? 'चुने हुए विषय और अध्यायों के प्रश्नों से अभ्यास करें।' : 'Practise questions from the selected subject and chapters.')
         : (S.lang === 'hi'
-          ? 'बोर्ड चुनिए, अध्याय चुनिए, और कृतिन उपाय उसी पैटर्न पर नया प्रश्नपत्र बनाएगा — आसान, मध्यम और कठिन खंडों में। प्रत्येक प्रश्न CBSE के पिछले प्रश्नों की किसी तर्क-शैली से बना है, पर संख्याएँ नई हैं।'
-          : 'Pick your board and chapters. Kritin Upay assembles a fresh paper in the same pattern, split into easy, medium and hard sections. Every question is built from the reasoning of a real CBSE past question — with new numbers, so nothing is memorised.')}</p>
+          ? 'बोर्ड, अध्याय और कठिनाई चुनकर नई संख्याओं वाला गणित अभ्यास सेट बनाइए।'
+          : 'Choose a board, chapters and difficulty to build a maths practice set with fresh values.')}</p>
     </section>
 
     <section class="card test-setup">
@@ -5291,9 +5243,8 @@ window.UP = window.UP || {};
           ? (S.lang === 'hi'
             ? 'यह अभ्यास सेट दिए गए मूल प्रश्नों से चुना गया है। इसे बिना अंक-भार और आधिकारिक उत्तर-कुंजी के स्व-अभ्यास हेतु उपयोग करें।'
             : 'This practice set samples the original supplied questions. Use it for self-practice; mark weightings and official answers were not included.')
-          : (S.lang === 'hi'
-            ? 'यह अभ्यास-प्रश्नपत्र CBSE के उसी पैटर्न पर है (A–E खंड), पर 53 अंकों का छोटा संस्करण — एक बैठक में पूरा हो जाए।'
-            : 'Same CBSE pattern (Sections A–E), as a 53-mark practice set rather than a full 80-mark paper — so it can be finished in one sitting.')}</div>
+          : (S.lang === 'hi' ? `इस अभ्यास सेट में ${p.sections.length} खंड हैं। यह आधिकारिक बोर्ड पेपर नहीं है।`
+            : `This practice set has ${p.sections.length} sections. It is not an official board paper.`)}</div>
         <div class="paper-meta">
           <span class="tag">${totalQ} ${S.lang === 'hi' ? 'प्रश्न' : 'questions'}</span>
           ${p.total != null ? `<span class="tag">${p.total} ${S.lang === 'hi' ? 'अंक' : 'marks'}</span>` : `<span class="tag grey">${S.lang === 'hi' ? 'अंक-वितरण उपलब्ध नहीं' : 'mark scheme not supplied'}</span>`}
@@ -5324,9 +5275,9 @@ window.UP = window.UP || {};
         ? (S.lang === 'hi'
           ? 'प्रश्न मूल CBSE स्रोत-पत्रों से चुने गए हैं। प्रत्येक प्रश्न के साथ प्रश्नपत्र कोड, सत्र और भाग/विकल्प सुरक्षित हैं; आधिकारिक हल या अंक-योजना इस बैंक में शामिल नहीं है।'
           : 'Questions are selected from the original CBSE source papers. Paper code, session and part/option metadata are retained; official solutions and mark scheme are not included in this bank.')
-        : (S.lang === 'hi'
-          ? 'प्रत्येक प्रश्न किसी वास्तविक बोर्ड प्रश्न की तर्क-शैली से बना है (कुल 47 शैलियाँ), पर संख्याएँ नई हैं। उत्तर क्रम में जाँचे गए हैं — इसलिए हर प्रश्न के साथ पूर्ण हल मिलता है।'
-          : 'Each question is generated from the reasoning pattern of a real board question (47 patterns in total), using fresh numbers. Every answer is checked by an independent solver, so the full worked solution is always available.')}</p>
+        : isGeneratedTest
+        ? (S.lang === 'hi' ? 'हर प्रश्न और उसके हल के चरण एक ही संख्याओं से बनाए गए हैं।' : 'Each question and its worked solution use the same generated values.')
+        : (S.lang === 'hi' ? 'यह सेट उपलब्ध स्रोत-प्रश्नों से चुना गया है।' : 'This set is drawn from the available source questions.')}</p>
       <p class="muted">${isAccountancyTest
         ? (S.lang === 'hi' ? 'इसे स्व-अभ्यास के लिए उपयोग करें; उत्तर अलग से जाँचें।' : 'Use for self-practice and check answers separately.')
         : (S.lang === 'hi'
@@ -5384,7 +5335,7 @@ window.UP = window.UP || {};
     const opts = hasOpts(q) ? `<div class="q-question-extra q-options-extra">${optionsToggle}<div id="${esc(optionsId)}" class="q-opts" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" ${choicesOpen ? '' : 'hidden'}>${q.opts.map((o, i) => {
       const label = String.fromCharCode(65 + i);
       const value = mcqOptionText(o);
-      const picked = a && (a.pickIndex === i || a.pick === value);
+      const picked = a && (a.pickIndex != null ? a.pickIndex === i : a.pick === value);
       const correct = rightIndex === i;
       const cls = a && a.pick !== undefined ? (!graded ? (picked ? 'chosen' : '') : (correct ? 'right' : picked ? 'wrong' : '')) : '';
       return `<button class="q-opt ${cls}" data-action="test-pick" data-q="${q.no}" data-i="${i}" data-opt="${esc(value)}" ${graded && a && a.pick !== undefined ? 'disabled' : ''}>
@@ -5412,7 +5363,8 @@ window.UP = window.UP || {};
       ${questionDiagramMarkup(q, 'test-' + q.no)}
       ${S.lang === 'hi' && (q.raw || q).hindiReview ? '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>' : ''}
       ${opts}
-      ${hasOpts(q) && !graded && !(a && a.aiVerdict) ? `<div class="callout tip mcq-unscored-note" role="note" style="margin-top:10px">${S.lang === 'hi' ? 'इस प्रश्न की संग्रहीत कुंजी नहीं है — विकल्प चुनिए, AI आपका उत्तर जाँचेगा और अंक देगा। इसमें कुछ सेकंड लग सकते हैं।' : 'No stored key for this question — pick an option and AI will check it and score you. It can take a few seconds.'}</div>` : ''}
+      ${hasOpts(q) && q.raw?.textReview === 'awaiting-source-review' ? `<p class="mcq-unscored-note">${S.lang === 'hi' ? 'केवल अभ्यास के लिए। पाठ की स्रोत-जाँच बाकी है; कोई अंक नहीं मिलेगा।' : 'Practice only. The question text still needs source review; your choice is not graded.'}</p>`
+        : hasOpts(q) && !graded && !(a && a.aiVerdict) ? `<div class="callout tip mcq-unscored-note" role="note" style="margin-top:10px">${S.lang === 'hi' ? 'इस प्रश्न की संग्रहीत कुंजी नहीं है — विकल्प चुनिए, AI आपका उत्तर जाँचेगा और अंक देगा। इसमें कुछ सेकंड लग सकते हैं।' : 'No stored key for this question — pick an option and AI will check it and score you. It can take a few seconds.'}</div>` : ''}
       ${a && a.aiChecking ? `<div class="callout tip" role="status"><div>Checking your answer with AI… please wait a few seconds.</div></div>` : ''}
       ${a && a.aiVerdict ? `<div class="callout ${a.aiVerdict === 'incorrect' ? 'warn' : 'tip'}" role="status"><div><b>${a.aiVerdict === 'correct' ? '✔ Correct — checked by AI' : a.aiVerdict === 'incorrect' ? '✘ Incorrect — checked by AI' : a.aiVerdict === 'partly-correct' ? 'Partly correct — checked by AI' : 'AI could not decide this one'}</b>${a.aiCorrect ? '<p><b>Correct answer:</b> ' + esc(a.aiCorrect) + '</p>' : ''}${a.aiFeedback ? '<p>' + esc(a.aiFeedback) + '</p>' : ''}<p class="muted">AI practice marking — not an official board key.</p><div class="pactions">${a.aiVerdict !== 'correct' ? `<a class="btn btn-primary btn-sm" href="#/ask?q=${encodeURIComponent('Question: ' + (q.en || q.hi || '') + '\nMy answer: ' + (a.pick || a.text || '') + (a.aiCorrect ? '\nCorrect answer: ' + a.aiCorrect : '') + '\nWhere did I go wrong? Explain my mistake step by step.')}">Ask AI where I went wrong</a> ${topicButton(q)}` : similarButton(q)}</div></div></div>` : ''}
       ${graded && a && a.ok !== null ? `<div class="q-verdict ${a.ok ? 'ok' : 'bad'}">${a.ok ? '✓ ' + (S.lang === 'hi' ? 'सही' : 'Correct') : '× ' + (S.lang === 'hi' ? 'सही उत्तर' : 'Correct answer') + ': ' + mathText(String(q.ans))}</div>` : ''}
@@ -5782,25 +5734,31 @@ window.UP = window.UP || {};
     if (current) updateWrittenBox(current, st);
   }
 
-  function pyqKeyIsVerified(q) {
-    return !!q && trustedKeyRecord(q);
+  function pyqTextDamage(q) {
+    const shown = P({ sa: q.sa, en: q.en, hi: q.hi }) || '';
+    if (['maths','applied-maths'].includes(S.subject) && (UP.squareInteger.compute(shown) || UP.squareInteger.radicalCompute(shown))) return null;
+    return UP.corrupt?.why(shown, { expectHindi: !!shown && (shown === q.hi || shown === q.sa) });
   }
 
-  function pyqVerifiedChoiceIndex(q, choices) {
-    if (!q || !Array.isArray(choices) || !choices.length || !pyqKeyIsVerified(q)
-      || q.paperCode || (q.raw && q.raw.paperCode)) return -1;
-    const storedAnswer = q.ans == null || !String(q.ans).trim() ? (q.raw && q.raw.ans) : q.ans;
-    const answer = String(storedAnswer == null ? '' : storedAnswer).normalize('NFKC').trim();
-    if (!answer) return -1;
-    const letter = answer.match(/^\(?([A-F])\)?[.)]?$/i);
-    if (letter) {
-      const index = letter[1].toUpperCase().charCodeAt(0) - 65;
-      return index < choices.length ? index : -1;
+  // One decision for the review label, key strip and local marking. A
+  // separately recovered choice list or a worked solution cannot supply a key.
+  function pyqAnswerKey(q, choices, damaged) {
+    if (!UP.questionQuality.keyMetadataAllows(q) || !(q.keyVerified === true || q.raw?.keyVerified === true)
+      || q.paperCode || q.raw?.paperCode || UP.taskRouting.resolve(q.en || q.hi || '', S.subject).task === 'writing') return null;
+    // The script heuristic also fires on short English statements. Keep its
+    // text warning, but don't invalidate an independently keyed English choice
+    // list on that guess alone. Structural damage and review holds still veto.
+    const scriptGuess = damaged === 'Hindi text came through as Latin mojibake' && choices.length && q.en
+      && !['hindi','sanskrit'].includes(q.subject) && !(S.lang === 'hi' && q.hi);
+    if (damaged && !scriptGuess) return null;
+    const text = String(q.ans ?? '').trim() || String(q.raw?.ans ?? '').trim();
+    if (!text) return null;
+    if (choices.length || hasOpts(q) || UP.questionQuality.declaredMcq(q) || UP.questionQuality.declaredMcq(q.raw)) {
+      if (!hasOpts(q) || !choices.length) return null;
+      const index = UP.questionQuality.choiceIndex(choices, text);
+      return index < 0 ? null : { text, index };
     }
-    const normalize = value => mcqOptionText(value).normalize('NFKC')
-      .replace(/[−–—]/g, '-').replace(/\s+/g, ' ').trim().toLowerCase();
-    const target = normalize(answer);
-    return target ? choices.findIndex(option => normalize(option) === target) : -1;
+    return { text, index: -1 };
   }
 
   /* ---------------------------------------------------------------------
@@ -6000,11 +5958,8 @@ window.UP = window.UP || {};
 
     function qCardHtml(q, badge) {
       const choices = pyqOptions(q);
-      const shown = P({ sa: q.sa, en: q.en, hi: q.hi }) || '';
-      // Gate the source field actually on screen, including Sanskrit-only stems.
-      const expectHindi = !!shown && (shown === q.hi || shown === q.sa);
-      const exactSquare = ['maths','applied-maths'].includes(S.subject) && (UP.squareInteger.compute(shown) || UP.squareInteger.radicalCompute(shown));
-      const why = exactSquare ? null : UP.corrupt && UP.corrupt.why(shown, { expectHindi: !!expectHindi });
+      const why = pyqTextDamage(q);
+      const answerKey = pyqAnswerKey(q, choices, why);
       const questionText = pyqQuestionText(q);
       const optionsId = questionControlId('pyq-options', q.id);
       const questionFigure = questionDiagramMarkup(q, 'pyq-' + q.id);
@@ -6037,7 +5992,12 @@ window.UP = window.UP || {};
       out += '</div>';
       out += questionActionBar(questionText, pyqAnswerButton(q.id));
       out += '</div>';
-      out += '<div class="q-review muted">' + (q.textReview === 'source-verified' ? 'Text checked against source' : 'Text not fully source-reviewed') + ' · ' + (q.keyVerified === true ? 'Verified answer key available' : 'No independently verified answer key recorded') + '</div>';
+      const textStatus = q.textReview === 'source-verified'
+        ? (S.lang === 'hi' ? 'पाठ स्रोत से मिलाया गया है' : 'Text checked against source')
+        : (S.lang === 'hi' ? 'पाठ की स्रोत-जाँच पूरी नहीं हुई है' : 'Text not fully source-reviewed');
+      const keyStatus = answerKey ? (S.lang === 'hi' ? 'सत्यापित उत्तर-कुंजी उपलब्ध है' : 'Verified answer key available')
+        : (S.lang === 'hi' ? 'स्वतंत्र रूप से सत्यापित उत्तर-कुंजी उपलब्ध नहीं है' : 'No independently verified answer key recorded');
+      out += '<div class="q-review muted">' + textStatus + ' · ' + keyStatus + '</div>';
       out += '<div class="q-text">' + rich(questionText) + '</div>';
       out += questionFigure;
       if (S.lang === 'hi' && q.hindiReview) out += '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>';
@@ -6061,10 +6021,10 @@ window.UP = window.UP || {};
       // action available so the student can still ask for an interpretation.
       if (why) {
         out += '<div class="pyq-torn warn"><div>' + icon('warn') + '</div><div><b>' + (S.lang === 'hi' ? 'पीडीएफ से पाठ आंशिक रूप से निकला' : 'PDF text is partially damaged') + ':</b> ' + esc(why) + '.</div></div>';
-      } else if (q.paperCode && !q.ans) {
+      } else if (q.paperCode && !answerKey) {
         out += '<div class="callout tip q-unscored-note">' + icon('info') + '<div>' + (S.lang === 'hi' ? 'इस आयातित प्रश्न-बैंक में आधिकारिक उत्तर-कुंजी शामिल नहीं है। AI व्याख्या भी सत्यापित कुंजी नहीं है।' : 'The official answer key is not included in this imported question bank. An AI explanation is not a verified key.') + '</div></div>';
       }
-      if (!(q.paperCode && !q.ans)) out += '<div class="pyq-ans q-answer-reveal" id="ans-' + esc(q.id) + '" hidden><span>' + (S.lang === 'hi' ? 'उत्तर' : 'Answer') + '</span> <b>' + mathText(q.ans || (S.lang === 'hi' ? 'इस प्रश्न की कुंजी अभी दर्ज नहीं है — ऊपर "AI से हल" दबाइए' : "Key not on file — tap Solve with AI above")) + '</b></div>';
+      if (answerKey) out += '<div class="pyq-ans q-answer-reveal" id="ans-' + esc(q.id) + '" hidden><span>' + (S.lang === 'hi' ? 'सत्यापित उत्तर' : 'Verified answer') + '</span> <b>' + mathText(answerKey.text) + '</b></div>';
       out += '<div class="pyq-sol" id="sol-' + esc(q.id) + '" hidden></div>';
       if (q.twist) out += '<div class="pyq-twist">' + icon('bulb') + '<div><b>' + (S.lang === 'hi' ? 'इससे नया प्रश्न कैसे बनता है' : 'How a new question is built from this') + '</b><p>' + rich(q.twist) + '</p></div></div>';
       const kindPair = (questionKind === 'mcq' || questionKind === '1') && choices.length
@@ -6232,14 +6192,21 @@ window.UP = window.UP || {};
       /* Choices recovered from the separate source table are practice-only.
          Imported answers are also unscored unless the bank explicitly marks a
          key as verified; a non-empty `ans` string by itself is not evidence. */
-      const answerText = String(qq.ans == null || !String(qq.ans).trim() ? (qq.raw && qq.raw.ans) || '' : qq.ans).trim();
-      const keyTrusted = pyqKeyIsVerified(qq) && !!answerText && !qq.paperCode && !(qq.raw && qq.raw.paperCode);
-      if (!hasOpts(qq) || !keyTrusted) {
+      const damaged = pyqTextDamage(qq);
+      const key = pyqAnswerKey(qq, choices, damaged);
+      if (!key) {
         const box = pick.closest('.q-opts');
         box.querySelectorAll('[data-pick]').forEach(b => { b.classList.remove('chosen'); b.setAttribute('aria-pressed', 'false'); b.disabled = true; });
         pick.classList.add('chosen'); pick.setAttribute('aria-pressed', 'true');
         let note = box.parentNode.querySelector('.pyq-verdict.note');
         if (!note) { note = document.createElement('div'); note.className = 'pyq-verdict note'; box.parentNode.insertBefore(note, box.nextSibling); }
+        if (damaged || qq.textReview === 'awaiting-source-review' || qq.raw?.textReview === 'awaiting-source-review') {
+          // Codes recovered from this paper's directions can be tried without
+          // grading an unreviewed stem, even if an AI checker is available.
+          box.querySelectorAll('[data-pick]').forEach(b => { b.disabled = false; });
+          note.textContent = S.lang === 'hi' ? 'विकल्प चुना गया। प्रश्न के पाठ की जाँच बाकी है; कोई अंक नहीं दिया गया।' : 'Choice selected. The question text still needs source review; this attempt is not graded.';
+          return;
+        }
         note.textContent = S.lang === 'hi' ? 'AI से आपका उत्तर जाँचा जा रहा है… इसमें कुछ सेकंड लग सकते हैं।' : 'Checking your answer with AI… this can take a few seconds.';
         const chosenText = displayedChoiceText(choices[i]);
         const fullQuestion = pyqQuestionText(qq) + '\nOptions: ' + choices.map((o, j) => String.fromCharCode(65 + j) + '. ' + displayedChoiceText(o)).join('  ');
@@ -6264,26 +6231,9 @@ window.UP = window.UP || {};
         }).catch(e => { note.textContent = aiCheckFailureMessage(e); box.querySelectorAll('[data-pick]').forEach(b => { b.disabled = false; }); });
         return;
       }
-      /* A verified key still has to match a displayed choice exactly enough
-         to avoid turning a lost fraction or OCR mismatch into a false grade. */
-      const right = pyqVerifiedChoiceIndex(qq, choices);
-      if (right < 0) {
-        const box0 = pick.closest('.q-opts');
-        box0.querySelectorAll('[data-pick]').forEach(b => { b.disabled = true; });
-        const note = document.createElement('div');
-        note.className = 'pyq-verdict note';
-        note.innerHTML = S.lang === 'hi'
-          ? 'इस प्रश्न की कुंजी विकल्पों से मिल नहीं रही, इसलिए मैं इसे गलत नहीं कहूँगा — नीचे पूरा हल देखिए।'
-          : 'The stored key does not line up with these options, so I will not mark you wrong — read the solution below.';
-        box0.parentNode.insertBefore(note, box0.nextSibling);
-        revealPyq(id);
-        return;
-      }
-      const scoreSource = Object.assign({}, qq, {
-        ans: answerText,
-        keyVerified: pyqKeyIsVerified(qq)
-      });
-      attemptItem({q:pyqQuestionText(qq),ch:qq.ch,source:scoreSource},String((choices[i]||{}).en||choices[i]||''));
+      const right = key.index;
+      const scoreSource = Object.assign({}, qq, { ans: key.text, keyVerified: true });
+      attemptItem({q:pyqQuestionText(qq),ch:qq.ch,source:scoreSource}, String.fromCharCode(65 + i));
       const box = pick.closest('.q-opts');
       box.querySelectorAll('[data-pick]').forEach((b, j) => {
         b.disabled = true;
@@ -6540,10 +6490,11 @@ window.UP = window.UP || {};
       const q = findQ(no); if (!q) return;
       const answerIndex = verifiedChoiceIndex(q);
       const graded = hasVerifiedAnswer(q) && answerIndex >= 0;
-      if (graded) practiceAttempt(q,pick);
+      const checkWithAI = !graded && q.raw?.textReview !== 'awaiting-source-review';
+      if (graded) practiceAttempt(q,String.fromCharCode(65 + pickIndex));
       S.answers[no] = { pick, pickIndex, ok: graded ? pickIndex === answerIndex : null,
-        shown: !!(S.answers[no] && S.answers[no].shown), aiChecking: !graded };
-      render(); if (!graded) aiGradeTestAnswer(no); return;
+        shown: !!(S.answers[no] && S.answers[no].shown), aiChecking: checkWithAI };
+      render(); if (checkWithAI) aiGradeTestAnswer(no); return;
     }
     if (action === 'test-check') {
       const no = +tgt.dataset.q;
@@ -7551,7 +7502,7 @@ async function checkMockAnswerWithAI(i){
   const it=test.items[i], answer=String((test.answers||{})[i]||'').trim(); if(!answer)return;
   test.aiChecks=test.aiChecks||{}; test.aiChecks[i]={loading:true}; store.set(mockStoreKey(),test); render();
   try{
-    const j=await aiCheckAnswerText(it.q,answer,(it.source&&it.source.ans)||'');
+    const j=await aiCheckAnswerText(it.q,answer,UP.mockAssessment.key(it));
     test.aiChecks[i]={verdict:j.verdict,feedback:j.feedback||'',correctAnswer:j.correctAnswer||'',marksHint:j.marksHint||''};
   }catch(e){ test.aiChecks[i]={error:String(e&&e.message||e||'AI check failed.')}; }
   store.set(mockStoreKey(),test); render();
@@ -7857,8 +7808,7 @@ function attemptItem(item,answer){
   const assessment=UP.mockAssessment.assess(item,answer);rememberAssessment(item,answer,assessment);return assessment;
 }
 function practiceAttempt(q,answer){
-  const trusted=q.keyVerified===true||!!(q.raw&&q.raw.keyVerified===true)||!!(q.tid && UP.testgen.templates.some(t=>t.id===q.tid) && q.keyVerified!==false && !(q.raw&&q.raw.keyVerified===false) && !(q.raw&&q.raw.paperCode));
-  return attemptItem({q:P(q),ch:q.ch,source:{...q,m:q.marks||q.m,keyVerified:trusted}},answer);
+  return attemptItem({q:P(q),ch:q.ch,source:{...q,m:q.marks||q.m,keyVerified:hasVerifiedAnswer(q)}},answer);
 }
 function viewMistakes(){
   const miss = Object.keys(S.mastery||{}).flatMap(chId=>{

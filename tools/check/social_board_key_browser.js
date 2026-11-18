@@ -10,7 +10,7 @@ const { chromium } = require('playwright');
     let checks = 0;
     page.on('pageerror', e => errors.push(String(e)));
     await page.route('**/api/ai/**', route => {
-      if (/\/check(?:\?|$)/.test(route.request().url())) checks++;
+      if (new URL(route.request().url()).pathname === '/api/ai/check-answer') checks++;
       return route.fulfill({status:503,contentType:'application/json',body:'{"error":"AI unavailable"}'});
     });
     await page.goto(process.env.UPAY_BASE || 'http://127.0.0.1:8005/',{waitUntil:'networkidle'});
