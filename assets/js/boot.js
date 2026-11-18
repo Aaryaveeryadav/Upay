@@ -253,7 +253,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26f11');
+    return loadScript('assets/js/app.js?v=26f12');
   }
 
   function loadPostPaint() {
