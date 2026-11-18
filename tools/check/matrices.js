@@ -75,6 +75,33 @@ assert(html.includes('mk-row') && html.includes('mk-bracket') && html.includes('
 assert.equal((html.match(/mk-cell/g) || []).length, 6, 'six entries of a 3×2 matrix');
 assert(!/<script/i.test(M.matrixHTML([['<img src=x onerror=alert(1)>']])), 'entries must be escaped');
 
+/* The paste that had no word "matrix" in it and timed out in the app. */
+const PASTE = 'A = [[2, 1, -1], [1, 2, 1], [3, -1, 2]]\nB = [[4, 1], [7, 0], [8, 5]]\n\nFind X such that AX = B.';
+assert.equal(M.isMatrixQuestion(PASTE), true, 'a pasted block is recognised without the word "matrix"');
+assert.equal(M.solve(PASTE).solved, true, 'and it solves');
+assert.equal(M.answerFor(M.solve(PASTE), 'en').result, ans.result);
+assert.equal(M.isMatrixQuestion('A = [[1,2],[3,4]], B=[[5,6],[7,8]]. Find AB.'), true);
+
+/* "Find AB" — the juxtaposition is the operation. */
+const prodAns = M.answerFor(M.solve('A = [[1,2],[3,4]]\nB = [[5,6],[7,8]]\nFind AB.'), 'en');
+assert.equal(prodAns.result, 'A·B = [[19, 22], [43, 50]]');
+assert.equal(prodAns.approaches.length, 4);
+assert.equal(JSON.stringify(prodAns.resultMatrix.rows), JSON.stringify([['19', '22'], ['43', '50']]));
+
+/* Determinant: no result matrix, but a grid-free answer and four routes. */
+const detAns = M.answerFor(M.solve('Find the determinant of [[1, 2], [3, 4]].'), 'en');
+assert.equal(detAns.result, '|A| = -2');
+assert.equal(detAns.resultMatrix, null, 'a determinant is a number, not a matrix');
+assert.equal(detAns.approaches.length, 4);
+assert(detAns.approaches[1].name.includes('first column'), 'the second expansion is genuinely different');
+assert(detAns.approaches.every((a) => a.steps.some((st) => /-2/.test(st.m || ''))));
+
+/* Inverse: drawn as a matrix, and the verification survives. */
+const invAns = M.answerFor(M.solve('Find the inverse of the matrix A = [[1,2],[3,4]].'), 'en');
+assert.equal(invAns.result, 'A⁻¹ = [[-2, 1], [3/2, -1/2]]');
+assert.equal((M.matrixHTML(invAns.resultMatrix.rows).match(/mk-cell/g) || []).length, 4);
+assert(invAns.approaches[3].steps[0].m.includes('✓'), 'the multiply-back check passes');
+
 const ansHi = M.answerFor(res, 'hi');
 assert(ansHi.result === ans.result && /सहखंडज/.test(ansHi.approaches[0].name), 'Hindi routes, same numbers');
 

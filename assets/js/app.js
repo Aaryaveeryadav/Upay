@@ -1785,11 +1785,14 @@ window.UP = window.UP || {};
     let matrixBlock = '', matrixSolved = null;
     try {
       const routeSubject = UP.taskRouting ? UP.taskRouting.resolve(q, S.subject).subject : S.subject;
-      if (UP.matrices && ['maths', 'applied-maths'].includes(routeSubject) && UP.matrices.isMatrixQuestion(q)) {
+      /* Try the exact solve on every maths question: a pasted matrix equation
+         is recognised by its numbers, not by the word "matrix", and the solver
+         itself refuses anything it cannot read unambiguously. */
+      if (UP.matrices && ['maths', 'applied-maths'].includes(routeSubject)) {
         const mx = UP.matrices.solve(q);
         if (mx && mx.solved) { q = mx.canonical; matrixSolved = mx; }
         else if (mx && mx.singular) matrixBlock = 'matrix-singular';
-        else matrixBlock = 'matrix-repair';
+        else if (UP.matrices.isMatrixQuestion(q)) matrixBlock = 'matrix-repair';
       }
     } catch (_) {}
     S.aiQuestion = q;

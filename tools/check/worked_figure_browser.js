@@ -114,7 +114,10 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       /* 5. A matrix equation is values and one operation. The app solves it in
             exact fractions and draws the matrices it actually used, so the
             AI's misreading of the grid cannot become the picture. */
-      const MATRIX_Q = 'Find the matrix X if A X = B, where A = [[2,1,-1],[1,2,1],[3,-1,2]] and B = [[4,1],[7,0],[8,5]].';
+      /* Exactly what the student pasted in the app: two blocks and one line of
+         instruction, with no word "matrix" anywhere. This used to miss the
+         engine and time out at the provider. */
+      const MATRIX_Q = 'A = [[2, 1, -1], [1, 2, 1], [3, -1, 2]]\nB = [[4, 1], [7, 0], [8, 5]]\n\nFind X such that AX = B.';
       const beforeMatrix = aiCalls;
       await ask(MATRIX_Q, 'maths', 'X = [[-1/5, 12/5, 6/5], [-1/5, 8/5, -7/5]]', null);
       await page.waitForFunction(() => {
@@ -145,6 +148,18 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
         'the badge must say the answer was computed, not generated');
       assert.equal(await page.locator('.worked-figure-mismatch').count(), 0,
         'no mismatch warning: there is no model answer to disagree with');
+
+      /* 5b. Products and determinants are answered locally too, and a
+             determinant is a number rather than a drawn matrix. */
+      const DET_Q = 'Find the determinant of [[1, 2], [3, 4]].';
+      const beforeDet = aiCalls;
+      await ask(DET_Q, 'maths', '|A| = -6', null);
+      await page.waitForFunction(() => /\|A\|\s*=\s*-?2|−2/.test(document.body.innerText) &&
+        !!document.querySelector('.ai-answer .worked-figure'));
+      assert.equal(aiCalls, beforeDet, 'a determinant is answered locally too');
+      const detText = await page.locator('.ai-answer').innerText();
+      assert(/-2|−2/.test(detText), 'the determinant value is shown: ' + detText.slice(0, 120));
+      assert(!/-6/.test(detText), 'the wrong AI determinant is not shown');
 
       /* 6. A paste that lost the grid gets no invented values: the student is
             asked for the matrices, and their values are then solved and drawn. */

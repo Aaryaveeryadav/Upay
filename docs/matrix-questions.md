@@ -19,13 +19,24 @@ matrices it used.
 
 ## What happens on Ask
 
-1. **`UP.matrices.isMatrixQuestion(text)`** — the word *matrix* (or आव्यूह) plus
-   at least one number. Theory questions ("explain matrix multiplication") are
-   left to the model.
+1. **Detection by shape, not vocabulary.** A pasted
+   `A = [[…]] / B = [[…]] / Find X such that AX = B.` — the form students
+   actually paste — has no word *matrix* in it anywhere; requiring the word sent
+   exactly that question to the model, where it timed out with "The AI took too
+   long to respond". `isMatrixQuestion` now accepts a bracketed block of
+   bracketed numeric rows, or two or more labelled numeric rows, as well as the
+   word. Theory questions ("explain matrix multiplication") still have no
+   numbers and are left to the model. The app also tries the exact solve on
+   every maths question and only falls back to the repair card when the text
+   *looks* like matrices but cannot be read.
 0. **If the equation parses, the app answers it itself** — no provider call, no
    model prose. The answer line shows X as a drawn grid, the badge says
    *Solved by exact calculation*, and four routes (adjoint, Gauss–Jordan,
-   Cramer, substitution) all come from the one exact solution. This exists
+   Cramer, substitution) all come from the one exact solution. `det`, `A⁻¹` and
+   `AB` (including a bare "Find AB") take the same path, with four routes each:
+   two expansions / pivots / adjugate for a determinant, `[A | I]` / adjoint /
+   cofactor entry / multiply-back for an inverse, and row·column / all entries /
+   dimension rule / `(AB)ᵀ = BᵀAᵀ` for a product. This exists
    because the model's arithmetic on exactly this question was wrong: it wrote
    `adj(A)·B = [[18,18],[36,−18],[0,36]]` instead of `[[37,20],[29,−14],[31,8]]`
    and answered `[[1,1],[2,−1],[0,2]]`.
@@ -94,8 +105,9 @@ A·X = B                                        (checked entry by entry)
 ## Tests
 
 - `node tools/check/matrices.js` — the exact X and |A| for the reported
-  question, the four answer routes (each ending at the same X), the drawn
-  answer grid, the badge, substitution check,
+  question, detection of the pasted block that has no word "matrix", the four
+  answer routes (each ending at the same X), the drawn answer grid, the badge,
+  the local determinant/inverse/product answers, substitution check,
   inverse/determinant/product/`XA` cases, the figure contents, and the refusals
   (singular, mismatched, unparsable, five-row blocks, non-matrix text).
 - `tools/check/worked_figure_browser.js` — at 1280 px and 390 px: the matrix
