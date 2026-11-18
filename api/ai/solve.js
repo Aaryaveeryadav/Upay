@@ -151,7 +151,8 @@ module.exports = async function handler(req, res) {
     '  When the solid isn\'t named or numbers aren\'t given, DO NOT invent a cylinder — return diagram:null instead.',
     '- Plane geometry: use "points" + "segments" with real coordinates.',
     '- Circles/tangents/chords: use "circles" with real radius + "segments".',
-    '- Trig/heights: put the right-triangle vertices in "points" and label the angle.',
+    '- Trig/heights: put the right-triangle vertices in "points", label the angle, and label the height or distance you computed.',
+    '- In any diagram, label the answer values you calculated so the picture explains the result; never label a figure you did not compute.',
     '- Statistics: use "bars" with the real frequencies.'
   ];
   const sciencePrompt = [
@@ -171,7 +172,7 @@ module.exports = async function handler(req, res) {
     '- Hindi NOT needed — English only.',
     '- Return a "diagram" ONLY when the question is about something that has a diagram:',
     '  • Ray optics: {"type":"lens","lens":"convex|concave",...} or {"type":"mirror",...}.',
-    '  • Circuits: {"type":"circuit","caption":"..."}.',
+    '  • Circuits: {"type":"circuit","caption":"..."}. For a mixed series–parallel resistor network of two or three resistors the app draws its own verified figure from the given values, so diagram:null is correct there.',
     '  • Mechanics: {"type":"pulley","mechanism":"incline|pendulum|pulley",...}.',
     '  • Chemistry apparatus: {"type":"apparatus","parts":[...],...}.',
     '  • Biology: {"type":"bio","kind":"leaf|cell|flower|organ",...}.',

@@ -1932,12 +1932,65 @@ window.UP = window.UP || {};
   }
 
   /* the AI answer, in the same shape as a built-in one */
+  /* A worked figure is drawn from the question's own numbers: the picture,
+     the labels and the answer all come from one calculation in
+     UP.workedFigure. Nothing here can be nudged by the model's prose, and a
+     question the parser cannot settle gets no picture at all. */
+  function workedFigureSubject(spec, question) {
+    let subject = S.subject;
+    try { if (UP.taskRouting) subject = UP.taskRouting.resolve(question, S.subject).subject; } catch (_) {}
+    /* The drawing is arithmetic, not subject decoration, so a trigonometry
+       question asked while Science is selected still gets its figure. Language,
+       Social and Commerce answers never do. */
+    if (['hindi', 'english', 'sanskrit', 'social', 'accountancy', 'computerized-accounting', 'economics', 'business-studies'].includes(subject)) return '';
+    if (spec.type === 'circuit') return ['physics', 'science', 'chemistry', 'biology'].includes(subject) ? subject : '';
+    return subject;
+  }
+  function workedFigureFor(question) {
+    if (!UP.workedFigure || !question) return null;
+    try {
+      const spec = UP.workedFigure.forQuestion(question);
+      if (!spec || !workedFigureSubject(spec, question)) return null;
+      return spec;
+    } catch (_) { return null; }
+  }
+  function answerMentions(text, value) {
+    if (!text) return true;                       /* nothing to contradict */
+    const re = /\d+(?:\.\d+)?/g;
+    let m;
+    while ((m = re.exec(text))) {
+      if (Math.abs(Number(m[0]) - Math.abs(value)) <= Math.max(0.02, Math.abs(value) * 0.005)) return true;
+    }
+    return false;
+  }
+  function workedFigureCard(spec, a) {
+    let svg = '';
+    try { svg = UP.figures ? UP.figures.generic(spec) : ''; } catch (_) { svg = ''; }
+    if (!svg) return '';
+    const hi = S.lang === 'hi';
+    const text = [a && a.result, a && a.summary].filter(Boolean).join(' ');
+    /* A written answer may give the exact surd ("10√3 m") or the decimal;
+       either counts, and a rounded decimal is inside the tolerance. */
+    const spelled = (spec.checkText || []).some(t => t && t.length > 2 && text.includes(t));
+    const differs = spec.type === 'elevation' && spec.computed
+      && !spelled && !answerMentions(text, spec.computed.height);
+    return '<figure class="figure-card worked-figure">' +
+      '<div class="figure-head"><span class="mini-label">' + (hi ? 'हल का चित्र' : 'Worked diagram') + '</span>' +
+      '<span class="tag grey">' + (hi ? 'प्रश्न के अंकों से बना; मान यहीं निकाले गए' : 'Drawn from the question’s numbers; values calculated here') + '</span></div>' +
+      '<div class="figure-body">' + svg + '</div>' +
+      (spec.answer && spec.answer.length ? '<figcaption>' + spec.answer.map(v => esc(String(v))).join(' · ') + '</figcaption>' : '') +
+      (spec.caption ? '<p class="muted">' + esc(spec.caption) + '</p>' : '') +
+      (differs ? '<p class="muted worked-figure-mismatch">' + (hi ? 'लिखे उत्तर में ये गणना किए मान नहीं दोहराए गए हैं — उत्तर को ऊपर के चित्र से मिलाइए।' : 'The written answer does not repeat the calculated height shown here — check it against this working.') + '</p>' : '') +
+      '</figure>';
+  }
   function renderAIDiagram(a) {
     if (!a) return '';
     const concept = a.conceptDiagram && a.conceptDiagram.type === 'flow' ? a.conceptDiagram : null;
     const graphical = a.diagram && a.diagram.type !== 'flow' ? a.diagram : null;
-    let drawing = '';
-    if (Array.isArray(a.diagrams) && a.diagrams.length) {
+    const question = a.question || S.aiQuestion || '';
+    const worked = workedFigureFor(question);
+    let drawing = worked ? workedFigureCard(worked, a) : '';
+    if (!drawing && Array.isArray(a.diagrams) && a.diagrams.length) {
       drawing = a.diagrams.filter(d => d && d.type !== 'flow').map(d => {
         try { return renderSingleAIDiagram(Object.assign({}, a, { diagram: d })); } catch (_) { return ''; }
       }).join('');
@@ -1945,8 +1998,7 @@ window.UP = window.UP || {};
     if (!drawing && graphical) drawing = renderSingleAIDiagram(a);
     // A flow-only reply must not replace an existing question-matched local
     // drawing (e.g. the √5 number-line construction). Never borrow a stale one.
-    const question = a.question || S.aiQuestion || '';
-    if (!graphical && S.answer && S.answer.question === question &&
+    if (!drawing && !graphical && S.answer && S.answer.question === question &&
         !S.answer._loading && S.answer._geom && !['topic','concept','fallback'].includes(S.answer.kind) && ['maths','applied-maths'].includes(S.subject)) {
       try {
         drawing = figureBlock(S.answer);
