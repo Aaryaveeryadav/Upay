@@ -37,6 +37,8 @@ The current `data/` directory contains private state. Do **not** serve the proje
 
 ## Practice and backups
 
+In **Past Years**, tap **Show choices** to answer a multiple-choice question. For a written question, type directly in **Your answer**. Drafts are saved in this browser for the current student, board, class, subject and question; writing does not require sign-in. Use **Think first** to reveal the available answer, or choose **Check with AI** for optional practice feedback if you have AI access. Checking is never automatic and is not official marking. Cards with missing or suspect choices accept ungraded drafts rather than inventing options. Chapter PYQ cards and the Class 10 Science exercise reader share drafts with Past Years when they use the same question ID. Written drafts are not synced or included in progress backups.
+
 Mock practice is **ungraded** until complete, verified keys are available. The site records how many answers were attempted rather than inventing a score. Accountancy sample-paper AI explanations are labelled unverified and do not become answer keys. Large Past Years lists are paginated in groups of 60 to keep the page responsive; use Previous/Next and the year or chapter filters to browse the whole bank.
 
 The **Saved → Progress backup** controls export or import the current account's saved questions, practice state and scoped mastery. Import replaces saved questions and matching practice data in the receiving account. Local practice data is separated by account, board, class and subject; it remains on the device. Guest saves and practice are not silently uploaded into a signed-in account. Signed-in Supabase saved questions may sync, but full offline/cloud reconciliation has not been verified.

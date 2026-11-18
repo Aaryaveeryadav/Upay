@@ -1774,6 +1774,14 @@ ol.prose-answer > li::before { content: none; display: none; }
 .q-opt-static:hover{border-color:var(--line-cool)!important;background:#fff!important}
 .q-answer-reveal{margin-top:13px;padding:10px 12px;border:1px solid var(--cream-300);border-radius:10px;background:var(--cream-50);font-size:13.4px;line-height:1.55;color:var(--ink-700)}
 .q-answer-label{display:inline-block;margin-right:5px;color:var(--ink-500);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.pyq-card-footer{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin-top:12px;font-size:12px}
+.pyq-card-footer .pyq-kind{margin:0 auto 0 0}
+.written-practice{margin-top:14px;max-width:48rem;min-width:0}
+.written-practice label{display:block;margin-bottom:5px;font-size:13px;font-weight:650;color:var(--ink-700)}
+.written-practice textarea{display:block;box-sizing:border-box;width:100%;min-height:4.2em;padding:9px 12px;resize:vertical;border:1px solid var(--line-cool);border-radius:10px;background:#fff;font:inherit;line-height:1.5}
+.written-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:7px}
+.written-practice .written-note{font-size:12px;line-height:1.45;color:var(--ink-600)}
+.written-feedback:not(:empty){margin-top:10px;padding:9px 12px;border-left:3px solid var(--cream-300);background:var(--cream-50);color:var(--ink-700);font-size:13px;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere}
 .q-question-figure{margin:0;overflow:hidden}
 .q-question-figure .figure-body{padding:8px;overflow-x:auto}
 .q-question-figure svg{display:block;width:auto;max-width:min(100%,640px);max-height:230px;height:auto;margin:0 auto}
@@ -1821,7 +1829,7 @@ ol.prose-answer > li::before { content: none; display: none; }
   .q-opts{grid-template-columns:minmax(0,1fr);gap:8px}
 }
 @media print{
-  .q-corner-actions,.q-question-extra>.q-inline-toggle{display:none!important}
+  .q-corner-actions,.q-question-extra>.q-inline-toggle,.written-actions{display:none!important}
   .q-opts[hidden]{display:grid!important}
   .q-diagram-panel[hidden]{display:block!important}
 }

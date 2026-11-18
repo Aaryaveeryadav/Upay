@@ -21,8 +21,8 @@ window.UP = window.UP || {};
       if (type === 'number') return (typeof v === 'number' && isFinite(v)) ? v : d;
       return v;
     },
-    set(k, v) { try { localStorage.setItem('upay.' + k, JSON.stringify(v)); } catch (e) { } },
-    remove(k) { try { localStorage.removeItem('upay.' + k); } catch(e){} }
+    set(k, v) { try { localStorage.setItem('upay.' + k, JSON.stringify(v)); return true; } catch (e) { return false; } },
+    remove(k) { try { localStorage.removeItem('upay.' + k); return true; } catch(e){ return false; } }
   };
 
   S.lang = store.getTyped('lang', 'en', 'string');
@@ -65,10 +65,14 @@ window.UP = window.UP || {};
   function scopedDataKey(kind) {
     return kind + '.scope.' + encodeURIComponent(JSON.stringify([S.savedKey, S.board, +S.cls, S.subject]));
   }
+  // Written practice drafts live on this device. In-flight checks and feedback
+  // are transient and must never follow a student into a different study scope.
+  const writtenAttempts = new Map();
   function syncStudyScope() {
     const key = scopedDataKey('mastery');
     if (S.studyScope === key) return;
     S.studyScope = key;
+    writtenAttempts.clear();
     const mastery = store.get(key, {}), hard = store.get(scopedDataKey('hardList'), []);
     const daily = store.get(scopedDataKey('dailyProgress'), {});
     S.mastery = mastery && typeof mastery === 'object' && !Array.isArray(mastery) ? mastery : {};
@@ -2927,13 +2931,15 @@ window.UP = window.UP || {};
       const answerMarkup = verified
         ? `<span class="q-answer-label">${S.lang === 'hi' ? 'सत्यापित उत्तर' : 'Verified answer'}</span> <b>${mathText(p.ans)}</b>`
         : `<span class="muted">${S.lang === 'hi' ? 'इस कार्ड में सत्यापित उत्तर-कुंजी उपलब्ध नहीं है।' : 'No verified answer key is attached to this question.'}</span>`;
-      const optionsMarkup = hasOpts(p) ? `<div class="q-question-extra q-options-extra">${questionPanelButton(optionsId, {
+      const choices = pyqOptions(p);
+      const optionsMarkup = choices.length ? `<div class="q-question-extra q-options-extra">${questionPanelButton(optionsId, {
         className: 'q-inline-toggle q-options-toggle', icon: 'list',
-        closedLabel: S.lang === 'hi' ? `विकल्प देखें · ${p.opts.length}` : `Show choices · ${p.opts.length}`,
+        closedLabel: S.lang === 'hi' ? `विकल्प देखें · ${choices.length}` : `Show choices · ${choices.length}`,
         openLabel: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide choices',
-        closedAria: S.lang === 'hi' ? `${p.opts.length} बहुविकल्पीय विकल्प दिखाएँ` : `Reveal the ${p.opts.length} multiple-choice options`,
+        closedAria: S.lang === 'hi' ? `${choices.length} बहुविकल्पीय विकल्प दिखाएँ` : `Reveal the ${choices.length} multiple-choice options`,
         openAria: S.lang === 'hi' ? 'विकल्प छिपाएँ' : 'Hide the multiple-choice options'
-      })}<div id="${esc(optionsId)}" class="q-opts" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" hidden>${p.opts.map((o, i) => `<div class="q-opt q-opt-static"><b>${String.fromCharCode(65 + i)}</b><span>${rich(P(o))}</span></div>`).join('')}</div></div>` : '';
+      })}<div id="${esc(optionsId)}" class="q-opts" role="group" aria-label="${S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices'}" hidden>${choices.map((o, i) => `<div class="q-opt q-opt-static"><b>${String.fromCharCode(65 + i)}</b><span>${rich(P(o))}</span></div>`).join('')}</div></div>`
+        : writtenAnswerBox(p, { key: p.id || `chapter:${questionKey}:${p.en || p.hi}`, text });
       const questionToolbar = questionActionBar(text, thinkFirstButton(answerId));
       const questionTools = `${questionDiagramMarkup(p, 'chapter-' + questionKey)}${optionsMarkup}<div id="${esc(answerId)}" class="q-answer-reveal" role="status" aria-live="polite" hidden>${answerMarkup}</div>`;
       if (p && p.paperCode) {
@@ -5020,6 +5026,23 @@ window.UP = window.UP || {};
         <figcaption><b>Figure ${esc(f.num)}</b> ${esc(f.cap)}</figcaption>
       </figure>`;
 
+    const renderExercise = (q, i) => {
+      const choices = pyqOptions(q);
+      return `<div class="sci-q">
+        <div class="sci-qno">${q.qno || i + 1}</div>
+        <div>
+          <p>${rich(q.en)}</p>
+          ${choices.length ? `<ul class="sci-opts">${choices.map((o, oi) =>
+            `<li><b>(${esc(q.optLetters && q.optLetters[oi] || String.fromCharCode(97 + oi))})</b> ${esc(o.en || o)}</li>`).join('')}</ul>` : ''}
+          ${q.fig ? `<figure class="sci-fig"><img src="${esc(q.fig.src)}" alt="${esc(q.fig.cap)}" loading="lazy">
+            <figcaption><b>Figure ${esc(q.fig.num)}</b> ${esc(q.fig.cap)}</figcaption></figure>` : ''}
+          ${choices.length ? '' : writtenAnswerBox(q, { text: q.en })}
+          ${q.ans ? `<details class="sci-ans"><summary>${S.lang === 'hi' ? 'उत्तर देखें' : 'Show answer'}</summary>
+            <div><span class="sci-ans-lbl">${S.lang === 'hi' ? 'NCERT उत्तर' : 'NCERT answer key'}</span> ${mathText(q.ans)}</div></details>` : ''}
+        </div>
+      </div>`;
+    };
+
     if (ch.scanned || !(ch.sections || []).length) {
       return `
       <section class="page-head">
@@ -5035,7 +5058,7 @@ window.UP = window.UP || {};
         </div>
       </section>
       ${qs.length ? `<section class="card"><h3>${S.lang === 'hi' ? 'प्रश्न' : 'Questions'}</h3>
-        <ol class="sci-qlist">${qs.map(q => `<li>${rich(q.en)}</li>`).join('')}</ol></section>` : ''}`;
+        ${qs.map(renderExercise).join('')}</section>` : ''}`;
     }
 
     let body = '';
@@ -5076,18 +5099,7 @@ window.UP = window.UP || {};
     ${qs.length ? `<section class="card">
       <h3>${S.lang === 'hi' ? 'अभ्यास प्रश्न' : 'Exercise questions'}</h3>
       <p class="hint">${S.lang === 'hi' ? 'पुस्तक के अंत में दिए प्रश्न, मूल शब्दों में। किसी प्रश्न पर चित्र दिखे तो वह उसी प्रश्न का है।' : 'The textbook’s own end-of-chapter questions, in their original wording. Where a question shows a diagram, it is the figure printed for that question.'}</p>
-      ${qs.map((q, i) => `<div class="sci-q">
-        <div class="sci-qno">${q.qno || i + 1}</div>
-        <div>
-          <p>${rich(q.en)}</p>
-          ${(q.opts && q.opts.length) ? `<ul class="sci-opts">${q.opts.map((o, oi) =>
-            `<li><b>(${esc(q.optLetters && q.optLetters[oi] || String.fromCharCode(97 + oi))})</b> ${esc(o.en || o)}</li>`).join('')}</ul>` : ''}
-          ${q.fig ? `<figure class="sci-fig"><img src="${esc(q.fig.src)}" alt="${esc(q.fig.cap)}" loading="lazy">
-            <figcaption><b>Figure ${esc(q.fig.num)}</b> ${esc(q.fig.cap)}</figcaption></figure>` : ''}
-          ${q.ans ? `<details class="sci-ans"><summary>${S.lang === 'hi' ? 'उत्तर देखें' : 'Show answer'}</summary>
-            <div><span class="sci-ans-lbl">${S.lang === 'hi' ? 'NCERT उत्तर' : 'NCERT answer key'}</span> ${mathText(q.ans)}</div></details>` : ''}
-        </div>
-      </div>`).join('')}
+      ${qs.map(renderExercise).join('')}
     </section>` : ''}`;
   }
 
@@ -5734,6 +5746,93 @@ window.UP = window.UP || {};
     return pyqOptionIssue(options, q) ? [] : options;
   }
 
+  // Called only when the card has no usable choices. Some of these are real
+  // written questions; others lost their options in extraction. Both accept a
+  // draft, but a missing choice set must not become a gradable written task.
+  function writtenAnswerBox(q, { key = q.id, text = pyqQuestionText(q), damaged } = {}) {
+    const hi = S.lang === 'hi';
+    // Past Years already ran the text gates. Chapter exercise lists have not.
+    if (damaged === undefined) damaged = UP.questionQuality?.inspect(q, S.subject)
+      || UP.questionQuality?.testReadyIssue(q) || UP.corrupt?.why(text);
+    const rows = [q, q.raw].filter(Boolean);
+    const missingChoices = rows.some(row => pyqDeclaredMcq(row) || hasOpts(row)
+      || (row.opts && !Array.isArray(row.opts)) || row.optionReview === 'awaiting-source-review');
+    const needsReview = damaged || rows.some(row => row.qualityStatus === 'withheld' || row.textReview === 'awaiting-source-review'
+      || (Array.isArray(row.qualityReasons) && row.qualityReasons.length));
+    const canCheck = !missingChoices && !needsReview;
+    const id = questionControlId('written-answer', key);
+    let st = writtenAttempts.get(id);
+    if (!st) {
+      const storageKey = scopedDataKey('writtenDraft') + '.' + encodeURIComponent(key);
+      st = { storageKey, draft: store.getTyped(storageKey, '', 'string'), saved: true };
+      writtenAttempts.set(id, st);
+    }
+    if (st.question !== text || st.lang !== S.lang || st.canCheck !== canCheck) {
+      st.pending = null; st.feedback = '';
+    }
+    Object.assign(st, { question: text, lang: S.lang, canCheck,
+      reference: canCheck && !q.paperCode && hasVerifiedAnswer(q) ? String(q.ans) : '' });
+    const warning = missingChoices
+      ? (hi ? 'विकल्प अधूरे या संदिग्ध हैं। आप उत्तर लिख सकते हैं, लेकिन उसकी जाँच नहीं होगी।' : 'Options missing or suspect — withheld pending source review. You can write an answer, but this question is not graded.')
+      : needsReview ? (hi ? 'प्रश्न के पाठ की जाँच बाकी है। आप बिना अंक वाला उत्तर लिख सकते हैं।' : 'The question text needs review. You can write an ungraded answer.') : '';
+    return `<div class="written-practice">
+      ${warning ? `<p class="written-note">${warning}</p>` : ''}
+      <label for="${id}">${hi ? 'आपका उत्तर' : 'Your answer'}</label>
+      <textarea id="${id}" data-written-draft rows="2" aria-describedby="${id}-note" placeholder="${hi ? 'यहाँ अपना उत्तर लिखिए…' : 'Write your answer here…'}">\n${esc(st.draft)}</textarea>
+      <div class="written-actions">${canCheck ? `<button type="button" class="q-inline-toggle" data-action="check-written" ${st.pending || !st.draft.trim() ? 'disabled' : ''}>${icon('check')}${hi ? 'AI से जाँचें' : 'Check with AI'}</button>` : ''}
+        <small class="written-note" id="${id}-note">${writtenDraftNote(st)}</small></div>
+      <div class="written-feedback" role="status">${esc(st.feedback)}</div>
+    </div>`;
+  }
+
+  function writtenDraftNote(st) {
+    const hi = S.lang === 'hi';
+    if (!st.saved) return hi ? 'ड्राफ़्ट सहेजा नहीं जा सका। जाने से पहले इसे कॉपी करें।' : 'Draft could not be saved. Copy it before leaving.';
+    return st.draft ? (hi ? 'ड्राफ़्ट इस डिवाइस पर सहेजा गया।' : 'Draft saved on this device.')
+      : (hi ? 'ड्राफ़्ट इसी डिवाइस पर सहेजा जाएगा।' : 'Drafts are saved on this device.');
+  }
+
+  function updateWrittenBox(input, st) {
+    const box = input.closest('.written-practice');
+    const button = box.querySelector('[data-action="check-written"]');
+    if (button) button.disabled = !!st.pending || !st.draft.trim();
+    box.querySelector('small').textContent = writtenDraftNote(st);
+    box.querySelector('.written-feedback').textContent = st.feedback;
+  }
+
+  async function checkWrittenAnswer(input) {
+    const st = writtenAttempts.get(input.id);
+    // A scope selector can change before its lazy pack finishes rendering.
+    if (!st || !st.canCheck || st.pending || S.studyScope !== scopedDataKey('mastery')) return;
+    const answer = st.draft.trim();
+    if (!answer) { input.focus(); return; }
+    const hi = S.lang === 'hi';
+    // Both check endpoints cap each text at 4,000 characters. Keep the whole
+    // draft instead of sending a silently truncated question or answer.
+    if (answer.length > 4000 || st.question.length > 4000) {
+      st.feedback = hi ? 'AI जाँच के लिए प्रश्न और उत्तर, दोनों 4,000 अक्षरों तक होने चाहिए। उत्तर की जाँच नहीं हुई।'
+        : 'AI checking supports up to 4,000 characters each for the question and answer. This answer was not checked.';
+      updateWrittenBox(input, st); return;
+    }
+    const request = st.pending = {};
+    st.feedback = hi ? 'AI आपका उत्तर जाँच रहा है…' : 'Checking your answer with AI…';
+    updateWrittenBox(input, st);
+    let message;
+    try {
+      const result = await aiCheckAnswerText(st.question, answer, st.reference);
+      const verdicts = hi ? { correct: 'सही', incorrect: 'गलत', 'partly-correct': 'आंशिक रूप से सही' }
+        : { correct: 'Correct', incorrect: 'Incorrect', 'partly-correct': 'Partly correct' };
+      message = [(hi ? 'AI अभ्यास जाँच: ' : 'AI practice feedback: ') + (verdicts[result.verdict] || (hi ? 'निर्णय नहीं हो सका' : 'Could not determine')),
+        result.feedback, result.correctAnswer && (hi ? 'सुझाया गया उत्तर: ' : 'Suggested answer: ') + result.correctAnswer,
+        hi ? 'यह आधिकारिक अंक नहीं है।' : 'Not official board marking.'].filter(Boolean).join('\n');
+    } catch (error) { message = aiCheckFailureMessage(error); }
+    // Ignore late results for an edited draft, language or previous account.
+    if (st.pending !== request || writtenAttempts.get(input.id) !== st) return;
+    st.pending = null; st.feedback = message;
+    const current = document.getElementById(input.id);
+    if (current) updateWrittenBox(current, st);
+  }
+
   function pyqKeyIsVerified(q) {
     return !!q && trustedKeyRecord(q);
   }
@@ -5952,12 +6051,9 @@ window.UP = window.UP || {};
 
     function qCardHtml(q, badge) {
       const choices = pyqOptions(q);
-      const shown = (S.lang === 'hi' ? (q.hi || q.en) : (q.en || q.hi)) || '';
-      /* Gate mojibake only when the displayed field is actually the Hindi
-         translation (or the only available field is the Hindi fallback). A
-         question can belong to Hindi/Sanskrit and still have intact English
-         source text, which must not be called Latin mojibake. */
-      const expectHindi = !!(q.hi && (S.lang === 'hi' || !q.en));
+      const shown = P({ sa: q.sa, en: q.en, hi: q.hi }) || '';
+      // Gate the source field actually on screen, including Sanskrit-only stems.
+      const expectHindi = !!shown && (shown === q.hi || shown === q.sa);
       const exactSquare = ['maths','applied-maths'].includes(S.subject) && (UP.squareInteger.compute(shown) || UP.squareInteger.radicalCompute(shown));
       const why = exactSquare ? null : UP.corrupt && UP.corrupt.why(shown, { expectHindi: !!expectHindi });
       const questionText = pyqQuestionText(q);
@@ -5997,14 +6093,6 @@ window.UP = window.UP || {};
       out += questionFigure;
       if (S.lang === 'hi' && q.hindiReview) out += '<p class="muted">हिंदी पाठ की जाँच बाकी है; मूल अंग्रेज़ी प्रश्न दिखाया गया है।</p>';
       const questionKind = String(q.kind == null ? '' : q.kind).toLowerCase();
-      const optionDataIncomplete = hasOpts(q) && !choices.length;
-      if (q.optionReview === 'awaiting-source-review' || optionDataIncomplete || (pyqDeclaredMcq(q) && !choices.length))
-        out += '<p class="muted">Options missing or suspect — withheld pending source review. This question is not graded.</p>';
-      const reportURL = 'https://github.com/Aaryaveeryadav/Upay/issues/new?title=' + encodeURIComponent('Question issue: '+q.id) + '&body=' + encodeURIComponent('Question ID: '+q.id+'\nSubject: '+S.subject+'\nYear: '+(q.y||'unknown')+'\n\nDescribe the problem (do not include private account details):\n');
-      out += '<a class="link" target="_blank" rel="noopener noreferrer" href="'+esc(reportURL)+'">Report a problem (GitHub)</a>';
-      const sourceFile = String(q.sourceUrl || q.sourceFile || '');
-      if (/^\/assets\/papers\/[a-zA-Z0-9_./%()-]+\.pdf$/.test(sourceFile) && !sourceFile.includes('..')) out += ' · <a class="link" target="_blank" rel="noopener noreferrer" href="'+esc(sourceFile)+'">View source PDF</a>';
-
       if (choices.length) {
         const choicesToggle = questionPanelButton(optionsId, {
           className: 'q-inline-toggle q-options-toggle', icon: 'list',
@@ -6017,6 +6105,8 @@ window.UP = window.UP || {};
         out += '<div id="' + esc(optionsId) + '" class="q-opts" data-quiz="' + esc(q.id) + '" role="group" aria-label="' + (S.lang === 'hi' ? 'उत्तर विकल्प' : 'Answer choices') + '" hidden>';
         out += choices.map((o, i) => '<button type="button" class="q-opt" data-pick="' + esc(q.id) + '" data-i="' + i + '"><b>' + String.fromCharCode(65 + i) + '</b><span>' + rich(P(o)) + '</span></button>').join('');
         out += '</div></div>';
+      } else {
+        out += writtenAnswerBox(q, { text: questionText, damaged: !!why });
       }
       // If extraction is torn, preserve the warning and keep the corner AI
       // action available so the student can still ask for an interpretation.
@@ -6038,8 +6128,12 @@ window.UP = window.UP || {};
       const sourceMeta = q.paperCode
         ? [q.part ? 'Part ' + q.part : '', q.option ? 'Option ' + q.option : '', q.sourcePage ? (S.lang === 'hi' ? 'PDF पृष्ठ ' : 'PDF p. ') + q.sourcePage : ''].filter(Boolean).join(' · ')
         : '';
-      out += '<div class="pyq-kind">' + icon('list') + ' ' + esc(kindText) + ' · ' + (S.lang === 'hi' ? 'प्रश्न क्रमांक' : 'question') + ' ' + esc(q.q) + (sourceMeta ? ' · ' + esc(sourceMeta) : '') + '</div>';
-      out += '</article>';
+      out += '<footer class="pyq-card-footer"><div class="pyq-kind">' + icon('list') + ' ' + esc(kindText) + ' · ' + (S.lang === 'hi' ? 'प्रश्न क्रमांक' : 'question') + ' ' + esc(q.q) + (sourceMeta ? ' · ' + esc(sourceMeta) : '') + '</div>';
+      const reportURL = 'https://github.com/Aaryaveeryadav/Upay/issues/new?title=' + encodeURIComponent('Question issue: '+q.id) + '&body=' + encodeURIComponent('Question ID: '+q.id+'\nSubject: '+S.subject+'\nYear: '+(q.y||'unknown')+'\n\nDescribe the problem (do not include private account details):\n');
+      out += '<a class="link" target="_blank" rel="noopener noreferrer" href="'+esc(reportURL)+'">' + (S.lang === 'hi' ? 'समस्या बताएँ (GitHub)' : 'Report a problem (GitHub)') + '</a>';
+      const sourceFile = String(q.sourceUrl || q.sourceFile || '');
+      if (/^\/assets\/papers\/[a-zA-Z0-9_./%()-]+\.pdf$/.test(sourceFile) && !sourceFile.includes('..')) out += '<a class="link" target="_blank" rel="noopener noreferrer" href="'+esc(sourceFile)+'">' + (S.lang === 'hi' ? 'स्रोत PDF देखें' : 'View source PDF') + '</a>';
+      out += '</footer></article>';
       return out;
     }
     function groupHtml(g) {
@@ -6342,6 +6436,16 @@ window.UP = window.UP || {};
     }
   });
 
+  document.addEventListener('input', function (e) {
+    const input = e.target;
+    if (!input.matches('[data-written-draft]')) return;
+    const st = writtenAttempts.get(input.id);
+    if (!st) return;
+    st.draft = input.value; st.pending = null; st.feedback = '';
+    st.saved = st.draft ? store.set(st.storageKey, st.draft) : store.remove(st.storageKey);
+    updateWrittenBox(input, st);
+  });
+
   document.addEventListener('change', function(e) {
     if (e.target.matches('[data-action="study-goal"]')) {
       const goal = Number(e.target.value);
@@ -6362,6 +6466,10 @@ window.UP = window.UP || {};
     const tgt = e.target.closest('[data-action]');
     if (!tgt) return;
     const action = tgt.dataset.action;
+    if (action === 'check-written') {
+      checkWrittenAnswer(tgt.closest('.written-practice').querySelector('[data-written-draft]'));
+      return;
+    }
     if (action === 'toggle-question-panel') {
       const panel = document.getElementById(tgt.dataset.target || '');
       if (!panel) return;
@@ -7445,9 +7553,11 @@ function aiCheckFailureMessage(err) {
   const code = String((err && err.code) || '');
   const status = Number(err && err.status) || 0;
   const hi = S.lang === 'hi';
-  if (code === 'sign_in_required' || status === 401) {
-    return hi ? 'AI जाँच के लिए साइन इन करें — आपका साइन-इन समाप्त हो गया है।'
-              : 'Sign in to check answers — your sign-in has expired.';
+  if (code === 'sign_in_required' || status === 401 || (status === 403 && !S.user)) {
+    return hi ? 'AI से उत्तर जाँचने के लिए साइन इन करें।' : 'Sign in to check answers with AI.';
+  }
+  if (code === 'access_not_enabled') {
+    return hi ? 'इस खाते पर AI जाँच उपलब्ध नहीं है। व्यवस्थापक से संपर्क करें।' : 'AI checking is not enabled for this account. Contact your administrator.';
   }
   if (code === 'ai_disabled') {
     return hi ? 'व्यवस्थापक ने एआई अस्थायी रूप से बंद रखा है।'

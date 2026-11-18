@@ -1114,14 +1114,15 @@ const handleRequest = async function (req, res) {
         return json(res, 429, { code: 'rate_limited', error: 'Too many AI requests in a short time. Wait a few seconds and try again — your study material is unaffected.', retryAfter });
       }
     }
-    if (process.env.UPAY_AI_ENABLED === 'false' && req.method === 'POST' && /^\/api\/ai\/(solve|read-image|translate)$/.test(p)) {
+    const studyAI = req.method === 'POST' && /^\/api\/ai\/(solve|read-image|translate|check-answer)$/.test(p);
+    if (process.env.UPAY_AI_ENABLED === 'false' && studyAI) {
       return json(res, 503, {code:'ai_disabled', error:'AI is temporarily switched off by the administrator. Study material is still available.'});
     }
     // The linked Supabase project currently permits unverified self-signup.
     // Restrict provider-spending calls from Supabase accounts to an explicit
     // server-side allowlist. Admin-created local accounts retain their roles.
-    if (sess && sess.sb && req.method === 'POST' && /^\/api\/ai\/(solve|read-image|translate)$/.test(p) && !isAllowedForPaidAI(sess.id)) {
-      return json(res, 403, { error: 'AI access is not enabled for this account. Contact the site administrator.' });
+    if (sess && sess.sb && studyAI && !isAllowedForPaidAI(sess.id)) {
+      return json(res, 403, { code: 'access_not_enabled', error: 'AI access is not enabled for this account. Contact the site administrator.' });
     }
     /* ---------- auth ---------- */
     if (p === '/api/auth/login' && req.method === 'POST') {
