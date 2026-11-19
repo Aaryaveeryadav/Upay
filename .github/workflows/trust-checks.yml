@@ -134,10 +134,14 @@ jobs:
             tail -c 60000 /tmp/browser-logs.txt >> "$GITHUB_STEP_SUMMARY"
             echo '```' >> "$GITHUB_STEP_SUMMARY"
           fi
-      - name: Upload browser logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: browser-logs
-          path: /tmp/browser-logs.txt
-          if-no-files-found: ignore
+      - name: Publish browser logs to a branch
+        if: failure()
+        run: |
+          if [ -f /tmp/browser-logs.txt ]; then
+            git config user.email "ci@upay.local"
+            git config user.name "Upay CI"
+            cp /tmp/browser-logs.txt ci-browser-logs.txt
+            git add ci-browser-logs.txt
+            git commit -m "CI browser logs for run $GITHUB_RUN_ID"
+            git push origin "HEAD:refs/heads/ci-logs-$GITHUB_RUN_ID"
+          fi
