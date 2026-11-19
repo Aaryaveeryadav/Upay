@@ -64,6 +64,9 @@ jobs:
       # Avoid the failing runtime browser/apt installation step.
       - name: Physics and security browser checks
         run: |
+          set -o pipefail
+          exec > >(tee -a /tmp/browser-logs.txt) 2>&1
+          echo "== browser checks =="
           HOST=0.0.0.0 PORT=8004 node server.js > /tmp/upay-test-server.log 2>&1 &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID"' EXIT
@@ -88,6 +91,15 @@ jobs:
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/practice_grading_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/pyq.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/pasted_question_browser.js
+      # The Actions log API is not always reachable; keep the browser output as
+      # an artifact so a red build can still be diagnosed.
+      - name: Save browser logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-logs
+          path: /tmp/browser-logs.txt
+          if-no-files-found: ignore
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/science_timeout_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/share_mock_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/daily_mock_browser.js
