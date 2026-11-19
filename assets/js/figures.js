@@ -1027,6 +1027,26 @@ UP.figures = (function () {
       ${label(W / 2, H - 14, 'exact fractions computed here; every entry is checked by substituting back', { size: 10, fill: C.inkSoft })}`);
   }
 
+  /* Initial and final positions for the solved like-charge setup. */
+  function chargeEnergyFig() {
+    const y=130, qx=105, x1=270, x2=435;
+    return wrap(660,260,`
+      <line x1="${qx}" y1="${y}" x2="${x2+28}" y2="${y}" stroke="${C.inkSoft}" stroke-width="1.5" stroke-dasharray="5 5"/>
+      <circle cx="${qx}" cy="${y}" r="24" fill="${C.skySoft}" stroke="${C.skyDeep}" stroke-width="2"/>
+      <circle cx="${x1}" cy="${y}" r="19" fill="${C.cream}" stroke="${C.creamDeep}" stroke-width="2"/>
+      <circle cx="${x2}" cy="${y}" r="19" fill="${C.cream}" stroke="${C.creamDeep}" stroke-width="2"/>
+      ${label(qx,y+4,'Q',{size:14,weight:700})}${label(x1,y+4,'q',{size:14,weight:700})}${label(x2,y+4,'q',{size:14,weight:700})}
+      ${label(qx,170,'fixed Q',{size:11})}${label(x1,170,'initial: rest',{size:11})}${label(x2,170,'final: speed v',{size:11})}
+      <line x1="${qx}" y1="75" x2="${x1}" y2="75" stroke="${C.skyDeep}" stroke-width="1.4"/>
+      <line x1="${qx}" y1="67" x2="${qx}" y2="83" stroke="${C.skyDeep}"/><line x1="${x1}" y1="67" x2="${x1}" y2="83" stroke="${C.skyDeep}"/>
+      ${label((qx+x1)/2,66,'d',{size:12,weight:700})}
+      <line x1="${qx}" y1="208" x2="${x2}" y2="208" stroke="${C.violet}" stroke-width="1.4"/>
+      <line x1="${qx}" y1="200" x2="${qx}" y2="216" stroke="${C.violet}"/><line x1="${x2}" y1="200" x2="${x2}" y2="216" stroke="${C.violet}"/>
+      ${label((qx+x2)/2,231,'2d',{size:12,weight:700})}
+      <path d="M${x2+25} ${y} h35 m-8 -5 l8 5 -8 5" fill="none" stroke="${C.green}" stroke-width="2"/>
+      ${label(330,22,'Like charges repel · separation shown to scale',{size:11,fill:C.inkSoft})}`);
+  }
+
   /* =========================================================
      Generic diagram — draws any shape the AI describes.
      spec = {
@@ -1058,6 +1078,7 @@ UP.figures = (function () {
       return orbitFig(spec);
     }
 
+    if (spec.type === 'charge-energy' && spec.verified) return chargeEnergyFig();
     if (spec.type === 'matrix' && spec.verified) {
       return matrixFig(spec);
     }

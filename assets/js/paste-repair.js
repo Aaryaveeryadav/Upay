@@ -104,12 +104,59 @@
       (all, letter, digit) => letter + superscript(digit));
   }
 
+  /* PDF selection may put a definite integral's limits on separate lines,
+     even when the rest of the question is normal prose. Only combine a
+     complete, unambiguous two-limit block followed by an integrand. Keep the
+     order as supplied and retain the actual values. */
+  function repairCalculus(text) {
+    const bound = '[+−-]?(?:[0-9]+(?:\\.[0-9]+)?|π|∞|[a-zA-Z])(?:\\s*\\/\\s*(?:[0-9]+|π|[a-zA-Z]))?';
+    const integral = new RegExp('(∫|\\\\int)\\s*\\n[ \\t]*(' + bound + ')[ \\t]*\\n[ \\t]*(' + bound + ')[ \\t]*\\n[ \\t\\n]*(?=[^\\s])', 'g');
+    return text.replace(integral, (all, symbol, lower, upper) =>
+      symbol + '_{' + lower.trim() + '}^{' + upper.trim() + '} ')
+      .replace(/(?<![A-Za-z0-9_])(d(?:[²³]|\^[23])?[a-z]?|∂[a-z]?)\s*\n\s*\/\s*\n\s*(d[a-z](?:[²³]|\^[23])?|∂[a-z])(?![A-Za-z0-9_])/g, '$1/$2');
+  }
+
+  /* Rendered web maths can copy both its accessibility and visual text:
+     a variable on one line, followed by the same variable at the start of
+     the next. Require multiple duplicates before changing the layout. */
+  function repairDuplicatedInlineMath(text) {
+    const raw = text.split('\n');
+    const lines = raw.map(line => {
+      const t = line.trim();
+      const bold = t.match(/^\*\*([A-Za-zΑ-Ωα-ω]|[0-9]+)\*\*$/);
+      return bold ? bold[1].trim() : t;
+    });
+    const remove = new Set();
+    const nextFilled = i => { let j=i+1; while(j<lines.length && !lines[j]) j++; return j; };
+    for (let i=0;i<lines.length;i++) {
+      const a=lines[i], j=nextFilled(i), b=lines[j] || '';
+      if (/^[A-Za-zΑ-Ωα-ω]$/.test(a) &&
+          new RegExp('^' + a + '(?=$|[\\s.,;:!?])').test(b)) { remove.add(i); continue; }
+      // PDF copies "2", "d", "2d"; remove the two duplicated fragments.
+      if (/^\d+$/.test(a) && /^[A-Za-zΑ-Ωα-ω]$/.test(b)) {
+        const k=nextFilled(j), c=lines[k] || '';
+        if (new RegExp('^' + a + b + '(?=$|[\\s.,;:!?])').test(c)) { remove.add(i); remove.add(j); }
+      }
+    }
+    if (remove.size < 2 || /\[\s*\[|[=≤≥<>+−×÷∫√|^_]|(?:^|\s)-(?:\s|$)/.test(text)) return text;
+    const kept=lines.filter((line,i)=>line && !remove.has(i));
+    // Do not collapse aligned equations or multi-line matrix/number rows.
+    if (kept.some(line=>/[=≤≥]/.test(line)) || kept.some(line=>/^(?:[-+]?\d+\s+){2,}[-+]?\d+$/.test(line))) return text;
+    return respace(kept.join(' '));
+  }
+
   /* Returns { text, changed }. */
   function tidy(raw, options) {
     const opts = options || {};
     const original = String(raw == null ? '' : raw);
     let text = original.replace(/\r\n?/g, '\n');
     let changed = false;
+
+    const duplicated = repairDuplicatedInlineMath(text);
+    if (duplicated !== text) { text = duplicated; changed = true; }
+
+    const calculus = repairCalculus(text);
+    if (calculus !== text) { text = calculus; changed = true; }
 
     const lines = text.split('\n');
     if (isTokenSoup(lines)) {
@@ -127,7 +174,7 @@
     return { text: text, changed: changed && text !== original };
   }
 
-  const api = { tidy: tidy, isTokenSoup: isTokenSoup, joinFragments: joinFragments, restorePowers: restorePowers };
+  const api = { tidy: tidy, isTokenSoup: isTokenSoup, joinFragments: joinFragments, restorePowers: restorePowers, repairCalculus: repairCalculus, repairDuplicatedInlineMath: repairDuplicatedInlineMath };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else { root.UP = root.UP || {}; root.UP.pasteRepair = api; }
 })(typeof window === 'undefined' ? globalThis : window);

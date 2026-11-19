@@ -1,6 +1,6 @@
 /* Plain-Unicode presentation for AI maths. No HTML or provider markup executes. */
 (function(root) {
-  const symbols = {nu:'ν',Phi:'Φ',phi:'φ',alpha:'α',beta:'β',gamma:'γ',theta:'θ',lambda:'λ',mu:'μ',pi:'π',rho:'ρ',sigma:'σ',omega:'ω',Delta:'Δ',delta:'δ',epsilon:'ε',tau:'τ',eta:'η',Omega:'Ω',times:'×',cdot:'·',pm:'±',propto:'∝',implies:'⇒',rightarrow:'→',leftarrow:'←',leq:'≤',geq:'≥',neq:'≠',approx:'≈',infty:'∞',degree:'°',sin:'sin',cos:'cos',tan:'tan',cot:'cot',sec:'sec',csc:'csc',log:'log',ln:'ln'};
+  const symbols = {nu:'ν',Phi:'Φ',phi:'φ',alpha:'α',beta:'β',gamma:'γ',theta:'θ',lambda:'λ',mu:'μ',pi:'π',rho:'ρ',sigma:'σ',omega:'ω',Delta:'Δ',delta:'δ',epsilon:'ε',tau:'τ',eta:'η',Omega:'Ω',times:'×',cdot:'·',pm:'±',propto:'∝',implies:'⇒',rightarrow:'→',leftarrow:'←',leq:'≤',geq:'≥',neq:'≠',approx:'≈',infty:'∞',partial:'∂',degree:'°',sin:'sin',cos:'cos',tan:'tan',cot:'cot',sec:'sec',csc:'csc',log:'log',ln:'ln'};
   const subs = '₀₁₂₃₄₅₆₇₈₉', supers = '⁰¹²³⁴⁵⁶⁷⁸⁹';
   function text(value) {
     let s = String(value == null ? '' : value);
@@ -25,6 +25,9 @@
     for(let i=0;i<8;i++) {
       const before=s;
       s=s.replace(/\\(?:dfrac|tfrac|frac)\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g,(_,a,b)=>{
+        // Keep differential quotients recognisable to the renderer and speech/copy.
+        if (/^(?:d(?:[²³])?\s*[A-Za-z]?|∂\s*[A-Za-z]?)$/.test(a.trim()) &&
+            /^(?:d\s*[A-Za-z](?:[²³])?|∂\s*[A-Za-z])$/.test(b.trim())) return a.replace(/\s/g, '') + '/' + b.replace(/\s/g, '');
         const group=v=>/[+\-=/\s]/.test(v.trim()) ? '('+v.trim()+')' : v.trim();
         return '('+group(a)+'/'+group(b)+')';
       }).replace(/\\sqrt\s*\{([^{}]*)\}/g,'√($1)')
@@ -44,7 +47,7 @@
   // Only use this for student input/presentation, never rewrite source banks.
   function question(value) {
     const s=String(value == null ? '' : value);
-    if (!/\\+[()[\]]|\$[^$]+\$|\\+(?:frac|sqrt|nu|Phi)\b/.test(s)) return s;
+    if (!/\\+[()[\]]|\$[^$]+\$|\\+(?:frac|sqrt|nu|Phi|int|partial)(?![A-Za-z])/.test(s)) return s;
     return text(s.replace(/\\+(?=[()[\]A-Za-z])/g, '\\'));
   }
   const api={text,answer,question};

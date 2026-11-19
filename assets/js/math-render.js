@@ -86,6 +86,50 @@
     return { value: char, end: i + char.length };
   }
 
+  /* Parenthesized plain-text scripts (e^(−x), ∫₀^(π/2)) occur in
+     provider responses as well as TeX's braced forms. */
+  function readScriptArgument(source, start) {
+    let i = start;
+    while (i < source.length && /[ \t]/.test(source[i])) i++;
+    const parens = balancedGroup(source, i, '(', ')');
+    return parens || readArgument(source, start);
+  }
+
+  function integralAt(source, start) {
+    let i;
+    if (source[start] === '∫') i = start + 1;
+    else if (source.slice(start, start + 4) === '\\int' && !/[A-Za-z]/.test(source[start + 4] || '')) i = start + 4;
+    else return null;
+    const lowerChars = '₀₁₂₃₄₅₆₇₈₉₊₋ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ';
+    const upperChars = '⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻ';
+    const lowerNormal = '0123456789+-aehijklmnoprstuvx';
+    const upperNormal = '0123456789+-abcdefghijklmnoprstuvwxyz';
+    let lower = null, upper = null, end = i;
+    for (let k = 0; k < 2; k++) {
+      let pos = end;
+      while (/[ \t]/.test(source[pos] || '') && pos < source.length) pos++;
+      const ch = source[pos];
+      let kind, value, next;
+      if (ch === '_' || ch === '^') {
+        kind = ch === '_' ? 'lower' : 'upper';
+        const arg = readScriptArgument(source, pos + 1);
+        if (!arg) break;
+        value = arg.value; next = arg.end;
+      } else if (ch && (lowerChars.includes(ch) || upperChars.includes(ch))) {
+        kind = lowerChars.includes(ch) ? 'lower' : 'upper';
+        const chars = kind === 'lower' ? lowerChars : upperChars;
+        const normal = kind === 'lower' ? lowerNormal : upperNormal;
+        let j = pos; value = '';
+        while (j < source.length && chars.includes(source[j])) { value += normal[chars.indexOf(source[j])]; j++; }
+        next = j;
+      } else break;
+      if ((kind === 'lower' && lower !== null) || (kind === 'upper' && upper !== null)) break;
+      if (kind === 'lower') lower = value; else upper = value;
+      end = next;
+    }
+    return lower === null && upper === null ? null : { lower, upper, end };
+  }
+
   function stripMathDelimiters(value) {
     return String(value == null ? '' : value).replace(/\$\$([\s\S]*?)\$\$|\$([^$\r\n]+?)\$/g, function (whole, display, inline) {
       const body = display === undefined ? inline : display;
@@ -102,6 +146,29 @@
       let out = '';
       for (let i = 0; i < text.length;) {
         const ch = text[i];
+
+        const integral = (ch === '∫' || ch === '\\') && integralAt(text, i);
+        if (integral) {
+          const spoken = 'integral' + (integral.lower === null ? '' : ' from ' + integral.lower) +
+            (integral.upper === null ? '' : ' to ' + integral.upper);
+          out += '<span class="math-integral" role="math" aria-label="' + escapeHTML(spoken) + '">' +
+            '<span class="math-integral-sign" aria-hidden="true">∫</span><span class="math-integral-limits" aria-hidden="true">' +
+            '<span class="math-integral-upper">' + (integral.upper === null ? '' : renderRange(integral.upper)) + '</span>' +
+            '<span class="math-integral-lower">' + (integral.lower === null ? '' : renderRange(integral.lower)) + '</span></span></span>';
+          i = integral.end; continue;
+        }
+
+        /* Only compact differential quotients are recognised; do not turn
+           arbitrary divisions or URLs into fractions. */
+        const derivative = (ch === 'd' || ch === '∂') && (i === 0 || !/[A-Za-z0-9_/]/.test(text[i - 1])) &&
+          text.slice(i).match(/^(d(?:[²³]|\^[23])?[a-z]?|∂[a-z]?)\/(d[a-z](?:[²³]|\^[23])?|∂[a-z])(?![A-Za-z0-9_])/);
+        if (derivative) {
+          out += '<span class="math-frac math-derivative" role="math" aria-label="' + escapeHTML(derivative[0]) + '">' +
+            '<span class="math-frac-num" aria-hidden="true">' + renderRange(derivative[1]) + '</span>' +
+            '<span class="math-frac-slash" aria-hidden="true">/</span>' +
+            '<span class="math-frac-den" aria-hidden="true">' + renderRange(derivative[2]) + '</span></span>';
+          i += derivative[0].length; continue;
+        }
 
         if (ch === '\\') {
           if (i + 1 >= text.length) { out += '\\'; i++; continue; }
@@ -210,7 +277,7 @@
         }
 
         if (ch === '_' || ch === '^') {
-          const arg = readArgument(text, i + 1);
+          const arg = readScriptArgument(text, i + 1);
           if (arg) {
             const tag = ch === '_' ? 'sub' : 'sup';
             out += '<' + tag + ' class="math-script">' + renderRange(arg.value) + '</' + tag + '>';

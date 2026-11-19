@@ -76,3 +76,12 @@ console.log('PASS fragmented polynomial and arithmetic operators are preserved')
 const duplicate = ['For the cell','Z','n','∣','Z','n','2','-','(', '0.10','M',')','∣','∣','C','u','2','-','(', '1.0','M',')','∣','C','u','Zn∣Zn','2+','(0.10M)∣∣Cu','2+','(1.0M)∣Cu, calculate the cell potential.'].join('\n');
 const preserved = P.tidy(duplicate).text;
 assert(preserved.includes('Zn²⁻') && preserved.includes('2+'), 'contradictory source signs both survive');
+
+const calculusPaste = 'Evaluate\n∫\n0\nπ/2\n\nln(sin x)ln(cos x) dx';
+const calculusClean = 'Evaluate\n∫_{0}^{π/2} ln(sin x)ln(cos x) dx';
+assert.deepEqual(P.tidy(calculusPaste), {text:calculusClean, changed:true});
+assert.equal(P.tidy(calculusClean).text, calculusClean, 'calculus repair is idempotent');
+assert.equal(P.tidy('∫\n0\nπ/2').text, '∫\n0\nπ/2', 'do not guess missing integrand');
+assert.equal(P.tidy('Find dy\n/\ndx of x²').text, 'Find dy/dx of x²');
+assert.equal(P.tidy('Integrate ∫ x² dx.').text, 'Integrate ∫ x² dx.');
+console.log('PASS pasted integral limits and differential quotient; incomplete bounds remain unchanged');

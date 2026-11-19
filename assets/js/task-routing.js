@@ -18,6 +18,8 @@
    subject='chemistry';reason='Explicit chemistry process';
   }else if(/glucose|lactic acid|anaerobic|photosynthesis|muscle cells|ग्लूकोज|प्रकाश संश्लेषण/i.test(q)){
    subject='biology';reason='Explicit biology process';
+  }else if(/particle of charge[\s\S]{0,120}fixed charge/i.test(q)){
+   subject='physics';reason='Explicit electrostatics setup';
   }else if(/\b(?:resistors?|ohms?)\b|Ω|\bbattery\b[\s\S]{0,90}\b(?:current|voltage|series|parallel)\b|प्रतिरोध|विद्युत परिपथ|ओम/i.test(q)){
    subject='physics';reason='Explicit electrical circuit';
   }else if(/civil disobedience|power sharing|belgium|sri lanka|rainwater harvesting|groundwater recharge|water.management plan|income[\s\S]{0,120}sustainability|सविनय अवज्ञा|बेल्जियम|श्रीलंका|वर्षा जल संचयन|भूजल पुनर्भरण/i.test(q)){
