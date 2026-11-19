@@ -2051,7 +2051,12 @@ window.UP = window.UP || {};
         const note = (j && j.offline)
             ? (S.lang === 'hi' ? 'आप ऑफ़लाइन हैं — बिल्ट-इन हल दिखाया जा रहा है' : 'You are offline — showing the built-in solver')
             : (j && j.error) ? j.error + retryHint : (S.lang === 'hi' ? 'एआई से जवाब नहीं आया' : 'The AI did not return an answer.');
-          /* The single call could not finish. Ask for the answer in parts
+          /* Only a genuine timeout earns the extra requests: an access,
+             quota or "could not answer" reply is reported as it always was,
+             and a still-arriving answer is not duplicated. */
+          const timedOut = j && (j.code === 'provider_timeout' || j.status === 504);
+          if (!timedOut) { goLocal(note, true); return; }
+          /* The single call ran out of time. Ask for the answer in parts
              before telling the student anything failed. */
           const base = {
             question: q, subject: routing.subject, selectedSubject: S.subject, cls: S.cls,
