@@ -28,6 +28,9 @@ window.UP = window.UP || {};
   S.lang = store.getTyped('lang', 'en', 'string');
   S.cls = store.getTyped('cls', 10, 'number');
   S.subject = store.getTyped('subject', 'maths', 'string');
+  // Keep old saved scopes intact, but do not reopen a retired subject.
+  const retiredSubjects = new Set(['accountancy','computerized-accounting','economics','business-studies']);
+  if (retiredSubjects.has(S.subject)) { S.subject = 'maths'; store.set('subject', S.subject); }
   S.board = store.getTyped('board', 'cbse', 'string');
   S.chapterId = null;
   S.answer = null;
@@ -405,9 +408,6 @@ window.UP = window.UP || {};
       chemistry:['Type your Chemistry question.', 'अपना रसायन विज्ञान प्रश्न लिखिए।'],
       biology:['Type your Biology question.', 'अपना जीव विज्ञान प्रश्न लिखिए।'],
       'applied-maths':['Type your Applied Mathematics question.', 'अपना अनुप्रयुक्त गणित प्रश्न लिखिए।'],
-      accountancy:['Type your Accountancy question, including all figures and alternatives.', 'अपना लेखाशास्त्र प्रश्न सभी अंकों और विकल्पों के साथ लिखिए।'],
-      'computerized-accounting':['Type your Computerised Accounting question.', 'अपना कम्प्यूटरीकृत लेखांकन प्रश्न लिखिए।'],
-      economics:['Type your Economics question — for example, “What is GDP?”', 'अपना अर्थशास्त्र प्रश्न लिखिए — जैसे “GDP क्या है?”'], 
     },
     askBtn: ['Show me the ways', 'सभी तरीके दिखाइए'],
     tryOne: ['Try one:', 'आज़माइए:'],
@@ -890,7 +890,7 @@ window.UP = window.UP || {};
     if (_fullTextPromise) return _fullTextPromise;
     _fullTextPromise = new Promise(resolve => {
       const s = document.createElement('script');
-      s.src = 'assets/js/data/chapter-fulltext.js?v=26ab';
+      s.src = 'assets/js/data/chapter-fulltext.js?v=26f27';
       s.async = true;
       s.onload = () => resolve(UP.chapterFullText || {});
       s.onerror = () => resolve({});
@@ -1238,11 +1238,6 @@ window.UP = window.UP || {};
         { en: 'What made the postmaster help Lencho?', hi: 'पोस्टमास्टर ने लैंचो की मदद क्यों की?' },
         { en: 'Describe the baker of Goa in 100 words.', hi: 'गोवा के बेकर का 100 शब्दों में वर्णन कीजिए।' },
       ],
-      economics: [
-        { en: 'What is GDP?', hi: 'GDP क्या है?' },
-        { en: 'How is market equilibrium determined?', hi: 'बाज़ार संतुलन कैसे निर्धारित होता है?' },
-        { en: 'What is opportunity cost?', hi: 'अवसर लागत क्या है?' },
-      ],
       sanskrit: [
         { en: 'शुचिपर्यावरणम् — स्वच्छ वातावरण का महत्त्व स्पष्ट कुरुत।', hi: 'शुचिपर्यावरणम् — स्वच्छ वातावरणस्य महत्त्वं स्पष्टयत।' },
         { en: 'सन्धिं कुरुत — राम + आगच्छति', hi: 'सन्धिं कुरुत — राम + आगच्छति' },
@@ -1262,9 +1257,7 @@ window.UP = window.UP || {};
         physics: ['State Faraday’s law of induction.', 'Explain the photoelectric effect.'],
         chemistry: ['What is the Nernst equation?', 'Explain an electrochemical cell.'],
         biology: ['Describe DNA replication.', 'What is natural selection?'],
-        english: ['How does Franz’s view change in The Last Lesson?', 'What does the rattrap represent?'],
-        accountancy: ['How is goodwill treated when a partner retires?', 'What is a cash-flow statement?'],
-        'computerized-accounting': ['What does the SUM function do in a spreadsheet?', 'What is a primary key in a database?']
+        english: ['How does Franz’s view change in The Last Lesson?', 'What does the rattrap represent?']
       }
     };
     const specific = (scopedExamples[+S.cls] || {})[S.subject];
@@ -1537,7 +1530,7 @@ window.UP = window.UP || {};
         sanskrit:['शुचिपर्यावरणम् — स्वच्छ वातावरणस्य महत्त्वम्', 'सन्धिं कुरुत — राम + आगच्छति', '"बुद्धिर्बलवती सदा" पाठस्य सारः', 'देव-शब्दस्य चतुर्थी-विभक्तिः'],
       },
       11: { maths: ['sin x / x limit', 'nCr formula', 'GP sum'], physics: ['projectile motion', 'Newton’s laws'], chemistry: ['mole concept', 'chemical bonding'], biology: ['photosynthesis', 'cell structure'], science: ['projectile motion', 'mole concept', 'photosynthesis'], hindi: ['कबीर के दोहे'], english: ['The Portrait of a Lady'], social: ['French Revolution'], sanskrit: ['शेमुषी — सन्धि'] },
-      12: { maths: ['integration by parts', 'Bayes theorem', 'cross product'], 'applied-maths': ['simple interest', 'moving average'], physics: ['photoelectric effect', 'Faraday’s law'], chemistry: ['Nernst equation', 'electrochemical cell'], biology: ['DNA replication', 'natural selection'], economics: ['What is GDP?', 'Explain market equilibrium', 'What is opportunity cost?'], accountancy: ['Goodwill on retirement of a partner', 'What is a cash-flow statement?'], 'computerized-accounting': ['SUM function in a spreadsheet', 'What is a primary key in a database?'], science: ['photoelectric effect', 'Nernst equation', 'DNA replication'], hindi: ['काव्य-सौन्दर्य'], english: ['How does Franz’s view change in The Last Lesson?', 'What does the rattrap represent?', 'How does Eveline face her choice?'], social: ['Cold War era'], sanskrit: ['अनुवाद कार्यम्'] },
+      12: { maths: ['integration by parts', 'Bayes theorem', 'cross product'], 'applied-maths': ['simple interest', 'moving average'], physics: ['photoelectric effect', 'Faraday’s law'], chemistry: ['Nernst equation', 'electrochemical cell'], biology: ['DNA replication', 'natural selection'], science: ['photoelectric effect', 'Nernst equation', 'DNA replication'], hindi: ['काव्य-सौन्दर्य'], english: ['How does Franz’s view change in The Last Lesson?', 'What does the rattrap represent?', 'How does Eveline face her choice?'], social: ['Cold War era'], sanskrit: ['अनुवाद कार्यम्'] },
     };
     const solverBlurbs = {
       maths: {
@@ -4758,8 +4751,8 @@ window.UP = window.UP || {};
         <div class="mini-label">03</div>
         <h3 style="font-size:17px;margin:6px 0 6px">${S.lang === 'hi' ? 'सीमाएँ स्पष्ट हैं' : 'The limits are stated'}</h3>
         <p style="font-size:13.8px;color:var(--ink-600);margin:0">${S.lang === 'hi'
-          ? 'बिल्ट-इन हलकर्ता कुछ गणितीय प्रश्नों तक सीमित है। आयातित लेखाशास्त्र बैंक में सत्यापित स्थानीय हल या आधिकारिक उत्तर-कुंजी नहीं है। AI व्याख्या गलत हो सकती है।'
-          : 'The built-in solver covers selected maths patterns, not every subject. Accountancy has no verified local solver or official answer key in the imported bank. AI explanations can be wrong.'}</p>
+          ? 'बिल्ट-इन हलकर्ता कुछ गणितीय प्रश्नों तक सीमित है। AI व्याख्या गलत हो सकती है।'
+          : 'The built-in solver covers selected maths patterns, not every subject. AI explanations can be wrong.'}</p>
       </article>
       <article class="card">
         <div class="mini-label">04</div>
@@ -4817,7 +4810,7 @@ window.UP = window.UP || {};
     // A shareable entry point selects this supplied subject, then removes the
     // one-time route so later header changes are not overwritten on rerender.
     if (r.name === 'economics' || r.name === 'english12') {
-      const targetSubject = r.name === 'english12' ? 'english' : 'economics';
+      const targetSubject = r.name === 'english12' ? 'english' : 'maths';
       if (+S.cls !== 12 || S.subject !== targetSubject) {
         S.chapterId = null; window.__qIndex = null; S.dailySet = null;
         // Hide a previous scope's in-memory mock without deleting its stored data.
@@ -4833,6 +4826,7 @@ window.UP = window.UP || {};
       if (nc !== S.cls) { S.chapterId = null; window.__qIndex = null; S.dailySet = null; clearMockTest(); store.remove(dailyStoreKey()); }
       S.cls = nc;
     }
+    if (r.params.sub && retiredSubjects.has(r.params.sub)) r.params.sub = 'maths';
     if (r.params.sub) {
       if (r.params.sub !== S.subject) { S.chapterId = null; window.__qIndex = null; S.dailySet = null; clearMockTest(); store.remove(dailyStoreKey()); }
       S.subject = r.params.sub;
@@ -4858,7 +4852,7 @@ window.UP = window.UP || {};
         try {
           const json = decodeURIComponent(escape(atob(r.params.s.replace(/_/g, '/').replace(/-/g, '+'))));
           const p = JSON.parse(json);
-          if (p.q) { r.params.q = p.q; if (p.sub) S.subject = p.sub; }
+          if (p.q) { r.params.q = p.q; if (p.sub && !retiredSubjects.has(p.sub)) S.subject = p.sub; }
         } catch (e) {}
       }
       const q = r.params.q ? tidyQuestion(UP.answerFormat.question(r.params.q)).trim() : r.params.q;
@@ -7143,6 +7137,8 @@ window.UP = window.UP || {};
         if (!allowed.includes(S.subject)) S.subject = allowed[0];
       }
       if (key === 'subject') {
+        const allowed = (UP.classes.find(c => c.id === +S.cls) || UP.classes[0]).subjects;
+        if (!allowed.includes(val)) return;
         S.subject = val; S.chapterId = null; resetScope = true;
         // Changing subject invalidates chapter selection (chapter IDs are per-subject)
         S.test.chapters = []; S.test.seed = 0; S.paper = null;
@@ -8028,6 +8024,7 @@ function importProgress(file){
       if (!d || typeof d !== 'object' || Array.isArray(d)) throw new Error('invalid backup');
       if (Array.isArray(d.saved)) S.saved = d.saved;
       ['cls','subject','lang','board'].forEach(k=>{ if(d[k]) S[k]=d[k]; });
+      if (retiredSubjects.has(S.subject)) S.subject = 'maths';
       S.test.board = S.board;
       if (Array.isArray(d.scopedStudy)) d.scopedStudy.forEach(entry => {
         if (!entry || !['mastery','hardList','dailyProgress','mistakeQueue'].includes(entry.kind) ||

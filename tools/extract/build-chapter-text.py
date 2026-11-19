@@ -43,15 +43,14 @@ CACHE = os.path.join(ROOT, 'tools/extract/.chapter-text-cache.json')
 # --------------------------------------------------------------------------
 
 def load_catalogue():
-    """Parse UP.english12Sources / UP.economicsSources out of the JS files."""
+    """Parse UP.english12Sources out of the JS files."""
     out = []
 
     def read(path):
         with open(os.path.join(ROOT, path), encoding='utf-8') as fh:
             return fh.read()
 
-    for path, kind in (('assets/js/data/english12-sources.js', 'english'),
-                       ('assets/js/data/economics-sources.js', 'economics')):
+    for path, kind in (('assets/js/data/english12-sources.js', 'english'),):
         src = read(path)
         # The arrays are a list of plain JSON object literals.
         for m in re.finditer(r'\{\s*"id".*?\}', src, re.S):

@@ -38,7 +38,7 @@
 
   /* --- CRITICAL CORE: required before app.js boots --- */
   const CRITICAL_CORE = [
-    'assets/js/data-extra.js?v=26e5',
+    'assets/js/data-extra.js?v=26f27',
     'assets/js/data/chapters1.js',
     'assets/js/data/chapters2.js',
     'assets/js/data/pyq.js',
@@ -48,7 +48,7 @@
     'assets/js/question-quality.js?v=26f15', // shared conservative activity/OCR quality gates
     'assets/js/question-fold.js?v=26f0', // shared Hindi/Sanskrit/English exercise folding
     'assets/js/data/question-overrides.js?v=26f15', // question-bank curation, applied once packs are in
-    'assets/js/math-render.js?v=26f26', // safe inline TeX rendering for questions, options and answers
+    'assets/js/math-render.js?v=26f27', // safe inline TeX rendering for questions, options and answers
     'assets/js/approach-enrich.js?v=26ab',
       'assets/js/maths-solvers.js',  // attaches three solution methods to every PYQ (all classes/subjects)
       'assets/js/physics-solvers.js',
@@ -57,19 +57,19 @@
     'assets/js/solver-core.js',
     'assets/js/solver-arith.js?v=26e5',
     'assets/js/solver-geo.js',
-    'assets/js/task-routing.js?v=26f26',
+    'assets/js/task-routing.js?v=26f27',
     'assets/js/language-policy.js?v=26e5',
-    'assets/js/solve-timing.js?v=26f26',
-    'assets/js/solve-parts.js?v=26f26', // a long question answered in parts instead of being lost
+    'assets/js/solve-timing.js?v=26f27',
+    'assets/js/solve-parts.js?v=26f27', // a long question answered in parts instead of being lost
     'assets/js/square-integers.js?v=26e5',
-    'assets/js/charge-energy.js?v=26f26',
+    'assets/js/charge-energy.js?v=26f27',
     'assets/js/solver-route.js?v=26e5',
-    'assets/js/paste-repair.js?v=26f26', // a pasted question rejoined into the sentence it came from
-    'assets/js/answer-format.js?v=26f26',
+    'assets/js/paste-repair.js?v=26f27', // a pasted question rejoined into the sentence it came from
+    'assets/js/answer-format.js?v=26f27',
     'assets/js/teacher-voice.js?v=26e5',
-    'assets/js/figures.js?v=26f26',
-    'assets/js/matrices.js?v=26f26', // matrix questions: exact solve + the matrices drawn
-    'assets/js/worked-figure.js?v=26f26', // answer-labelled figures computed from the question
+    'assets/js/figures.js?v=26f27',
+    'assets/js/matrices.js?v=26f27', // matrix questions: exact solve + the matrices drawn
+    'assets/js/worked-figure.js?v=26f27', // answer-labelled figures computed from the question
     'assets/js/checker.js',
     'assets/js/testgen.js?v=26f14',
     'assets/js/mock-assessment.js?v=26f15',
@@ -135,13 +135,7 @@
     biology: [
       'assets/js/data/biology-outlines.js' // CBSE 2026–27 outline view + verified source-crop figures per chapter
     ],
-    economics: [], // guide and source catalogue are in the lazy class12 pack
-    // Their chapter maps and PYQ bank live in the lazy class12 pack; these
-    // empty packs make saved subjects valid for the boot-time subject check
-    // and the standard switchSubject path.
-    'business-studies': [], // outline data is in the lazy class12 pack
-    accountancy: [],
-    'computerized-accounting': []
+
   };
 
   const BOARD_PACKS = {
@@ -155,18 +149,11 @@
   PACKS.class12 = [
     'assets/js/data/chapters12-maths.js',
     'assets/js/data/chapters12-applied-maths.js',
-    'assets/js/data/chapters12-accountancy.js',
-    'assets/js/data/accountancy-chapters.js?v=26ab',
-    'assets/js/data/business-studies12.js?v=26e5',
-    'assets/js/data/economics12.js?v=26ab',
-    'assets/js/data/economics-sources.js?v=26ab',
     'assets/js/data/english12.js?v=26ab',
     'assets/js/data/english12-sources.js?v=26ab',
-    'assets/js/data/chapter-summary.js?v=26ab',
-    'assets/js/data/class12-original-test-papers.js?v=26ab',
+    'assets/js/data/chapter-summary.js?v=26f27',
+    'assets/js/data/class12-original-test-papers.js?v=26f27',
     'assets/js/data/pyq-cbse2025-cls12.js',
-    'assets/js/data/pyq-accountancy-2023-2026-extracted.js?v=26ab',
-    'assets/js/data/accountancy-original-papers.js?v=26ab',
     'assets/js/data/figures-c12.js',
     'assets/js/data/figures-physics.js'
   ];
@@ -258,7 +245,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26f26');
+    return loadScript('assets/js/app.js?v=26f27');
   }
 
   function loadPostPaint() {

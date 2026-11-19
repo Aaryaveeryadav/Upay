@@ -34,6 +34,7 @@ jobs:
       - run: node tools/check/answer_format.js
       - run: node tools/check/paste_repair.js
       - run: node tools/check/charge_energy.js
+      - run: node tools/check/subject_scope.js
       - run: node tools/check/teacher_voice.js
       - run: node tools/check/prime_power_ratio.js
       - run: node tools/check/square_integers.js
@@ -92,6 +93,7 @@ jobs:
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/pasted_question_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/calculus_format_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/charge_energy_browser.js
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/subject_scope_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/science_timeout_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/share_mock_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/daily_mock_browser.js

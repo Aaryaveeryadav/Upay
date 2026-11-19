@@ -27,7 +27,7 @@ async function checkSubjectCoverage(page) {
     assert.deepEqual(summary.missingOrBoth, [], `Each card needs exactly one answer mode (${scope})`);
     if (summary.count) populated.push(scope.join('/'));
   }
-  assert(populated.includes('12/accountancy/cbse') && populated.includes('10/science/cbse'));
+  assert(populated.includes('12/maths/cbse') && populated.includes('10/science/cbse'));
   console.log('PASS first page of every selectable CBSE class/subject and Rajasthan Maths; populated:', populated.join(', '));
 }
 

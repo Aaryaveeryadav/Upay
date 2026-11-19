@@ -13,3 +13,6 @@ server.js
 # Private handoff notes and local-server-only files are not deployment assets.
 *.md
 /corrupt_gate.js
+
+# Internal review previews are not public study content.
+/*-PREVIEW.html
