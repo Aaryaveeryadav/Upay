@@ -112,7 +112,18 @@ jobs:
           python3 tools/check/run_ci_check.py python3 tools/check/security_headers.py 2>&1 | tee -a /tmp/browser-logs.txt
       # The Actions log API is not always reachable; keep the browser output as
       # an artifact so a red build can still be diagnosed.
+      # Logs and artifacts live on a CDN that is not reachable from every
+      # environment; the job summary is readable straight from the API, so the
+      # failing output is copied there as well.
       - name: Save browser logs
+        if: always()
+        run: |
+          if [ -f /tmp/browser-logs.txt ]; then
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            tail -c 60000 /tmp/browser-logs.txt >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload browser logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
