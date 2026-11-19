@@ -869,17 +869,18 @@ window.UP = window.UP || {};
         <details class="card" style="padding:16px"><summary>खोजने योग्य प्रतिलिपि · समीक्षा शेष</summary><p>मात्रा, वर्तनी और पंक्तियों में अंतर हो सकता है। ऊपर का मूल पृष्ठ मानें।</p><p style="white-space:pre-wrap">${esc(UP.hindi12Text?.[source]?.[page-1] || 'पाठ के लिए मूल पृष्ठ देखें।')}</p></details>
         ${c.question&&!supplement?practice(c):''}</article>`;
     }
+    if (route === 'pyq' && S.subject === 'hindi-core') return header+`<hindi-paper-reader paper="${esc(params.paper || '')}" number="${esc(params.number || '1')}"></hindi-paper-reader>`;
     if (route === 'pyq') return header+'<div class="empty">इस पाठ्यक्रम के पिछले प्रश्नपत्र या आधिकारिक उत्तर-कुंजी नहीं मिले हैं। <a class="link" href="#/today">पुस्तक से अभ्यास करें</a></div>';
     if (['today','test','mock','mockresult','mcq'].includes(route)) {
       const pool = list.filter(c=>c.question), start = Math.max(0,Number.parseInt(params.start,10)||0)%Math.max(1,pool.length);
       const set = route==='today'?pool:pool.concat(pool).slice(start,start+Math.min(3,pool.length));
-      return header+`<h2>पाठ्यपुस्तक से स्व-अभ्यास</h2><p>ये बोर्ड प्रश्न नहीं हैं। अंक या आधिकारिक उत्तर-कुंजी उपलब्ध नहीं हैं।</p>
+      return header+`<h2>पाठ्यपुस्तक से स्व-अभ्यास</h2><p>ये बोर्ड प्रश्न नहीं हैं। अंक या आधिकारिक उत्तर-कुंजी उपलब्ध नहीं हैं। ${S.subject==='hindi-core'?'<a class="link" href="#/pyq">मूल प्रश्नपत्र देखें</a>':''}</p>
         <div class="grid">${set.map(practice).join('')}</div>${route!=='today'?`<a class="btn btn-primary" href="#/test?start=${start+3}">अगला अभ्यास सेट →</a>`:''}`;
     }
     const query=(params.q||'').trim().toLowerCase();
     const matchPage = c => query ? (UP.hindi12Text?.[c.id] || []).findIndex(page=>page.replace(/\s+/g,' ').includes(query))+1 : 0;
     const hits=list.filter(c=>[c.hi,c.book,c.question,c.id].join(' ').toLowerCase().includes(query) || matchPage(c));
-    return header+`<p>मूल पाठ और प्रश्न-अभ्यास · <a class="link" href="#/today">अभ्यास</a> · <a class="link" href="#/test">स्व-परीक्षण</a></p>
+    return header+`<p>मूल पाठ और प्रश्न-अभ्यास · <a class="link" href="#/today">अभ्यास</a> · <a class="link" href="#/test">स्व-परीक्षण</a> ${S.subject==='hindi-core'?' · <a class="link" href="#/pyq">प्रश्नपत्र</a>':''}</p>
       <label class="search-input">${icon('search')}<input type="search" data-action="search" aria-label="पाठ या अभ्यास खोजें" placeholder="पुस्तक, पाठ, पंक्ति या अभ्यास खोजें" value="${esc(query)}"></label>
       ${hits.length?'':'<p>कोई मेल नहीं मिला।</p>'}${[...new Set(hits.map(c=>c.book))].map(b=>`<h2>${esc(b)}</h2><div class="grid grid-2">${hits.filter(c=>c.book===b).map(c=>`<a class="card" style="padding:16px" href="${reader(c,matchPage(c)||1)}"><span class="tag cream">पाठ ${c.n}</span><h3>${esc(c.hi)}</h3>${c.pages} पृष्ठ · पाठ और अभ्यास →</a>`).join('')}</div>`).join('')}`;
   }

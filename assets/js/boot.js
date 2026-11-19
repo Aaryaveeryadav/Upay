@@ -86,7 +86,7 @@
 
   /* --- Subject packs (lazy) --- */
   const PACKS = {
-    'hindi-core':['assets/js/data/hindi12-core-text.js'],
+    'hindi-core':['assets/js/data/hindi12-core-text.js','assets/js/hindi-paper-reader.js'],
     'hindi-elective':['assets/js/data/hindi12-elective-text.js'],
     maths:   [],
     science: [
@@ -248,7 +248,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26hi12');
+    return loadScript('assets/js/app.js?v=26hip1');
   }
 
   function loadPostPaint() {
