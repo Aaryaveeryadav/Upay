@@ -869,6 +869,71 @@ UP.figures = (function () {
   }
 
   /* =========================================================
+     A satellite in a circular orbit around Earth: the circle the question
+     names, the radius r to the satellite, the velocity v tangent to it, and
+     (when the question asks about doubling r) the doubled orbit dashed.
+     spec = {radius (m) | null, stated, doubled, speed, period, answer, caption}
+     Nothing is drawn that the question does not state; a symbolic question
+     gets symbols, a numeric one gets the values computed from its radius.
+     ========================================================= */
+  function orbitFig(p) {
+    const W = 660, H = 430, cx = 330, cy = 196;
+    const doubled = !!p.doubled;
+    const R1 = doubled ? 92 : 148;
+    const R2 = R1 * 2;
+    if (!(R1 > 0) || (doubled && (cy - R2 < 8 || cy + R2 > H - 34))) return wrap(W, 430, '');
+    const earth = 30;
+    const at = -55 * Math.PI / 180;                    /* upper right */
+    const sx = cx + R1 * Math.cos(at), sy = cy + R1 * Math.sin(at);
+    /* tangent, turned 90° from the radius, so the velocity is drawn along the
+       motion rather than into or out of the Earth */
+    const rx = sx - cx, ry = sy - cy;
+    const tl = Math.hypot(rx, ry) || 1;
+    const tx = -ry / tl, ty = rx / tl;
+    const arrowLen = 52;
+    const tipX = sx + tx * arrowLen, tipY = sy + ty * arrowLen;
+    const speedText = Number.isFinite(p.speed) ? fmtNum(p.speed / 1000) + ' km/s' : 'v = √(GM/r)';
+    const periodText = Number.isFinite(p.period)
+      ? (p.period >= 7200 ? fmtNum(p.period / 3600) + ' h' : fmtNum(p.period) + ' s')
+      : 'T = 2π√(r³/GM)';
+    const radiusText = p.stated ? 'r = ' + p.stated : 'r';
+    const rows = [
+      { text: 'circular orbit around Earth', size: 10.5, fill: C.inkSoft },
+      { text: radiusText, size: 13, weight: 700, fill: C.creamDeep, mono: true },
+      { text: speedText, size: 12, fill: C.skyDeep, mono: true },
+      { text: periodText, size: 12, fill: C.skyDeep, mono: true }
+    ];
+    if (doubled) rows.push({ text: '2r → T′ = 2√2 T ≈ 2.83 T', size: 12, fill: C.violet, mono: true });
+    const boxW = Math.max.apply(null, rows.map(r => r.text.length * 7.1 + 26));
+    const boxH = 16 + rows.length * 21;
+    const box = `<g transform="translate(18, 16)">
+        <rect x="0" y="0" width="${num(boxW)}" height="${num(boxH)}" rx="10" fill="${C.cream}" stroke="${C.creamMid}"/>
+        ${rows.map((r, i) => label(13, 24 + i * 21, r.text,
+          { anchor: 'start', size: r.size, weight: r.weight || 500, fill: r.fill, mono: !!r.mono })).join('')}
+      </g>`;
+    return wrap(W, H, `
+      ${doubled ? `<circle cx="${cx}" cy="${cy}" r="${R2}" fill="none" stroke="${C.violet}"
+        stroke-width="1.6" stroke-dasharray="7 6"/>` : ''}
+      <circle cx="${cx}" cy="${cy}" r="${R1}" fill="none" stroke="${C.skyMid}" stroke-width="2"/>
+      <line x1="${num(cx)}" y1="${num(cy)}" x2="${num(sx)}" y2="${num(sy)}"
+        stroke="${C.inkSoft}" stroke-width="1.5" stroke-dasharray="5 4"/>
+      ${label((cx + sx) / 2 + 10, (cy + sy) / 2 - 8, 'r', { size: 13, weight: 700, fill: C.ink })}
+      ${doubled ? label(cx - R2 - 6, cy + 4, '2r', { anchor: 'end', size: 12, weight: 700, fill: C.violet }) : ''}
+      <circle cx="${cx}" cy="${cy}" r="${earth}" fill="${C.sky}" stroke="${C.white}" stroke-width="2"/>
+      ${label(cx, cy + 4, 'Earth', { size: 11, weight: 600, fill: C.white, halo: false })}
+      ${dot(sx, sy, 6, C.creamDeep, C.white)}
+      <line x1="${num(sx)}" y1="${num(sy)}" x2="${num(tipX)}" y2="${num(tipY)}"
+        stroke="${C.green}" stroke-width="2.6"/>
+      <path d="M${num(tipX)} ${num(tipY)} L${num(tipX - tx * 10 - ty * 5)} ${num(tipY - ty * 10 + tx * 5)}
+        L${num(tipX - tx * 10 + ty * 5)} ${num(tipY - ty * 10 - tx * 5)} Z" fill="${C.green}"/>
+      ${label(tipX + tx * 14, tipY + ty * 14, 'v', { size: 13, weight: 700, fill: C.green })}
+      ${box}
+      ${label(W / 2, H - 14, 'drawn from the question: the orbit is a circle of radius r; ' +
+        (doubled ? 'the dashed circle is 2r, and T grows as r³ᐟ²' : 'v points along the motion'),
+        { size: 10, fill: C.inkSoft })}`);
+  }
+
+  /* =========================================================
      Matrix equation figure — the values the question states and the X the
      app computed. spec = {op:'AX'|'XA'|'det'|'inverse'|'product',
      plainA:[[..]], plainB:[[..]], plainX:[[..]], det:'18'}
@@ -988,6 +1053,9 @@ UP.figures = (function () {
     }
     if (spec.type === 'optics' && spec.verified) {
       return opticsWorkedFig(spec);
+    }
+    if (spec.type === 'orbit' && spec.verified) {
+      return orbitFig(spec);
     }
 
     if (spec.type === 'matrix' && spec.verified) {

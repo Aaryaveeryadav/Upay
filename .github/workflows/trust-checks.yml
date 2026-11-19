@@ -32,6 +32,7 @@ jobs:
       - run: node tools/check/question_audit.js
       - run: node tools/check/solve_parts.js
       - run: node tools/check/answer_format.js
+      - run: node tools/check/paste_repair.js
       - run: node tools/check/teacher_voice.js
       - run: node tools/check/prime_power_ratio.js
       - run: node tools/check/square_integers.js

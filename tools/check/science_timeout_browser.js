@@ -101,6 +101,25 @@ const { chromium } = require('playwright');
       assert.equal(await page.evaluate(() => UP.S.aiQuestion), next, 'the second question survives the timeout');
       assert.equal(await page.locator('[data-action="retryAI"]').count(), 1, 'browser safety deadline remains recoverable');
       assert.equal(pending.length, 0, 'no request storm after the refusal');
+      /* A malformed first response is retried automatically, without a second
+         student action; access errors must never cause duplicate requests. */
+      const retryQuestion = 'A satellite moves in a circular orbit around Earth. Derive its orbital speed and time period if the radius is doubled.';
+      await page.evaluate(q => { UP.S.subject = 'physics'; location.hash = '#/ask?q=' + encodeURIComponent(q); }, retryQuestion);
+      const firstTry = await take('', 'first orbit request');
+      await fulfil(firstTry, 502, { fallback: true, error: 'The AI returned an unusable response. Please try again.' });
+      const autoRetry = await take('', 'automatic retry');
+      const complete = { source: 'ai', result: 'T doubles by a factor of 2√2.', summary: 'Circular orbit',
+        approaches: ['Force balance', 'Energy', 'Scaling', 'Dimensional reasoning'].map(name => ({name, steps:[{t:'For circular motion, v = √(GM/r).'}]})) };
+      await fulfil(autoRetry, 200, complete);
+      await page.waitForFunction(() => UP.S.aiState === 'done');
+      assert.match(await page.locator('.ai-answer').innerText(), /2√2/);
+      assert.equal(await page.locator('[data-action="retryAI"]').count(), 0);
+      assert.equal(pending.length, 0);
+      await page.evaluate(() => { location.hash = '#/ask?q=' + encodeURIComponent('Explain the motion of planets around the Sun.'); });
+      const blocked = await take('', 'access failure');
+      await fulfil(blocked, 403, { code: 'access_not_enabled', fallback: true, error: 'Access not enabled. Please try again.' });
+      await page.waitForFunction(() => UP.S.aiState === 'local');
+      assert.equal(pending.length, 0, 'access failures are not retried');
       assert.deepEqual(errors, []);
       console.log(`PASS ${width}px: slow science request survives 40s, a timeout is answered in parts, ` +
         'the loop stops on a refusal, the missing methods can be requested, and a bare timeout keeps a retry');

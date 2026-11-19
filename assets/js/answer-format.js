@@ -7,11 +7,20 @@
     // Only recognized TeX commands are transformed; unknown notation is retained.
     s = s.replace(/\\(?:left|right)\b/g,'').replace(/\\[()[\]]/g,'').replace(/\$\$?([^$]+)\$\$?/g,'$1');
     s = s.replace(/\\([A-Za-z]+)/g,(all,k)=>symbols[k] || all);
-    s=s.replace(/_\{([^{}]+)\}|_([A-Za-z0-9]+)/g,(_,a,b)=>{
-      const v=a||b; const letters={a:'ₐ',e:'ₑ',h:'ₕ',i:'ᵢ',j:'ⱼ',k:'ₖ',l:'ₗ',m:'ₘ',n:'ₙ',o:'ₒ',p:'ₚ',r:'ᵣ',s:'ₛ',t:'ₜ',u:'ᵤ',v:'ᵥ',x:'ₓ'};
-      return /^[0-9aehijklmnoprstuvx]+$/.test(v)?Array.from(v,c=>letters[c]||subs[+c]).join(''):'_['+v+']';
-    }).replace(/\^\{([^{}]+)\}|\^([+-]?[0-9]+)/g,(_,a,b)=>{
-      const v=a||b;return /^[0-9+-]+$/.test(v)?v.replace(/[0-9+-]/g,d=>d==='+'?'⁺':d==='-'?'⁻':supers[+d]):'^('+v+')';
+    /* Sub/superscripts that have a Unicode form are flattened to it, because
+       that survives everywhere (prose, SVG labels, plain text). The rest are
+       KEPT in brace form: the answer card renders them as real <sub>/<sup>,
+       and the old "Z_[AB]" / "e^(−Eₐ/RT)" fallbacks looked like broken TeX on
+       the page. Nothing is dropped: the letters are still there. */
+    const letters={a:'ₐ',e:'ₑ',h:'ₕ',i:'ᵢ',j:'ⱼ',k:'ₖ',l:'ₗ',m:'ₘ',n:'ₙ',o:'ₒ',p:'ₚ',r:'ᵣ',s:'ₛ',t:'ₜ',u:'ᵤ',v:'ᵥ',x:'ₓ'};
+    const sub = (v) => /^[0-9aehijklmnoprstuvx]+$/.test(v) ? Array.from(v,c=>letters[c]||subs[+c]).join('') : '_{'+v+'}';
+    /* Braced groups first, then a bare digit run (so H_2O is H₂O and not
+       H_{2O}), then bare letters. */
+    s=s.replace(/_\{([^{}]+)\}/g,(_,a)=>sub(a))
+      .replace(/_([0-9]+)/g,(_,a)=>sub(a))
+      .replace(/_([A-Za-z]+)/g,(_,a)=>sub(a))
+      .replace(/\^\{([^{}]+)\}|\^([+-]?[0-9]+)/g,(_,a,b)=>{
+      const v=a||b;return /^[0-9+-]+$/.test(v)?v.replace(/[0-9+-]/g,d=>d==='+'?'⁺':d==='-'?'⁻':supers[+d]):'^{'+v+'}';
     }).replace(/\\[,;:!]/g,' ');
     for(let i=0;i<8;i++) {
       const before=s;
