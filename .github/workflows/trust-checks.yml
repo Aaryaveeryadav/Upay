@@ -58,14 +58,13 @@ jobs:
           node-version: '22'
       # Use the image's native Python/pip instead of a host-toolcache Python
       # built for ubuntu-latest, which may not match this Noble container.
-      - run: python3 tools/check/run_ci_check.py python3 -m pip install playwright==1.58.0
+      - run: python3 tools/check/run_ci_check.py python3 -m pip install playwright==1.58.0 2>&1 | tee -a /tmp/browser-logs.txt
       - run: npm install --prefix /tmp/upay-diagram-check playwright@1.58.0 pngjs@7.0.0
       # The matching image already contains Chromium and OS dependencies.
       # Avoid the failing runtime browser/apt installation step.
       - name: Physics and security browser checks
         run: |
           set -o pipefail
-          exec > >(tee -a /tmp/browser-logs.txt) 2>&1
           echo "== browser checks =="
           HOST=0.0.0.0 PORT=8004 node server.js > /tmp/upay-test-server.log 2>&1 &
           SERVER_PID=$!
@@ -81,40 +80,40 @@ jobs:
           else:
               raise SystemExit('Server did not start')
           PY
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/ai_diagram_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/worked_figure_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/question_audio_format_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/prime_power_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/dual_diagram_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/save_question_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/written_answers_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/practice_grading_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/pyq.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/pasted_question_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/science_timeout_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/share_mock_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/daily_mock_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/mistake_confirmation_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/language_integrity_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/adaptive_approaches_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/red_theme_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/branding_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/google_welcome_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/signup_feedback_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/square_integer_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/science_diagram_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/task_routing_browser.js
-          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/social_board_key_browser.js
-          UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py python3 tools/check/physics_quality_browser.py
-          python3 tools/check/run_ci_check.py python3 tools/check/physics_outline_smoke.py
-          python3 tools/check/run_ci_check.py python3 tools/check/trust_browser_smoke.py
-          python3 tools/check/run_ci_check.py python3 tools/check/solve_policy_browser.py
-          python3 tools/check/run_ci_check.py python3 tools/check/ai_access_browser.py
-          python3 tools/check/run_ci_check.py python3 tools/check/security_headers.py
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/ai_diagram_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/worked_figure_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/question_audio_format_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/prime_power_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/dual_diagram_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/save_question_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/written_answers_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/practice_grading_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/pyq.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/pasted_question_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/science_timeout_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/share_mock_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/daily_mock_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/mistake_confirmation_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/language_integrity_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/adaptive_approaches_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/red_theme_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/branding_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/google_welcome_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/signup_feedback_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/square_integer_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/science_diagram_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/task_routing_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/social_board_key_browser.js 2>&1 | tee -a /tmp/browser-logs.txt
+          UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py python3 tools/check/physics_quality_browser.py 2>&1 | tee -a /tmp/browser-logs.txt
+          python3 tools/check/run_ci_check.py python3 tools/check/physics_outline_smoke.py 2>&1 | tee -a /tmp/browser-logs.txt
+          python3 tools/check/run_ci_check.py python3 tools/check/trust_browser_smoke.py 2>&1 | tee -a /tmp/browser-logs.txt
+          python3 tools/check/run_ci_check.py python3 tools/check/solve_policy_browser.py 2>&1 | tee -a /tmp/browser-logs.txt
+          python3 tools/check/run_ci_check.py python3 tools/check/ai_access_browser.py 2>&1 | tee -a /tmp/browser-logs.txt
+          python3 tools/check/run_ci_check.py python3 tools/check/security_headers.py 2>&1 | tee -a /tmp/browser-logs.txt
       # The Actions log API is not always reachable; keep the browser output as
       # an artifact so a red build can still be diagnosed.
       - name: Save browser logs
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: browser-logs
