@@ -1842,9 +1842,12 @@ window.UP = window.UP || {};
           return step();
         }
         /* A refused part (access, quota, confirmation) stops the loop; a
-           timeout only costs the remaining methods. */
+           timeout only costs the remaining methods. Never keep asking: without
+           a core answer there is nothing to add methods to, and two misses in
+           a row means the provider is not going to deliver them now. */
         if (j && j.code) return UP.solveParts.have(state) > 0;
         state.failed += 1;
+        if (!state.answer || state.failed >= 2) return UP.solveParts.have(state) > 0;
         return step();
       });
     };

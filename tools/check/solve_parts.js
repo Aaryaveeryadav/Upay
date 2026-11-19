@@ -88,6 +88,13 @@ assert.equal(fresh.answer._parts.have, 1);
 assert.equal(fresh.answer._parts.want, 4);
 assert.equal(fresh.answer._partial, true);
 
+/* Two misses in a row end the loop: the client must not keep asking. */
+const stop = P.create(base.question);
+P.absorb(stop, { result: 'Answer', approaches: [step('One', 'w')] });
+stop.failed = 2;
+assert.equal(P.have(stop), 1, 'the answer survives the misses');
+assert.equal(stop.answer.result, 'Answer');
+
 /* Later parts must not overwrite the settled answer with a different one. */
 P.absorb(fresh, { result: 'something else', approaches: [step('Similar triangles', 'Ratio')] });
 assert.equal(fresh.answer.result, '42 m', 'the settled answer wins');
