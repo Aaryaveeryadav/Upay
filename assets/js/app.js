@@ -1872,8 +1872,14 @@ window.UP = window.UP || {};
     };
     const state = UP.solveParts.create(base.question, answer);
     if (!state.answer) return;
+    /* This runs from the answer card's own click, outside askAI's closure, so
+       it paints itself. */
+    const repaint = () => {
+      const m = document.getElementById('answerMount');
+      if (m && S.aiAnswer) { m.innerHTML = renderAIAnswer(S.aiAnswer); postRenderEnhance(m); }
+    };
     answer._parts = Object.assign({}, answer._parts, { done: false });
-    paint();
+    repaint();
     const step = () => {
       const payload = UP.solveParts.next(state, base);
       if (!payload) return Promise.resolve();
@@ -1882,7 +1888,7 @@ window.UP = window.UP || {};
           if (ok && j && Array.isArray(j.approaches) && j.approaches.length) {
             UP.solveParts.absorb(state, j);
             S.aiAnswer = state.answer;
-            paint();
+            repaint();
             return step();
           }
           state.failed += 1;
@@ -1890,7 +1896,7 @@ window.UP = window.UP || {};
           return step();
         });
     };
-    step().then(() => { UP.solveParts.finish(state); S.aiAnswer = state.answer; paint(); });
+    step().then(() => { UP.solveParts.finish(state); S.aiAnswer = state.answer; repaint(); });
   }
 
   /* ---------------- ask the server's AI solver ---------------- */
