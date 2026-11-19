@@ -45,11 +45,8 @@ with sync_playwright() as p:
     page.locator('#trust-unverified .q-options-toggle').click()
     page.locator('#trust-unverified [data-i="0"]').click()
     assert page.locator('#trust-unverified .q-opt.right, #trust-unverified .q-opt.wrong').count()==0
-    page.locator('#topbar select[data-key="subject"]').select_option('economics')
-    page.wait_for_function('() => UP.S.subject === "economics"')
-    page.wait_for_timeout(700)
     page.route('**/api/ai/solve',lambda r:r.fulfill(status=429,content_type='application/json',body='{"code":"provider_rate_limit","error":"Provider temporarily limited","retryAfter":15}'))
-    page.evaluate('() => location.hash="#/ask?q=Explain%20GDP%20for%20a%20mock%20recovery%20test"')
+    page.evaluate('() => location.hash="#/ask?q=Explain%20physics%20for%20a%20mock%20recovery%20test"')
     page.wait_for_selector('[data-action="copy-ai-question"]',timeout=20000)
     assert page.locator('[data-action="savePyq"]').count()>0
     assert 'Retry after 15 seconds' in page.locator('#answerMount').inner_text()

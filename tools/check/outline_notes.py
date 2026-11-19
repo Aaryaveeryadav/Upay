@@ -10,8 +10,9 @@ ledger = json.loads((root/'assets/notes/chemistry-batch.json').read_text())
 ledger2 = json.loads((root/'assets/notes/chemistry-batch-2.json').read_text())
 bio = json.loads((root/'assets/notes/biology-batch.json').read_text())
 phy = json.loads((root/'assets/notes/physics-batch.json').read_text())
-bs, chem = notes['business_studies'], notes['chemistry']
-assert len(bs) == 12 and [c['id'] for c in chem] == ['lech101','lech102','lech103','lech104','lech105','lech201','lech202','lech203','lech204','lech205']
+chem = notes['chemistry']
+assert 'business_studies' not in notes
+assert [c['id'] for c in chem] == ['lech101','lech102','lech103','lech104','lech105','lech201','lech202','lech203','lech204','lech205']
 assert {x['source_file'] for x in ledger2['sources']} == {'lech105.pdf'} | {f'lech20{i}.pdf' for i in range(1,6)}
 assert {x['source_file'] for x in ledger['sources']} == {f'lech10{i}.pdf' for i in range(1,5)} | {'lech1an.pdf','lech2an.pdf'}
 BIO_TEXT = {f'lebo10{i}.pdf' for i in (3,5,7,9)} | {f'lebo11{i}.pdf' for i in range(0,4)}
@@ -24,21 +25,11 @@ for record in bio['sources']:
     if record['source_file'] in BIO_SCAN:
         assert record['figure_count'] == 0 and record['classification'].startswith('image-only scan')
 assert sum(r['figure_count'] for r in bio['sources']) == len(bio['crops']) == 59
-for c in bs + chem:
+for c in chem:
     assert c['title'] and c['sections'] and c['objectives'] and c['terms']
     assert 150 <= len(c['summary']) <= 320
-    if c['id'] == 'cbse-business-unit10':
-        assert c['source_url'].startswith('https://cbseacademic.nic.in/')
-    else:
-        assert len(c['sha256']) == 64
+    assert len(c['sha256']) == 64
     assert not re.search(r'Reprint|NOT TO BE REPUBLISHED', c['summary'], re.I)
-staged=json.loads((root/'tools/extract/staging/business-studies-en.json').read_text())['chapters']
-for chapter in bs:
-    if chapter['id'] in staged:
-        assert chapter['sha256'] == staged[chapter['id']]['sha256']
-        assert chapter['source'] == staged[chapter['id']]['source']
-consumer = next(c for c in bs if c['id'] == 'lebs203')
-assert '2019' in consumer['summary'] and '1986' not in consumer['summary']
 images = manifest['images']
 assert len(images) == 139 + len(phy['crops']) and len({x['sha256'] for x in images}) == len(images)
 for item in images:
@@ -135,7 +126,7 @@ class Page(HTMLParser):
         if 'id' in a: self.ids.add(a['id'])
         if tag == 'img': self.img.append(a.get('src'))
 page=Page(); html=(root/'assets/notes/index.html').read_text(); page.feed(html)
-assert all(c['id'] in page.ids for c in bs+chem+bio_out+phy_out)
+assert all(c['id'] in page.ids for c in chem+bio_out+phy_out)
 assert set(page.img) == {'/'+x['path'] for x in images}
 assert 'practice, not board-verified' in html and 'not certified by CBSE' in html
 # Headings and eyebrows name the chapter or unit; a supplied PDF filename is
@@ -148,7 +139,7 @@ assert '<h3>Unit 1 · Solutions</h3>' in html
 # to the library by the actual outline ID, and the library retains its section.
 app_source = (root/'assets/js/app.js').read_text()
 assert '/assets/notes/index.html#${esc(n.id)}' in app_source
-assert 'business' in page.ids
+assert 'business' not in page.ids
 # Physics ledger includes all supplied files, even chapters pending review.
 phy_images = [x for x in images if x['source_file'].startswith('leph')]
 assert len(phy_images) == len(phy['crops']) == sum(s['figure_count'] for s in phy['sources']) == 235

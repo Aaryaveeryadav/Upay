@@ -24,7 +24,7 @@ with sync_playwright() as p:
     page.route('**/api/ai/solve', lambda r:r.fulfill(status=200,content_type='application/json',body=json.dumps(fixture)))
     page.goto(base+'/',wait_until='networkidle')
     page.wait_for_function('() => window.UP && UP.S && document.body.classList.contains("up-ready")')
-    for subject in ['maths','physics','chemistry','biology','economics','english','accountancy']:
+    for subject in ['maths','applied-maths','physics','chemistry','biology','english']:
         page.evaluate('(subject) => { UP.S.subject=subject; UP.S.cls=12; location.hash="#/ask?q=Explain%20a%20concept%20in%20"+subject; }',subject)
         page.wait_for_selector('#answerMount .ai-flow-nodes li')
         assert page.locator('#answerMount .ai-flow-nodes li').count() == 3
@@ -34,4 +34,4 @@ with sync_playwright() as p:
         assert page.locator('#answerMount .ai-flow-nodes').evaluate('(e) => e.scrollWidth <= e.clientWidth')
     assert not errors, errors
     browser.close()
-print('PASS mocked four-approach answers and escaped concept diagrams across seven subjects on mobile')
+print('PASS mocked four-approach answers and escaped concept diagrams across six retained subjects on mobile')

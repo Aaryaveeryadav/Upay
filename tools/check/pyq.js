@@ -201,34 +201,16 @@ for (const prompt of [
   await pg.keyboard.press('Escape');
   await pg.waitForSelector('.fig-lightbox', { state: 'detached' });
 
-  // Class 12 original source PDFs are linked from both the empty-bank path
-  // and the populated Accountancy sample-paper setup.
-  await pg.locator('#topbar select[data-key="subject"]').selectOption('accountancy');
-  await pg.waitForFunction(() => UP.S.subject === 'accountancy');
-  await pg.evaluate(() => { location.hash = '#/test'; });
-  await pg.waitForSelector('.test-setup a[href="#/pyq"]');
-  if (!(await pg.locator('.paper-head').count()) || !(await pg.locator('.paper-section .q-card').count()))
-    throw new Error('Accountancy paper view should be populated for the source-link test');
-  await pg.locator('.test-setup a[href="#/pyq"]').click();
-  await pg.waitForSelector('#source-papers .source-paper-link');
-  const accountancyLinks = pg.locator('#source-papers .source-paper-link');
-  if (await accountancyLinks.count() !== 17) throw new Error('Accountancy source catalogue should expose all 17 PDFs');
-  if ((await accountancyLinks.evaluateAll(links => links.map(link => link.getAttribute('href'))))
-      .some(href => !/^\/assets\/papers\/.+\.pdf$/i.test(href || '')))
-    throw new Error('Accountancy source-paper link is not a local PDF path');
-  await pg.locator('#topbar select[data-key="subject"]').selectOption('economics');
-  await pg.waitForFunction(() => UP.S.subject === 'economics');
-  await pg.evaluate(() => { location.hash = '#/test'; });
-  await pg.waitForSelector('#view a[href="#/pyq"]', { timeout: 15000 });
-  if (!/No questions for these filters/i.test(await pg.locator('#view').innerText()))
-    throw new Error('Economics test view should exercise the empty-bank link path');
-  await pg.locator('#view a[href="#/pyq"]').click();
+  // Retained Class 12 English sources remain available after retiring commerce subjects.
+  await pg.locator('#topbar select[data-key="subject"]').selectOption('english');
+  await pg.waitForFunction(() => UP.S.subject === 'english');
+  await pg.evaluate(() => { location.hash = '#/pyq'; });
   await pg.waitForSelector('#original-test-papers .source-test-paper');
-  const economicsLinks = pg.locator('#original-test-papers .source-test-paper');
-  if (await economicsLinks.count() !== 90) throw new Error('Economics source catalogue should expose all 90 PDFs');
-  if ((await economicsLinks.evaluateAll(links => links.map(link => link.getAttribute('href'))))
-      .some(href => !/^\/assets\/papers\/.+\.pdf$/i.test(href || '')))
-    throw new Error('Economics source-paper link is not a local PDF path');
+  const englishLinks = pg.locator('#original-test-papers .source-test-paper');
+  if (await englishLinks.count() !== 101) throw new Error('English source catalogue should retain all 101 PDFs');
+  if ((await englishLinks.evaluateAll(links => links.map(link => link.getAttribute('href'))))
+      .some(href => !/^\/assets\/papers\/english\/.+\.pdf$/i.test(href || '')))
+    throw new Error('English source-paper link is not a local PDF path');
 
   console.log('PASS: source-matched choices, ungraded fifth and verified sixth choices, suspect choices withheld, compact image zoom and Class 12 source links');
 
