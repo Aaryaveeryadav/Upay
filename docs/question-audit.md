@@ -86,3 +86,9 @@ arithmetic · data rows, not a matrix  maths          ai          ok
 - Hindi, chemistry and biology have no local solver at all.
 
 Each of these is visible in the table above rather than silently passing.
+
+## When a question is too big for one request
+
+See [split-answers.md](split-answers.md): if the single call cannot finish, the
+answer is fetched in parts (the answer plus one method, then one method per
+request) and whatever arrives is kept.

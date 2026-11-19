@@ -137,6 +137,35 @@ async function main() {
   queuedReplies=[short,short];
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Reject genuinely empty fixture',subject:'physics'}});
   assert.equal(r.code,502);assert.match(r.body.error,/four distinct complete approaches/);
+
+
+  // ---- a long question answered in parts (the client asks for these) ----
+  // The whole-answer request can outrun the budget; these parts are small and
+  // each one is merged into the same answer by assets/js/solve-parts.js.
+  queuedReplies = [JSON.stringify({ question_understood:'A long question', answer:'The settled answer',
+    summary:'What it asks', check:'Substitute back', approaches:[four()[0]] })];
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Long multi-part fixture question',subject:'physics',cls:12,part:'core'}});
+  assert.equal(r.code,200); assert.equal(r.body.part,'core'); assert.equal(r.body.complete,false);
+  assert.equal(r.body.approaches.length,1); assert.equal(r.body.result,'The settled answer');
+  assert.match(lastPrompt,/PART 1 OF 4/); assert.match(lastPrompt,/exactly ONE approach/);
+  const coreBudget = callBudgets[callBudgets.length-1];
+  assert.equal(coreBudget.maxOutputTokens,4096, 'a part gets a smaller output budget');
+  assert(coreBudget.deadline - Date.now() <= 42000 + 100, 'and a shorter deadline');
+  queuedReplies = [JSON.stringify({ approaches:[four()[1]] })];
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Long multi-part fixture question',subject:'physics',cls:12,
+    part:'approach',index:2,taken:['First principles'],core:{answer:'The settled answer'}}});
+  assert.equal(r.code,200); assert.equal(r.body.part,'approach'); assert.equal(r.body.index,2);
+  assert.equal(r.body.approaches.length,1);
+  assert.match(lastPrompt,/PART 2 OF 4/); assert.match(lastPrompt,/The settled answer/); assert.match(lastPrompt,/First principles/);
+  assert.equal(callBudgets[callBudgets.length-1].maxOutputTokens,3072);
+  // No four-approach requirement on a part, but an empty part is still a failure.
+  queuedReplies = [JSON.stringify({ answer:'A', approaches:[] })];
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Long empty fixture',subject:'physics',part:'core'}});
+  assert.equal(r.code,502);
+  // A part without an answer field cannot be the core part.
+  queuedReplies = [JSON.stringify({ approaches:[four()[0]] })];
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Long answerless fixture',subject:'physics',part:'core'}});
+  assert.equal(r.code,502);
   queuedReplies = [];
   r = await invoke(readImage,{method:'POST',token:'valid',body:{}}); assert.equal(r.code,400);
   r = await invoke(readImage,{method:'POST',token:'valid',body:{data:'a'.repeat(240),mime:'image/png'}});
