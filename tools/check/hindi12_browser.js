@@ -21,9 +21,10 @@ try { for(const [width,sub,id,other] of [[1280,'hindi-core','lhvt102','lhat102']
  await go('#/test');await page.getByText('अगला अभ्यास सेट →').waitFor();assert.equal(await page.locator('#view article.card').count(),3);
  await go('#/pyq');
  if(sub==='hindi-core'){
-   const reader=page.locator('hindi-paper-reader');await reader.locator('article').first().waitFor();assert.equal(await reader.locator('article').count(),18);
+   const reader=page.locator('hindi-paper-reader');await reader.locator('article').first().waitFor();assert.equal(await reader.locator('article').count(),38);
    await reader.locator('input').fill('संस्कृति');assert(await reader.locator('article a[href*=number]').count()>0);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-   await reader.locator('input').fill('2/1/1');assert.equal(await reader.locator('article').count(),1);await reader.locator('article a').first().click();
+   await reader.locator('input').fill('2/1/1');assert.equal(await reader.locator('article').count(),2);
+   await reader.locator('input').fill('QR1SP');assert.equal(await reader.locator('article').count(),3);await reader.locator('article a').first().click();
    await reader.getByRole('link',{name:'प्रश्न 12',exact:true}).click();await reader.getByRole('heading',{name:/प्रश्न 12/}).waitFor();assert.match(await reader.locator('section a').first().getAttribute('href'),/2-1-1.pdf#page=15$/);
  }else{await page.getByText(/इस पाठ्यक्रम के पिछले प्रश्नपत्र/).waitFor();assert.equal(await page.locator('hindi-paper-reader').count(),0);}
  await go('#/chapter/'+other);await page.getByText('इस पाठ्यक्रम में यह अध्याय नहीं है।').waitFor();

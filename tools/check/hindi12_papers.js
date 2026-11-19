@@ -1,7 +1,16 @@
 'use strict';
 const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const {papers}=JSON.parse(fs.readFileSync('assets/papers/hindi-core/questions.json'));
-const ids=[1,2,3,4,5,7].flatMap(series=>[1,2,3].map(set=>`2-${series}-${set}`));
+const ids=[
+ '2-1-1','2-1-1-yzw1x','2-1-2','2-1-2-yzw1x','2-1-3','2-1-3-yzw1x',
+ '2-2-1','2-2-1-wyx2z','2-2-2','2-2-2-wyx2z','2-2-3','2-2-3-wyx2z',
+ '2-3-1','2-3-2','2-3-3',
+ '2-4-1','2-4-1-yxwz4','2-4-2','2-4-2-yxwz4','2-4-3','2-4-3-yxwz4',
+ '2-5-1','2-5-1-5wxzy','2-5-2','2-5-2-5wxzy','2-5-3','2-5-3-5wxzy',
+ '2-6-1','2-6-2','2-6-3',
+ '2-7-1','2-7-1-wyx7z','2-7-2','2-7-2-wyx7z','2-7-3',
+ '2-s-1','2-s-2','2-s-3',
+];
 assert.deepEqual(papers.map(p=>p.id),ids);
 for(const paper of papers){
   const {id,questions}=paper;
@@ -15,5 +24,5 @@ for(const paper of papers){
     for(const part of q.parts){assert(part.page>=q.startPage && part.page<=(questions[i+1]?.startPage||paper.pageCount));assert(part.text.trim());}
   }
 }
-assert.equal(papers.reduce((n,p)=>n+p.pageCount,0),228);
-console.log('PASS Hindi Core: 18 distinct source PDFs, 216 numbered questions, printed totals, OCR review flags and PDF-page references');
+assert.equal(papers.reduce((n,p)=>n+p.pageCount,0),478);
+console.log('PASS Hindi Core: 38 distinct source PDFs, 456 numbered questions, printed totals, OCR review flags and PDF-page references');
