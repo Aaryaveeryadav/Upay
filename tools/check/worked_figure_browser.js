@@ -34,9 +34,30 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       const context = await browser.newContext({ viewport: { width, height: 900 }, serviceWorkers: 'block' });
       const page = await context.newPage(), errors = [];
       page.on('pageerror', e => errors.push(String(e)));
-      let reply = null, aiCalls = 0;
+      let reply = null, aiCalls = 0, partsMode = false, partCalls = [];
       await page.route('**/api/ai/solve', route => {
         aiCalls++;
+        let body = {};
+        try { body = JSON.parse(route.request().postData() || '{}'); } catch (_) {}
+        /* The split-answer case: the whole-answer call fails, then the app asks
+           for the answer and one method at a time. */
+        if (partsMode) {
+          partCalls.push(body.part || 'full');
+          if (body.part === 'core') {
+            return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+              source: 'ai', part: 'core', complete: false, result: 'Current = 0.5 A',
+              summary: 'Mock split summary.', check: 'Mock check',
+              approaches: [{ name: 'Formula', steps: [{ t: 'Mock working for the split test.' }] }]
+            }) });
+          }
+          if (body.part === 'approach') {
+            const name = ['Substitution', 'Verification', 'Reasoning'][(body.index || 2) - 2] || 'Another method';
+            return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+              source: 'ai', part: 'approach', index: body.index, approaches: [{ name, steps: [{ t: 'Mock working for the split test.' }] }]
+            }) });
+          }
+          return route.fulfill({ status: 504, contentType: 'application/json', body: JSON.stringify({ error: 'provider timeout', code: 'provider_timeout' }) });
+        }
         /* A request before the test arms its reply is answered honestly as a
            failure; the figure test must never depend on an accidental cache. */
         if (!reply) return route.fulfill({ status: 503, contentType: 'application/json', body: '{}' });
@@ -196,6 +217,43 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
         'the confirmed matrices are solved and drawn');
       assert(await page.locator('.ai-answer .matrix-grid').count() >= 1,
         'and the answer is a drawn matrix after the repair too');
+
+      /* 7. A question too big for one request: the whole-answer call fails, and
+            the answer still arrives — in parts, with the banner saying so. */
+      partsMode = true; partCalls = [];
+      const LONG = 'A long multi-part physics question about a circuit with several resistors, a battery and ' +
+        'two switches. Find the current in each branch, the potential difference across each resistor, ' +
+        'the power dissipated, and explain what changes when the second switch is opened.';
+      await page.evaluate((q) => { UP.S.subject = 'physics'; location.hash = '#/ask?q=' + encodeURIComponent(q); }, LONG);
+      await page.waitForFunction(() => {
+        const answer = document.querySelector('.ai-answer');
+        return answer && /Current = 0\.5 A/.test(answer.textContent);
+      }, { timeout: 30000 });
+      await page.waitForFunction(() => document.querySelectorAll('.ai-answer .approach').length >= 4,
+        { timeout: 30000 });
+      assert.deepEqual(partCalls, ['full', 'core', 'approach', 'approach', 'approach'],
+        'one whole-answer attempt, then the answer and one method per request: ' + partCalls.join(','));
+      const splitText = await page.locator('.ai-answer').innerText();
+      assert(/0\.5 A/.test(splitText), 'the answer arrived despite the failed single call');
+      const partsProbe = await page.evaluate(() => {
+        const a = UP.S.aiAnswer;
+        return JSON.stringify({
+          keys: a ? Object.keys(a) : null,
+          parts: a ? a._parts : null,
+          count: a && a.approaches ? a.approaches.length : null,
+          notes: document.querySelectorAll('.parts-note').length,
+          text: a ? String(a._partsNote || '') : ''
+        });
+      });
+      assert.equal(await page.locator('.ai-answer .parts-note').count(), 1,
+        'the card carries the split-answer banner: ' + partsProbe);
+      assert(!/too long/i.test(splitText), 'no "took too long" dead end');
+      assert.equal(await page.locator('.ai-answer .approach').count(), 4, 'all four methods were assembled');
+      assert.equal(await page.locator('[data-action="more-approaches"]').count(), 0,
+        'a complete split answer offers no retry button');
+      partsMode = false;
+
+      
 
       assert.deepEqual(errors, []);
       console.log(`PASS ${width}px: tower figure 10√3/30/10 m, mismatch warning, verified 6 Ω network replaces a wrong AI circuit, ladder refused, matrix X = 37/18 drawn from exact fractions with a mismatch warning, mangled matrix paste refused and repaired, no invented values`);

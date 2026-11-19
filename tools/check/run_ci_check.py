@@ -20,8 +20,17 @@ def main():
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     print(result.stdout, end='', flush=True)
     if result.returncode:
+        # GitHub drops annotations that are too long, so summarise: the failure
+        # line, not the whole transcript. This is the only channel readable when
+        # the log host is unreachable.
+        lines = [ln.strip() for ln in result.stdout.splitlines() if ln.strip()]
+        key = [ln for ln in lines if 'AssertionError' in ln or 'Error:' in ln or 'error:' in ln][:2]
+        if not key:
+            key = [ln for ln in lines if not ln.startswith('at ')][-3:]
+        summary = ' | '.join(key)
         title = annotation('Failed: ' + ' '.join(command)).replace(',', '%2C').replace(':', '%3A')
-        print(f'::error title={title}::{annotation(result.stdout[-6000:])}', flush=True)
+        summary = annotation(summary[:900])
+        print(f'::error title={title}::{summary}', flush=True)
     return result.returncode if result.returncode >= 0 else 1
 
 

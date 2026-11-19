@@ -1787,6 +1787,118 @@ window.UP = window.UP || {};
     </div>`;
   }
 
+  /* ---------------- an answer too big for one request ----------------
+     A long or complex question can outrun the single-call budget, and the old
+     behaviour threw everything away ("The AI took too long to answer"). Now the
+     answer is fetched in parts instead: first the answer with one method, then
+     one method per request. Each part is small enough to finish, the card is
+     re-painted as parts arrive, and whatever arrived is kept. */
+  function postSolvePart(payload, budgetMs) {
+    return new Promise((resolve) => {
+      let controller = null;
+      try { controller = new AbortController(); } catch (e) { controller = null; }
+      const timer = setTimeout(() => { if (controller) controller.abort(); }, budgetMs);
+      const done = (value) => { clearTimeout(timer); resolve(value); };
+      if (typeof fetch !== 'function') { done({ ok: false, j: null }); return; }
+      let request;
+      try {
+        request = fetch('/api/ai/solve', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', authorization: 'Bearer ' + (localStorage.getItem('upay.token') || '') },
+          body: JSON.stringify(payload),
+          signal: controller ? controller.signal : undefined
+        });
+      } catch (e) { done({ ok: false, j: null }); return; }
+      request
+        .then((r) => r.json().catch(() => null).then((j) => ({ ok: r.ok, j: j })))
+        .then(done)
+        .catch(() => done({ ok: false, j: null }));
+    });
+  }
+
+  /* Runs the part loop. `paint` re-renders the card; `isCurrent` guards against
+     a student who has moved on. Resolves true once at least one method exists. */
+  function splitAnswer(base, paint, isCurrent) {
+    if (!UP.solveParts) return Promise.resolve(false);
+    const state = UP.solveParts.create(base.question);
+    const step = () => {
+      if (!isCurrent()) return Promise.resolve(UP.solveParts.have(state) > 0);
+      const payload = UP.solveParts.next(state, base);
+      if (!payload) return Promise.resolve(UP.solveParts.have(state) > 0);
+      const budget = payload.part === 'core'
+        ? (UP.solveTiming ? UP.solveTiming.forPart('core').clientMs : 50000)
+        : (UP.solveTiming ? UP.solveTiming.forPart('approach').clientMs : 46000);
+      return postSolvePart(payload, budget).then(({ ok, j }) => {
+        if (!isCurrent()) return UP.solveParts.have(state) > 0;
+        if (ok && j && Array.isArray(j.approaches) && j.approaches.length) {
+          UP.solveParts.absorb(state, j);
+          if (state.answer) {
+            state.answer.question = base.question;
+            state.answer.subjectRouting = base.subjectRouting;
+            S.aiAnswer = state.answer;
+            S.aiState = 'done';
+            paint();
+          }
+          return step();
+        }
+        /* A refused part (access, quota, confirmation) stops the loop; a
+           timeout only costs the remaining methods. Never keep asking: without
+           a core answer there is nothing to add methods to, and two misses in
+           a row means the provider is not going to deliver them now. */
+        if (j && j.code) return UP.solveParts.have(state) > 0;
+        state.failed += 1;
+        if (!state.answer || state.failed >= 2) return UP.solveParts.have(state) > 0;
+        return step();
+      });
+    };
+    return step().then((any) => {
+      UP.solveParts.finish(state);
+      if (state.answer) { S.aiAnswer = state.answer; S.aiState = 'done'; paint(); }
+      return any;
+    });
+  }
+
+  /* The "request the missing methods again" button on a partial answer. */
+  function moreApproaches() {
+    const answer = S.aiAnswer;
+    if (!answer || !UP.solveParts) return;
+    const base = {
+      question: answer.question || S.aiQuestion || '',
+      subject: S.subject,
+      selectedSubject: S.subject,
+      cls: S.cls,
+      lang: S.lang,
+      chapter: S.chapterId || 0
+    };
+    const state = UP.solveParts.create(base.question, answer);
+    if (!state.answer) return;
+    /* This runs from the answer card's own click, outside askAI's closure, so
+       it paints itself. */
+    const repaint = () => {
+      const m = document.getElementById('answerMount');
+      if (m && S.aiAnswer) { m.innerHTML = renderAIAnswer(S.aiAnswer); postRenderEnhance(m); }
+    };
+    answer._parts = Object.assign({}, answer._parts, { done: false });
+    repaint();
+    const step = () => {
+      const payload = UP.solveParts.next(state, base);
+      if (!payload) return Promise.resolve();
+      return postSolvePart(payload, UP.solveTiming ? UP.solveTiming.forPart('approach').clientMs : 46000)
+        .then(({ ok, j }) => {
+          if (ok && j && Array.isArray(j.approaches) && j.approaches.length) {
+            UP.solveParts.absorb(state, j);
+            S.aiAnswer = state.answer;
+            repaint();
+            return step();
+          }
+          state.failed += 1;
+          if (state.failed > 1) return null;
+          return step();
+        });
+    };
+    step().then(() => { UP.solveParts.finish(state); S.aiAnswer = state.answer; repaint(); });
+  }
+
   /* ---------------- ask the server's AI solver ---------------- */
   function aiScope() { return JSON.stringify([S.savedKey, +S.cls, S.board, S.subject]); }
   function askAI(q) {
@@ -1945,7 +2057,24 @@ window.UP = window.UP || {};
         const note = (j && j.offline)
             ? (S.lang === 'hi' ? 'आप ऑफ़लाइन हैं — बिल्ट-इन हल दिखाया जा रहा है' : 'You are offline — showing the built-in solver')
             : (j && j.error) ? j.error + retryHint : (S.lang === 'hi' ? 'एआई से जवाब नहीं आया' : 'The AI did not return an answer.');
-          goLocal(note, true);
+          /* Only a genuine timeout earns the extra requests: an access,
+             quota or "could not answer" reply is reported as it always was,
+             and a still-arriving answer is not duplicated. */
+          const timedOut = j && (j.code === 'provider_timeout' || j.status === 504);
+          if (!timedOut) { goLocal(note, true); return; }
+          /* The single call ran out of time. Ask for the answer in parts
+             before telling the student anything failed. */
+          const base = {
+            question: q, subject: routing.subject, selectedSubject: S.subject, cls: S.cls,
+            lang: responseLang, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0),
+            chapterTitle: !routing.changed && chapterContext ? P(chapterContext) : '',
+            subjectRouting: routing, _chId: S.chapterId || 0
+          };
+          splitAnswer(base, paint, isCurrent).then((any) => {
+            if (!isCurrent()) return;
+            if (any) { pushRecent(q, S.subject, ''); bumpProgress(S.subject); return; }
+            goLocal(note, true);
+          });
           return;
         }
         paint();
@@ -1954,9 +2083,18 @@ window.UP = window.UP || {};
         clearTimeout(clientTimeout); clearTimeout(slowTimer);
         if (!isCurrent()) return;
         const isTimeout = err && err.name === 'AbortError';
-        goLocal(isTimeout
-          ? (S.lang === 'hi' ? 'एआई को जवाब देने में बहुत समय लग रहा है' : 'The AI is taking too long to answer')
-          : (S.lang === 'hi' ? 'नेटवर्क से संपर्क नहीं हुआ' : 'could not reach the server'), true);
+        const base = {
+          question: q, subject: routing.subject, selectedSubject: S.subject, cls: S.cls,
+          lang: responseLang, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0),
+          chapterTitle: !routing.changed && chapterContext ? P(chapterContext) : '',
+          subjectRouting: routing, _chId: S.chapterId || 0
+        };
+        splitAnswer(base, paint, isCurrent).then((any) => {
+          if (!isCurrent() || any) return;
+          goLocal(isTimeout
+            ? (S.lang === 'hi' ? 'एआई को जवाब देने में बहुत समय लग रहा है' : 'The AI is taking too long to answer')
+            : (S.lang === 'hi' ? 'नेटवर्क से संपर्क नहीं हुआ' : 'could not reach the server'), true);
+        });
       });
   }
 
@@ -2174,6 +2312,21 @@ window.UP = window.UP || {};
     }
     return fig;
   }
+  /* A long question answered in parts: say so while the methods arrive, and
+     offer the missing ones again rather than silently coming up short. */
+  function partsNoteFor(answer) {
+    const parts = answer && answer._parts && typeof answer._parts === 'object' ? answer._parts : null;
+    if (!parts) return '';
+    const shown = UP.solveParts ? UP.solveParts.status({ answer: answer, done: parts.done, failed: parts.failed || 0 }, S.lang) : '';
+    const retry = parts.done && parts.have < parts.want
+      ? `<button class="btn btn-ghost btn-sm" style="margin-top:8px" data-action="more-approaches">${S.lang === 'hi' ? 'शेष तरीके फिर माँगें' : 'Request the missing methods'}</button>`
+      : '';
+    if (!shown && !retry) return '';
+    return `<div class="callout parts-note" style="margin-top:12px">
+          ${icon('clock')}
+          <div><div data-parts>${esc(shown)}</div>${retry}</div>
+        </div>`;
+  }
   function renderAIAnswer(a) {
     const clarification=UP.squareInteger.clarification(a.question || S.aiQuestion || '');
     if(clarification)return renderAnswer({kind:'question-clarification',question:a.question||S.aiQuestion,...clarification});
@@ -2208,6 +2361,7 @@ window.UP = window.UP || {};
               : mathText(a.result)}</span></div>
         </div>
       </div>
+      ${partsNoteFor(a)}
       ${fig}
       <div class="section-head" data-approaches-heading style="margin:6px 0 0"><div><h2 style="font-size:20px">${theory ? (S.lang === 'hi' ? 'अलग तरीकों से समझें' : 'Different ways to understand') : t('approaches')}</h2></div></div>
       ${a.methodsShort ? `<div class="callout warn" style="margin:0 0 14px">${icon('info')}<div>${esc(a.methodsNote || (S.lang === 'hi' ? 'इस प्रश्न में वास्तव में इतनी ही विधियाँ हैं।' : 'This question genuinely has only this many routes.'))}</div></div>` : ''}
@@ -6543,6 +6697,10 @@ window.UP = window.UP || {};
     if (action === 'clearPhoto') {
       S.photoState = null; S.photoNote = ''; S.photoPreview = null;
       paintPhotoStrip();
+      return;
+    }
+    if (action === 'more-approaches') {
+      moreApproaches();
       return;
     }
     if (action === 'retryAI') {

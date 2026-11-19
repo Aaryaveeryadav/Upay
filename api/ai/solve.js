@@ -105,7 +105,18 @@ module.exports = async function handler(req, res) {
       if(contextRequest)return json(res,422,contextRequest);
       if (subjectRouting.language) b.lang = subjectRouting.language;
       if (subjectRouting.changed) b.chapter = 0;
-  const timing = solveTiming.forQuestion(question,subject);
+  /* A long question can exhaust one call's budget. The client then asks for it
+     in parts: 'core' is the answer plus the first method, 'approach' is one
+     more method at a time. Each part has its own small budget, so a single
+     unfinished method can no longer lose the whole answer. */
+  const part = ['core', 'approach'].includes(String(b.part || '').toLowerCase())
+    ? String(b.part).toLowerCase() : '';
+  const partIndex = Math.max(2, Math.min(6, Number(b.index) || 2));
+  const takenNames = Array.isArray(b.taken)
+    ? b.taken.filter((x) => typeof x === 'string').slice(0, 6).map((x) => x.slice(0, 80))
+    : [];
+  const settled = b.core && typeof b.core === 'object' ? b.core : null;
+  const timing = part ? solveTiming.forPart(part) : solveTiming.forQuestion(question,subject);
   const solveDeadline = solveStarted + timing.serverMs;
   const clarification = squareInteger.clarification(question);
   if (clarification) return json(res, 422, clarification);
@@ -117,8 +128,8 @@ module.exports = async function handler(req, res) {
   const isEnglish12 = subject === 'english' && cls === 12;
   const noOfficialKey = isAccountancy || isEconomics || isEnglish12 || subjectRouting.task === 'writing' || ['social','hindi','english','sanskrit'].includes(subject);
   // Never reuse one student's potentially private prompt/answer for another.
-  const cacheKey = JSON.stringify([solvePolicy.VERSION, user.id, subject, cls, String(b.lang || 'en').slice(0, 2).toLowerCase(), question.toLowerCase()]);
-  const cached = noOfficialKey ? null : cacheGet(cacheKey);
+  const cacheKey = JSON.stringify([solvePolicy.VERSION, user.id, subject, cls, String(b.lang || 'en').slice(0, 2).toLowerCase(), question.toLowerCase(), part, part ? partIndex : 0]);
+  const cached = (noOfficialKey || part) ? null : cacheGet(cacheKey);
   if (cached && !b.refresh) return json(res, 200, Object.assign({ cached: true }, cached));
 
   if (!aiRateFloor(req, res, user)) return;
@@ -226,7 +237,18 @@ module.exports = async function handler(req, res) {
     'EXPLAIN THE WHY: for every sub-part, state not only what happens but WHY it happens (the law/principle and the causal chain). A bare table of same/different answers without the reason is incomplete.',
     'MULTI-PART FIGURES: if different parts of the question involve different setups or figures (e.g. series AND parallel circuits, two cases, two diagrams in the book), return a "diagrams" array with ONE honest figure per part, each with its own caption naming the part it belongs to. Never force several setups into one figure, and never invent a figure for a part that has none.'
   ];
-  const prompt = topicPrompt.concat(qualityRules,[solvePolicy.instructions,languagePolicy.instructions,chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:'', '', 'QUESTION: ' + question]).join('\n');
+  const partRules = part === 'core'
+    ? ['THIS IS PART 1 OF 4 of a deliberately split answer, because the question is long.',
+      'Return JSON with question_understood, answer, summary, check, diagram and exactly ONE approach — the clearest complete method, finished to the final answer.',
+      'Do not write the other methods here and do not promise them; they are requested separately. Keep the whole reply under 450 words.']
+    : part === 'approach'
+      ? ['THIS IS PART ' + partIndex + ' OF 4 of a deliberately split answer, because the question is long.',
+        'The answer has already been settled on an earlier pass' + (settled && settled.answer ? ': ' + String(settled.answer).slice(0, 400) : '') + '.',
+        'Methods already shown: ' + (takenNames.length ? takenNames.join('; ') : '(the first method)') + '.',
+        'Return JSON {"approaches":[ exactly ONE ]} with one MORE genuinely different, complete method that reaches the SAME answer.',
+        'Do not repeat or rename those methods, do not change the answer, and do not restate the question. Keep the whole reply under 350 words.']
+      : [];
+  const prompt = topicPrompt.concat(qualityRules,[solvePolicy.instructions,languagePolicy.instructions,chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:''].concat(partRules,['', 'QUESTION: ' + question])).join('\n');
 
   // Shared adaptive budget leaves headroom under the solve function duration.
   const providerController = new AbortController();
@@ -248,7 +270,8 @@ module.exports = async function handler(req, res) {
     ]);
     // One bounded repair call, sharing the original adaptive deadline.
     const draft = parseSolveJSON(out.text);
-    if (!draft || solvePolicy.completeApproaches(draft, question, subject).length < 4) {
+    const wantFour = !part;
+    if (wantFour && (!draft || solvePolicy.completeApproaches(draft, question, subject).length < 4)) {
       // A malformed response is a null result from firstJSON, not an exception.
       // Give the provider one bounded chance to return a valid replacement.
       out = await Promise.race([
@@ -296,6 +319,19 @@ module.exports = async function handler(req, res) {
       : 'AI-generated; not independently checked.' },
     generatedAt: new Date().toISOString()
   };
+  if (part) {
+    /* A part is small on purpose: one method, and for 'core' the answer too. */
+    if (!answer.approaches.length) {
+      return json(res, 502, { error: 'That part of the answer did not come back. Please try again.', fallback: true });
+    }
+    if (part === 'core' && !answer.result) {
+      return json(res, 502, { error: 'The answer did not come back. Please try again.', fallback: true });
+    }
+    answer.part = part;
+    if (part === 'approach') answer.index = partIndex;
+    answer.complete = false;
+    return json(res, 200, answer);
+  }
   if (answer.approaches.length < 4 || !answer.result) {
     return json(res, 502, { error: 'The AI could not provide four distinct complete approaches. Please try again.', fallback: true });
   }
