@@ -64,8 +64,6 @@ jobs:
       # Avoid the failing runtime browser/apt installation step.
       - name: Physics and security browser checks
         run: |
-          set -o pipefail
-          echo "== browser checks =="
           HOST=0.0.0.0 PORT=8004 node server.js > /tmp/upay-test-server.log 2>&1 &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID"' EXIT
