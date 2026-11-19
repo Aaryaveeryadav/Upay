@@ -1,0 +1,457 @@
+[
+  {
+    "source": "lhar101.pdf",
+    "pdfPage": 1,
+    "reason": "no supported text layer"
+  },
+  {
+    "source": "lhar101.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar101.pdf",
+    "pdfPage": 3,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar101.pdf",
+    "pdfPage": 4,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar102.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar102.pdf",
+    "pdfPage": 5,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar103.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar103.pdf",
+    "pdfPage": 6,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar105.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar106.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar106.pdf",
+    "pdfPage": 4,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar106.pdf",
+    "pdfPage": 5,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar106.pdf",
+    "pdfPage": 6,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar107.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar108.pdf",
+    "pdfPage": 1,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar108.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar108.pdf",
+    "pdfPage": 3,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar109.pdf",
+    "pdfPage": 1,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar110.pdf",
+    "pdfPage": 1,
+    "reason": "no supported text layer"
+  },
+  {
+    "source": "lhar110.pdf",
+    "pdfPage": 10,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar110.pdf",
+    "pdfPage": 12,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar111.pdf",
+    "pdfPage": 3,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar111.pdf",
+    "pdfPage": 5,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar111.pdf",
+    "pdfPage": 8,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar111.pdf",
+    "pdfPage": 10,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar111.pdf",
+    "pdfPage": 12,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar112.pdf",
+    "pdfPage": 4,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar112.pdf",
+    "pdfPage": 5,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar112.pdf",
+    "pdfPage": 9,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar113.pdf",
+    "pdfPage": 1,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar113.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar113.pdf",
+    "pdfPage": 3,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar113.pdf",
+    "pdfPage": 5,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar113.pdf",
+    "pdfPage": 6,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar113.pdf",
+    "pdfPage": 7,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar113.pdf",
+    "pdfPage": 8,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar113.pdf",
+    "pdfPage": 10,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar113.pdf",
+    "pdfPage": 11,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar114.pdf",
+    "pdfPage": 1,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar114.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar114.pdf",
+    "pdfPage": 9,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar115.pdf",
+    "pdfPage": 1,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar115.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar115.pdf",
+    "pdfPage": 7,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhar115.pdf",
+    "pdfPage": 8,
+    "reason": "no supported text layer"
+  },
+  {
+    "source": "lhar115.pdf",
+    "pdfPage": 9,
+    "reason": "no supported text layer"
+  },
+  {
+    "source": "lhvt101.pdf",
+    "pdfPage": 3,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt101.pdf",
+    "pdfPage": 11,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt102.pdf",
+    "pdfPage": 6,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt102.pdf",
+    "pdfPage": 7,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt102.pdf",
+    "pdfPage": 9,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt102.pdf",
+    "pdfPage": 14,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt103.pdf",
+    "pdfPage": 1,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt103.pdf",
+    "pdfPage": 3,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt103.pdf",
+    "pdfPage": 4,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt103.pdf",
+    "pdfPage": 8,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt103.pdf",
+    "pdfPage": 10,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt103.pdf",
+    "pdfPage": 11,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt103.pdf",
+    "pdfPage": 13,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt103.pdf",
+    "pdfPage": 14,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhvt103.pdf",
+    "pdfPage": 15,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhan101.pdf",
+    "pdfPage": 4,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhan102.pdf",
+    "pdfPage": 1,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhan102.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhan102.pdf",
+    "pdfPage": 3,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhan102.pdf",
+    "pdfPage": 5,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhan102.pdf",
+    "pdfPage": 6,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhan102.pdf",
+    "pdfPage": 7,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhan103.pdf",
+    "pdfPage": 1,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhan103.pdf",
+    "pdfPage": 3,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhan103.pdf",
+    "pdfPage": 4,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhan103.pdf",
+    "pdfPage": 7,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhan103.pdf",
+    "pdfPage": 9,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat101.pdf",
+    "pdfPage": 1,
+    "reason": "no supported text layer"
+  },
+  {
+    "source": "lhat102.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat104.pdf",
+    "pdfPage": 1,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat104.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat105.pdf",
+    "pdfPage": 2,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat105.pdf",
+    "pdfPage": 6,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat106.pdf",
+    "pdfPage": 6,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat110.pdf",
+    "pdfPage": 1,
+    "reason": "no supported text layer"
+  },
+  {
+    "source": "lhat110.pdf",
+    "pdfPage": 2,
+    "reason": "no supported text layer"
+  },
+  {
+    "source": "lhat110.pdf",
+    "pdfPage": 10,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat111.pdf",
+    "pdfPage": 3,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat115.pdf",
+    "pdfPage": 5,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat115.pdf",
+    "pdfPage": 6,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat115.pdf",
+    "pdfPage": 7,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat116.pdf",
+    "pdfPage": 1,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat116.pdf",
+    "pdfPage": 6,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat117.pdf",
+    "pdfPage": 4,
+    "reason": "suspect glyph sequence"
+  },
+  {
+    "source": "lhat117.pdf",
+    "pdfPage": 10,
+    "reason": "suspect glyph sequence"
+  }
+]

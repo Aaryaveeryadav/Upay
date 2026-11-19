@@ -422,7 +422,7 @@ const MIME = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.webmanifest': 'application/manifest+json; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8',
-  '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon',
+  '.webp': 'image/webp', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon',
   '.woff2': 'font/woff2', '.pdf': 'application/pdf'
 };
 
@@ -1802,6 +1802,8 @@ const handleRequest = async function (req, res) {
          a chemistry answer. */
       const subjectRouting = taskRouting.resolve(question, String(b.selectedSubject || b.subject || 'maths'));
       const subject = subjectRouting.subject;
+      if (['hindi-core','hindi-elective'].includes(subject) && (+b.cls !== 12 || b.board !== 'cbse'))
+        return json(res,422,{error:'This Hindi course requires CBSE Class 12.'});
       const chapterTitle=subjectRouting.changed?'':String(b.chapterTitle||'').slice(0,200);
       const contextRequest=languagePolicy.contextRequest(question,subject,chapterTitle);
       if(contextRequest)return json(res,422,contextRequest);
@@ -1813,7 +1815,7 @@ const handleRequest = async function (req, res) {
       const isAccountancy = subject === 'accountancy' || subject === 'computerized-accounting';
       const isEconomics = subject === 'economics';
       const isEnglish12 = subject === 'english' && cls === 12;
-      const noOfficialKey = isAccountancy || isEconomics || isEnglish12 || subjectRouting.task === 'writing' || ['social','hindi','english','sanskrit'].includes(subject);
+      const noOfficialKey = isAccountancy || isEconomics || isEnglish12 || subjectRouting.task === 'writing' || ['social','hindi','hindi-core','hindi-elective','english','sanskrit'].includes(subject);
       const qLang = String(b.lang || 'en').slice(0, 2).toLowerCase();
       const cacheKey = aiCacheKey(sess, 'solve', subject, cls, qLang, question);
       // Do not reuse cached replies for subjects without an official key.
@@ -1842,7 +1844,7 @@ const handleRequest = async function (req, res) {
             figure types remain subject-specific.                                                       */
       const isSci = ['science', 'physics', 'chemistry', 'biology'].includes(subject);
       const isMaths = ['maths', 'applied-maths'].includes(subject);
-      const isLang = subject === 'hindi' || subject === 'english' || subject === 'sanskrit';
+      const isLang = ['hindi','hindi-core','hindi-elective'].includes(subject) || subject === 'english' || subject === 'sanskrit';
       const isSocial = subject === 'social';
 
       const mathsPrompt = [
@@ -1939,7 +1941,11 @@ const handleRequest = async function (req, res) {
       let topicPrompt;
       if (isAccountancy) topicPrompt = accountancyPrompt;
       else if (isEconomics) topicPrompt = economicsPrompt;
-      else if (isEnglish12) topicPrompt = english12Prompt;
+      else if (['hindi-core','hindi-elective'].includes(subject)) topicPrompt = langPrompt.concat([
+    'This is CBSE Class 12 Hindi '+(subject==='hindi-core'?'Core (Aaroh and Vitan).':'Elective (Antara and Antaral).'),
+    'Write in Hindi. The textbook pages are not supplied to you. Request the passage if needed. Do not invent quotations, marks or an official answer key.'
+  ]);
+  else if (isEnglish12) topicPrompt = english12Prompt;
       else if (isMaths) topicPrompt = mathsPrompt;
       else if (isSci) topicPrompt = sciencePrompt;
       else if (isSocial) topicPrompt = socialPrompt;

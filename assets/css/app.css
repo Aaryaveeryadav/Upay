@@ -1860,3 +1860,7 @@ ol.prose-answer > li::before { content: none; display: none; }
 .ai-answer .steps .st-t,.answer .steps .st-t{line-height:1.8;letter-spacing:.01em}
 .ai-answer .steps .st-m,.answer .steps .st-m{max-width:100%;overflow-x:auto;line-height:2;letter-spacing:.025em;padding:9px 14px}
 .answer-math{font-family:var(--mono);font-size:14px;line-height:1.9;letter-spacing:.025em;overflow-wrap:anywhere}
+
+/* The reader must retain Hindi glyph coverage when external fonts are offline. */
+@font-face{font-family:UpayHindiReader;src:url('../hindi/font/devanagari.woff2') format('woff2');font-weight:400;font-display:swap;unicode-range:U+0900-097F,U+A8E0-A8FF}
+#view.hindi12-reader, #view.hindi12-reader :is(h1,h2,h3,p,b,label,textarea,input,summary,.btn,.tag){font-family:UpayHindiReader,system-ui,sans-serif}

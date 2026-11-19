@@ -3,6 +3,7 @@
 (function(root){
  function resolve(question,selected){
   const q=String(question||'').replace(/\\+[()[\]]|\$/g,''),base=selected||'maths';let subject=base,task='subject',reason='Using the selected subject';
+  if(['hindi-core','hindi-elective'].includes(base)) return {selected:base,subject:base,task:'subject',changed:false,reason:'Class 12 Hindi course',language:'hi'};
   const devanagari=/[\u0900-\u097f]/.test(q);
   if(/संस्कृत|संस्कृते|in Sanskrit/i.test(q) && /लिख|रच|translate|write|compose|सन्धि|संधि/i.test(q)){
    subject='sanskrit';reason='Explicit Sanskrit response task';
