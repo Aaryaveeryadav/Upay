@@ -1986,6 +1986,8 @@ window.UP = window.UP || {};
     const chapterContext=mappedChapters.length===1?chapterById(mappedChapters[0]):chapterById(S.chapterId);
     const languageContext=UP.languagePolicy.contextRequest(q,routing.subject,chapterContext&&P(chapterContext));
     if(languageContext){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'language-context',question:q,...languageContext};paint();return;}
+    const chargeExact = UP.chargeEnergy && UP.chargeEnergy.solve(q, responseLang);
+    if (chargeExact) { chargeExact.subjectRouting = routing; S.aiAnswer = chargeExact; S.aiState = 'done'; paint(); return; }
     const clarification=UP.squareInteger.clarification(q);
     if(clarification){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'question-clarification',question:q,...clarification};paint();return;}
     const exact = ['maths','applied-maths'].includes(routing.subject) && UP.squareInteger.solve(q, responseLang);
@@ -2159,6 +2161,10 @@ window.UP = window.UP || {};
         <span>${hi ? 'ऐप ने प्रश्न से उत्तर स्वयं निकाला' : 'The app worked this out from the question itself'}: <b style="display:inline">${esc(c.yourAnswer || c.computed || '—')}</b>${
           c.note ? ' — ' + esc(String(c.note).slice(0, 80)) : ''}</span></div></div>`;
     }
+    if (st === 'passed' && c.source === 'symbolic-energy') {
+      return `<div class="check-badge ok">${icon('check')}<div><b>${hi ? 'ऊर्जा संरक्षण से जाँचा गया' : 'Checked by energy conservation'}</b>
+        <span>${hi ? 'अंतिम सूत्र को ऊर्जा समीकरण में रखकर जाँचा गया।' : 'The final formula was substituted into the energy equation.'}</span></div></div>`;
+    }
     if (st === 'passed') {
       return `<div class="check-badge ok">${icon('check')}<div><b>${hi ? 'गणना से जाँचा गया' : 'Checked by calculation'}</b>
         <span>${hi ? 'ऐप ने उत्तर यहाँ ही, बिना इंटरनेट, दोबारा निकालकर मिलाया' : 'the app recomputed this offline and the numbers matched'}</span></div></div>`;
@@ -2307,7 +2313,7 @@ window.UP = window.UP || {};
         if (ty === 'solid' || ty === 'composite') return false;
         const sciAllowed = ['copper-refining','apparatus','beaker','test-tube','flask','burner','reaction',
                            'lens','mirror','ray','optics','circuit','pulley','pendulum',
-                           'bio','leaf','cell','flower','organ'];
+                           'bio','leaf','cell','flower','organ','charge-energy'];
         if (sciAllowed.indexOf(ty) >= 0) return true;
         /* Allow plane/triangle/circle for PHYSICS ray/force/optics questions,
            but not for chemistry/biology text, and never with random coordinate
@@ -2341,7 +2347,7 @@ window.UP = window.UP || {};
         const svg = UP.figures.generic(figSpec);
         if (svg) fig = '<figure class="figure-card"><div class="figure-head">' +
           '<span class="mini-label">' + (S.lang === 'hi' ? 'चित्र' : 'Diagram') + '</span>' +
-          '<span class="tag grey">' + (S.lang === 'hi' ? 'प्रश्न के निर्देशांकों से बना' : 'AI-generated schematic · check labels and values') + '</span>' +
+          '<span class="tag grey">' + (figSpec.type === 'charge-energy' && figSpec.verified ? (S.lang === 'hi' ? 'प्रश्न से बना चित्र' : 'Drawn from the question') : (S.lang === 'hi' ? 'प्रश्न के निर्देशांकों से बना' : 'AI-generated schematic · check labels and values')) + '</span>' +
           '</div><div class="figure-body">' + svg + '</div>' +
           '<figcaption>' + esc(figSpec.caption || '') + '</figcaption></figure>';
       } catch (e) { fig = ''; }
@@ -2366,6 +2372,8 @@ window.UP = window.UP || {};
         </div>`;
   }
   function renderAIAnswer(a) {
+    const checkedCharge = UP.chargeEnergy && UP.chargeEnergy.solve(a.question || S.aiQuestion || '', S.lang);
+    if (checkedCharge) { checkedCharge.subjectRouting = a.subjectRouting; if (a === S.aiAnswer) S.aiAnswer = checkedCharge; a = checkedCharge; }
     const clarification=UP.squareInteger.clarification(a.question || S.aiQuestion || '');
     if(clarification)return renderAnswer({kind:'question-clarification',question:a.question||S.aiQuestion,...clarification});
     // Also replace legacy/cached drafts for this narrowly supported problem.
@@ -2393,7 +2401,7 @@ window.UP = window.UP || {};
         <div style="font-size:14px;color:var(--ink-600)">${rich(a.summary || '')}</div>
         <div class="callout why" style="margin-top:14px">
           ${icon('check')}
-          <div><b>${S.lang === 'hi' ? 'उत्तर' : 'Answer'}:</b> <span style="font-family:var(--mono);font-size:14px">${
+          <div><b>${S.lang === 'hi' ? 'उत्तर' : 'Answer'}:</b> <span class="answer-math">${
             a.resultMatrix && UP.matrices && UP.matrices.matrixHTML
               ? esc(a.resultMatrix.name) + ' = ' + UP.matrices.matrixHTML(a.resultMatrix.rows)
               : mathText(a.result)}</span></div>
@@ -2446,7 +2454,7 @@ window.UP = window.UP || {};
     const localHit = S.answer && S.answer._ver === 'passed';
     const cached = a._id && UP.answers && UP.answers.get(a._id);
     let level, cls, icon_, label;
-    if (a.source === 'exact') { level='verified'; cls='ok'; icon_='check'; label=(S.lang==='hi'?'सटीक गुणनखंड खोज और प्रतिस्थापन से जाँचा गया':'Checked by exact factor enumeration and substitution'); }
+    if (a.source === 'exact') { level='verified'; cls='ok'; icon_='check'; label=a.kind === 'charge-energy' ? (S.lang==='hi'?'ऊर्जा संरक्षण से जाँचा गया':'Checked by energy conservation') : (S.lang==='hi'?'सटीक गुणनखंड खोज और प्रतिस्थापन से जाँचा गया':'Checked by exact factor enumeration and substitution'); }
     else if (localHit) { level='verified'; cls='ok'; icon_='check'; label=(S.lang==='hi'?'स्थानीय हलक से सत्यापित ✓':'Maths engine verified ✓'); }
     else if (a.model && /flash-lite/.test(a.model)) { level='ai'; cls='ai'; icon_='sparkle'; label=(S.lang==='hi'?'एआई-जनित — कृपया अपनी पाठ्यपुस्तक से मिलान करें':'AI-generated — cross-check with your textbook'); }
     else { level='ai'; cls='ai'; icon_='sparkle'; label=(S.lang==='hi'?'एआई-जनित — कृपया अपनी पाठ्यपुस्तक से मिलान करें':'AI-generated — cross-check with your textbook'); }
@@ -2855,7 +2863,7 @@ window.UP = window.UP || {};
         </div>` : `
         <div class="callout why" style="margin-top:14px">
           ${icon('check')}
-          <div><b>${S.lang === 'hi' ? 'उत्तर' : 'Answer'}:</b> <span style="font-family:var(--mono);font-size:14px">${mathText(P(ans.result))}</span></div>
+          <div><b>${S.lang === 'hi' ? 'उत्तर' : 'Answer'}:</b> <span class="answer-math">${mathText(P(ans.result))}</span></div>
         </div>`}
       </div>
 
@@ -4853,7 +4861,7 @@ window.UP = window.UP || {};
           if (p.q) { r.params.q = p.q; if (p.sub) S.subject = p.sub; }
         } catch (e) {}
       }
-      const q = r.params.q ? UP.answerFormat.question(r.params.q).trim() : r.params.q;
+      const q = r.params.q ? tidyQuestion(UP.answerFormat.question(r.params.q)).trim() : r.params.q;
       if (q) r.params.q = q;
       S.q = q || '';
       if (q && UP.taskRouting.resolve(q, S.subject).task === 'writing' && S.answer && S.answer.kind !== 'ai-waiting') { S.answer = accountancyAIWaiting(q); }

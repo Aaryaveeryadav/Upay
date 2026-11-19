@@ -36,3 +36,31 @@ for(const [input,expected] of [[String.raw`Z_{AB}`, '<sub class="math-script">AB
   assert.equal(f.text(result),result);
 }
 console.log('PASS grouped subscripts and exponents render safely and remain idempotent');
+
+const m=context.UP.mathRender;
+for(const input of [String.raw`\int_{0}^{\pi/2} f(x) dx`, '∫₀^(π/2) f(x) dx', '∫^{π/2}_{0} f(x) dx', '∫₀¹ x dx', '∫ₐ^b f(x) dx']) {
+  const formatted=f.text(input), html=m.math(formatted);
+  assert(html.includes('class="math-integral"') && html.includes('class="math-integral-lower"'), html);
+  assert(html.includes('class="math-integral-upper"'), html);
+  assert(!html.includes('^('), html);
+}
+const integralHtml=m.math(f.text(String.raw`\int_0^{\pi/2} f(x) dx`));
+assert(integralHtml.includes('aria-label="integral from 0 to π/2"'));
+assert.match(integralHtml, /math-integral-upper">π\/2<\/span>/);
+assert.match(integralHtml, /math-integral-lower">0<\/span>/);
+for (const input of ['dy/dx', 'd²y/dx²', '∂y/∂x']) {
+  const html=m.rich(input);
+  assert(html.includes('class="math-frac math-derivative"') && html.includes('aria-label="'+input+'"'), html);
+}
+const deriv = f.text(String.raw`\frac{dy}{dx} = 2x`);
+assert.equal(deriv, 'dy/dx = 2x');
+assert(m.math(deriv).includes('math-frac-num'));
+assert.equal(f.text(deriv), deriv);
+assert(m.math('e^(−Eₐ/RT)').includes('<sup class="math-script">−Eₐ/RT</sup>'));
+assert(!m.math('https://example.com/d/dx').includes('math-derivative'));
+assert(m.math('∫_{0}^{<img src=x>}').includes('&lt;img src=x&gt;'), 'math content is escaped');
+assert.equal(f.question(String.raw`\int_0^1 x dx`),String.raw`\int₀¹ x dx`);
+console.log('PASS stacked integral limits, parenthesized exponents, derivative fractions and safe escaping');
+
+assert(m.math(f.text('∫_{a}^{b} f(x) dx')).includes('aria-label="integral from a to b"'));
+assert.equal(f.text(String.raw`\frac{\partial y}{\partial x}`), '∂y/∂x');
