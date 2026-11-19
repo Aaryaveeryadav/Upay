@@ -51,6 +51,26 @@ assert.equal(res.canonical,
   'Find the matrix X if A X = B, where A = [[2, 1, -1], [1, 2, 1], [3, -1, 2]] and B = [[4, 1], [7, 0], [8, 5]].');
 assert(M.solve(res.canonical).canonical === res.canonical, 'the restatement must be stable');
 
+/* Matrix polynomial / Cayley–Hamilton question from the user's screenshot.
+   It was misrouted into matrix repair because only AX=B, products, inverse and
+   determinant were recognized. Compute it exactly and refuse a false claim. */
+const cayleyQuestion = 'If A = [[1,0,2],[0,2,1],[2,0,3]], prove that A³ − 6A² + 7A + 2I = O.';
+const cayley = M.solve(cayleyQuestion);
+assert(cayley && cayley.solved && cayley.op === 'polynomial', 'matrix polynomial must be recognized');
+assert.equal(M.matrixText(cayley.A2), '[[5, 0, 8], [2, 4, 5], [8, 0, 13]]');
+assert.equal(M.matrixText(cayley.A3), '[[21, 0, 34], [12, 8, 23], [34, 0, 55]]');
+assert.equal(M.matrixText(cayley.X), '[[0, 0, 0], [0, 0, 0], [0, 0, 0]]');
+assert.equal(cayley.check, true);
+assert(M.solve(cayley.canonical)?.check, 'canonical restatement must be stable and solvable');
+const cayleyAnswer = M.answerFor(cayley, 'en');
+assert.equal(cayleyAnswer.approaches.length, 2, 'direct multiplication and Cayley–Hamilton proof');
+assert(cayleyAnswer.approaches[0].steps.some((step) => step.m === 'A² = [[5, 0, 8], [2, 4, 5], [8, 0, 13]]'));
+assert(cayleyAnswer.approaches[1].steps.some((step) => step.m === 'χA(λ) = λ³ − 6λ² + 7λ + 2'));
+assert.equal(cayleyAnswer.check.state, 'verified');
+const falseIdentity = M.solve('For A = [[1,0],[0,1]], verify that A³ − 6A² + 7A + 2I = O.');
+assert(falseIdentity && falseIdentity.op === 'polynomial' && falseIdentity.check === false,
+  'a false polynomial identity must not be reported as proved');
+
 /* ------------------------------------------------------------ the figure */
 
 /* ------------------------------------------- the answer, not just a solve */

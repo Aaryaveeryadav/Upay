@@ -626,7 +626,7 @@ window.UP = window.UP || {};
   function solveWithAIButton(question) {
     const q = String(question || '').trim(); if (!q) return '';
     const label = S.lang === 'hi' ? 'AI से हल' : 'Solve with AI';
-    return `<button type="button" class="q-corner-action q-ai-action" data-action="sample" data-q="${esc(q)}" aria-label="${esc(label)}" title="${esc(label)}">${icon('sparkle')}<span class="q-action-label">${esc(label)}</span></button>`;
+    return `<button type="button" class="q-corner-action q-ai-action" data-action="solve-question" data-q="${esc(q)}" aria-label="${esc(label)}" title="${esc(label)}">${icon('sparkle')}<span class="q-action-label">${esc(label)}</span></button>`;
   }
   function questionActionBar(question, answerButton, includeSave = true) {
     return `<div class="q-actions q-corner-actions">${answerButton || ''}${solveWithAIButton(question)}${includeSave ? saveQuestionButton(question, true) : ''}</div>`;
@@ -2836,20 +2836,25 @@ window.UP = window.UP || {};
     let read = null;
     try { read = UP.matrices && UP.matrices.fromRows ? UP.matrices.fromRows(ans.question || '') : null; } catch (_) { read = null; }
     const ragged = read && read.reason === 'ragged';
+    let foundBlocks = !!(read && Array.isArray(read.blocks) && read.blocks.length > 0);
+    try {
+      if (!foundBlocks && UP.matrices && UP.matrices.blocks && UP.matrices.clean) {
+        foundBlocks = UP.matrices.blocks(UP.matrices.clean(ans.question || '')).length > 0;
+      }
+    } catch (_) {}
     return `<div class="callout warn matrix-repair"><div>
-      <h3>${hi ? 'आव्यूह के मान साफ़ नहीं पढ़े जा सके' : 'The matrix values could not be read'}</h3>
+      <h3>${hi ? (foundBlocks ? 'आव्यूह का हल पढ़ा नहीं जा सका' : 'आव्यूह के मान साफ़ नहीं पढ़े जा सके') : (foundBlocks ? 'The matrix operation could not be read' : 'The matrix values could not be read')}</h3>
       <p>${hi
-        ? 'प्रश्न के अंकों से आव्यूह का आकार और मान पक्के तौर पर नहीं निकले, इसलिए मैंने अनुमान नहीं लगाया। नीचे मान ठीक करके लिखिए — हल और चित्र ठीक इन्हीं मानों से बनेंगे।'
-        : 'The shape and values did not survive the paste, so nothing was guessed. Type or correct the matrices below — the solution and its figure are built from exactly these numbers.'}</p>
+        ? 'मैट्रिक्स के कुछ मान मिल गए, लेकिन प्रश्न का आकार/संचालन पक्का नहीं हुआ; इसलिए कुछ भी अनुमान नहीं लगाया। नीचे मूल प्रश्न है — मान सुधारें या संचालन स्पष्ट करें। हल और चित्र ठीक इन्हीं मानों से बनेंगे।'
+        : 'Some matrix values were found, but the shape or requested operation was ambiguous, so nothing was guessed. The original question is below — correct the values or clarify the operation. The solution and figure use exactly what you enter.'}</p>
       <p class="muted">${hi ? 'जैसा पढ़ा गया:' : 'As read from the question:'} ${esc(String(ans.question || ''))}</p>
       ${ragged ? `<p class="muted">${hi
         ? 'पंक्तियाँ असमान आई हैं — कोष्ठकों के साथ कुछ अंक छूट गए। कृपया आव्यूह वैसे ही लिखिए जैसे किताब में हैं।'
         : 'The rows came through unevenly — some digits were lost with the brackets. Please type the matrices exactly as they are printed.'}</p>` : ''}
       <label class="mini-label" for="matrix-repair-input">${hi ? 'आव्यूह लिखिए' : 'Matrices'}</label>
-      <textarea id="matrix-repair-input" rows="4" spellcheck="false" style="width:100%;margin-top:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace"
-        placeholder="A = [[2, 1, -1], [1, 2, 1], [3, -1, 2]]&#10;B = [[4, 1], [7, 0], [8, 5]]"></textarea>
-      <p class="muted">${hi ? 'यह रूप भी चलेगा:' : 'Also accepted:'} <code>A = [2 1 -1; 1 2 1; 3 -1 2]</code></p>
-      <p class="muted">${hi ? 'केवल A और B लिखने पर प्रश्न A X = B माना जाएगा; X A = B, |A| या A⁻¹ के लिए वह शब्द भी लिखिए।' : 'With only A and B, the question is taken as A X = B; write X A = B, |A| or A⁻¹ to ask for those.'}</p>
+      <textarea id="matrix-repair-input" rows="5" spellcheck="false" style="width:100%;margin-top:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace">${esc(String(ans.question || ''))}</textarea>
+      <p class="muted">${hi ? 'कोष्ठकों वाला रूप या पंक्तियों के बीच अर्धविराम वाला रूप लिख सकते हैं।' : 'Use bracketed rows or semicolons between rows, for example A = [1 2; 3 4].'}</p>
+      <p class="muted">${hi ? 'यदि दो आव्यूह A और B हों, तो AX = B, XA = B, |A| या A⁻¹ जैसे संचालन को स्पष्ट लिखिए।' : 'If the question has A and B, state the operation explicitly, e.g. AX = B, XA = B, |A| or A⁻¹.'}</p>
       <button class="btn btn-primary" data-action="matrix-repair-solve">${hi ? 'इन मानों से हल करें' : 'Solve with these values'}</button>
     </div></div>`;
   }
@@ -6927,6 +6932,16 @@ window.UP = window.UP || {};
       e.preventDefault();
       document.querySelectorAll('.approach.closed').forEach(a => { a.classList.add('open'); a.classList.remove('closed'); });
       postRenderEnhance(document.getElementById('view'));
+      return;
+    }
+    if (action === 'solve-question') {
+      e.preventDefault();
+      const q = String(tgt.dataset.q || '').trim();
+      if (!q) return;
+      /* This is a solve action, not a sample-chip selection: always open the
+         exact stem in Ask, including when it is already the current route. */
+      if (S.aiQuestion === q) { S.aiQuestion = null; S.aiScope = null; }
+      go(`#/ask?q=${encodeURIComponent(q)}`, true);
       return;
     }
     if (action === 'sample') {
