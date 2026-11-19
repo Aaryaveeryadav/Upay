@@ -5,6 +5,7 @@ on:
     branches: [main]
 permissions:
   contents: read
+  pull-requests: write
 jobs:
   contracts:
     runs-on: ubuntu-latest
@@ -130,3 +131,13 @@ jobs:
           name: browser-logs
           path: /tmp/browser-logs.txt
           if-no-files-found: ignore
+      - name: Post failing browser output on the pull request
+        if: failure() && github.event.pull_request.number
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          if [ -f /tmp/browser-logs.txt ]; then
+            { echo '### Browser check output'; echo '```'; tail -c 40000 /tmp/browser-logs.txt; echo '```'; } > /tmp/browser-comment.md
+            gh pr comment "$PR_NUMBER" --body-file /tmp/browser-comment.md
+          fi
