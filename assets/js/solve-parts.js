@@ -95,7 +95,13 @@
     const hi = lang === 'hi';
     const count = have(state);
     if (!state || !state.answer) return '';
-    if (count >= WANT) return '';
+    /* Even a complete split answer says so: the student should know why the
+       card came back in pieces, and that nothing is missing. */
+    if (count >= WANT) {
+      return hi
+        ? 'यह लंबा प्रश्न टुकड़ों में हल हुआ: 4 में से ' + count + ' तरीके मिले।'
+        : 'This long question was answered in parts: ' + count + ' of ' + WANT + ' methods came back.';
+    }
     if (!state.done) {
       return hi
         ? 'उत्तर तैयार है — बाकी तरीके अभी लिखे जा रहे हैं (4 में से ' + count + ')।'

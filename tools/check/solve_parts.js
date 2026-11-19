@@ -50,7 +50,8 @@ P.absorb(s, { approaches: [step('Graphical check', 'Read the intercept')] });
 P.absorb(s, { approaches: [step('Verification', 'Substitute back')] });
 assert.equal(P.have(s), 4);
 assert.equal(P.next(s, base), null, 'nothing more to ask for once four are shown');
-assert.equal(P.status(s, 'en'), '', 'a complete answer shows no banner');
+assert.match(P.status(s, 'en'), /4 of 4 methods came back/,
+  'a complete split answer still says it arrived in parts');
 
 /* ------------------------------------------- the answer survives a failure */
 

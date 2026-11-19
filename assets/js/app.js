@@ -2793,7 +2793,7 @@ window.UP = window.UP || {};
     return `
     <section class="answer">
       ${localBadge}
-      ${!isLoading && !parts && methods.length < 4 ? '<p class="muted">' + (S.lang === 'hi' ? 'स्थानीय प्रारंभिक हल; चार पूर्ण तरीकों के लिए AI उत्तर माँगें।' : 'Local starter solution only; request an AI answer for four complete approaches.') + '</p>' : ''}
+      ${!isLoading && methods.length < 4 ? '<p class="muted">' + (S.lang === 'hi' ? 'स्थानीय प्रारंभिक हल; चार पूर्ण तरीकों के लिए AI उत्तर माँगें।' : 'Local starter solution only; request an AI answer for four complete approaches.') + '</p>' : ''}
       <div class="answer-head">
         <div class="meta-row">
           <span class="tag">${esc(ch && !answerRoute.changed ? P({ en: ch.en, hi: ch.hi }) : (isLoading ? (S.lang==='hi'?'एआई':'AI') : (S.lang === 'hi' ? 'अवधारणा' : 'Concept')))}</span>
