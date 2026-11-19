@@ -13,6 +13,6 @@ try{for(const width of [1280,390])for(const old of ['accountancy','computerized-
  assert(await page.evaluate(()=>UP.catalogue(12,'english').length>0));
  await page.evaluate(()=>{location.hash='#/syllabus?cls=12&sub=applied-maths';});await page.waitForFunction(()=>UP.S.subject==='applied-maths');
  assert(await page.evaluate(()=>UP.catalogue(12,'applied-maths').length>0));
- for(const path of ['/assets/js/data/economics12.js','/assets/books/economics/macro/lhec101.pdf','/assets/papers/accountancy/2023/67_1_1_Accountancy.pdf']) assert.equal((await page.request.get(path)).status(),404);
+ for(const path of ['/assets/js/data/economics12.js','/assets/books/economics/macro/lhec101.pdf','/assets/papers/accountancy/2023/67_1_1_Accountancy.pdf']) assert.equal((await page.request.get((process.env.UPAY_BASE||'http://127.0.0.1:8005').replace(/\/$/,'')+path)).status(),404);
  assert.deepEqual(errors,[]);await ctx.close();console.log(`PASS ${width}px ${old}: migrated saved scope, retired deep link blocked, retained subjects and missing assets`);
 }}finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1});
