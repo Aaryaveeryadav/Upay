@@ -59,15 +59,15 @@
     'assets/js/solver-geo.js',
     'assets/js/task-routing.js?v=26e5',
     'assets/js/language-policy.js?v=26e5',
-    'assets/js/solve-timing.js?v=26f22',
-    'assets/js/solve-parts.js?v=26f22', // a long question answered in parts instead of being lost
+    'assets/js/solve-timing.js?v=26f23',
+    'assets/js/solve-parts.js?v=26f23', // a long question answered in parts instead of being lost
     'assets/js/square-integers.js?v=26e5',
     'assets/js/solver-route.js?v=26e5',
     'assets/js/answer-format.js?v=26e5',
     'assets/js/teacher-voice.js?v=26e5',
-    'assets/js/figures.js?v=26f22',
-    'assets/js/matrices.js?v=26f22', // matrix questions: exact solve + the matrices drawn
-    'assets/js/worked-figure.js?v=26f22', // answer-labelled figures computed from the question
+    'assets/js/figures.js?v=26f23',
+    'assets/js/matrices.js?v=26f23', // matrix questions: exact solve + the matrices drawn
+    'assets/js/worked-figure.js?v=26f23', // answer-labelled figures computed from the question
     'assets/js/checker.js',
     'assets/js/testgen.js?v=26f14',
     'assets/js/mock-assessment.js?v=26f15',
@@ -256,7 +256,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26f22');
+    return loadScript('assets/js/app.js?v=26f23');
   }
 
   function loadPostPaint() {

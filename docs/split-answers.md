@@ -11,9 +11,12 @@ writing tasks). When the provider ran past it, the whole answer was thrown away
 ## What happens now
 
 The first attempt is unchanged, so ordinary questions still cost exactly one
-call. **If that attempt fails for any reason** — the client aborts at
-`clientMs`, the provider times out, or the model returns fewer than four usable
-methods — the app asks again in parts:
+call. **If that attempt genuinely runs out of time** — the client aborts at
+`clientMs` or the provider reports `provider_timeout` (HTTP 504) — the app asks
+again in parts. An access error, a quota refusal or an explicit
+"could not answer" reply is still reported as before: extra requests would only
+multiply the same failure. A whole answer that does arrive with fewer than four
+usable methods is still repaired inside its own budget (see below).
 
 | part | what it returns | budget |
 | --- | --- | --- |
@@ -32,7 +35,14 @@ methods — the app asks again in parts:
 The card is re-painted after every part, so the student sees the answer as soon
 as it exists. When the loop ends short of four methods, the banner says how
 many arrived and a **Request the missing methods** button resumes from where it
-stopped (`_parts` on the answer keeps the count).
+stopped (`_parts` on the answer keeps the count). A complete split answer keeps
+the banner too ("4 of 4 methods came back"), because the student should know
+why the card arrived in pieces.
+
+The loop is bounded: it stops on a refused part (`code` in the reply), when
+there is no core answer to add methods to, and after two consecutive misses.
+The banner and the button are drawn by `partsNoteFor()` in
+`assets/js/app.js`, which both answer cards use.
 
 ## Why parts help
 
