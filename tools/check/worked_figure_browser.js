@@ -235,8 +235,18 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
         'one whole-answer attempt, then the answer and one method per request: ' + partCalls.join(','));
       const splitText = await page.locator('.ai-answer').innerText();
       assert(/0\.5 A/.test(splitText), 'the answer arrived despite the failed single call');
+      const partsProbe = await page.evaluate(() => {
+        const a = UP.S.aiAnswer;
+        return JSON.stringify({
+          keys: a ? Object.keys(a) : null,
+          parts: a ? a._parts : null,
+          count: a && a.approaches ? a.approaches.length : null,
+          notes: document.querySelectorAll('.parts-note').length,
+          text: a ? String(a._partsNote || '') : ''
+        });
+      });
       assert.equal(await page.locator('.ai-answer .parts-note').count(), 1,
-        'the card carries the split-answer banner');
+        'the card carries the split-answer banner: ' + partsProbe);
       assert(!/too long/i.test(splitText), 'no "took too long" dead end');
       assert.equal(await page.locator('.ai-answer .approach').count(), 4, 'all four methods were assembled');
       assert.equal(await page.locator('[data-action="more-approaches"]').count(), 0,
