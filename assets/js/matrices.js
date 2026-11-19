@@ -2,7 +2,8 @@
    Upay · matrix questions
 
    A matrix question is all values and one operation: AX = B, XA = B, |A|,
-   A⁻¹, AB. Nothing about it needs a language model — and a language model
+   A⁻¹, AB, or a polynomial identity such as p(A) = O. Nothing about it needs
+   a language model — and a language model
    reading a flattened paste ("2 1 -1 41 : 2 1 | X = : 0]. 3 -1 2 8 5")
    gets the shape and the values wrong, then answers a different question.
 
@@ -279,6 +280,65 @@
     return null;
   }
 
+  /* Matrix polynomial identity, such as
+     A³ − 6A² + 7A + 2I = O. Parse only an explicit polynomial in one labelled
+     matrix and evaluate it with exact integer arithmetic; never infer the
+     missing matrix values or claim an identity that fails. */
+  function polynomialOperation(t, bs) {
+    if (!bs.length || !bs.some((b) => b.label === 'A')) return null;
+    const end = Math.max.apply(null, bs.map((b) => b.end));
+    const tail = t.slice(end);
+    const eq = tail.indexOf('=');
+    if (eq < 0) return null;
+    const rhs = tail.slice(eq + 1).replace(/[.!?]/g, '').trim();
+    if (!/^(?:O|0|zero(?:matrix)?|0_{?n}?|0_{?3x3}?)$/i.test(rhs.replace(/\s+/g, ''))) return null;
+    let lhs = tail.slice(0, eq)
+      .replace(/\b(?:prove|show|verify|that|the|following|identity|holds)\b/gi, '')
+      .replace(/[−–]/g, '-').replace(/³/g, '^3').replace(/²/g, '^2').replace(/¹/g, '^1')
+      .replace(/\s+/g, '').replace(/^[,;:]+/, '');
+    const coefficients = { 0: 0, 1: 0, 2: 0, 3: 0 };
+    let at = 0, terms = 0;
+    while (at < lhs.length) {
+      const re = /([+-]?)(\d*)(A(?:\^([1-3]))?|I)/g;
+      re.lastIndex = at;
+      const m = re.exec(lhs);
+      if (!m || m.index !== at) return null;
+      const sign = m[1] === '-' ? -1 : 1;
+      const amount = m[2] ? Number(m[2]) : 1;
+      if (!Number.isSafeInteger(amount)) return null;
+      const degree = m[3] === 'I' ? 0 : Number(m[4] || 1);
+      coefficients[degree] += sign * amount;
+      at = re.lastIndex;
+      terms++;
+    }
+    if (!terms || coefficients[3] === 0) return null;
+    const A = labelledMap(bs).A;
+    const s = shape(A);
+    if (!s || s.rows !== s.cols || s.rows > 4) return null;
+    return { op: 'polynomial', A: A, coefficients: coefficients };
+  }
+
+  function scaleMatrix(m, k) {
+    return m.map((row) => row.map((v) => mul(frac(k), v)));
+  }
+  function addMatrices(a, b) {
+    return a.map((row, i) => row.map((v, j) => add(v, b[i][j])));
+  }
+  function polynomialText(c) {
+    const symbols = { 3: 'A³', 2: 'A²', 1: 'A', 0: 'I' };
+    const terms = [];
+    [3, 2, 1, 0].forEach((degree) => {
+      const value = c[degree] || 0;
+      if (!value) return;
+      const sign = value < 0 ? '−' : '+';
+      const abs = Math.abs(value);
+      const body = (abs === 1 && degree > 0 ? '' : String(abs)) + symbols[degree];
+      terms.push({ sign, body });
+    });
+    if (!terms.length) return '0';
+    return terms.map((term, i) => (i ? ' ' + term.sign + ' ' : (term.sign === '−' ? '−' : '')) + term.body).join('');
+  }
+
   /* -------------------------------------------------------------- solving */
 
   function solve(text, opts) {
@@ -286,7 +346,7 @@
     if (!t || t.length > 1200) return null;
     const bs = blocks(t);
     if (!bs.length) return null;
-    let op = operation(t, bs);
+    let op = polynomialOperation(t, bs) || operation(t, bs);
     /* The repair card asks only for the two grids, with X implied. That
        default belongs to that flow alone (`defaultOp`), never to a question
        pasted from a paper, where the operation has to be read. */
@@ -299,6 +359,22 @@
     if (!sa) return null;
 
     let X = null, det = null, inverse = null, product = null;
+    if (op.op === 'polynomial') {
+      if (sa.rows !== sa.cols) return null;
+      const A2 = multiply(op.A, op.A);
+      const A3 = multiply(A2, op.A);
+      const I = identity(sa.rows);
+      let value = scaleMatrix(A3, op.coefficients[3]);
+      value = addMatrices(value, scaleMatrix(A2, op.coefficients[2]));
+      value = addMatrices(value, scaleMatrix(op.A, op.coefficients[1]));
+      value = addMatrices(value, scaleMatrix(I, op.coefficients[0]));
+      const isZeroMatrix = value.every((row) => row.every(isZero));
+      return done({
+        op: 'polynomial', A: op.A, coefficients: op.coefficients, A2: A2, A3: A3, X: value,
+        answer: [polynomialText(op.coefficients) + ' = ' + matrixText(value), isZeroMatrix ? 'Therefore the given expression is the zero matrix.' : 'The given expression is not the zero matrix for these entries.'],
+        check: isZeroMatrix
+      });
+    }
     if (op.op === 'det') {
       if (sa.rows !== sa.cols) return null;
       const res = eliminate(op.A, identity(sa.rows).map((r) => [r[0]]));
@@ -386,6 +462,7 @@
 
   function canonical(res) {
     const A = matrixText(res.A);
+    if (res.op === 'polynomial') return 'For A = ' + A + ', verify that ' + polynomialText(res.coefficients) + ' = O.';
     if (res.op === 'det') return 'Find the determinant of the matrix A = ' + A + '.';
     if (res.op === 'inverse') return 'Find the inverse of the matrix A = ' + A + '.';
     if (res.op === 'product') return 'If A = ' + A + ' and B = ' + matrixText(res.B) + ', find the product AB.';
@@ -475,6 +552,51 @@
       check: { state: 'verified', source: 'arithmetic', note: '' },
       approaches: []
     };
+
+    if (res.op === 'polynomial') {
+      const c = res.coefficients;
+      const poly = polynomialText(c);
+      const zeroResult = res.check === true;
+      const tr = A.reduce((sum, row, i) => add(sum, row[i]), ZERO);
+      let principalSum = ZERO;
+      if (A.length === 3) {
+        principalSum = add(add(mul(A[0][0], A[1][1]), mul(A[0][0], A[2][2])), mul(A[1][1], A[2][2]));
+        principalSum = sub(principalSum, add(add(mul(A[0][1], A[1][0]), mul(A[0][2], A[2][0])), mul(A[1][2], A[2][1])));
+      }
+      const detA = determinant(A);
+      const cayleyHamilton = A.length === 3 && c[3] === 1 && c[2] === -Number(str(tr))
+        && c[1] === Number(str(principalSum)) && c[0] === -Number(str(detA));
+      const resultText = poly + ' = ' + matrixText(X);
+      base.result = resultText;
+      base.resultMatrix = { name: poly, rows: plain(X) };
+      base.summary = zeroResult
+        ? L('The matrix polynomial is evaluated exactly from the supplied entries; every entry of the result is zero.', 'दिए गए प्रवेश्यों से आव्यूह बहुपद की सटीक गणना की गई है; परिणाम का प्रत्येक प्रवेश्य शून्य है।')
+        : L('Exact arithmetic shows this expression is not the zero matrix for the supplied entries. Check the question or its signs.', 'सटीक गणना से दिए गए प्रवेश्यों पर यह व्यंजक शून्य आव्यूह नहीं है। प्रश्न या चिह्न जाँचें।');
+      base.check.note = zeroResult
+        ? L('The matrix powers and every entry of the polynomial were checked exactly.', 'आव्यूह की घातों और बहुपद के प्रत्येक प्रवेश्य की सटीक जाँच की गई।')
+        : L('The displayed nonzero entries are the exact result; the stated identity does not hold for these values.', 'दिखाए गए अशून्य प्रवेश्य सटीक परिणाम हैं; इन मानों के लिए दी गई सर्वसमिका सत्य नहीं है।');
+      const directSteps = [
+        { t: L('Multiply A by itself.', 'A का स्वयं से गुणन कीजिए।'), m: 'A² = ' + matrixText(res.A2) },
+        { t: L('Multiply once more to get the cube.', 'घन के लिए एक बार और गुणा कीजिए।'), m: 'A³ = ' + matrixText(res.A3) },
+        { t: L('Substitute the exact powers into the expression and combine corresponding entries.', 'सटीक घातों को व्यंजक में रखकर संगत प्रवेश्य जोड़ें।'), m: resultText }
+      ];
+      base.approaches = [{
+        name: L('Direct matrix multiplication', 'सीधा आव्यूह गुणन'),
+        tag: L('exact arithmetic', 'सटीक गणना'), steps: directSteps
+      }];
+      if (cayleyHamilton) {
+        base.approaches.push({
+          name: L('Cayley–Hamilton theorem', 'केली–हैमिल्टन प्रमेय'),
+          tag: L('characteristic polynomial', 'अभिलाक्षणिक बहुपद'),
+          steps: [
+            { t: L('For a 3×3 matrix, the characteristic polynomial is λ³ − (tr A)λ² + (sum of principal 2×2 minors)λ − det(A).', '3×3 आव्यूह का अभिलाक्षणिक बहुपद λ³ − (tr A)λ² + (मुख्य 2×2 लघु सारणिकों का योग)λ − det(A) है।'), m: 'tr(A) = ' + str(tr) + ', sum of principal minors = ' + str(principalSum) + ', det(A) = ' + str(detA) },
+            { t: L('These coefficients give the characteristic polynomial.', 'इन गुणांकों से अभिलाक्षणिक बहुपद मिलता है।'), m: 'χA(λ) = ' + polynomialText(c).replace(/A³/g, 'λ³').replace(/A²/g, 'λ²').replace(/A/g, 'λ').replace(/I/g, '') },
+            { t: L('By the Cayley–Hamilton theorem, a matrix satisfies its own characteristic polynomial.', 'केली–हैमिल्टन प्रमेय के अनुसार प्रत्येक आव्यूह अपना अभिलाक्षणिक बहुपद संतुष्ट करता है।'), m: polynomialText(c) + ' = O' }
+          ]
+        });
+      }
+      return base;
+    }
 
     /* ---------------- determinant, inverse, product ---------------- */
     if (res.op !== 'AX' && res.op !== 'XA') {

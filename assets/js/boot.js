@@ -68,7 +68,7 @@
     'assets/js/answer-format.js?v=26f27',
     'assets/js/teacher-voice.js?v=26e5',
     'assets/js/figures.js?v=26f27',
-    'assets/js/matrices.js?v=26f27', // matrix questions: exact solve + the matrices drawn
+    'assets/js/matrices.js?v=26f28', // matrix questions: exact solve + the matrices drawn
     'assets/js/worked-figure.js?v=26f27', // answer-labelled figures computed from the question
     'assets/js/checker.js',
     'assets/js/testgen.js?v=26f14',
@@ -248,7 +248,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26hip2');
+    return loadScript('assets/js/app.js?v=26hip3');
   }
 
   function loadPostPaint() {
