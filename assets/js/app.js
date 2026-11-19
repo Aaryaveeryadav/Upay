@@ -793,12 +793,13 @@ window.UP = window.UP || {};
      the question views are untouched; only the chapter list follows the board. */
   function isRbse() { return S.board === 'rajasthan' && +S.cls === 10 && S.subject === 'maths'; }
   function catalogue() {
-    if (businessTrack() && S.board !== 'cbse') return [];
+    if ((businessTrack() || hindi12Track()) && S.board !== 'cbse') return [];
     if (isRbse() && UP.rbseChapters) return UP.rbseChapters.chapters;
     return UP.catalogue(S.cls, S.subject);
   }
   function chapterById(id, cls, subject) {
     const rb = (isRbse() && UP.rbseChapters) ? UP.rbseChapters.chapters : null;
+    if (hindi12Subject(subject || S.subject) && S.board !== 'cbse') return null;
     if ((subject || S.subject) === 'business-studies' && S.board !== 'cbse') return null;
     const list = rb || UP.catalogue(cls || S.cls, subject || S.subject);
     // A stale or manually typed chapter ID must not open a different class or
@@ -827,9 +828,64 @@ window.UP = window.UP || {};
     return +S.cls === 12 && (S.subject === 'accountancy' || S.subject === 'computerized-accounting');
   }
   function economicsTrack() { return +S.cls === 12 && S.subject === 'economics'; }
+  const hindi12Subject = sub => ['hindi-core','hindi-elective'].includes(sub);
+  // The existing mock/daily storage keys can contain work from another subject.
+  // Entering the textbook reader must not delete either of those records.
+  function resetOnCourseSwitch(preserve) {
+    window.__qIndex = null; S.dailySet = null;
+    if (preserve) { S.mockTest = null; clearInterval(window.__mtTimer); }
+    else { clearMockTest(); store.remove(dailyStoreKey()); }
+  }
+  function hindi12Track() { return +S.cls === 12 && hindi12Subject(S.subject); }
+  document.addEventListener('input', event => {
+    const id = event.target.dataset.hindiDraft;
+    if (id && hindi12Track() && catalogue().some(c => c.id === id))
+      store.set(scopedDataKey('hindiDraft.' + id), event.target.value);
+  });
+  function hindi12View(route, params = {}, id) {
+    const list = catalogue(), title = P(UP.subjects[S.subject]);
+    const header = `<header class="page-head" lang="hi"><span class="eyebrow">CBSE · कक्षा 12</span><h1>${esc(title)}</h1></header>`;
+    if (S.board !== 'cbse') return '<div class="empty">इस पाठ्यसामग्री के लिए CBSE बोर्ड चुनें।</div>';
+    const reader = (c,p=1) => `#/chapter/${c.id}?p=${p}`;
+    const practice = c => {
+      const context = `${c.book} · ${c.hi}\n${c.question}`;
+      return `<article class="card" style="padding:16px"><b>${esc(c.book)} · ${esc(c.hi)}</b><p>${esc(c.question)}</p>
+      <label>आपका उत्तर (स्व-अभ्यास)<textarea rows="3" style="display:block;width:100%" data-hindi-draft="${c.id}">${esc(store.getTyped(scopedDataKey('hindiDraft.'+c.id),'','string'))}</textarea></label>
+      <a class="link" href="${reader(c,c.exercisePage)}">मूल अभ्यास देखें</a> ${saveQuestionButton(context)}
+      <a class="btn btn-ghost btn-sm" href="#/ask?q=${encodeURIComponent(context)}">AI व्याख्या (असत्यापित)</a></article>`;
+    };
+    if (route === 'chapter' || route === 'cheatsheet') {
+      const c = list.find(c => c.id === id);
+      if (!c) return header+'<div class="empty">इस पाठ्यक्रम में यह अध्याय नहीं है।</div>';
+      const supplement = params.extra === 'author' && c.book === 'वितान';
+      const source = supplement ? 'lhvt1lp' : c.id, count = supplement ? 2 : c.pages;
+      const page = Math.max(1,Math.min(count,Number.parseInt(params.p,10)||1));
+      const jump = p => reader(c,p)+(supplement?'&extra=author':'');
+      const img = `/assets/hindi/class12/${source}/${page}.webp`;
+      return header+`<article lang="hi"><a class="link" href="#/syllabus">← पुस्तकें और पाठ</a><h2>${esc(c.book)} · ${esc(supplement?'लेखक परिचय':c.hi)}</h2>
+        <p><a class="btn btn-cream" href="${reader(c,c.exercisePage)}">प्रश्न-अभ्यास</a> ${c.book==='वितान'?`<a class="btn btn-ghost" href="${reader(c)}&extra=author">लेखक परिचय</a>`:''}</p>
+        <nav aria-label="पृष्ठ">${page>1?`<a class="btn" href="${jump(page-1)}">← पिछला</a>`:''} <span title="${source}.pdf">पृष्ठ ${page} / ${count}</span> ${page<count?`<a class="btn" href="${jump(page+1)}">अगला →</a>`:''}</nav>
+        <a href="${img}" aria-label="पृष्ठ बड़ा करें"><img src="${img}" style="display:block;width:100%;max-width:780px;height:auto" alt="${esc(c.book)} · ${esc(c.hi)} · मूल पृष्ठ ${page}"></a>
+        <details class="card" style="padding:16px"><summary>खोजने योग्य प्रतिलिपि · समीक्षा शेष</summary><p>मात्रा, वर्तनी और पंक्तियों में अंतर हो सकता है। ऊपर का मूल पृष्ठ मानें।</p><p style="white-space:pre-wrap">${esc(UP.hindi12Text?.[source]?.[page-1] || 'पाठ के लिए मूल पृष्ठ देखें।')}</p></details>
+        ${c.question&&!supplement?practice(c):''}</article>`;
+    }
+    if (route === 'pyq') return header+'<div class="empty">इस पाठ्यक्रम के पिछले प्रश्नपत्र या आधिकारिक उत्तर-कुंजी नहीं मिले हैं। <a class="link" href="#/today">पुस्तक से अभ्यास करें</a></div>';
+    if (['today','test','mock','mockresult','mcq'].includes(route)) {
+      const pool = list.filter(c=>c.question), start = Math.max(0,Number.parseInt(params.start,10)||0)%Math.max(1,pool.length);
+      const set = route==='today'?pool:pool.concat(pool).slice(start,start+Math.min(3,pool.length));
+      return header+`<h2>पाठ्यपुस्तक से स्व-अभ्यास</h2><p>ये बोर्ड प्रश्न नहीं हैं। अंक या आधिकारिक उत्तर-कुंजी उपलब्ध नहीं हैं।</p>
+        <div class="grid">${set.map(practice).join('')}</div>${route!=='today'?`<a class="btn btn-primary" href="#/test?start=${start+3}">अगला अभ्यास सेट →</a>`:''}`;
+    }
+    const query=(params.q||'').trim().toLowerCase();
+    const matchPage = c => query ? (UP.hindi12Text?.[c.id] || []).findIndex(page=>page.replace(/\s+/g,' ').includes(query))+1 : 0;
+    const hits=list.filter(c=>[c.hi,c.book,c.question,c.id].join(' ').toLowerCase().includes(query) || matchPage(c));
+    return header+`<p>मूल पाठ और प्रश्न-अभ्यास · <a class="link" href="#/today">अभ्यास</a> · <a class="link" href="#/test">स्व-परीक्षण</a></p>
+      <label class="search-input">${icon('search')}<input type="search" data-action="search" aria-label="पाठ या अभ्यास खोजें" placeholder="पुस्तक, पाठ, पंक्ति या अभ्यास खोजें" value="${esc(query)}"></label>
+      ${hits.length?'':'<p>कोई मेल नहीं मिला।</p>'}${[...new Set(hits.map(c=>c.book))].map(b=>`<h2>${esc(b)}</h2><div class="grid grid-2">${hits.filter(c=>c.book===b).map(c=>`<a class="card" style="padding:16px" href="${reader(c,matchPage(c)||1)}"><span class="tag cream">पाठ ${c.n}</span><h3>${esc(c.hi)}</h3>${c.pages} पृष्ठ · पाठ और अभ्यास →</a>`).join('')}</div>`).join('')}`;
+  }
   function english12Track() { return +S.cls === 12 && S.subject === 'english'; }
   function businessTrack() { return +S.cls === 12 && S.subject === 'business-studies'; }
-  function needsAIOnly() { return accountancyTrack() || economicsTrack() || english12Track() || businessTrack(); }
+  function needsAIOnly() { return hindi12Track() || accountancyTrack() || economicsTrack() || english12Track() || businessTrack(); }
 
   const ENGLISH12_GROUPS = [
     ['flamingo', 'prose'], ['flamingo', 'poetry'], ['vistas', 'readings'],
@@ -1976,7 +2032,7 @@ window.UP = window.UP || {};
     }
     const matches=(UP.pyq||[]).filter(row=>qInScope(row)&&pyqQuestionText(row)===q);
     const mappedChapters=[...new Set(matches.map(row=>String(row.ch)).filter(Boolean))];
-    const chapterContext=mappedChapters.length===1?chapterById(mappedChapters[0]):chapterById(S.chapterId);
+    const chapterContext=hindi12Track() ? catalogue().find(c=>q.startsWith(c.book + ' · ' + c.hi)) || chapterById(S.chapterId) : mappedChapters.length===1?chapterById(mappedChapters[0]):chapterById(S.chapterId);
     const languageContext=UP.languagePolicy.contextRequest(q,routing.subject,chapterContext&&P(chapterContext));
     if(languageContext){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'language-context',question:q,...languageContext};paint();return;}
     const chargeExact = UP.chargeEnergy && UP.chargeEnergy.solve(q, responseLang);
@@ -2030,7 +2086,7 @@ window.UP = window.UP || {};
        and a complete answer on the second. The student used to have to press
        "Try again" to discover that; now the app asks once more itself, with
        a fresh bounded deadline, and only then reports the failure. */
-    const payload = JSON.stringify({ question: q, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0), chapterTitle:!routing.changed&&chapterContext?P(chapterContext):'', subject: routing.subject, selectedSubject:S.subject, cls: S.cls, lang:responseLang });
+    const payload = JSON.stringify({ question: q, chapter: routing.changed ? 0 : (chapterContext?.id || 0), ...(hindi12Track()?{board:S.board}:{}), chapterTitle:!routing.changed&&chapterContext?P(chapterContext):'', subject: routing.subject, selectedSubject:S.subject, cls: S.cls, lang:responseLang });
     const send = () => fetch('/api/ai/solve', {
       method: 'POST',
       headers: { 'content-type': 'application/json', authorization: 'Bearer ' + (localStorage.getItem('upay.token') || '') },
@@ -2096,7 +2152,7 @@ window.UP = window.UP || {};
              before telling the student anything failed. */
           const base = {
             question: q, subject: routing.subject, selectedSubject: S.subject, cls: S.cls,
-            lang: responseLang, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0),
+            lang: responseLang, ...(hindi12Track()?{board:S.board}:{}), chapter: routing.changed ? 0 : (chapterContext?.id || 0),
             chapterTitle: !routing.changed && chapterContext ? P(chapterContext) : '',
             subjectRouting: routing, _chId: S.chapterId || 0
           };
@@ -2115,7 +2171,7 @@ window.UP = window.UP || {};
         const isTimeout = err && err.name === 'AbortError';
         const base = {
           question: q, subject: routing.subject, selectedSubject: S.subject, cls: S.cls,
-          lang: responseLang, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0),
+          lang: responseLang, ...(hindi12Track()?{board:S.board}:{}), chapter: routing.changed ? 0 : (chapterContext?.id || 0),
           chapterTitle: !routing.changed && chapterContext ? P(chapterContext) : '',
           subjectRouting: routing, _chId: S.chapterId || 0
         };
@@ -3022,6 +3078,7 @@ window.UP = window.UP || {};
 
   /* ============================== SYLLABUS ============================== */
   function viewSyllabus(params) {
+    if (hindi12Track()) return hindi12View('syllabus',params);
     const list = catalogue();
     const q = (params.q || '').toLowerCase();
     const filtered = list.filter(c => {
@@ -4260,7 +4317,7 @@ window.UP = window.UP || {};
                     <button class="tag-pill ${!s.tag?'on':''}" data-action="tagSaved" data-i="${realIdx}" data-tag="">${S.lang==='hi'?'कोई नहीं':'none'}</button>
                   </div>
                   <div class="pactions">
-                    <button class="btn btn-primary btn-sm" data-action="sample" data-q="${esc(s.q)}">${icon('sparkle')} ${t('solveThis')}</button>
+                    <button class="btn btn-primary btn-sm" data-action="sample" data-saved-index="${realIdx}" data-q="${esc(s.q)}">${icon('sparkle')} ${t('solveThis')}</button>
                     <button class="btn btn-ghost btn-sm" data-action="deleteSaved" data-i="${realIdx}">${icon('trash')}</button>
                   </div>
                 </div>
@@ -4506,7 +4563,7 @@ window.UP = window.UP || {};
       items.push({type:'action', label:S.lang==='hi'?'अभिभावक सारांश':'Parent summary', icon:'user', go:'#/parent'});
       items.push({type:'action', label:S.lang==='hi'?'खोज':'Search questions', icon:'search', go:'#/search'});
       // Chapters
-      (UP.catalogue(S.cls, S.subject)||[]).forEach(c=>{
+      (hindi12Track() ? catalogue() : UP.catalogue(S.cls, S.subject)||[]).forEach(c=>{
         const lbl = P({en:c.en,hi:c.hi});
         if (!qstr || lbl.toLowerCase().includes(qstr))
           items.push({type:'chapter', label:lbl, sub:(c.enDesc||'').slice(0,60), icon:'book', go:'#/chapter/'+c.id});
@@ -4519,6 +4576,7 @@ window.UP = window.UP || {};
         matches.forEach(x => items.push({type:'q', label:pyqQuestionText(x).slice(0,100), icon:'list', go:'#/ask?q='+encodeURIComponent(pyqQuestionText(x))}));
         // Saved
         S.saved.slice(0,5).forEach(s => {
+          if (hindi12Subject(s.subject) && (S.subject!==s.subject || !hindi12Track() || S.board!=='cbse')) return;
           if (s.q.toLowerCase().includes(qstr)) items.push({type:'saved', label:s.q.slice(0,80), icon:'save', go:'#/ask?q='+encodeURIComponent(s.q)});
         });
       }
@@ -4821,30 +4879,33 @@ window.UP = window.UP || {};
       history.replaceState(null, '', location.pathname + location.search + '#/syllabus');
       r.name = 'syllabus'; r.params = {};
     }
+    const preserveSessions = hindi12Subject(r.params.sub) || hindi12Track();
     if (r.params.cls) {
       const nc = +r.params.cls;
-      if (nc !== S.cls) { S.chapterId = null; window.__qIndex = null; S.dailySet = null; clearMockTest(); store.remove(dailyStoreKey()); }
+      if (nc !== S.cls) { S.chapterId = null; resetOnCourseSwitch(preserveSessions); }
       S.cls = nc;
     }
     if (r.params.sub && retiredSubjects.has(r.params.sub)) r.params.sub = 'maths';
     if (r.params.sub) {
-      if (r.params.sub !== S.subject) { S.chapterId = null; window.__qIndex = null; S.dailySet = null; clearMockTest(); store.remove(dailyStoreKey()); }
+      if (r.params.sub !== S.subject) { S.chapterId = null; resetOnCourseSwitch(preserveSessions); }
       S.subject = r.params.sub;
     }
     // Preserve an explicitly shared Class 12 English chapter's scope when the
     // student follows its Books link and later reloads.
-    if ((r.params.cls || r.params.sub) && english12Track()) saveState();
+    if ((r.params.cls || r.params.sub) && (english12Track() || hindi12Track())) saveState();
     // A deep link can land in Class 12 before its lazy pack has loaded;
     // fetch it once, then re-render with the data present.
     if (+S.cls === 12 && UP.loadClass12 && UP.loaded && !UP.loaded.packs.class12) {
       UP.loadClass12().then(function () { render(); });
     }
+    if (hindi12Track() && !UP.loaded.packs[S.subject]) UP.loadPack(S.subject).then(() => render());
     syncStudyScope();
     renderShell(); renderTopbar(); renderFooter();
 
     const main = document.getElementById('view');
     let html = '';
-    if (r.name === 'ask') {
+    if (hindi12Track() && (['home','chapter','search','books','test','mock','mockresult','today','mcq','pyq','cheatsheet'].includes(r.name) || (r.name==='ask' && S.board!=='cbse'))) html = hindi12View(r.name,r.params,r.id);
+    else if (r.name === 'ask') {
       S.cls = +S.cls;
       if (r.params.cls) { /* already set */ }
       // Decode shared-question payload ?s=base64
@@ -4896,7 +4957,7 @@ window.UP = window.UP || {};
       } else {
         S.answer = null; S.aiAnswer = null; S.aiState = null; S.aiQuestion = null; S.aiScope = null;
       }
-      html = viewAsk(r.params);
+      html = (hindi12Track() ? '<div class="callout tip">AI व्याख्या असत्यापित है; यह आधिकारिक उत्तर-कुंजी नहीं है।</div>' : '') + viewAsk(r.params);
     } else if (r.name === 'today') { html = viewToday(); }
     else if (r.name === 'syllabus') html = viewSyllabus(r.params);
     else if (r.name === 'chapter') {
@@ -4939,9 +5000,9 @@ window.UP = window.UP || {};
     else html = viewHome();
 
     main.innerHTML = html;
-    if (r.name === 'today') restoreDailyPanels();
+    if (r.name === 'today' && !hindi12Track()) restoreDailyPanels();
     if (r.name === 'ai-access') loadAIAccess(false);
-    main.className = 'page';
+    main.className = hindi12Track() ? 'page hindi12-reader' : 'page';
     // active nav
     document.querySelectorAll('[data-nav]').forEach(a => {
       const on = a.dataset.nav === r.name || (r.name === 'chapter' && a.dataset.nav === 'syllabus');
@@ -6868,6 +6929,9 @@ window.UP = window.UP || {};
       return;
     }
     if (action === 'sample') {
+      const item = S.saved[tgt.dataset.savedIndex];
+      if (item && item.subject==='hindi' && hindi12Track() && (!item.cls || +item.cls===10)) { S.board=item.board || 'cbse'; S.test.board=S.board; S.chapterId=null; go('#/ask?cls=10&sub=hindi&q='+encodeURIComponent(item.q),true); return; }
+      if (item && hindi12Subject(item.subject)) { S.board='cbse'; S.test.board='cbse'; S.chapterId=null; go('#/ask?cls=12&sub='+item.subject+'&q='+encodeURIComponent(item.q),true); return; }
       const q = tgt.dataset.q;
       // Selecting a previously failed question again is a fresh request.
       if (S.aiQuestion === q && S.aiState === 'local') { S.aiQuestion = null; S.aiScope = null; }
@@ -6925,6 +6989,7 @@ window.UP = window.UP || {};
         chapter: (ans && ans.chapter && chapterById(ans.chapter))
           ? P({ en: chapterById(ans.chapter).en, hi: chapterById(ans.chapter).hi })
           : '',
+        ...(hindi12Track()?{cls:12, board:S.board}:{}),
         subject: (ans && ans._subj) || S.subject
       };
       S.saved.unshift(item); S.saved = S.saved.slice(0, 200); saveSaved();
@@ -7130,6 +7195,7 @@ window.UP = window.UP || {};
     const el = e.target.closest('[data-action="set"]');
     if (el) {
       const key = el.dataset.key, val = el.value;
+      const preserveSessions = hindi12Track() || (key === 'subject' && hindi12Subject(val));
       let resetScope = false;
       if (key === 'cls') {
         S.cls = +val; S.chapterId = null; resetScope = true;
@@ -7143,18 +7209,18 @@ window.UP = window.UP || {};
         // Changing subject invalidates chapter selection (chapter IDs are per-subject)
         S.test.chapters = []; S.test.seed = 0; S.paper = null;
         return Promise.all([UP.switchSubject(val), +S.cls === 12 && UP.loadClass12 ? UP.loadClass12() : Promise.resolve()]).then(function () {
-          window.__qIndex = null; S.dailySet = null; clearMockTest(); store.remove(dailyStoreKey());
-          saveState(); const r = parseHash(); if (r.name === 'chapter') go('#/syllabus'); else render();
+          resetOnCourseSwitch(preserveSessions);
+          saveState(); const r = parseHash(); if (r.name === 'chapter' || preserveSessions && (r.params.sub || r.params.cls)) go('#/syllabus'); else render();
         });
       }
       if (key === 'board') {
         S.board = val; S.chapterId = null;
         S.test.board = val; S.test.chapters = []; S.test.seed = 0; S.paper = null;
-        window.__qIndex = null; S.dailySet = null; clearMockTest(); store.remove(dailyStoreKey());
+        resetOnCourseSwitch(preserveSessions);
         return UP.loadBoardPack(val).then(function () { saveState(); render(); });
       }
       if (resetScope) {
-        window.__qIndex = null; S.dailySet = null; clearMockTest(); store.remove(dailyStoreKey());
+        resetOnCourseSwitch(preserveSessions);
         // Class change also invalidates chapter filter
         if (key === 'cls') S.test.chapters = [];
       }

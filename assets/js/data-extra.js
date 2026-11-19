@@ -6,10 +6,12 @@ window.UP = window.UP || {};
 UP.classes = [
   { id: 10, en: "Class 10", hi: "कक्षा 10", subjects: ["maths", "science", "social", "hindi", "english", "sanskrit"] },
   { id: 11, en: "Class 11", hi: "कक्षा 11", subjects: ["maths", "physics", "chemistry", "biology"] },
-  { id: 12, en: "Class 12", hi: "कक्षा 12", subjects: ["maths", "applied-maths", "physics", "chemistry", "biology", "english"] }
+  { id: 12, en: "Class 12", hi: "कक्षा 12", subjects: ["maths", "applied-maths", "physics", "chemistry", "biology", "english", "hindi-core", "hindi-elective"] }
 ];
 
 UP.subjects = {
+  "hindi-core": { en:"Hindi Core", hi:"हिंदी आधार", icon:"book" },
+  "hindi-elective": { en:"Hindi Elective", hi:"हिंदी ऐच्छिक", icon:"book" },
   maths: { en: "Mathematics", hi: "गणित", icon: "sigma" },
   "applied-maths": { en: "Applied Mathematics", hi: "व्यावहारिक गणित", icon: "calc" },
   science: { en: "Science", hi: "विज्ञान", icon: "flask" },
@@ -327,6 +329,7 @@ UP.catalogue = function (cls, subject) {
   if (+cls === 12 && String(subject) === 'english') {
     return (UP.course12english || []).map(c => Object.assign({}, c, { className: 12, subject: 'english' }));
   }
+  if (+cls === 12 && ['hindi-core','hindi-elective'].includes(subject)) return (UP.hindi12||[]).filter(c=>c.subject===subject);
   if (out) return out;
   /* Class 12 Chemistry (NCERT): 10 units, id range 701–710 */
   if (+cls === 12 && subject === 'chemistry') return (window.UP && UP.chemistry12) || [];

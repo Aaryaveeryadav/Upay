@@ -38,7 +38,7 @@
 
   /* --- CRITICAL CORE: required before app.js boots --- */
   const CRITICAL_CORE = [
-    'assets/js/data-extra.js?v=26f27',
+    'assets/js/data-extra.js?v=26hi12',
     'assets/js/data/chapters1.js',
     'assets/js/data/chapters2.js',
     'assets/js/data/pyq.js',
@@ -57,8 +57,8 @@
     'assets/js/solver-core.js',
     'assets/js/solver-arith.js?v=26e5',
     'assets/js/solver-geo.js',
-    'assets/js/task-routing.js?v=26f27',
-    'assets/js/language-policy.js?v=26e5',
+    'assets/js/task-routing.js?v=26hi12',
+    'assets/js/language-policy.js?v=26hi12',
     'assets/js/solve-timing.js?v=26f27',
     'assets/js/solve-parts.js?v=26f27', // a long question answered in parts instead of being lost
     'assets/js/square-integers.js?v=26e5',
@@ -86,6 +86,8 @@
 
   /* --- Subject packs (lazy) --- */
   const PACKS = {
+    'hindi-core':['assets/js/data/hindi12-core-text.js'],
+    'hindi-elective':['assets/js/data/hindi12-elective-text.js'],
     maths:   [],
     science: [
       'assets/science/science10.js',
@@ -147,6 +149,7 @@
      downloads it. It loads once when the student enters Class 12 (boot with
      a saved Class 12 scope, a class switch, or a Class 12 deep link). */
   PACKS.class12 = [
+    'assets/js/data/hindi12.js',
     'assets/js/data/chapters12-maths.js',
     'assets/js/data/chapters12-applied-maths.js',
     'assets/js/data/english12.js?v=26ab',
@@ -245,7 +248,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26f27');
+    return loadScript('assets/js/app.js?v=26hi12');
   }
 
   function loadPostPaint() {

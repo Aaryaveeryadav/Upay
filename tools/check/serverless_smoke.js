@@ -99,6 +99,14 @@ async function main() {
     assert.equal(r.body.check.state,'unchecked'); assert.equal(r.body.diagram,null); assert.notEqual(r.body.cached,true);
   }
   assert.equal(providerCalls,beforeEnglish12+2);
+  for(const subject of ['hindi-core','hindi-elective']) {
+    const body={subject,cls:12,board:'cbse',question:'कवि को अपनी स्वर्गीया पत्नी की याद क्यों आई?'};
+    r=await invoke(solve,{method:'POST',token:'valid',body});assert.equal(r.code,200);
+    assert(lastPrompt.includes('CBSE Class 12 Hindi '+(subject==='hindi-core'?'Core':'Elective')));
+    assert.equal(r.body.check.state,'unchecked');assert.match(r.body.check.note,/not checked against an official answer key/);
+    r=await invoke(solve,{method:'POST',token:'valid',body:{...body,board:'rajasthan'}});assert.equal(r.code,422);
+    r=await invoke(solve,{method:'POST',token:'valid',body:{...body,cls:10}});assert.equal(r.code,422);
+  }
   r = await invoke(solve,{method:'POST', token:'valid', body:{question:'Describe electromagnetic induction', subject:'physics', cls:12}});
   assert.equal(r.code,200); assert.match(lastPrompt,/Science teacher/);
   const beforeCache = providerCalls;

@@ -4,7 +4,7 @@ const removed=['accountancy','computerized-accounting','economics','business-stu
 const ctx={window:{UP:{chapters:[]}},console}; ctx.UP=ctx.window.UP;
 vm.runInNewContext(fs.readFileSync('assets/js/data-extra.js','utf8'),ctx);
 const list=Array.from(ctx.UP.classes.find(c=>c.id===12).subjects);
-assert.deepEqual(list,['maths','applied-maths','physics','chemistry','biology','english']);
+assert.deepEqual(list,['maths','applied-maths','physics','chemistry','biology','english','hindi-core','hindi-elective']);
 assert(Array.from(ctx.UP.classes.find(c=>c.id===10).subjects).includes('social'));
 assert(fs.readFileSync('assets/js/data/social-chapters.js','utf8').includes('Economics'),'Class 10 Social Science remains intact');
 for(const s of removed){ assert(!ctx.UP.subjects[s]);assert(!ctx.UP.catalogue(12,s).length); }

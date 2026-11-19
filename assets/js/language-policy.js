@@ -16,7 +16,7 @@
  }
  function issue(q){
   if(!q)return '';
-  const languageSubject=['hindi','english','sanskrit'].includes(q.subject);
+  const languageSubject=['hindi','hindi-core','hindi-elective','english','sanskrit'].includes(q.subject);
   if(!languageSubject&&q.subject)
    return devanagariOnly(q)?'Devanagari-only text in a non-Hindi subject: no English-medium wording was extracted':'';
   if(!languageSubject)return '';
@@ -29,7 +29,7 @@
   return '';
  }
  function contextRequest(question,subject,title){
-  if(!['hindi','english','sanskrit'].includes(subject))return null;
+  if(!['hindi','hindi-core','hindi-elective','english','sanskrit'].includes(subject))return null;
   const q=String(question||'').trim();let error='';
   if(/बरामदा\s*22[.।]?\s*साफ़?,?\s*शुद्ध/.test(q))error='This appears to be a glossary/OCR fragment, not a complete question. Please provide the full question and its source page.';
   else if(!title&&q.length<450&&/पाठ पढ़ते[ -]पढ़ते|इस पाठ|प्रस्तुत पाठ|इस कहानी|this (?:poem|lesson|chapter|passage)/i.test(q))error='Which chapter or passage does this question refer to? Please provide its title or the relevant extract; I will not guess the missing context.';
