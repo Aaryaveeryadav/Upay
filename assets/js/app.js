@@ -1697,14 +1697,28 @@ window.UP = window.UP || {};
         if (j && j.ok && j.question) {
           S.photoState = 'done';
           S.photoPreview = null;
+          /* If the scan lost the grid but kept every number in its row, put the
+             question back into the form the engine (and the model) can read. */
+          let qText = j.question;
+          try {
+            if (UP.matrices && UP.matrices.fromRows) {
+              const rebuilt = UP.matrices.fromRows(qText);
+              if (rebuilt && rebuilt.ok) {
+                qText = rebuilt.text;
+                S.photoNote = S.lang === 'hi'
+                  ? 'फोटो में आव्यूह की पंक्तियाँ बिखरी थीं — उन्हें [[…], […]] रूप में लिखकर हल किया जा रहा है।'
+                  : 'The photo flattened the matrix — its rows were rebuilt as [[…], […]] and are being solved now.';
+              }
+            }
+          } catch (_) {}
           const ta = document.querySelector('form[data-form="ask"] textarea[name="q"]');
-          if (ta) ta.value = j.question;
-          S.photoNote = S.lang === 'hi'
+          if (ta) ta.value = qText;
+          if (!S.photoNote) S.photoNote = S.lang === 'hi'
             ? 'प्रश्न पढ़ लिया गया — उत्तर निकाला जा रहा है। यदि कोई अंक गलत पढ़ा गया हो तो नीचे ठीक करके फिर भेजिए।'
             : 'Question read — solving it now. If a digit was misread, correct it below and send again.';
           paintPhotoStrip();
           /* go straight on to the answer; the text stays editable in the box */
-          go('#/ask?q=' + encodeURIComponent(j.question.trim()));
+          go('#/ask?q=' + encodeURIComponent(qText.trim()));
           if (parseHash().name === 'ask') render();
         } else {
           S.photoState = 'error';
@@ -1791,8 +1805,21 @@ window.UP = window.UP || {};
       if (UP.matrices && ['maths', 'applied-maths'].includes(routeSubject)) {
         const mx = UP.matrices.solve(q);
         if (mx && mx.solved) { q = mx.canonical; matrixSolved = mx; }
-        else if (mx && mx.singular) matrixBlock = 'matrix-singular';
-        else if (UP.matrices.isMatrixQuestion(q)) matrixBlock = 'matrix-repair';
+        else {
+          /* A photo, or a copy out of a PDF, can arrive as loose rows of
+             numbers. Rebuild the grid only when the numbers force one reading
+             and that reading solves with a passing check. */
+          let rebuilt = null;
+          try { rebuilt = UP.matrices.fromRows ? UP.matrices.fromRows(q) : null; } catch (_) { rebuilt = null; }
+          if (rebuilt && rebuilt.ok) {
+            const again = UP.matrices.solve(rebuilt.text);
+            if (again && again.solved) { q = again.canonical; matrixSolved = again; }
+          }
+          if (!matrixSolved) {
+            if (mx && mx.singular) matrixBlock = 'matrix-singular';
+            else if (UP.matrices.isMatrixQuestion(q)) matrixBlock = 'matrix-repair';
+          }
+        }
       }
     } catch (_) {}
     S.aiQuestion = q;
@@ -2553,12 +2580,21 @@ window.UP = window.UP || {};
      drawn. */
   function matrixRepairCard(ans) {
     const hi = S.lang === 'hi';
+    /* Why it could not be read, when we know: rows that came through unevenly
+       mean the scan lost digits, and saying so stops the student hunting for a
+       mistake of their own. */
+    let read = null;
+    try { read = UP.matrices && UP.matrices.fromRows ? UP.matrices.fromRows(ans.question || '') : null; } catch (_) { read = null; }
+    const ragged = read && read.reason === 'ragged';
     return `<div class="callout warn matrix-repair"><div>
       <h3>${hi ? 'आव्यूह के मान साफ़ नहीं पढ़े जा सके' : 'The matrix values could not be read'}</h3>
       <p>${hi
         ? 'प्रश्न के अंकों से आव्यूह का आकार और मान पक्के तौर पर नहीं निकले, इसलिए मैंने अनुमान नहीं लगाया। नीचे मान ठीक करके लिखिए — हल और चित्र ठीक इन्हीं मानों से बनेंगे।'
         : 'The shape and values did not survive the paste, so nothing was guessed. Type or correct the matrices below — the solution and its figure are built from exactly these numbers.'}</p>
       <p class="muted">${hi ? 'जैसा पढ़ा गया:' : 'As read from the question:'} ${esc(String(ans.question || ''))}</p>
+      ${ragged ? `<p class="muted">${hi
+        ? 'पंक्तियाँ असमान आई हैं — कोष्ठकों के साथ कुछ अंक छूट गए। कृपया आव्यूह वैसे ही लिखिए जैसे किताब में हैं।'
+        : 'The rows came through unevenly — some digits were lost with the brackets. Please type the matrices exactly as they are printed.'}</p>` : ''}
       <label class="mini-label" for="matrix-repair-input">${hi ? 'आव्यूह लिखिए' : 'Matrices'}</label>
       <textarea id="matrix-repair-input" rows="4" spellcheck="false" style="width:100%;margin-top:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace"
         placeholder="A = [[2, 1, -1], [1, 2, 1], [3, -1, 2]]&#10;B = [[4, 1], [7, 0], [8, 5]]"></textarea>

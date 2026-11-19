@@ -102,6 +102,30 @@ assert.equal(invAns.result, 'A⁻¹ = [[-2, 1], [3/2, -1/2]]');
 assert.equal((M.matrixHTML(invAns.resultMatrix.rows).match(/mk-cell/g) || []).length, 4);
 assert(invAns.approaches[3].steps[0].m.includes('✓'), 'the multiply-back check passes');
 
+/* A photo or a PDF copy keeps the numbers but loses the grid. The rows are
+   rebuilt only when they force one reading and it solves. */
+const FLAT = 'Find the matrix X if\n2 1 -1 4 1\n1 2 1 7 0\n3 -1 2 8 5';
+const rebuilt = M.fromRows(FLAT);
+assert.equal(rebuilt.ok, true, 'complete rows rebuild into [[…], […]]');
+assert.match(rebuilt.text, /A = \[\[2, 1, -1\], \[1, 2, 1\], \[3, -1, 2\]\]/);
+assert.match(rebuilt.text, /B = \[\[4, 1\], \[7, 0\], \[8, 5\]\]/);
+assert.equal(M.matrixText(rebuilt.res.X), '[[37/18, 10/9], [29/18, -7/9], [31/18, 4/9]]');
+assert.equal(M.solve(rebuilt.text).solved, true, 'the rebuilt question is itself solvable');
+
+/* Rows printed one after another — A's block, then B's. */
+assert.equal(M.fromRows('A:\n2 1 -1\n1 2 1\n3 -1 2\nB:\n4 1\n7 0\n8 5').ok, true);
+
+/* The photo in the report: a digit is gone, so the rows are ragged. Nothing is
+   invented to make a shape work. */
+const LOST = 'Hard Matrix Question: Find the matrix X if\n2 1 -1 41\n: 2 1|X= : 0].\n3 -1 2 8 5';
+const lost = M.fromRows(LOST);
+assert.equal(lost.ok, false);
+assert.equal(lost.reason, 'ragged');
+
+/* Numbers that merely sit on their own lines are not a matrix. */
+assert.equal(M.fromRows('3 4 25\n5 6 41').reason, 'no-signal');
+assert.equal(M.fromRows('A shop sold 3 apples for 25 rupees.').ok, false);
+
 const ansHi = M.answerFor(res, 'hi');
 assert(ansHi.result === ans.result && /सहखंडज/.test(ansHi.approaches[0].name), 'Hindi routes, same numbers');
 

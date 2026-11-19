@@ -29,6 +29,7 @@ jobs:
       - run: node tools/check/ai_diagram_geometry.js
       - run: node tools/check/worked_figures.js
       - run: node tools/check/matrices.js
+      - run: node tools/check/question_audit.js
       - run: node tools/check/answer_format.js
       - run: node tools/check/teacher_voice.js
       - run: node tools/check/prime_power_ratio.js

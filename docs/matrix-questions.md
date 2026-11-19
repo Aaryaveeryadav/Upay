@@ -17,6 +17,22 @@ matrices it used.
 
 ![A 3×3 matrix times X equals a 3×2 matrix, with X = A⁻¹B computed in exact fractions](images/worked-figure-matrix.png)
 
+## A photo of a matrix question
+
+`api/ai/read-image.js` used to ask for a flat transcript, which turned a printed
+`AX = B` into `2 1 -1 41 / : 2 1|X= : 0]. / 3 -1 2 8 5`. Its prompt now keeps the
+grid: one matrix per line in `[[row], [row]]` form, no two matrices on one line,
+no digits run together, `?` for a genuinely illegible digit.
+
+On the client, `UP.matrices.fromRows(text)` rebuilds the grid when the numbers
+force one reading — A's rows and B's rows on the same visual line, or A's block
+followed by B's block — and accepts the reconstruction only if it solves and the
+substitution check passes. `readPhoto` swaps in that rebuilt text before it opens
+the answer, so what the student sees is what was solved. A ragged paste (a digit
+lost) is refused rather than guessed, and the repair card asks for the values.
+
+`docs/question-audit.md` records how 26 question shapes are routed.
+
 ## What happens on Ask
 
 1. **Detection by shape, not vocabulary.** A pasted
