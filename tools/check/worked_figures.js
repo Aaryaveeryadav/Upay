@@ -241,3 +241,19 @@ console.log('PASS worked figures: tower 10√3 m/30 m/10 m, mixed 6 Ω network 2
   'series/parallel chains, mensuration 1540 cm³/440 cm²/748 cm², two-point distance 5 and midpoint (5, 2.5), ' +
   'lens v = 30 cm m = −1 and mirror v = −60 cm m = −3, refusals for ladders, depression, mirror networks, ' +
   'composite solids, ratios and inverse-optics wording, and the older AI/2-resistor renderers unchanged');
+
+/* User's exact symbolic orbit and focal-length-first prose lens. */
+const orbitQuestion = 'A satellite moves in a circular orbit of radius r around Earth. Derive its orbital speed and time period, then find how the time period changes if the orbital radius is doubled.';
+const orbit = wf.forQuestion(orbitQuestion);
+assert(orbit && orbit.type === 'orbit' && orbit.doubled && orbit.radius === null);
+const orbitSvg = svgOf(orbit);
+for (const label of ['Earth', '2r', '2√2 T', 'r³/GM', 'r³ᐟ²']) assert(orbitSvg.includes(label), label);
+assert(clean(orbitSvg) && !orbitSvg.includes('r^'));
+const numericalOrbit = wf.forQuestion('A satellite moves in a circular orbit of radius 7000 km around Earth. Find its speed and time period.');
+assert(numericalOrbit && near(numericalOrbit.speed / 1000, 7.546, .001));
+assert(svgOf(numericalOrbit).includes('7000 km'), 'undoubled orbit must render');
+assert.equal(wf.orbitMotion('An electron moves in a circular orbit around a hydrogen atom.'), null);
+const proseLens = wf.forQuestion('A convex lens of focal length 20cm forms an image of an object placed 30cm from it. Using the lens formula, find the image position and magnification, and state whether the image is real or virtual.');
+assert(proseLens && proseLens.type === 'optics' && near(proseLens.v, 60) && near(proseLens.m, -2));
+for (const label of ['f = 20 cm', 'v = 60 cm']) assert(svgOf(proseLens).includes(label), label);
+console.log('PASS symbolic and numerical circular orbits, and focal-length-first prose lens');

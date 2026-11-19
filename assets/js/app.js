@@ -577,6 +577,16 @@ window.UP = window.UP || {};
     .replace(/\n/g, '<br>');
   const mathText = s => UP.mathRender ? UP.mathRender.math(s) : esc(s).replace(/«([^»]*)»/g, '$1');
 
+  /* A question pasted out of a PDF or a rendered page arrives as a column of
+     fragments; paste-repair.js rebuilds the sentence. It is applied to the
+     ask box and to the route, never to the source banks, and the student is
+     told when the text changed — nothing is rewritten silently. */
+  const tidyQuestion = value => {
+    const raw = String(value == null ? '' : value);
+    if (!UP.pasteRepair) return raw;
+    try { return UP.pasteRepair.tidy(raw).text; } catch (_) { return raw; }
+  };
+
   /* --------------------------- persistence --------------------------- */
   const saveState = () => { store.set('lang', S.lang); store.set('cls', S.cls); store.set('subject', S.subject); store.set('board', S.board); };
   const saveSaved = () => store.set(S.savedKey, S.saved);
@@ -1582,7 +1592,7 @@ window.UP = window.UP || {};
       </div>
       <form class="askbox" data-form="ask">
         <div class="askbox-inner">
-          <textarea name="q" rows="2" placeholder="${t('askPlaceholder')}" aria-label="${t('askTitle')}">${esc(UP.answerFormat.question(params.q || ''))}</textarea>
+          <textarea name="q" rows="2" placeholder="${t('askPlaceholder')}" aria-label="${t('askTitle')}">${esc(tidyQuestion(UP.answerFormat.question(params.q || '')))}</textarea>
           <button class="photo-btn" type="button" data-action="cameraOCR"
             title="${S.lang === 'hi' ? 'कैमरे से प्रश्न पढ़ें' : 'Scan a question with camera'}"
             aria-label="${S.lang === 'hi' ? 'कैमरे से प्रश्न पढ़ें' : 'Scan a question with camera'}">
@@ -2020,24 +2030,43 @@ window.UP = window.UP || {};
     try { controller = new AbortController(); } catch(e) { controller = null; }
     // Allow the server's 50-second provider budget, authentication and transport.
     // Keep the timer alive while reading the response body as well.
-    const clientTimeout = setTimeout(() => { if (controller) controller.abort(); }, timing.clientMs);
-    let req;
-    try {
-      if (typeof fetch !== 'function') { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'इस ब्राउज़र में नेटवर्क उपलब्ध नहीं' : 'no network available here', true); return; }
-      req = fetch('/api/ai/solve', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', authorization: 'Bearer ' + (localStorage.getItem('upay.token') || '') },
-        body: JSON.stringify({ question: q, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0), chapterTitle:!routing.changed&&chapterContext?P(chapterContext):'', subject: routing.subject, selectedSubject:S.subject, cls: S.cls, lang:responseLang }),
-        signal: controller ? controller.signal : undefined
-      });
-    } catch (e) { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'नेटवर्क से संपर्क नहीं हुआ' : 'could not reach the server', true); return; }
-    req.then(r => {
+    let clientTimeout = setTimeout(() => { if (controller) controller.abort(); }, timing.clientMs);
+    /* The provider occasionally hands back an unusable draft on the first ask
+       and a complete answer on the second. The student used to have to press
+       "Try again" to discover that; now the app asks once more itself, with
+       a fresh bounded deadline, and only then reports the failure. */
+    const payload = JSON.stringify({ question: q, chapter: routing.changed ? 0 : (chapterById(S.chapterId) ? S.chapterId : 0), chapterTitle:!routing.changed&&chapterContext?P(chapterContext):'', subject: routing.subject, selectedSubject:S.subject, cls: S.cls, lang:responseLang });
+    const send = () => fetch('/api/ai/solve', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: 'Bearer ' + (localStorage.getItem('upay.token') || '') },
+      body: payload,
+      signal: controller ? controller.signal : undefined
+    }).then(r => {
       if (!r) throw new Error('no response');
       return r.json().catch(e => {
         if (controller && controller.signal.aborted) throw e;
-        return { error: 'The server returned an unreadable answer. Your question is preserved; try again.' };
+        return { error: 'The server returned an unreadable answer. Your question is preserved; try again.', fallback: true };
       }).then(j => ({ ok: r.ok, j }));
-    })
+    });
+    /* An unusable / unexpected / short answer is the provider's own "try
+       again", not a refusal: an access, quota or timeout reply is never
+       retried here. */
+    const worthRetry = x => x && x.fallback === true && !x.code &&
+      /try again|could not provide/i.test(String(x.error || ''));
+    let req, retried = false;
+    try {
+      if (typeof fetch !== 'function') { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'इस ब्राउज़र में नेटवर्क उपलब्ध नहीं' : 'no network available here', true); return; }
+      req = send();
+    } catch (e) { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'नेटवर्क से संपर्क नहीं हुआ' : 'could not reach the server', true); return; }
+    req
+      .then(({ ok, j }) => {
+        const incomplete = ok && (!j || (!j.code && !j.offline && (!Array.isArray(j.approaches) || j.approaches.length < 4)));
+        if ((!incomplete && (ok || !worthRetry(j))) || !isCurrent()) return { ok, j };
+        retried = true;
+        clearTimeout(clientTimeout);
+        clientTimeout = setTimeout(() => { if (controller) controller.abort(); }, timing.clientMs);
+        return send();
+      })
       .then(({ ok, j }) => {
         clearTimeout(clientTimeout); clearTimeout(slowTimer);
         if (!isCurrent()) return;
@@ -2054,9 +2083,15 @@ window.UP = window.UP || {};
           S.aiErrorCode = j && j.code || '';
         S.aiRetryAt = j && Number.isFinite(j.retryAfter) && j.retryAfter > 0 ? Date.now() + j.retryAfter*1000 : 0;
         const retryHint = j && Number.isFinite(j.retryAfter) && j.retryAfter > 0 ? ' Retry after '+Math.ceil(j.retryAfter)+' seconds.' : '';
-        const note = (j && j.offline)
+        let note = (j && j.offline)
             ? (S.lang === 'hi' ? 'आप ऑफ़लाइन हैं — बिल्ट-इन हल दिखाया जा रहा है' : 'You are offline — showing the built-in solver')
             : (j && j.error) ? j.error + retryHint : (S.lang === 'hi' ? 'एआई से जवाब नहीं आया' : 'The AI did not return an answer.');
+        /* Say when the app already asked a second time, so "try again" does
+           not look like the student's only option was never tried. */
+        if (retried && worthRetry(j)) {
+          note = note.replace(/\s*Please try again\.?\s*$/i, '') +
+            (S.lang === 'hi' ? ' दो बार कोशिश की गई — फिर कोशिश करें।' : ' Two attempts were made — try once more.');
+        }
           /* Only a genuine timeout earns the extra requests: an access,
              quota or "could not answer" reply is reported as it always was,
              and a still-arriving answer is not duplicated. */
@@ -2151,6 +2186,9 @@ window.UP = window.UP || {};
     if (['hindi', 'english', 'sanskrit', 'social', 'accountancy', 'computerized-accounting', 'economics', 'business-studies'].includes(subject)) return '';
     if (spec.type === 'matrix') return ['maths', 'applied-maths'].includes(subject) ? subject : '';
     if (spec.type === 'circuit') return ['physics', 'science', 'chemistry', 'biology'].includes(subject) ? subject : '';
+    /* An orbit belongs to physics: the same words in a Geography answer are
+       about the Earth, not about a satellite's speed. */
+    if (spec.type === 'orbit') return ['physics', 'science'].includes(subject) ? subject : '';
     return subject;
   }
   function workedFigureFor(question) {
@@ -7203,7 +7241,7 @@ window.UP = window.UP || {};
     const form = e.target.closest('form[data-form]');
     if (!form) return;
     e.preventDefault();
-    const q = UP.answerFormat.question((form.querySelector('textarea[name="q"]') || {}).value || '');
+    const q = tidyQuestion(UP.answerFormat.question((form.querySelector('textarea[name="q"]') || {}).value || ''));
     if (!q.trim()) { (form.querySelector('textarea') || {}).focus?.(); return; }
     go(`#/ask?q=${encodeURIComponent(q.trim())}`, true);
   });
@@ -7351,7 +7389,7 @@ window.UP = window.UP || {};
     const ta = e.target.closest('textarea[name="q"]');
     if (ta && e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      const q = UP.answerFormat.question(ta.value).trim(); if (!q) return;
+      const q = tidyQuestion(UP.answerFormat.question(ta.value)).trim(); if (!q) return;
       go(`#/ask?q=${encodeURIComponent(q)}`);
     }
   });
@@ -7360,11 +7398,35 @@ window.UP = window.UP || {};
     const ta = e.target.closest && e.target.closest('textarea[name="q"]');
     if (!ta || !e.clipboardData) return;
     const raw = e.clipboardData.getData('text/plain');
-    const clean = UP.answerFormat.question(raw);
-    if (clean === raw) return;
+    const formatted = UP.answerFormat.question(raw);
+    let repaired = { text: formatted, changed: formatted !== raw };
+    if (UP.pasteRepair) {
+      try {
+        const tidy = UP.pasteRepair.tidy(formatted);
+        repaired = { text: tidy.text, changed: tidy.changed || formatted !== raw };
+      } catch (_) { /* a broken repair must never block the paste */ }
+    }
+    if (repaired.text === raw) return;
     e.preventDefault();
-    ta.setRangeText(clean, ta.selectionStart, ta.selectionEnd, 'end');
+    ta.setRangeText(repaired.text, ta.selectionStart, ta.selectionEnd, 'end');
     ta.dispatchEvent(new Event('input', {bubbles:true}));
+    if (!repaired.changed) return;
+    /* The paste was rebuilt, not retyped: say so, so that a wrong sign or a
+       wrong number stays the student's decision instead of a silent rewrite. */
+    const form = ta.closest('form');
+    const meta = form && form.querySelector('.askbox-meta');
+    if (!meta) return;
+    let note = meta.querySelector('.paste-note');
+    if (!note) {
+      note = document.createElement('span');
+      note.className = 'chip paste-note';
+      note.setAttribute('role', 'status');
+      note.style.cssText = 'background:#fff;border-style:dashed;max-width:32ch;text-align:left';
+      meta.appendChild(note);
+    }
+    note.textContent = S.lang === 'hi'
+      ? 'पेस्ट किया गया प्रश्न व्यवस्थित किया गया — अंक और चिह्न जाँच लें।'
+      : 'Pasted question tidied up — check the numbers and signs.';
   });
 
   window.addEventListener('hashchange', render);

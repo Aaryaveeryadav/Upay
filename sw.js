@@ -1,6 +1,6 @@
-/* Upay service worker — offline shell + public asset caching (v26f23).
+/* Upay service worker — offline shell + public asset caching (v26f24).
    API responses are deliberately never stored: they can be user-specific. */
-const VERSION = 'upay-v26f23';
+const VERSION = 'upay-v26f24';
 const ASSET_CACHE = VERSION + '-assets';
 const PRECACHE = [
   '/',
@@ -9,17 +9,18 @@ const PRECACHE = [
   '/assets/brand/kritin-logo.png',
   '/assets/brand/kritin-icon-192.png',
   '/assets/brand/kritin-icon-512.png',
-  '/assets/css/app.css?v=26f23',
-  '/assets/js/boot.js?v=26f23',
+  '/assets/css/app.css?v=26f24',
+  '/assets/js/boot.js?v=26f24',
   '/assets/js/question-quality.js?v=26f15',
   '/assets/js/data/question-overrides.js?v=26f15',
   '/assets/js/testgen.js?v=26f14',
   '/assets/js/mock-assessment.js?v=26f15',
-  '/assets/js/figures.js?v=26f23',
-  '/assets/js/matrices.js?v=26f23',
-  '/assets/js/worked-figure.js?v=26f23',
-  '/assets/js/solve-parts.js?v=26f23',
-  '/assets/js/app.js?v=26f23',
+  '/assets/js/figures.js?v=26f24',
+  '/assets/js/paste-repair.js?v=26f24',
+  '/assets/js/matrices.js?v=26f24',
+  '/assets/js/worked-figure.js?v=26f24',
+  '/assets/js/solve-parts.js?v=26f24',
+  '/assets/js/app.js?v=26f24',
 ];
 
 self.addEventListener('install', ev => {

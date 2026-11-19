@@ -16,6 +16,10 @@ const {chromium}=require('playwright');
   await ta.fill('Prefix ');
   await ta.evaluate((el,raw)=>{el.setSelectionRange(0,el.value.length);const data=new DataTransfer();data.setData('text/plain',raw);el.dispatchEvent(new ClipboardEvent('paste',{clipboardData:data,bubbles:true,cancelable:true}));},raw);
   assert.equal(await ta.inputValue(),expected,'paste should replace selection and unwrap math formatting');
+  const fragments = 'Find the intervals on which\nf\n(\nx\n)\n=\nx\n3\n−\n3\nx\n2\n−\n9\nx\n+\n5\nis increasing or decreasing.';
+  await ta.evaluate((el,raw)=>{el.setSelectionRange(0,el.value.length);const data=new DataTransfer();data.setData('text/plain',raw);el.dispatchEvent(new ClipboardEvent('paste',{clipboardData:data,bubbles:true,cancelable:true}));},fragments);
+  assert.match(await ta.inputValue(), /x³ − 3x² − 9x \+ 5/);
+  assert.match(await page.locator('.paste-note').innerText(), /check the numbers and signs/);
   // Use a separate, unsupported prompt for the delayed-provider UX check;
   // the original perfect-square example now has an exact instant solver.
   const submitted = expected + ' Explain each step.';

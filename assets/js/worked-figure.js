@@ -550,15 +550,30 @@
       const before = t.slice(Math.max(0, start - 50), start);
       const after = t.slice(end, end + 30);
       /* the focal length is the lens's, not the object's; an object's height
-         is a length but not a distance along the axis */
+         is a length but not a distance along the axis. English puts the words
+         before the number ("of focal length 20 cm"), Hindi puts them after
+         ("20 सेमी फोकस दूरी"), so both sides are checked. */
       if (/^\s*(?:focal|फोकस|tall|ऊँचाई|लंबा|लम्बा)|^\s*(?:is\s+the\s+)?focal/i.test(after)) continue;
+      if (/(?:focal\s*length|फोकस\s*दूरी|\bf)\s*(?:of\s*)?(?:is\s*)?=\s*$/i.test(before)) continue;
       dists.push({ v: Number(m[1]), start: start, before: before, after: after, clause: clauseOf(start) });
     }
-    const hasObject = (str) => /object|वस्तु/i.test(str);
-    const hasImage = (str) => /image|प्रतिबिम्ब|screen|स्क्रीन/i.test(str);
-    const objectish = dists.filter(d => hasObject(d.before) && !hasImage(d.before));
-    const byClause = dists.filter(d => hasObject(d.clause) && !hasImage(d.clause));
-    const candidate = objectish.length === 1 ? objectish : (objectish.length === 0 && byClause.length === 1 ? byClause : []);
+    /* A clause often names both ("forms an image of an object placed 30 cm").
+       Whichever word sits closest to the number is the one it belongs to, so
+       the nearest keyword wins instead of any keyword anywhere in the clause. */
+    const objects = /object|वस्तु/gi, images = /image|प्रतिबिम्ब|screen|स्क्रीन/gi;
+    const lastIndex = (str, re) => {
+      let at = -1, m2;
+      re.lastIndex = 0;
+      while ((m2 = re.exec(str))) at = Math.max(at, m2.index + m2[0].length);
+      return at;
+    };
+    const owner = (str) => {
+      const o = lastIndex(str, objects), i = lastIndex(str, images);
+      return o >= 0 && o > i ? 'object' : '';
+    };
+    const nearby = dists.filter(d => owner(d.before) === 'object');
+    const byClause = dists.filter(d => owner(d.clause) === 'object' && !/image|प्रतिबिम्ब|screen|स्क्रीन/i.test(d.clause));
+    const candidate = nearby.length === 1 ? nearby : (nearby.length === 0 && byClause.length === 1 ? byClause : []);
     if (candidate.length !== 1) return null;
     const d = candidate[0].v;
     if (!(d > 0) || d > 2000) return null;
@@ -604,6 +619,66 @@
     };
   }
 
+  /* -------------------------------------------------- satellite in orbit */
+
+  /* A satellite in a circular orbit is a circle with r, v and T on it, and —
+     when the question asks what doubling r does — the doubled orbit drawn
+     dashed with the exact factor. GM for Earth is the only constant used and
+     nothing is invented: a symbolic question gets symbols, a numeric one gets
+     the values computed from its own radius. */
+  function orbitMotion(text) {
+    const t = normalise(text);
+    if (!/satell?ite|उपग्रह/i.test(t)) return null;
+    if (!/orbit|कक्षा/i.test(t)) return null;
+    if (!/circular|वृत्तीय|vrittiya/i.test(t)) return null;
+    if (!/earth|पृथ्वी/i.test(t)) return null;
+    /* an elliptical or escape-velocity question is a different figure */
+    if (/elliptical|दीर्घवृत्त|escape\s+velocity|पलायन\s+वेग/i.test(t)) return null;
+
+    const GM = 3.986004418e14;                 /* m³ s⁻², Earth */
+    const rEarth = 6.371e6;                    /* m */
+    const doubled = /doubl|twice|दोगुना|दुगना/i.test(t);
+
+    /* "radius 7000 km", "r = 7.0 × 10^6 m", "7000 किमी त्रिज्या" */
+    let radius = null, stated = '';
+    const rm = t.match(/(?:radius|r|त्रिज्या)\s*(?:of|=|is|की|का)?\s*([\d]+(?:\.\d+)?)\s*(?:[×x]\s*10\s*\^?\s*(\d+))?\s*(km|kilometres?|kilometers?|किमी|m\b|मीटर)/i);
+    if (rm) {
+      let value = Number(rm[1]);
+      if (rm[2]) value *= Math.pow(10, Number(rm[2]));
+      const km = /km|kilomet|किमी/i.test(rm[3]);
+      radius = km ? value * 1000 : value;
+      if (!(radius > rEarth) || radius > 1e9) return null;
+      stated = decimal(km ? radius / 1000 : radius) + (km ? ' km' : ' m');
+    }
+
+    const answer = [];
+    let speed = null, period = null;
+    if (radius) {
+      speed = Math.sqrt(GM / radius);
+      period = (2 * Math.PI * radius) / speed;
+      answer.push('v = √(GM/r) ≈ ' + decimal(speed / 1000) + ' km/s');
+      answer.push('T = 2πr/v ≈ ' + decimal(period) + ' s ≈ ' +
+        decimal(period / 3600) + ' h');
+    } else {
+      answer.push('v = √(GM/r)');
+      answer.push('T = 2πr/v = 2π√(r³/GM)');
+    }
+    if (doubled) {
+      const factor = 2 * Math.SQRT2;                        /* T ∝ r³ᐟ² */
+      answer.push(radius
+        ? 'r doubled → T′ = 2√2 T ≈ ' + decimal(factor * period / 3600) + ' h (' +
+          decimal(factor) + '× longer), v′ = v/√2 ≈ ' + decimal(speed / Math.SQRT2 / 1000) + ' km/s'
+        : 'r doubled → T′ = 2√2 T ≈ ' + decimal(factor) + ' T, v′ = v/√2 ≈ 0.71 v');
+    }
+    return {
+      type: 'orbit', verified: true, radius: radius, stated: stated, doubled: doubled,
+      speed: speed, period: period, answer: answer,
+      caption: 'The orbit is the circle the question names' +
+        (doubled ? '; the dashed circle is the doubled radius the question asks about.' : '.') +
+        ' Earth’s GM = 3.986 × 10¹⁴ m³ s⁻² is the only constant used, and T ∝ r³ᐟ² gives the 2√2 factor.'
+    };
+  }
+
   function forQuestion(question) {
     const text = normalise(question);
     if (!text || text.length > 900) return null;
@@ -613,6 +688,7 @@
     if (!spec) { try { spec = mensurationSolid(text); } catch (_) { spec = null; } }
     if (!spec) { try { spec = coordinatePoints(text); } catch (_) { spec = null; } }
     if (!spec) { try { spec = opticsRay(text); } catch (_) { spec = null; } }
+    if (!spec) { try { spec = orbitMotion(text); } catch (_) { spec = null; } }
     return spec && spec.answer && spec.answer.length ? spec : null;
   }
 
@@ -621,7 +697,7 @@
     withUnitExactFirst: withUnitExactFirst,
     heightsAndDistances: heightsAndDistances, resistorNetwork: resistorNetwork,
     mensurationSolid: mensurationSolid, coordinatePoints: coordinatePoints, opticsRay: opticsRay,
-    computeNetwork: computeNetwork, forQuestion: forQuestion
+    computeNetwork: computeNetwork, orbitMotion: orbitMotion, forQuestion: forQuestion
   };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.UP = root.UP || {};

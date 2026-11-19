@@ -25,3 +25,14 @@ assert.equal(f.question('Plain text n^2 should stay unchanged'),'Plain text n^2 
 assert.equal(f.question(String.raw`Path C:\notes\chapter`),String.raw`Path C:\notes\chapter`);
 assert.equal(f.question(f.question(pasted)),pasted);
 console.log('PASS single/double-escaped pasted TeX, idempotence and unchanged plain text');
+
+/* Unsupported Unicode sub/superscripts remain structured for the safe renderer. */
+const vm=require('node:vm'),fs=require('node:fs');
+const context={UP:{}};context.window=context;vm.createContext(context);
+vm.runInContext(fs.readFileSync('assets/js/math-render.js','utf8'),context);
+for(const [input,expected] of [[String.raw`Z_{AB}`, '<sub class="math-script">AB</sub>'], [String.raw`e^{-E_a/RT}`, '<sup class="math-script">−Eₐ/RT</sup>']]) {
+  const result=f.text(input.replace('-', '−'));
+  assert(context.UP.mathRender.math(result).includes(expected), `${result} should render as ${expected}`);
+  assert.equal(f.text(result),result);
+}
+console.log('PASS grouped subscripts and exponents render safely and remain idempotent');
