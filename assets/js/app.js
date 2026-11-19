@@ -2306,6 +2306,21 @@ window.UP = window.UP || {};
     }
     return fig;
   }
+  /* A long question answered in parts: say so while the methods arrive, and
+     offer the missing ones again rather than silently coming up short. */
+  function partsNoteFor(answer) {
+    const parts = answer && answer._parts && typeof answer._parts === 'object' ? answer._parts : null;
+    if (!parts) return '';
+    const shown = UP.solveParts ? UP.solveParts.status({ answer: answer, done: parts.done, failed: parts.failed || 0 }, S.lang) : '';
+    const retry = parts.done && parts.have < parts.want
+      ? `<button class="btn btn-ghost btn-sm" style="margin-top:8px" data-action="more-approaches">${S.lang === 'hi' ? 'शेष तरीके फिर माँगें' : 'Request the missing methods'}</button>`
+      : '';
+    if (!shown && !retry) return '';
+    return `<div class="callout parts-note" style="margin-top:12px">
+          ${icon('clock')}
+          <div><div data-parts>${esc(shown)}</div>${retry}</div>
+        </div>`;
+  }
   function renderAIAnswer(a) {
     const clarification=UP.squareInteger.clarification(a.question || S.aiQuestion || '');
     if(clarification)return renderAnswer({kind:'question-clarification',question:a.question||S.aiQuestion,...clarification});
@@ -2340,6 +2355,7 @@ window.UP = window.UP || {};
               : mathText(a.result)}</span></div>
         </div>
       </div>
+      ${partsNoteFor(a)}
       ${fig}
       <div class="section-head" data-approaches-heading style="margin:6px 0 0"><div><h2 style="font-size:20px">${theory ? (S.lang === 'hi' ? 'अलग तरीकों से समझें' : 'Different ways to understand') : t('approaches')}</h2></div></div>
       ${a.methodsShort ? `<div class="callout warn" style="margin:0 0 14px">${icon('info')}<div>${esc(a.methodsNote || (S.lang === 'hi' ? 'इस प्रश्न में वास्तव में इतनी ही विधियाँ हैं।' : 'This question genuinely has only this many routes.'))}</div></div>` : ''}
@@ -2772,25 +2788,12 @@ window.UP = window.UP || {};
       } else if (claim) localBadge = checkBadge({ state: 'unchecked' }, false);
     } catch (e) { /* a missing checker must never break the answer */ }
     const isLoading = ans._loading === true;
-    /* A long question answered in parts: say so while the methods arrive, and
-       offer the missing ones again rather than silently coming up short. */
-    const parts = ans._parts && typeof ans._parts === 'object' ? ans._parts : null;
-    const partsNote = parts
-      ? `<div class="callout parts-note" style="margin-top:12px">
-          ${icon('clock')}
-          <div><div data-parts>${esc(UP.solveParts ? UP.solveParts.status({ answer: ans, done: parts.done, failed: parts.failed || 0 }, S.lang) : '')}</div>
-          ${parts.done && parts.have < parts.want
-            ? `<button class="btn btn-ghost btn-sm" style="margin-top:8px" data-action="more-approaches">${S.lang === 'hi' ? 'शेष तरीके फिर माँगें' : 'Request the missing methods'}</button>`
-            : ''}</div>
-        </div>`
-      : '';
     const answerRoute = UP.taskRouting.resolve(ans.question || S.aiQuestion || '', S.subject);
     const answerSubject = P(UP.subjects[answerRoute.subject]) || answerRoute.subject;
     return `
     <section class="answer">
       ${localBadge}
       ${!isLoading && !parts && methods.length < 4 ? '<p class="muted">' + (S.lang === 'hi' ? 'स्थानीय प्रारंभिक हल; चार पूर्ण तरीकों के लिए AI उत्तर माँगें।' : 'Local starter solution only; request an AI answer for four complete approaches.') + '</p>' : ''}
-      ${isLoading ? '' : partsNote}
       <div class="answer-head">
         <div class="meta-row">
           <span class="tag">${esc(ch && !answerRoute.changed ? P({ en: ch.en, hi: ch.hi }) : (isLoading ? (S.lang==='hi'?'एआई':'AI') : (S.lang === 'hi' ? 'अवधारणा' : 'Concept')))}</span>
