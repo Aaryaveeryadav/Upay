@@ -145,6 +145,64 @@
     return respace(kept.join(' '));
   }
 
+  /* Plain-text copies of rendered maths may contain each coordinate and
+     equation twice. Only collapse exact copies when at least two independent
+     mathematical duplicates are present; do not rewrite ordinary repetition. */
+  function repairDuplicatePlainMath(text) {
+    let count = 0;
+    let out = text.replace(/\b([A-Z])\s*\(\s*([+−-]?\d+)\s*,\s*([+−-]?\d+)\s*\)\s*\1\s*\(\s*([+−-]?\d+)\s*,\s*([+−-]?\d+)\s*\)/g,
+      (all, name, x, y, x2, y2) => {
+        if (x.replace('−','-') !== x2.replace('−','-') || y.replace('−','-') !== y2.replace('−','-')) return all;
+        count++; return name+'('+x+','+y+')';
+      });
+    out = out.replace(/\b([a-z])\s*=\s*([a-z])\s*([+−-])\s*(\d+)\s*\1\s*=\s*\2\s*([+−-])\s*(\d+)/gi,
+      (all,a,b,op,n,op2,n2) => {
+        if (op.replace('−','-') !== op2.replace('−','-') || n !== n2) return all;
+        count++; return a+' = '+b+' '+op+' '+n;
+      });
+    if (count < 2) return text;
+    return out.replace(/\b([A-Z])\s+\1(?=\s+(?:divides|lies)\b)/g, '$1')
+      .replace(/\b([a-z])\s*:\s*(\d+)\s+\1\s*:\s*\2\b/g, '$1:$2');
+  }
+
+  /* Web math renderers often put both MathML and visual spans on the
+     clipboard. Read just the semantic MathML, never both copies. If any
+     notation is unsupported, leave the plain clipboard untouched. */
+  function fromHTML(html, parser) {
+    if (!html || !parser) return null;
+    try {
+      const doc = parser.parseFromString(html, 'text/html');
+      doc.querySelectorAll('script,style,template').forEach(n => n.remove());
+      const maths = Array.from(doc.querySelectorAll('math'));
+      if (!maths.length) return null;
+      function math(node) {
+        if (node.nodeType === 3) return node.nodeValue;
+        if (node.nodeType !== 1) return '';
+        const tag = node.localName.toLowerCase();
+        const children = Array.from(node.childNodes).filter(n => n.nodeType === 1 || (n.nodeType === 3 && n.nodeValue.trim()));
+        if (tag === 'annotation' || tag === 'annotation-xml') return '';
+        if (tag === 'semantics') { const first = children.find(n => n.nodeType === 1 && !/^annotation/.test(n.localName)); return first ? math(first) : null; }
+        const parts = children.map(math); if (parts.some(p => p === null)) return null;
+        if (tag === 'mfrac' && parts.length === 2) return '('+parts[0]+')/('+parts[1]+')';
+        if (tag === 'msup' && parts.length === 2) return '('+parts[0]+')^('+parts[1]+')';
+        if (tag === 'msub' && parts.length === 2) return parts[0]+'_('+parts[1]+')';
+        if (tag === 'msqrt') return '√('+parts.join('')+')';
+        if (['math','mrow','mi','mn','mo','mtext','mstyle','mpadded'].includes(tag)) return parts.join('');
+        return null;
+      }
+      for (const m of maths) {
+        const value = math(m); if (value === null || !value.trim()) return null;
+        // KaTeX/MathJax wraps accessibility and visual representations together.
+        const wrapper = m.closest('.katex, mjx-container, .MathJax');
+        const target = wrapper || m;
+        target.replaceWith(doc.createTextNode(value));
+      }
+      doc.querySelectorAll('br').forEach(n => n.replaceWith(doc.createTextNode('\n')));
+      doc.querySelectorAll('p,div,li').forEach(n => n.appendChild(doc.createTextNode('\n')));
+      return (doc.body.textContent || '').replace(/\u00a0/g,' ').replace(/[ \t]*\n[ \t]*/g,'\n').trim() || null;
+    } catch (_) { return null; }
+  }
+
   /* Returns { text, changed }. */
   function tidy(raw, options) {
     const opts = options || {};
@@ -152,6 +210,12 @@
     let text = original.replace(/\r\n?/g, '\n');
     let changed = false;
 
+    // A rendered variable followed by its Markdown duplicate, e.g. P*P*.
+    // Only collapse an exact adjacent copy; never infer missing fractions.
+    const inline = text.replace(/\b([A-Za-z])\s*\*\1\*/g, '$1');
+    if (inline !== text) { text = inline; changed = true; }
+    const repeated = repairDuplicatePlainMath(text);
+    if (repeated !== text) { text = repeated; changed = true; }
     const duplicated = repairDuplicatedInlineMath(text);
     if (duplicated !== text) { text = duplicated; changed = true; }
 
@@ -174,7 +238,7 @@
     return { text: text, changed: changed && text !== original };
   }
 
-  const api = { tidy: tidy, isTokenSoup: isTokenSoup, joinFragments: joinFragments, restorePowers: restorePowers, repairCalculus: repairCalculus, repairDuplicatedInlineMath: repairDuplicatedInlineMath };
+  const api = { fromHTML: fromHTML, repairDuplicatePlainMath: repairDuplicatePlainMath, tidy: tidy, isTokenSoup: isTokenSoup, joinFragments: joinFragments, restorePowers: restorePowers, repairCalculus: repairCalculus, repairDuplicatedInlineMath: repairDuplicatedInlineMath };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else { root.UP = root.UP || {}; root.UP.pasteRepair = api; }
 })(typeof window === 'undefined' ? globalThis : window);

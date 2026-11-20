@@ -1084,7 +1084,7 @@ window.UP = window.UP || {};
     rail.innerHTML = `
       <a class="brand" href="#/home" aria-label="Kritin Upaay home">
         <span class="brand-mark"><img src="/assets/brand/kritin-logo.png" alt="" width="54" height="48"></span>
-        <span class="brand-name">Kritin Upaay<span>${t('brandSub')}</span></span>
+        <span class="brand-name">Kritin उpaay<span>${t('brandSub')}</span></span>
       </a>
       <nav class="nav" aria-label="${S.lang === 'hi' ? 'अनुभाग' : 'Sections'}">
         <span class="nav-label">${t('learn')}</span>
@@ -2036,6 +2036,8 @@ window.UP = window.UP || {};
     const chapterContext=hindi12Track() ? catalogue().find(c=>q.startsWith(c.book + ' · ' + c.hi)) || chapterById(S.chapterId) : mappedChapters.length===1?chapterById(mappedChapters[0]):chapterById(S.chapterId);
     const languageContext=UP.languagePolicy.contextRequest(q,routing.subject,chapterContext&&P(chapterContext));
     if(languageContext){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'language-context',question:q,...languageContext};paint();return;}
+    const checkedRequest = UP.requestAccuracy && UP.requestAccuracy.solve(q);
+    if (checkedRequest) { checkedRequest.subjectRouting = routing; S.aiAnswer = checkedRequest; S.aiState = 'done'; paint(); return; }
     const chargeExact = UP.chargeEnergy && UP.chargeEnergy.solve(q, responseLang);
     if (chargeExact) { chargeExact.subjectRouting = routing; S.aiAnswer = chargeExact; S.aiState = 'done'; paint(); return; }
     const clarification=UP.squareInteger.clarification(q);
@@ -2049,7 +2051,7 @@ window.UP = window.UP || {};
       S.aiState = 'local';
       S.aiNote = note || '';
       S.aiRetry = !!showRetry;
-      if (needsAIOnly() || routing.task === 'writing' || !['maths','applied-maths'].includes(routing.subject)) {
+      if (!S.answer || S.answer.kind === 'ai-waiting' || needsAIOnly() || routing.task === 'writing' || !['maths','applied-maths'].includes(routing.subject)) {
         S.aiAnswer = null;
         S.answer = { kind: isAccountancyTrack() ? 'accountancy-unavailable' : 'no-local-solver', question: q,
           note: /built-in solver|बिल्ट-इन हल/.test(note || '') ? '' : (note || '') };
@@ -2112,7 +2114,8 @@ window.UP = window.UP || {};
     } catch (e) { clearTimeout(slowTimer); clearTimeout(clientTimeout); goLocal(S.lang === 'hi' ? 'नेटवर्क से संपर्क नहीं हुआ' : 'could not reach the server', true); return; }
     req
       .then(({ ok, j }) => {
-        const incomplete = ok && (!j || (!j.code && !j.offline && (!Array.isArray(j.approaches) || j.approaches.length < 4)));
+        const minimum = routing.task === 'writing' ? 1 : 4;
+        const incomplete = ok && (!j || (!j.code && !j.offline && (!Array.isArray(j.approaches) || j.approaches.length < minimum)));
         if ((!incomplete && (ok || !worthRetry(j))) || !isCurrent()) return { ok, j };
         retried = true;
         clearTimeout(clientTimeout);
@@ -2122,7 +2125,7 @@ window.UP = window.UP || {};
       .then(({ ok, j }) => {
         clearTimeout(clientTimeout); clearTimeout(slowTimer);
         if (!isCurrent()) return;
-        if (ok && j && j.approaches && j.approaches.length >= 4) {
+        if (ok && j && j.approaches && j.approaches.length >= (routing.task === 'writing' ? 1 : 4)) {
           j = UP.answerFormat.answer(j);
           j.question = q; j.subjectRouting = routing; j.chapterTitle=chapterContext?P(chapterContext):'';
           j._chId = S.chapterId || 0;
@@ -2491,7 +2494,7 @@ window.UP = window.UP || {};
           <button class="btn btn-ghost btn-sm" data-action="share">${icon('share')} ${S.lang === 'hi' ? 'शेयर' : 'Share'}</button>
           <button class="btn btn-ghost btn-sm" data-action="print">${icon('print')} ${t('print')}</button>
           <button class="btn btn-ghost btn-sm" data-action="shareImage">${icon('share')} ${S.lang==='hi'?'चित्र':'Image'}</button>
-          ${needsAIOnly() ? '' : `<button class="btn btn-ghost btn-sm" data-action="askLocal">${icon('list')} ${S.lang === 'hi' ? 'अंतर्निहित हल भी देखें' : 'Also see the built-in solution'}</button>`}
+          ${needsAIOnly() || !S.answer || S.answer.kind === 'ai-waiting' ? '' : `<button class="btn btn-ghost btn-sm" data-action="askLocal">${icon('list')} ${S.lang === 'hi' ? 'अंतर्निहित हल भी देखें' : 'Also see the built-in solution'}</button>`}
           <button class="btn btn-ghost btn-sm" data-action="newQuestion">${icon('plus')} ${t('newQ')}</button>
         </div>
       </div>
@@ -2504,7 +2507,7 @@ window.UP = window.UP || {};
     const localHit = S.answer && S.answer._ver === 'passed';
     const cached = a._id && UP.answers && UP.answers.get(a._id);
     let level, cls, icon_, label;
-    if (a.source === 'exact') { level='verified'; cls='ok'; icon_='check'; label=a.kind === 'charge-energy' ? (S.lang==='hi'?'ऊर्जा संरक्षण से जाँचा गया':'Checked by energy conservation') : (S.lang==='hi'?'सटीक गुणनखंड खोज और प्रतिस्थापन से जाँचा गया':'Checked by exact factor enumeration and substitution'); }
+    if (a.source === 'exact') { level='verified'; cls='ok'; icon_='check'; label=a.kind === 'request-accuracy' ? (S.lang==='hi'?'मूल प्रश्न से गणना जाँचें':'Calculated from the supplied question') : a.kind === 'charge-energy' ? (S.lang==='hi'?'ऊर्जा संरक्षण से जाँचा गया':'Checked by energy conservation') : (S.lang==='hi'?'सटीक गुणनखंड खोज और प्रतिस्थापन से जाँचा गया':'Checked by exact factor enumeration and substitution'); }
     else if (localHit) { level='verified'; cls='ok'; icon_='check'; label=(S.lang==='hi'?'स्थानीय हलक से सत्यापित ✓':'Maths engine verified ✓'); }
     else if (a.model && /flash-lite/.test(a.model)) { level='ai'; cls='ai'; icon_='sparkle'; label=(S.lang==='hi'?'एआई-जनित — कृपया अपनी पाठ्यपुस्तक से मिलान करें':'AI-generated — cross-check with your textbook'); }
     else { level='ai'; cls='ai'; icon_='sparkle'; label=(S.lang==='hi'?'एआई-जनित — कृपया अपनी पाठ्यपुस्तक से मिलान करें':'AI-generated — cross-check with your textbook'); }
@@ -4952,7 +4955,7 @@ window.UP = window.UP || {};
             };
             if (pyq.figs && pyq.figs.length) ans.fig = pyq.figs[0];
           } else {
-            ans = UP.answerQuestion(q) || UP.fallbackAnswer(q, S.lang, true);
+            ans = accountancyAIWaiting(q); // Never display a fuzzy match as the answer to a different question.
           }
           if (!ans) ans = accountancyAIWaiting(q);
           ans.question = q;
@@ -7484,7 +7487,9 @@ window.UP = window.UP || {};
     const ta = e.target.closest && e.target.closest('textarea[name="q"]');
     if (!ta || !e.clipboardData) return;
     const raw = e.clipboardData.getData('text/plain');
-    const formatted = UP.answerFormat.question(raw);
+    const html = e.clipboardData.getData('text/html');
+    const semantic = UP.pasteRepair && UP.pasteRepair.fromHTML(html, new DOMParser());
+    const formatted = UP.answerFormat.question(semantic || raw);
     let repaired = { text: formatted, changed: formatted !== raw };
     if (UP.pasteRepair) {
       try {
@@ -7492,11 +7497,13 @@ window.UP = window.UP || {};
         repaired = { text: tidy.text, changed: tidy.changed || formatted !== raw };
       } catch (_) { /* a broken repair must never block the paste */ }
     }
-    if (repaired.text === raw) return;
-    e.preventDefault();
-    ta.setRangeText(repaired.text, ta.selectionStart, ta.selectionEnd, 'end');
-    ta.dispatchEvent(new Event('input', {bubbles:true}));
-    if (!repaired.changed) return;
+    const uncertain = !semantic && /[�□]|(?:\b1\s+x\s*[−-]\s*[12]\b)/.test(raw);
+    if (repaired.text !== raw) {
+      e.preventDefault();
+      ta.setRangeText(repaired.text, ta.selectionStart, ta.selectionEnd, 'end');
+      ta.dispatchEvent(new Event('input', {bubbles:true}));
+    }
+    if (!repaired.changed && !uncertain) return;
     /* The paste was rebuilt, not retyped: say so, so that a wrong sign or a
        wrong number stays the student's decision instead of a silent rewrite. */
     const form = ta.closest('form');
@@ -7513,6 +7520,9 @@ window.UP = window.UP || {};
     note.textContent = S.lang === 'hi'
       ? 'पेस्ट किया गया प्रश्न व्यवस्थित किया गया — अंक और चिह्न जाँच लें।'
       : 'Pasted question tidied up — check the numbers and signs.';
+    if (uncertain) {
+      note.textContent = S.lang === 'hi' ? 'गणित का पेस्ट अस्पष्ट हो सकता है। हल करने से पहले भिन्न और चिह्न जाँचें।' : 'Math paste may be incomplete. Check or retype fractions and symbols before solving.';
+    }
   });
 
   window.addEventListener('hashchange', render);

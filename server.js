@@ -1827,14 +1827,6 @@ const handleRequest = async function (req, res) {
 
       if (!plain.length) return json(res, 400, { error: 'The admin has not added a Google API key yet, so the AI solver is off.', fallback: true });
 
-      /* a little grounding from the real bank, so the style matches CBSE */
-      const ch = Number(b.chapter) || 0;
-      // This index contains Class 10 maths only; never ground another subject
-      // or class with unrelated examples.
-      const idx = subject === 'maths' && cls === 10 ? (db.content.pyqIndex || []) : [];
-      const near = (ch ? idx.filter(function (q) { return q.ch === ch; }) : idx).slice(0, 6)
-        .map(function (q) { return '- ' + q.en; }).join('\n');
-
       /* Per-subject prompts.  The shape of the answer is always the same JSON,
          but:
           - For Maths we draw honest geometric/mensuration figures.
@@ -1960,7 +1952,6 @@ const handleRequest = async function (req, res) {
       const prompt = topicPrompt.concat(qualityRules,[solvePolicy.instructions, languagePolicy.instructions, chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:'',
         '',
         'QUESTION: ' + question,
-        near ? ('\nFor calibration — real CBSE questions of the same chapter (do not answer these):\n' + near) : ''
       ]).filter(Boolean).join('\n');
 
       let out;
@@ -1972,7 +1963,7 @@ const handleRequest = async function (req, res) {
         out = await solveRuntime.callGeminiResilient(prompt, plain, db.settings.geminiModel, null, callOptions);
         let draft;
         try { draft = firstJSON(out.text); } catch (_) { draft = null; }
-        if (draft && solvePolicy.completeApproaches(draft, question, subject).length < 4) {
+        if (draft && solvePolicy.completeApproaches(draft, question, subject).length < solvePolicy.minimumApproaches(question)) {
           out = await solveRuntime.callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), plain, out.model, null, callOptions);
         }
       } catch (e) {
@@ -2026,7 +2017,7 @@ const handleRequest = async function (req, res) {
         verify: String(parsed.check || ''),
         approaches: solvePolicy.completeApproaches(parsed, question, subject).map(function (a) {
           return {
-            format: solvePolicy.proseTask(question) ? 'prose' : '', name: String(a.name || 'Method'),
+            format: solvePolicy.proseTask(question, subject) ? 'prose' : '', name: String(a.name || 'Method'),
             tag: String(a.tag || ''),
             steps: steps(a.steps),
             why: String(a.why || ''),
@@ -2040,8 +2031,8 @@ const handleRequest = async function (req, res) {
 
       if (!answer.approaches.length) return json(res, 502, { error: 'The model returned no solvable steps. Try rephrasing.', fallback: true });
 
-      if (answer.approaches.length < 4) return json(res, 502, {
-        error: 'The AI could not provide four distinct complete approaches. Please try again.', fallback: true
+      if (answer.approaches.length < solvePolicy.minimumApproaches(question)) return json(res, 502, {
+        error: solvePolicy.compositionTask(question) ? 'The AI could not provide a complete draft. Please try again.' : 'The AI could not provide four distinct complete approaches. Please try again.', fallback: true
       });
       answer.methodCount = answer.approaches.length;
 

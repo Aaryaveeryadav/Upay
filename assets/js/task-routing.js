@@ -3,11 +3,11 @@
 (function(root){
  function resolve(question,selected){
   const q=String(question||'').replace(/\\+[()[\]]|\$/g,''),base=selected||'maths';let subject=base,task='subject',reason='Using the selected subject';
-  if(['hindi-core','hindi-elective'].includes(base)) return {selected:base,subject:base,task:'subject',changed:false,reason:'Class 12 Hindi course',language:'hi'};
+  if(['hindi-core','hindi-elective'].includes(base)) return {selected:base,subject:base,task:/निबंध|अनुच्छेद|पत्र\s*(?:लिख|लेखन)/.test(q)?'writing':'subject',changed:false,reason:'Class 12 Hindi course',language:'hi'};
   const devanagari=/[\u0900-\u097f]/.test(q);
   if(/संस्कृत|संस्कृते|in Sanskrit/i.test(q) && /लिख|रच|translate|write|compose|सन्धि|संधि/i.test(q)){
    subject='sanskrit';reason='Explicit Sanskrit response task';
-  }else if(devanagari && /निबंध|अनुच्छेद|विचार\s*लिख|पत्र\s*लिख|शब्दों[\s\S]{0,100}लिख|लिख[\s\S]{0,100}शब्दों/.test(q)){
+  }else if(devanagari && /निबंध|अनुच्छेद|विचार\s*लिख|पत्र\s*(?:लिख|लेखन)|शब्दों[\s\S]{0,100}लिख|लिख[\s\S]{0,100}शब्दों/.test(q)){
    subject='hindi';task='writing';reason='Hindi composition/word-limit task';
   }else if(/\b(?:write|draft|compose)\b[\s\S]{0,90}\b(?:letter|essay|article|speech|paragraph|story|report)\b/i.test(q)){
    subject='english';task='writing';reason='English composition task';

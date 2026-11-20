@@ -57,14 +57,15 @@
     'assets/js/solver-core.js',
     'assets/js/solver-arith.js?v=26e5',
     'assets/js/solver-geo.js',
-    'assets/js/task-routing.js?v=26hi12',
+    'assets/js/task-routing.js?v=26hip5',
+    'assets/js/request-accuracy.js?v=26hip5',
     'assets/js/language-policy.js?v=26hi12',
     'assets/js/solve-timing.js?v=26f27',
     'assets/js/solve-parts.js?v=26f27', // a long question answered in parts instead of being lost
     'assets/js/square-integers.js?v=26e5',
     'assets/js/charge-energy.js?v=26f27',
     'assets/js/solver-route.js?v=26e5',
-    'assets/js/paste-repair.js?v=26f27', // a pasted question rejoined into the sentence it came from
+    'assets/js/paste-repair.js?v=26hip5', // a pasted question rejoined into the sentence it came from
     'assets/js/answer-format.js?v=26f27',
     'assets/js/teacher-voice.js?v=26e5',
     'assets/js/figures.js?v=26f27',
@@ -248,7 +249,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26hip4');
+    return loadScript('assets/js/app.js?v=26hip5');
   }
 
   function loadPostPaint() {
