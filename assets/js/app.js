@@ -383,7 +383,7 @@ window.UP = window.UP || {};
     subjectShort: ['Subject', 'विषय'],
     nav_books: ['Books & sources', 'पुस्तकें व स्रोत'],
     nav_saved: ['Saved', 'सहेजे गए'],
-    nav_test: ['Test & sample papers', 'टेस्ट व सैंपल पेपर'],
+    nav_test: ['Study Test Paper', 'अध्ययन टेस्ट पेपर'],
     nav_pyq: ["PYQ’s", 'पिछले वर्षों के प्रश्न'],
     nav_mcq: ['MCQ drill', 'MCQ अभ्यास'],
     nav_about: ['About & method', 'परिचय व विधि'],
@@ -6518,7 +6518,7 @@ window.UP = window.UP || {};
         const t = P(st.t || '').trim();
         if (t) out += (j+1) + '. ' + t + (t.endsWith('.') || t.endsWith('।') ? '' : '.') + '\n';
         if (st.m) {
-          const mm = String(st.m).replace(/[∗*•|]/g, '').replace(/\s+/g, ' ').trim();
+          const mm = String(st.m).replace(/\s+/g, ' ').trim();
           if (mm) out += (isHi ? 'गणना: ' : 'Working: ') + mm + '.\n';
         }
       });
@@ -7043,10 +7043,12 @@ window.UP = window.UP || {};
       if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) {
         toast(S.lang === 'hi' ? 'इस ब्राउज़र में आवाज़ उपलब्ध नहीं है।' : 'Read aloud is not supported in this browser.'); return;
       }
-      const txt = answerToText(spokenAnswer());
+      const rawText = answerToText(spokenAnswer());
+      const speechLanguage = (S.aiAnswer && S.aiAnswer.subjectRouting && S.aiAnswer.subjectRouting.language) || S.lang;
+      const txt = UP.teacherVoice.mathSpeech(rawText, speechLanguage);
       if (!txt) { toast(S.lang === 'hi' ? 'पढ़ने के लिए उत्तर उपलब्ध नहीं है।' : 'No answer is available to read yet.'); return; }
       // Small utterances avoid long-answer speech stalls on mobile/Chromium.
-      const chunks = txt.match(/[^.!?।]+[.!?।]*/g) || [txt];
+      const chunks = txt.match(/(?:[^.!?।]|\.(?=\d))+[.!?।]*/g) || [txt];
       const parts = [];
       chunks.forEach(chunk => {
         let rest = chunk.trim();
@@ -7064,7 +7066,6 @@ window.UP = window.UP || {};
         if (speechSession !== session) return;
         if (index >= parts.length) { stopAnswerSpeech(); return; }
         const u = session.utterance = new SpeechSynthesisUtterance(parts[index++]);
-        const speechLanguage = (S.aiAnswer && S.aiAnswer.subjectRouting && S.aiAnswer.subjectRouting.language) || S.lang;
         u.lang = speechLanguage === 'hi' ? 'hi-IN' : 'en-IN';
         const settings = UP.teacherVoice.select(window.speechSynthesis.getVoices(), u.lang);
         u.rate = settings.rate; u.pitch = settings.pitch; u.volume = settings.volume;
