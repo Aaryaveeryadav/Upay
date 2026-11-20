@@ -4,17 +4,12 @@ const languagePolicy = require('../../assets/js/language-policy.js');
 const solveTiming = require('../../assets/js/solve-timing.js');
 const taskRouting = require('../../assets/js/task-routing.js');
 const solvePolicy = require('../../lib/solve-policy.js');
+const integrity = require('../../lib/solve-integrity.js');
 const { consumeAI } = require('../../lib/ai-usage.js');
 const { aiRateFloor } = require('../../lib/rate-limit.js');
 const { aiFailure } = require('../../lib/ai-status.js');
 const { callGeminiResilient, readBody, json, firstJSON } = require('../../lib/gemini.js');
 const { requireStudent } = require('../../lib/supabase-auth.js');
-
-/* In-memory LRU cache (survives for the life of the function instance). */
-const CACHE = new Map();
-const CACHE_MAX = 400;
-function cacheGet(k) { const v = CACHE.get(k); if (v) { CACHE.delete(k); CACHE.set(k, v); } return v; }
-function cacheSet(k, v) { CACHE.set(k, v); if (CACHE.size > CACHE_MAX) { const firstKey = CACHE.keys().next().value; CACHE.delete(firstKey); } }
 
 function repairNumericDots(text) {
   const s = String(text || '');
@@ -123,17 +118,10 @@ module.exports = async function handler(req, res) {
   const clarification = squareInteger.clarification(question);
   if (clarification) return json(res, 422, clarification);
   const cls = Number(b.cls) || 10;
-  const exact = ['maths','applied-maths'].includes(subject) && squareInteger.solve(question, b.lang);
-  if (exact) return json(res, 200, Object.assign({subjectRouting},exact));
   const isAccountancy = subject === 'accountancy' || subject === 'computerized-accounting';
   const isEconomics = subject === 'economics';
   const isEnglish12 = subject === 'english' && cls === 12;
   const noOfficialKey = isAccountancy || isEconomics || isEnglish12 || subjectRouting.task === 'writing' || ['social','hindi','hindi-core','hindi-elective','english','sanskrit'].includes(subject);
-  // Never reuse one student's potentially private prompt/answer for another.
-  const cacheKey = JSON.stringify([solvePolicy.VERSION, user.id, subject, cls, String(b.lang || 'en').slice(0, 2).toLowerCase(), question.toLowerCase(), part, part ? partIndex : 0]);
-  const cached = (noOfficialKey || part) ? null : cacheGet(cacheKey);
-  if (cached && !b.refresh) return json(res, 200, Object.assign({ cached: true }, cached));
-
   if (!aiRateFloor(req, res, user)) return;
   if (!await consumeAI(user, res)) return;
 
@@ -254,7 +242,8 @@ module.exports = async function handler(req, res) {
         'Return JSON {"approaches":[ exactly ONE ]} with one MORE genuinely different, complete method that reaches the SAME answer.',
         'Do not repeat or rename those methods, do not change the answer, and do not restate the question. Keep the whole reply under 350 words.']
       : [];
-  const prompt = topicPrompt.concat(qualityRules,[solvePolicy.instructions,languagePolicy.instructions,chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:''].concat(partRules,['', 'QUESTION: ' + question])).join('\n');
+  const checkedEvidence = integrity.evidence(question);
+  const prompt = topicPrompt.concat(qualityRules,[solvePolicy.instructions,languagePolicy.instructions,checkedEvidence ? checkedEvidence.text : '',chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:''].concat(partRules,['', 'QUESTION: ' + question])).join('\n');
 
   // Shared adaptive budget leaves headroom under the solve function duration.
   const providerController = new AbortController();
@@ -277,7 +266,7 @@ module.exports = async function handler(req, res) {
     // One bounded repair call, sharing the original adaptive deadline.
     const draft = parseSolveJSON(out.text);
     const wantFour = !part;
-    if (wantFour && (!draft || solvePolicy.completeApproaches(draft, question, subject).length < solvePolicy.minimumApproaches(question))) {
+    if (wantFour && (!draft || solvePolicy.completeApproaches(draft, question, subject).length < solvePolicy.minimumApproaches(question) || integrity.conflict(question, draft))) {
       // A malformed response is a null result from firstJSON, not an exception.
       // Give the provider one bounded chance to return a valid replacement.
       out = await Promise.race([
@@ -299,6 +288,7 @@ module.exports = async function handler(req, res) {
   if (!parsed) {
     return json(res, 502, { error: 'The AI returned an unusable response. Please try again.', fallback: true });
   }
+  if (integrity.conflict(question, parsed)) return json(res, 502, {error:'The AI answer conflicts with an independent calculation. Please try again.', fallback:true});
   if (!parsed.approaches) {
     return json(res, 502, { error: 'The AI returned an unexpected shape. Please try again.', fallback: true });
   }
@@ -339,8 +329,7 @@ module.exports = async function handler(req, res) {
     return json(res, 200, answer);
   }
   if (answer.approaches.length < solvePolicy.minimumApproaches(question) || !answer.result) {
-    return json(res, 502, { error: solvePolicy.compositionTask(question) ? 'The AI could not provide a complete draft. Please try again.' : 'The AI could not provide four distinct complete approaches. Please try again.', fallback: true });
+    return json(res, 502, { error: 'The AI could not provide four distinct complete approaches. Please try again.', fallback: true });
   }
-  if (!noOfficialKey) cacheSet(cacheKey, answer);
   return json(res, 200, answer);
 };

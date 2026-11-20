@@ -1,0 +1,13 @@
+'use strict';
+const assert = require('node:assert/strict');
+const paste = require('../../assets/js/paste-repair');
+const quality = require('../../assets/js/question-quality');
+const damaged = 'Prove that 1−cos⁡Asin⁡A=sin⁡A1+cos⁡A';
+assert.match(paste.mathInputIssue(damaged), /fraction bars/);
+assert.match(paste.mathInputIssue('Prove 1-cos A/sin A = sin A/1+cos A'), /parentheses/);
+assert.equal(paste.mathInputIssue('Prove (1−cos A)/(sin A) = (sin A)/(1+cos A)'), '');
+assert.equal(paste.mathInputIssue('Solve 1/(x-1)+1/(x-2)=3/2'), '');
+assert.match(paste.mathInputIssue('Solve (x+1 = 2'), /parentheses/);
+assert.equal(quality.missingWritingTopic({hi:'शब्दों में एक अनुच्छेद लिखिए :'}), true);
+assert.equal(quality.missingWritingTopic({hi:'जल संरक्षण पर 100 शब्दों में एक अनुच्छेद लिखिए।'}), false);
+console.log('PASS ambiguous mathematical input guard and incomplete Hindi prompt screening');

@@ -61,12 +61,16 @@
       return payload.approaches.length;
     }
     if (!Array.isArray(state.answer.approaches)) state.answer.approaches = [];
-    const known = new Set(state.answer.approaches.map((a) => String((a && a.name) || '').trim().toLowerCase()));
+    const norm = text => String(text || '').toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+    const work = a => norm((a.steps || []).map(s => String(s.t || '') + ' ' + String(s.m || '')).join(' '));
+    const known = new Set(state.answer.approaches.map((a) => norm(a && a.name)));
+    const workings = new Set(state.answer.approaches.map(work));
     let added = 0;
     payload.approaches.forEach((a) => {
-      const key = String((a && a.name) || '').trim().toLowerCase();
-      if (key && known.has(key)) return;            /* never show the same method twice */
-      known.add(key);
+      if (!a || !Array.isArray(a.steps)) return;
+      const key = norm(a.name), value = work(a);
+      if (!key || !value || known.has(key) || workings.has(value)) return;            /* never show the same method twice */
+      known.add(key); workings.add(value);
       state.answer.approaches.push(a);
       added += 1;
     });

@@ -66,8 +66,9 @@ async function checkPage(browser, width) {
     await mcq.locator('.q-options-toggle').click();
     await mcq.locator('[data-pick]').first().click();
     assert.match(await mcq.locator('.pyq-verdict').innerText(), /Correct/);
-    assert(await check.isDisabled());
-    await input.fill('  '); assert(await check.isDisabled());
+    assert(await check.isEnabled());
+    await check.click(); assert.match(await feedback.innerText(), /Write your answer first/);
+    await input.fill('  '); assert(await check.isEnabled());
     const draft = '\nEach element has the same atom count on both sides.\nMass is conserved. <my notes>';
     await input.fill(draft);
     assert(await check.isEnabled());

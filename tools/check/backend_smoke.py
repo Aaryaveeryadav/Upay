@@ -109,7 +109,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='upay-isolated-', dir=os.environ.get('UPAY_TEST_TMP') or None) as td:
         work = Path(td)
         policy_version = subprocess.check_output(['node', '-p', "require('./lib/solve-policy.js').VERSION"], cwd=ROOT, text=True).strip()
-        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-status.js', 'lib/rate-limit.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
+        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'lib/solve-integrity.js', 'assets/js/worked-figure.js', 'assets/js/request-accuracy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-status.js', 'lib/rate-limit.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
             (work / name).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / name, work / name)
         (work / 'index.html').write_text('<title>isolated test</title>')
@@ -137,7 +137,7 @@ def main():
             startup_log = []
             for line in proc.stdout:
                 startup_log.append(line)
-                if 'Upay server on ' in line:
+                if 'Upaay server on ' in line:
                     return
             raise RuntimeError('isolated server did not start: ' + ''.join(startup_log))
 
@@ -211,15 +211,14 @@ def main():
             start()
             query = '/api/ai/cache?q=owner%20fixture%20question&subject=maths&cls=10&lang=en'
             cached = expect(port, query, 200, token=student)
-            assert cached['found'] and cached['answer']['result'] == 'student-only cached answer'
+            assert cached['found'] is False
             assert not expect(port, query, 200, token=admin)['found']
             assert not expect(port, query.replace('cls=10','cls=12'), 200, token=student)['found']
             assert not expect(port, query.replace('lang=en','lang=hi'), 200, token=student)['found']
-            assert expect(port, '/api/ai/cache', 200, token=student)['count'] == 1
+            assert expect(port, '/api/ai/cache', 200, token=student)['count'] == 0
             assert expect(port, '/api/ai/cache', 200, token=admin)['count'] == 0
-            solved = expect(port, '/api/ai/solve', 200, token=student, method='POST',
-                            body={'question':'Owner fixture question','subject':'maths','cls':10,'lang':'en'})
-            assert solved['cached'] and solved['result'] == 'student-only cached answer'
+            expect(port, '/api/ai/solve', 400, token=student, method='POST',
+                   body={'question':'Owner fixture question','subject':'maths','cls':10,'lang':'en'})
             expect(port, '/api/ai/solve', 400, token=admin, method='POST',
                    body={'question':'Owner fixture question','subject':'maths','cls':10,'lang':'en'})
             assert 'legacy-fixture' in json.loads(dbfile.read_text())['aiCache']
@@ -285,7 +284,7 @@ def main():
             me = expect(port, '/api/auth/me', 200)
             assert me['user']['role'] == 'student'
             expect(port, '/api/ai/solve', 400, method='POST', body={'question':'A test question'})
-            print('Isolated server authentication, revocation, spoofing, owner-scoped cache, static paths and permissions: PASS')
+            print('Isolated server authentication, revocation, spoofing, fresh solve behavior, static paths and permissions: PASS')
         finally:
             stop()
 

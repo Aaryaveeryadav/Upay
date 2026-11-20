@@ -203,6 +203,29 @@
     } catch (_) { return null; }
   }
 
+  /* Do not guess a fraction after a web/PDF copy loses its layout. */
+  function mathInputIssue(raw) {
+    const text = String(raw || '');
+    if (!/[=≠≤≥]/.test(text)) return '';
+    if (/[�□]/.test(text)) return 'Some mathematical symbols were not copied. Please check and retype them.';
+    let depth = 0;
+    for (const c of text) { if (c === '(') depth++; else if (c === ')') { if (--depth < 0) break; } }
+    if (depth !== 0) return 'The parentheses do not balance. Please correct the full expression.';
+    if (/sin|cos|tan/i.test(text)) {
+      if (/[⁡​]/.test(text) && !/[\/\\]/.test(text)) return 'The copied trigonometric fractions may have lost their fraction bars. Please retype them using parentheses and /.';
+      for (const side of text.split('=')) {
+        let nesting=0, slash=0, op=0;
+        for (let i=0;i<side.length;i++) {
+          const c=side[i]; if(c==='(') nesting++; else if(c===')') nesting--;
+          else if(nesting===0 && c==='/') slash++;
+          else if(nesting===0 && /[+−-]/.test(c)) op++;
+        }
+        if (slash===1 && op>0) return 'A trigonometric fraction may be ambiguous. Use parentheses around each numerator and denominator, for example (1 − cos A)/(sin A).';
+      }
+    }
+    return '';
+  }
+
   /* Returns { text, changed }. */
   function tidy(raw, options) {
     const opts = options || {};
@@ -238,7 +261,7 @@
     return { text: text, changed: changed && text !== original };
   }
 
-  const api = { fromHTML: fromHTML, repairDuplicatePlainMath: repairDuplicatePlainMath, tidy: tidy, isTokenSoup: isTokenSoup, joinFragments: joinFragments, restorePowers: restorePowers, repairCalculus: repairCalculus, repairDuplicatedInlineMath: repairDuplicatedInlineMath };
+  const api = { mathInputIssue: mathInputIssue, fromHTML: fromHTML, repairDuplicatePlainMath: repairDuplicatePlainMath, tidy: tidy, isTokenSoup: isTokenSoup, joinFragments: joinFragments, restorePowers: restorePowers, repairCalculus: repairCalculus, repairDuplicatedInlineMath: repairDuplicatedInlineMath };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else { root.UP = root.UP || {}; root.UP.pasteRepair = api; }
 })(typeof window === 'undefined' ? globalThis : window);

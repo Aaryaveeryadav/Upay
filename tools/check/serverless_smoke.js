@@ -114,11 +114,23 @@ async function main() {
   r = await invoke(solve,{method:'POST', token:'valid', body:privateQuestion});
   assert.equal(r.code,200); assert.equal(providerCalls,beforeCache+1); assert.notEqual(r.body.cached,true);
   r = await invoke(solve,{method:'POST', token:'valid', body:privateQuestion});
-  assert.equal(r.code,200); assert.equal(r.body.cached,true); assert.equal(providerCalls,beforeCache+1);
-  r = await invoke(solve,{method:'POST', token:'valid-two', body:privateQuestion});
   assert.equal(r.code,200); assert.notEqual(r.body.cached,true); assert.equal(providerCalls,beforeCache+2);
-  r = await invoke(solve,{method:'POST', token:'valid-two', body:{...privateQuestion,lang:'hi'}});
+  r = await invoke(solve,{method:'POST', token:'valid-two', body:privateQuestion});
   assert.equal(r.code,200); assert.notEqual(r.body.cached,true); assert.equal(providerCalls,beforeCache+3);
+  r = await invoke(solve,{method:'POST', token:'valid-two', body:{...privateQuestion,lang:'hi'}});
+  assert.equal(r.code,200); assert.notEqual(r.body.cached,true); assert.equal(providerCalls,beforeCache+4);
+  // A wrong headline must not survive even when the workings happen to be correct.
+  const circuitQuestion = 'A 6 Ω resistor and a 3 Ω resistor are connected in parallel, then connected in series with a 2 Ω resistor to a 12 V battery. Find the total resistance and the current through each parallel resistor.';
+  const wrongCircuit = JSON.stringify({answer:'Total resistance = 4 Ω; Current through 6 Ω resistor = 1.33 A; Current through 3 Ω resistor = 2.67 A',approaches:four()});
+  const correctCircuit = JSON.stringify({answer:'Total resistance = 4 Ω; Current through 6 Ω resistor = 1 A; Current through 3 Ω resistor = 2 A',approaches:four()});
+  const beforeCircuit=providerCalls; queuedReplies=[wrongCircuit,correctCircuit];
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:circuitQuestion,subject:'physics'}});
+  assert.equal(r.code,200); assert.equal(providerCalls,beforeCircuit+2); assert.match(r.body.result,/6 Ω resistor = 1 A/);
+  assert.match(lastPrompt,/Independent circuit calculation/);
+  queuedReplies=[wrongCircuit,wrongCircuit];
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:circuitQuestion,subject:'physics'}});
+  assert.equal(r.code,502); assert.match(r.body.error,/independent calculation/);
+  queuedReplies=[];
   // One complete repair for a short draft, including theory and non-maths subjects.
   const short = JSON.stringify({answer:'A theory answer', approaches:[]});
   const complete = JSON.stringify({answer:'A theory answer', approaches:four(),
@@ -214,7 +226,7 @@ async function main() {
   replyText=JSON.stringify({answer:'एक लेखन उत्तर',approaches:four()});
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:hindiPrompt,subject:'social',cls:10,lang:'en'}});
   assert.equal(r.code,200);assert.equal(r.body.subjectRouting.subject,'hindi');
-  assert.match(lastPrompt,/Class 10 hindi/i);assert.match(lastPrompt,/provide one complete response/);
+  assert.match(lastPrompt,/Class 10 hindi/i);assert.match(lastPrompt,/FOUR complete alternative responses/);
   assert.equal(r.body.approaches.length,4);
   const letterQuestion = 'Write a formal letter to the editor arguing against replacing a public park with a parking lot. Discuss health, environment and access to public space, and suggest a practical alternative.';
   const letter = '[Your address]\n[Date]\nThe Editor\n[Newspaper]\n[Town]\nSubject: Preserve our public park\nSir or Madam,\nThrough your newspaper, I urge the council to retain our public park rather than replace it with a parking lot.\nThe park offers free space for walking, exercise and play. Its loss would particularly affect children and older residents who cannot afford private recreation. Trees provide shade, absorb some pollutants and help rainwater soak into the soil; paving the site would increase heat and runoff.\nPublic green space belongs to everyone, including households without cars. Convenient parking should not take priority over their access to recreation and community life.\nThe council should instead improve existing parking on already paved land, introduce timed parking near shops and strengthen bus connections. Please encourage a public consultation before any decision.\nYours faithfully,\n[Your name]';
@@ -224,7 +236,7 @@ async function main() {
   const oneDraft = 'सेवा में, प्रधानाचार्य महोदय, विद्यालय। विषय: नई पुस्तकें और समाचार-पत्र। महोदय, सविनय निवेदन है कि हमारे पुस्तकालय में हिंदी की नई पुस्तकों तथा समाचार-पत्रों की आवश्यकता है। इनसे विद्यार्थियों में पठन की रुचि बढ़ेगी और हमें भाषा तथा समसामयिक विषयों का ज्ञान मिलेगा। कृपया पुस्तकालय में इनकी नियमित व्यवस्था कराने की कृपा करें। धन्यवाद। भवदीय, एक विद्यार्थी।';
   queuedReplies = []; replyText = JSON.stringify({answer:'पुस्तकालय में नई पुस्तकों की व्यवस्था का अनुरोध',approaches:[{name:'औपचारिक पत्र',steps:[{t:oneDraft}]}]});
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:singleLetterQuestion,subject:'maths',cls:10}});
-  assert.equal(r.code,200); assert.equal(r.body.subjectRouting.subject,'hindi'); assert.equal(r.body.approaches.length,1);
+  assert.equal(r.code,502, 'one draft must not be presented as four');
   queuedReplies = [JSON.stringify({answer:'Four complete formal letter options', approaches:four()})];
   replyText = JSON.stringify({answer:'I urge the council to retain our public park.', approaches:four().map((a,i)=>({name:a.name, steps:[{t:letter.replace('Preserve our public park', ['Save our green space','Protect shared recreation','Choose sustainable parking','Keep the park accessible'][i])}]}))});
   const beforeLetter = providerCalls;
@@ -240,10 +252,9 @@ async function main() {
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:letterQuestion,subject:'english'}});
   assert.equal(r.code,502,'persistent outlines must not be shown as completed letters');
   const callsBeforeExact = providerCalls;
+  replyText = JSON.stringify({answer:'Mock answer',approaches:four()}); queuedReplies=[];
   r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all positive integers n for which n²+10n+2026 is a perfect square.',subject:'maths'}});
-  assert.equal(r.code,200); assert.equal(r.body.result,'n = 15, 27, 327, 995');
-  assert.equal(r.body.source,'exact'); assert.equal(r.body.check.source,'arithmetic');
-  assert.equal(providerCalls,callsBeforeExact,'exact supported question must not spend a provider call');
+  assert.equal(r.code,200); assert.equal(r.body.source,'ai'); assert.equal(providerCalls,callsBeforeExact+1);
   const ambiguousCalls=providerCalls;
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all positive integers 7 for which n2 + 10m + 2026 is a perfect square.',subject:'maths'}});
   assert.equal(r.code,422);assert.equal(r.body.code,'question_needs_confirmation');assert.equal(providerCalls,ambiguousCalls);
@@ -255,11 +266,10 @@ async function main() {
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:'सन्धिं कुरुत — राम + आगच्छति',subject:'sanskrit',lang:'hi',chapterTitle:'सन्धिः'}});
   assert.equal(r.code,200);assert.equal(r.body.subjectRouting.language,'sa');assert.match(lastPrompt,/grammatical Sanskrit/);assert.match(lastPrompt,/Provided chapter context.*सन्धिः/);
   const radicalCalls = providerCalls;
-  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all integers x for which √(x+6) + √(19-x) is an integer.',subject:'social'}});
-  assert.equal(r.code,200);assert.equal(r.body.result,'x ∈ {-6, 3, 10, 19}');
-  assert.equal(r.body.source,'exact');assert.equal(providerCalls,radicalCalls);
-  for(const approach of r.body.approaches)assert.equal(approach.steps.at(-1).m,r.body.result);
+  replyText=JSON.stringify({answer:'Mock result',approaches:four()}); queuedReplies=[];
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:'Find all integers x for which √(x+6) + √(19-x) is an integer.',subject:'social'}});
+  assert.equal(r.code,200); assert.equal(r.body.source,'ai'); assert.equal(providerCalls,radicalCalls+1);
   await assert.rejects(lib.readBody({body:'{bad json'}));
-  console.log('Mocked serverless auth, paid-AI allowlist, owner-scoped cache, response shape, image reading and body parsing: PASS');
+  console.log('Mocked serverless auth, paid-AI allowlist, fresh responses, response shape, image reading and body parsing: PASS');
 }
 main().catch(err => { console.error(err); process.exitCode=1; });
