@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · where is the API?
+   Upaay · where is the API?
    ---------------------------------------------------------------------
    These pages get opened several different ways and the API port can be
    either 8004 (primary) or 8090 (legacy). We build a candidate list,

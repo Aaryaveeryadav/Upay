@@ -1,5 +1,5 @@
 {
-  "_readme": "Upay - Class 12 Physics data. Syntax: docs/physics-data-syntax.md. Send chapters, questions or both; delete what you don't use. The chapter below is the outline the site already shows for chapter 1, so you can see the bar. The two questions are real (CBSE 2025 paper 55/5/1 Q7 and NCERT Exercise 1.1) but they are examples: replace or delete every row whose id starts with example-. Check the file with: python3 tools/curate/validate-physics-data.py <file>",
+  "_readme": "Upaay - Class 12 Physics data. Syntax: docs/physics-data-syntax.md. Send chapters, questions or both; delete what you don't use. The chapter below is the outline the site already shows for chapter 1, so you can see the bar. The two questions are real (CBSE 2025 paper 55/5/1 Q7 and NCERT Exercise 1.1) but they are examples: replace or delete every row whose id starts with example-. Check the file with: python3 tools/curate/validate-physics-data.py <file>",
   "subject": "physics",
   "class": 12,
 

@@ -27,7 +27,7 @@ const hash = crypto.pbkdf2Sync(pw, salt, 120000, 32, 'sha256').toString('hex');
 const db = {
   version: 1,
   createdAt: new Date().toISOString(),
-  settings: { geminiKeySealed: null, signupOpen: false, signupCode: '', geminiModel: 'gemini-3.5-flash-lite', siteTitle: 'Upay · उपाय' },
+  settings: { geminiKeySealed: null, signupOpen: false, signupCode: '', geminiModel: 'gemini-3.5-flash-lite', siteTitle: 'Upaay · उपाय' },
   users: [{
     id: 'u_admin', user: 'admin', role: 'admin', name: 'Administrator',
     salt: salt, hash: hash, mustChange: false, createdAt: new Date().toISOString()

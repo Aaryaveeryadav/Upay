@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · Physics Deterministic Solvers (Class 12)
+   Upaay · Physics Deterministic Solvers (Class 12)
    Scans UP.pyq physics questions and computes numerical answers for
    standard patterns: Coulomb, Ohm, resistors, capacitors, lens/mirror,
    Biot-Savart wire, AC reactance, photoelectric, Bohr, half-life,

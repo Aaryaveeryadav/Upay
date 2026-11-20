@@ -1,5 +1,5 @@
 /* ============================================================
-   Upay — figures
+   Upaay — figures
    Every answer gets a diagram drawn from its own numbers.
    Pure inline SVG: no images, no libraries, prints cleanly.
    ============================================================ */

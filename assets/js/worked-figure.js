@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · worked figures
+   Upaay · worked figures
 
    Two numerical families where a figure is only honest if it is drawn
    from the question's own numbers AND labelled with the answer those

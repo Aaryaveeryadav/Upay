@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · matrix questions
+   Upaay · matrix questions
 
    A matrix question is all values and one operation: AX = B, XA = B, |A|,
    A⁻¹, AB, or a polynomial identity such as p(A) = O. Nothing about it needs

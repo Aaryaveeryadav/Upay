@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · Boards, books, classes 11–12 and Class 10 Science outline
+   Upaay · Boards, books, classes 11–12 and Class 10 Science outline
    ===================================================================== */
 window.UP = window.UP || {};
 

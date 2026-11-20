@@ -2,9 +2,9 @@
 
 Search date: 17 November 2026. [CBSE's examination marking-scheme index](https://www.cbse.gov.in/cbsenew/marking-scheme.html) lists Class X and XII subject archives for main and supplementary exams from 2022 onward. A listing establishes that a source exists; it does **not** by itself verify any bank answer or guarantee that all sets are present. The archives are ZIP files and their contents were not independently opened in this environment. Sample-paper marking schemes are different documents, not substitutes for main-board keys.
 
-## Official main-board archive by Upay subject
+## Official main-board archive by Upaay subject
 
-The following are representative **2026 main-exam** links from CBSE's index. Other years and supplementary papers are in the same index under their own headings. Class 11 in Upay is school-level; the index is for the board's X and XII examinations, not a Class XI board key. RBSE questions require RBSE sources, not CBSE answers.
+The following are representative **2026 main-exam** links from CBSE's index. Other years and supplementary papers are in the same index under their own headings. Class 11 in Upaay is school-level; the index is for the board's X and XII examinations, not a Class XI board key. RBSE questions require RBSE sources, not CBSE answers.
 
 | Class / subject | CBSE archive |
 | --- | --- |

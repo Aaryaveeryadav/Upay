@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · paste repair
+   Upaay · paste repair
 
    A question copied out of a PDF, a slide or a rendered web page rarely
    arrives as a sentence. It arrives as a column of fragments — one glyph or

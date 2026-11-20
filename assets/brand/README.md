@@ -4,4 +4,4 @@
 
 The 192px and 512px install icons contain the same original artwork scaled proportionally on a white square with padding. The full supplied PDF is not bundled with the website.
 
-Brand display name: Kritin Upay. Existing `upay.*` storage keys, authentication, routes, and GitHub issue links are deliberately preserved for compatibility. The static web manifest is shared by the initial shell and runtime so installation branding cannot revert to the former identity.
+Brand display name: Kritin Upaay. Existing `upay.*` storage keys, authentication, routes, project URLs, and GitHub issue links are deliberately preserved for compatibility. The static web manifest is shared by the initial shell and runtime so installation branding cannot revert to the former identity.

@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · test paper generator
+   Upaay · test paper generator
    ---------------------------------------------------------------------
    Each template below is one *logic family* learnt from the CBSE papers
    in /uploads. A template never repeats a year's numbers verbatim: it

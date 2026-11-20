@@ -1,6 +1,6 @@
 # Sending Class 12 Physics data
 
-The format for sending Physics material to Upay. There are three kinds of
+The format for sending Physics material to Upaay. There are three kinds of
 material. Send any mix of them:
 
 | You have | Send | Format |

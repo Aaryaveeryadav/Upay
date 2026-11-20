@@ -13,5 +13,5 @@ if [ "$MAJOR" -lt 18 ]; then
   echo "Node.js 18 or newer is required."
   exit 1
 fi
-echo "Starting Upay at http://localhost:$PORT. Press Ctrl+C to stop."
+echo "Starting Upaay at http://localhost:$PORT. Press Ctrl+C to stop."
 exec env PORT="$PORT" node server.js

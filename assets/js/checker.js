@@ -1,5 +1,5 @@
 /* ============================================================
-   Upay — answer checker
+   Upaay — answer checker
    Works with no internet: reads the question, works it out from
    first principles, and says whether a claimed answer matches.
    Used to check AI answers, and to check the past-year bank

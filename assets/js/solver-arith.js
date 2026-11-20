@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · Multi-method solver — number theory, polynomials, APs,
+   Upaay · Multi-method solver — number theory, polynomials, APs,
    coordinate geometry, statistics, arithmetic, mensuration, probability
    ===================================================================== */
 window.UP = window.UP || {};

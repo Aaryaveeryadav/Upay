@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · server.js  —  tiny dependency-free Node server
+   Upaay · server.js  —  tiny dependency-free Node server
    ---------------------------------------------------------------------
    Serves the static app from /public and a JSON API under /api.
 
@@ -97,7 +97,7 @@ function freshDB() {
       signupCode: '',
       signupNote: 'Class 10 Mathematics',
       geminiModel: 'gemini-3.5-flash-lite',
-      siteTitle: 'Kritin Upay'
+      siteTitle: 'Kritin Upaay'
     },
     users: [{
       id: 'u_admin',
@@ -436,14 +436,14 @@ function notFoundPage(res, why, hint) {
   /* "/" is relative to whatever host the browser actually used. A literal
      http://localhost:PORT link is dead when the app is opened on 192.168.x.x
      or through a preview host. */
-  res.end('<!doctype html><meta charset="utf-8"><title>Kritin Upay</title>'
+  res.end('<!doctype html><meta charset="utf-8"><title>Kritin Upaay</title>'
     + '<div style="font:16px/1.6 system-ui,sans-serif;max-width:560px;margin:12vh auto;padding:0 24px;color:#2b3a42">'
-    + '<h1 style="font-size:20px;margin:0 0 10px">This is not the Kritin Upay address</h1>'
+    + '<h1 style="font-size:20px;margin:0 0 10px">This is not the Kritin Upaay address</h1>'
     + '<p style="color:#5b6b74">' + why + '</p>'
     + (hint ? '<p style="color:#5b6b74">' + hint + '</p>' : '')
     + '<p style="margin-top:18px"><a href="/" '
     + 'style="display:inline-block;padding:9px 20px;border-radius:10px;background:#46a0c9;'
-    + 'color:#fff;text-decoration:none;font-weight:600">Open Kritin Upay</a></p>'
+    + 'color:#fff;text-decoration:none;font-weight:600">Open Kritin Upaay</a></p>'
     + '</div>');
 }
 
@@ -2331,7 +2331,7 @@ loadDB();
    made it hard to tell which address was real, so it was removed. The single
    address is PORT (8090 by default, overridable with the PORT env var). */
 server.listen(PORT, HOST, function () {
-  console.log('Upay server on http://localhost:' + PORT);
+  console.log('Upaay server on http://localhost:' + PORT);
   console.log('');
   console.log('  Public study pages are available without sign-in.');
   console.log('  Admin tools require a verified administrator session.');

@@ -1,5 +1,5 @@
 /* ================================================================
-   Upay · CBSE Class 10 Hindi (Course-B) — chapter outline
+   Upaay · CBSE Class 10 Hindi (Course-B) — chapter outline
    Four NCERT textbooks: क्षितिज, स्पर्श, संचयन, कृतिका.
    Chapter ids: hind10-bKK-NN where KK is book (ks=क्षितिज, sp=स्पर्श,
    sy=संचयन, kr=कृतिका) and NN is the chapter number within that book.

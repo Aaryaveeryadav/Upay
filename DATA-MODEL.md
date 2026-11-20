@@ -1,8 +1,8 @@
-# Upay — Data Model Reference
+# Upaay — Data Model Reference
 
 What data the project currently holds, which class/collection owns it, and what type each field is.
 
-Upay has **four separate storage layers**, and it is easy to confuse them:
+Upaay has **four separate storage layers**, and it is easy to confuse them:
 
 | # | Layer | Where it physically lives | Written by | Who can read it |
 |---|-------|---------------------------|------------|-----------------|
