@@ -1,0 +1,17 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {evidence,conflict}=require('../../lib/solve-integrity');
+const q='A 6 Ω resistor and a 3 Ω resistor are connected in parallel, then connected in series with a 2 Ω resistor to a 12 V battery. Find the total resistance and the current through each parallel resistor.';
+assert.match(evidence(q).text,/Equivalent resistance: 4 Ω/);
+assert.match(evidence(q).text,/\(6 Ω\): 1 A/);
+const answer='Total resistance = 4 Ω; Current through 6 Ω resistor = 1 A; Current through 3 Ω resistor = 2 A';
+assert.equal(conflict(q,{answer,approaches:[{steps:[{m:'I₆ = 6 V / 6 Ω = 1 A; I₃ = 6 V / 3 Ω = 2 A'}]}]}),'');
+assert.match(conflict(q,{answer:answer.replace('1 A','1.33 A')}),/conflicts/);
+assert.match(conflict(q,{answer,approaches:[{steps:[{m:'I₆ = 1.33 A'}]}]}),/conflicts/);
+assert.match(conflict(q,{answer:answer.replace('4 Ω','5 Ω')}),/resistance/);
+assert.equal(conflict(q,{answer:'Current through 6 Ω resistor = 1.00 A'}),'');
+assert.equal(evidence('A 6 Ω resistor in a circuit with an unknown battery.'),null);
+const coord='A point P divides the line segment joining A(2,-3) and B(7,2) in the ratio k:1. If P lies on y=x-1, find k.';
+assert.match(conflict(coord,{answer:'k = -1'}),/denominator/);
+assert.equal(conflict(coord,{answer:'No value of k; k = -1 is invalid.'}),'');
+console.log('PASS circuit independent calculations, contradiction rejection, rounding, and invalid section ratio');

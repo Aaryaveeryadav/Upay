@@ -17,6 +17,7 @@ const taskRouting = require('./assets/js/task-routing.js');
 const languagePolicy = require('./assets/js/language-policy.js');
 const solveTiming = require('./assets/js/solve-timing.js');
 const solvePolicy = require('./lib/solve-policy.js');
+const integrity = require('./lib/solve-integrity.js');
 const solveRuntime = require('./lib/gemini.js');
 const { aiFailure: solveFailure } = require('./lib/ai-status.js');
 
@@ -1284,19 +1285,7 @@ const handleRequest = async function (req, res) {
        question the teacher already paid for comes back instantly and offline. */
     if (p === '/api/ai/cache' && req.method === 'GET') {
       const err = requireRole(sess); if (err) return json(res, 401, { error: err });
-      const owner = aiCacheOwner(sess), qq = u.query.q;
-      if (qq) {
-        const subject = String(u.query.subject || 'maths');
-        const cls = Number(u.query.cls) || 10;
-        // Never reuse explanations as answer keys for source-only subjects.
-        if (subject === 'accountancy' || subject === 'computerized-accounting' || subject === 'economics' || (subject === 'english' && cls === 12)) return json(res, 200, { found: false });
-        const lang = String(u.query.lang || 'en').slice(0, 2).toLowerCase();
-        const k = aiCacheKey(sess, 'solve', subject, cls, lang, qq);
-        const hit = db.aiCache[k];
-        return json(res, 200, hit && hit.policyVersion === solvePolicy.VERSION && hit.owner === owner ? { found: true, answer: Object.assign({ cached: true }, hit) } : { found: false });
-      }
-      const keys = Object.keys(db.aiCache).filter(k => db.aiCache[k] && db.aiCache[k].owner === owner && db.aiCache[k].policyVersion === solvePolicy.VERSION && db.aiCache[k].kind !== 'translation');
-      return json(res, 200, { count: keys.length, keys: keys });
+      return json(res, 200, u.query.q ? { found: false } : { count: 0, keys: [] });
     }
 
     if (p === '/api/content' && req.method === 'GET') {
@@ -1810,21 +1799,10 @@ const handleRequest = async function (req, res) {
       if (subjectRouting.language) b.lang = subjectRouting.language;
       if (subjectRouting.changed) b.chapter = 0;
       const cls = Number(b.cls) || 10;
-      const exact = ['maths','applied-maths'].includes(subject) && require('./assets/js/square-integers.js').solve(question, b.lang);
-      if (exact) return json(res, 200, Object.assign({subjectRouting},exact));
       const isAccountancy = subject === 'accountancy' || subject === 'computerized-accounting';
       const isEconomics = subject === 'economics';
       const isEnglish12 = subject === 'english' && cls === 12;
       const noOfficialKey = isAccountancy || isEconomics || isEnglish12 || subjectRouting.task === 'writing' || ['social','hindi','hindi-core','hindi-elective','english','sanskrit'].includes(subject);
-      const qLang = String(b.lang || 'en').slice(0, 2).toLowerCase();
-      const cacheKey = aiCacheKey(sess, 'solve', subject, cls, qLang, question);
-      // Do not reuse cached replies for subjects without an official key.
-      if (!noOfficialKey && db.aiCache[cacheKey] && db.aiCache[cacheKey].policyVersion === solvePolicy.VERSION && db.aiCache[cacheKey].owner === aiCacheOwner(sess) && !b.refresh) {
-        const hit = db.aiCache[cacheKey];
-        hit.cached = true;
-        return json(res, 200, hit);
-      }
-
       if (!plain.length) return json(res, 400, { error: 'The admin has not added a Google API key yet, so the AI solver is off.', fallback: true });
 
       /* Per-subject prompts.  The shape of the answer is always the same JSON,
@@ -1949,7 +1927,8 @@ const handleRequest = async function (req, res) {
         'EXPLAIN THE WHY: for every sub-part, state not only what happens but WHY it happens (the law/principle and the causal chain). A bare table of same/different answers without the reason is incomplete.',
         'MULTI-PART FIGURES: if different parts of the question involve different setups or figures (e.g. series AND parallel circuits, two cases, two diagrams in the book), return a "diagrams" array with ONE honest figure per part, each with its own caption naming the part it belongs to. Never force several setups into one figure, and never invent a figure for a part that has none.'
       ];
-      const prompt = topicPrompt.concat(qualityRules,[solvePolicy.instructions, languagePolicy.instructions, chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:'',
+      const checkedEvidence = integrity.evidence(question);
+      const prompt = topicPrompt.concat(qualityRules,[solvePolicy.instructions, languagePolicy.instructions, checkedEvidence ? checkedEvidence.text : '', chapterTitle?'Provided chapter context (not a supplied source passage): '+chapterTitle:'',
         '',
         'QUESTION: ' + question,
       ]).filter(Boolean).join('\n');
@@ -1963,7 +1942,7 @@ const handleRequest = async function (req, res) {
         out = await solveRuntime.callGeminiResilient(prompt, plain, db.settings.geminiModel, null, callOptions);
         let draft;
         try { draft = firstJSON(out.text); } catch (_) { draft = null; }
-        if (draft && solvePolicy.completeApproaches(draft, question, subject).length < solvePolicy.minimumApproaches(question)) {
+        if (draft && (solvePolicy.completeApproaches(draft, question, subject).length < solvePolicy.minimumApproaches(question) || integrity.conflict(question, draft))) {
           out = await solveRuntime.callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), plain, out.model, null, callOptions);
         }
       } catch (e) {
@@ -2029,10 +2008,12 @@ const handleRequest = async function (req, res) {
         conceptDiagram: solvePolicy.conceptDiagram(parsed.conceptDiagram)
       };
 
+      if (integrity.conflict(question, parsed)) return json(res, 502, {error:'The AI answer conflicts with an independent calculation. Please try again.', fallback:true});
+
       if (!answer.approaches.length) return json(res, 502, { error: 'The model returned no solvable steps. Try rephrasing.', fallback: true });
 
       if (answer.approaches.length < solvePolicy.minimumApproaches(question)) return json(res, 502, {
-        error: solvePolicy.compositionTask(question) ? 'The AI could not provide a complete draft. Please try again.' : 'The AI could not provide four distinct complete approaches. Please try again.', fallback: true
+        error: 'The AI could not provide four distinct complete approaches. Please try again.', fallback: true
       });
       answer.methodCount = answer.approaches.length;
 
@@ -2153,35 +2134,6 @@ const handleRequest = async function (req, res) {
                + 'is shown. A worked solution that argues against itself teaches the wrong thing.'
         });
       }
-      /* store the answer so it is never paid for twice.
-         What may be stored:
-           verified / passed  -- checked, so it is a solution worth keeping
-           disputed + source=arithmetic -- the computed value REPLACES the draft
-           unchecked          -- kept, but the page must say it was not checked;
-                                 this is the only way a proof-type question ever
-                                 gets cached, and without it every visit re-solved
-                                 it and paid for it again.
-         What may NOT be stored: an AI-vs-AI dispute.  Two models disagreeing is
-         not a verdict, and caching the draft would hand a wrong answer to the
-         next student. */
-      const settledByMath = check.state === 'disputed' && check.source === 'arithmetic';
-      const storable = check.state === 'verified' || check.state === 'passed'
-                       || check.state === 'unchecked' || settledByMath;
-      if (storable && !noOfficialKey) {
-        db.aiCache[cacheKey] = {
-          owner: aiCacheOwner(sess), at: now(), model: out.model, questionUnderstood: answer.questionUnderstood,
-          result: settledByMath ? String(check.yourAnswer) : answer.result,
-          summary: answer.summary, verify: answer.verify,
-          policyVersion: solvePolicy.VERSION, approaches: answer.approaches, diagram: answer.diagram, diagrams: answer.diagrams, conceptDiagram: answer.conceptDiagram, check: check,
-          methodCount: answer.approaches.length,
-          methodsShort: answer.methodsShort ? true : undefined,
-          methodsNote: answer.methodsNote || undefined,
-          corrected: settledByMath ? true : undefined,
-          draftResult: settledByMath ? answer.result : undefined
-        };
-        saveDB();
-      }
-
       /* A disputed answer is never handed over as if it were certain.
          Two things are better than refusing outright:
            1. try once more, because a fresh attempt often gets it right

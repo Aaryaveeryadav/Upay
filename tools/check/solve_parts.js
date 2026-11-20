@@ -45,6 +45,7 @@ const dup = P.absorb(s, { approaches: [step('first PRINCIPLES', 'Start from the 
 assert.equal(dup, 0, 'a method already shown is not added twice');
 assert.equal(P.have(s), 2);
 assert.equal(s.failed, 1, 'and the failed slot is counted, so the next request moves on');
+assert.equal(P.absorb(s, {approaches:[step('Renamed', 'Start from the definition')]}), 0, 'renamed identical work is not another approach');
 
 P.absorb(s, { approaches: [step('Graphical check', 'Read the intercept')] });
 P.absorb(s, { approaches: [step('Verification', 'Substitute back')] });

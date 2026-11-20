@@ -45,7 +45,7 @@
     'assets/js/data/pyq-2024.js',
     'assets/js/data/pyq-keys.js',
     'assets/js/data/mcq-keyed.js',
-    'assets/js/question-quality.js?v=26f15', // shared conservative activity/OCR quality gates
+    'assets/js/question-quality.js?v=26hip8', // shared conservative activity/OCR quality gates
     'assets/js/question-fold.js?v=26f0', // shared Hindi/Sanskrit/English exercise folding
     'assets/js/data/question-overrides.js?v=26f15', // question-bank curation, applied once packs are in
     'assets/js/math-render.js?v=26f27', // safe inline TeX rendering for questions, options and answers
@@ -57,15 +57,15 @@
     'assets/js/solver-core.js',
     'assets/js/solver-arith.js?v=26e5',
     'assets/js/solver-geo.js',
-    'assets/js/task-routing.js?v=26hip5',
-    'assets/js/request-accuracy.js?v=26hip5',
+    'assets/js/task-routing.js?v=26hip8',
+    'assets/js/request-accuracy.js?v=26hip8',
     'assets/js/language-policy.js?v=26hi12',
     'assets/js/solve-timing.js?v=26f27',
-    'assets/js/solve-parts.js?v=26f27', // a long question answered in parts instead of being lost
+    'assets/js/solve-parts.js?v=26hip8', // a long question answered in parts instead of being lost
     'assets/js/square-integers.js?v=26e5',
     'assets/js/charge-energy.js?v=26f27',
     'assets/js/solver-route.js?v=26e5',
-    'assets/js/paste-repair.js?v=26hip5', // a pasted question rejoined into the sentence it came from
+    'assets/js/paste-repair.js?v=26hip8', // a pasted question rejoined into the sentence it came from
     'assets/js/answer-format.js?v=26f27',
     'assets/js/teacher-voice.js?v=26e5',
     'assets/js/figures.js?v=26f27',
@@ -114,6 +114,7 @@
       'assets/js/data/english10-fp.js',
       'assets/js/data/english10.js',
       'assets/js/data/pyq-english.js',
+      'assets/js/data/english10-supplied-practice.js?v=26hip8',
       'assets/js/data/mcq-english.js'
     ],
     sanskrit: [
@@ -249,7 +250,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26hip5');
+    return loadScript('assets/js/app.js?v=26hip8');
   }
 
   function loadPostPaint() {

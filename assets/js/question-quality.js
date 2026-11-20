@@ -359,6 +359,11 @@
      mid-sentence, carries marks-column debris, or lost its operators/brackets
      in extraction. The PYQ list, test and mock pools use this gate before
      rendering; withholding a record here does not modify the source bank. */
+  function missingWritingTopic(q) {
+    const text = String(q && (q.en || q.hi || q.sa) || '').trim();
+    return /^(?:निम्नलिखित\s*)?(?:लगभग\s*)?शब्दों में एक अनुच्छेद लिखिए\s*[:：।.\s]*$/u.test(text);
+  }
+
   function testReadyIssue(q) {
     if (!q || typeof q !== 'object') return 'empty';
     const text = String((q.en || q.hi || q.sa || '')).trim();
@@ -412,7 +417,7 @@
     return inspect({ hi: String(text == null ? '' : text), subject: subject || '', kind: 'question' }, subject);
   }
 
-  const api = { activityTail, cleanActivityTail, inspect, inspectText, testReadyIssue, boardKeyAdmission, isGenericUncontextualized, isOptionFragment, isPaperDirections, declaredMcq, keyMetadataAllows, choiceIndex, choiceText, optionIssue, sourceOptionIssue, textOf };
+  const api = { missingWritingTopic, activityTail, cleanActivityTail, inspect, inspectText, testReadyIssue, boardKeyAdmission, isGenericUncontextualized, isOptionFragment, isPaperDirections, declaredMcq, keyMetadataAllows, choiceIndex, choiceText, optionIssue, sourceOptionIssue, textOf };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.UP = root.UP || {};
   root.UP.questionQuality = api;

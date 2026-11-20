@@ -16,7 +16,7 @@ assert.equal(accuracy.solve(coord.replace('7,2','7,3')), null);
 const hindi='अपने विद्यालय के प्रधानाचार्य को पत्र लिखकर पुस्तकालय में हिंदी की नई पुस्तकों और समाचार-पत्रों की व्यवस्था करने का अनुरोध कीजिए।';
 assert.equal(routing.resolve(hindi,'maths').task,'writing');
 assert.equal(routing.resolve(hindi,'hindi-core').task,'writing');
-assert.equal(policy.minimumApproaches(hindi),1);
+assert.equal(policy.minimumApproaches(hindi),4);
 assert.equal(policy.proseTask('Solve x²=4. Explain each step.', 'maths'),false);
 const letter='सेवा में, प्रधानाचार्य महोदय, विद्यालय। विषय: पुस्तकालय के लिए पुस्तकें। महोदय, सविनय निवेदन है कि हमारे विद्यालय के पुस्तकालय में हिंदी की नई पुस्तकों तथा समाचार-पत्रों की आवश्यकता है। इससे विद्यार्थियों में पठन की रुचि बढ़ेगी और वे भाषा तथा समसामयिक घटनाओं से परिचित होंगे। कृपया इनकी व्यवस्था कराने की कृपा करें। धन्यवाद। भवदीय, एक विद्यार्थी।';
 assert.equal(policy.completeApproaches({approaches:[{name:'पत्र',steps:[{t:letter}]}]},hindi,'hindi').length,1);
