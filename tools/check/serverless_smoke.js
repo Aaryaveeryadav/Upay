@@ -214,10 +214,17 @@ async function main() {
   replyText=JSON.stringify({answer:'एक लेखन उत्तर',approaches:four()});
   r=await invoke(solve,{method:'POST',token:'valid',body:{question:hindiPrompt,subject:'social',cls:10,lang:'en'}});
   assert.equal(r.code,200);assert.equal(r.body.subjectRouting.subject,'hindi');
-  assert.match(lastPrompt,/Class 10 hindi/i);assert.match(lastPrompt,/FOUR complete alternative responses/);
+  assert.match(lastPrompt,/Class 10 hindi/i);assert.match(lastPrompt,/provide one complete response/);
   assert.equal(r.body.approaches.length,4);
   const letterQuestion = 'Write a formal letter to the editor arguing against replacing a public park with a parking lot. Discuss health, environment and access to public space, and suggest a practical alternative.';
   const letter = '[Your address]\n[Date]\nThe Editor\n[Newspaper]\n[Town]\nSubject: Preserve our public park\nSir or Madam,\nThrough your newspaper, I urge the council to retain our public park rather than replace it with a parking lot.\nThe park offers free space for walking, exercise and play. Its loss would particularly affect children and older residents who cannot afford private recreation. Trees provide shade, absorb some pollutants and help rainwater soak into the soil; paving the site would increase heat and runoff.\nPublic green space belongs to everyone, including households without cars. Convenient parking should not take priority over their access to recreation and community life.\nThe council should instead improve existing parking on already paved land, introduce timed parking near shops and strengthen bus connections. Please encourage a public consultation before any decision.\nYours faithfully,\n[Your name]';
+  queuedReplies = [JSON.stringify({answer:'Four complete formal letter options', approaches:four()})];
+  replyText = JSON.stringify({answer:'I urge the council to retain our public park.', approaches:four().map((a,i)=>({name:a.name, steps:[{t:letter.replace('Preserve our public park', ['Save our green space','Protect shared recreation','Choose sustainable parking','Keep the park accessible'][i])}]}))});
+  const singleLetterQuestion = 'अपने विद्यालय के प्रधानाचार्य को पत्र लिखकर पुस्तकालय में हिंदी की नई पुस्तकों और समाचार-पत्रों की व्यवस्था करने का अनुरोध कीजिए।';
+  const oneDraft = 'सेवा में, प्रधानाचार्य महोदय, विद्यालय। विषय: नई पुस्तकें और समाचार-पत्र। महोदय, सविनय निवेदन है कि हमारे पुस्तकालय में हिंदी की नई पुस्तकों तथा समाचार-पत्रों की आवश्यकता है। इनसे विद्यार्थियों में पठन की रुचि बढ़ेगी और हमें भाषा तथा समसामयिक विषयों का ज्ञान मिलेगा। कृपया पुस्तकालय में इनकी नियमित व्यवस्था कराने की कृपा करें। धन्यवाद। भवदीय, एक विद्यार्थी।';
+  queuedReplies = []; replyText = JSON.stringify({answer:'पुस्तकालय में नई पुस्तकों की व्यवस्था का अनुरोध',approaches:[{name:'औपचारिक पत्र',steps:[{t:oneDraft}]}]});
+  r=await invoke(solve,{method:'POST',token:'valid',body:{question:singleLetterQuestion,subject:'maths',cls:10}});
+  assert.equal(r.code,200); assert.equal(r.body.subjectRouting.subject,'hindi'); assert.equal(r.body.approaches.length,1);
   queuedReplies = [JSON.stringify({answer:'Four complete formal letter options', approaches:four()})];
   replyText = JSON.stringify({answer:'I urge the council to retain our public park.', approaches:four().map((a,i)=>({name:a.name, steps:[{t:letter.replace('Preserve our public park', ['Save our green space','Protect shared recreation','Choose sustainable parking','Keep the park accessible'][i])}]}))});
   const beforeLetter = providerCalls;

@@ -277,7 +277,7 @@ module.exports = async function handler(req, res) {
     // One bounded repair call, sharing the original adaptive deadline.
     const draft = parseSolveJSON(out.text);
     const wantFour = !part;
-    if (wantFour && (!draft || solvePolicy.completeApproaches(draft, question, subject).length < 4)) {
+    if (wantFour && (!draft || solvePolicy.completeApproaches(draft, question, subject).length < solvePolicy.minimumApproaches(question))) {
       // A malformed response is a null result from firstJSON, not an exception.
       // Give the provider one bounded chance to return a valid replacement.
       out = await Promise.race([
@@ -314,7 +314,7 @@ module.exports = async function handler(req, res) {
     result: String(parsed.answer || ''), summary: String(parsed.summary || ''),
     verify: typeof parsed.check === 'string' ? parsed.check : '',
     approaches: solvePolicy.completeApproaches(parsed, question, subject).map(a => ({
-      format: solvePolicy.proseTask(question) ? 'prose' : '', name: String((a && a.name) || 'Method'), tag: String((a && a.tag) || ''),
+      format: solvePolicy.proseTask(question, subject) ? 'prose' : '', name: String((a && a.name) || 'Method'), tag: String((a && a.tag) || ''),
       steps: steps(a && a.steps), why: String((a && a.why) || ''), watch: String((a && a.watch) || '')
     })).filter(a => a.steps.length),
     diagram: solvePolicy.diagramForSubject(parsed.diagram, subject),
@@ -338,8 +338,8 @@ module.exports = async function handler(req, res) {
     answer.complete = false;
     return json(res, 200, answer);
   }
-  if (answer.approaches.length < 4 || !answer.result) {
-    return json(res, 502, { error: 'The AI could not provide four distinct complete approaches. Please try again.', fallback: true });
+  if (answer.approaches.length < solvePolicy.minimumApproaches(question) || !answer.result) {
+    return json(res, 502, { error: solvePolicy.compositionTask(question) ? 'The AI could not provide a complete draft. Please try again.' : 'The AI could not provide four distinct complete approaches. Please try again.', fallback: true });
   }
   if (!noOfficialKey) cacheSet(cacheKey, answer);
   return json(res, 200, answer);
