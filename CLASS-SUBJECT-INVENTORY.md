@@ -1,4 +1,4 @@
-# Upay — Class-wise / Subject-wise Question Inventory
+# Upaay — Class-wise / Subject-wise Question Inventory
 
 Measured by loading every data file in `assets/js/boot.js` load order (core → post-paint → all subject packs) and replaying the same `foldLiteratureIntoBank()` de-dupe. Numbers are record counts, not paper counts.
 

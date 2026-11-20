@@ -1,8 +1,8 @@
-# Upay — study site and Accountancy PYQs
+# Upaay — study site and Accountancy PYQs
 
-Upay contains study pages, chapter maps, practice sets, and past-paper questions for selected Classes 10–12. Availability varies by board and subject. The CBSE Class 12 Accountancy question bank currently contains **34 papers and 1,428 question records**; official answer keys are not included, and the transcription has been spot-checked rather than exhaustively verified.
+Upaay contains study pages, chapter maps, practice sets, and past-paper questions for selected Classes 10–12. Availability varies by board and subject. The CBSE Class 12 Accountancy question bank currently contains **34 papers and 1,428 question records**; official answer keys are not included, and the transcription has been spot-checked rather than exhaustively verified.
 
-Another **17 supplied papers** (12 from 2023 Main and five from 2024 Main) are accessible as original PDFs under **Past Years → Original papers** in the CBSE Class 12 Accountancy or Computerised Accounting view. These PDFs are separate from the searchable question bank and its counts; questions from them have **not** been imported. Their scans/text layers do not reliably preserve every detail when extracted, so the source documents are provided rather than presenting unchecked OCR as verified questions. Year filters apply to the PDF list, but chapter/level filters do not. Open a PDF online and download it if you need your own offline copy; Upay's service worker does not cache these large files. The files are public site assets and will be publicly accessible if the site is deployed.
+Another **17 supplied papers** (12 from 2023 Main and five from 2024 Main) are accessible as original PDFs under **Past Years → Original papers** in the CBSE Class 12 Accountancy or Computerised Accounting view. These PDFs are separate from the searchable question bank and its counts; questions from them have **not** been imported. Their scans/text layers do not reliably preserve every detail when extracted, so the source documents are provided rather than presenting unchecked OCR as verified questions. Year filters apply to the PDF list, but chapter/level filters do not. Open a PDF online and download it if you need your own offline copy; Upaay's service worker does not cache these large files. The files are public site assets and will be publicly accessible if the site is deployed.
 
 Class 12 **Economics** has 11 original bilingual study guides and the 22 English textbook chapter PDFs (six Macroeconomics and five Microeconomics, plus two Microeconomics glossaries). **The English chapter PDFs were removed and replaced by extracted text** on the same basis as English above. The 12 Hindi chapter PDFs (`lhec101–106`, `lhec201–205`, `lhec2gl`) were **kept**: they use a legacy KrutiDev font whose text layer is Latin look-alikes rather than Devanagari, so no text could be extracted. Their chapter pages say “पाठ उपलब्ध नहीं” and fall back to the Hindi study guide. Re-upload them as Unicode PDFs to extract them. These guides and review checks are not official textbook transcriptions or answer keys. Indian Economic Development books were not supplied, so this is not a claim of complete current syllabus coverage.
 
@@ -114,7 +114,7 @@ project work 20 marks) and
 topics — Surface Chemistry; General Principles and Processes of Isolation of
 Elements; Polymers; Chemistry in Everyday Life — are not included as such, and
 the practical syllabus is not covered). The PDFs were read on 2026-11-09. This
-is syllabus mapping by Upay, not certification by CBSE or a claim that the
+is syllabus mapping by Upaay, not certification by CBSE or a claim that the
 outlines exhaust every examinable topic. Sources and gaps are listed on the
 [outline page](assets/notes/index.html): eleven Business Studies chapter PDFs
 plus a syllabus-derived Financial Markets unit; ten Chemistry reprint PDFs, with

@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · Router — decides which multi-method solver to use,
+   Upaay · Router — decides which multi-method solver to use,
    with a graceful fallback that still gives a genuinely useful answer.
    ===================================================================== */
 window.UP = window.UP || {};

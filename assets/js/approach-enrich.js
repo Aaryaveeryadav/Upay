@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · Three-Approach Enricher
+   Upaay · Three-Approach Enricher
    Attaches three solution methods to EVERY question that does not already
    have approaches populated, for EVERY class and subject (10, 11, 12)
    including MCQ/SA/LA/Assertion/Case questions.

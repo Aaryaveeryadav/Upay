@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check a Class 12 Physics data file before it is sent to Upay.
+"""Check a Class 12 Physics data file before it is sent to Upaay.
 
     python3 tools/curate/validate-physics-data.py my-physics.json
     python3 tools/curate/validate-physics-data.py my-questions.csv

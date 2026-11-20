@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · Maths Deterministic Solvers (Class 10 & 12)
+   Upaay · Maths Deterministic Solvers (Class 10 & 12)
    Computes numerical answers for common MCQ patterns: 2x2 determinants,
    2x2 matrix inverse, quadratic roots/sum/product, AP nth term/sum,
    trig values at standard angles, derivative of polynomials,

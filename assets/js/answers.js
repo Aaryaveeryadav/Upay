@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay answer cache
+   Upaay answer cache
    ---------------------------------------------------------------------
    Lookup order:
      1. in-memory ANS (loaded from /assets/answers/<subject>.json seed bundle)

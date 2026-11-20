@@ -1,4 +1,4 @@
-/* Upay admin dashboard — built from scratch, same-origin /api only. */
+/* Upaay admin dashboard — built from scratch, same-origin /api only. */
 (function(){
   'use strict';
 

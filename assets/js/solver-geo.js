@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · Multi-method solver — mensuration, circles, trigonometry,
+   Upaay · Multi-method solver — mensuration, circles, trigonometry,
    heights & distances, probability, similarity, plain arithmetic
    ===================================================================== */
 window.UP = window.UP || {};

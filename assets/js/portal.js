@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay admin portal  —  minimal, same-origin /api only, no probing.
+   Upaay admin portal  —  minimal, same-origin /api only, no probing.
    Server MUST serve this page (portal.html) on the same origin as the API.
    That is always true for `node server.js` on port 8004.
    ===================================================================== */

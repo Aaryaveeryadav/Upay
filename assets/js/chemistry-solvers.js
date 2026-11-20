@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · Chemistry Deterministic Solvers (Class 12)
+   Upaay · Chemistry Deterministic Solvers (Class 12)
    Computes answers for molarity/molality/mole fraction/colligative
    properties/Nernst equation/half-life (1st order).
    ===================================================================== */

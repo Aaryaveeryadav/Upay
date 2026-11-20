@@ -16,7 +16,7 @@ if !NODEVER! LSS 18 (
   pause
   exit /b 1
 )
-echo Starting Upay at http://localhost:%PORT%
+echo Starting Upaay at http://localhost:%PORT%
 echo Press Ctrl+C to stop.
 start "" "http://localhost:%PORT%"
 node server.js

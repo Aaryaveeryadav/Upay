@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · Multi-method solver — core utilities, quadratic equations,
+   Upaay · Multi-method solver — core utilities, quadratic equations,
    pairs of linear equations.
    Every solver returns:
    { kind, chapter, title:{en,hi}, approaches:[{name, tag, steps, why, watch}],

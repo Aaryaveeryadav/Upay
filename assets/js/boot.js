@@ -1,5 +1,5 @@
 /* =====================================================================
-   Upay · boot.js  —  fast parallel loader
+   Upaay · boot.js  —  fast parallel loader
    Strategy for first paint:
      1. CRITICAL_CORE: scripts required for app.js to render the home page.
         These are fetched in parallel (Promise.all) and executed in order.
@@ -248,7 +248,7 @@
     UP.answers.loadSeed(lastSubject);
     document.documentElement.classList.add('up-ready');
     if (typeof UP._onCoreReady === 'function') UP._onCoreReady();
-    return loadScript('assets/js/app.js?v=26hip3');
+    return loadScript('assets/js/app.js?v=26hip4');
   }
 
   function loadPostPaint() {
@@ -285,9 +285,9 @@
       else setTimeout(loadPostPaint, 400);
     })
     .catch(function (err) {
-      console.error('Upay boot failed:', err);
+      console.error('Upaay boot failed:', err);
       const view = document.getElementById('view');
-      if (view) view.innerHTML = '<div class="page" style="padding:40px;text-align:center"><h2>Could not load Kritin Upay</h2><p>' + (err.message || 'network error') + '</p><button class="btn btn-primary" onclick="location.reload()">Retry</button></div>';
+      if (view) view.innerHTML = '<div class="page" style="padding:40px;text-align:center"><h2>Could not load Kritin Upaay</h2><p>' + (err.message || 'network error') + '</p><button class="btn btn-primary" onclick="location.reload()">Retry</button></div>';
     });
 
   UP.switchSubject = function (subject) {

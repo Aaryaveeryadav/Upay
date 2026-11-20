@@ -1,5 +1,5 @@
 /* ============================================================
-   Upay — the panel
+   Upaay — the panel
    How a question would be answered by different assistant styles.
    Everything here is generated locally from the same numbers the
    solvers already computed, so the comparison is honest: the maths
