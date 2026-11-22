@@ -5,7 +5,9 @@
   "installCommand": null,
   "outputDirectory": null,
   "functions": {
-    "api/ai/solve.js": { "maxDuration": 180 },
+    "api/ai/solve.js": {
+      "maxDuration": 180
+    },
     "api/**/*.js": {
       "maxDuration": 60
     }
@@ -64,7 +66,7 @@
   ],
   "routes": [
     {
-      "src": "^/(?:lib|tools|data|uploads|solutions|\\.vercel)(?:/.*)?$",
+      "src": "^/(?:lib|tools|data|uploads|solutions|apps|extracted|supabase|docs|node_modules|\\.github|\\.vercel)(?:/.*)?$",
       "status": 404,
       "dest": "/index.html"
     },

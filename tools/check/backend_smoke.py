@@ -44,6 +44,13 @@ https.request = function(opts, cb) {
 // No network: emulate only the Google endpoint and record the requested prompt.
 const fs = require('fs');
 global.fetch = async function(url, opts) {
+  if (String(url) === 'https://model.example.test/v1/chat/completions') {
+    if (opts.headers.authorization !== 'Bearer isolated-model-token') throw new Error('Bad model authorization');
+    const req = JSON.parse(opts.body);
+    if (req.model !== 'isolated-model') throw new Error('Bad model selection');
+    const reply = {answer:'A mocked custom model answer.', approaches:['Definition','Example','Comparison','Check'].map((name,i)=>({name,steps:[{t:'A distinct mocked explanation number '+i+' with enough detail to complete this answer.'}]}))};
+    return {ok:true,status:200,text:async()=>JSON.stringify({choices:[{message:{content:JSON.stringify(reply)}}]})};
+  }
   if (!String(url).startsWith('https://generativelanguage.googleapis.com/')) throw new Error('Unexpected network request in isolated test');
   const request = JSON.parse(opts.body);
   fs.appendFileSync('mock-provider-prompts.jsonl', JSON.stringify(request.contents[0].parts[0].text) + '\n');
@@ -109,7 +116,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='upay-isolated-', dir=os.environ.get('UPAY_TEST_TMP') or None) as td:
         work = Path(td)
         policy_version = subprocess.check_output(['node', '-p', "require('./lib/solve-policy.js').VERSION"], cwd=ROOT, text=True).strip()
-        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'lib/solve-integrity.js', 'assets/js/worked-figure.js', 'assets/js/request-accuracy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-status.js', 'lib/rate-limit.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
+        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'lib/solve-integrity.js', 'assets/js/worked-figure.js', 'assets/js/request-accuracy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-provider.js', 'lib/ai-status.js', 'lib/rate-limit.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
             (work / name).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / name, work / name)
         (work / 'index.html').write_text('<title>isolated test</title>')
@@ -284,6 +291,13 @@ def main():
             me = expect(port, '/api/auth/me', 200)
             assert me['user']['role'] == 'student'
             expect(port, '/api/ai/solve', 400, method='POST', body={'question':'A test question'})
+            stop()
+            env.update(UPAY_SOLVE_PROVIDER='openai-compatible', UPAY_LLM_URL='https://model.example.test/v1/chat/completions', UPAY_LLM_MODEL='isolated-model', UPAY_LLM_KEY='isolated-model-token')
+            start(open_mode=True)
+            custom = expect(port, '/api/ai/solve', 200, method='POST', body={'question':'What is photosynthesis?', 'subject':'science'})
+            assert custom['result'] == 'A mocked custom model answer.' and len(custom['approaches']) == 4
+            assert 'isolated-model-token' not in json.dumps(custom)
+            print('PASS local custom provider without a Gemini key, mocked four-approach response')
             print('Isolated server authentication, revocation, spoofing, fresh solve behavior, static paths and permissions: PASS')
         finally:
             stop()

@@ -18,7 +18,7 @@ const languagePolicy = require('./assets/js/language-policy.js');
 const solveTiming = require('./assets/js/solve-timing.js');
 const solvePolicy = require('./lib/solve-policy.js');
 const integrity = require('./lib/solve-integrity.js');
-const solveRuntime = require('./lib/gemini.js');
+const solveRuntime = require('./lib/ai-provider.js');
 const { aiFailure: solveFailure } = require('./lib/ai-status.js');
 
 const http = require('http');
@@ -1803,7 +1803,7 @@ const handleRequest = async function (req, res) {
       const isEconomics = subject === 'economics';
       const isEnglish12 = subject === 'english' && cls === 12;
       const noOfficialKey = isAccountancy || isEconomics || isEnglish12 || subjectRouting.task === 'writing' || ['social','hindi','hindi-core','hindi-elective','english','sanskrit'].includes(subject);
-      if (!plain.length) return json(res, 400, { error: 'The admin has not added a Google API key yet, so the AI solver is off.', fallback: true });
+      if (!plain.length && solveRuntime.providerName() === 'gemini') return json(res, 400, { error: 'The admin has not added a Google API key yet, so the AI solver is off.', fallback: true });
 
       /* Per-subject prompts.  The shape of the answer is always the same JSON,
          but:
@@ -1939,11 +1939,11 @@ const handleRequest = async function (req, res) {
       const callOptions = {deadline:Date.now()+timing.serverMs, signal:solveController.signal, attemptMs:timing.attemptMs, maxOutputTokens:timing.maxOutputTokens};
       const solveTimer = setTimeout(()=>solveController.abort(), timing.serverMs);
       try {
-        out = await solveRuntime.callGeminiResilient(prompt, plain, db.settings.geminiModel, null, callOptions);
+        out = await solveRuntime.generateSolve(prompt, plain, db.settings.geminiModel, callOptions);
         let draft;
         try { draft = firstJSON(out.text); } catch (_) { draft = null; }
         if (draft && (solvePolicy.completeApproaches(draft, question, subject).length < solvePolicy.minimumApproaches(question) || integrity.conflict(question, draft))) {
-          out = await solveRuntime.callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), plain, out.model, null, callOptions);
+          out = await solveRuntime.generateSolve(solvePolicy.repairPrompt(prompt, draft), plain, out.model, callOptions);
         }
       } catch (e) {
         audit(sess.user, 'solve-error', String(e.message).slice(0, 140));

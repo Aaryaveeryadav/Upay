@@ -1,5 +1,7 @@
 # Upaay — study site and Accountancy PYQs
 
+**React migration and future model integration:** See [architecture and migration](docs/architecture-migration.md). The production site is still the existing app; the separate React preview is not yet a replacement.
+
 Upaay contains study pages, chapter maps, practice sets, and past-paper questions for selected Classes 10–12. Availability varies by board and subject. The CBSE Class 12 Accountancy question bank currently contains **34 papers and 1,428 question records**; official answer keys are not included, and the transcription has been spot-checked rather than exhaustively verified.
 
 Another **17 supplied papers** (12 from 2023 Main and five from 2024 Main) are accessible as original PDFs under **Past Years → Original papers** in the CBSE Class 12 Accountancy or Computerised Accounting view. These PDFs are separate from the searchable question bank and its counts; questions from them have **not** been imported. Their scans/text layers do not reliably preserve every detail when extracted, so the source documents are provided rather than presenting unchecked OCR as verified questions. Year filters apply to the PDF list, but chapter/level filters do not. Open a PDF online and download it if you need your own offline copy; Upaay's service worker does not cache these large files. The files are public site assets and will be publicly accessible if the site is deployed.
@@ -18,7 +20,7 @@ The CBSE Class 12 Economics and Biology Past Years views also contain **90 Econo
 
 ## Start the local server
 
-1. Install Node.js 18 or newer.
+1. Install Node.js 22.12 or newer (required by the React migration toolchain).
 2. From this directory run `node server.js` (or `./start.sh` on macOS/Linux, `run.bat` on Windows).
 3. Open `http://localhost:8004`. The server itself does not necessarily open a browser.
 
@@ -33,7 +35,7 @@ The current `data/` directory contains private state. Do **not** serve the proje
 - For the local server, an authorized admin can configure Gemini keys under the Admin screen. A serverless deployment uses protected `GEMINI_KEYS` or `GEMINI_KEY` environment variables and `UPAY_AI_ALLOWED_USERS`; its Admin key-management endpoint is disabled.
 - AI answers can be wrong. Accountancy, Economics and Class 12 English AI responses are marked **not independently checked**; no official keys are supplied. When AI is unavailable there is no verified local solver for those subjects.
 - `UPAY_OPEN=1` is an insecure, explicitly opt-in demo mode that allows unauthenticated student AI requests. It never grants admin access and must not be enabled on a public deployment.
-- AI caches in the local server and serverless solver are scoped to the verified account, subject, class and language. Older unowned local cache entries are preserved in `data/db.json` but are no longer reused automatically.
+- AI solve answers are generated afresh. Older local cache entries are preserved in `data/db.json` but are not reused by the solver.
 
 ## Practice and backups
 
