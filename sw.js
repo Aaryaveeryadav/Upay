@@ -1,6 +1,6 @@
 /* Upaay service worker — offline shell + public asset caching (v26f27).
    API responses are deliberately never stored: they can be user-specific. */
-const VERSION = 'upay-v26hip9';
+const VERSION = 'upay-v26react1';
 const ASSET_CACHE = VERSION + '-assets';
 const PRECACHE = [
   '/',
@@ -10,7 +10,7 @@ const PRECACHE = [
   '/assets/brand/kritin-icon-192.png',
   '/assets/brand/kritin-icon-512.png',
   '/assets/css/app.css?v=26hi12',
-  '/assets/js/boot.js?v=26hip9',
+  '/assets/js/boot.js?v=26react1',
   '/assets/js/question-quality.js?v=26hip9',
   '/assets/js/data/question-overrides.js?v=26f15',
   '/assets/js/testgen.js?v=26f14',
@@ -18,6 +18,7 @@ const PRECACHE = [
   '/assets/js/figures.js?v=26f27',
   '/assets/js/paste-repair.js?v=26hip9',
   '/assets/js/charge-energy.js?v=26f27',
+  '/assets/js/hash-route.js?v=26react1',
   '/assets/js/task-routing.js?v=26hip9',
   '/assets/js/request-accuracy.js?v=26hip9',
   '/assets/js/math-render.js?v=26f27',
@@ -25,7 +26,7 @@ const PRECACHE = [
   '/assets/js/matrices.js?v=26f28',
   '/assets/js/worked-figure.js?v=26f27',
   '/assets/js/solve-parts.js?v=26hip9',
-  '/assets/js/app.js?v=26hip9',
+  '/assets/js/app.js?v=26react1',
 ];
 
 self.addEventListener('install', ev => {

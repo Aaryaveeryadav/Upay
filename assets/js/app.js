@@ -4813,18 +4813,7 @@ window.UP = window.UP || {};
   }
 
   /* ================================ ROUTER ================================ */
-  function parseHash() {
-    let h = location.hash.replace(/^#\/?/, '');
-    if (!h) return { name: 'home', params: {} };
-    const [path, qs] = h.split('?');
-    const parts = path.split('/').filter(Boolean);
-    const params = {};
-    (qs || '').split('&').filter(Boolean).forEach(kv => {
-      const [k, v] = kv.split('=');
-      params[decodeURIComponent(k)] = decodeURIComponent(v || '');
-    });
-    return { name: parts[0] || 'home', id: parts[1], params };
-  }
+  function parseHash() { return UP.hashRoute.parse(location.hash); }
 
   function render(options) {
     // Explanation updates replace the DOM, not the route. Keep the currently
