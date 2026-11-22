@@ -44,6 +44,10 @@ The gateway must accept `model`, `messages`, `max_tokens`, `temperature` and `st
 
 Unset `UPAY_SOLVE_PROVIDER` or set it to `gemini` to retain existing behavior. Test changes with `node tools/check/ai_provider.js`, `node tools/check/serverless_smoke.js`, and `python3 tools/check/backend_smoke.py`; all use mocks, not live model credentials.
 
+## Production baseline for migration
+
+`node tools/check/production_route_baseline.js` boots the existing production scripts in JSDOM with local fixtures and mocked network responses. It checks representative routes, retention of a seeded guest saved question and distinct submitted AI questions. It is a regression baseline, not proof of React parity: JSDOM does not exercise a real service worker, real authentication, live Gemini, mobile layout, or the full set of interactions and subject packs. The real-browser and provider checks remain necessary.
+
 ## Next migration steps
 
 1. Establish React design-system components and progressively migrate question browsing, exercises, authentication, and the remaining subjects with matching routes, accessible controls, mobile layouts, stored state and source metadata.
