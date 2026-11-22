@@ -2,7 +2,7 @@
 
 ## Current state
 
-The production application is **not yet fully migrated to React**. It is the existing browser application (`index.html`, `assets/js/app.js` and subject data under `assets/`) with a Node.js local server (`server.js`) and Vercel functions (`api/`). Supabase handles hosted authentication. The existing UI, hash routes, student data and deployment remain unchanged. `apps/web/` is an independent, working React 19 / Vite preview of **33 reviewed Class 10 English practice questions**. It is not the complete English bank or the rest of the site, is not linked from the live app and is not included in the current Vercel deployment. Nothing has been moved or deleted to make the repository look tidy at the cost of breaking references.
+The production application is **not yet fully migrated to React**. It is the existing browser application (`index.html`, `assets/js/app.js` and subject data under `assets/`) with a Node.js local server (`server.js`) and Vercel functions (`api/`). Supabase handles hosted authentication. The existing UI, hash routes, student data and deployment remain unchanged. `apps/web/` is an independent, working React 19 / Vite preview of **33 reviewed Class 10 English practice questions**. It is not the complete English bank or the rest of the site, is not linked from the live app and is not included in the current Vercel deployment. Nothing has been moved or deleted to make the repository look tidy at the cost of breaking references. The production router and React preview now share `assets/js/hash-route.js` for hash parsing and Ask links; preview questions explicitly carry their Class 10 English scope. This is routing groundwork, not a React migration of the production views.
 
 ### Repository responsibilities
 
@@ -27,7 +27,7 @@ npm start                    # existing Node server on port 8004
 npm run dev:web               # React preview, typically port 5173
 ```
 
-Open `/assets/react-study/` on the Vite server. Vite proxies the source-data and PDF requests to the existing Node server; browser code uses same-origin paths. The preview's “Ask AI” action opens the existing app, retaining its authentication and solve policies. Override the proxy target only as an operator with `UPAY_WEB_BACKEND` (a server-side development setting), never with browser input. For a production-style local build, run `npm run build:web` and open `/assets/react-study/index.html` on the Node server. The existing site does not need the React build to run. Build output is ignored and intentionally excluded from Vercel until the migration is reviewed and its deployment explicitly enabled.
+Open `/assets/react-study/` on the Vite server. Vite proxies the source-data and PDF requests to the existing Node server; browser code uses same-origin paths. The preview's “Ask AI” action opens the existing app with the question, class and subject in the link, retaining its authentication and solve policies. The shared route script is part of the production offline shell; `node tools/check/hash_route.js` checks its link contract. Override the proxy target only as an operator with `UPAY_WEB_BACKEND` (a server-side development setting), never with browser input. For a production-style local build, run `npm run build:web` and open `/assets/react-study/index.html` on the Node server. The existing site does not need the React build to run. Build output is ignored and intentionally excluded from Vercel until the migration is reviewed and its deployment explicitly enabled.
 
 ## Future model: solve provider boundary
 

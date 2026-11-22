@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import './style.css';
+import '../../../assets/js/hash-route.js';
 
 // This first migrated view reads the same reviewed public data as the legacy app.
 // It does not load unreviewed PDFs or claim AI answers are official keys.
@@ -17,7 +18,7 @@ function QuestionCard({question, onRelated, relatedCount}) {
     <p>{text}</p>
     {options.length > 0 && <ol className="options" type="A">{options.map((o,i) => <li key={i}>{typeof o === 'string' ? o : o.en || o.text}</li>)}</ol>}
     <div className="card-footer"><span>CBSE practice · PDF page {question.sourcePage} · No verified key</span>
-      <div className="actions">{relatedCount > 0 && <button type="button" onClick={() => onRelated(question.chapter)}>See similar ({relatedCount})</button>}<a href={question.sourceUrl} target="_blank" rel="noreferrer">Source PDF ↗</a><a className="action-primary" {...legacyTarget} href={`${appHome}#/ask?q=${encodeURIComponent(ask)}`}>Ask AI →</a></div>
+      <div className="actions">{relatedCount > 0 && <button type="button" onClick={() => onRelated(question.chapter)}>See similar ({relatedCount})</button>}<a href={question.sourceUrl} target="_blank" rel="noreferrer">Source PDF ↗</a><a className="action-primary" {...legacyTarget} href={`${appHome}${window.UP.hashRoute.ask(ask, {cls:10, sub:'english'})}`}>Ask AI →</a></div>
     </div>
   </article>;
 }
