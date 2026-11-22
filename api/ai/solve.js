@@ -8,7 +8,8 @@ const integrity = require('../../lib/solve-integrity.js');
 const { consumeAI } = require('../../lib/ai-usage.js');
 const { aiRateFloor } = require('../../lib/rate-limit.js');
 const { aiFailure } = require('../../lib/ai-status.js');
-const { callGeminiResilient, readBody, json, firstJSON } = require('../../lib/gemini.js');
+const { readBody, json, firstJSON } = require('../../lib/gemini.js');
+const { generateSolve } = require('../../lib/ai-provider.js');
 const { requireStudent } = require('../../lib/supabase-auth.js');
 
 function repairNumericDots(text) {
@@ -260,7 +261,7 @@ module.exports = async function handler(req, res) {
   try {
     // Prefer fast models for the first hit; chain falls back to larger ones if needed
     out = await Promise.race([
-      callGeminiResilient(prompt, null, 'gemini-3.5-flash-lite', null, callOptions),
+      generateSolve(prompt, null, 'gemini-3.5-flash-lite', callOptions),
       timeoutPromise
     ]);
     // One bounded repair call, sharing the original adaptive deadline.
@@ -270,7 +271,7 @@ module.exports = async function handler(req, res) {
       // A malformed response is a null result from firstJSON, not an exception.
       // Give the provider one bounded chance to return a valid replacement.
       out = await Promise.race([
-        callGeminiResilient(solvePolicy.repairPrompt(prompt, draft), null, out.model, null, callOptions),
+        generateSolve(solvePolicy.repairPrompt(prompt, draft), null, out.model, callOptions),
         timeoutPromise
       ]);
     }

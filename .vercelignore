@@ -16,3 +16,11 @@ server.js
 
 # Internal review previews are not public study content.
 /*-PREVIEW.html
+
+# Migration source and internal working files are not public site assets.
+apps/**
+extracted/**
+docs/**
+supabase/**
+node_modules/**
+assets/react-study/**
