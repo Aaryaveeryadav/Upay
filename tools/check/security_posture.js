@@ -40,15 +40,33 @@ for (const rel of ['api/ai/solve.js', 'api/ai/check-answer.js', 'api/ai/read-ima
 }
 const server = read('server.js');
 assert(/aiUserLimiter/.test(server) && /aiIpLimiter/.test(server), 'server.js must cap AI routes per account and per address');
-// The Science tutor spends local model time; it must sit behind the same
-// per-address floor before the route body can reach the model.
-const askRoute = require('fs').readFileSync(path.join(ROOT, 'api/science/ask.js'), 'utf8');
+// The Science tutor spends model time; it must sit behind the same
+// per-address floor before the route body can reach the model. The route now
+// re-exports the shared chat handler to stay inside Vercel's Hobby function
+// limit, so resolve that re-export instead of assuming the body is inline.
+function routeSource(rel) {
+  let src = require('fs').readFileSync(path.join(ROOT, rel), 'utf8');
+  for (let hop = 0; hop < 3; hop++) {
+    const m = /module\.exports\s*=\s*require\(['"]([^'"]+)['"]\)/.exec(src);
+    if (!m) break;
+    const target = path.resolve(ROOT, path.dirname(rel), m[1]);
+    const withExt = [target, target + '.js', path.join(target, 'index.js')].find(f => require('fs').existsSync(f));
+    assert(withExt, rel + ' re-exports a module that does not exist: ' + m[1]);
+    rel = path.relative(ROOT, withExt);
+    src = require('fs').readFileSync(withExt, 'utf8');
+  }
+  return src;
+}
+const askRoute = routeSource('api/science/ask.js');
 // Every model-reading route must sit behind the per-address floor. The tutor
 // moved onto the shared study chat (one model boundary), so the call it must
 // follow is chat.answer; the old rag.answerQuestion name is kept as an alias
 // only if something still calls it directly.
 const tutorCall = Math.min(
-  ...['chat.answer', 'rag.answerQuestion'].map(name => {
+  // The shared chat handler destructures answer() from lib/chat.js, so the
+  // call site reads `await answer({...})`; the qualified names cover the
+  // other ways the same boundary has been written.
+  ...['chat.answer', 'rag.answerQuestion', 'await answer('].map(name => {
     const at = askRoute.indexOf(name);
     return at < 0 ? Infinity : at;
   })
