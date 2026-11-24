@@ -4822,19 +4822,31 @@ window.UP = window.UP || {};
   function viewStudyChatForward(params) {
     const q = params && params.q ? String(params.q).slice(0, 800) : '';
     const hash = '#/chat' + (q ? '?q=' + encodeURIComponent(q) : '');
-    /* location.replace is the real navigation. jsdom (the node test harness)
-       cannot leave the document and reports that as an unhandled error, so the
-       jump is skipped there — the markup below is the same destination, and the
-       check asserts on it. */
+    /* The Study chat is a signed-in screen: it answers from the student's own
+       class and subject, which it takes from the account rather than the URL.
+       A guest therefore gets the sign-in page, not a bounced chat. Say that
+       plainly instead of sending them somewhere that will ask for a password
+       without explanation. */
+    const signedIn = !!(S && S.user);
     setTimeout(() => {
       if (navigator.userAgent && /jsdom/i.test(navigator.userAgent)) return;
       try { location.replace('/app' + hash); } catch (_) {}
     }, 0);
-    return `<section class="page-head"><h1>${S.lang === 'hi' ? 'अध्ययन चैट' : 'Study chat'}</h1></section>
-      <div class="callout"><div>${S.lang === 'hi'
+    const title = S.lang === 'hi' ? 'अध्ययन चैट' : 'Study chat';
+    const line = signedIn
+      ? (S.lang === 'hi'
         ? 'प्रश्न अब अध्ययन चैट में पूछे जाते हैं — किताब के अपने उत्तर से।'
-        : 'Questions are answered in the Study chat now, from the book\'s own answer key.'}</div>
-        <p><a class="btn btn-primary btn-sm" href="/app${hash}" data-app>${S.lang === 'hi' ? 'चैट खोलें' : 'Open the chat'}</a></p></div>`;
+        : 'Questions are answered in the Study chat now, from the book\'s own answer key.')
+      : (S.lang === 'hi'
+        ? 'अध्ययन चैट में प्रवेश करने के लिए साइन इन करें; वह आपकी कक्षा और विषय अपने आप चुनती है।'
+        : 'Sign in to use the Study chat; it reads your class and subject from your account.');
+    const button = signedIn
+      ? (S.lang === 'hi' ? 'चैट खोलें' : 'Open the chat')
+      : (S.lang === 'hi' ? 'साइन इन करें' : 'Sign in');
+    const href = signedIn ? '/app' + hash : '/app';
+    return `<section class="page-head"><h1>${title}</h1></section>
+      <div class="callout"><div>${line}</div>
+        <p><a class="btn btn-primary btn-sm" href="${href}" data-app>${button}</a></p></div>`;
   }
 
   /* ================================ ROUTER ================================ */

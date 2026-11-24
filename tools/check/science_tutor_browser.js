@@ -39,16 +39,19 @@ const { chromium } = require('playwright');
       assert.equal(await page.locator('[data-nav="tutor"]').count(), 0, width + ': no separate subject-tutor entry');
       assert.equal(await page.locator('form[data-form="science-tutor"]').count(), 0, width + ': no second ask form');
 
-      // An old #/tutor bookmark lands somewhere useful rather than on a blank page.
-      await page.goto((process.env.UPAY_BASE || 'http://127.0.0.1:8005') + '/#/tutor', { waitUntil: 'networkidle' });
-      await page.waitForFunction(() => window.UP && UP.S && document.body.classList.contains('up-ready'));
-      const forward = page.locator('a[data-app]');
-      await forward.first().waitFor({ timeout: 15000 });
-      const target = await forward.first().getAttribute('href');
-      assert.match(target, /^\/app#\/chat/, width + ': an old #/tutor link offers the Study chat');
+      /* An old #/tutor bookmark must land somewhere useful. The app navigates
+         itself: on the next tick it replaces the location with /app#/chat, so
+         the correct outcome of opening #/tutor is arriving at the chat, not
+         sitting on a page that offers a link. Wait for that arrival. */
+      await page.goto((process.env.UPAY_BASE || 'http://127.0.0.1:8005') + '/#/tutor', { waitUntil: 'domcontentloaded' });
+      await page.waitForURL(url => url.pathname === '/app', { timeout: 20000 }).catch(() => {});
+      const landed = new URL(page.url());
+      assert.equal(landed.pathname, '/app', width + ': an old #/tutor link forwards to the Study chat');
+      assert.match(landed.hash, /^#\/chat/, width + ': the forwarded page opens the chat route');
 
-      // Following it really arrives at the chat shell.
-      await page.goto((process.env.UPAY_BASE || 'http://127.0.0.1:8005') + target, { waitUntil: 'networkidle' });
+      // And the shell it lands on is the Study chat: reachable, bundled, and
+      // rendering something a visitor can act on (sign-in, for a guest).
+      await page.waitForLoadState('networkidle');
       const chat = await page.evaluate(() => ({
         hasRoot: !!document.getElementById('root'),
         booted: !!document.querySelector('#root > *'),
