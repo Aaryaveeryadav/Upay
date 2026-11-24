@@ -4983,7 +4983,10 @@ window.UP = window.UP || {};
             state: 'done', grounded: !!body.grounded, answer: String(body.answer || ''),
             citations: Array.isArray(body.citations) ? body.citations : [],
             citationCheck: body.citationCheck || { used: [], invalid: [], hasCitation: false },
-            model: body.model || '', notice: body.notice || '', retrieved: Number(body.retrieved) || 0
+            model: body.model || '', notice: body.notice || '', retrieved: Number(body.retrieved) || 0,
+            // A book key or a stored answer is not an AI draft; keep the flag
+            // so the card names its real source.
+            keyed: !!body.keyed, stored: !!body.stored
           });
           return;
         }

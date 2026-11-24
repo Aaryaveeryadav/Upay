@@ -116,7 +116,9 @@ def main():
     with tempfile.TemporaryDirectory(prefix='upay-isolated-', dir=os.environ.get('UPAY_TEST_TMP') or None) as td:
         work = Path(td)
         policy_version = subprocess.check_output(['node', '-p', "require('./lib/solve-policy.js').VERSION"], cwd=ROOT, text=True).strip()
-        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'lib/solve-integrity.js', 'assets/js/worked-figure.js', 'assets/js/request-accuracy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-provider.js', 'lib/ai-status.js', 'lib/rate-limit.js', 'lib/science-rag.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
+        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'lib/solve-integrity.js', 'assets/js/worked-figure.js', 'assets/js/request-accuracy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-provider.js', 'lib/ai-status.js', 'lib/rate-limit.js', 'lib/science-rag.js', 'lib/local-llm.js', 'lib/chat.js', 'lib/platform-api.js',
+                         'lib/content-control.js', 'lib/supabase-admin.js', 'lib/subject-index.js', 'lib/answer-store.js', 'lib/db.js', 'lib/tenancy.js',
+                         'lib/roster.js', 'lib/gemini.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
             (work / name).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / name, work / name)
         (work / 'index.html').write_text('<title>isolated test</title>')
@@ -226,6 +228,10 @@ def main():
             db['aiCache'][key] = {'owner':owner, 'result':'student-only cached answer', 'policyVersion':policy_version, 'approaches':[{'name':str(i),'steps':[{'t':str(i)}]} for i in range(4)]}
             db['aiCache']['legacy-fixture'] = {'result':'legacy private answer'}
             dbfile.write_text(json.dumps(db))
+            # This block verifies the prompt contract of an explicitly configured
+            # cloud provider; the shipped default is the site's own local model
+            # (covered by /api/ai/solve returning 503 above).
+            env.update(UPAY_SOLVE_PROVIDER='gemini')
             start()
             query = '/api/ai/cache?q=owner%20fixture%20question&subject=maths&cls=10&lang=en'
             cached = expect(port, query, 200, token=student)
@@ -235,10 +241,13 @@ def main():
             assert not expect(port, query.replace('lang=en','lang=hi'), 200, token=student)['found']
             assert expect(port, '/api/ai/cache', 200, token=student)['count'] == 0
             assert expect(port, '/api/ai/cache', 200, token=admin)['count'] == 0
-            expect(port, '/api/ai/solve', 400, token=student, method='POST',
-                   body={'question':'Owner fixture question','subject':'maths','cls':10,'lang':'en'})
-            expect(port, '/api/ai/solve', 400, token=admin, method='POST',
-                   body={'question':'Owner fixture question','subject':'maths','cls':10,'lang':'en'})
+            # This block runs the explicitly configured cloud prompt contract,
+            # with no key installed yet: the honest answer is "not configured",
+            # never an invented solution and never a leaked cached one.
+            for account in (student, admin):
+                solved = expect(port, '/api/ai/solve', 400, token=account, method='POST',
+                        body={'question':'Owner fixture question','subject':'maths','cls':10,'lang':'en'})
+                assert solved.get('fallback') is True and 'result' not in solved
             assert 'legacy-fixture' in json.loads(dbfile.read_text())['aiCache']
             # A local mock provider verifies Economics-specific prompts, no
             # unrelated arithmetic verification/diagram, and no answer cache.
@@ -301,7 +310,10 @@ def main():
                 expect(port, '/api/admin/key', 403, headers=headers)
             me = expect(port, '/api/auth/me', 200)
             assert me['user']['role'] == 'student'
-            expect(port, '/api/ai/solve', 400, method='POST', body={'question':'A test question'})
+            # No key is configured for the mock provider at this point, so the
+            # honest answer is "not configured", never an invented solution.
+            solved = expect(port, '/api/ai/solve', 400, method='POST', body={'question':'A test question'})
+            assert solved.get('fallback') is True
             stop()
             env.update(UPAY_SOLVE_PROVIDER='openai-compatible', UPAY_LLM_URL='https://model.example.test/v1/chat/completions', UPAY_LLM_MODEL='isolated-model', UPAY_LLM_KEY='isolated-model-token')
             start(open_mode=True)

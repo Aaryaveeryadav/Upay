@@ -59,9 +59,18 @@ module.exports = async function handler(req, res) {
     return json(res, 200, result);
   } catch (e) {
     const status = Number(e && e.status) || 500;
+    /* This route's public contract is the tutor_* vocabulary documented in
+       docs/science-tutor.md, and the legacy tutor screen switches on it. The
+       answer itself comes from the shared study chat, so translate its model
+       codes back at this boundary instead of changing the contract. */
+    const TUTOR_CODES = {
+      llm_unavailable: 'tutor_unavailable', llm_timeout: 'tutor_timeout',
+      llm_model_missing: 'tutor_model_missing', llm_configuration: 'tutor_configuration',
+      llm_disabled: 'tutor_disabled', llm_error: 'tutor_model_error'
+    };
     const payload = {
       error: status >= 500 ? String((e && e.message) || 'The Science tutor is unavailable.') : String(e.message),
-      code: (e && e.code) || 'tutor_error'
+      code: TUTOR_CODES[e && e.code] || (e && e.code) || 'tutor_error'
     };
     // Keep the retrieved evidence in the failure: it is still true and useful.
     if (e && e.citations) {

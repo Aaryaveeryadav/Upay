@@ -18,7 +18,9 @@ jobs:
           python-version: '3.11'
       - run: npm ci
       - run: npm run build:web
-      - run: node tools/check/react_preview.js
+      - run: node tools/check/react_app.js
+      - run: node tools/check/legacy_app.js
+      - run: node tools/check/answer_bank.js
       - run: node tools/check/hash_route.js
       - run: node tools/check/production_route_baseline.js
       - run: node tools/check/ai_provider.js

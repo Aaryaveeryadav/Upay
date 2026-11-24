@@ -5,6 +5,10 @@ const { Readable } = require('stream');
 process.env.UPAY_AI_ALLOWED_USERS = 'allowed-test-user,allowed-test-user-2';
 // Prefer the new public key over a stale legacy env override; both are fixtures.
 process.env.SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_test_fixture';
+// This contract test drives the Gemini-shaped mock below, so it names that
+// provider explicitly. The shipped default (lib/ai-provider.js) is the site's
+// own local model, and the local path has its own mocked test.
+process.env.UPAY_SOLVE_PROVIDER = 'gemini';
 process.env.SUPABASE_ANON_KEY = 'legacy_test_fixture';
 const lib = require('../../lib/gemini.js');
 let providerCalls = 0, lastPrompt = '', replyText = '', queuedReplies = [], callBudgets = [];

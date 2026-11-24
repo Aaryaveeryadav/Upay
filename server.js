@@ -452,12 +452,42 @@ function notFoundPage(res, why, hint) {
     + '</div>');
 }
 
+/* The React app shell. If it has not been built yet, say so in one line
+   instead of a blank page; the study APIs keep working either way. */
+function serveApp(res) {
+  const shell = path.join(PUBLIC, 'assets', 'app', 'index.html');
+  fs.readFile(shell, 'utf8', function (err, html) {
+    if (err) {
+      /* A deployment that has not built the React app still has the reviewed
+         legacy study pages; send people there instead of a dead end. */
+      const legacy = path.join(PUBLIC, 'index.html');
+      if (fs.existsSync(legacy)) {
+        return fs.readFile(legacy, function (e2, old) {
+          res.writeHead(e2 ? 503 : 200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache' });
+          res.end(e2 ? 'The app is not built on this server.' : old);
+        });
+      }
+      res.writeHead(503, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+      return res.end('<!doctype html><meta charset="utf-8"><title>Kritin Upaay</title>' +
+        '<div style="font:16px system-ui;padding:40px;max-width:640px;margin:auto">' +
+        '<h1 style="font-size:24px">The app is not built on this server yet.</h1>' +
+        '<p>Run <code>npm run build:web</code> where the site is deployed, then reload this page.</p></div>');
+    }
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache' });
+    res.end(html);
+  });
+}
+
 function serveStatic(req, res, pathname) {
   let p;
   try { p = decodeURIComponent(pathname); }
   catch (_) { res.writeHead(400); return res.end('bad path'); }
   if (p.includes('\0')) { res.writeHead(400); return res.end('bad path'); }
-  if (p === '/' ) p = '/index.html';
+  /* "/" is the React app. index.html itself stays the legacy study app, which
+     the React chat links to as "/legacy" for paper-level work that has not
+     moved yet; keeping both reachable means neither rewrite strands a page. */
+  if (p === '/') return serveApp(res);
+  if (p === '/legacy') p = '/index.html';
   /* The pages were once reachable as /public/login.html (the folder was the
      web root). Those links still exist in old bookmarks and in login.html's
      own redirect, so the legacy prefix is mapped onto the real file rather
@@ -2262,6 +2292,13 @@ const handleRequest = async function (req, res) {
        POST asks a question. No account is required: answers come from the
        local index and a local model, and the shared IP floor above bounds
        abuse. Model configuration is server-side only (docs/science-tutor.md). */
+    /* ---------- The app: React build served from /assets/app/ ----------
+       "/" and any client route open the React app. Deep links (#/chat?q=...)
+       are client-side; the shell is the same file. */
+    if ((p === '/' || p === '/app' || p === '/index.html') && req.method === 'GET') {
+      return serveApp(res);
+    }
+
     if (p === '/api/science/ask' && req.method === 'GET') {
       const st = scienceRag.status();
       return json(res, 200, {

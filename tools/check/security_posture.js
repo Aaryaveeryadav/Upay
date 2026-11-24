@@ -43,10 +43,24 @@ assert(/aiUserLimiter/.test(server) && /aiIpLimiter/.test(server), 'server.js mu
 // The Science tutor spends local model time; it must sit behind the same
 // per-address floor before the route body can reach the model.
 const askRoute = require('fs').readFileSync(path.join(ROOT, 'api/science/ask.js'), 'utf8');
-assert(askRoute.indexOf('aiRateFloor(req') >= 0 && askRoute.indexOf('aiRateFloor(req') < askRoute.indexOf('rag.answerQuestion'),
+// Every model-reading route must sit behind the per-address floor. The tutor
+// moved onto the shared study chat (one model boundary), so the call it must
+// follow is chat.answer; the old rag.answerQuestion name is kept as an alias
+// only if something still calls it directly.
+const tutorCall = Math.min(
+  ...['chat.answer', 'rag.answerQuestion'].map(name => {
+    const at = askRoute.indexOf(name);
+    return at < 0 ? Infinity : at;
+  })
+);
+assert(askRoute.indexOf('aiRateFloor(req') >= 0 && isFinite(tutorCall) && askRoute.indexOf('aiRateFloor(req') < tutorCall,
   'api/science/ask.js must rate-limit before calling the model');
-assert(server.indexOf("'/api/science/ask'") < server.indexOf('scienceRag.answerQuestion'),
-  'server.js must rate-limit the tutor route before the model call');
+for (const name of ['scienceRag.answerQuestion', 'studyChat.answer']) {
+  const at = server.indexOf(name);
+  if (at >= 0) assert(server.indexOf("'/api/science/ask'") < at,
+    'server.js must rate-limit the tutor route before the model call (' + name + ')');
+}
+assert(server.includes("'/api/science/ask'"), 'server.js still serves the tutor');
 assert(!/UPAY_OLLAMA_URL[^\n]*req\.|req\.[a-z]+[^\n]*UPAY_OLLAMA_URL/.test(askRoute), 'model configuration cannot come from a request');
 assert(/LOGIN_MAX_IP/.test(server) && /LOGIN_MAX_USER/.test(server), 'login rate limits must stay');
 console.log('PASS security: AI + login rate limiting wired');

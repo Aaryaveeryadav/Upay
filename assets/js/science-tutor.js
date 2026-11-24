@@ -200,6 +200,24 @@
     const noCite = (!check.hasCitation && sources.length)
       ? '<p class="tutor-warn">' + (hi ? 'ड्राफ्ट में कोई [n] संदर्भ नहीं है — नीचे के पृष्ठ स्वयं जाँचें।' : 'The draft does not point to a source with [n]. Read the pages below and check the claim yourself.') + '</p>'
       : '';
+    /* The server can answer from the book's own key or from the stored answer
+       bank; neither was drafted by the model, so neither may be labelled as an
+       AI draft. */
+    if (entry.keyed || entry.stored) {
+      return '<div class="tutor-answer">' +
+        '<div class="tutor-answer-meta">' +
+        '<span class="tag ' + (entry.keyed ? 'green' : 'grey') + '">' +
+          (hi ? (entry.keyed ? 'पुस्तक उत्तर-कुंजी' : 'संग्रहित उत्तर') : (entry.keyed ? 'Book answer key' : 'Stored answer')) +
+        '</span>' +
+        '<span class="tag grey">' + esc(sources.length + (sources.length === 1 ? ' source' : ' sources')) + '</span>' +
+        (entry.notice ? '<span class="muted tutor-answer-note">' + esc(entry.notice) + '</span>' : '') +
+        '</div>' +
+        '<div class="tutor-answer-text"><p>' + esc(entry.answer) + '</p></div>' +
+        (sources.length ? '<h3 class="tutor-sources-title">' + (hi ? 'स्रोत' : 'Sources') +
+          ' <span class="muted">' + (hi ? 'मूल पाठ से जाँचें' : 'verify against the original') + '</span></h3>' +
+          '<div class="tutor-sources">' + sources.map(c => sourceCard(c, lang)).join('') + '</div>' : '') +
+        '</div>';
+    }
     return '<div class="tutor-answer">' +
       '<div class="tutor-answer-meta">' +
       '<span class="tag green">' + esc(entry.model || 'local model') + '</span>' +
