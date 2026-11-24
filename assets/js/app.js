@@ -1893,8 +1893,8 @@ window.UP = window.UP || {};
         if (!isCurrent()) return UP.solveParts.have(state) > 0;
         if (ok && j && Array.isArray(j.approaches) && j.approaches.length) {
           const added = UP.solveParts.absorb(state, j);
-          if (!added && state.failed >= 2) return UP.solveParts.have(state) >= 2;
-          if (state.answer && UP.solveParts.have(state) >= 2) {
+          if (!added && state.failed >= 2) return UP.solveParts.have(state) >= 1;
+          if (state.answer && UP.solveParts.have(state) >= 1) {
             state.answer.question = base.question;
             state.answer.subjectRouting = base.subjectRouting;
             S.aiAnswer = state.answer;
@@ -1919,7 +1919,7 @@ window.UP = window.UP || {};
        leaves the student with an error where a usable answer existed. */
     return step().then((any) => {
       UP.solveParts.finish(state);
-      if (isCurrent() && state.answer && UP.solveParts.have(state) >= 2) {
+      if (isCurrent() && state.answer && UP.solveParts.have(state) >= 1) {
         state.answer.question = base.question;
         state.answer.subjectRouting = base.subjectRouting;
         S.aiAnswer = state.answer; S.aiState = 'done'; paint(); return true;

@@ -47,13 +47,14 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
             return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
               source: 'ai', part: 'core', complete: false, result: 'Current = 0.5 A',
               summary: 'Mock split summary.', check: 'Mock check',
-              approaches: [{ name: 'Formula', steps: [{ t: 'Mock working for the split test.' }] }]
+              approaches: [{ name: 'Formula', steps: [{ t: 'Mock working for Formula in the split test.' }] }]
             }) });
           }
           if (body.part === 'approach') {
             const name = ['Substitution', 'Verification', 'Reasoning'][(body.index || 2) - 2] || 'Another method';
             return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
-              source: 'ai', part: 'approach', index: body.index, approaches: [{ name, steps: [{ t: 'Mock working for the split test.' }] }]
+              source: 'ai', part: 'approach', index: body.index,
+              approaches: [{ name, steps: [{ t: 'Mock working for ' + name + ' in the split test.' }] }]
             }) });
           }
           return route.fulfill({ status: 504, contentType: 'application/json', body: JSON.stringify({ error: 'provider timeout', code: 'provider_timeout' }) });
