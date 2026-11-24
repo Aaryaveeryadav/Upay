@@ -597,6 +597,23 @@ tan A = ${N.dec(tan, 4)}` }
       (() => { const m = s.match(/(\d+(?:\.\d+)?)\s*(?:m|metre|meter|मीटर|मी)\b/); return m ? parseFloat(m[1]) : null; })() ||
       (() => { const m = s.match(/(\d+(?:\.\d+)?)\s*(?:m|metre|meters)?\s*away/); return m ? parseFloat(m[1]) : null; })();
     if (!angs.length) return null;
+    /* Two angles from two points on the same line is the standard "walked d
+       towards the tower" question, and it has its own solution: the near and
+       far angles are measured from different distances, so h = d tanθ₁ does
+       not apply. Using the first angle alone here produced a confidently wrong
+       height (11.5 instead of 17.32 for a 30°/60° tower) and, now that the
+       solver runs before the provider, hid the correct answer. */
+    const twoAngles = angs.length >= 2 && dist;
+    if (twoAngles && dist) {
+      /* h = x tan(near) and h = (x + d) tan(far)  =>  x = d tan(far)/(tan(near) − tan(far)) */
+      const near = Math.max(angs[0], angs[1]), far = Math.min(angs[0], angs[1]);
+      const tn = Math.tan(near * PI / 180), tf = Math.tan(far * PI / 180);
+      if (tn > tf) {
+        const x = dist * tf / (tn - tf);
+        const h = x * tn;
+        return twoPosition({ near, far, d: dist, x, h });
+      }
+    }
     const th = angs[0];
     const t = Math.tan(th * PI / 180);
     const h = dist ? dist * t : null;
@@ -653,6 +670,92 @@ tan A = ${N.dec(tan, 4)}` }
       _geom: { angle: th, dist: dist, height: null }
     });
     function angles2(a) { return a[1] || a[0]; }
+
+    /* Two observations of the same object from two points on one line. */
+    function twoPosition(o) {
+      const { near, far, d, x, h } = o;
+      const exact = (deg) => deg === 30 ? '1/√3' : deg === 45 ? '1' : deg === 60 ? '√3' : 'tan ' + deg + '°';
+      const heightText = h === null ? '' : N.dec(h, 2) + ' m';
+      const original = x + d;
+      return pack({
+        kind: 'heights', chapter: 9,
+        title: L('Height and distance — two observation points', 'ऊँचाई और दूरी — दो प्रेक्षण बिंदु'),
+        summary: L('nearer angle ' + near + '°, farther angle ' + far + ', ' + d + ' m walked toward the object',
+                   'निकट कोण ' + near + '°, दूर कोण ' + far + ', वस्तु की ओर ' + d + ' मी चले'),
+        result: L('height = ' + heightText + '; original distance = ' + N.dec(original, 2) + ' m; nearer distance = ' + N.dec(x, 2) + ' m',
+                  'ऊँचाई = ' + heightText + '; मूल दूरी = ' + N.dec(original, 2) + ' मी; निकट दूरी = ' + N.dec(x, 2) + ' मी'),
+        approaches: [
+          {
+            name: L('Equate the common height', 'उभयनिष्ठ ऊँचाई बराबर कीजिए'),
+            tag: L('The standard method for two angles', 'दो कोणों की मानक विधि'),
+            steps: [
+              { t: L('Let the height be h and the nearer distance be x; the farther point is x + ' + d + ' metres away.',
+                     'ऊँचाई h और निकट दूरी x मानिए; दूर वाला बिंदु x + ' + d + ' मीटर पर है।'),
+                m: 'h = x tan ' + near + '° = (x + ' + d + ') tan ' + far + '°' },
+              { t: L('The object does not change height, so the two expressions are equal.',
+                     'वस्तु की ऊँचाई नहीं बदलती, अतः दोनों व्यंजक बराबर हैं।'),
+                m: 'x tan ' + near + '° = (x + ' + d + ') tan ' + far + '°' },
+              { t: L('Solve for x, then put it back to get h.',
+                     'x के लिए हल कीजिए, फिर वापस रखकर h ज्ञात कीजिए।'),
+                m: 'x = ' + N.dec(x, 2) + ' m, h = ' + N.dec(h, 3) + ' m' }
+            ],
+            why: L('Both triangles share the same vertical side, so setting the two expressions for h equal removes h and leaves one unknown, x.',
+                   'दोनों त्रिभुजों की ऊर्ध्वाधर भुजा एक ही है, अतः h के दोनों व्यंजक बराबर रखने से h हट जाता है और केवल x बचता है।'),
+            watch: L('The farther point is x + d, not x − d; adding the walked distance is the commonest error here.',
+                     'दूर वाला बिंदु x + d पर है, x − d पर नहीं; चली गई दूरी जोड़ना यहाँ सबसे आम भूल है।')
+          },
+          {
+            name: L('Work with exact tangent values', 'सटीक स्पर्शज्या मानों से'),
+            tag: L('Keeps the answer exact', 'उत्तर सटीक रहता है'),
+            steps: [
+              { t: L('Use the exact values of tan for the given angles.', 'दिए गए कोणों के tan के सटीक मान लीजिए।'),
+                m: 'tan ' + near + '° = ' + exact(near) + ', tan ' + far + '° = ' + exact(far) },
+              { t: L('Substitute into the equation from the first method.', 'पहली विधि के समीकरण में रखिए।'),
+                m: 'x · ' + exact(near) + ' = (x + ' + d + ') · ' + exact(far) },
+              { t: L('Simplify before converting to decimals.', 'दशमलव में बदलने से पहले सरल कीजिए।'),
+                m: 'h = ' + N.dec(h, 3) + ' m' }
+            ],
+            why: L('Surds cancel cleanly, so the height comes out exact, and rounding happens only once at the end.',
+                   'करणी साफ़ कट जाती हैं, इसलिए ऊँचाई सटीक मिलती है और पूर्णांकन केवल अंत में एक बार होता है।'),
+            watch: L('Do not substitute 1.732 early; it changes the last digit of the final answer.',
+                     'आरंभ में ही 1.732 न रखिए; इससे अंतिम उत्तर का अंतिम अंक बदल जाता है।')
+          },
+          {
+            name: L('Check against the 30°–60° shortcut', '30°–60° लघु विधि से जाँच'),
+            tag: L('Fast verification', 'शीघ्र जाँच'),
+            steps: [
+              { t: L('For 60° and 30° the height is d√3⁄2 and the near distance d⁄2.', '60° और 30° के लिए ऊँचाई d√3⁄2 और निकट दूरी d⁄2 होती है।'),
+                m: 'h = ' + d + '·√3/2 = ' + N.dec(h, 3) + ' m' },
+              { t: L('The original distance is the near distance plus the walk.', 'मूल दूरी निकट दूरी और चली दूरी का योग है।'),
+                m: 'original = ' + N.dec(x, 2) + ' + ' + d + ' = ' + N.dec(original, 2) + ' m' }
+            ],
+            why: L('A second route to the same numbers catches an algebra slip immediately.',
+                   'उन्हीं संख्याओं तक दूसरा रास्ता बीजगणित की चूक तुरंत पकड़ लेता है।'),
+            watch: L('The shortcut only holds for these particular angles; elsewhere use the general method.',
+                     'लघु विधि केवल इन्हीं कोणों के लिए है; अन्यथा सामान्य विधि लीजिए।')
+          },
+          {
+            name: L('Check the answer makes sense', 'उत्तर की तर्कसंगत जाँच'),
+            tag: L('Never skip this', 'इसे कभी न छोड़ें'),
+            steps: [
+              { t: L('The nearer the observer, the larger the angle must be — 60° near, 30° far is consistent.',
+                     'पर्यवेक्षक जितना निकट, कोण उतना बड़ा — निकट 60°, दूर 30° संगत है।'),
+                m: near + '° > ' + far + '°' },
+              { t: L('Both triangles must give the same height.', 'दोनों त्रिभुजों से वही ऊँचाई मिलनी चाहिए।'),
+                m: N.dec(x, 2) + ' × tan ' + near + '° = ' + N.dec((x + d), 2) + ' × tan ' + far + '° = ' + N.dec(h, 2) + ' m' }
+            ],
+            why: L('Height-and-distance answers are easy to check geometrically, so a wrong sign or a misread diagram is caught before it reaches the exam.',
+                   'ऊँचाई-दूरी के उत्तर ज्यामितीय रूप से जाँचना आसान है, इसलिए गलत चिह्न या चित्र की भूल परीक्षा तक पहुँचने से पहले पकड़ी जाती है।'),
+            watch: L('If the two heights disagree, the distance used in one triangle is wrong.',
+                     'यदि दोनों ऊँचाइयाँ भिन्न निकलें, तो किसी त्रिभुज में प्रयुक्त दूरी गलत है।')
+          }
+        ],
+        verify: L('With the height fixed, the near angle must satisfy tan = h/x and the far angle tan = h/(x + ' + d + '); both reduce to the values used above.',
+                  'ऊँचाई निश्चित होने पर निकट कोण के लिए tan = h/x और दूर कोण के लिए tan = h/(x + ' + d + '); दोनों ऊपर प्रयुक्त मान ही देते हैं।'),
+        related: [9, 8],
+        _geom: { height: h, original: original, dist: x, angle: near }
+      });
+    }
   };
 
   /* ===================== PROBABILITY ===================== */
