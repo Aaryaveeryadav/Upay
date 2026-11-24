@@ -1,0 +1,6 @@
+*.pt
+*.json
+pdfs/
+__pycache__/
+.venv/
+training.txt
