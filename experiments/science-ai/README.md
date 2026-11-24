@@ -35,12 +35,14 @@ Put permitted textbook and PYQ PDFs in a local `pdfs/` folder (recursively suppo
 If you process PDFs in smaller batches:
 
 ```powershell
-python tutor.py index pdfs\textbook --out science-index.json --ocr auto --ocr-fallback ..\..\assets\science\_extract.json --report
-python tutor.py index pdfs\pyqs --out science-index.json --merge --ocr auto --report
+python tutor.py index pdfs\textbook --out science-index.json --ocr auto --ocr-fallback ..\..\assets\science\_extract.json --lang en --report
+python tutor.py index pdfs\pyqs --out science-index.json --merge --ocr auto --lang en --report
 python tutor.py audit --index science-index.json
 ```
 
-`--merge` preserves previously indexed files by SHA-256 hash so you can clear processed raw PDFs between batches if needed.
+- `--merge` preserves previously indexed files by SHA-256 hash (skipping unchanged PDFs before extraction) so you can clear processed raw PDFs between batches if needed.
+- `--lang en|all` (default `en`) skips Hindi pages (Devanagari, legacy control-char/KrutiDev/Chanakya, `ToUnicode`-stripped sparse, and alternating Hindi/English scanned CBSE papers) and records `skipped_lang_pages` in `audit`.
+- `eval` also accepts `--doc-type all|textbook|pyq|marking_scheme` (default `all`) to evaluate retrieval against a specific document type.
 
 ### Testing retrieval & asking questions
 

@@ -41,7 +41,142 @@ _HEADING_PATTERNS = [
     re.compile(r"^(Activity\s+\d+\.\d+)\b", re.IGNORECASE),
     re.compile(r"^(Example\s+\d+\.\d+)\b", re.IGNORECASE),
     re.compile(r"^(QUESTIONS|EXERCISES|What you have learnt|More to Know!|Do You Know\?)\b"),
+    re.compile(r"^(SECTION\s+[A-E]\b.*)$", re.IGNORECASE),
+    re.compile(r"^(Sample Case Studies?)\b", re.IGNORECASE),
+    re.compile(r"^(Answer Key)\b", re.IGNORECASE),
 ]
+
+# Symbol-font PUA glyphs (extracted as U+F0xx) -> real math symbols.
+# Symbol encoding: 0xAE = right arrow, 0xB0 = degree, 0xD7 = multiplication.
+_SYMBOL_PUA_MAP: dict[str, str] = {
+    "\uf0ae": "→",
+    "\uf0b0": "°",
+    "\uf0d7": "×",
+    "\uf8ae": "→",
+    "\uf8b0": "°",
+    "\uf8d7": "×",
+    "\uf0af": "↓",
+    "\uf0ac": "←",
+    "\uf0ad": "↑",
+    "\uf0ab": "↔",
+}
+_SYMBOL_PUA_TRANS = str.maketrans(_SYMBOL_PUA_MAP)
+
+# KrutiDev / Chanakya ASCII-Hindi markers (legacy Hindi fonts mapped onto Latin keys).
+KRUTIDEV_MARKERS = ("H$", "Ho$", "Am¡a", "CÎma", "àíZ")
+
+# Roman numerals that appear on Hindi cover/contents pages and must be ignored
+# when deciding whether a sparse page is ToUnicode-stripped Hindi.
+_ROMAN_NUMERAL_RE = re.compile(r"\b(?:iii|vii|viii|ii|iv|vi|ix|x)\b", re.IGNORECASE)
+_DEVANAGARI_RE = re.compile(r"[\u0900-\u097f]")
+_ENGLISH_WORD_RE = re.compile(r"[A-Za-z]{3,}")
+
+
+def _devanagari_count(text: str) -> int:
+    return len(_DEVANAGARI_RE.findall(text or ""))
+
+
+def _is_devanagari_page(text: str) -> bool:
+    """Unicode Devanagari Hindi page."""
+    if not text:
+        return False
+    count = _devanagari_count(text)
+    if count >= 8:
+        return True
+    # Ratio check for short pages.
+    stripped = text.strip()
+    if stripped and count >= 3 and count / max(1, len(stripped)) > 0.05:
+        return True
+    return False
+
+
+def _is_legacy_control_hindi_page(text: str) -> bool:
+    """Legacy Hindi fonts that extract as control characters (no ToUnicode)."""
+    if not text:
+        return False
+    ctrl = sum(1 for ch in text if (ord(ch) < 32 and ch not in "\n\t\r") or 0x7F <= ord(ch) <= 0x9F)
+    if ctrl >= 4:
+        return True
+    # Many private-use / replacement glyphs with almost no English words.
+    pua = sum(1 for ch in text if 0xE000 <= ord(ch) <= 0xF8FF)
+    if pua >= 8 and len(_ENGLISH_WORD_RE.findall(text)) < 3:
+        return True
+    return False
+
+
+def _is_krutidev_hindi_page(text: str) -> bool:
+    """KrutiDev/Chanakya ASCII-Hindi pages (H$, Ho$, Am¡a, CÎma, àíZ)."""
+    if not text:
+        return False
+    return any(marker in text for marker in KRUTIDEV_MARKERS)
+
+
+def _is_tounicode_sparse_hindi_page(text: str) -> bool:
+    """ToUnicode-stripped sparse Hindi page.
+
+    Such pages extract as very sparse gibberish: few English words and a
+    noticeable amount of non-ASCII / symbol characters. Roman numerals
+    (iii/vii/viii/...) on cover pages are ignored so a contents page that
+    only lists roman numerals is not misclassified on that alone.
+    """
+    if not text:
+        return False
+    # Ignore roman numerals before judging sparseness.
+    cleaned = _ROMAN_NUMERAL_RE.sub(" ", text)
+    english_words = _ENGLISH_WORD_RE.findall(cleaned)
+    non_ascii = sum(1 for ch in cleaned if ord(ch) > 127)
+    total_chars = len(cleaned.strip())
+    if total_chars == 0:
+        return False
+    # Sparse: very few English words but some non-ASCII gibberish.
+    if len(english_words) <= 2 and non_ascii >= 3 and total_chars < 400:
+        return True
+    if len(english_words) <= 4 and non_ascii >= 8 and total_chars < 600:
+        return True
+    # Almost no alphabetic English at all but non-ASCII present.
+    alpha = sum(1 for ch in cleaned if ch.isalpha() and ord(ch) < 128)
+    if alpha < 10 and non_ascii >= 4:
+        return True
+    return False
+
+
+def _is_hindi_page(text: str) -> bool:
+    """True if a page looks like Hindi (any of the known Hindi encodings)."""
+    if not text or not text.strip():
+        return False
+    return (
+        _is_devanagari_page(text)
+        or _is_legacy_control_hindi_page(text)
+        or _is_krutidev_hindi_page(text)
+        or _is_tounicode_sparse_hindi_page(text)
+    )
+
+
+def _looks_english_page(text: str) -> bool:
+    if not text:
+        return False
+    return len(_ENGLISH_WORD_RE.findall(text)) >= 5 and not _is_devanagari_page(text)
+
+
+def _detect_alternating_hindi_even(page_texts: list[str]) -> bool:
+    """Auto-detect alternating Hindi(even)/English(odd) scanned CBSE papers.
+
+    ``page_texts`` is 0-indexed in order; page numbers are 1-indexed, so
+    even pages are indices 1, 3, 5, ...  Returns True when even pages are
+    predominantly Hindi-like and odd pages predominantly English-like.
+    Requires at least 4 pages so a single Hindi page cannot trigger it.
+    """
+    if len(page_texts) < 4:
+        return False
+    even = page_texts[1::2]
+    odd = page_texts[0::2]
+    if not even or not odd:
+        return False
+    even_hindi = sum(1 for t in even if _is_hindi_page(t))
+    odd_english = sum(1 for t in odd if _looks_english_page(t))
+    odd_hindi = sum(1 for t in odd if _is_hindi_page(t))
+    # Even pages mostly Hindi, odd pages mostly English and not Hindi.
+    return even_hindi >= max(1, len(even) // 2) and odd_english >= max(1, len(odd) // 2) and odd_hindi == 0
 
 
 @dataclass
@@ -59,6 +194,7 @@ class FileReport:
     chunks: int
     extraction_methods: list[str]
     warnings: list[str]
+    skipped_lang_pages: int = 0
 
 
 def sha256_file(path: Path) -> str:
@@ -81,7 +217,10 @@ def detect_chapter_info(filename: str, sample_text: str = "") -> tuple[int | Non
     low = filename.lower()
     if any(tok in low for tok in ("marking", "solution", "ms_", "_ms", "anskey", "answer-key")):
         doc_type = "marking_scheme"
-    elif any(tok in low for tok in ("pyq", "paper", "qp", "sample", "sqp", "board", "31_", "31-")):
+    elif any(
+        tok in low
+        for tok in ("pyq", "paper", "qp", "sample", "sqp", "board", "31_", "31-", "sciencex", "case")
+    ):
         doc_type = "pyq"
     else:
         m = re.search(r"(?:chapter[-_ ]?|jesc1)(\d{1,2})(?=\D|$)", low)
@@ -104,35 +243,124 @@ def detect_chapter_info(filename: str, sample_text: str = "") -> tuple[int | Non
                 if ch in NCERT_SCIENCE_CHAPTERS:
                     return ch, NCERT_SCIENCE_CHAPTERS[ch], "textbook"
             for ch, title in NCERT_SCIENCE_CHAPTERS.items():
-                if title.lower().split("–")[0].strip() in head.lower():
+                prefix = title.lower().split("–")[0].strip()
+                # Require word boundaries so e.g. "sunlight" does not match
+                # the "Light" chapter (Ch 9) via a substring search.
+                if re.search(r"\b" + re.escape(prefix) + r"\b", head.lower()):
                     return ch, title, "textbook"
     return None, None, doc_type
 
 
-def _stitch_overlapping_text(left: str, right: str) -> str:
-    """Merge partial overprinted spans whose suffix/prefix overlap (e.g. CHEMIC + ANDING...)."""
+def _stitch_overlapping_text(left: str, right: str, min_overlap: int = 1) -> str:
+    """Merge partial overprinted spans whose suffix/prefix overlap (e.g. CHEMIC + ANDING...).
+
+    ``min_overlap=1`` (default) stitches column-cut words that share as
+    little as a single character on the same baseline, e.g. a word split
+    across two touching PDF blocks as ``Calciu`` + ``m oxide`` style
+    fragments with a one-character overlap.
+    """
+    if not left:
+        return right
+    if not right:
+        return left
     max_ov = min(len(left), len(right))
-    for k in range(max_ov, 3, -1):
+    for k in range(max_ov, min_overlap - 1, -1):
         if left.endswith(right[:k]):
             return left + right[k:]
     return right if len(right) >= len(left) else left
 
 
+def _join_column_parts(left: str, right: str, *, gap: float = 0.0, size: float = 10.0) -> str:
+    """Join two same-baseline fragments from horizontally touching blocks.
+
+    Stitches overlapping column-cut words (``min_overlap=1``); otherwise
+    inserts a space only when the horizontal gap is large enough.
+    """
+    if not left:
+        return right
+    if not right:
+        return left
+    max_ov = min(len(left), len(right))
+    for k in range(max_ov, 0, -1):
+        if left.endswith(right[:k]):
+            return left + right[k:]
+    if gap <= max(1.5, size * 0.18):
+        return left + right
+    if left.endswith(" ") or right.startswith(" "):
+        return left + right
+    return left + " " + right
+
+
+def _blocks_touch_horizontally(a: tuple[float, float, float, float], b: tuple[float, float, float, float]) -> bool:
+    """Union-find predicate: y-overlap > 1.0pt and horizontal gap < 14.0pt.
+
+    Blocks separated by >= 14pt are kept separate so multi-column
+    sidebars / marginalia do not get merged into the main column.
+    """
+    ax0, ay0, ax1, ay1 = a
+    bx0, by0, bx1, by1 = b
+    y_ov = min(ay1, by1) - max(ay0, by0)
+    if y_ov <= 1.0:
+        return False
+    x_gap = max(0.0, max(ax0 - bx1, bx0 - ax1))
+    return x_gap < 14.0
+
+
+def _union_find_groups(bboxes: list[tuple[float, float, float, float]]) -> list[list[int]]:
+    """Group block indices with union-find over horizontally touching blocks."""
+    n = len(bboxes)
+    parent = list(range(n))
+
+    def find(x: int) -> int:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(x: int, y: int) -> None:
+        rx, ry = find(x), find(y)
+        if rx != ry:
+            parent[ry] = rx
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            if _blocks_touch_horizontally(bboxes[i], bboxes[j]):
+                union(i, j)
+    groups: dict[int, list[int]] = {}
+    for i in range(n):
+        groups.setdefault(find(i), []).append(i)
+    # Deterministic reading order: by top, then left of each group.
+    ordered = sorted(groups.values(), key=lambda g: (min(bboxes[i][1] for i in g), min(bboxes[i][0] for i in g)))
+    for g in ordered:
+        g.sort(key=lambda i: (bboxes[i][1], bboxes[i][0]))
+    return ordered
+
+
 def _extract_page_pymupdf(page: Any) -> str:
     d = page.get_text("dict")
+    raw_blocks = [b for b in d.get("blocks", []) if "lines" in b]
+    if not raw_blocks:
+        return ""
+
+    bboxes = [
+        (float(b["bbox"][0]), float(b["bbox"][1]), float(b["bbox"][2]), float(b["bbox"][3]))
+        for b in raw_blocks
+    ]
+    groups = _union_find_groups(bboxes)
+
     blocks_out: list[str] = []
-    for b in d.get("blocks", []):
-        if "lines" not in b:
-            continue
+    for grp in groups:
         spans = []
-        for ln in b["lines"]:
-            for s in ln.get("spans", []):
-                txt = s.get("text", "")
-                if not txt.strip():
-                    continue
-                x0, _, x1, _ = s["bbox"]
-                ox, oy = s["origin"]
-                spans.append((oy, ox, x0, x1, float(s.get("size", 10.0)), txt))
+        for bi in grp:
+            b = raw_blocks[bi]
+            for ln in b["lines"]:
+                for s in ln.get("spans", []):
+                    txt = s.get("text", "")
+                    if not txt.strip():
+                        continue
+                    x0, _, x1, _ = s["bbox"]
+                    ox, oy = s["origin"]
+                    spans.append((oy, ox, x0, x1, float(s.get("size", 10.0)), txt))
         if not spans:
             continue
 
@@ -187,15 +415,16 @@ def _extract_page_pymupdf(page: Any) -> str:
                     kept.append(sp)
 
             kept.sort(key=lambda s: s[2])
-            parts: list[str] = []
+            line_str = ""
             prev_x1: float | None = None
             for _, _, x0, x1, sz, txt in kept:
-                if prev_x1 is not None and x0 - prev_x1 > max(1.5, sz * 0.18):
-                    if not (parts and parts[-1].endswith(" ")) and not txt.startswith(" "):
-                        parts.append(" ")
-                parts.append(txt)
+                if not line_str:
+                    line_str = txt
+                else:
+                    gap = x0 - (prev_x1 if prev_x1 is not None else x0)
+                    line_str = _join_column_parts(line_str, txt, gap=gap, size=sz)
                 prev_x1 = x1
-            line = "".join(parts).strip()
+            line = line_str.strip()
             if line:
                 lines_out.append(line)
         if lines_out:
@@ -206,15 +435,22 @@ def _extract_page_pymupdf(page: Any) -> str:
 def clean_extracted_text(text: str, doc_type: str = "textbook") -> str:
     if not text:
         return ""
-    text = text.replace("\r\n", "\n").replace("\r", "\n").translate(_SUBSCRIPT_DIGITS)
-    # Strip Adobe/Symbol PUA arrow-extension glyphs (e.g. →) around reaction arrows.
-    text = re.sub(r"[\uf8e0-\uf8ff]+", " ", text)
+    text = (
+        text.replace("\r\n", "\n")
+        .replace("\r", "\n")
+        .translate(_SUBSCRIPT_DIGITS)
+        .translate(_SYMBOL_PUA_TRANS)
+    )
+    # Strip remaining Adobe/Symbol PUA arrow-extension glyphs (e.g. →) around reaction arrows.
+    text = re.sub(r"[\uf000-\uf8ff]+", " ", text)
 
     # Collapse vertical or spaced banners (Q U E S T I O N S -> QUESTIONS).
     text = re.sub(r"Q\s*\n\s*U\s*\n\s*E\s*\n\s*S\s*\n\s*T\s*\n\s*I\s*\n\s*O\s*\n\s*N\s*\n\s*S(?:\s*\n\s*\?)?", "QUESTIONS", text)
     text = re.sub(r"E\s*\n\s*X\s*\n\s*E\s*\n\s*R\s*\n\s*C\s*\n\s*I\s*\n\s*S\s*\n\s*E\s*\n\s*S", "EXERCISES", text)
     text = re.sub(r"\bQ\s+U\s+E\s+S\s+T\s+I\s+O\s+N\s+S\b", "QUESTIONS", text)
     text = re.sub(r"\bE\s+X\s+E\s+R\s+C\s+I\s+S\s+E\s+S\b", "EXERCISES", text)
+    # Join split QUESTIONS1 -> QUESTIONS\n1.
+    text = re.sub(r"\bQUESTIONS(\d+)\b", r"QUESTIONS\n\1.", text)
     # Repair noisy OCR headings seen in compressed scans of Ch 4 and Ch 8.
     text = re.sub(r"\bOUVEsTtILO\s*WN\s*\n*\s*S\b", "QUESTIONS", text)
     text = re.sub(r"\bO\s*VEST\s*LON\s*'s\b", "QUESTIONS", text)
@@ -242,15 +478,37 @@ def clean_extracted_text(text: str, doc_type: str = "textbook") -> str:
         merged_lines.append(cur)
         i += 1
 
-    # Strip running headers/footers and repeated lines.
+    # Strip running headers/footers, PYQ watermarks/covers, and repeated lines.
     cleaned_lines: list[str] = []
     chapter_title_norms = {t.lower().replace("–", "-") for t in NCERT_SCIENCE_CHAPTERS.values()}
     prev_nonempty = ""
+    in_pyq_instructions = False
     for ln in merged_lines:
         if not ln:
             if cleaned_lines and cleaned_lines[-1] != "":
                 cleaned_lines.append("")
             continue
+        if doc_type in ("pyq", "marking_scheme"):
+            # CBSE PYQ watermarks / headers / footers
+            if re.fullmatch(r"\*\s*31(?:/[A-Za-z0-9]+)*\s*\*?", ln):
+                continue
+            if re.fullmatch(r"\*?\s*ECNEICS\s*\*?", ln, re.I):
+                continue
+            if re.fullmatch(r"\[\s*P\.?\s*T\.?\s*O\.?\s*\]", ln, re.I):
+                continue
+            if re.fullmatch(r"H\s*\d+\s*H", ln):
+                continue
+            if re.fullmatch(r"\[\s*\]", ln):
+                continue
+            # Strip General Instructions block before SECTION A or Q1
+            if re.match(r"^General Instructions\b", ln, re.I):
+                in_pyq_instructions = True
+                continue
+            if in_pyq_instructions:
+                if re.match(r"^(?:SECTION\s+[A-E]\b|Q\.?\s*1\b|1\.)", ln, re.I):
+                    in_pyq_instructions = False
+                else:
+                    continue
         # Running NCERT footers & codes
         if re.fullmatch(r"20\d{2}-\d{2}", ln) or re.fullmatch(r"Reprint\s+20\d{2}-\d{2}", ln, re.I):
             continue
@@ -272,7 +530,28 @@ def clean_extracted_text(text: str, doc_type: str = "textbook") -> str:
         cleaned_lines.append(ln)
         prev_nonempty = ln
 
-    joined = "\n".join(cleaned_lines)
+    # Join standalone question numbers ("1." or "Q.1") and option markers ("(a)", "(A)", "(i)")
+    # with the following non-empty line.
+    joined_q_lines: list[str] = []
+    idx = 0
+    while idx < len(cleaned_lines):
+        cur = cleaned_lines[idx]
+        if (
+            re.fullmatch(r"(?:Q\.?\s*)?\d+\.", cur)
+            or re.fullmatch(r"\([a-dA-D]|[ivxIVX]+\)", cur)
+            or re.fullmatch(r"\((?:[a-dA-D]|[ivxIVX]+)\)", cur)
+        ):
+            nxt = idx + 1
+            while nxt < len(cleaned_lines) and not cleaned_lines[nxt]:
+                nxt += 1
+            if nxt < len(cleaned_lines):
+                joined_q_lines.append(f"{cur} {cleaned_lines[nxt]}")
+                idx = nxt + 1
+                continue
+        joined_q_lines.append(cur)
+        idx += 1
+
+    joined = "\n".join(joined_q_lines)
     # Rejoin hyphenated line breaks in prose (avoid chemical/number hyphens).
     joined = re.sub(r"([A-Za-z]{2,})-\n([a-z]{2,})", r"\1\2", joined)
 
@@ -467,6 +746,7 @@ def extract_pdf_file(
     rel_source: str | None = None,
     ocr_mode: str = "none",
     ocr_fallback_map: dict[int, list[dict[str, Any]]] | None = None,
+    lang: str = "en",
 ) -> tuple[list[dict[str, Any]], FileReport]:
     """Extract, clean, audit, and chunk a single PDF file."""
     source_name = rel_source or pdf_path.name
@@ -475,6 +755,8 @@ def extract_pdf_file(
     raw_pages: list[dict[str, Any]] = []
     methods_used: list[str] = []
     rapid_box: list[Any] = []
+    skipped_lang_pages = 0
+    seen_page_texts: list[str] = []
 
     try:
         import pymupdf  # type: ignore
@@ -494,6 +776,15 @@ def extract_pdf_file(
             txt = _extract_page_pymupdf(page)
             method = "pymupdf"
             if len(txt.strip()) < 30:
+                if (
+                    lang == "en"
+                    and idx % 2 == 0
+                    and len(seen_page_texts) >= 3
+                    and _detect_alternating_hindi_even(seen_page_texts)
+                ):
+                    skipped_lang_pages += 1
+                    seen_page_texts.append("")
+                    continue
                 if fallback_pages and idx in fallback_pages and fallback_pages[idx].strip():
                     txt = fallback_pages[idx]
                     method = "ocr-fallback"
@@ -506,6 +797,10 @@ def extract_pdf_file(
                         method = "empty"
                 else:
                     method = "empty"
+            seen_page_texts.append(txt)
+            if lang == "en" and _is_hindi_page(txt):
+                skipped_lang_pages += 1
+                continue
             cleaned = clean_extracted_text(txt, doc_type=doc_type)
             raw_pages.append({"page": idx, "text": cleaned, "method": method})
             if method not in methods_used:
@@ -543,6 +838,10 @@ def extract_pdf_file(
                     method = "ocr-fallback"
                 else:
                     method = "empty"
+            seen_page_texts.append(txt)
+            if lang == "en" and _is_hindi_page(txt):
+                skipped_lang_pages += 1
+                continue
             cleaned = clean_extracted_text(txt, doc_type=doc_type)
             raw_pages.append({"page": idx, "text": cleaned, "method": method})
             if method not in methods_used:
@@ -581,6 +880,7 @@ def extract_pdf_file(
         chunks=len(chunks),
         extraction_methods=methods_used,
         warnings=warnings,
+        skipped_lang_pages=skipped_lang_pages,
     )
     return chunks, report
 

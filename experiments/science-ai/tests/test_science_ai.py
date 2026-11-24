@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+import pdf_extract  # noqa: E402
 from pdf_extract import clean_extracted_text, detect_chapter_info, chunk_pages  # noqa: E402
 from retrieval import Retriever, tokenize  # noqa: E402
 from tiny_model import ByteBPETokenizer  # noqa: E402
@@ -165,6 +166,109 @@ class TutorPipelineTests(unittest.TestCase):
             tutor.export_corpus(idx_path, out_path)
             content = out_path.read_text(encoding="utf-8")
             self.assertEqual(content.count("Magnesium burns in air"), 1)
+
+    def test_merge_skips_unchanged_sha_before_extract(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            pdf_path = Path(tmp) / "ch1.pdf"
+            pdf_path.write_bytes(b"%PDF-1.4\n1 0 obj\n<<>>\nendobj\ntrailer\n<<>>\n%%EOF\n")
+            idx_path = Path(tmp) / "idx.json"
+            digest = pdf_extract.sha256_file(pdf_path)
+            tutor.save_index(
+                idx_path,
+                {"ch1.pdf": {"sha256": digest, "chunks": 1}},
+                [{"id": "c1", "source": "ch1.pdf", "page": 1, "doc_type": "textbook", "text": "Existing chunk."}],
+            )
+            called = False
+
+            def _boom(*args, **kwargs):
+                nonlocal called
+                called = True
+                raise AssertionError("extract_pdf_file should not be called for unchanged SHA-256")
+
+            orig = tutor.extract_pdf_file
+            tutor.extract_pdf_file = _boom
+            try:
+                sources, chunks = tutor.build_or_merge_index(pdf_path, out_path=idx_path, merge=True)
+            finally:
+                tutor.extract_pdf_file = orig
+            self.assertFalse(called)
+            self.assertEqual(len(chunks), 1)
+            self.assertEqual(sources["ch1.pdf"]["sha256"], digest)
+
+
+class Batch2And3Tests(unittest.TestCase):
+    def test_union_find_and_sidebar_separation(self):
+        # Two touching blocks on same baseline (< 14pt gap) + one sidebar (>= 14pt gap)
+        bboxes = [
+            (10.0, 20.0, 100.0, 32.0),
+            (105.0, 20.0, 180.0, 32.0),  # gap = 5pt -> merged
+            (200.0, 20.0, 300.0, 32.0),  # gap = 20pt -> separate sidebar
+        ]
+        groups = pdf_extract._union_find_groups(bboxes)
+        self.assertEqual(len(groups), 2)
+        self.assertEqual(groups[0], [0, 1])
+        self.assertEqual(groups[1], [2])
+        # Column-cut word stitching with min_overlap=1
+        self.assertEqual(pdf_extract._stitch_overlapping_text("Calciu", "um oxide"), "Calcium oxide")
+
+    def test_detect_chapter_info_pyq_and_word_boundary(self):
+        self.assertEqual(pdf_extract.detect_chapter_info("sciencex_2024.pdf")[2], "pyq")
+        self.assertEqual(pdf_extract.detect_chapter_info("case_study_bio.pdf")[2], "pyq")
+        self.assertEqual(pdf_extract.detect_chapter_info("31-1-1_Science.pdf")[2], "pyq")
+        self.assertEqual(pdf_extract.detect_chapter_info("31_2_1.pdf")[2], "pyq")
+        # "sunlight" must NOT match Ch 9 ("Light – Reflection and Refraction")
+        ch, _, _ = pdf_extract.detect_chapter_info("notes.pdf", "Plants use sunlight for photosynthesis.")
+        self.assertIsNone(ch)
+
+    def test_hindi_page_detection_variants(self):
+        self.assertTrue(pdf_extract._is_hindi_page("यह एक विज्ञान का प्रश्न पत्र है।"))
+        self.assertTrue(pdf_extract._is_hindi_page("\x01\x02\x03\x04\x05\x06"))
+        self.assertTrue(pdf_extract._is_hindi_page("H$ Ho$ Am¡a CÎma àíZ"))
+        self.assertTrue(pdf_extract._is_hindi_page("iii vii viii \u00e9\u00e8\u00ea\u00eb"))
+        self.assertFalse(pdf_extract._is_hindi_page("iii vii viii"))
+        pages = [
+            "1. What is a chemical reaction? Explain with an example.",
+            "यह एक विज्ञान का प्रश्न पत्र है।",
+            "2. State Ohm's law and define resistance of a conductor.",
+            "H$ Ho$ Am¡a CÎma àíZ",
+        ]
+        self.assertTrue(pdf_extract._detect_alternating_hindi_even(pages))
+
+    def test_pyq_cleaning_and_symbol_pua(self):
+        raw = (
+            "*31/1/1*\n*ECNEICS*\n[ P.T.O. ]\nH 3 H\n[ ]\n"
+            "General Instructions\nRead carefully.\n"
+            "SECTION A\n"
+            "QUESTIONS1\n"
+            "1.\nWhat is 2 \uf0d7 3 = 6 at 25\uf0b0C? A \uf0ae B\n"
+            "(a)\nOption one"
+        )
+        cleaned = pdf_extract.clean_extracted_text(raw, doc_type="pyq")
+        self.assertNotIn("ECNEICS", cleaned)
+        self.assertNotIn("P.T.O.", cleaned)
+        self.assertNotIn("Read carefully", cleaned)
+        self.assertIn("2 × 3 = 6 at 25°C", cleaned)
+        self.assertIn("A → B", cleaned)
+        self.assertIn("QUESTIONS", cleaned)
+        self.assertIn("1. What is", cleaned)
+        self.assertIn("(a) Option one", cleaned)
+
+    def test_retrieval_downweights_and_mixed_slot_reservation(self):
+        chunks = [
+            {"id": "tb1", "source": "tb.pdf", "page": 1, "doc_type": "textbook", "chapter": 1, "section": "1.1 Chemical Equations", "text": "Magnesium burns in oxygen to form magnesium oxide.", "extraction_method": "pymupdf"},
+            {"id": "tb2", "source": "tb.pdf", "page": 2, "doc_type": "textbook", "chapter": 1, "section": "1.2 Types", "text": "Magnesium oxide is formed when magnesium ribbon burns in air.", "extraction_method": "pymupdf"},
+            {"id": "tb3", "source": "tb.pdf", "page": 3, "doc_type": "textbook", "chapter": 1, "section": "QUESTIONS", "text": "Why should magnesium ribbon be cleaned before burning in air?", "extraction_method": "pymupdf"},
+            {"id": "pyq1", "source": "pyq1.pdf", "page": 1, "doc_type": "pyq", "chapter": None, "section": "SECTION A", "text": "Magnesium burns in oxygen to form magnesium oxide.", "extraction_method": "pymupdf"},
+            {"id": "pyq2", "source": "pyq2.pdf", "page": 1, "doc_type": "pyq", "chapter": None, "section": "SECTION A", "text": "Magnesium burns in oxygen to form magnesium oxide!", "extraction_method": "pymupdf"},
+        ]
+        ret = Retriever(chunks)
+        res = ret.search("magnesium burns oxygen", limit=4, doc_type="all", min_confidence=False)
+        self.assertEqual(len(res), 4)
+        tb_count = sum(1 for r in res if r["doc_type"] == "textbook")
+        pyq_count = sum(1 for r in res if r["doc_type"] == "pyq")
+        # ceil(4 * 0.75) = 3 textbook slots, 1 non-duplicate PYQ companion
+        self.assertEqual(tb_count, 3)
+        self.assertEqual(pyq_count, 1)
 
 
 class TokenizerTests(unittest.TestCase):
