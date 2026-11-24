@@ -58,7 +58,8 @@
     'assets/js/solver-arith.js?v=26e5',
     'assets/js/solver-geo.js',
     'assets/js/hash-route.js?v=26react1', // shared legacy/React deep-link contract
-    'assets/js/science-tutor.js?v=26sci1', // Class 10 Science chat UI + citation cards
+    /* science-tutor.js is no longer loaded: its separate tutor section was
+       folded into the one Study chat. The module stays for its API checks. */
     'assets/js/task-routing.js?v=26hip9',
     'assets/js/request-accuracy.js?v=26hip9',
     'assets/js/language-policy.js?v=26hi12',

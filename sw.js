@@ -11,7 +11,6 @@ const PRECACHE = [
   '/assets/brand/kritin-icon-512.png',
   '/assets/css/app.css?v=26sci1',
   '/assets/js/boot.js?v=26react1',
-  '/assets/js/science-tutor.js?v=26sci1',
   '/assets/js/question-quality.js?v=26hip9',
   '/assets/js/data/question-overrides.js?v=26f15',
   '/assets/js/testgen.js?v=26f14',

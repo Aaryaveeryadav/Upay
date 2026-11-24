@@ -483,11 +483,13 @@ function serveStatic(req, res, pathname) {
   try { p = decodeURIComponent(pathname); }
   catch (_) { res.writeHead(400); return res.end('bad path'); }
   if (p.includes('\0')) { res.writeHead(400); return res.end('bad path'); }
-  /* "/" is the React app. index.html itself stays the legacy study app, which
-     the React chat links to as "/legacy" for paper-level work that has not
-     moved yet; keeping both reachable means neither rewrite strands a page. */
-  if (p === '/') return serveApp(res);
-  if (p === '/legacy') p = '/index.html';
+  /* "/" is the study app every existing page, bookmark and browser check
+     expects: the reviewed legacy app in index.html. The React app is at /app
+     (and /app/), which is where the legacy nav links to it, so neither entry
+     point can strand the other. "/legacy" stays an alias for people who
+     followed an older link to it. */
+  if (p === '/app' || p === '/app/') return serveApp(res);
+  if (p === '/' || p === '/legacy') p = '/index.html';
   /* The pages were once reachable as /public/login.html (the folder was the
      web root). Those links still exist in old bookmarks and in login.html's
      own redirect, so the legacy prefix is mapped onto the real file rather
@@ -2293,9 +2295,10 @@ const handleRequest = async function (req, res) {
        local index and a local model, and the shared IP floor above bounds
        abuse. Model configuration is server-side only (docs/science-tutor.md). */
     /* ---------- The app: React build served from /assets/app/ ----------
-       "/" and any client route open the React app. Deep links (#/chat?q=...)
-       are client-side; the shell is the same file. */
-    if ((p === '/' || p === '/app' || p === '/index.html') && req.method === 'GET') {
+       Only /app opens the React shell; "/" and /index.html stay the study app
+       (see serveStatic), and React deep links (#/chat?q=...) are client-side
+       inside that shell. */
+    if ((p === '/app' || p === '/app/') && req.method === 'GET') {
       return serveApp(res);
     }
 
