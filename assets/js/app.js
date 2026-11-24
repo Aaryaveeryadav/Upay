@@ -2060,46 +2060,6 @@ window.UP = window.UP || {};
         return;
       }
     }
-    /* The built-in solver is asked before the provider, for the same reason the
-       matrix engine is: it is exact, instant, free, and it can say what it does
-       not know. It used to be consulted only from the past-year-question panel,
-       so a question typed into Ask went to the model even when the app could
-       answer it perfectly - and with the provider down, a solver-solvable
-       question was reported as unsolved. Only a real answer is used: a
-       "not-attempted" refusal leaves the question to the model, which may
-       explain what the solver cannot compute. */
-    if (!needsAIOnly() && ['maths','applied-maths'].includes(routing.subject) &&
-        routing.task !== 'writing' && UP.answerQuestion) {
-      let solved = null;
-      try { solved = UP.answerQuestion(q); } catch (_) { solved = null; }
-      if (solved && solved.kind && solved.kind !== 'not-attempted' &&
-          Array.isArray(solved.approaches) && solved.approaches.length && solved.result) {
-        /* The solver is bilingual: its text fields are {en, hi} pairs, while the
-           answer card reads plain strings. Resolve them for the chosen
-           language here; leaving them unresolved printed "[object Object]". */
-        const text = v => (v && typeof v === 'object' && !Array.isArray(v)) ? P(v) : (v == null ? '' : String(v));
-        const local = Object.assign({}, solved, {
-          source: 'exact', question: q, subjectRouting: routing,
-          result: text(solved.result),
-          summary: text(solved.summary),
-          title: text(solved.title),
-          verify: text(solved.verify),
-          approaches: (solved.approaches || []).map(ap => ({
-            name: text(ap && ap.name),
-            steps: ((ap && ap.steps) || []).map(st => Object.assign({}, st, {
-              t: text(st && st.t), m: text(st && st.m), note: text(st && st.note)
-            }))
-          }))
-        });
-        S.aiState = 'local'; S.aiRetry = false; S.aiNote = '';
-        S.aiAnswer = local;
-        S.answer = local;
-        paint();
-        bumpProgress(S.subject);
-        pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
-        return;
-      }
-    }
     const matches=(UP.pyq||[]).filter(row=>qInScope(row)&&pyqQuestionText(row)===q);
     const mappedChapters=[...new Set(matches.map(row=>String(row.ch)).filter(Boolean))];
     const chapterContext=hindi12Track() ? catalogue().find(c=>q.startsWith(c.book + ' · ' + c.hi)) || chapterById(S.chapterId) : mappedChapters.length===1?chapterById(mappedChapters[0]):chapterById(S.chapterId);
@@ -2113,6 +2073,39 @@ window.UP = window.UP || {};
       S.aiNote = note || '';
       S.aiRetry = !!showRetry;
       if (!S.answer || S.answer.kind === 'ai-waiting' || needsAIOnly() || routing.task === 'writing' || !['maths','applied-maths'].includes(routing.subject)) {
+        /* Before telling the student nothing is available, ask the built-in
+           solver. It used to be consulted only from the past-year-question
+           panel, so with the provider down a question the app can answer
+           exactly was reported as unsolved. A 'not-attempted' refusal is not
+           an answer and is ignored. */
+        let solved = null;
+        if (!needsAIOnly() && routing.task !== 'writing' && ['maths','applied-maths'].includes(routing.subject) && UP.answerQuestion) {
+          try { solved = UP.answerQuestion(q); } catch (_) { solved = null; }
+        }
+        if (solved && solved.kind && solved.kind !== 'not-attempted' &&
+            Array.isArray(solved.approaches) && solved.approaches.length && solved.result) {
+          /* The solver is bilingual ({en, hi} fields); the card reads plain
+             strings, and passing the objects through printed [object Object]. */
+          const text = v => (v && typeof v === 'object' && !Array.isArray(v)) ? P(v) : (v == null ? '' : String(v));
+          const local = Object.assign({}, solved, {
+            source: 'exact', question: q, subjectRouting: routing,
+            result: text(solved.result),
+            summary: text(solved.summary),
+            title: text(solved.title),
+            verify: text(solved.verify),
+            approaches: (solved.approaches || []).map(ap => ({
+              name: text(ap && ap.name),
+              steps: ((ap && ap.steps) || []).map(st => Object.assign({}, st, {
+                t: text(st && st.t), m: text(st && st.m), note: text(st && st.note)
+              }))
+            }))
+          });
+          S.aiAnswer = local;
+          S.answer = local;
+          paint();
+          bumpProgress(S.subject);
+          return;
+        }
         S.aiAnswer = null;
         S.answer = { kind: isAccountancyTrack() ? 'accountancy-unavailable' : 'no-local-solver', question: q,
           note: /built-in solver|बिल्ट-इन हल/.test(note || '') ? '' : (note || '') };
