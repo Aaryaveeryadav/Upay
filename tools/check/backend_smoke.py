@@ -116,7 +116,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='upay-isolated-', dir=os.environ.get('UPAY_TEST_TMP') or None) as td:
         work = Path(td)
         policy_version = subprocess.check_output(['node', '-p', "require('./lib/solve-policy.js').VERSION"], cwd=ROOT, text=True).strip()
-        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'lib/solve-integrity.js', 'assets/js/worked-figure.js', 'assets/js/request-accuracy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-provider.js', 'lib/ai-status.js', 'lib/rate-limit.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
+        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'lib/solve-integrity.js', 'assets/js/worked-figure.js', 'assets/js/request-accuracy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-provider.js', 'lib/ai-status.js', 'lib/rate-limit.js', 'lib/science-rag.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
             (work / name).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / name, work / name)
         (work / 'index.html').write_text('<title>isolated test</title>')
@@ -170,6 +170,17 @@ def main():
             expect(port, '/api/auth/me', 401)
             expect(port, '/api/ai/cache', 401)
             expect(port, '/api/ai/cache?q=test', 401)
+            # The Science tutor needs no account, but must degrade cleanly when the
+            # index is not deployed beside the server: probe says so, ask abstains.
+            tutor = expect(port, '/api/science/ask', 200)
+            assert tutor['ok'] is True and tutor['index']['available'] is False, tutor
+            assert 'ollama' not in json.dumps(tutor).lower(), 'the probe must not reveal the model host'
+            ask = expect(port, '/api/science/ask', 200, method='POST',
+                         body={'question': 'Why are chips flushed with nitrogen?'})
+            assert ask['grounded'] is False and ask['citations'] == [] and not ask['model'], ask
+            # Unknown methods fall through to the server's usual 404, like every
+            # other local route; the serverless handler answers 405.
+            expect(port, '/api/science/ask', 404, method='PUT', body={})
             expect(port, '/api/auth/login', 401, method='POST', body={'user':'admin','password':'wrong'})
             login = expect(port, '/api/auth/login', 200, method='POST', body={'user':'admin','password':TEST_PW})
             token = login['token']
