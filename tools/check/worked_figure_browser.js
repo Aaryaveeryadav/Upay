@@ -64,7 +64,6 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
         route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(reply) });
       });
       await page.goto(BASE, { waitUntil: 'networkidle' });
-      await page.waitForFunction(() => window.UP && UP.S && document.body.classList.contains('up-ready'));
       /* Named waits: a bare 30 s timeout says nothing about which case hung,
          and this check is the only place some of these paths are exercised. */
       const waitFor = (label, fn, arg) => page.waitForFunction(fn, arg, { timeout: 20000 })
@@ -78,6 +77,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
           })).catch(() => null);
           throw new Error(label + ' timed out at ' + width + 'px: ' + JSON.stringify(state) + ' — ' + e.message);
         });
+      await waitFor('app boot', () => window.UP && UP.S && document.body.classList.contains('up-ready'));
 
       const arm = (question, answer, diagram) => {
         reply = {
@@ -240,12 +240,11 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
         'two switches. Find the current in each branch, the potential difference across each resistor, ' +
         'the power dissipated, and explain what changes when the second switch is opened.';
       await page.evaluate((q) => { UP.S.subject = 'physics'; location.hash = '#/ask?q=' + encodeURIComponent(q); }, LONG);
-      await page.waitForFunction(() => {
+      await waitFor('split answer (core part)', () => {
         const answer = document.querySelector('.ai-answer');
         return answer && /Current = 0\.5 A/.test(answer.textContent);
-      }, { timeout: 30000 });
-      await page.waitForFunction(() => document.querySelectorAll('.ai-answer .approach').length >= 4,
-        { timeout: 30000 });
+      });
+      await waitFor('split answer (all approaches)', () => document.querySelectorAll('.ai-answer .approach').length >= 4);
       assert.deepEqual(partCalls, ['full', 'core', 'approach', 'approach', 'approach'],
         'one whole-answer attempt, then the answer and one method per request: ' + partCalls.join(','));
       const splitText = await page.locator('.ai-answer').innerText();
