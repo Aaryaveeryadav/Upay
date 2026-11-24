@@ -1078,6 +1078,12 @@ UP.figures = (function () {
       return orbitFig(spec);
     }
 
+    if (spec.type === 'irrational' && spec.verified) {
+      /* The proof is a contradiction, but the length is real: √n is drawn on
+         the number line by the classical right-triangle construction. */
+      const n = Number(spec.n) > 0 ? Number(spec.n) : 5;
+      return sqrtLine({ n: n });
+    }
     if (spec.type === 'charge-energy' && spec.verified) return chargeEnergyFig();
     if (spec.type === 'matrix' && spec.verified) {
       return matrixFig(spec);
