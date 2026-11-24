@@ -48,7 +48,8 @@ module.exports = async function handler(req, res) {
   catch (e) { return json(res, 400, { error: 'Send a JSON body with a question.' }); }
 
   try {
-    const result = await rag.answerQuestion({
+    const chat = require('../../lib/chat.js');
+    const result = await chat.answer({
       question: body.question,
       chapter: body.chapter,
       limit: body.limit,

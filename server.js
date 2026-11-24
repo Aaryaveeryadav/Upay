@@ -20,6 +20,9 @@ const solvePolicy = require('./lib/solve-policy.js');
 const integrity = require('./lib/solve-integrity.js');
 const solveRuntime = require('./lib/ai-provider.js');
 const scienceRag = require('./lib/science-rag.js');
+const studyChat = require('./lib/chat.js');
+const platform = require('./lib/platform-api.js');
+const contentControl = require('./lib/content-control.js');
 const { aiFailure: solveFailure } = require('./lib/ai-status.js');
 
 const http = require('http');
@@ -2267,6 +2270,54 @@ const handleRequest = async function (req, res) {
           : 'No science index is installed on this server, so the tutor cannot cite sources.'
       });
     }
+    /* ---------- Study chat for every subject: local model + citations ---------- */
+    if (p === '/api/chat/ask' && req.method === 'GET') {
+      const st = studyChat.status();
+      return json(res, 200, { ok: true, enabled: st.enabled, model: st.model, host: 'local', subjects: st.subjects, note: st.note });
+    }
+    if (p === '/api/chat/ask' && req.method === 'POST') {
+      const b = await readBody(req, 32 * 1024);
+      // Scope: a signed-in student is pinned to their own class/board; the
+      // question cannot choose another class. A guest may browse freely.
+      let profile = null;
+      // The school/class scope comes from the account, never from the request.
+      // A missing or invalid token simply means a guest scope.
+      try {
+        if (require('./lib/db.js').enabled()) profile = await require('./lib/tenancy.js').resolve(req);
+      } catch (_) { profile = null; }
+      const scope = profile && profile.active
+        ? { class: profile.class_level || Number(b.class) || 10, subject: b.subject, board: profile.board }
+        : { class: b.class, subject: b.subject, board: b.board };
+      try {
+        const result = await studyChat.answer({
+          question: b.question,
+          class: scope.class,
+          subject: b.subject,
+          chapter: b.chapter,
+          language: b.lang,
+          history: b.history,
+          callModel: async ({ messages, model }) => {
+            const out = await require('./lib/local-llm.js').generate({ messages, model, temperature: 0.25, maxTokens: 800, numCtx: 4096, timeoutMs: 60000 });
+            return out.text;
+          }
+        });
+        return json(res, 200, result);
+      } catch (e) {
+        const payload = { ok: false, code: (e && e.code) || 'chat_error', error: String((e && e.message) || 'The study model is unavailable.') };
+        if (e && e.citations) {
+          payload.citations = e.citations; payload.retrieved = e.retrieved;
+          payload.question = e.question; payload.model = e.model; payload.grounded = false;
+          payload.notice = 'The sources below came from the index; the model could not draft an answer.';
+        }
+        return json(res, Number(e && e.status) || 500, payload);
+      }
+    }
+
+    /* ---------- Accounts, schools and records (multi-tenant platform) ---------- */
+    if (p.startsWith('/api/platform')) {
+      return platform.handle(req, res, new URL(req.url, 'http://' + String(req.headers.host || 'localhost')));
+    }
+
     if (p === '/api/science/ask' && req.method === 'POST') {
       const b = await readBody(req, 16 * 1024);
       try {
