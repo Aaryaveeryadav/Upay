@@ -1,5 +1,11 @@
 # Class 10 Science tutor — cited answers from a local model
 
+> **One handler.** `/api/science/ask` is answered by the same function as
+> `/api/chat/ask` (it re-exports it). Vercel's Hobby plan allows 12
+> serverless functions and this repository has 12, so the tutor route
+> shares the chat's slot. The response contract below is unchanged and
+> the React chat reads the same answer.
+
 The research prototypes in `experiments/science-ai/` (BM25 retrieval +
 local Ollama tutor) are now wired into the web app behind one route:
 
