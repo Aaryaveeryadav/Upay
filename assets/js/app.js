@@ -5105,6 +5105,12 @@ window.UP = window.UP || {};
       UP.loadClass12().then(function () { render(); });
     }
     if (hindi12Track() && !UP.loaded.packs[S.subject]) UP.loadPack(S.subject).then(() => render());
+    // A shared deep link (?sub=) can land on a subject whose pack was never
+    // fetched in this session. Load it once, then repaint with the data.
+    if (r.params.sub && UP.loaded && UP.loadPack && !UP.loaded.packs[S.subject]) {
+      const wanted = S.subject;
+      UP.loadPack(wanted).then(() => { if (S.subject === wanted) render(); });
+    }
     syncStudyScope();
     renderShell(); renderTopbar(); renderFooter();
 

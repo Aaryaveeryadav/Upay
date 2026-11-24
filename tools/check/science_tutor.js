@@ -492,12 +492,38 @@ async function routeChecks() {
     assert.equal(document.querySelector('[data-tutor-chapter]').value, '11', 'deep-linked chapter scope is selected');
     assert.match(document.title, /Science tutor/);
 
+    // The chapter page offers the chapter-scoped tutor, and following it
+    // carries the scope into the tutor page.
+    window.location.hash = '#/home';
+    for (let i = 0; i < 40 && document.querySelector('form[data-form="science-tutor"]'); i++) await pause(50);
+    window.location.hash = '#/chapter/11?sub=science&cls=10';
+    for (let i = 0; i < 80 && !(window.UP?.S?.subject === 'science' && document.querySelector('a[href="#/tutor?ch=11"]')); i++) await pause(50);
+    const chapterTutorLink = document.querySelector('a[href="#/tutor?ch=11"]');
+    assert(chapterTutorLink, 'the science chapter page links to the scoped tutor');
+    assert.match(chapterTutorLink.textContent, /tutor/i, 'the chapter link says what it does');
+    chapterTutorLink.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
+    for (let i = 0; i < 60 && !(document.querySelector('form[data-form="science-tutor"]') && document.querySelector('[data-tutor-chapter]')?.value === '11'); i++) await pause(50);
+    assert.equal(document.querySelector('[data-tutor-chapter]').value, '11', 'the chapter button opens the tutor scoped to that chapter');
+
+    // A shared question (?q=) is asked once, then the parameter is dropped.
+    window.location.hash = '#/home';
+    for (let i = 0; i < 40 && document.querySelector('form[data-form="science-tutor"]'); i++) await pause(50);
+    const beforeShare = posts.length;
+    window.location.hash = '#/tutor?q=' + encodeURIComponent('Why is a convex mirror used as a rear-view mirror?');
+    for (let i = 0; i < 80 && posts.length === beforeShare; i++) await pause(50);
+    assert.equal(posts.length, beforeShare + 1, 'a shared question is asked automatically');
+    assert.equal(posts[posts.length - 1].question, 'Why is a convex mirror used as a rear-view mirror?', 'the shared question is the one asked');
+    for (let i = 0; i < 40 && window.location.hash !== '#/tutor'; i++) await pause(50);
+    assert.equal(window.location.hash, '#/tutor', 'the one-shot ?q= is removed from the address');
+    for (let i = 0; i < 40 && posts.length !== beforeShare + 1; i++) await pause(50);
+    assert.equal(posts.length, beforeShare + 1, 'the re-render after replaceState does not ask again');
+
     document.querySelector('[data-tutor-action="clear"]').dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
     for (let i = 0; i < 40 && document.querySelectorAll('[data-tutor-suggestion]').length === 0; i++) await pause(50);
     assert.equal(document.querySelectorAll('.tutor-source').length, 0, 'clear empties the thread');
     assert.equal(JSON.parse(window.localStorage.getItem('upay.scienceTutor.chat.en') || '[]').length, 0, 'clear empties storage');
     assert(errors.length === 0, 'no page errors: ' + errors.slice(0, 3).join(' | '));
-    pass('app route: boot, rail link, ask -> cited answer -> source card, storage, chapter deep link, clear');
+    pass('app route: boot, rail link, ask -> cited answer -> source card, storage, chapter link and deep link, shared question, clear');
   } finally {
     dom.window.close();
   }
