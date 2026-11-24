@@ -65,6 +65,19 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       });
       await page.goto(BASE, { waitUntil: 'networkidle' });
       await page.waitForFunction(() => window.UP && UP.S && document.body.classList.contains('up-ready'));
+      /* Named waits: a bare 30 s timeout says nothing about which case hung,
+         and this check is the only place some of these paths are exercised. */
+      const waitFor = (label, fn, arg) => page.waitForFunction(fn, arg, { timeout: 20000 })
+        .catch(async e => {
+          const state = await page.evaluate(() => ({
+            hash: location.hash.slice(0, 60),
+            subject: window.UP && UP.S ? UP.S.subject : null,
+            answerKind: window.UP && UP.S && UP.S.answer ? UP.S.answer.kind : null,
+            aiState: window.UP && UP.S ? UP.S.aiState : null,
+            mountChars: (document.getElementById('answerMount') || {}).textContent?.length || 0
+          })).catch(() => null);
+          throw new Error(label + ' timed out at ' + width + 'px: ' + JSON.stringify(state) + ' — ' + e.message);
+        });
 
       const arm = (question, answer, diagram) => {
         reply = {
@@ -79,7 +92,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
 
       /* 1. The tower: height and both distances labelled from the question. */
       await ask(TOWER, 'maths', 'Height = 10√3 m ≈ 17.32 m; original distance = 30 m; nearer distance = 10 m.', null);
-      await page.waitForFunction(() => {
+      await waitFor('tower worked figure', () => {
         const figure = document.querySelector('.ai-answer .worked-figure');
         return figure && /17\.32/.test(figure.textContent);
       });
@@ -128,7 +141,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
         type: 'triangle', points: [{ x: 0, y: 0, label: 'A' }, { x: 3, y: 0, label: 'B' }, { x: 0, y: 4, label: 'C' }],
         segments: [[0, 0, 3, 0]], caption: 'Mock ladder triangle'
       });
-      await page.waitForFunction(() => /Mock ladder triangle/.test(document.body.textContent));
+      await waitFor('ladder diagram', () => /Mock ladder triangle/.test(document.body.textContent));
       assert.equal(await page.locator('.ai-answer .worked-figure').count(), 0, 'no worked figure for a ladder');
       assert(await page.locator('.ai-answer .figure-body svg polygon').count() >= 1, 'the ordinary AI triangle still renders');
 
@@ -141,10 +154,12 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       const MATRIX_Q = 'A = [[2, 1, -1], [1, 2, 1], [3, -1, 2]]\nB = [[4, 1], [7, 0], [8, 5]]\n\nFind X such that AX = B.';
       const beforeMatrix = aiCalls;
       await ask(MATRIX_Q, 'maths', 'X = [[-1/5, 12/5, 6/5], [-1/5, 8/5, -7/5]]', null);
-      await page.waitForFunction(() => {
+      await waitFor('matrix worked figure', () => {
         const figure = document.querySelector('.ai-answer .worked-figure');
         return figure && /37\/18/.test(figure.textContent);
       });
+      /* A local answer must not have asked the provider at all: that is the
+         whole point of solving it here. */
       assert.equal(aiCalls, beforeMatrix, 'a solved matrix question is answered locally, not by the provider');
       const matrixFigure = page.locator('.ai-answer .worked-figure');
       const matrixText = await matrixFigure.innerText();
