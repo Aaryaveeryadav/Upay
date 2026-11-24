@@ -28,6 +28,17 @@ def main():
         if not key:
             key = [ln for ln in lines if not ln.startswith('at ')][-3:]
         summary = ' | '.join(key)
+        # Node prints the assertion message on the lines *after* the header for
+        # `assert(cond)` without a message, and on the header itself when there
+        # is one. Without it the annotation says only "evaluated to a falsy
+        # value", which is true of every failed assertion. Include the source
+        # frame and the code excerpt that node prints between them.
+        if any('AssertionError' in ln for ln in lines):
+            at = next((i for i, ln in enumerate(lines) if 'AssertionError' in ln), None)
+            if at is not None:
+                tail = lines[at + 1:at + 9]
+                tail = [ln for ln in tail if not ln.startswith('at ')][:3]
+                summary = ' | '.join([summary] + tail)
         title = annotation('Failed: ' + ' '.join(command)).replace(',', '%2C').replace(':', '%3A')
         summary = annotation(summary[:900])
         print(f'::error title={title}::{summary}', flush=True)
