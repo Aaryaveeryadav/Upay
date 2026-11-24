@@ -2028,6 +2028,24 @@ window.UP = window.UP || {};
       paint();
       return;
     }
+    /* A matrix equation solved here is answered here. The entries are exact
+       fractions and the drawing is built from the grid that was actually
+       solved, so sending it to a model could only lose that: the model cannot
+       see the matrices, and a misreading of the grid used to become the
+       picture. This is also the cheapest and fastest answer we can give. */
+    if (matrixSolved) {
+      let local = null;
+      try { local = UP.matrices.answerFor(matrixSolved, S.lang); } catch (_) { local = null; }
+      if (local) {
+        S.aiState = 'local'; S.aiRetry = false;
+        S.aiAnswer = local;
+        S.answer = local;
+        paint();
+        bumpProgress(S.subject);
+        pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
+        return;
+      }
+    }
     const matches=(UP.pyq||[]).filter(row=>qInScope(row)&&pyqQuestionText(row)===q);
     const mappedChapters=[...new Set(matches.map(row=>String(row.ch)).filter(Boolean))];
     const chapterContext=hindi12Track() ? catalogue().find(c=>q.startsWith(c.book + ' · ' + c.hi)) || chapterById(S.chapterId) : mappedChapters.length===1?chapterById(mappedChapters[0]):chapterById(S.chapterId);
