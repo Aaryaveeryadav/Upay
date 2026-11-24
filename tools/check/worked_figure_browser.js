@@ -123,7 +123,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
             verified network, and no resistance may be invented. */
       await ask(CIRCUIT, 'science', 'Total resistance = 6 Ω; current = 2 A; the 6 Ω branch takes 0.67 A and the 3 Ω branch 1.33 A.',
         { type: 'circuit', topology: 'series', resistors: [{ label: 'R₁', value: 1 }, { label: 'R₂', value: 2 }], caption: 'Mock wrong diagram' });
-      await page.waitForFunction(() => {
+      await waitFor('circuit worked figure', () => {
         const figure = document.querySelector('.ai-answer .worked-figure');
         return figure && /12 V/.test(figure.textContent) && /R_eq = 6 Ω/.test(figure.textContent);
       });
@@ -190,7 +190,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       const DET_Q = 'Find the determinant of [[1, 2], [3, 4]].';
       const beforeDet = aiCalls;
       await ask(DET_Q, 'maths', '|A| = -6', null);
-      await page.waitForFunction(() => /\|A\|\s*=\s*-?2|−2/.test(document.body.innerText) &&
+      await waitFor('determinant answer', () => /\|A\|\s*=\s*-?2|−2/.test(document.body.innerText) &&
         !!document.querySelector('.ai-answer .worked-figure'));
       assert.equal(aiCalls, beforeDet, 'a determinant is answered locally too');
       const detText = await page.locator('.ai-answer').innerText();
@@ -202,7 +202,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       const FLAT = 'Find X such that A X = B\n2 1 -1 4 1\n1 2 1 7 0\n3 -1 2 8 5';
       const beforeFlat = aiCalls;
       await ask(FLAT, 'maths', 'X = [[0, 0], [0, 0], [0, 0]]', null);
-      await page.waitForFunction(() => {
+      await waitFor('flat paste solved', () => {
         const fig = document.querySelector('.ai-answer .worked-figure');
         return fig && /37\/18/.test(fig.textContent);
       });
@@ -223,7 +223,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
         'A = [[2,1,-1],[1,2,1],[3,-1,2]]\nB = [[4,1],[7,0],[8,5]]');
       const beforeRepair = aiCalls;
       await page.locator('[data-action="matrix-repair-solve"]').click();
-      await page.waitForFunction(() => {
+      await waitFor('confirmed matrices solved', () => {
         const figure = document.querySelector('.ai-answer .worked-figure');
         return figure && /37\/18/.test(figure.textContent);
       });
