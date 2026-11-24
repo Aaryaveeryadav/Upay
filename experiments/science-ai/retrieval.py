@@ -251,6 +251,12 @@ class Retriever:
             # Tiny nudge for clean digital extraction over noisy OCR on exact ties.
             if not str(chunk.get("extraction_method", "")).startswith("ocr"):
                 score *= 1.03
+            # Downweight exercise/summary sections relative to explanatory NCERT prose.
+            sec_upper = str(chunk.get("section") or "").upper()
+            if "QUESTIONS" in sec_upper or "EXERCISES" in sec_upper:
+                score *= 0.78
+            elif "WHAT YOU HAVE LEARNT" in sec_upper:
+                score *= 0.85
             candidates.append((score, idx, matched_set))
 
         if not candidates:
@@ -296,34 +302,63 @@ class Retriever:
         # Greedy selection balancing BM25 relevance, subtopic coverage, and low overlap.
         selected: list[dict[str, Any]] = []
         selected_sets: list[set[str]] = []
+        selected_pyq_sets: list[set[str]] = []
         covered_q_terms: set[str] = set()
         remaining = list(candidates[:60])
 
-        while remaining and len(selected) < limit:
-            best_pos = 0
-            best_adj = -1.0
-            for pos, (score, idx, mset) in enumerate(remaining):
-                tok_set = set(self.doc_tf[idx])
-                max_overlap = 0.0
-                if diversify and tok_set and selected_sets:
-                    for prev_set in selected_sets:
-                        union = len(tok_set | prev_set)
-                        if union:
-                            max_overlap = max(max_overlap, len(tok_set & prev_set) / union)
-                if max_overlap > 0.65:
-                    adj = score * 0.25
-                else:
-                    uncovered_bonus = 1.0 + 0.35 * (len(mset - covered_q_terms) / max(1, len(q_unique)))
-                    adj = score * uncovered_bonus * (1.0 - 0.35 * max_overlap)
-                if adj > best_adj:
-                    best_adj = adj
-                    best_pos = pos
+        def _pick_from(pool: list[tuple[float, int, set[str]]], target_count: int, *, dedup_pyq: bool = False) -> None:
+            while pool and len(selected) < target_count:
+                best_pos = -1
+                best_adj = -1.0
+                for pos, (score, idx, mset) in enumerate(pool):
+                    tok_set = set(self.doc_tf[idx])
+                    if dedup_pyq and tok_set and selected_pyq_sets:
+                        is_dup = False
+                        for pset in selected_pyq_sets:
+                            union = len(tok_set | pset)
+                            if union and (len(tok_set & pset) / union) >= 0.62:
+                                is_dup = True
+                                break
+                        if is_dup:
+                            continue
+                    max_overlap = 0.0
+                    if diversify and tok_set and selected_sets:
+                        for prev_set in selected_sets:
+                            union = len(tok_set | prev_set)
+                            if union:
+                                max_overlap = max(max_overlap, len(tok_set & prev_set) / union)
+                    if max_overlap > 0.65:
+                        adj = score * 0.25
+                    else:
+                        uncovered_bonus = 1.0 + 0.15 * (len(mset - covered_q_terms) / max(1, len(q_unique)))
+                        adj = score * uncovered_bonus * (1.0 - 0.20 * max_overlap)
+                    if adj > best_adj:
+                        best_adj = adj
+                        best_pos = pos
 
-            score, idx, mset = remaining.pop(best_pos)
-            item = dict(self.chunks[idx])
-            item["score"] = round(score, 4)
-            selected.append(item)
-            selected_sets.append(set(self.doc_tf[idx]))
-            covered_q_terms.update(mset)
+                if best_pos < 0:
+                    break
+                score, idx, mset = pool.pop(best_pos)
+                item = dict(self.chunks[idx])
+                item["score"] = round(score, 4)
+                selected.append(item)
+                tok_set = set(self.doc_tf[idx])
+                selected_sets.append(tok_set)
+                if item.get("doc_type") in ("pyq", "marking_scheme"):
+                    selected_pyq_sets.append(tok_set)
+                covered_q_terms.update(mset)
+
+        is_mixed = (doc_type is None or doc_type == "all") and limit >= 3
+        if is_mixed:
+            tb_pool = [c for c in remaining if self.chunks[c[1]].get("doc_type") == "textbook"]
+            pyq_pool = [c for c in remaining if self.chunks[c[1]].get("doc_type") != "textbook"]
+            tb_slots = max(2, math.ceil(limit * 0.75))
+            _pick_from(tb_pool, min(tb_slots, limit))
+            _pick_from(pyq_pool, limit, dedup_pyq=True)
+            # If PYQs didn't fill remaining slots, top up with remaining textbook chunks.
+            if len(selected) < limit and tb_pool:
+                _pick_from(tb_pool, limit)
+        else:
+            _pick_from(remaining, limit)
 
         return selected

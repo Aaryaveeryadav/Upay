@@ -9,7 +9,7 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
-from pdf_extract import discover_pdfs, extract_pdf_file, load_ocr_fallback_map, report_to_dict
+from pdf_extract import discover_pdfs, extract_pdf_file, load_ocr_fallback_map, report_to_dict, sha256_file
 from retrieval import Retriever
 
 DEFAULT_MODEL = "qwen2.5:3b"
@@ -44,6 +44,7 @@ def build_or_merge_index(
     merge: bool = False,
     ocr_mode: str = "none",
     ocr_fallback_path: Path | None = None,
+    lang: str = "en",
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     pdfs = discover_pdfs(target)
     if not pdfs:
@@ -62,17 +63,20 @@ def build_or_merge_index(
 
     for pdf in pdfs:
         rel = str(pdf.relative_to(target)) if target.is_dir() else pdf.name
+        prev = existing_sources.get(rel)
+        if merge and prev and prev.get("chunks", 0) > 0:
+            cur_hash = sha256_file(pdf)
+            if prev.get("sha256") == cur_hash:
+                # Skip extracting unchanged scanned/digital PDFs when merging.
+                continue
         chunks, report = extract_pdf_file(
             pdf,
             rel_source=rel,
             ocr_mode=ocr_mode,
             ocr_fallback_map=fallback_map,
+            lang=lang,
         )
         rep_dict = report_to_dict(report)
-        prev = existing_sources.get(rel)
-        if merge and prev and prev.get("sha256") == rep_dict["sha256"] and prev.get("chunks", 0) > 0:
-            # Skip re-adding unchanged source chunks when merging.
-            continue
         replaced_sources.add(rel)
         updated_sources[rel] = rep_dict
         new_chunks.extend(chunks)
@@ -213,10 +217,11 @@ def print_audit(index_path: Path) -> None:
         ch = info.get("chapter")
         ch_lbl = f"Ch {ch:2d}" if isinstance(ch, int) else info.get("doc_type", "?")
         methods = ",".join(info.get("extraction_methods", []))
+        skipped = info.get("skipped_lang_pages", 0)
         print(
             f"  {src:48s} | {ch_lbl:6s} | pages={info.get('pages', 0):2d} "
             f"(dig={info.get('digital_pages', 0):2d}, ocr={info.get('ocr_pages', 0):2d}, "
-            f"empty={info.get('empty_pages', 0):2d}) | chars={info.get('chars', 0):6d} | "
+            f"empty={info.get('empty_pages', 0):2d}, skip={skipped:2d}) | chars={info.get('chars', 0):6d} | "
             f"chunks={info.get('chunks', 0):3d} | {methods}"
         )
         for w in info.get("warnings", []):
@@ -228,6 +233,7 @@ def run_eval(
     suite_path: Path,
     *,
     limit: int = 5,
+    doc_type: str = "all",
     with_llm: bool = False,
     model: str = DEFAULT_MODEL,
     embed_model: str | None = None,
@@ -252,7 +258,7 @@ def run_eval(
         kind = item.get("kind", "in_syllabus")
         exp_ch = item.get("expected_chapter")
         exp_kws = [k.lower() for k in item.get("expected_keywords", [])]
-        found = ret.search(q, limit=limit, embed_model=embed_model)
+        found = ret.search(q, limit=limit, doc_type=doc_type, embed_model=embed_model)
 
         if kind == "in_syllabus":
             in_scope_total += 1
@@ -339,6 +345,7 @@ def main() -> int:
     p_idx.add_argument("--merge", action="store_true", help="Merge into existing index by file SHA-256")
     p_idx.add_argument("--ocr", choices=("none", "auto", "tesseract", "rapidocr"), default="none")
     p_idx.add_argument("--ocr-fallback", type=Path, default=None, help="Optional pre-extracted OCR JSON (e.g. assets/science/_extract.json)")
+    p_idx.add_argument("--lang", choices=("en", "all"), default="en", help="Language filter: 'en' skips Hindi pages (default), 'all' keeps all")
     p_idx.add_argument("--report", action="store_true", help="Print detailed per-file extraction report")
 
     p_aud = sub.add_parser("audit", help="Inspect an existing index and extraction warnings")
@@ -379,6 +386,7 @@ def main() -> int:
     p_eval.add_argument("--index", type=Path, default=Path("science-index.json"))
     p_eval.add_argument("--suite", type=Path, default=Path(__file__).with_name("eval_suite.json"))
     p_eval.add_argument("--limit", type=int, default=5)
+    p_eval.add_argument("--doc-type", choices=("all", "textbook", "pyq", "marking_scheme"), default="all")
     p_eval.add_argument("--with-llm", action="store_true")
     p_eval.add_argument("--model", default=DEFAULT_MODEL)
     p_eval.add_argument("--embed-model", default=None)
@@ -399,6 +407,7 @@ def main() -> int:
                 merge=args.merge,
                 ocr_mode=args.ocr,
                 ocr_fallback_path=args.ocr_fallback,
+                lang=args.lang,
             )
             print(f"Indexed {len(chunks)} chunks from {len(sources)} source PDF(s) to {args.out}.")
             if args.report:
@@ -485,6 +494,7 @@ def main() -> int:
                 args.index,
                 args.suite,
                 limit=args.limit,
+                doc_type=args.doc_type,
                 with_llm=args.with_llm,
                 model=args.model,
                 embed_model=args.embed_model,
