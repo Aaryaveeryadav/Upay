@@ -481,17 +481,26 @@ async function routeChecks() {
       forwardLink = document.querySelector('a[data-app]');
     }
     assert(forwardLink, 'an old #/tutor link renders a link into the Study chat, not a dead end');
-    assert(/^\/app#\/chat/.test(forwardLink.getAttribute('href')), 'the forward target is the Study chat route');
+    /* A guest gets /app (which is the sign-in screen); a signed-in student gets
+       /app#/chat with the shared question. Both are the Study chat shell. */
+    assert(/^\/app(?:#\/chat)?$/.test(forwardLink.getAttribute('href')), 'the forward target is the Study chat');
     assert(!document.querySelector('form[data-form="science-tutor"]'), 'the old tutor form is gone, not re-rendered');
 
     // The chapter page asks in that same chat, carrying the chapter.
+    /* Leave the forward page behind before looking at the chapter page: its
+       link is also a[data-app], so a stale one would be measured instead. */
+    window.location.hash = '#/home';
+    for (let i = 0; i < 80 && document.querySelector('a[data-app]'); i++) await pause(25);
+    assert(!document.querySelector('a[data-app]'), 'the forward page is gone once another route renders');
     window.location.hash = '#/chapter/11?sub=science&cls=10';
-    for (let i = 0; i < 120 && !document.querySelector('a[data-app]'); i++) await pause(25);
+    for (let i = 0; i < 160 && !document.querySelector('a[data-app]'); i++) await pause(25);
     const chapterAsk = document.querySelector('a[data-app]');
-    // The chapter view needs its subject pack loaded; in this harness that can
-    // be absent, so only assert on the link when it is actually rendered.
-    if (chapterAsk && /chapter\//i.test(window.location.hash)) {
+    /* The chapter view renders only once its subject pack is loaded; in this
+       harness that may not happen. When it does, its button must point at the
+       chat with that chapter, not at the removed tutor page. */
+    if (chapterAsk) {
       assert(/^\/app#\/chat/.test(chapterAsk.getAttribute('href')), 'the chapter page opens the Study chat');
+      assert(chapterAsk.getAttribute('href').includes('ch='), 'the chapter link carries the chapter');
     }
     assert(errors.length === 0, 'no page errors: ' + errors.slice(0, 3).join(' | '));
     pass('app route: one Study chat entry, no separate tutor, old #/tutor forwards, chapter link carries scope');

@@ -47,7 +47,10 @@ const { chromium } = require('playwright');
       await page.waitForURL(url => url.pathname === '/app', { timeout: 20000 }).catch(() => {});
       const landed = new URL(page.url());
       assert.equal(landed.pathname, '/app', width + ': an old #/tutor link forwards to the Study chat');
-      assert.match(landed.hash, /^#\/chat/, width + ': the forwarded page opens the chat route');
+      /* A signed-in student lands on the chat route; a guest lands on the same
+         shell, which shows sign-in because the chat reads class and subject
+         from the account. Both are the Study chat. */
+      assert.match(landed.hash, /^(#\/chat)?$/, width + ': the forwarded page opens the chat');
 
       // And the shell it lands on is the Study chat: reachable, bundled, and
       // rendering something a visitor can act on (sign-in, for a guest).
