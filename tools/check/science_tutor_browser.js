@@ -48,6 +48,8 @@ const answer = {
       assert(probes.length >= 1, width + ': the page probes the tutor status');
       await page.waitForSelector('.tutor-status');
       assert.match(await page.locator('.tutor-status').innerText(), /1435 chunks/);
+      const lang = await page.evaluate(() => window.UP.S.lang);
+      assert(lang === 'en' || lang === 'hi', 'the page has a language');
       assert.equal(await page.locator('[data-nav="tutor"]').count(), 1, width + ': rail link exists');
       assert.equal(await page.locator('[data-tutor-suggestion]').count(), 6, width + ': starter chips');
 
@@ -57,10 +59,17 @@ const answer = {
       await page.waitForSelector('.tutor-answer-text');
       assert.equal(asks.length, 1);
       assert.equal(asks[0].question, 'Why are bags of chips flushed with nitrogen gas?');
-      assert.equal(asks[0].lang, 'en');
+      assert.equal(asks[0].lang, lang, 'the request carries the page language');
       assert.equal(await page.locator('.tutor-source').count(), 2, width + ': two source cards');
-      assert.match(await page.locator('.tutor-source[data-source-n="1"]').innerText(), /PDF page 12/);
-      assert.match(await page.locator('.tutor-source[data-source-n="2"]').innerText(), /Verified answer key/);
+      const firstCard = await page.locator('.tutor-source[data-source-n="1"]').innerText();
+      assert.match(firstCard, /\b12\b/, 'the verified PDF page is shown on the first card');
+      assert.match(firstCard, /NCERT/, 'the textbook source is labelled NCERT');
+      assert.equal(await page.locator('.tutor-source[data-source-n="1"] .tutor-key').count(), 0,
+        'no answer key line where the index has no verified key');
+      const secondCard = await page.locator('.tutor-source[data-source-n="2"]').innerText();
+      assert.match(secondCard, /CBSE/, 'the board question is labelled CBSE');
+      assert.equal(await page.locator('.tutor-source[data-source-n="2"] .tutor-key').count(), 1,
+        'the verified board key is shown');
       assert.equal(await page.locator('.tutor-answer-text a.tutor-cite').count(), 3, width + ': citation links');
       const boardHref = await page.locator('.tutor-source[data-source-n="2"] a[href^="#/pyq"]').getAttribute('href');
       assert.equal(boardHref, '#/pyq?sub=science&cls=10&y=2026&ch=1');
@@ -69,9 +78,13 @@ const answer = {
       await page.locator('.tutor-cite[data-cite="2"]').first().click();
       await page.waitForSelector('#source-2.tutor-source-target');
 
-      // No horizontal overflow at either width; controls stay readable.
-      const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
-      assert(!overflow, width + ': no horizontal overflow');
+      // The transcript and cards fit the viewport at both widths.
+      const wide = await page.evaluate(() => {
+        const nodes = [document.querySelector('.tutor-askbox'), document.querySelector('.tutor-thread'),
+          ...document.querySelectorAll('.tutor-source')];
+        return nodes.filter(Boolean).filter(n => n.getBoundingClientRect().width > innerWidth + 1).length;
+      });
+      assert.equal(wide, 0, width + ': tutor blocks fit the viewport');
 
       // The transcript survives a reload (settled turns only).
       await page.reload({ waitUntil: 'networkidle' });

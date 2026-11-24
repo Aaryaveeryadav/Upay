@@ -158,5 +158,6 @@ node tools/check/science_tutor.js        # index, retrieval, prompt, citations, 
 
 `tools/check/science_tutor.js` needs no network, credentials or live model: it
 starts a fake Ollama on localhost and runs the real JSDOM app for the page
-flow. The browser Playwright check `tools/check/science_tutor_browser.js` is
-optional and runs only where Playwright/Chromium is installed.
+flow. Both are wired into `.github/workflows/trust-checks.yml` (the JSDOM one in
+the `contracts` job, alongside `build_science_index.js --check`; the Playwright
+one in the `browser` job with a mocked `/api/science/ask`).
