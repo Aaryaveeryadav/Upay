@@ -1897,6 +1897,11 @@ window.UP = window.UP || {};
           if (state.answer && UP.solveParts.have(state) >= 1) {
             state.answer.question = base.question;
             state.answer.subjectRouting = base.subjectRouting;
+            /* The whole-answer path formats before storing, so speech, copy
+               and the card all see the same plain-Unicode maths. The split
+               path was storing the provider's raw TeX: read aloud then said
+               "h backslash nu" instead of "h nu". */
+            if (UP.answerFormat) state.answer = UP.answerFormat.answer(state.answer);
             S.aiAnswer = state.answer;
             S.aiState = 'done';
             paint();
@@ -1922,6 +1927,7 @@ window.UP = window.UP || {};
       if (isCurrent() && state.answer && UP.solveParts.have(state) >= 1) {
         state.answer.question = base.question;
         state.answer.subjectRouting = base.subjectRouting;
+        if (UP.answerFormat) state.answer = UP.answerFormat.answer(state.answer);
         S.aiAnswer = state.answer; S.aiState = 'done'; paint(); return true;
       }
       return false;

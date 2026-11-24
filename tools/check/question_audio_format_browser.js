@@ -48,7 +48,14 @@ const {chromium}=require('playwright');
    assert.equal(await listen.getAttribute('aria-pressed'),'false');
    speech=await page.evaluate(()=>__speech.calls.map(u=>u.text));
    assert(speech.length>3 && speech.every(t=>t.length<=220));
-   assert(speech.join(' ').includes('Kₘₐₓ = hν - Φ₀'));
+   /* Speech is the expanded form, deliberately: mathSpeech spells glyphs out so
+      a voice never reads "h backslash nu" or drops a bare "=" into silence.
+      What must hold is that the formula survives in spoken words - the symbols
+      are named and the values are intact - and that no TeX command leaks. */
+   const spoken=speech.join(' ');
+   assert(/Kₘₐₓ\s+equals\s+hν\s+minus\s+Φ₀/.test(spoken),
+     'the formula is spoken with its symbols named: ' + spoken.slice(0, 300));
+   assert(!/backslash|\bnu\b.*text|open brace|Phi_0|_\{/.test(spoken), 'no TeX syntax is read aloud: ' + spoken.slice(0, 300));
    await listen.click();await listen.click();assert.equal(await listen.getAttribute('aria-pressed'),'false');
    await listen.click();await page.evaluate(()=>__speech.calls.at(-1).onerror({error:'voice-unavailable'}));
    assert.equal(await listen.getAttribute('aria-pressed'),'false');

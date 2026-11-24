@@ -18,13 +18,23 @@
     const supDigits = {'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁺':'+','⁻':'-'};
     const subDigits = {'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','ₐ':'a','ₑ':'e','ₕ':'h','ᵢ':'i','ⱼ':'j','ₖ':'k','ₗ':'l','ₘ':'m','ₙ':'n','ₒ':'o','ₚ':'p','ᵣ':'r','ₛ':'s','ₜ':'t','ᵤ':'u','ᵥ':'v','ₓ':'x'};
     let s = String(value == null ? '' : value);
+    /* Plain-Unicode maths is what the answer card shows, but raw TeX can still
+       reach the reader (a stored older answer, a pasted question). Flatten it
+       first, otherwise the voice says "h backslash nu" and "subscript open
+       brace max close brace" instead of the formula. */
+    if (root.UP && root.UP.answerFormat && typeof root.UP.answerFormat.text === 'function') {
+      try { s = root.UP.answerFormat.text(s); } catch (_) { /* fall back to the raw text */ }
+    }
     s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻]+/g, run => {
       const exp = Array.from(run, c => supDigits[c]).join('');
       if (exp === '2') return ' ' + word('squared', 'का वर्ग') + ' ';
       if (exp === '3') return ' ' + word('cubed', 'का घन') + ' ';
       return ' ' + word('to the power', 'की घात') + ' ' + exp.replace('-', word('minus ', 'ऋण ')).replace('+', word('plus ', 'धन ')) + ' ';
     });
-    s = s.replace(/[₀₁₂₃₄₅₆₇₈₉ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ]+/g, run => ' ' + word('subscript', 'सबस्क्रिप्ट') + ' ' + Array.from(run, c => subDigits[c]).join('') + ' ');
+    /* Unicode sub/superscripts are what the answer card shows and what a
+       speech engine pronounces correctly ("K sub m a x" is read as a subscript
+       by en-IN and hi-IN voices), so only the TeX brace form is spelled out. */
+    s = s.replace(/_\{([^{}]+)\}/g, (_, v) => ' ' + word('subscript', 'सबस्क्रिप्ट') + ' ' + v + ' ');
     const symbols = {
       '√':word('square root of','वर्गमूल'), '∛':word('cube root of','घनमूल'),
       '÷':word('divided by','भाग'), '/':word('divided by','भाग'),
