@@ -1,5 +1,6 @@
 *.pt
 *.json
+!eval_suite.json
 pdfs/
 __pycache__/
 .venv/

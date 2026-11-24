@@ -1,0 +1,8 @@
+pymupdf>=1.24
+pypdf>=4.0
+numpy>=1.26
+# Optional OCR fallback for scanned PDFs if Tesseract is not installed on PATH:
+# rapidocr-onnxruntime>=1.4
+# opencv-python-headless>=4.8
+# For tiny_model.py and sample.py (install CUDA build on RTX 3050 via pytorch.org):
+# torch>=2.2

@@ -2,44 +2,84 @@
 
 Two **local-only research prototypes**, separate from the Upay website. Neither is ready for students or is a replacement for the existing Gemini integration. No school accounts, authorization, domain enforcement, or production safeguards are implemented. Outputs can be incorrect; teacher review is essential. Do not use student or private school data here.
 
-## Setup on your Windows laptop
+## Setup on your laptop (Windows / Linux)
 
 Install Python 3.10 or newer. In PowerShell, from this folder:
 
 ```powershell
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install pypdf
+python -m pip install -r requirements.txt
 ```
 
-If PowerShell blocks activation, use Command Prompt and `.venv\Scripts\activate.bat`, or run `.venv\Scripts\python` directly. For the scratch model, install PyTorch using the current Windows/Pip/CUDA instructions at https://pytorch.org/get-started/locally/; a CPU-only install also works, but is slower. Check CUDA with `python -c "import torch; print(torch.cuda.is_available())"`. An NVIDIA driver alone does not guarantee a CUDA-enabled PyTorch installation.
+If PowerShell blocks activation, use Command Prompt and `.venv\Scripts\activate.bat`, or run `.venv\Scripts\python` directly.
 
-## 1. Build a tiny model from scratch
+- `pymupdf` is recommended as the primary PDF extractor because complex NCERT vector figures (for example Chapter 5 and Chapter 6) can hit `pypdf`'s default content-stream token limit. `pypdf` remains a fallback.
+- For scanned / image-only PDFs (like compressed chapter scans or scanned PYQs), install Tesseract OCR on your system `PATH` or `pip install rapidocr-onnxruntime opencv-python-headless`.
+- For `tiny_model.py` / `sample.py`, install PyTorch with CUDA support for your **RTX 3050 (4 GB VRAM)** using https://pytorch.org/get-started/locally/. Verify with `python -c "import torch; print(torch.cuda.is_available())"`.
 
-Prepare a UTF-8 `training.txt` containing text you are permitted to use. Use diverse, legally usable text; a few books alone are not enough to make a useful tutor. This byte-level model starts with random weights and learns next-byte prediction, not chat or reliable reasoning.
+## 1. Local PDF-based tutor (Ollama + BM25)
+
+Install Ollama from https://ollama.com/ and pull a model sized well for **4 GB VRAM**:
 
 ```powershell
-python tiny_model.py training.txt --steps 500 --out tiny-model.pt
-python sample.py tiny-model.pt --prompt "Science is" --bytes 200
+ollama pull qwen2.5:3b
 ```
 
-Training loss is not a measure of correctness. The sample may be nonsensical or contain replacement characters. 4 GB VRAM may require `--batch-size 2 --context 64`; reduce these if CUDA runs out of memory. Checkpoints are local and must only be loaded from trusted sources. Do not commit training data or checkpoints.
+(`qwen2.5:3b` quantized Q4 uses ~1.9 GB VRAM and fits comfortably inside 4 GB VRAM alongside `num_ctx=4096`. Use `qwen2.5:1.5b` if you want faster responses or lower memory pressure. Optionally pull `nomic-embed-text` for hybrid dense+BM25 reranking via `--embed-model nomic-embed-text`.)
 
-## 2. Local source-based tutor
+Put permitted textbook and PYQ PDFs in a local `pdfs/` folder (recursively supported, e.g. `pdfs/textbook/` and `pdfs/pyqs/`). Do not commit or publish PDFs unless you intend to distribute them.
 
-Install Ollama from https://ollama.com/ on the laptop and start it, then download an open-weight model (check its license for your intended use):
+### Incremental batch indexing
+
+If you process PDFs in smaller batches:
 
 ```powershell
-ollama pull qwen2.5:1.5b
+python tutor.py index pdfs\textbook --out science-index.json --ocr auto --ocr-fallback ..\..\assets\science\_extract.json --report
+python tutor.py index pdfs\pyqs --out science-index.json --merge --ocr auto --report
+python tutor.py audit --index science-index.json
 ```
 
-Put permitted textbook and PYQ PDFs in a local `pdfs` folder. Do not commit or publish PDFs unless you intend to distribute them. Then:
+`--merge` preserves previously indexed files by SHA-256 hash so you can clear processed raw PDFs between batches if needed.
+
+### Testing retrieval & asking questions
+
+Test retrieval without needing Ollama running:
 
 ```powershell
-python tutor.py index pdfs --out science-index.json
-python tutor.py ask "How does photosynthesis work?" --index science-index.json
+python tutor.py search "Why does quicklime react vigorously with water?" --index science-index.json
+python tutor.py eval --index science-index.json
 ```
 
-The index is local, may contain full copyrighted text, and is ignored by Git. Use `--model` to choose another locally installed Ollama model. The prototype sends prompts only to Ollama on the same computer; model download requires internet. It does not use Gemini. For scanned PDFs, OCR is required separately; even text PDFs can extract incorrectly, so check source pages. PYQs are questions, not verified answer keys.
+Run the local Ollama tutor (`ask`, `chat`, or end-to-end `eval --with-llm`):
 
-Retrieval uses simple keyword matching, so it can miss relevant material or retrieve irrelevant pages. It cannot reliably recognize off-topic questions, prevent prompt injection, enforce curriculum restrictions, or guarantee correct citations. PDF page numbers refer to the file, not necessarily printed page numbers. Test with teacher-reviewed in-syllabus, novel exam-style, out-of-scope and adversarial questions before considering any integration. A production version needs authenticated school-scoped retrieval, server-side access checks, proper evaluation, and reliable inference hosting; a local laptop is not a public service.
+```powershell
+python tutor.py ask "How is Plaster of Paris prepared from gypsum?" --index science-index.json --model qwen2.5:3b
+python tutor.py chat --index science-index.json --model qwen2.5:3b
+python tutor.py eval --index science-index.json --with-llm --model qwen2.5:3b
+```
+
+Retrieval uses formula-aware BM25 with section/bigram boosts and optional Ollama embedding fusion; prompts use `/api/chat` with `<sources>` isolation and low-confidence abstention, but outputs are still unverified AI drafts and must be checked against original PDFs.
+
+## 2. Tiny Transformer trained from scratch (`tiny_model.py` + `sample.py`)
+
+This is a **from-scratch learning experiment** (not a reliable tutor). You can export clean deduplicated text directly from your indexed PDFs:
+
+```powershell
+python tutor.py export-corpus --index science-index.json --out training.txt
+```
+
+Recommended starting settings for an **RTX 3050 (4 GB VRAM)** using built-in byte-level BPE (`--tokenizer bpe`, ~2.0M params, fp16 `--amp`):
+
+```powershell
+python tiny_model.py training.txt --tokenizer bpe --vocab-size 1024 --context 256 --width 192 --layers 4 --heads 4 --batch-size 16 --steps 1000 --amp --out tiny-model.pt
+python sample.py tiny-model.pt --prompt "Chemical Reactions" --tokens 120 --temperature 0.8 --top-k 40
+```
+
+You can also run byte-level mode (`--tokenizer byte --context 128 --width 128 --layers 2`). If CUDA runs out of memory, reduce `--batch-size 8 --grad-accum 2` or `--context 128`. Do not commit `training.txt`, `science-index.json`, or `*.pt` checkpoints.
+
+## Tests
+
+```powershell
+python -m unittest discover -s tests -v
+```
