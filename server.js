@@ -19,6 +19,7 @@ const solveTiming = require('./assets/js/solve-timing.js');
 const solvePolicy = require('./lib/solve-policy.js');
 const integrity = require('./lib/solve-integrity.js');
 const solveRuntime = require('./lib/ai-provider.js');
+const scienceRag = require('./lib/science-rag.js');
 const { aiFailure: solveFailure } = require('./lib/ai-status.js');
 
 const http = require('http');
@@ -1106,6 +1107,13 @@ const handleRequest = async function (req, res) {
   try {
     /* Provider-spending routes get a rate ceiling: per account, plus a loose
        per-address floor. Login has its own stricter limits above. */
+    if (req.method === 'POST' && /^\/api\/science\/ask$/.test(p)) {
+      const verdict = aiIpLimiter.check(limitKey('science-ip', clientIp(req)));
+      if (!verdict.ok) {
+        res.setHeader('retry-after', String(verdict.retryAfter || 1));
+        return json(res, 429, { code: 'rate_limited', error: 'Too many tutor questions in a short time. Wait a moment and try again.', retryAfter: verdict.retryAfter || 1 });
+      }
+    }
     if (req.method === 'POST' && /^\/api\/ai\/(solve|read-image|translate|check-answer|generate|index)$/.test(p)) {
       const ipVerdict = aiIpLimiter.check(limitKey('ai-ip', clientIp(req)));
       const userVerdict = ipVerdict.ok && sess && !openSession ? aiUserLimiter.check(limitKey('ai-user', sess.id)) : { ok: true };
@@ -2244,6 +2252,48 @@ const handleRequest = async function (req, res) {
     if (p === '/api/ai/log' && req.method === 'GET') {
       const err = requireRole(sess, ['teacher', 'admin']); if (err) return json(res, 403, { error: err });
       return json(res, 200, { log: db.aiLog });
+    }
+
+    /* ---------- Class 10 Science tutor: index retrieval + local Ollama ---------- */
+    /* GET is a capability probe for the UI (no model host, no credentials).
+       POST asks a question. No account is required: answers come from the
+       local index and a local model, and the shared IP floor above bounds
+       abuse. Model configuration is server-side only (docs/science-tutor.md). */
+    if (p === '/api/science/ask' && req.method === 'GET') {
+      const st = scienceRag.status();
+      return json(res, 200, {
+        ok: true, enabled: st.enabled, ready: st.ready, model: st.model, index: st.index,
+        note: st.index.available ? 'Answers are drafted by a local model from the indexed NCERT and CBSE material.'
+          : 'No science index is installed on this server, so the tutor cannot cite sources.'
+      });
+    }
+    if (p === '/api/science/ask' && req.method === 'POST') {
+      const b = await readBody(req, 16 * 1024);
+      try {
+        const result = await scienceRag.answerQuestion({
+          question: b.question,
+          chapter: b.chapter,
+          limit: b.limit,
+          language: b.lang,
+          history: Array.isArray(b.history) ? b.history : []
+        });
+        return json(res, 200, result);
+      } catch (e) {
+        const status = Number(e && e.status) || 500;
+        const payload = {
+          error: String((e && e.message) || 'The Science tutor is unavailable.'),
+          code: (e && e.code) || 'tutor_error'
+        };
+        if (e && e.citations) {
+          payload.citations = e.citations;
+          payload.retrieved = e.retrieved;
+          payload.grounded = false;
+          payload.question = e.question;
+          payload.model = e.model;
+          payload.notice = 'The sources below were retrieved from the index; the model could not draft an answer.';
+        }
+        return json(res, status, payload);
+      }
     }
 
     /* Camera OCR stub — the client runs Tesseract.js in-browser; this endpoint

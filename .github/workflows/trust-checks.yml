@@ -56,6 +56,8 @@ jobs:
       - run: node tools/check/question_language_and_ai_checks.js
       - run: node tools/check/ai_access.js
       - run: node tools/check/security_posture.js
+      - run: node tools/science-index/build_science_index.js --check
+      - run: node tools/check/science_tutor.js
       - run: python3 tools/check/backend_smoke.py
   browser:
     runs-on: ubuntu-latest
@@ -107,6 +109,7 @@ jobs:
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/language_integrity_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/adaptive_approaches_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/red_theme_browser.js
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/science_tutor_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/branding_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/google_welcome_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/signup_feedback_browser.js

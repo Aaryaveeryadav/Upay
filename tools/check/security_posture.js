@@ -40,6 +40,14 @@ for (const rel of ['api/ai/solve.js', 'api/ai/check-answer.js', 'api/ai/read-ima
 }
 const server = read('server.js');
 assert(/aiUserLimiter/.test(server) && /aiIpLimiter/.test(server), 'server.js must cap AI routes per account and per address');
+// The Science tutor spends local model time; it must sit behind the same
+// per-address floor before the route body can reach the model.
+const askRoute = require('fs').readFileSync(path.join(ROOT, 'api/science/ask.js'), 'utf8');
+assert(askRoute.indexOf('aiRateFloor(req') >= 0 && askRoute.indexOf('aiRateFloor(req') < askRoute.indexOf('rag.answerQuestion'),
+  'api/science/ask.js must rate-limit before calling the model');
+assert(server.indexOf("'/api/science/ask'") < server.indexOf('scienceRag.answerQuestion'),
+  'server.js must rate-limit the tutor route before the model call');
+assert(!/UPAY_OLLAMA_URL[^\n]*req\.|req\.[a-z]+[^\n]*UPAY_OLLAMA_URL/.test(askRoute), 'model configuration cannot come from a request');
 assert(/LOGIN_MAX_IP/.test(server) && /LOGIN_MAX_USER/.test(server), 'login rate limits must stay');
 console.log('PASS security: AI + login rate limiting wired');
 

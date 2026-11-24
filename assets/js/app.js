@@ -1095,6 +1095,7 @@ window.UP = window.UP || {};
         <a href="#/test" data-nav="test">${icon('list')} ${t('nav_test')}</a>
         <a href="#/mcq" data-nav="mcq">${icon('check')} ${t('nav_mcq')}</a>
         <a href="#/pyq" data-nav="pyq">${icon('book')} ${t('nav_pyq')}</a>
+        <a href="#/tutor" data-nav="tutor">${icon('atom')} ${S.lang==='hi'?'विज्ञान शिक्षक':'Science tutor'}</a>
         <a href="#/syllabus" data-nav="syllabus">${icon('layers')} ${t('nav_syllabus')}<span class="badge">${catalogue().length}</span></a>
         <span class="nav-label">${t('library')}</span>
         <a href="#/boards" data-nav="boards">${icon('board')} ${t('nav_boards')}</a>
@@ -4812,6 +4813,249 @@ window.UP = window.UP || {};
       : 'Before writing an answer in an exam, match it to your textbook’s method — board marking schemes are built on the textbook method.'}</div></div>`;
   }
 
+  /* ============================ SCIENCE TUTOR ============================
+     A chat page that answers only from assets/science/science-index.json via
+     /api/science/ask. The transcript lives in localStorage (last 12 turns) so
+     a reload does not lose the cited sources the student was reading.
+     Rendering and citation linking live in assets/js/science-tutor.js so the
+     same markup is unit-tested in node without a browser. */
+  const TUTOR_TURNS_KEPT = 12;
+  const tutorState = { turns: [], busy: false, draft: '', chapter: '', status: null, statusAt: 0 };
+
+  function tutorModule() {
+    return UP.scienceTutor || null;
+  }
+
+  function tutorStoreKey() {
+    return 'scienceTutor.chat.' + (S.lang === 'hi' ? 'hi' : 'en');
+  }
+
+  function tutorLoad() {
+    const saved = store.getTyped(tutorStoreKey(), [], 'array');
+    tutorState.turns = saved.filter(t => t && typeof t === 'object' && typeof t.question === 'string' && t.question.length <= 800)
+      .slice(-TUTOR_TURNS_KEPT)
+      .map(t => Object.assign({}, t, { state: t.state === 'loading' ? 'error' : t.state, error: t.state === 'loading' ? 'The previous draft did not finish. Ask again to retry.' : t.error }));
+    return tutorState.turns;
+  }
+
+  function tutorSave() {
+    // Only settled turns are persisted: a reload must not resurrect a spinner.
+    const settled = tutorState.turns.filter(t => t.state !== 'loading').slice(-TUTOR_TURNS_KEPT);
+    store.set(tutorStoreKey(), settled);
+  }
+
+  function tutorRefreshStatus() {
+    if (tutorState.statusAt && Date.now() - tutorState.statusAt < 60000) return Promise.resolve(tutorState.status);
+    if (typeof fetch !== 'function') return Promise.resolve(null);
+    return fetch('/api/science/ask', { headers: { accept: 'application/json' } })
+      .then(r => r.ok ? r.json() : null)
+      .then(j => { tutorState.status = j || null; tutorState.statusAt = Date.now(); return tutorState.status; })
+      .catch(() => { tutorState.status = null; return null; });
+  }
+
+  function viewScienceTutor() {
+    const mod = tutorModule();
+    if (!mod) {
+      return `<section class="page-head"><h1>${S.lang === 'hi' ? 'विज्ञान शिक्षक' : 'Science tutor'}</h1></section>
+        <div class="callout warn"><div>${S.lang === 'hi' ? 'ट्यूटर स्क्रिप्ट लोड नहीं हुई। पेज रीफ़्रेश करें।' : 'The tutor script did not load. Refresh the page to try again.'}</div></div>`;
+    }
+    tutorLoad();
+    // A chapter page can deep-link here with a scope (?ch=). A shared
+    // question (?q=) is asked once and the parameter is dropped. render()
+    // re-runs often, so the one-shot work is idempotent or guarded.
+    const params = parseHash().params || {};
+    tutorState.chapter = params.ch && /^([1-9]|1[0-3])$/.test(String(params.ch)) ? String(params.ch) : '';
+    if (params.q) {
+      const seeded = String((UP.answerFormat ? UP.answerFormat.question(String(params.q)) : params.q) || '').slice(0, 800);
+      tutorState.draft = seeded;
+      setTimeout(() => {
+        const box = document.getElementById('tutorQuestion');
+        if (!box) return;
+        box.value = seeded;
+        history.replaceState(null, '', '#/tutor');
+        tutorAsk(seeded);
+      }, 0);
+    }
+    // Paint the last known capability state, then refresh it in the background.
+    tutorRefreshStatus().then(st => {
+      const line = document.getElementById('tutorStatusLine');
+      if (!line) return;
+      const holder = line.parentElement;
+      if (!holder) return;
+      const fresh = mod.statusChip(st) || '<span class="tutor-status off">Tutor status unavailable</span>';
+      const chip = holder.querySelector('.tutor-status');
+      if (chip) chip.outerHTML = fresh;
+      else holder.insertAdjacentHTML('afterbegin', fresh);
+      line.textContent = '';
+    }).catch(() => {});
+    return mod.view(tutorState, S.lang);
+  }
+
+  function tutorRenderThread() {
+    const mod = tutorModule();
+    const host = document.getElementById('tutorThread');
+    if (!mod || !host) return;
+    host.innerHTML = tutorState.turns.map(t => mod.turnMarkup(t, S.lang)).join('');
+  }
+
+  function tutorScrollToLatest() {
+    const groups = document.querySelectorAll('#tutorThread .tutor-turn-group');
+    const last = groups[groups.length - 1];
+    if (last && last.scrollIntoView) last.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  function tutorSetBusy(busy) {
+    tutorState.busy = busy;
+    document.querySelectorAll('[data-form="science-tutor"] button[type="submit"]').forEach(b => {
+      b.disabled = busy;
+      if (busy) b.setAttribute('aria-busy', 'true'); else b.removeAttribute('aria-busy');
+      b.textContent = busy ? (S.lang === 'hi' ? 'उत्तर बन रहा है…' : 'Drafting…') : (S.lang === 'hi' ? 'पूछें' : 'Ask the tutor');
+    });
+  }
+
+  function tutorErrorText(code, fallback) {
+    const hi = S.lang === 'hi';
+    const map = {
+      tutor_unavailable: hi ? 'इस सर्वर से स्थानीय मॉडल (Ollama) उपलब्ध नहीं है। मिले स्रोत नीचे पढ़ें।' : 'The local model (Ollama) is not reachable from this server, so no draft could be written. The retrieved sources are still safe to read.',
+      tutor_timeout: hi ? 'मॉडल ने समय पर उत्तर नहीं दिया। मिले स्रोत नीचे हैं।' : 'The local model took too long. The retrieved sources are below.',
+      tutor_model_missing: hi ? 'इस सर्वर पर मॉडल नहीं मिला (ollama pull qwen2.5:3b चलाएँ)।' : 'The configured model is not installed on this server (run: ollama pull qwen2.5:3b).',
+      tutor_disabled: hi ? 'व्यवस्थापक ने ट्यूटर बंद कर दिया है।' : 'The administrator switched the tutor off.',
+      tutor_configuration: hi ? 'सर्वर कॉन्फ़िगरेशन ग़लत है।' : 'The server configuration for the tutor is invalid.',
+      rate_limited: hi ? 'बहुत जल्दी बहुत सारे प्रश्न। थोड़ा रुककर पूछें।' : 'Too many questions too quickly. Wait a moment and ask again.',
+      question_required: hi ? 'पहले प्रश्न लिखें।' : 'Type a question first.',
+      bad_chapter: hi ? 'अध्याय अमान्य है।' : 'That chapter is not valid for Class 10 Science.'
+    };
+    return map[code] || fallback || (hi ? 'उत्तर नहीं बना।' : 'The answer could not be drafted.');
+  }
+
+  function tutorAsk(question) {
+    const mod = tutorModule();
+    if (!mod || tutorState.busy) return;
+    const q = String(question || '').replace(/\s+/g, ' ').trim().slice(0, 800);
+    if (q.length < 3) {
+      const line = document.getElementById('tutorStatusLine');
+      if (line) line.textContent = tutorErrorText('question_required');
+      const box = document.getElementById('tutorQuestion');
+      if (box) box.focus();
+      return;
+    }
+    // History is the settled Q/A pairs, newest last, so a follow-up like
+    // "and why is that?" still has the previous cited answer in view.
+    const history = [];
+    for (const turn of tutorState.turns.filter(t => t.state !== 'loading').slice(-2)) {
+      if (!turn.answer || turn.kind === 'error') continue;
+      history.push({ role: 'user', content: turn.question });
+      history.push({ role: 'assistant', content: String(turn.answer).slice(0, 600) });
+    }
+    const turn = { id: 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), question: q, state: 'loading' };
+    tutorState.turns = tutorState.turns.concat(turn).slice(-TUTOR_TURNS_KEPT);
+    const thread = document.getElementById('tutorThread');
+    if (thread) {
+      tutorRenderThread();
+    } else {
+      // First question: replace the starters with a thread without a full rerender.
+      const starters = document.querySelector('.tutor-starters');
+      if (starters) starters.outerHTML = '<div class="tutor-thread" id="tutorThread" aria-live="polite"></div>';
+      const host = document.getElementById('tutorThread');
+      if (host) host.innerHTML = mod.turnMarkup(turn, S.lang);
+    }
+    const draft = document.getElementById('tutorQuestion');
+    tutorState.draft = '';
+    if (draft) draft.value = '';
+    tutorSetBusy(true);
+    tutorScrollToLatest();
+    const finish = (patch) => {
+      const idx = tutorState.turns.findIndex(t => t.id === turn.id);
+      if (idx >= 0) tutorState.turns[idx] = Object.assign({}, tutorState.turns[idx], patch);
+      tutorSetBusy(false);
+      tutorSave();
+      tutorRenderThread();
+      tutorScrollToLatest();
+    };
+    fetch('/api/science/ask', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ question: q, chapter: tutorState.chapter || undefined, lang: S.lang, history })
+    }).then(r => r.json().catch(() => null).then(j => ({ ok: r.ok, status: r.status, body: j || {} })))
+      .then(({ ok, status, body }) => {
+        if (ok && body && body.ok) {
+          finish({
+            state: 'done', grounded: !!body.grounded, answer: String(body.answer || ''),
+            citations: Array.isArray(body.citations) ? body.citations : [],
+            citationCheck: body.citationCheck || { used: [], invalid: [], hasCitation: false },
+            model: body.model || '', notice: body.notice || '', retrieved: Number(body.retrieved) || 0
+          });
+          return;
+        }
+        const code = (body && body.code) || (status === 429 ? 'rate_limited' : 'tutor_error');
+        const notice = body && body.notice;
+        finish({
+          state: 'error', kind: 'error', code,
+          error: tutorErrorText(code, body && body.error),
+          answer: notice || '',
+          citations: Array.isArray(body && body.citations) ? body.citations : []
+        });
+      })
+      .catch(() => {
+        finish({ state: 'error', kind: 'error', code: 'tutor_unavailable', error: tutorErrorText('tutor_unavailable'), citations: [] });
+      });
+  }
+
+  document.addEventListener('submit', function (e) {
+    const form = e.target.closest('form[data-form="science-tutor"]');
+    if (!form) return;
+    e.preventDefault();
+    const box = form.querySelector('textarea[name="question"]');
+    tutorAsk(box ? box.value : '');
+  });
+
+  document.addEventListener('change', function (e) {
+    const select = e.target.closest('[data-tutor-chapter]');
+    if (!select) return;
+    tutorState.chapter = select.value || '';
+  });
+
+  document.addEventListener('keydown', function (e) {
+    const box = e.target.closest('#tutorQuestion');
+    if (!box) return;
+    // Enter asks, Shift+Enter makes a new line (a phone keyboard sends Enter).
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+      e.preventDefault();
+      tutorAsk(box.value);
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    const chip = e.target.closest('[data-tutor-suggestion]');
+    if (chip) {
+      const box = document.getElementById('tutorQuestion');
+      if (box) box.value = chip.dataset.tutorSuggestion || chip.textContent || '';
+      tutorAsk(box ? box.value : chip.dataset.tutorSuggestion);
+      return;
+    }
+    const act = e.target.closest('[data-tutor-action="clear"]');
+    if (act) {
+      tutorState.turns = [];
+      store.remove(tutorStoreKey());
+      tutorRenderThread();
+      render();
+      return;
+    }
+    const cite = e.target.closest('.tutor-cite, a[href^="#source-"]');
+    if (cite) {
+      const n = cite.dataset.cite || String(cite.getAttribute('href') || '').replace('#source-', '');
+      const card = document.getElementById('source-' + n);
+      if (card) {
+        e.preventDefault();
+        card.classList.add('tutor-source-target');
+        card.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        if (card.focus) card.focus({ preventScroll: true });
+        setTimeout(() => card.classList.remove('tutor-source-target'), 1600);
+      }
+      return;
+    }
+  });
+
   /* ================================ ROUTER ================================ */
   function parseHash() { return UP.hashRoute.parse(location.hash); }
 
@@ -4959,6 +5203,7 @@ window.UP = window.UP || {};
     else if (r.name === 'mockresult') { html = viewMockResult(); }
     else if (r.name === 'cheatsheet') html = viewCheatsheet({ch:r.id});
     else if (r.name === 'search') html = viewSearch(r.params);
+    else if (r.name === 'tutor') html = viewScienceTutor(r.params);
     else html = viewHome();
 
     main.innerHTML = html;
@@ -4971,7 +5216,7 @@ window.UP = window.UP || {};
       a.classList.toggle('active', on);
       if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
-    document.title = 'Kritin Upaay · ' + ({ home: 'Home', ask: 'Ask', today: 'Today', syllabus: 'Syllabus', chapter: (chapterById(r.id) ? P({ en: chapterById(r.id).en, hi: chapterById(r.id).hi }) : 'Chapter'), boards: 'Boards', books: 'Books', saved: 'Saved', about: 'About', parent: 'Parent', apikey: 'API key', admin: 'Admin', login: 'Sign in', account: 'Account', mistakes: 'Mistakes', mock: 'Mock test', mockresult: 'Result', cheatsheet: 'Cheatsheet', search: 'Search' }[r.name] || 'Home');
+    document.title = 'Kritin Upaay · ' + ({ home: 'Home', ask: 'Ask', today: 'Today', tutor: 'Science tutor', syllabus: 'Syllabus', chapter: (chapterById(r.id) ? P({ en: chapterById(r.id).en, hi: chapterById(r.id).hi }) : 'Chapter'), boards: 'Boards', books: 'Books', saved: 'Saved', about: 'About', parent: 'Parent', apikey: 'API key', admin: 'Admin', login: 'Sign in', account: 'Account', mistakes: 'Mistakes', mock: 'Mock test', mockresult: 'Result', cheatsheet: 'Cheatsheet', search: 'Search' }[r.name] || 'Home');
     // auto-size hero textarea
     const ta = main.querySelector('textarea[name="q"]');
     if (ta) {
@@ -5411,6 +5656,9 @@ window.UP = window.UP || {};
       <p class="lead">${S.lang === 'hi'
         ? 'यह पाठ NCERT की पुस्तक से सीधे लिया गया है — वही धाराएँ, वही चित्र, वही अभ्यास प्रश्न।'
         : 'Read straight from the NCERT textbook — the same sections, the same printed diagrams, the same exercise questions.'}</p>
+      <div class="pactions" style="margin-top:12px">
+        <a class="btn btn-primary btn-sm" href="#/tutor?ch=${ch.id}">${icon('atom')} ${S.lang === 'hi' ? 'इस अध्याय पर शिक्षक से पूछें' : 'Ask the tutor about this chapter'}</a>
+      </div>
       <div class="paper-meta">
         <span class="tag">${(ch.sections || []).length} ${S.lang === 'hi' ? 'धाराएँ' : 'sections'}</span>
         <span class="tag">${(ch.figures || []).length} ${S.lang === 'hi' ? 'चित्र' : 'diagrams'}</span>

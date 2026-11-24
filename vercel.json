@@ -8,6 +8,10 @@
     "api/ai/solve.js": {
       "maxDuration": 180
     },
+    "api/science/ask.js": {
+      "maxDuration": 120,
+      "includeFiles": "assets/science/science-index.json"
+    },
     "api/**/*.js": {
       "maxDuration": 60
     }

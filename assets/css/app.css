@@ -1864,3 +1864,67 @@ ol.prose-answer > li::before { content: none; display: none; }
 /* The reader must retain Hindi glyph coverage when external fonts are offline. */
 @font-face{font-family:UpayHindiReader;src:url('../hindi/font/devanagari.woff2') format('woff2');font-weight:400;font-display:swap;unicode-range:U+0900-097F,U+A8E0-A8FF}
 #view.hindi12-reader, #view.hindi12-reader :is(h1,h2,h3,p,b,label,textarea,input,summary,.btn,.tag){font-family:UpayHindiReader,system-ui,sans-serif}
+
+/* =====================================================================
+   Class 10 Science tutor (#/tutor) — chat with cited NCERT/PYQ sources.
+   The answer is prose with [n] links; each source is a card with the
+   chapter, section, verified PDF page and a verified key when one exists.
+   ===================================================================== */
+.tutor-head .tutor-head-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.tutor-status{font-size:12px;font-weight:650;padding:5px 11px;border-radius:999px;background:#eaf3ea;color:#3f6b3a;border:1px solid #d7e6d5}
+.tutor-status.warn{background:var(--cream-100);color:#7d6733;border-color:var(--cream-300)}
+.tutor-status.off{background:#fdf3ee;color:#7d5340;border-color:#f3ded2}
+.tutor-notice{margin:10px 0 18px}
+.tutor-askbox{background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:14px;margin:18px 0 8px}
+.tutor-askbox textarea{width:100%;border:0;outline:0;resize:vertical;background:transparent;font:inherit;font-size:15.5px;line-height:1.6;color:var(--ink-900);min-height:58px}
+.tutor-askbox textarea:focus-visible{outline:2px solid var(--sky-300);outline-offset:4px;border-radius:8px}
+.tutor-askbox-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-top:1px solid var(--cream-200);padding-top:10px;margin-top:6px}
+.tutor-chapter{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-500)}
+.tutor-chapter select{max-width:250px;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--cream-50);font-size:13px}
+.tutor-flex{flex:1}
+.tutor-starters{margin:22px 0}
+.tutor-starters h2,.tutor-help h2{font-size:18px;margin-bottom:10px}
+.tutor-thread{display:flex;flex-direction:column;gap:22px;margin:26px 0 10px}
+.tutor-turn-student{display:flex;justify-content:flex-end}
+.tutor-bubble{max-width:min(85%,640px);background:var(--ink-900);color:#fff;border-radius:18px 18px 6px 18px;padding:11px 16px;font-size:14.6px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.tutor-turn-tutor{margin-top:10px}
+.tutor-loading{display:flex;gap:9px;align-items:center;color:var(--ink-500);font-size:13.5px;background:#fff;border:1px dashed var(--cream-300);border-radius:var(--radius-md);padding:14px 16px}
+.tutor-answer{background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--shadow-sm)}
+.tutor-answer-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.tutor-answer-note{font-size:12px;flex-basis:100%}
+.tutor-answer-text p{margin:0 0 .7em;line-height:1.72}
+.tutor-answer-text p:last-child{margin-bottom:0}
+.tutor-points{margin:.2em 0 .8em;padding-left:1.25em}
+.tutor-points li{margin:.25em 0;line-height:1.65}
+.tutor-cite{display:inline-grid;place-items:center;min-width:20px;height:20px;margin:0 2px;padding:0 5px;border-radius:6px;background:var(--sky-100);border:1px solid var(--sky-300);color:var(--sky-800);font-size:11.5px;font-weight:750;line-height:1;text-decoration:none;vertical-align:2px}
+.tutor-cite:hover{background:var(--sky-600);border-color:var(--sky-600);color:#fff}
+.tutor-cite:focus-visible{outline:2px solid var(--sky-500);outline-offset:2px}
+.tutor-bad-cite{background:#fdecea;color:#a3372f;border-radius:4px;padding:0 3px;font-weight:700}
+.tutor-warn{margin:0 0 10px;padding:9px 12px;border-radius:10px;background:#fdf3ee;border:1px solid #f3ded2;color:#7d5340;font-size:12.8px}
+.tutor-sources-title{font-size:15px;margin:18px 0 10px;display:flex;gap:8px;align-items:baseline}
+.tutor-sources{display:grid;gap:12px}
+.tutor-source{padding:14px 16px;border-radius:var(--radius-md);box-shadow:none;transition:border-color .2s,box-shadow .2s}
+.tutor-source:hover{transform:none;box-shadow:var(--shadow-sm)}
+.tutor-source-target{border-color:var(--sky-500);box-shadow:0 0 0 3px var(--sky-100)}
+.tutor-source-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:7px}
+.tutor-cite-badge{display:inline-grid;place-items:center;min-width:24px;height:24px;border-radius:7px;background:var(--ink-900);color:#fff;font-size:12px;font-weight:750}
+.tutor-page{font-size:11.5px;color:var(--ink-500);background:var(--cream-100);border:1px solid var(--cream-300);border-radius:999px;padding:3px 9px}
+.tutor-source h3{font-size:14.5px;margin:0 0 3px;overflow-wrap:anywhere}
+.tutor-source-meta{font-size:12px;color:var(--ink-500);margin:0 0 8px}
+.tutor-q{font-size:13.6px;color:var(--ink-800);margin:0 0 8px;line-height:1.6}
+.tutor-excerpt{margin:0;padding:9px 13px;border-left:3px solid var(--sky-300);background:var(--cream-50);border-radius:0 10px 10px 0;font-size:13px;line-height:1.62;color:var(--ink-600);overflow-wrap:anywhere}
+.tutor-key{margin-top:9px;padding:9px 12px;border-radius:10px;background:#eaf3ea;border:1px solid #d7e6d5;color:#3f5f3b;font-size:13px;line-height:1.6}
+.tutor-source-links{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;font-size:12.6px}
+.tutor-answer-error{border-color:#f3ded2;background:#fffaf7}
+.tutor-answer-none{background:var(--cream-50)}
+.tutor-help{margin:30px 0 10px}
+.tutor-help .card{box-shadow:none;transform:none}
+.tutor-help h3{font-size:14px;margin:0 0 6px}
+.tutor-help p{font-size:13px;color:var(--ink-600);margin:0}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+@media (max-width:720px){
+  .tutor-askbox-foot{flex-direction:column;align-items:stretch}
+  .tutor-chapter select{max-width:100%;width:100%}
+  .tutor-bubble{max-width:100%}
+  .tutor-help .grid-3{grid-template-columns:1fr}
+}

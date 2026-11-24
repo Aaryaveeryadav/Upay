@@ -82,7 +82,16 @@ python3 tools/check/offline_smoke.py
 python3 tools/check/auth_browser_smoke.py
 python3 tools/check/backend_smoke.py
 node tools/check/serverless_smoke.js
+node tools/check/science_tutor.js
+node tools/science-index/build_science_index.js --check
 ```
+
+`node tools/check/science_tutor.js` needs no server, model or credentials: it
+builds a fake local Ollama, checks retrieval, prompts, citations and the API
+shapes, and boots the real page in JSDOM. The Class 10 Science tutor page
+(`#/tutor`) answers from `assets/science/science-index.json` with a local
+Ollama model and shows the cited NCERT/board source for every claim; see
+`docs/science-tutor.md` for the index build step and deployment limits.
 
 The source-integrity checks accept an optional `--uploads DIRECTORY` to compare the included PDFs with separately preserved originals. The browser smokes use isolated contexts; the auth/backend tests use temporary databases. Some AI responses are mocked, and a passing smoke test is not an exhaustive source audit, security audit, or guarantee of error-free operation.
 
