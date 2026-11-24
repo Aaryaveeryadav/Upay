@@ -649,19 +649,6 @@ tan A = ${N.dec(tan, 4)}` }
                   'tan उन्हीं दो भुजाओं को जोड़ता है जो ऊँचाई-दूरी के प्रश्न में वास्तव में होती हैं, इसलिए यह इस अध्याय का अधिकांश कार्य करता है।'),
           watch: L('Round only at the very end. √3 = 1.732 early in the working changes the last digit of the answer.',
                   'पूर्णांकन केवल अंत में कीजिए। कार्य के बीच में √3 = 1.732 लेने से उत्तर का अंतिम अंक बदल जाता है।')
-        },
-        {
-          name: L('Two positions: equate the common height', 'दो स्थितियाँ: उभयनिष्ठ ऊँचाई बराबर कीजिए'),
-          tag: L('For two angles from two points', 'दो बिंदुओं से दो कोण होने पर'),
-          steps: [
-            { t: L('Let the height be h and the nearer distance be x; write h in terms of each angle.', 'ऊँचाई h और निकट दूरी x मानिए; प्रत्येक कोण के लिए h लिखिए।'), m: `h = x tan ${angles2(angs)}  and  h = (x + d) tan ${angs[0]}°` },
-            { t: L('Equate them so h disappears and solve for x.', 'बराबर रखिए जिससे h हट जाए और x ज्ञात कीजिए।'), m: `x tan ${angles2(angs)} = (x + d) tan ${angs[0]}°` },
-            { t: L('Put x back into either equation to get h.', 'x को किसी भी समीकरण में रखकर h ज्ञात कीजिए।'), m: `h = x tan ${angles2(angs)}` }
-          ],
-          why: L('The object does not change height when the observer moves, so both triangles must give the same h. That equality is the whole method.',
-                  'पर्यवेक्षक के चलने से वस्तु की ऊँचाई नहीं बदलती, अतः दोनों त्रिभुजों से वही h मिलना चाहिए। यही समता पूरी विधि है।'),
-          watch: L('Add the distances correctly — the farther point is x + d away, not x − d.',
-                  'दूरियाँ सही जोड़िए — दूर वाला बिंदु x + d पर है, x − d पर नहीं।')
         }
       ],
       verify: L('The height must be sensible relative to the distance: at 45° it equals the distance, at 30° it is the distance ÷ √3, at 60° it is distance × √3.',
@@ -669,7 +656,6 @@ tan A = ${N.dec(tan, 4)}` }
       related: [9, 8],
       _geom: { angle: th, dist: dist, height: null }
     });
-    function angles2(a) { return a[1] || a[0]; }
 
     /* Two observations of the same object from two points on one line. */
     function twoPosition(o) {
