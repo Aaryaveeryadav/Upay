@@ -32,17 +32,30 @@ function res(){return {headers:{},setHeader(k,v){this.headers[k]=v},status(n){th
   assert.equal(r.code,200); assert.equal(r.body.approaches.length,4); assert(!JSON.stringify(r.body).includes('test-secret-do-not-log'));
   const noAuth=res(); sent=null; await solve({method:'POST',headers:{},body:{question:'Explain this question'}},noAuth);
   assert.equal(noAuth.code,401); assert.equal(sent,null);
+  /* A bad endpoint is a configuration error, and callers switch on the CODE
+     (llm_configuration), not on the wording of the message. */
   const original=process.env.UPAY_LLM_URL;
+  /* A non-local model must be https; loopback may be http (see the gateway:
+     a model on this machine has no token to protect in transit). */
   for (const url of ['http://model.example.test','https://user:pass@model.example.test/v1','https://model.example.test/v1?secret=x']) {
-    process.env.UPAY_LLM_URL=url; await assert.rejects(provider.generateSolve('x'),/configuration/);
+    process.env.UPAY_LLM_URL=url;
+    await assert.rejects(provider.generateSolve('x'), e => e.code === 'llm_configuration');
   }
+  /* No key at all is the same class of error, not an anonymous request. */
+  const originalKey=process.env.UPAY_LLM_KEY;
+  delete process.env.UPAY_LLM_KEY;
+  await assert.rejects(provider.generateSolve('x'), e => e.code === 'llm_configuration');
+  process.env.UPAY_LLM_KEY=originalKey;
   process.env.UPAY_LLM_URL=original;
-  process.env.UPAY_SOLVE_PROVIDER='not-supported'; await assert.rejects(provider.generateSolve('x'),/configuration/);
+  process.env.UPAY_SOLVE_PROVIDER='not-supported';
+  await assert.rejects(provider.generateSolve('x'), e => e.code === 'llm_configuration');
   process.env.UPAY_SOLVE_PROVIDER='openai-compatible';
   global.fetch=async()=>({ok:false,status:429,text:async()=>{throw Error('must not read upstream errors')}});
   await assert.rejects(provider.generateSolve('x'),e=>e.status===429&&!e.message.includes('test-secret'));
+  /* A reply the gateway cannot read is its own code, not an empty answer:
+     the difference is "the model is broken" vs "the model had nothing to say". */
   global.fetch=async()=>({ok:true,status:200,text:async()=>JSON.stringify({bad:'shape'})});
-  await assert.rejects(provider.generateSolve('x'),/request failed/);
+  await assert.rejects(provider.generateSolve('x'),e=>e.code==='llm_empty');
   const ac=new AbortController();ac.abort(); await assert.rejects(provider.generateSolve('x',null,null,{signal:ac.signal}),e=>e.status===504);
   global.fetch=async(_url,opts)=>new Promise((resolve,reject)=>opts.signal.addEventListener('abort',()=>reject(Error('private timeout details'))));
   await assert.rejects(provider.generateSolve('x',null,null,{attemptMs:10,deadline:Date.now()+1000}),e=>e.status===504&&!e.message.includes('private'));

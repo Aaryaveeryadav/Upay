@@ -117,7 +117,7 @@ def main():
         work = Path(td)
         policy_version = subprocess.check_output(['node', '-p', "require('./lib/solve-policy.js').VERSION"], cwd=ROOT, text=True).strip()
         for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'lib/solve-integrity.js', 'assets/js/worked-figure.js', 'assets/js/request-accuracy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-provider.js', 'lib/ai-status.js', 'lib/rate-limit.js', 'lib/science-rag.js', 'lib/local-llm.js', 'lib/chat.js', 'lib/platform-api.js',
-                         'lib/content-control.js', 'lib/supabase-admin.js', 'lib/subject-index.js', 'lib/answer-store.js', 'lib/db.js', 'lib/tenancy.js',
+                         'lib/content-control.js', 'lib/supabase-admin.js', 'lib/subject-index.js', 'lib/answer-store.js', 'lib/model-gateway.js', 'lib/db.js', 'lib/tenancy.js',
                          'lib/roster.js', 'lib/gemini.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
             (work / name).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / name, work / name)

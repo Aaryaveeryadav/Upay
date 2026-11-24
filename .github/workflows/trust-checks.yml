@@ -57,6 +57,7 @@ jobs:
       - run: node tools/check/hindi_practice_papers.js
       - run: node tools/check/question_language_and_ai_checks.js
       - run: node tools/check/ai_access.js
+      - run: node tools/check/model_gateway.js
       - run: node tools/check/security_posture.js
       - run: node tools/science-index/build_science_index.js --check
       - run: node tools/check/science_tutor.js

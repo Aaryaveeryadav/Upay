@@ -694,128 +694,28 @@ async function callGemini(prompt, key, model, image) {
   return parts.map(function (p) { return p.text || ''; }).join('');
 }
 
-/* Model names move: Google retires them and, at peak, overloads them.
-   Walk a preference list and report which one actually answered. */
-/* Measured on 2026-11-01 with a live key:
-     gemini-2.5-flash        -> 404 "no longer available to new users"   (drop)
-     gemini-3.5/3.7/3.8-flash-> 429 after ~20 calls (free tier is PER MODEL)
-     gemini-*.x-flash-lite   -> still answering when the big ones are capped
-   So the lite models are kept as real fallbacks, not afterthoughts: when the
-   main model's daily 20 is gone, the app keeps working instead of dying. */
-const MODEL_CHAIN = [
-  'gemini-3.5-flash-lite',      /* minimal live provider check succeeded */
-  'gemini-3.1-flash-lite',
-  'gemini-3.5-flash',
-  'gemini-3.8-flash',
-  'gemini-flash-lite-latest'
-];
+/* Every model call on this server goes through the shared gateway, so the
+   self-hosted install honours the same UPAY_MODEL_PROVIDER choice as the
+   hosted one: your own model, an OpenAI-compatible server, or Gemini.
+   The old in-file Gemini client (key ring, model chain, quota memory) is
+   gone; lib/gemini.js keeps the key rotation, and lib/model-gateway.js
+   decides who answers.
 
-/* A model that has told us its daily quotal is gone will keep saying so until
-   the window resets. Remembering that (in memory, per model) stops every later
-   request from burning 3 wasted calls before reaching a model that works. */
-const quotaDead = {};                       /* model -> timestamp of the 429 */
-/* The DAILY cap is not per model and not per minute: once Google says the key
-   is done for the day, every model refuses at once. Remembering that stops each
-   later request from walking the whole chain (33 s of waiting) just to be told
-   the same thing five times. Only a long retryDelay sets this, so ordinary
-   per-minute burst throttling still retries normally. */
-let keyDeadUntil = 0;
-const QUOTA_COOLDOWN = 50 * 60 * 1000;      /* free tier resets ~hourly */
-
-async function callGeminiResilient(prompt, key, preferred, image) {
-  /* `key` may be one key or the whole ring. When it is the ring, a key that is
-     capped mid-run is retired and the next one takes over without the student
-     seeing anything. */
-  const keys = Array.isArray(key) ? key.filter(Boolean) : [key].filter(Boolean);
-  if (!keys.length) throw new Error('Gemini 400: no API key is configured');
-  let lastKeyErr = null;
-  for (let ki = 0; ki < keys.length; ki++) {
-    const thisKey = keys[ki];
-    if (!keyReady(thisKey)) continue;
-    try {
-      return await callGeminiChain(prompt, thisKey, preferred, image);
-    } catch (e) {
-      const msg = String(e.message || e);
-      lastKeyErr = e;
-      const rm = String(e.raw || msg).match(/"retryDelay"\s*:\s*"(\d+(?:\.\d+)?)s"/);
-      const secs = rm ? Number(rm[1]) : 0;
-      /* a long wait means this KEY is done for the day: move to the next one */
-      if (/\b429\b|RESOURCE_EXHAUSTED/.test(msg) && secs > 600) {
-        noteKeyDead(thisKey, secs);
-        continue;
-      }
-      if (/API key not valid|PERMISSION_DENIED|\b403\b/.test(msg)) {
-        noteKeyDead(thisKey, 30 * 3600);           /* bad key: do not retry it today */
-        continue;
-      }
-      throw e;                                     /* not a key problem */
-    }
+   The signature is unchanged — (prompt, key, preferred, image, options) —
+   because the routes below call it in a dozen places. `key`, `preferred` and
+   `image` are Gemini-era arguments: the gateway reads its own configuration
+   and its own key ring, so they are accepted and ignored rather than removed
+   from call sites in the same change. Photo questions keep their own route. */
+async function callGeminiResilient(prompt, key, preferred, image, options) {
+  if (image) {
+    /* Image reading is Gemini-only for now; an operator with their own model
+       gets a clear refusal instead of a silently wrong answer. */
+    const gemini = require('./lib/gemini.js');
+    return gemini.callGeminiResilient(prompt, key, preferred, image, options || {});
   }
-  throw lastKeyErr || new Error('Gemini 429: every configured key is out of quota');
+  return solveRuntime.generateSolve(prompt, key, preferred, options || {});
 }
 
-async function callGeminiChain(prompt, key, preferred, image) {
-  /* known-capped key: fail at once with the same shape the caller expects,
-     instead of walking five models and making the student wait a minute */
-  if (Date.now() < keyDeadUntil) {
-    keyDeadUntil = 0;   /* the ring decides now; this is only a hint */
-    const err = new Error('Gemini 429: the free AI quota for today is used up');
-    err.status = 429;
-    err.raw = '{"error":{"code":429,"status":"RESOURCE_EXHAUSTED","details":[]},"retryDelay":"' +
-      Math.ceil((keyDeadUntil - Date.now()) / 1000) + 's"}';
-    throw err;
-  }
-  const chain = [];
-  [preferred].concat(MODEL_CHAIN).forEach(function (m) {
-    if (m && chain.indexOf(m) === -1) chain.push(m);
-  });
-  const now = Date.now();
-  /* put models we have not just exhausted first; keep the rest as last resort */
-  chain.sort(function (a, b) {
-    const da = quotaDead[a] && now - quotaDead[a] < QUOTA_COOLDOWN ? 1 : 0;
-    const db2 = quotaDead[b] && now - quotaDead[b] < QUOTA_COOLDOWN ? 1 : 0;
-    return da - db2;
-  });
-  const tried = [];
-  let lastErr = null;
-  for (let i = 0; i < chain.length; i++) {
-    const m = chain[i];
-    try {
-      const out = await callGemini(prompt, key, m, image);
-      return { text: out, model: m, tried: tried };
-    } catch (e) {
-      const msg = String(e.message || e);
-      tried.push({ model: m, error: msg.slice(0, 120) });
-      if (/\b429\b|RESOURCE_EXHAUSTED/.test(msg)) {
-        quotaDead[m] = Date.now();
-        /* A long retryDelay on a 429 is the DAILY cap, and it applies to the
-           whole key rather than this one model. Note it here, at the source,
-           so a caller that swallows the error (the approach top-up) still
-           cannot leave the next request to walk all five models again. */
-        const rm = String(e.raw || msg).match(/"retryDelay"\s*:\s*"(\d+(?:\.\d+)?)s"/);
-        if (rm && Number(rm[1]) > 600) {
-          keyDeadUntil = Date.now() + Math.min(Number(rm[1]), 6 * 3600) * 1000;
-        }
-      }
-      else if (/\b404\b|no longer available/.test(msg)) quotaDead[m] = Date.now();
-      lastErr = e;
-      /* Move on to the next model whenever this one could not answer for a
-         reason another model might not share: quota, overload, retirement.
-         Only a genuinely malformed request (400) is worth giving up on. */
-      const hopeless = /\b400\b|INVALID_ARGUMENT|API key not valid|PERMISSION_DENIED|\b403\b/.test(msg);
-      if (hopeless) break;
-    }
-  }
-  const err = new Error(String((lastErr && lastErr.message) || 'no model answered'));
-  err.tried = tried;
-  /* carry the provider's raw body up to the caller so the retry delay survives */
-  if (lastErr && lastErr.raw) err.raw = lastErr.raw;
-  if (lastErr && lastErr.status) err.status = lastErr.status;
-  throw err;
-}
-
-
-/* ---- pull every number out of an answer string, in a comparable form ---- */
 function answerNumbers(str) {
   const out = [];
   const t = String(str || '')
