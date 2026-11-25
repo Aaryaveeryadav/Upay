@@ -2782,7 +2782,7 @@ window.UP = window.UP || {};
        says so. Its own `source` field is not trusted to prove it was an exact
        calculation: a stored reply could claim that and be promoted above the
        key. Anything that came out of storage is a SAVED AI explanation. */
-    const saved = !sourceTrack && UP.answers && UP.answers.get
+    const saved = UP.answers && UP.answers.get
       ? (() => { try { return UP.answers.get(id); } catch (_) { return null; } })() : null;
     if (saved && hasPyqApproaches(saved)) {
       renderPyqExplanation(saved, qq, sol, 'cached');
@@ -2843,6 +2843,19 @@ window.UP = window.UP || {};
         return;
       }
       renderPyqExplanation(j, qq, sol, 'ai');
+      /* Keep what the provider just charged for. Without this, collapsing and
+         reopening a card sent the same question again, so a student who merely
+         looked twice paid twice -- and a later failure left the bare
+         "Step-by-step solution" heading on screen. Stored replies are always
+         replayed as SAVED AI explanations (see revealPyq), never as an exact
+         calculation, whatever `source` the reply carries. */
+      if (UP.answers && UP.answers.set) {
+        try {
+          const keep = Object.assign({}, j);
+          if (keep.source === 'exact') delete keep.source;
+          UP.answers.set(id, keep);
+        } catch (_) {}
+      }
 
     }).catch(function (err) {
       /* never leave the spinner running: say what happened */
