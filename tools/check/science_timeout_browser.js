@@ -54,11 +54,18 @@ const { chromium } = require('playwright');
           pending.map(p => p.part || 'whole').join(',') + ' | state ' + JSON.stringify(diag));
       };
       const fulfil = (route, status, body) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) });
+      /* Each method must carry working of its own. The app refuses to show two
+         methods with identical working, which is correct, so a mock that reuses
+         one sentence is testing the de-duplication rule rather than the request
+         loop: every part is absorbed as a duplicate and the check then waits for
+         methods the app rightly threw away. A real provider writes different
+         working per method, and so must this. */
+      const working = name => 'Mock working for ' + name + ' in the timeout test.';
       const partial = { source: 'ai', part: 'core', complete: false, result: 'The sky looks blue because air scatters short wavelengths of sunlight.',
         summary: 'Rayleigh scattering.', check: 'Mock check',
-        approaches: [{ name: 'Rayleigh scattering', steps: [{ t: 'Mock working for the timeout test.' }] }] };
+        approaches: [{ name: 'Rayleigh scattering', steps: [{ t: working('Rayleigh scattering') }] }] };
       const method = name => ({ source: 'ai', part: 'approach', complete: false,
-        approaches: [{ name, steps: [{ t: 'Mock working for the timeout test.' }] }] });
+        approaches: [{ name, steps: [{ t: working(name) }] }] });
 
       /* 1. The single call is allowed its whole budget: 40 s is still waiting. */
       const q = 'Why is the sky blue?';

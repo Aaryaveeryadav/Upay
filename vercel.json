@@ -98,6 +98,10 @@
       "dest": "/assets/app/index.html"
     },
     {
+      "src": "^/api/platform(?:/.*)?$",
+      "dest": "/api/platform/[...action]"
+    },
+    {
       "handle": "filesystem"
     },
     {

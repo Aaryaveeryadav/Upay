@@ -34,7 +34,7 @@ window.UP = window.UP || {};
   S.board = store.getTyped('board', 'cbse', 'string');
   S.chapterId = null;
   S.answer = null;
-  S.aiAnswer = null; S.aiState = null; S.aiQuestion = null; S.aiScope = null; S.aiNote = ''; S.aiRetry = false;
+  S.aiAnswer = null; S.aiState = null; S.aiQuestion = null; S.aiScope = null; S.aiNote = ''; S.aiRetry = false; S.notices = undefined;
   S.photoState = null; S.photoNote = ''; S.photoPreview = null;
   S.savedKey = 'saved'; // legacy/guest list remains on this device
   S.saved = store.getTyped(S.savedKey, [], 'array');
@@ -1085,7 +1085,7 @@ window.UP = window.UP || {};
     rail.innerHTML = `
       <a class="brand" href="#/home" aria-label="Kritin Upaay home">
         <span class="brand-mark"><img src="/assets/brand/kritin-logo.png" alt="" width="54" height="48"></span>
-        <span class="brand-name">Kritin उpaay<span>${t('brandSub')}</span></span>
+        <span class="brand-name">Kritin Upaay<span>${t('brandSub')}</span></span>
       </a>
       <nav class="nav" aria-label="${S.lang === 'hi' ? 'अनुभाग' : 'Sections'}">
         <span class="nav-label">${t('learn')}</span>
@@ -2157,6 +2157,43 @@ window.UP = window.UP || {};
         m.insertBefore(d, m.firstChild);
       }
     };
+    /* A rigorously exact answer is shown without asking the model at all.
+       Only the solver families that verify themselves are taken here: they
+       mark the result source:'exact' after checking every value against the
+       question (the integer-square and integer-radical-sum solvers). The
+       templated families -- heights, optics, topic cards -- are deliberately
+       NOT taken: they can be wrong (a 10 m ladder at 60 degrees has height
+       10*sin60 = 8.66, not 10*tan60), and for those the model's prose is still
+       compared against the computed drawing so a disagreement is flagged. A
+       student must never be shown a wrong number the app could have computed
+       correctly, and must never silently lose that warning either. */
+    if (!needsAIOnly() && routing.task !== 'writing' &&
+        ['maths','applied-maths'].includes(routing.subject) && UP.answerQuestion) {
+      let solved = null;
+      try { solved = UP.answerQuestion(q); } catch (_) { solved = null; }
+      if (solved && solved.source === 'exact' && solved.result &&
+          Array.isArray(solved.approaches) && solved.approaches.length) {
+        const text = v => (v && typeof v === 'object' && !Array.isArray(v)) ? P(v) : (v == null ? '' : String(v));
+        const local = Object.assign({}, solved, {
+          question: q, subjectRouting: routing,
+          result: text(solved.result),
+          summary: text(solved.summary),
+          title: text(solved.title),
+          verify: text(solved.verify),
+          approaches: (solved.approaches || []).map(ap => ({
+            name: text(ap && ap.name),
+            steps: ((ap && ap.steps) || []).map(st => Object.assign({}, st, {
+              t: text(st && st.t), m: text(st && st.m), note: text(st && st.note)
+            }))
+          }))
+        });
+        S.aiState = 'local'; S.aiRetry = false; S.aiNote = '';
+        S.aiAnswer = local; S.answer = local;
+        paint(); bumpProgress(S.subject);
+        pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
+        return;
+      }
+    }
     if (routing.subject === 'business-studies') { goLocal('Business Studies AI is not enabled; use the supplied outlines.', false); return; }
     // "taking a moment" nudge — after 6s swap the spinner text
     let slowTimer = setTimeout(() => {
@@ -2218,6 +2255,16 @@ window.UP = window.UP || {};
           pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
           bumpProgress(S.subject);
         } else {
+          /* The syllabus/safety gate refused this before the model ran. Show
+             the sentence it wrote, as its own card: telling a student "no
+             local solver" or "the AI did not return an answer" would hide the
+             one fact that matters -- that the question is not in the course. */
+          if (j && j.refused) {
+            S.aiState = 'local'; S.aiAnswer = null; S.aiRetry = false;
+            S.answer = { kind: 'refused', question: q, message: j.answer || '', severity: j.severity || 'none', code: j.refused };
+            paint();
+            return;
+          }
           if(j&&j.code==='language_context_required'){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'language-context',question:q,...j};paint();return;}
           if(j&&j.code==='question_needs_confirmation'){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'question-clarification',question:q,...j};paint();return;}
           S.aiErrorCode = j && j.code || '';
@@ -2510,8 +2557,42 @@ window.UP = window.UP || {};
           <div><div data-parts>${esc(shown)}</div>${retry}</div>
         </div>`;
   }
+  /* A draft can outlive the truth. If the app can prove this question -- the
+     integer-square and integer-radical-sum solvers verify every value against
+     the question -- then a model draft for the same question must never be
+     drawn over it. A stored draft saying 'n = 191' used to survive a redisplay
+     because nothing re-checked it against the solver. Repairing here, at the
+     one place an answer reaches the screen, covers every path that can put a
+     stale draft into state (a reload, a stale tab, an old cached answer). */
+  function proveAnswer(a) {
+    if (!a || typeof a !== 'object') return a;
+    if (a.source === 'exact') return a;
+    const q = a.question || S.aiQuestion || '';
+    if (!q || !['maths','applied-maths'].includes(S.subject)) return a;
+    let solved = null;
+    try { solved = UP.answerQuestion ? UP.answerQuestion(q) : null; } catch (_) { solved = null; }
+    if (!solved || solved.source !== 'exact' || !solved.result ||
+        !Array.isArray(solved.approaches) || !solved.approaches.length) return a;
+    /* Only repair a real disagreement, so a healthy answer is left untouched. */
+    const was = String(a.result || '');
+    const now = String((solved.result && solved.result.en) || solved.result || '');
+    if (was && now && was === now) return a;
+    const text = v => (v && typeof v === 'object' && !Array.isArray(v)) ? P(v) : (v == null ? '' : String(v));
+    return Object.assign({}, solved, {
+      question: q, subjectRouting: a.subjectRouting,
+      result: text(solved.result), summary: text(solved.summary),
+      title: text(solved.title), verify: text(solved.verify),
+      approaches: (solved.approaches || []).map(ap => ({
+        name: text(ap && ap.name),
+        steps: ((ap && ap.steps) || []).map(st => Object.assign({}, st, {
+          t: text(st && st.t), m: text(st && st.m), note: text(st && st.note)
+        }))
+      }))
+    });
+  }
   function renderAIAnswer(a) {
-    a = UP.answerFormat.answer(a);
+    a = proveAnswer(UP.answerFormat.answer(a));
+    S.aiAnswer = a;
     const fig = renderAIDiagram(a);
     const routing = a.subjectRouting || UP.taskRouting.resolve(a.question || S.aiQuestion || '', S.subject);
     const chk = a.check || null;
@@ -2813,6 +2894,32 @@ window.UP = window.UP || {};
        says so. Its own `source` field is not trusted to prove it was an exact
        calculation: a stored reply could claim that and be promoted above the
        key. Anything that came out of storage is a SAVED AI explanation. */
+    /* A question the solver can prove is answered from it, before any saved
+       draft is shown. A saved explanation is whatever the model said last
+       time; when the app can verify the question itself, an old draft must not
+       outrank the calculation. This is the same rule the answer card uses, and
+       it is why a stored 'n = 191' can no longer be revealed here. */
+    const proven = (() => {
+      if (!['maths','applied-maths'].includes(S.subject) || !UP.answerQuestion) return null;
+      let r = null;
+      try { r = UP.answerQuestion(pyqQuestionText(qq)); } catch (_) { r = null; }
+      return r && r.source === 'exact' && r.result && Array.isArray(r.approaches) && r.approaches.length ? r : null;
+    })();
+    if (proven) {
+      const text = v => (v && typeof v === 'object' && !Array.isArray(v)) ? P(v) : (v == null ? '' : String(v));
+      renderPyqExplanation(Object.assign({}, proven, {
+        answer: text(proven.result), result: text(proven.result),
+        summary: text(proven.summary), verify: text(proven.verify),
+        approaches: (proven.approaches || []).map(ap => ({
+          name: text(ap && ap.name),
+          steps: ((ap && ap.steps) || []).map(st => Object.assign({}, st, {
+            t: text(st && st.t), m: text(st && st.m), note: text(st && st.note)
+          }))
+        }))
+      }), qq, sol, 'exact');
+      return;
+    }
+
     const saved = UP.answers && UP.answers.get
       ? (() => { try { return UP.answers.get(id); } catch (_) { return null; } })() : null;
     if (saved && hasPyqApproaches(saved)) {
@@ -2838,6 +2945,16 @@ window.UP = window.UP || {};
         return { status: r.status, ok: r.ok, body: j };
       });
     }).then(function (reply) {
+      /* The syllabus gate answers with a refusal, not a solution. Show the
+         sentence the server wrote: "that is outside your Class 10 Science
+         course" is the useful thing here, and the generic "AI could not
+         produce a solution" would throw it away. */
+      if (reply.body && reply.body.refused) {
+        sol.innerHTML = '<div class="callout ' + (reply.body.severity === 'notice' ? 'tip' : 'warn') + '">' +
+          icon(reply.body.severity === 'notice' ? 'info' : 'warn') +
+          '<div>' + esc(reply.body.answer || 'This question was not answered.') + '</div></div>';
+        return;
+      }
       const j = UP.answerFormat.answer(reply.body);
       /* The loading line used to stay forever when the reply had no usable
          approaches, or when anything below threw. Both are silent failures for
@@ -2947,6 +3064,14 @@ window.UP = window.UP || {};
 
   function renderAnswer(ans) {
     if(ans.kind==='math-input-clarification') return `<div class="callout warn" role="status"><div><h3>${S.lang === 'hi' ? 'पहले प्रश्न जाँचें' : 'Check the question first'}</h3><p>${esc(ans.note)}</p><p>${S.lang === 'hi' ? 'ऊपर प्रश्न सुधारकर फिर भेजें। मूल पाठ बदला नहीं गया है।' : 'Edit the question above and submit again. The supplied text has not been guessed or solved.'}</p></div></div>`;
+    /* A question the syllabus or safety gate refused. The server wrote the
+       sentence, so it is shown as written; there is no retry button because
+       retrying the same out-of-course question cannot succeed. */
+    if(ans.kind==='refused')return `<div class="callout ${ans.severity === 'notice' ? 'tip' : 'warn'} refused-a11y" role="status">${icon(ans.severity === 'notice' ? 'info' : 'warn')}<div>
+      <h3 style="margin:0 0 6px">${S.lang === 'hi' ? 'यह प्रश्न उत्तर नहीं दिया गया' : 'This question was not answered'}</h3>
+      <p style="margin:0">${esc(ans.message || '')}</p>
+      ${ans.severity === 'notice' ? `<p style="margin:8px 0 0;font-size:12.5px;color:var(--ink-500)">${S.lang === 'hi' ? 'आपका अभिभावक सारांश में इसे देख सकते हैं।' : 'This is listed in the parent summary.'}</p>` : ''}
+    </div></div>`;
     if(ans.kind==='matrix-repair')return matrixRepairCard(ans);
     if(ans.kind==='matrix-singular')return `<div class="callout warn"><div>
       <h3>${S.lang === 'hi' ? 'A का व्युत्क्रम नहीं है' : 'A has no inverse'}</h3>
@@ -4874,7 +4999,41 @@ window.UP = window.UP || {};
       ${weakChs.length
         ? `<ul style="margin:10px 0 0;padding:0;list-style:none">${weakChs.slice(0,5).map(w=>`<li style="padding:8px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between"><span>${esc(P(w.c))}</span><b style="color:#c9530e">${w.pct}%</b></li>`).join('')}</ul>`
         : `<p class="muted" style="margin:8px 0 0">${S.lang==='hi'?'अभी कोई अध्याय कमज़ोर नहीं पहचाना गया।':'No weak chapters identified yet.'}</p>`}
+    </section>
+    ${parentNoticesCard()}`;
+  }
+
+  /* What a parent is told when a student searched outside their syllabus.
+     Deliberately narrow: only syllabus drift lands here. A safety block (a
+     student asking about self-harm, or for weapons) is recorded for the
+     operator and never shown to a parent as misconduct, because that would
+     punish a request for help. */
+  function parentNoticesCard() {
+    const notices = Array.isArray(S.notices) ? S.notices : null;
+    const head = S.lang === 'hi' ? 'पाठ्यक्रम से बाहर के प्रश्न' : 'Questions outside the syllabus';
+    if (notices === null) return `<section class="card cream flat" style="margin-top:14px"><div class="mini-label">${head}</div><p class="muted" style="margin:8px 0 0">${S.lang==='hi'?'लोड हो रहा है…':'Loading…'}</p></section>`;
+    if (!notices.length) return `<section class="card cream flat" style="margin-top:14px"><div class="mini-label">${head}</div><p class="muted" style="margin:8px 0 0">${S.lang==='hi'?'हाल में कोई पाठ्यक्रम-से-बाहर प्रश्न दर्ज नहीं हुआ।':'No out-of-syllabus questions have been recorded recently.'}</p></section>`;
+    return `<section class="card cream flat" style="margin-top:14px">
+      <div class="mini-label">${head}</div>
+      <p class="muted" style="margin:6px 0 10px;font-size:12.5px">${S.lang==='hi'
+        ? 'ये प्रश्न पाठ्यक्रम से बाहर थे। साइट ने मॉडल चलाने से पहले उत्तर देने से मना कर दिया, इसलिए कोई उत्तर नहीं बना।'
+        : 'These questions were outside the course. The site refused them before the model ran, so no answer was generated.'}</p>
+      <ul style="margin:0;padding:0;list-style:none">${notices.slice(0,6).map(n => `<li style="padding:9px 0;border-bottom:1px solid var(--line)">
+        <div style="font-size:13px;color:var(--ink-700)">“${esc(String(n.question||'').slice(0,120))}”</div>
+        <div style="font-size:12px;color:var(--ink-500);margin-top:3px">${esc(String(n.at||'').slice(0,10))} · ${esc(String(n.subject||''))}${n.cls?' · '+t('classShort')+' '+esc(String(n.cls)):''}</div>
+      </li>`).join('')}</ul>
     </section>`;
+  }
+
+  /* Reaching #/parent is the moment to read them; fetching on every render of
+     the page would repeat the call on each repaint. */
+  function loadParentNotices() {
+    if (S.notices !== undefined && S.notices !== null) return;
+    S.notices = null;
+    fetch('/api/ai/notices', { headers: { authorization: 'Bearer ' + (localStorage.getItem('upay.token') || '') } })
+      .then(r => r.ok ? r.json() : { notices: [] })
+      .then(j => { S.notices = Array.isArray(j.notices) ? j.notices : []; render(); })
+      .catch(() => { S.notices = []; render(); });
   }
 
   function viewAbout() {
@@ -5110,7 +5269,7 @@ window.UP = window.UP || {};
     else if (r.name === 'books') html = viewBooks(r.params);
     else if (r.name === 'saved') html = viewSaved() + (typeof window.viewMe === 'function' ? window.viewMe() : '');
     else if (r.name === 'about') html = viewAbout();
-    else if (r.name === 'parent') html = viewParent();
+    else if (r.name === 'parent') { loadParentNotices(); html = viewParent(); }
     else if (r.name === 'apikey') html = viewApiKey();
     else if (r.name === 'admin') html = viewAdmin();
     else if (r.name === 'login') html = viewLogin(r.params);

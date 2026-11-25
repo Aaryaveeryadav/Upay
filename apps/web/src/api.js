@@ -52,7 +52,9 @@ async function call(path, options = {}) {
 export const api = {
   me: () => call('/api/platform/me'),
   login: (email, password) => call('/api/platform/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
-  signup: (payload) => call('/api/platform/signup', { method: 'POST', body: JSON.stringify(payload) }),
+  /* Accounts are created on the legacy site (/#/login), which is backed by
+     Supabase. There is deliberately no signup call here: this deployment has
+     no Postgres service-role database for /api/platform to use. */
   logout: () => call('/api/platform/logout', { method: 'POST' }).catch(() => null),
 
   schools: () => call('/api/platform/schools'),

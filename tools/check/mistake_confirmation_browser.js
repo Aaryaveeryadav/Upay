@@ -17,8 +17,18 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
   await page.evaluate(q=>{UP.S.subject='maths';location.hash='#/ask?q='+encodeURIComponent(q);},typo);
   await page.locator('.question-clarification').waitFor();assert.equal(requests.length,0);
   await page.locator('.question-clarification a').click();
-  await page.waitForFunction(()=>UP.S.aiAnswer&&UP.S.aiAnswer.source==='exact');
-  assert.equal(await page.evaluate(()=>UP.S.aiAnswer.result),'n = 15, 27, 327, 995');assert.equal(requests.length,0);
+  /* The answer is the contract: the right four values, from the app's own
+     exact solver, and not one request to a model that could replace them.
+     This question is one the solver proves (integer-square), so it is answered
+     without asking the provider at all -- which is also why the stub above
+     must not be left holding an unanswered request: a parked request hangs for
+     the app's whole client budget (65s here), far longer than the 30s a
+     waitForFunction allows, and the step then failed for a reason that had
+     nothing to do with the behaviour under test. */
+  await page.waitForFunction(()=>UP.S.aiAnswer&&String(UP.S.aiAnswer.result||'').length>0, null, {timeout: 20000});
+  assert.equal(await page.evaluate(()=>UP.S.aiAnswer.source),'exact','a provable question is answered exactly');
+  assert.equal(await page.evaluate(()=>UP.S.aiAnswer.result),'n = 15, 27, 327, 995');
+  assert.equal(requests.length,0,'a provable question never asks the provider');
   await page.evaluate(()=>{
    UP.S.mockTest={scope:'cbse|10|maths',subject:'maths',started:Date.now(),items:[{q:'What is one plus one?',ch:1,source:{m:1,keyVerified:true,ans:'2'}}],answers:{},submitted:{},finished:false};location.hash='#/mock';
   });
@@ -44,12 +54,26 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
   await page.waitForFunction(()=>UP.S.mistakeQueue.length===0);
   // A long English response must survive past both the old 35s and 65s cutoffs.
   await page.clock.install();
+  /* Once the clock is installed, every timer in the page is fake -- including
+     the one Playwright's waitForFunction uses to poll from inside the page. A
+     polled wait can then never see a state change, so this section advanced
+     90 s and then waited on a clock that was no longer running; the wait timed
+     out and the report blamed a check that was behaving correctly. Time is
+     driven explicitly here instead: runFor fires the timers that are due, and
+     each read is a plain evaluate, which needs no timer to come back. */
+  const until = async (fn, label) => {
+    for (let i = 0; i < 400; i++) {
+      if (await page.evaluate(fn)) return;
+      await page.clock.runFor(50);
+    }
+    throw new Error('never became true: ' + label);
+  };
   await page.evaluate(()=>{UP.S.subject='english';location.hash='#/ask?q='+encodeURIComponent('Write a formal letter to the editor arguing for preserving a public park.');});
-  await page.waitForFunction(()=>UP.S.aiState==='loading');await page.waitForTimeout(50);
+  await until(()=>UP.S.aiState==='loading','the writing question starts loading');
   await page.clock.fastForward(90000);assert.equal(await page.evaluate(()=>UP.S.aiState),'loading');
   assert.match(await page.locator('#aiRequestStatus').innerText(),/140 seconds/);
   await requests.pop().fulfill({status:200,contentType:'application/json',body:JSON.stringify({source:'ai',result:'Mock long response',approaches:[1,2,3,4].map(i=>({name:'Draft '+i,format:'prose',steps:[{t:'Mock prose for timer testing, not a provider quality claim.'}]}))})});
-  await page.waitForFunction(()=>UP.S.aiState==='done');
+  await until(()=>UP.S.aiState==='done','the writing answer is rendered');
   assert.deepEqual(errors,[]);
   console.log(`PASS ${width}px: malformed question confirmation/exact correction, persistent wrong-answer queue/scope isolation/retry resolution and 90s writing response`);
   await context.close();
