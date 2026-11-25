@@ -29,6 +29,12 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
 (async () => {
   const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'],
     ...(process.env.UPAY_CHROMIUM ? { executablePath: process.env.UPAY_CHROMIUM } : {}) });
+ /* A browser check whose page never reaches the state it waits for must end
+    in a named failure. Without this, one unbounded waitForFunction kept the
+    whole workflow job alive until GitHub's six-hour ceiling, and the report
+    named no check at all. */
+ const watchdog=setTimeout(()=>{console.error('TIMEOUT: '+require('node:path').basename(__filename)+' did not finish within '+(+process.env.UPAY_CHECK_TIMEOUT||300)+'s; it hung waiting for a page state.');process.exit(124);},(+process.env.UPAY_CHECK_TIMEOUT||300)*1000);
+ watchdog.unref();
   try {
     for (const width of [1280, 390]) {
       const context = await browser.newContext({ viewport: { width, height: 900 }, serviceWorkers: 'block' });
@@ -47,13 +53,14 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
             return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
               source: 'ai', part: 'core', complete: false, result: 'Current = 0.5 A',
               summary: 'Mock split summary.', check: 'Mock check',
-              approaches: [{ name: 'Formula', steps: [{ t: 'Mock working for the split test.' }] }]
+              approaches: [{ name: 'Formula', steps: [{ t: 'Mock working for Formula in the split test.' }] }]
             }) });
           }
           if (body.part === 'approach') {
             const name = ['Substitution', 'Verification', 'Reasoning'][(body.index || 2) - 2] || 'Another method';
             return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
-              source: 'ai', part: 'approach', index: body.index, approaches: [{ name, steps: [{ t: 'Mock working for the split test.' }] }]
+              source: 'ai', part: 'approach', index: body.index,
+              approaches: [{ name, steps: [{ t: 'Mock working for ' + name + ' in the split test.' }] }]
             }) });
           }
           return route.fulfill({ status: 504, contentType: 'application/json', body: JSON.stringify({ error: 'provider timeout', code: 'provider_timeout' }) });
@@ -64,7 +71,20 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
         route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(reply) });
       });
       await page.goto(BASE, { waitUntil: 'networkidle' });
-      await page.waitForFunction(() => window.UP && UP.S && document.body.classList.contains('up-ready'));
+      /* Named waits: a bare 30 s timeout says nothing about which case hung,
+         and this check is the only place some of these paths are exercised. */
+      const waitFor = (label, fn, arg) => page.waitForFunction(fn, arg, { timeout: 20000 })
+        .catch(async e => {
+          const state = await page.evaluate(() => ({
+            hash: location.hash.slice(0, 60),
+            subject: window.UP && UP.S ? UP.S.subject : null,
+            answerKind: window.UP && UP.S && UP.S.answer ? UP.S.answer.kind : null,
+            aiState: window.UP && UP.S ? UP.S.aiState : null,
+            mountChars: (document.getElementById('answerMount') || {}).textContent?.length || 0
+          })).catch(() => null);
+          throw new Error(label + ' timed out at ' + width + 'px: ' + JSON.stringify(state) + ' — ' + e.message);
+        });
+      await waitFor('app boot', () => window.UP && UP.S && document.body.classList.contains('up-ready'));
 
       const arm = (question, answer, diagram) => {
         reply = {
@@ -79,7 +99,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
 
       /* 1. The tower: height and both distances labelled from the question. */
       await ask(TOWER, 'maths', 'Height = 10√3 m ≈ 17.32 m; original distance = 30 m; nearer distance = 10 m.', null);
-      await page.waitForFunction(() => {
+      await waitFor('tower worked figure', () => {
         const figure = document.querySelector('.ai-answer .worked-figure');
         return figure && /17\.32/.test(figure.textContent);
       });
@@ -110,7 +130,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
             verified network, and no resistance may be invented. */
       await ask(CIRCUIT, 'science', 'Total resistance = 6 Ω; current = 2 A; the 6 Ω branch takes 0.67 A and the 3 Ω branch 1.33 A.',
         { type: 'circuit', topology: 'series', resistors: [{ label: 'R₁', value: 1 }, { label: 'R₂', value: 2 }], caption: 'Mock wrong diagram' });
-      await page.waitForFunction(() => {
+      await waitFor('circuit worked figure', () => {
         const figure = document.querySelector('.ai-answer .worked-figure');
         return figure && /12 V/.test(figure.textContent) && /R_eq = 6 Ω/.test(figure.textContent);
       });
@@ -128,7 +148,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
         type: 'triangle', points: [{ x: 0, y: 0, label: 'A' }, { x: 3, y: 0, label: 'B' }, { x: 0, y: 4, label: 'C' }],
         segments: [[0, 0, 3, 0]], caption: 'Mock ladder triangle'
       });
-      await page.waitForFunction(() => /Mock ladder triangle/.test(document.body.textContent));
+      await waitFor('ladder diagram', () => /Mock ladder triangle/.test(document.body.textContent));
       assert.equal(await page.locator('.ai-answer .worked-figure').count(), 0, 'no worked figure for a ladder');
       assert(await page.locator('.ai-answer .figure-body svg polygon').count() >= 1, 'the ordinary AI triangle still renders');
 
@@ -141,10 +161,12 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       const MATRIX_Q = 'A = [[2, 1, -1], [1, 2, 1], [3, -1, 2]]\nB = [[4, 1], [7, 0], [8, 5]]\n\nFind X such that AX = B.';
       const beforeMatrix = aiCalls;
       await ask(MATRIX_Q, 'maths', 'X = [[-1/5, 12/5, 6/5], [-1/5, 8/5, -7/5]]', null);
-      await page.waitForFunction(() => {
+      await waitFor('matrix worked figure', () => {
         const figure = document.querySelector('.ai-answer .worked-figure');
         return figure && /37\/18/.test(figure.textContent);
       });
+      /* A local answer must not have asked the provider at all: that is the
+         whole point of solving it here. */
       assert.equal(aiCalls, beforeMatrix, 'a solved matrix question is answered locally, not by the provider');
       const matrixFigure = page.locator('.ai-answer .worked-figure');
       const matrixText = await matrixFigure.innerText();
@@ -175,7 +197,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       const DET_Q = 'Find the determinant of [[1, 2], [3, 4]].';
       const beforeDet = aiCalls;
       await ask(DET_Q, 'maths', '|A| = -6', null);
-      await page.waitForFunction(() => /\|A\|\s*=\s*-?2|−2/.test(document.body.innerText) &&
+      await waitFor('determinant answer', () => /\|A\|\s*=\s*-?2|−2/.test(document.body.innerText) &&
         !!document.querySelector('.ai-answer .worked-figure'));
       assert.equal(aiCalls, beforeDet, 'a determinant is answered locally too');
       const detText = await page.locator('.ai-answer').innerText();
@@ -187,7 +209,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
       const FLAT = 'Find X such that A X = B\n2 1 -1 4 1\n1 2 1 7 0\n3 -1 2 8 5';
       const beforeFlat = aiCalls;
       await ask(FLAT, 'maths', 'X = [[0, 0], [0, 0], [0, 0]]', null);
-      await page.waitForFunction(() => {
+      await waitFor('flat paste solved', () => {
         const fig = document.querySelector('.ai-answer .worked-figure');
         return fig && /37\/18/.test(fig.textContent);
       });
@@ -208,7 +230,7 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
         'A = [[2,1,-1],[1,2,1],[3,-1,2]]\nB = [[4,1],[7,0],[8,5]]');
       const beforeRepair = aiCalls;
       await page.locator('[data-action="matrix-repair-solve"]').click();
-      await page.waitForFunction(() => {
+      await waitFor('confirmed matrices solved', () => {
         const figure = document.querySelector('.ai-answer .worked-figure');
         return figure && /37\/18/.test(figure.textContent);
       });
@@ -225,12 +247,11 @@ const four = () => ['Formula', 'Substitution', 'Verification', 'Reasoning'].map(
         'two switches. Find the current in each branch, the potential difference across each resistor, ' +
         'the power dissipated, and explain what changes when the second switch is opened.';
       await page.evaluate((q) => { UP.S.subject = 'physics'; location.hash = '#/ask?q=' + encodeURIComponent(q); }, LONG);
-      await page.waitForFunction(() => {
+      await waitFor('split answer (core part)', () => {
         const answer = document.querySelector('.ai-answer');
         return answer && /Current = 0\.5 A/.test(answer.textContent);
-      }, { timeout: 30000 });
-      await page.waitForFunction(() => document.querySelectorAll('.ai-answer .approach').length >= 4,
-        { timeout: 30000 });
+      });
+      await waitFor('split answer (all approaches)', () => document.querySelectorAll('.ai-answer .approach').length >= 4);
       assert.deepEqual(partCalls, ['full', 'core', 'approach', 'approach', 'approach'],
         'one whole-answer attempt, then the answer and one method per request: ' + partCalls.join(','));
       const splitText = await page.locator('.ai-answer').innerText();

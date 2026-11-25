@@ -1,10 +1,16 @@
 'use strict';
+const fs = require('node:fs');
+const path = require('node:path');
 // Mocked serverless contract/auth test. No real users, network, or API keys.
 const assert = require('assert');
 const { Readable } = require('stream');
 process.env.UPAY_AI_ALLOWED_USERS = 'allowed-test-user,allowed-test-user-2';
 // Prefer the new public key over a stale legacy env override; both are fixtures.
 process.env.SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_test_fixture';
+// This contract test drives the Gemini-shaped mock below, so it names that
+// provider explicitly. The shipped default (lib/ai-provider.js) is the site's
+// own local model, and the local path has its own mocked test.
+process.env.UPAY_SOLVE_PROVIDER = 'gemini';
 process.env.SUPABASE_ANON_KEY = 'legacy_test_fixture';
 const lib = require('../../lib/gemini.js');
 let providerCalls = 0, lastPrompt = '', replyText = '', queuedReplies = [], callBudgets = [];
@@ -22,8 +28,19 @@ lib.callGeminiResilient = async function (prompt, keys, model, image, options) {
   return { text: queuedReplies.length ? queuedReplies.shift() : replyText, model: 'mock-model' };
 };
 const authMe = require('../../api/auth/me.js');
-const localLogin = require('../../api/auth/login.js');
-const telemetry = require('../../api/tel.js');
+// The stateless stubs (login, telemetry, cache, key admin, OCR) share one
+// function to stay inside Vercel's Hobby limit, so the checks call it by the
+// URL each route answers — the contract is the URL, not the file layout.
+const stubs = require('../../api/[...path].js');
+// vercel.json sends every unclaimed /api/* path here with
+// ^/api/(.*)$ -> /api/[...path], and the rewrite preserves the original URL,
+// so the handler dispatches on req.url exactly as it will in production.
+const byUrl = url => (req, res) => {
+  req.url = url;
+  return stubs(req, res);
+};
+const localLogin = byUrl('/api/auth/login');
+const telemetry = byUrl('/api/tel');
 const solve = require('../../api/ai/solve.js');
 const readImage = require('../../api/ai/read-image.js');
 global.fetch = async function (_url, options) {
@@ -49,12 +66,41 @@ async function invoke(handler, { method='GET', token='', body }={}) {
   const req = { method, headers: token ? { authorization: 'Bearer ' + token } : {}, body };
   const r = res(); await handler(req,r); return r;
 }
+/* Vercel's Hobby plan refuses a deployment with more than 12 Serverless
+   Functions, and every file under api/ is one. The deploy failed twice on
+   this before it was checked here, so the count is asserted, not assumed. */
+function functionCount() {
+  const root = path.join(__dirname, '..', '..', 'api');
+  const seen = [];
+  (function walk(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.name.endsWith('.js')) seen.push(path.relative(root, full));
+    }
+  })(root);
+  return seen;
+}
+
 async function main() {
+  const fns = functionCount();
+  assert.ok(fns.length <= 12,
+    'api/ has ' + fns.length + ' functions but Vercel Hobby allows 12: ' + fns.join(', '));
+  assert.ok(fns.includes('platform/[...action].js') && fns.includes('[...path].js'),
+    'the catch-all routers are part of the design; keep them in the count');
   for (const method of ['POST','OPTIONS']) {
     const tel = await invoke(telemetry,{method,body:{e:'route'}});
     assert.equal(tel.code,204); assert.equal(tel.headers['cache-control'],'no-store');
   }
   const telGet = await invoke(telemetry); assert.equal(telGet.code,405);
+  const cache = await invoke(byUrl('/api/ai/cache')); assert.equal(cache.code,200);
+  assert.equal(cache.body.found, false);
+  const keyDenied = await invoke(byUrl('/api/admin/key')); assert.equal(keyDenied.code,403);
+  const keyModels = await invoke(byUrl('/api/admin/key/models')); assert.equal(keyModels.code,200);
+  assert.deepEqual(keyModels.body.models, []);
+  const ocrStub = await invoke(byUrl('/api/ocr'), {method:'POST'}); assert.equal(ocrStub.code,200);
+  assert.equal(ocrStub.body.text, null);
+  const unknown = await invoke(byUrl('/api/nope')); assert.equal(unknown.code,404);
   const unavailableLogin = await invoke(localLogin,{method:'POST',body:{user:'test',pass:'test'}});
   assert.equal(unavailableLogin.code,401); assert.ok(unavailableLogin.body.error); assert.ok(!unavailableLogin.body.user);
   assert.equal((await invoke(localLogin)).code,405);

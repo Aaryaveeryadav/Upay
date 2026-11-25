@@ -2,6 +2,12 @@
 const assert=require('node:assert/strict'),{chromium}=require('playwright');
 (async()=>{
  const browser=await chromium.launch({headless:true,args:['--no-sandbox'],...(process.env.UPAY_CHROMIUM?{executablePath:process.env.UPAY_CHROMIUM}:{})});
+ /* A browser check whose page never reaches the state it waits for must end
+    in a named failure. Without this, one unbounded waitForFunction kept the
+    whole workflow job alive until GitHub's six-hour ceiling, and the report
+    named no check at all. */
+ const watchdog=setTimeout(()=>{console.error('TIMEOUT: '+require('node:path').basename(__filename)+' did not finish within '+(+process.env.UPAY_CHECK_TIMEOUT||300)+'s; it hung waiting for a page state.');process.exit(124);},(+process.env.UPAY_CHECK_TIMEOUT||300)*1000);
+ watchdog.unref();
  try{for(const width of [1280,390]){
   const context=await browser.newContext({viewport:{width,height:900},serviceWorkers:'block',acceptDownloads:true}),page=await context.newPage(),errors=[];let downloads=0;
   page.on('pageerror',e=>errors.push(String(e)));page.on('download',()=>downloads++);

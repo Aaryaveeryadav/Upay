@@ -24,10 +24,31 @@
       s.async = false;                 // preserve execution order
       if (opts && opts.defer) s.defer = true;
       if (opts && opts.fetchPriority) s.fetchPriority = opts.fetchPriority;
-      s.onload = function () { loaded.add(src); resolve(); };
-      s.onerror = function () { reject(new Error('load failed: ' + src)); };
+      let settled = false;
+      const done = function (ok, why) {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        if (ok) loaded.add(src);
+        /* Keep the cache honest: a failed script must be retryable, and the
+           rejection must not be stored forever where nothing awaits it. */
+        else delete loading[src];
+        ok ? resolve() : reject(new Error(why));
+      };
+      s.onload = function () { done(true); };
+      s.onerror = function () { done(false, 'load failed: ' + src); };
+      /* A script whose request is aborted or blocked fires NEITHER load nor
+         error in some browsers, so the promise never settled. Everything that
+         awaited it — UP.loadPack, UP.loadClass12, and any page waiting for a
+         data pack — then waited forever. Bound it, and say what happened. */
+      const timer = setTimeout(function () {
+        done(false, 'load timed out: ' + src);
+      }, (opts && opts.timeoutMs) || 20000);
       document.head.appendChild(s);
     });
+    /* A rejection nobody awaits (a prefetch) must not become an unhandled
+       rejection that kills the page; callers still see the rejection. */
+    loading[src].catch(function () {});
     return loading[src];
   }
 
@@ -58,6 +79,8 @@
     'assets/js/solver-arith.js?v=26e5',
     'assets/js/solver-geo.js',
     'assets/js/hash-route.js?v=26react1', // shared legacy/React deep-link contract
+    /* science-tutor.js is no longer loaded: its separate tutor section was
+       folded into the one Study chat. The module stays for its API checks. */
     'assets/js/task-routing.js?v=26hip9',
     'assets/js/request-accuracy.js?v=26hip9',
     'assets/js/language-policy.js?v=26hi12',
@@ -163,6 +186,23 @@
     'assets/js/data/figures-c12.js',
     'assets/js/data/figures-physics.js'
   ];
+
+  /* Which saved pack actually carries each subject's chapters. Class 12
+     Applied Mathematics, Physics, Chemistry and Biology all ship inside the
+     class12 pack, and Class 11 has no pack of its own; without this table a
+     deep link to one of them asked for a pack that does not exist, the request
+     never recorded itself as loaded, and the caller re-rendered forever. */
+  const SUBJECT_PACK = {
+    'applied-maths': 'class12', physics: 'class12', chemistry: 'class12',
+    biology: 'class12', english: 'class12', 'hindi-core': 'hindi-core',
+    'hindi-elective': 'hindi-elective'
+  };
+  UP.packFor = function (subject) {
+    if (!subject) return null;
+    if (PACKS[subject]) return subject;
+    if (+UP.S.cls === 12) return SUBJECT_PACK[subject] || 'class12';
+    return SUBJECT_PACK[subject] || null;
+  };
 
   UP.loadPack = function (name) {
     if (!PACKS[name] || UP.loaded.packs[name]) return Promise.resolve();

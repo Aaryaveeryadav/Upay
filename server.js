@@ -19,6 +19,10 @@ const solveTiming = require('./assets/js/solve-timing.js');
 const solvePolicy = require('./lib/solve-policy.js');
 const integrity = require('./lib/solve-integrity.js');
 const solveRuntime = require('./lib/ai-provider.js');
+const scienceRag = require('./lib/science-rag.js');
+const studyChat = require('./lib/chat.js');
+const platform = require('./lib/platform-api.js');
+const contentControl = require('./lib/content-control.js');
 const { aiFailure: solveFailure } = require('./lib/ai-status.js');
 
 const http = require('http');
@@ -448,12 +452,44 @@ function notFoundPage(res, why, hint) {
     + '</div>');
 }
 
+/* The React app shell. If it has not been built yet, say so in one line
+   instead of a blank page; the study APIs keep working either way. */
+function serveApp(res) {
+  const shell = path.join(PUBLIC, 'assets', 'app', 'index.html');
+  fs.readFile(shell, 'utf8', function (err, html) {
+    if (err) {
+      /* A deployment that has not built the React app still has the reviewed
+         legacy study pages; send people there instead of a dead end. */
+      const legacy = path.join(PUBLIC, 'index.html');
+      if (fs.existsSync(legacy)) {
+        return fs.readFile(legacy, function (e2, old) {
+          res.writeHead(e2 ? 503 : 200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache' });
+          res.end(e2 ? 'The app is not built on this server.' : old);
+        });
+      }
+      res.writeHead(503, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+      return res.end('<!doctype html><meta charset="utf-8"><title>Kritin Upaay</title>' +
+        '<div style="font:16px system-ui;padding:40px;max-width:640px;margin:auto">' +
+        '<h1 style="font-size:24px">The app is not built on this server yet.</h1>' +
+        '<p>Run <code>npm run build:web</code> where the site is deployed, then reload this page.</p></div>');
+    }
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache' });
+    res.end(html);
+  });
+}
+
 function serveStatic(req, res, pathname) {
   let p;
   try { p = decodeURIComponent(pathname); }
   catch (_) { res.writeHead(400); return res.end('bad path'); }
   if (p.includes('\0')) { res.writeHead(400); return res.end('bad path'); }
-  if (p === '/' ) p = '/index.html';
+  /* "/" is the study app every existing page, bookmark and browser check
+     expects: the reviewed legacy app in index.html. The React app is at /app
+     (and /app/), which is where the legacy nav links to it, so neither entry
+     point can strand the other. "/legacy" stays an alias for people who
+     followed an older link to it. */
+  if (p === '/app' || p === '/app/') return serveApp(res);
+  if (p === '/' || p === '/legacy') p = '/index.html';
   /* The pages were once reachable as /public/login.html (the folder was the
      web root). Those links still exist in old bookmarks and in login.html's
      own redirect, so the legacy prefix is mapped onto the real file rather
@@ -658,128 +694,28 @@ async function callGemini(prompt, key, model, image) {
   return parts.map(function (p) { return p.text || ''; }).join('');
 }
 
-/* Model names move: Google retires them and, at peak, overloads them.
-   Walk a preference list and report which one actually answered. */
-/* Measured on 2026-11-01 with a live key:
-     gemini-2.5-flash        -> 404 "no longer available to new users"   (drop)
-     gemini-3.5/3.7/3.8-flash-> 429 after ~20 calls (free tier is PER MODEL)
-     gemini-*.x-flash-lite   -> still answering when the big ones are capped
-   So the lite models are kept as real fallbacks, not afterthoughts: when the
-   main model's daily 20 is gone, the app keeps working instead of dying. */
-const MODEL_CHAIN = [
-  'gemini-3.5-flash-lite',      /* minimal live provider check succeeded */
-  'gemini-3.1-flash-lite',
-  'gemini-3.5-flash',
-  'gemini-3.8-flash',
-  'gemini-flash-lite-latest'
-];
+/* Every model call on this server goes through the shared gateway, so the
+   self-hosted install honours the same UPAY_MODEL_PROVIDER choice as the
+   hosted one: your own model, an OpenAI-compatible server, or Gemini.
+   The old in-file Gemini client (key ring, model chain, quota memory) is
+   gone; lib/gemini.js keeps the key rotation, and lib/model-gateway.js
+   decides who answers.
 
-/* A model that has told us its daily quotal is gone will keep saying so until
-   the window resets. Remembering that (in memory, per model) stops every later
-   request from burning 3 wasted calls before reaching a model that works. */
-const quotaDead = {};                       /* model -> timestamp of the 429 */
-/* The DAILY cap is not per model and not per minute: once Google says the key
-   is done for the day, every model refuses at once. Remembering that stops each
-   later request from walking the whole chain (33 s of waiting) just to be told
-   the same thing five times. Only a long retryDelay sets this, so ordinary
-   per-minute burst throttling still retries normally. */
-let keyDeadUntil = 0;
-const QUOTA_COOLDOWN = 50 * 60 * 1000;      /* free tier resets ~hourly */
-
-async function callGeminiResilient(prompt, key, preferred, image) {
-  /* `key` may be one key or the whole ring. When it is the ring, a key that is
-     capped mid-run is retired and the next one takes over without the student
-     seeing anything. */
-  const keys = Array.isArray(key) ? key.filter(Boolean) : [key].filter(Boolean);
-  if (!keys.length) throw new Error('Gemini 400: no API key is configured');
-  let lastKeyErr = null;
-  for (let ki = 0; ki < keys.length; ki++) {
-    const thisKey = keys[ki];
-    if (!keyReady(thisKey)) continue;
-    try {
-      return await callGeminiChain(prompt, thisKey, preferred, image);
-    } catch (e) {
-      const msg = String(e.message || e);
-      lastKeyErr = e;
-      const rm = String(e.raw || msg).match(/"retryDelay"\s*:\s*"(\d+(?:\.\d+)?)s"/);
-      const secs = rm ? Number(rm[1]) : 0;
-      /* a long wait means this KEY is done for the day: move to the next one */
-      if (/\b429\b|RESOURCE_EXHAUSTED/.test(msg) && secs > 600) {
-        noteKeyDead(thisKey, secs);
-        continue;
-      }
-      if (/API key not valid|PERMISSION_DENIED|\b403\b/.test(msg)) {
-        noteKeyDead(thisKey, 30 * 3600);           /* bad key: do not retry it today */
-        continue;
-      }
-      throw e;                                     /* not a key problem */
-    }
+   The signature is unchanged — (prompt, key, preferred, image, options) —
+   because the routes below call it in a dozen places. `key`, `preferred` and
+   `image` are Gemini-era arguments: the gateway reads its own configuration
+   and its own key ring, so they are accepted and ignored rather than removed
+   from call sites in the same change. Photo questions keep their own route. */
+async function callGeminiResilient(prompt, key, preferred, image, options) {
+  if (image) {
+    /* Image reading is Gemini-only for now; an operator with their own model
+       gets a clear refusal instead of a silently wrong answer. */
+    const gemini = require('./lib/gemini.js');
+    return gemini.callGeminiResilient(prompt, key, preferred, image, options || {});
   }
-  throw lastKeyErr || new Error('Gemini 429: every configured key is out of quota');
+  return solveRuntime.generateSolve(prompt, key, preferred, options || {});
 }
 
-async function callGeminiChain(prompt, key, preferred, image) {
-  /* known-capped key: fail at once with the same shape the caller expects,
-     instead of walking five models and making the student wait a minute */
-  if (Date.now() < keyDeadUntil) {
-    keyDeadUntil = 0;   /* the ring decides now; this is only a hint */
-    const err = new Error('Gemini 429: the free AI quota for today is used up');
-    err.status = 429;
-    err.raw = '{"error":{"code":429,"status":"RESOURCE_EXHAUSTED","details":[]},"retryDelay":"' +
-      Math.ceil((keyDeadUntil - Date.now()) / 1000) + 's"}';
-    throw err;
-  }
-  const chain = [];
-  [preferred].concat(MODEL_CHAIN).forEach(function (m) {
-    if (m && chain.indexOf(m) === -1) chain.push(m);
-  });
-  const now = Date.now();
-  /* put models we have not just exhausted first; keep the rest as last resort */
-  chain.sort(function (a, b) {
-    const da = quotaDead[a] && now - quotaDead[a] < QUOTA_COOLDOWN ? 1 : 0;
-    const db2 = quotaDead[b] && now - quotaDead[b] < QUOTA_COOLDOWN ? 1 : 0;
-    return da - db2;
-  });
-  const tried = [];
-  let lastErr = null;
-  for (let i = 0; i < chain.length; i++) {
-    const m = chain[i];
-    try {
-      const out = await callGemini(prompt, key, m, image);
-      return { text: out, model: m, tried: tried };
-    } catch (e) {
-      const msg = String(e.message || e);
-      tried.push({ model: m, error: msg.slice(0, 120) });
-      if (/\b429\b|RESOURCE_EXHAUSTED/.test(msg)) {
-        quotaDead[m] = Date.now();
-        /* A long retryDelay on a 429 is the DAILY cap, and it applies to the
-           whole key rather than this one model. Note it here, at the source,
-           so a caller that swallows the error (the approach top-up) still
-           cannot leave the next request to walk all five models again. */
-        const rm = String(e.raw || msg).match(/"retryDelay"\s*:\s*"(\d+(?:\.\d+)?)s"/);
-        if (rm && Number(rm[1]) > 600) {
-          keyDeadUntil = Date.now() + Math.min(Number(rm[1]), 6 * 3600) * 1000;
-        }
-      }
-      else if (/\b404\b|no longer available/.test(msg)) quotaDead[m] = Date.now();
-      lastErr = e;
-      /* Move on to the next model whenever this one could not answer for a
-         reason another model might not share: quota, overload, retirement.
-         Only a genuinely malformed request (400) is worth giving up on. */
-      const hopeless = /\b400\b|INVALID_ARGUMENT|API key not valid|PERMISSION_DENIED|\b403\b/.test(msg);
-      if (hopeless) break;
-    }
-  }
-  const err = new Error(String((lastErr && lastErr.message) || 'no model answered'));
-  err.tried = tried;
-  /* carry the provider's raw body up to the caller so the retry delay survives */
-  if (lastErr && lastErr.raw) err.raw = lastErr.raw;
-  if (lastErr && lastErr.status) err.status = lastErr.status;
-  throw err;
-}
-
-
-/* ---- pull every number out of an answer string, in a comparable form ---- */
 function answerNumbers(str) {
   const out = [];
   const t = String(str || '')
@@ -1106,6 +1042,13 @@ const handleRequest = async function (req, res) {
   try {
     /* Provider-spending routes get a rate ceiling: per account, plus a loose
        per-address floor. Login has its own stricter limits above. */
+    if (req.method === 'POST' && /^\/api\/science\/ask$/.test(p)) {
+      const verdict = aiIpLimiter.check(limitKey('science-ip', clientIp(req)));
+      if (!verdict.ok) {
+        res.setHeader('retry-after', String(verdict.retryAfter || 1));
+        return json(res, 429, { code: 'rate_limited', error: 'Too many tutor questions in a short time. Wait a moment and try again.', retryAfter: verdict.retryAfter || 1 });
+      }
+    }
     if (req.method === 'POST' && /^\/api\/ai\/(solve|read-image|translate|check-answer|generate|index)$/.test(p)) {
       const ipVerdict = aiIpLimiter.check(limitKey('ai-ip', clientIp(req)));
       const userVerdict = ipVerdict.ok && sess && !openSession ? aiUserLimiter.check(limitKey('ai-user', sess.id)) : { ok: true };
@@ -2244,6 +2187,104 @@ const handleRequest = async function (req, res) {
     if (p === '/api/ai/log' && req.method === 'GET') {
       const err = requireRole(sess, ['teacher', 'admin']); if (err) return json(res, 403, { error: err });
       return json(res, 200, { log: db.aiLog });
+    }
+
+    /* ---------- Class 10 Science tutor: index retrieval + local Ollama ---------- */
+    /* GET is a capability probe for the UI (no model host, no credentials).
+       POST asks a question. No account is required: answers come from the
+       local index and a local model, and the shared IP floor above bounds
+       abuse. Model configuration is server-side only (docs/science-tutor.md). */
+    /* ---------- The app: React build served from /assets/app/ ----------
+       Only /app opens the React shell; "/" and /index.html stay the study app
+       (see serveStatic), and React deep links (#/chat?q=...) are client-side
+       inside that shell. */
+    if ((p === '/app' || p === '/app/') && req.method === 'GET') {
+      return serveApp(res);
+    }
+
+    if (p === '/api/science/ask' && req.method === 'GET') {
+      const st = scienceRag.status();
+      return json(res, 200, {
+        ok: true, enabled: st.enabled, ready: st.ready, model: st.model, index: st.index,
+        note: st.index.available ? 'Answers are drafted by a local model from the indexed NCERT and CBSE material.'
+          : 'No science index is installed on this server, so the tutor cannot cite sources.'
+      });
+    }
+    /* ---------- Study chat for every subject: local model + citations ---------- */
+    if (p === '/api/chat/ask' && req.method === 'GET') {
+      const st = studyChat.status();
+      return json(res, 200, { ok: true, enabled: st.enabled, model: st.model, host: 'local', subjects: st.subjects, note: st.note });
+    }
+    if (p === '/api/chat/ask' && req.method === 'POST') {
+      const b = await readBody(req, 32 * 1024);
+      // Scope: a signed-in student is pinned to their own class/board; the
+      // question cannot choose another class. A guest may browse freely.
+      let profile = null;
+      // The school/class scope comes from the account, never from the request.
+      // A missing or invalid token simply means a guest scope.
+      try {
+        if (require('./lib/db.js').enabled()) profile = await require('./lib/tenancy.js').resolve(req);
+      } catch (_) { profile = null; }
+      const scope = profile && profile.active
+        ? { class: profile.class_level || Number(b.class) || 10, subject: b.subject, board: profile.board }
+        : { class: b.class, subject: b.subject, board: b.board };
+      try {
+        const result = await studyChat.answer({
+          question: b.question,
+          class: scope.class,
+          subject: b.subject,
+          chapter: b.chapter,
+          language: b.lang,
+          history: b.history,
+          callModel: async ({ messages, model }) => {
+            const out = await require('./lib/local-llm.js').generate({ messages, model, temperature: 0.25, maxTokens: 800, numCtx: 4096, timeoutMs: 60000 });
+            return out.text;
+          }
+        });
+        return json(res, 200, result);
+      } catch (e) {
+        const payload = { ok: false, code: (e && e.code) || 'chat_error', error: String((e && e.message) || 'The study model is unavailable.') };
+        if (e && e.citations) {
+          payload.citations = e.citations; payload.retrieved = e.retrieved;
+          payload.question = e.question; payload.model = e.model; payload.grounded = false;
+          payload.notice = 'The sources below came from the index; the model could not draft an answer.';
+        }
+        return json(res, Number(e && e.status) || 500, payload);
+      }
+    }
+
+    /* ---------- Accounts, schools and records (multi-tenant platform) ---------- */
+    if (p.startsWith('/api/platform')) {
+      return platform.handle(req, res, new URL(req.url, 'http://' + String(req.headers.host || 'localhost')));
+    }
+
+    if (p === '/api/science/ask' && req.method === 'POST') {
+      const b = await readBody(req, 16 * 1024);
+      try {
+        const result = await scienceRag.answerQuestion({
+          question: b.question,
+          chapter: b.chapter,
+          limit: b.limit,
+          language: b.lang,
+          history: Array.isArray(b.history) ? b.history : []
+        });
+        return json(res, 200, result);
+      } catch (e) {
+        const status = Number(e && e.status) || 500;
+        const payload = {
+          error: String((e && e.message) || 'The Science tutor is unavailable.'),
+          code: (e && e.code) || 'tutor_error'
+        };
+        if (e && e.citations) {
+          payload.citations = e.citations;
+          payload.retrieved = e.retrieved;
+          payload.grounded = false;
+          payload.question = e.question;
+          payload.model = e.model;
+          payload.notice = 'The sources below were retrieved from the index; the model could not draft an answer.';
+        }
+        return json(res, status, payload);
+      }
     }
 
     /* Camera OCR stub — the client runs Tesseract.js in-browser; this endpoint

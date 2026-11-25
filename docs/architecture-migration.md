@@ -7,7 +7,7 @@ The production application is **not yet fully migrated to React**. It is the exi
 ### Repository responsibilities
 
 - `apps/web/`: React migration preview source and Vite configuration. Compiled preview output goes to ignored `assets/react-study/`; do not commit generated bundles.
-- `api/`: authenticated Vercel API handlers. Keep provider credentials on the server.
+- `api/`: authenticated Vercel API handlers. Keep provider credentials on the server. `api/science/ask.js` (Class 10 Science tutor) is the one route that needs no account: it spends local model time, not provider quota, and is bounded by the shared per-IP AI floor. See `docs/science-tutor.md`.
 - `lib/`: shared Node.js policy, authentication, provider, and integrity modules. `ai-provider.js` is the solve-provider boundary.
 - `server.js`: current local Node API and public-file allowlist; legacy functionality remains here until extracted and tested.
 - `assets/`: public legacy application, public question data and public study PDFs. Treat everything in this directory as public. No secrets or private uploads belong here.
@@ -28,6 +28,21 @@ npm run dev:web               # React preview, typically port 5173
 ```
 
 Open `/assets/react-study/` on the Vite server. Vite proxies the source-data and PDF requests to the existing Node server; browser code uses same-origin paths. The preview's “Ask AI” action opens the existing app with the question, class and subject in the link, retaining its authentication and solve policies. The shared route script is part of the production offline shell; `node tools/check/hash_route.js` checks its link contract. Override the proxy target only as an operator with `UPAY_WEB_BACKEND` (a server-side development setting), never with browser input. For a production-style local build, run `npm run build:web` and open `/assets/react-study/index.html` on the Node server. The existing site does not need the React build to run. Build output is ignored and intentionally excluded from Vercel until the migration is reviewed and its deployment explicitly enabled.
+
+## Class 10 Science tutor (RAG)
+
+`#/tutor` (rail link **Science tutor**) is the first feature integrated from
+`experiments/science-ai/`: a chat page where the answer must cite the NCERT
+section or CBSE board question it read. Retrieval (formula-aware BM25), prompt
+isolation in `<sources>`, citation checking and the local Ollama call live in
+`lib/science-rag.js`; the index is generated from the reviewed app data by
+`tools/science-index/build_science_index.js` into
+`assets/science/science-index.json`. `api/science/ask.js` and the local
+`server.js` route share that module. Regression: `node tools/check/science_tutor.js`.
+Full contract, configuration and deployment limits: `docs/science-tutor.md`.
+The model is deliberately local, so a hosted deployment without a reachable
+Ollama returns the cited sources with `503 tutor_unavailable` rather than an
+ungrounded answer.
 
 ## Future model: solve provider boundary
 

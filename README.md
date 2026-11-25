@@ -32,6 +32,7 @@ The current `data/` directory contains private state. Do **not** serve the proje
 
 - Public study pages work without sign-in; live AI calls require an authorized account and a working Gemini key. Use the Board, Class and Subject selectors in the top bar to choose the scope; the available subjects change with the class.
 - Local admin-created accounts can access the local AI service. Supabase accounts require their user IDs in the server environment variable `UPAY_AI_ALLOWED_USERS` (comma-separated). This is deliberately fail-closed because the linked project's current self-signup settings allow unverified email accounts. An allowlist is **not** production-grade rate limiting; add provider spending limits and durable abuse controls before public launch.
+- **The site answers with your own model.** `UPAY_MODEL_PROVIDER` selects it: `ollama` (default), `openai-compatible` (anything that speaks `POST /v1/chat/completions` — vLLM, llama.cpp, LM Studio, Together, Groq, OpenRouter), `gemini`, or `off`. One variable, no feature code changes. The compatibility contract, the local vs. remote rules and the failure codes are in [`docs/own-model.md`](docs/own-model.md).
 - For the local server, an authorized admin can configure Gemini keys under the Admin screen. A serverless deployment uses protected `GEMINI_KEYS` or `GEMINI_KEY` environment variables and `UPAY_AI_ALLOWED_USERS`; its Admin key-management endpoint is disabled.
 - AI answers can be wrong. Accountancy, Economics and Class 12 English AI responses are marked **not independently checked**; no official keys are supplied. When AI is unavailable there is no verified local solver for those subjects.
 - `UPAY_OPEN=1` is an insecure, explicitly opt-in demo mode that allows unauthenticated student AI requests. It never grants admin access and must not be enabled on a public deployment.
@@ -82,7 +83,16 @@ python3 tools/check/offline_smoke.py
 python3 tools/check/auth_browser_smoke.py
 python3 tools/check/backend_smoke.py
 node tools/check/serverless_smoke.js
+node tools/check/science_tutor.js
+node tools/science-index/build_science_index.js --check
 ```
+
+`node tools/check/science_tutor.js` needs no server, model or credentials: it
+builds a fake local Ollama, checks retrieval, prompts, citations and the API
+shapes, and boots the real page in JSDOM. The Class 10 Science tutor page
+(`#/tutor`) answers from `assets/science/science-index.json` with a local
+Ollama model and shows the cited NCERT/board source for every claim; see
+`docs/science-tutor.md` for the index build step and deployment limits.
 
 The source-integrity checks accept an optional `--uploads DIRECTORY` to compare the included PDFs with separately preserved originals. The browser smokes use isolated contexts; the auth/backend tests use temporary databases. Some AI responses are mocked, and a passing smoke test is not an exhaustive source audit, security audit, or guarantee of error-free operation.
 

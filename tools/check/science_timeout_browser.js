@@ -14,6 +14,12 @@ const { chromium } = require('playwright');
 (async () => {
   const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'],
     ...(process.env.UPAY_CHROMIUM ? { executablePath: process.env.UPAY_CHROMIUM } : {}) });
+ /* A browser check whose page never reaches the state it waits for must end
+    in a named failure. Without this, one unbounded waitForFunction kept the
+    whole workflow job alive until GitHub's six-hour ceiling, and the report
+    named no check at all. */
+ const watchdog=setTimeout(()=>{console.error('TIMEOUT: '+require('node:path').basename(__filename)+' did not finish within '+(+process.env.UPAY_CHECK_TIMEOUT||300)+'s; it hung waiting for a page state.');process.exit(124);},(+process.env.UPAY_CHECK_TIMEOUT||300)*1000);
+ watchdog.unref();
   try {
     for (const width of [1280, 390]) {
       const context = await browser.newContext({ viewport: { width, height: 844 }, serviceWorkers: 'block' });
@@ -35,8 +41,17 @@ const { chromium } = require('playwright');
           if (at >= 0) return pending.splice(at, 1)[0].route;
           await page.waitForTimeout(25);
         }
+        const diag = await page.evaluate(() => ({
+          aiState: UP.S.aiState, aiAnswer: !!UP.S.aiAnswer,
+          approaches: (UP.S.aiAnswer && UP.S.aiAnswer.approaches || []).length,
+          parts: UP.S.aiAnswer && UP.S.aiAnswer._parts || null,
+          more: document.querySelectorAll('[data-action="more-approaches"]').length,
+          lastErr: UP.__lastPartError || null,
+          trace: window.__moreDiag && window.__moreDiag.trace || null,
+          fetchType: typeof fetch
+        })).catch(() => ({}));
         throw new Error(`no ${part || 'whole'} request arrived for ${label}; waiting: ` +
-          pending.map(p => p.part || 'whole').join(','));
+          pending.map(p => p.part || 'whole').join(',') + ' | state ' + JSON.stringify(diag));
       };
       const fulfil = (route, status, body) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) });
       const partial = { source: 'ai', part: 'core', complete: false, result: 'The sky looks blue because air scatters short wavelengths of sunlight.',
@@ -75,7 +90,33 @@ const { chromium } = require('playwright');
       assert.match(await page.locator('.parts-note').innerText(), /1 of 4/, 'the banner counts what arrived');
 
       /* 4. The missing methods can be asked for again, and then all four show. */
+      await page.evaluate(() => {
+        const b = document.querySelector('[data-action="more-approaches"]');
+        window.__moreDiag = { found: !!b, aiAnswer: !!UP.S.aiAnswer,
+          approaches: (UP.S.aiAnswer && UP.S.aiAnswer.approaches || []).length,
+          parts: UP.S.aiAnswer && UP.S.aiAnswer._parts || null };
+        window.__moreDiag.before = JSON.stringify(window.__moreDiag);
+      });
+      /* Instrument the module the click actually goes through, so a silent
+         no-op names its own cause. */
+      await page.evaluate(() => {
+        const S = UP.solveParts, created = [], nexted = [];
+        const oc = S.create, on = S.next;
+        S.create = function (q, seed) {
+          const st = oc.apply(this, arguments);
+          created.push({ hasAnswer: !!st.answer, have: (st.answer && st.answer.approaches || []).length });
+          return st;
+        };
+        S.next = function (st, base) {
+          const pl = on.apply(this, arguments);
+          nexted.push(pl ? (pl.part + '#' + (pl.index == null ? '' : pl.index)) : 'null');
+          return pl;
+        };
+        window.__moreDiag.trace = { created, nexted };
+      });
       await page.locator('[data-action="more-approaches"]').click();
+      await page.waitForTimeout(50);
+      console.log('MORE DIAG ' + JSON.stringify(await page.evaluate(() => window.__moreDiag.trace)));
       for (const name of ['Substitution', 'Verification', 'Reasoning']) {
         const route = await take('approach', 'a requested method');
         await fulfil(route, 200, method(name));

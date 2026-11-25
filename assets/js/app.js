@@ -1095,6 +1095,7 @@ window.UP = window.UP || {};
         <a href="#/test" data-nav="test">${icon('list')} ${t('nav_test')}</a>
         <a href="#/mcq" data-nav="mcq">${icon('check')} ${t('nav_mcq')}</a>
         <a href="#/pyq" data-nav="pyq">${icon('book')} ${t('nav_pyq')}</a>
+        <a href="/app" data-nav="app">${icon('atom')} ${S.lang==='hi'?'अध्ययन चैट':'Study chat'}</a>
         <a href="#/syllabus" data-nav="syllabus">${icon('layers')} ${t('nav_syllabus')}<span class="badge">${catalogue().length}</span></a>
         <span class="nav-label">${t('library')}</span>
         <a href="#/boards" data-nav="boards">${icon('board')} ${t('nav_boards')}</a>
@@ -1869,11 +1870,14 @@ window.UP = window.UP || {};
           body: JSON.stringify(payload),
           signal: controller ? controller.signal : undefined
         });
-      } catch (e) { done({ ok: false, j: null }); return; }
+      } catch (e) { UP.__lastPartError = 'request: ' + String((e && e.message) || e); done({ ok: false, j: null }); return; }
       request
         .then((r) => r.json().catch(() => null).then((j) => ({ ok: r.ok, j: j })))
-        .then(done)
-        .catch(() => done({ ok: false, j: null }));
+        .then((value) => { UP.__lastPartError = null; done(value); })
+        /* Swallowing this used to make "request the missing methods" do
+           nothing at all, with no message anywhere: the click looked dead.
+           Keep the reason so the failure is nameable instead of silent. */
+        .catch((e) => { UP.__lastPartError = 'fetch: ' + String((e && e.message) || e); done({ ok: false, j: null }); });
     });
   }
 
@@ -1892,10 +1896,15 @@ window.UP = window.UP || {};
         if (!isCurrent()) return UP.solveParts.have(state) > 0;
         if (ok && j && Array.isArray(j.approaches) && j.approaches.length) {
           const added = UP.solveParts.absorb(state, j);
-          if (!added && state.failed >= 2) return UP.solveParts.have(state) >= 3;
-          if (state.answer && UP.solveParts.have(state) >= 3) {
+          if (!added && state.failed >= 2) return UP.solveParts.have(state) >= 1;
+          if (state.answer && UP.solveParts.have(state) >= 1) {
             state.answer.question = base.question;
             state.answer.subjectRouting = base.subjectRouting;
+            /* The whole-answer path formats before storing, so speech, copy
+               and the card all see the same plain-Unicode maths. The split
+               path was storing the provider's raw TeX: read aloud then said
+               "h backslash nu" instead of "h nu". */
+            if (UP.answerFormat) state.answer = UP.answerFormat.answer(state.answer);
             S.aiAnswer = state.answer;
             S.aiState = 'done';
             paint();
@@ -1912,9 +1921,18 @@ window.UP = window.UP || {};
         return step();
       });
     };
+    /* Publish whatever was assembled. A partial answer is labelled as partial
+       by solveParts.status(), and the card offers to fetch the rest; throwing
+       away a correct core answer because the extra methods did not arrive
+       leaves the student with an error where a usable answer existed. */
     return step().then((any) => {
       UP.solveParts.finish(state);
-      if (isCurrent() && state.answer && UP.solveParts.have(state) >= 3) { S.aiAnswer = state.answer; S.aiState = 'done'; paint(); return true; }
+      if (isCurrent() && state.answer && UP.solveParts.have(state) >= 1) {
+        state.answer.question = base.question;
+        state.answer.subjectRouting = base.subjectRouting;
+        if (UP.answerFormat) state.answer = UP.answerFormat.answer(state.answer);
+        S.aiAnswer = state.answer; S.aiState = 'done'; paint(); return true;
+      }
       return false;
     });
   }
@@ -2027,6 +2045,24 @@ window.UP = window.UP || {};
       paint();
       return;
     }
+    /* A matrix equation solved here is answered here. The entries are exact
+       fractions and the drawing is built from the grid that was actually
+       solved, so sending it to a model could only lose that: the model cannot
+       see the matrices, and a misreading of the grid used to become the
+       picture. This is also the cheapest and fastest answer we can give. */
+    if (matrixSolved) {
+      let local = null;
+      try { local = UP.matrices.answerFor(matrixSolved, S.lang); } catch (_) { local = null; }
+      if (local) {
+        S.aiState = 'local'; S.aiRetry = false;
+        S.aiAnswer = local;
+        S.answer = local;
+        paint();
+        bumpProgress(S.subject);
+        pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
+        return;
+      }
+    }
     const matches=(UP.pyq||[]).filter(row=>qInScope(row)&&pyqQuestionText(row)===q);
     const mappedChapters=[...new Set(matches.map(row=>String(row.ch)).filter(Boolean))];
     const chapterContext=hindi12Track() ? catalogue().find(c=>q.startsWith(c.book + ' · ' + c.hi)) || chapterById(S.chapterId) : mappedChapters.length===1?chapterById(mappedChapters[0]):chapterById(S.chapterId);
@@ -2034,12 +2070,73 @@ window.UP = window.UP || {};
     if(languageContext){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'language-context',question:q,...languageContext};paint();return;}
     const clarification=UP.squareInteger.clarification(q);
     if(clarification){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'question-clarification',question:q,...clarification};paint();return;}
+    /* charge-energy.js ships an exact, fully worked solution for the stated
+       like-charge rest-to-2d derivation, but nothing ever called it: the exact
+       solvers below are all gated on a maths subject, so a PHYSICS question
+       never reached one and the card said no local solver was available. The
+       module matches the whole wording, so anything else falls through. */
+    if (UP.chargeEnergy && UP.chargeEnergy.solve) {
+      let charged = null;
+      try { charged = UP.chargeEnergy.solve(q.replace(/[\u2019\u2018]/g, "'"), responseLang); } catch (_) { charged = null; }
+      if (charged && Array.isArray(charged.approaches) && charged.approaches.length && charged.result) {
+        const text = v => (v && typeof v === 'object' && !Array.isArray(v)) ? P(v) : (v == null ? '' : String(v));
+        const local = Object.assign({}, charged, {
+          question: q, subjectRouting: routing,
+          result: text(charged.result), summary: text(charged.summary),
+          verify: text(charged.verify),
+          approaches: charged.approaches.map(ap => ({
+            name: text(ap && ap.name),
+            steps: ((ap && ap.steps) || []).map(st => Object.assign({}, st, {
+              t: text(st && st.t), m: text(st && st.m), note: text(st && st.note)
+            }))
+          }))
+        });
+        S.aiState = 'local'; S.aiRetry = false;
+        S.aiAnswer = local; S.answer = local;
+        paint(); bumpProgress(S.subject);
+        pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
+        return;
+      }
+    }
     const goLocal = (note, showRetry) => {
       if (!isCurrent()) return;
       S.aiState = 'local';
       S.aiNote = note || '';
       S.aiRetry = !!showRetry;
       if (!S.answer || S.answer.kind === 'ai-waiting' || needsAIOnly() || routing.task === 'writing' || !['maths','applied-maths'].includes(routing.subject)) {
+        /* Before telling the student nothing is available, ask the built-in
+           solver. It used to be consulted only from the past-year-question
+           panel, so with the provider down a question the app can answer
+           exactly was reported as unsolved. A 'not-attempted' refusal is not
+           an answer and is ignored. */
+        let solved = null;
+        if (!needsAIOnly() && routing.task !== 'writing' && ['maths','applied-maths'].includes(routing.subject) && UP.answerQuestion) {
+          try { solved = UP.answerQuestion(q); } catch (_) { solved = null; }
+        }
+        if (solved && solved.kind && solved.kind !== 'not-attempted' &&
+            Array.isArray(solved.approaches) && solved.approaches.length && solved.result) {
+          /* The solver is bilingual ({en, hi} fields); the card reads plain
+             strings, and passing the objects through printed [object Object]. */
+          const text = v => (v && typeof v === 'object' && !Array.isArray(v)) ? P(v) : (v == null ? '' : String(v));
+          const local = Object.assign({}, solved, {
+            source: 'exact', question: q, subjectRouting: routing,
+            result: text(solved.result),
+            summary: text(solved.summary),
+            title: text(solved.title),
+            verify: text(solved.verify),
+            approaches: (solved.approaches || []).map(ap => ({
+              name: text(ap && ap.name),
+              steps: ((ap && ap.steps) || []).map(st => Object.assign({}, st, {
+                t: text(st && st.t), m: text(st && st.m), note: text(st && st.note)
+              }))
+            }))
+          });
+          S.aiAnswer = local;
+          S.answer = local;
+          paint();
+          bumpProgress(S.subject);
+          return;
+        }
         S.aiAnswer = null;
         S.answer = { kind: isAccountancyTrack() ? 'accountancy-unavailable' : 'no-local-solver', question: q,
           note: /built-in solver|बिल्ट-इन हल/.test(note || '') ? '' : (note || '') };
@@ -2712,6 +2809,17 @@ window.UP = window.UP || {};
       '<div class="sol-steps"><p>' + rich(qq.twist || '') + '</p></div>';
     sol.innerHTML = '<div class="sol-loading">' + loadingDots() + '</div>' + stored;
 
+    /* A explanation saved earlier is shown without another provider call, and
+       says so. Its own `source` field is not trusted to prove it was an exact
+       calculation: a stored reply could claim that and be promoted above the
+       key. Anything that came out of storage is a SAVED AI explanation. */
+    const saved = UP.answers && UP.answers.get
+      ? (() => { try { return UP.answers.get(id); } catch (_) { return null; } })() : null;
+    if (saved && hasPyqApproaches(saved)) {
+      renderPyqExplanation(saved, qq, sol, 'cached');
+      return;
+    }
+
     const choices = pyqOptions(qq);
     fetch('/api/ai/solve', {
       method: 'POST',
@@ -2766,6 +2874,19 @@ window.UP = window.UP || {};
         return;
       }
       renderPyqExplanation(j, qq, sol, 'ai');
+      /* Keep what the provider just charged for. Without this, collapsing and
+         reopening a card sent the same question again, so a student who merely
+         looked twice paid twice -- and a later failure left the bare
+         "Step-by-step solution" heading on screen. Stored replies are always
+         replayed as SAVED AI explanations (see revealPyq), never as an exact
+         calculation, whatever `source` the reply carries. */
+      if (UP.answers && UP.answers.set) {
+        try {
+          const keep = Object.assign({}, j);
+          if (keep.source === 'exact') delete keep.source;
+          UP.answers.set(id, keep);
+        } catch (_) {}
+      }
 
     }).catch(function (err) {
       /* never leave the spinner running: say what happened */
@@ -4812,6 +4933,42 @@ window.UP = window.UP || {};
       : 'Before writing an answer in an exam, match it to your textbook’s method — board marking schemes are built on the textbook method.'}</div></div>`;
   }
 
+  /* ============================== STUDY CHAT ==============================
+     There is no separate science-tutor section any more. The one
+     ask-a-question screen is the Study chat (the React app at /app#/chat): it
+     answers for every subject from the stored answer key first, then the book's
+     own key, and only then the local model. Old #/tutor links are forwarded
+     there so a bookmark or a chapter deep-link is never a dead end. */
+  function viewStudyChatForward(params) {
+    const q = params && params.q ? String(params.q).slice(0, 800) : '';
+    const hash = '#/chat' + (q ? '?q=' + encodeURIComponent(q) : '');
+    /* The Study chat is a signed-in screen: it answers from the student's own
+       class and subject, which it takes from the account rather than the URL.
+       A guest therefore gets the sign-in page, not a bounced chat. Say that
+       plainly instead of sending them somewhere that will ask for a password
+       without explanation. */
+    const signedIn = !!(S && S.user);
+    setTimeout(() => {
+      if (navigator.userAgent && /jsdom/i.test(navigator.userAgent)) return;
+      try { location.replace('/app' + hash); } catch (_) {}
+    }, 0);
+    const title = S.lang === 'hi' ? 'अध्ययन चैट' : 'Study chat';
+    const line = signedIn
+      ? (S.lang === 'hi'
+        ? 'प्रश्न अब अध्ययन चैट में पूछे जाते हैं — किताब के अपने उत्तर से।'
+        : 'Questions are answered in the Study chat now, from the book\'s own answer key.')
+      : (S.lang === 'hi'
+        ? 'अध्ययन चैट में प्रवेश करने के लिए साइन इन करें; वह आपकी कक्षा और विषय अपने आप चुनती है।'
+        : 'Sign in to use the Study chat; it reads your class and subject from your account.');
+    const button = signedIn
+      ? (S.lang === 'hi' ? 'चैट खोलें' : 'Open the chat')
+      : (S.lang === 'hi' ? 'साइन इन करें' : 'Sign in');
+    const href = signedIn ? '/app' + hash : '/app';
+    return `<section class="page-head"><h1>${title}</h1></section>
+      <div class="callout"><div>${line}</div>
+        <p><a class="btn btn-primary btn-sm" href="${href}" data-app>${button}</a></p></div>`;
+  }
+
   /* ================================ ROUTER ================================ */
   function parseHash() { return UP.hashRoute.parse(location.hash); }
 
@@ -4861,6 +5018,17 @@ window.UP = window.UP || {};
       UP.loadClass12().then(function () { render(); });
     }
     if (hindi12Track() && !UP.loaded.packs[S.subject]) UP.loadPack(S.subject).then(() => render());
+    // A shared deep link (?sub=) can land on a subject whose pack was never
+    // fetched in this session. Load it once, then repaint with the data.
+    /* Resolve the subject to the pack that actually carries its data. Asking
+       for a pack named after the subject left Applied Maths (whose chapters
+       ship in the class12 pack) permanently "not loaded", and the repaint
+       below re-entered render() forever -- a frozen tab from a deep link. */
+    const wantedPack = UP.packFor && UP.loaded && UP.loadPack ? UP.packFor(S.subject) : null;
+    if (r.params.sub && wantedPack && S.subject === r.params.sub && !UP.loaded.packs[wantedPack]) {
+      const wanted = S.subject;
+      UP.loadPack(wantedPack).then(() => { if (S.subject === wanted) render(); });
+    }
     syncStudyScope();
     renderShell(); renderTopbar(); renderFooter();
 
@@ -4888,6 +5056,11 @@ window.UP = window.UP || {};
            If the PYQ already carries three pre-baked approaches (approach-enrich.js),
            surface them immediately as the starter answer. */
         const scope = aiScope();
+        /* `?refresh=1` means "answer this again". Without honouring it the
+           route only compared the question text, saw no change, and left
+           whatever was on screen -- including a stale answer -- in place. */
+        const forceRefresh = !!r.params.refresh;
+        if (forceRefresh) { S.aiQuestion = null; S.aiAnswer = null; }
         if (S.aiQuestion !== q || S.aiScope !== scope) {
           let ans;
           // Try to find the underlying PYQ object to get its .approaches
@@ -4959,6 +5132,11 @@ window.UP = window.UP || {};
     else if (r.name === 'mockresult') { html = viewMockResult(); }
     else if (r.name === 'cheatsheet') html = viewCheatsheet({ch:r.id});
     else if (r.name === 'search') html = viewSearch(r.params);
+    /* The separate science-tutor section is gone: there is one ask-a-question
+       flow now, the Study chat, and it answers for every subject from the same
+       stored key. Old links (with a chapter, from a chapter page) still work
+       and land in that chat with the chapter as context. */
+    else if (r.name === 'tutor') html = viewStudyChatForward(r.params);
     else html = viewHome();
 
     main.innerHTML = html;
@@ -4971,7 +5149,7 @@ window.UP = window.UP || {};
       a.classList.toggle('active', on);
       if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
-    document.title = 'Kritin Upaay · ' + ({ home: 'Home', ask: 'Ask', today: 'Today', syllabus: 'Syllabus', chapter: (chapterById(r.id) ? P({ en: chapterById(r.id).en, hi: chapterById(r.id).hi }) : 'Chapter'), boards: 'Boards', books: 'Books', saved: 'Saved', about: 'About', parent: 'Parent', apikey: 'API key', admin: 'Admin', login: 'Sign in', account: 'Account', mistakes: 'Mistakes', mock: 'Mock test', mockresult: 'Result', cheatsheet: 'Cheatsheet', search: 'Search' }[r.name] || 'Home');
+    document.title = 'Kritin Upaay · ' + ({ home: 'Home', ask: 'Ask', today: 'Today', tutor: 'Science tutor', syllabus: 'Syllabus', chapter: (chapterById(r.id) ? P({ en: chapterById(r.id).en, hi: chapterById(r.id).hi }) : 'Chapter'), boards: 'Boards', books: 'Books', saved: 'Saved', about: 'About', parent: 'Parent', apikey: 'API key', admin: 'Admin', login: 'Sign in', account: 'Account', mistakes: 'Mistakes', mock: 'Mock test', mockresult: 'Result', cheatsheet: 'Cheatsheet', search: 'Search' }[r.name] || 'Home');
     // auto-size hero textarea
     const ta = main.querySelector('textarea[name="q"]');
     if (ta) {
@@ -5411,6 +5589,9 @@ window.UP = window.UP || {};
       <p class="lead">${S.lang === 'hi'
         ? 'यह पाठ NCERT की पुस्तक से सीधे लिया गया है — वही धाराएँ, वही चित्र, वही अभ्यास प्रश्न।'
         : 'Read straight from the NCERT textbook — the same sections, the same printed diagrams, the same exercise questions.'}</p>
+      <div class="pactions" style="margin-top:12px">
+        <a class="btn btn-primary btn-sm" href="/app#/chat?ch=${encodeURIComponent(ch.id)}" data-app>${icon('atom')} ${S.lang === 'hi' ? 'इस अध्याय पर पूछें' : 'Ask about this chapter'}</a>
+      </div>
       <div class="paper-meta">
         <span class="tag">${(ch.sections || []).length} ${S.lang === 'hi' ? 'धाराएँ' : 'sections'}</span>
         <span class="tag">${(ch.figures || []).length} ${S.lang === 'hi' ? 'चित्र' : 'diagrams'}</span>

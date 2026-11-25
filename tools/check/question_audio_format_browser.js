@@ -3,6 +3,12 @@ const assert=require('node:assert/strict');
 const {chromium}=require('playwright');
 (async()=>{
  const browser=await chromium.launch({headless:true,args:['--no-sandbox'],...(process.env.UPAY_CHROMIUM?{executablePath:process.env.UPAY_CHROMIUM}:{})});
+ /* A browser check whose page never reaches the state it waits for must end
+    in a named failure. Without this, one unbounded waitForFunction kept the
+    whole workflow job alive until GitHub's six-hour ceiling, and the report
+    named no check at all. */
+ const watchdog=setTimeout(()=>{console.error('TIMEOUT: '+require('node:path').basename(__filename)+' did not finish within '+(+process.env.UPAY_CHECK_TIMEOUT||300)+'s; it hung waiting for a page state.');process.exit(124);},(+process.env.UPAY_CHECK_TIMEOUT||300)*1000);
+ watchdog.unref();
  try {
   for(const width of [1280,390]){
    const context=await browser.newContext({viewport:{width,height:844},serviceWorkers:'block'}),page=await context.newPage(),errors=[];
@@ -48,7 +54,14 @@ const {chromium}=require('playwright');
    assert.equal(await listen.getAttribute('aria-pressed'),'false');
    speech=await page.evaluate(()=>__speech.calls.map(u=>u.text));
    assert(speech.length>3 && speech.every(t=>t.length<=220));
-   assert(speech.join(' ').includes('Kₘₐₓ = hν - Φ₀'));
+   /* Speech is the expanded form, deliberately: mathSpeech spells glyphs out so
+      a voice never reads "h backslash nu" or drops a bare "=" into silence.
+      What must hold is that the formula survives in spoken words - the symbols
+      are named and the values are intact - and that no TeX command leaks. */
+   const spoken=speech.join(' ');
+   assert(/Kₘₐₓ\s+equals\s+hν\s+minus\s+Φ₀/.test(spoken),
+     'the formula is spoken with its symbols named: ' + spoken.slice(0, 300));
+   assert(!/backslash|\bnu\b.*text|open brace|Phi_0|_\{/.test(spoken), 'no TeX syntax is read aloud: ' + spoken.slice(0, 300));
    await listen.click();await listen.click();assert.equal(await listen.getAttribute('aria-pressed'),'false');
    await listen.click();await page.evaluate(()=>__speech.calls.at(-1).onerror({error:'voice-unavailable'}));
    assert.equal(await listen.getAttribute('aria-pressed'),'false');

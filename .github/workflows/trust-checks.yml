@@ -18,7 +18,9 @@ jobs:
           python-version: '3.11'
       - run: npm ci
       - run: npm run build:web
-      - run: node tools/check/react_preview.js
+      - run: node tools/check/react_app.js
+      - run: node tools/check/legacy_app.js
+      - run: node tools/check/answer_bank.js
       - run: node tools/check/hash_route.js
       - run: node tools/check/production_route_baseline.js
       - run: node tools/check/ai_provider.js
@@ -55,7 +57,10 @@ jobs:
       - run: node tools/check/hindi_practice_papers.js
       - run: node tools/check/question_language_and_ai_checks.js
       - run: node tools/check/ai_access.js
+      - run: node tools/check/model_gateway.js
       - run: node tools/check/security_posture.js
+      - run: node tools/science-index/build_science_index.js --check
+      - run: node tools/check/science_tutor.js
       - run: python3 tools/check/backend_smoke.py
   browser:
     runs-on: ubuntu-latest
@@ -72,6 +77,11 @@ jobs:
       # The matching image already contains Chromium and OS dependencies.
       # Avoid the failing runtime browser/apt installation step.
       - name: Physics and security browser checks
+        # A hung check used to consume the job's whole six-hour default and
+        # report only "exceeded the maximum execution time", naming no check.
+        # The individual checks now have their own ceiling; this one bounds the
+        # step as a whole so a stuck browser cannot hide the rest.
+        timeout-minutes: 60
         run: |
           HOST=0.0.0.0 PORT=8004 node server.js > /tmp/upay-test-server.log 2>&1 &
           SERVER_PID=$!
@@ -88,6 +98,7 @@ jobs:
               raise SystemExit('Server did not start')
           PY
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/ai_diagram_browser.js
+          NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/science_tutor_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/worked_figure_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/question_audio_format_browser.js
           NODE_PATH=/tmp/upay-diagram-check/node_modules UPAY_BASE=http://127.0.0.1:8004 python3 tools/check/run_ci_check.py node tools/check/prime_power_browser.js

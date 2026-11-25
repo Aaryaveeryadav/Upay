@@ -1,5 +1,14 @@
 # Class 10 Science AI experiments
 
+> **Integrated with the web app.** The retrieval + Ollama tutor below now runs
+> inside Upay as the **Science tutor** page (`#/tutor`) and `POST /api/science/ask`.
+> The web version indexes the app's reviewed textbook/PYQ data instead of local
+> PDFs (`node tools/science-index/build_science_index.js`), shares
+> `lib/science-rag.js` with the local server and returns cited NCERT/PYQ sources
+> in the chat UI (`assets/js/science-tutor.js`). Contract, configuration and
+> limits: `docs/science-tutor.md`. The scripts here remain the reference
+> implementation and the full-PDF experiment; they are unchanged.
+
 Two **local-only research prototypes**, separate from the Upay website. Neither is ready for students or is a replacement for the existing Gemini integration. No school accounts, authorization, domain enforcement, or production safeguards are implemented. Outputs can be incorrect; teacher review is essential. Do not use student or private school data here.
 
 ## Setup on your laptop (Windows / Linux)

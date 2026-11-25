@@ -8,6 +8,14 @@
     "api/ai/solve.js": {
       "maxDuration": 180
     },
+    "api/chat/ask.js": {
+      "maxDuration": 120,
+      "includeFiles": "{assets/science/science-index.json,tools/answers/answers.json}"
+    },
+    "api/science/ask.js": {
+      "maxDuration": 120,
+      "includeFiles": "{assets/science/science-index.json,tools/answers/answers.json}"
+    },
     "api/**/*.js": {
       "maxDuration": 60
     }
@@ -86,7 +94,15 @@
       "caseSensitive": true
     },
     {
+      "src": "^/app/?$",
+      "dest": "/assets/app/index.html"
+    },
+    {
       "handle": "filesystem"
+    },
+    {
+      "src": "^/api/(.*)$",
+      "dest": "/api/[...path]"
     }
   ]
 }

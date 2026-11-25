@@ -679,6 +679,32 @@
     };
   }
 
+  /* "Prove that √n is irrational" is asked as a proof, but the one drawing
+     that helps is the classical construction: √n is the hypotenuse of a
+     right triangle with legs 2 and 1 for n = 5, marked on the number line.
+     It is drawn from the radicand in the question and nothing else. */
+  function surdIrrational(text) {
+    const t = normalise(text);
+    if (!/irrational|अपरिमेय/i.test(t)) return null;
+    if (!/\bsquare root|\bsurd|√|वर्गमूल/i.test(t)) return null;
+    const m = t.match(/√\s*(\d{1,4})/) || t.match(/(?:square\s*root|वर्गमूल)\s*(?:of\s*)?(\d{1,4})/i);
+    const n = m ? Number(m[1]) : (() => {
+      /* "prove that the square root of 5 is irrational" spells it out */
+      const w = t.match(/(\d{1,4})\s*is\s+irrational/i);
+      return w ? Number(w[1]) : null;
+    })();
+    if (!n || !Number.isInteger(n) || n < 2 || n > 9999) return null;
+    if (Number.isInteger(Math.sqrt(n))) return null;   /* a perfect square is not irrational */
+    return {
+      type: 'irrational', verified: true, n,
+      computed: { n, root: Math.sqrt(n) },
+      answer: ['√' + n + ' ≈ ' + decimal(Math.sqrt(n), 3)],
+      checkText: ['√' + n, '√' + n + ' ≈', decimal(Math.sqrt(n), 3)],
+      caption: '√' + n + ' is the hypotenuse of a right triangle with legs 2 and 1, so the length can be marked on the number line exactly — ' +
+               'no fraction with whole-number numerator and denominator can equal it.'
+    };
+  }
+
   function forQuestion(question) {
     const text = normalise(question);
     if (!text || text.length > 900) return null;
@@ -689,6 +715,7 @@
     if (!spec) { try { spec = coordinatePoints(text); } catch (_) { spec = null; } }
     if (!spec) { try { spec = opticsRay(text); } catch (_) { spec = null; } }
     if (!spec) { try { spec = orbitMotion(text); } catch (_) { spec = null; } }
+    if (!spec) { try { spec = surdIrrational(text); } catch (_) { spec = null; } }
     return spec && spec.answer && spec.answer.length ? spec : null;
   }
 
@@ -697,7 +724,7 @@
     withUnitExactFirst: withUnitExactFirst,
     heightsAndDistances: heightsAndDistances, resistorNetwork: resistorNetwork,
     mensurationSolid: mensurationSolid, coordinatePoints: coordinatePoints, opticsRay: opticsRay,
-    computeNetwork: computeNetwork, orbitMotion: orbitMotion, forQuestion: forQuestion
+    computeNetwork: computeNetwork, orbitMotion: orbitMotion, surdIrrational: surdIrrational, forQuestion: forQuestion
   };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.UP = root.UP || {};
