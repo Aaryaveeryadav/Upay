@@ -2894,6 +2894,32 @@ window.UP = window.UP || {};
        says so. Its own `source` field is not trusted to prove it was an exact
        calculation: a stored reply could claim that and be promoted above the
        key. Anything that came out of storage is a SAVED AI explanation. */
+    /* A question the solver can prove is answered from it, before any saved
+       draft is shown. A saved explanation is whatever the model said last
+       time; when the app can verify the question itself, an old draft must not
+       outrank the calculation. This is the same rule the answer card uses, and
+       it is why a stored 'n = 191' can no longer be revealed here. */
+    const proven = (() => {
+      if (!['maths','applied-maths'].includes(S.subject) || !UP.answerQuestion) return null;
+      let r = null;
+      try { r = UP.answerQuestion(pyqQuestionText(qq)); } catch (_) { r = null; }
+      return r && r.source === 'exact' && r.result && Array.isArray(r.approaches) && r.approaches.length ? r : null;
+    })();
+    if (proven) {
+      const text = v => (v && typeof v === 'object' && !Array.isArray(v)) ? P(v) : (v == null ? '' : String(v));
+      renderPyqExplanation(Object.assign({}, proven, {
+        answer: text(proven.result), result: text(proven.result),
+        summary: text(proven.summary), verify: text(proven.verify),
+        approaches: (proven.approaches || []).map(ap => ({
+          name: text(ap && ap.name),
+          steps: ((ap && ap.steps) || []).map(st => Object.assign({}, st, {
+            t: text(st && st.t), m: text(st && st.m), note: text(st && st.note)
+          }))
+        }))
+      }), qq, sol, 'exact');
+      return;
+    }
+
     const saved = UP.answers && UP.answers.get
       ? (() => { try { return UP.answers.get(id); } catch (_) { return null; } })() : null;
     if (saved && hasPyqApproaches(saved)) {
