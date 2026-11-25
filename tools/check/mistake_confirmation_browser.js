@@ -17,7 +17,16 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
   await page.evaluate(q=>{UP.S.subject='maths';location.hash='#/ask?q='+encodeURIComponent(q);},typo);
   await page.locator('.question-clarification').waitFor();assert.equal(requests.length,0);
   await page.locator('.question-clarification a').click();
-  await page.waitForFunction(()=>UP.S.aiAnswer&&UP.S.aiAnswer.source==='exact');
+  /* The corrected question has an exact answer, and the check used to demand
+     it arrive from the local solver (source === 'exact'). That is an internal
+     detail, not the contract, and it pinned the app to one code path: the
+     solver-first ordering was deliberately reverted in a69536e because it
+     stops the model's numbers ever being compared with the calculated ones,
+     which is what raises the mismatch warning. What matters to the student is
+     that confirming the corrected question yields the right four answers, and
+     that the question never silently changes. Both are asserted below, so the
+     check keeps its teeth without dictating where the answer comes from. */
+  await page.waitForFunction(()=>UP.S.aiAnswer&&String(UP.S.aiAnswer.result||'').length>0, null, {timeout: 20000});
   assert.equal(await page.evaluate(()=>UP.S.aiAnswer.result),'n = 15, 27, 327, 995');assert.equal(requests.length,0);
   await page.evaluate(()=>{
    UP.S.mockTest={scope:'cbse|10|maths',subject:'maths',started:Date.now(),items:[{q:'What is one plus one?',ch:1,source:{m:1,keyVerified:true,ans:'2'}}],answers:{},submitted:{},finished:false};location.hash='#/mock';
