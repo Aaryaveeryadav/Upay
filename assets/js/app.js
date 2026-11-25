@@ -2157,6 +2157,43 @@ window.UP = window.UP || {};
         m.insertBefore(d, m.firstChild);
       }
     };
+    /* A rigorously exact answer is shown without asking the model at all.
+       Only the solver families that verify themselves are taken here: they
+       mark the result source:'exact' after checking every value against the
+       question (the integer-square and integer-radical-sum solvers). The
+       templated families -- heights, optics, topic cards -- are deliberately
+       NOT taken: they can be wrong (a 10 m ladder at 60 degrees has height
+       10*sin60 = 8.66, not 10*tan60), and for those the model's prose is still
+       compared against the computed drawing so a disagreement is flagged. A
+       student must never be shown a wrong number the app could have computed
+       correctly, and must never silently lose that warning either. */
+    if (!needsAIOnly() && routing.task !== 'writing' &&
+        ['maths','applied-maths'].includes(routing.subject) && UP.answerQuestion) {
+      let solved = null;
+      try { solved = UP.answerQuestion(q); } catch (_) { solved = null; }
+      if (solved && solved.source === 'exact' && solved.result &&
+          Array.isArray(solved.approaches) && solved.approaches.length) {
+        const text = v => (v && typeof v === 'object' && !Array.isArray(v)) ? P(v) : (v == null ? '' : String(v));
+        const local = Object.assign({}, solved, {
+          question: q, subjectRouting: routing,
+          result: text(solved.result),
+          summary: text(solved.summary),
+          title: text(solved.title),
+          verify: text(solved.verify),
+          approaches: (solved.approaches || []).map(ap => ({
+            name: text(ap && ap.name),
+            steps: ((ap && ap.steps) || []).map(st => Object.assign({}, st, {
+              t: text(st && st.t), m: text(st && st.m), note: text(st && st.note)
+            }))
+          }))
+        });
+        S.aiState = 'local'; S.aiRetry = false; S.aiNote = '';
+        S.aiAnswer = local; S.answer = local;
+        paint(); bumpProgress(S.subject);
+        pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
+        return;
+      }
+    }
     if (routing.subject === 'business-studies') { goLocal('Business Studies AI is not enabled; use the supplied outlines.', false); return; }
     // "taking a moment" nudge — after 6s swap the spinner text
     let slowTimer = setTimeout(() => {
