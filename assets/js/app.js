@@ -5048,6 +5048,11 @@ window.UP = window.UP || {};
            If the PYQ already carries three pre-baked approaches (approach-enrich.js),
            surface them immediately as the starter answer. */
         const scope = aiScope();
+        /* `?refresh=1` means "answer this again". Without honouring it the
+           route only compared the question text, saw no change, and left
+           whatever was on screen -- including a stale answer -- in place. */
+        const forceRefresh = !!r.params.refresh;
+        if (forceRefresh) { S.aiQuestion = null; S.aiAnswer = null; }
         if (S.aiQuestion !== q || S.aiScope !== scope) {
           let ans;
           // Try to find the underlying PYQ object to get its .approaches
