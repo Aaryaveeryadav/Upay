@@ -2067,6 +2067,34 @@ window.UP = window.UP || {};
     if(languageContext){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'language-context',question:q,...languageContext};paint();return;}
     const clarification=UP.squareInteger.clarification(q);
     if(clarification){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'question-clarification',question:q,...clarification};paint();return;}
+    /* charge-energy.js ships an exact, fully worked solution for the stated
+       like-charge rest-to-2d derivation, but nothing ever called it: the exact
+       solvers below are all gated on a maths subject, so a PHYSICS question
+       never reached one and the card said no local solver was available. The
+       module matches the whole wording, so anything else falls through. */
+    if (UP.chargeEnergy && UP.chargeEnergy.solve) {
+      let charged = null;
+      try { charged = UP.chargeEnergy.solve(q.replace(/[\u2019\u2018]/g, "'"), responseLang); } catch (_) { charged = null; }
+      if (charged && Array.isArray(charged.approaches) && charged.approaches.length && charged.result) {
+        const text = v => (v && typeof v === 'object' && !Array.isArray(v)) ? P(v) : (v == null ? '' : String(v));
+        const local = Object.assign({}, charged, {
+          question: q, subjectRouting: routing,
+          result: text(charged.result), summary: text(charged.summary),
+          verify: text(charged.verify),
+          approaches: charged.approaches.map(ap => ({
+            name: text(ap && ap.name),
+            steps: ((ap && ap.steps) || []).map(st => Object.assign({}, st, {
+              t: text(st && st.t), m: text(st && st.m), note: text(st && st.note)
+            }))
+          }))
+        });
+        S.aiState = 'local'; S.aiRetry = false;
+        S.aiAnswer = local; S.answer = local;
+        paint(); bumpProgress(S.subject);
+        pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
+        return;
+      }
+    }
     const goLocal = (note, showRetry) => {
       if (!isCurrent()) return;
       S.aiState = 'local';
