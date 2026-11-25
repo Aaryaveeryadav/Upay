@@ -2778,6 +2778,17 @@ window.UP = window.UP || {};
       '<div class="sol-steps"><p>' + rich(qq.twist || '') + '</p></div>';
     sol.innerHTML = '<div class="sol-loading">' + loadingDots() + '</div>' + stored;
 
+    /* A explanation saved earlier is shown without another provider call, and
+       says so. Its own `source` field is not trusted to prove it was an exact
+       calculation: a stored reply could claim that and be promoted above the
+       key. Anything that came out of storage is a SAVED AI explanation. */
+    const saved = !sourceTrack && UP.answers && UP.answers.get
+      ? (() => { try { return UP.answers.get(id); } catch (_) { return null; } })() : null;
+    if (saved && hasPyqApproaches(saved)) {
+      renderPyqExplanation(saved, qq, sol, 'cached');
+      return;
+    }
+
     const choices = pyqOptions(qq);
     fetch('/api/ai/solve', {
       method: 'POST',
