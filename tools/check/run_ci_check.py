@@ -51,6 +51,12 @@ def main():
         if not key:
             key = [ln for ln in lines if not ln.startswith('at ')][-3:]
         summary = ' | '.join(key)
+        # A check that hangs prints where it got to; without this the report
+        # only says the file did not finish.
+        phases = [ln for ln in lines if ln.startswith('PHASE ')]
+        timed_out = any('Timed out after' in ln for ln in lines)
+        if timed_out and phases:
+            summary = 'reached: ' + phases[-1] + ' | ' + summary
         # Node prints the assertion message on the lines *after* the header for
         # `assert(cond)` without a message, and on the header itself when there
         # is one. Without it the annotation says only "evaluated to a falsy

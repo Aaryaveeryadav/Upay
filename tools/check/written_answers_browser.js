@@ -45,6 +45,11 @@ async function checkSubjectCoverage(page) {
   console.log('PASS first page of every selectable CBSE class/subject and Rajasthan Maths; populated:', populated.join(', '));
 }
 
+/* Named progress: a stall in this check used to report only that the whole
+   file timed out. Each phase now says which step it reached, so the next
+   failure names a step instead of the file. */
+const phase = (name) => console.log('PHASE ' + name);
+
 async function checkPage(browser, width) {
   const ctx = await browser.newContext({ viewport: { width, height: 844 }, serviceWorkers: 'block' });
   const page = await ctx.newPage(), errors = [], requests = [];
@@ -57,8 +62,12 @@ async function checkPage(browser, width) {
   let reply = { status: 401, json: { code: 'sign_in_required' } }, hold;
   await page.route('**/api/ai/check-answer', async route => {
     requests.push(route.request().postDataJSON());
+    /* Read the hold *now*: a later `hold = null` must not change what this
+       request already decided to wait for, and a released hold must not keep a
+       late request parked forever. */
+    const gate = hold;
     const response = reply;
-    if (hold) await hold;
+    if (gate) await gate;
     await route.fulfill(response);
   });
   const go = hash => page.evaluate(async h => {
@@ -67,7 +76,9 @@ async function checkPage(browser, width) {
     location.hash = h; await rendered;
   }, hash);
   try {
+    phase('1 goto pyq');
     await page.goto(BASE + '/#/pyq?ch=1', { waitUntil: 'networkidle' });
+    phase('1 loaded');
     const mcq = page.locator('#sci10-01-q03'), written = page.locator('#sci10-01-q04');
     const input = written.getByRole('textbox', { name: 'Your answer', exact: true });
     const check = written.getByRole('button', { name: 'Check with AI', exact: true });
@@ -81,6 +92,7 @@ async function checkPage(browser, width) {
     await mcq.locator('[data-pick]').first().click();
     assert.match(await mcq.locator('.pyq-verdict').innerText(), /Correct/);
     assert(await check.isEnabled());
+    phase('2 empty answer');
     await check.click(); assert.match(await feedback.innerText(), /Write your answer first/);
     await input.fill('  '); assert(await check.isEnabled());
     const draft = '\nEach element has the same atom count on both sides.\nMass is conserved. <my notes>';
@@ -88,16 +100,19 @@ async function checkPage(browser, width) {
     assert(await check.isEnabled());
     assert.equal(await page.locator('#sci10-01-q05 textarea').inputValue(), '');
     assert.equal(requests.length, 0, 'typing must not send anything to AI');
+    phase('3 reload keeps draft');
     await page.reload({ waitUntil: 'domcontentloaded' });
     assert.equal(await input.inputValue(), draft);
     const rect = await input.boundingBox();
     assert(rect.width > 180 && rect.x + rect.width <= width, 'editor fits the viewport');
 
     // The same exercise in the chapter reader uses the same draft, not its list index.
+    phase('4 chapter reader');
     await go('#/chapter/1');
     const chapterInput = page.locator('.sci-q').filter({ hasText: 'What is a balanced chemical equation?' }).getByRole('textbox');
     assert.equal(await chapterInput.inputValue(), draft);
     await go('#/pyq?ch=1');
+    phase('5 sign-in feedback');
     await check.click(); await feedback.filter({ hasText: 'Sign in' }).waitFor();
     assert.equal(await input.inputValue(), draft, 'failed check must leave an editable answer');
     assert.equal(requests[0].studentAnswer, draft.trim());
@@ -110,18 +125,25 @@ async function checkPage(browser, width) {
     assert.equal(await feedback.locator('reason').count(), 0);
     assert.match(await feedback.innerText(), /Not official/);
     // Edits invalidate both displayed feedback and any response still in flight.
+    phase('6 in-flight hold');
     let release; hold = new Promise(resolve => { release = resolve; });
-    await Promise.all([page.waitForRequest('**/api/ai/check-answer'), check.click()]);
+    /* Bounded: every one of these waits used to be able to sit forever, and a
+       browser check that never returns is worse than one that fails. */
+    const bounded = (p, what) => Promise.race([p, new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('timed out waiting for ' + what)), 20000))]);
+    await bounded(Promise.all([page.waitForRequest('**/api/ai/check-answer'), check.click()]), 'the held request');
     assert(await check.isDisabled());
     await input.fill('A revised explanation.');
-    const completed = page.waitForResponse('**/api/ai/check-answer'); release(); hold = null;
-    await (await completed).finished();
+    const completed = page.waitForResponse('**/api/ai/check-answer');
+    release(); hold = null;
+    await bounded((await completed).finished(), 'the released response');
     assert.equal(await feedback.innerText(), '');
     await page.locator('#topbar .lang-btn').click();
     assert.equal(await written.getByRole('textbox', { name: 'आपका उत्तर' }).inputValue(), 'A revised explanation.');
     await page.locator('#topbar .lang-btn').click();
 
     // A verified local session on the same browser must not inherit the guest draft.
+    phase('7 owner isolation');
     await page.route('**/api/auth/me', r => r.fulfill({ json: { user: { user: 'test-student', role: 'student' } } }));
     await page.evaluate(() => localStorage.setItem('upay.token', 'fixture-local-session'));
     await page.reload({ waitUntil: 'domcontentloaded' });
@@ -135,6 +157,7 @@ async function checkPage(browser, width) {
 
     // Another subject: a keyless open question may request practice feedback,
     // but an MCQ awaiting its options can only keep an ungraded draft.
+    phase('8 social science');
     await go('#/pyq');
     await page.locator('#topbar select[data-key="subject"]').selectOption('social');
     await page.waitForFunction(() => JSON.parse(localStorage.getItem('upay.subject')) === 'social'
@@ -153,7 +176,9 @@ async function checkPage(browser, width) {
     await incomplete.getByRole('textbox').fill('Ungraded notes.');
     assert.match(await incomplete.innerText(), /Options missing or suspect/);
     assert.equal(await incomplete.locator('[data-pick], [data-action="check-written"]').count(), 0);
+    phase('9 scope sweep');
     if (width === 1280) await checkSubjectCoverage(page);
+    phase('9 sweep done');
     assert.deepEqual(errors, []);
     console.log(`PASS ${width}px: Science MCQ and written answers, chapter/reload/owner isolation, Hindi, retry and stale feedback, Social Science, ungraded missing choices`);
   } finally { await ctx.close(); }
