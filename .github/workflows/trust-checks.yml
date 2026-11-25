@@ -77,6 +77,11 @@ jobs:
       # The matching image already contains Chromium and OS dependencies.
       # Avoid the failing runtime browser/apt installation step.
       - name: Physics and security browser checks
+        # A hung check used to consume the job's whole six-hour default and
+        # report only "exceeded the maximum execution time", naming no check.
+        # The individual checks now have their own ceiling; this one bounds the
+        # step as a whole so a stuck browser cannot hide the rest.
+        timeout-minutes: 60
         run: |
           HOST=0.0.0.0 PORT=8004 node server.js > /tmp/upay-test-server.log 2>&1 &
           SERVER_PID=$!

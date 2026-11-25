@@ -147,6 +147,12 @@ async function checkPage(browser, width) {
 
 (async () => {
   const browser = await chromium.launch({ args: ['--no-sandbox', '--disable-dev-shm-usage'], ...(process.env.UPAY_CHROMIUM ? { executablePath: process.env.UPAY_CHROMIUM } : {}) });
+ /* A browser check whose page never reaches the state it waits for must end
+    in a named failure. Without this, one unbounded waitForFunction kept the
+    whole workflow job alive until GitHub's six-hour ceiling, and the report
+    named no check at all. */
+ const watchdog=setTimeout(()=>{console.error('TIMEOUT: '+require('node:path').basename(__filename)+' did not finish within '+(+process.env.UPAY_CHECK_TIMEOUT||300)+'s; it hung waiting for a page state.');process.exit(124);},(+process.env.UPAY_CHECK_TIMEOUT||300)*1000);
+ watchdog.unref();
   try { for (const width of [1280, 390]) await checkPage(browser, width); }
   finally { await browser.close(); }
 })().catch(e => { console.error(e); process.exitCode = 1; });

@@ -5,6 +5,13 @@ const {PNG} = require('pngjs');
 (async()=>{
   const browser=await chromium.launch({headless:true,args:['--no-sandbox'],
     ...(process.env.UPAY_CHROMIUM?{executablePath:process.env.UPAY_CHROMIUM}:{})});
+  /* A browser check whose page never reaches the state it waits for must end
+     in a named failure. Without this, one unbounded waitForFunction kept the
+     whole workflow job alive until GitHub's six-hour ceiling, and the report
+     named no check at all. */
+  const watchdog=setTimeout(()=>{console.error('TIMEOUT: '+(process.env.UPAY_LABEL||'browser check')+' did not finish within '+(+process.env.UPAY_CHECK_TIMEOUT||300)+'s; it hung waiting for a page state.');process.exit(124);},(+process.env.UPAY_CHECK_TIMEOUT||300)*1000);
+ watchdog.unref();
+
   try {
     for (const width of [1170,390]) {
       const context=await browser.newContext({viewport:{width,height:900},serviceWorkers:'block'});
