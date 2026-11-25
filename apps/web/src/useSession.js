@@ -35,14 +35,6 @@ export function useSession() {
     return {result, me, home: result.home};
   }, []);
 
-  const signUp = useCallback(async (payload) => {
-    const result = await api.signup(payload);
-    saveSession({token: result.token});
-    const me = await api.me();
-    saveSession({token: result.token, person: me.person});
-    setState({status: 'ready', person: me.person, caps: me});
-    return {result, me, home: result.home};
-  }, []);
 
   const signOut = useCallback(async () => {
     await api.logout();
@@ -56,5 +48,5 @@ export function useSession() {
     return me;
   }, []);
 
-  return {...state, signIn, signUp, signOut, refresh};
+  return {...state, signIn, signOut, refresh};
 }

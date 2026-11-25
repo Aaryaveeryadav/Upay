@@ -111,7 +111,11 @@ async function group(name, fn) {
     const { dom, w, errors } = makeDom();
     await waitFor(() => w.document.body.textContent.includes('Welcome back'), 'the login form');
     const text = w.document.body.textContent;
-    assert(text.includes('Create account'), 'the same page offers signup');
+    /* One site, one account system. The guest must still be able to start
+       account creation from this page, but it now hands off to the legacy
+       site's Supabase login instead of offering a second form that could
+       never succeed on this deployment. */
+    assert(/Create your account/i.test(text), 'the same page points at account creation');
     assert(!text.includes('Study chat'), 'no app content before sign-in');
     assert.deepEqual(errors, []);
     dom.window.close();
