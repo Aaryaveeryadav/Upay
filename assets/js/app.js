@@ -34,7 +34,7 @@ window.UP = window.UP || {};
   S.board = store.getTyped('board', 'cbse', 'string');
   S.chapterId = null;
   S.answer = null;
-  S.aiAnswer = null; S.aiState = null; S.aiQuestion = null; S.aiScope = null; S.aiNote = ''; S.aiRetry = false;
+  S.aiAnswer = null; S.aiState = null; S.aiQuestion = null; S.aiScope = null; S.aiNote = ''; S.aiRetry = false; S.notices = undefined;
   S.photoState = null; S.photoNote = ''; S.photoPreview = null;
   S.savedKey = 'saved'; // legacy/guest list remains on this device
   S.saved = store.getTyped(S.savedKey, [], 'array');
@@ -2218,6 +2218,16 @@ window.UP = window.UP || {};
           pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
           bumpProgress(S.subject);
         } else {
+          /* The syllabus/safety gate refused this before the model ran. Show
+             the sentence it wrote, as its own card: telling a student "no
+             local solver" or "the AI did not return an answer" would hide the
+             one fact that matters -- that the question is not in the course. */
+          if (j && j.refused) {
+            S.aiState = 'local'; S.aiAnswer = null; S.aiRetry = false;
+            S.answer = { kind: 'refused', question: q, message: j.answer || '', severity: j.severity || 'none', code: j.refused };
+            paint();
+            return;
+          }
           if(j&&j.code==='language_context_required'){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'language-context',question:q,...j};paint();return;}
           if(j&&j.code==='question_needs_confirmation'){S.aiState='local';S.aiAnswer=null;S.aiRetry=false;S.answer={kind:'question-clarification',question:q,...j};paint();return;}
           S.aiErrorCode = j && j.code || '';
@@ -2838,6 +2848,16 @@ window.UP = window.UP || {};
         return { status: r.status, ok: r.ok, body: j };
       });
     }).then(function (reply) {
+      /* The syllabus gate answers with a refusal, not a solution. Show the
+         sentence the server wrote: "that is outside your Class 10 Science
+         course" is the useful thing here, and the generic "AI could not
+         produce a solution" would throw it away. */
+      if (reply.body && reply.body.refused) {
+        sol.innerHTML = '<div class="callout ' + (reply.body.severity === 'notice' ? 'tip' : 'warn') + '">' +
+          icon(reply.body.severity === 'notice' ? 'info' : 'warn') +
+          '<div>' + esc(reply.body.answer || 'This question was not answered.') + '</div></div>';
+        return;
+      }
       const j = UP.answerFormat.answer(reply.body);
       /* The loading line used to stay forever when the reply had no usable
          approaches, or when anything below threw. Both are silent failures for
@@ -2947,6 +2967,14 @@ window.UP = window.UP || {};
 
   function renderAnswer(ans) {
     if(ans.kind==='math-input-clarification') return `<div class="callout warn" role="status"><div><h3>${S.lang === 'hi' ? 'पहले प्रश्न जाँचें' : 'Check the question first'}</h3><p>${esc(ans.note)}</p><p>${S.lang === 'hi' ? 'ऊपर प्रश्न सुधारकर फिर भेजें। मूल पाठ बदला नहीं गया है।' : 'Edit the question above and submit again. The supplied text has not been guessed or solved.'}</p></div></div>`;
+    /* A question the syllabus or safety gate refused. The server wrote the
+       sentence, so it is shown as written; there is no retry button because
+       retrying the same out-of-course question cannot succeed. */
+    if(ans.kind==='refused')return `<div class="callout ${ans.severity === 'notice' ? 'tip' : 'warn'} refused-a11y" role="status">${icon(ans.severity === 'notice' ? 'info' : 'warn')}<div>
+      <h3 style="margin:0 0 6px">${S.lang === 'hi' ? 'यह प्रश्न उत्तर नहीं दिया गया' : 'This question was not answered'}</h3>
+      <p style="margin:0">${esc(ans.message || '')}</p>
+      ${ans.severity === 'notice' ? `<p style="margin:8px 0 0;font-size:12.5px;color:var(--ink-500)">${S.lang === 'hi' ? 'आपका अभिभावक सारांश में इसे देख सकते हैं।' : 'This is listed in the parent summary.'}</p>` : ''}
+    </div></div>`;
     if(ans.kind==='matrix-repair')return matrixRepairCard(ans);
     if(ans.kind==='matrix-singular')return `<div class="callout warn"><div>
       <h3>${S.lang === 'hi' ? 'A का व्युत्क्रम नहीं है' : 'A has no inverse'}</h3>
@@ -4874,7 +4902,41 @@ window.UP = window.UP || {};
       ${weakChs.length
         ? `<ul style="margin:10px 0 0;padding:0;list-style:none">${weakChs.slice(0,5).map(w=>`<li style="padding:8px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between"><span>${esc(P(w.c))}</span><b style="color:#c9530e">${w.pct}%</b></li>`).join('')}</ul>`
         : `<p class="muted" style="margin:8px 0 0">${S.lang==='hi'?'अभी कोई अध्याय कमज़ोर नहीं पहचाना गया।':'No weak chapters identified yet.'}</p>`}
+    </section>
+    ${parentNoticesCard()}`;
+  }
+
+  /* What a parent is told when a student searched outside their syllabus.
+     Deliberately narrow: only syllabus drift lands here. A safety block (a
+     student asking about self-harm, or for weapons) is recorded for the
+     operator and never shown to a parent as misconduct, because that would
+     punish a request for help. */
+  function parentNoticesCard() {
+    const notices = Array.isArray(S.notices) ? S.notices : null;
+    const head = S.lang === 'hi' ? 'पाठ्यक्रम से बाहर के प्रश्न' : 'Questions outside the syllabus';
+    if (notices === null) return `<section class="card cream flat" style="margin-top:14px"><div class="mini-label">${head}</div><p class="muted" style="margin:8px 0 0">${S.lang==='hi'?'लोड हो रहा है…':'Loading…'}</p></section>`;
+    if (!notices.length) return `<section class="card cream flat" style="margin-top:14px"><div class="mini-label">${head}</div><p class="muted" style="margin:8px 0 0">${S.lang==='hi'?'हाल में कोई पाठ्यक्रम-से-बाहर प्रश्न दर्ज नहीं हुआ।':'No out-of-syllabus questions have been recorded recently.'}</p></section>`;
+    return `<section class="card cream flat" style="margin-top:14px">
+      <div class="mini-label">${head}</div>
+      <p class="muted" style="margin:6px 0 10px;font-size:12.5px">${S.lang==='hi'
+        ? 'ये प्रश्न पाठ्यक्रम से बाहर थे। साइट ने मॉडल चलाने से पहले उत्तर देने से मना कर दिया, इसलिए कोई उत्तर नहीं बना।'
+        : 'These questions were outside the course. The site refused them before the model ran, so no answer was generated.'}</p>
+      <ul style="margin:0;padding:0;list-style:none">${notices.slice(0,6).map(n => `<li style="padding:9px 0;border-bottom:1px solid var(--line)">
+        <div style="font-size:13px;color:var(--ink-700)">“${esc(String(n.question||'').slice(0,120))}”</div>
+        <div style="font-size:12px;color:var(--ink-500);margin-top:3px">${esc(String(n.at||'').slice(0,10))} · ${esc(String(n.subject||''))}${n.cls?' · '+t('classShort')+' '+esc(String(n.cls)):''}</div>
+      </li>`).join('')}</ul>
     </section>`;
+  }
+
+  /* Reaching #/parent is the moment to read them; fetching on every render of
+     the page would repeat the call on each repaint. */
+  function loadParentNotices() {
+    if (S.notices !== undefined && S.notices !== null) return;
+    S.notices = null;
+    fetch('/api/ai/notices', { headers: { authorization: 'Bearer ' + (localStorage.getItem('upay.token') || '') } })
+      .then(r => r.ok ? r.json() : { notices: [] })
+      .then(j => { S.notices = Array.isArray(j.notices) ? j.notices : []; render(); })
+      .catch(() => { S.notices = []; render(); });
   }
 
   function viewAbout() {
@@ -5110,7 +5172,7 @@ window.UP = window.UP || {};
     else if (r.name === 'books') html = viewBooks(r.params);
     else if (r.name === 'saved') html = viewSaved() + (typeof window.viewMe === 'function' ? window.viewMe() : '');
     else if (r.name === 'about') html = viewAbout();
-    else if (r.name === 'parent') html = viewParent();
+    else if (r.name === 'parent') { loadParentNotices(); html = viewParent(); }
     else if (r.name === 'apikey') html = viewApiKey();
     else if (r.name === 'admin') html = viewAdmin();
     else if (r.name === 'login') html = viewLogin(r.params);

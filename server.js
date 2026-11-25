@@ -19,6 +19,7 @@ const solveTiming = require('./assets/js/solve-timing.js');
 const solvePolicy = require('./lib/solve-policy.js');
 const integrity = require('./lib/solve-integrity.js');
 const solveRuntime = require('./lib/ai-provider.js');
+const syllabusGuard = require('./lib/syllabus-guard.js');
 const scienceRag = require('./lib/science-rag.js');
 const studyChat = require('./lib/chat.js');
 const platform = require('./lib/platform-api.js');
@@ -118,7 +119,10 @@ function freshDB() {
     aiCache: {},   /* question-hash -> solved answer.  Filled once, reused forever:
                      the free tier allows ~20 calls per model per day, and the
                      bank has 833 questions, so nothing may be solved twice. */
-    audit: []
+    audit: [],
+    /* Questions refused as out-of-syllabus, kept so the parent summary can
+       show a parent what was asked and confirm no answer was generated. */
+    parentNotices: []
   };
 }
 
@@ -131,7 +135,12 @@ function loadDB() {
   db.aiLog = db.aiLog || [];
   db.aiCache = db.aiCache || {};
   db.audit = db.audit || [];
+  db.parentNotices = db.parentNotices || [];
 }
+/* The syllabus gate writes here; it is a plain in-memory view over the
+   persisted array so the handler can unshift without reaching into loadDB. */
+let parentNotices = [];
+function syncParentNotices() { parentNotices = Array.isArray(db && db.parentNotices) ? db.parentNotices : []; }
 /* Saves used to serialise the WHOLE database (4.8 MB and growing) on every
    call -- and there are 23 call sites, including one per solved question. At
    ~40 ms per write that capped the app at a few writes a second no matter how
@@ -1187,6 +1196,17 @@ const handleRequest = async function (req, res) {
       return json(res, 200, { user: { user: sess.user, role: sess.role, name: sess.name, mustChange: !!usr.mustChange } });
     }
 
+    /* A student's own refusals, for the parent summary. A parent reads this
+       on the child's device (there is no separate parent login), so it shows
+       only the signed-in student's notices and never another account's. */
+    if (p === '/api/ai/notices' && req.method === 'GET') {
+      const err = requireRole(sess, ['student', 'teacher', 'admin']); if (err) return json(res, 403, { error: err });
+      syncParentNotices();
+      const who = (sess && (sess.user || sess.id)) || '';
+      const mine = parentNotices.filter(n => !who || n.who === who).slice(0, 40);
+      return json(res, 200, { notices: mine, count: mine.length });
+    }
+
     if (p === '/api/auth/logout' && req.method === 'POST') {
       const h = req.headers['authorization'] || '';
       if (sess && !openSession && h.startsWith('Bearer ')) revoke(h.slice(7));
@@ -1742,6 +1762,40 @@ const handleRequest = async function (req, res) {
       if (subjectRouting.language) b.lang = subjectRouting.language;
       if (subjectRouting.changed) b.chapter = 0;
       const cls = Number(b.cls) || 10;
+
+      /* The syllabus gate. It runs BEFORE any prompt is built and before the
+         cache or a key is touched, so a refused question costs nothing and
+         cannot be smuggled past the model: a Class 10 Science student asking
+         for a Java program used to be answered, because this route never
+         called the guard that /api/chat has always used. The refusal is a
+         normal 200 with an explanation the card can render, not an error,
+         because being told why is more useful than being told nothing. */
+      const gate = syllabusGuard.check(question, { class: cls, subject });
+      if (!gate.ok) {
+        if (gate.severity === 'notice') {
+          /* Syllabus drift is the one case a parent is told about. The note
+             records what was asked and that nothing was generated; the
+             question itself is never solved or cached. */
+          try {
+            const note = syllabusGuard.parentNote(gate, question);
+            const who = (sess && (sess.user || sess.id)) || 'guest';
+            parentNotices.unshift({ at: new Date().toISOString(), who, cls, subject, code: gate.code, question: question.slice(0, 200), note });
+            db.parentNotices = parentNotices.slice(0, 300);
+            audit(who, 'syllabus-refused', subject + ' · ' + question.slice(0, 80));
+          } catch (_) {}
+        } else if (gate.severity === 'urgent' || gate.severity === 'block') {
+          try { audit((sess && (sess.user || sess.id)) || 'guest', 'safety-refused', gate.code + ' · ' + question.slice(0, 80)); } catch (_) {}
+        }
+        return json(res, 200, {
+          ok: false, refused: gate.code, severity: gate.severity || 'none',
+          answer: gate.message, summary: '', approaches: [],
+          notice: gate.severity === 'notice'
+            ? 'This question is outside the syllabus, so it was not sent to the model.'
+            : 'This question was stopped before the model ran.',
+          check: '', diagram: null, conceptDiagram: null
+        });
+      }
+
       const isAccountancy = subject === 'accountancy' || subject === 'computerized-accounting';
       const isEconomics = subject === 'economics';
       const isEnglish12 = subject === 'english' && cls === 12;
