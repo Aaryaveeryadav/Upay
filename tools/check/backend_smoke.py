@@ -116,7 +116,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='upay-isolated-', dir=os.environ.get('UPAY_TEST_TMP') or None) as td:
         work = Path(td)
         policy_version = subprocess.check_output(['node', '-p', "require('./lib/solve-policy.js').VERSION"], cwd=ROOT, text=True).strip()
-        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'lib/solve-integrity.js', 'assets/js/worked-figure.js', 'assets/js/request-accuracy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-provider.js', 'lib/ai-status.js', 'lib/rate-limit.js', 'lib/science-rag.js', 'lib/local-llm.js', 'lib/chat.js', 'lib/platform-api.js',
+        for name in ('server.js', 'corrupt_gate.js', 'lib/supabase-public.js', 'lib/supabase-auth.js', 'lib/ai-access.js','lib/solve-policy.js', 'lib/solve-integrity.js', 'assets/js/worked-figure.js', 'assets/js/request-accuracy.js', 'assets/js/language-policy.js', 'assets/js/task-routing.js', 'assets/js/solve-timing.js', 'assets/js/square-integers.js', 'lib/gemini.js', 'lib/ai-provider.js', 'lib/ai-status.js', 'lib/rate-limit.js', 'lib/science-rag.js', 'lib/local-llm.js', 'lib/syllabus-guard.js', 'lib/chat.js', 'lib/platform-api.js',
                          'lib/content-control.js', 'lib/supabase-admin.js', 'lib/subject-index.js', 'lib/answer-store.js', 'lib/model-gateway.js', 'lib/db.js', 'lib/tenancy.js',
                          'lib/roster.js', 'lib/gemini.js', 'tools/checker.js', 'tools/reset-admin.js', 'tools/seed-admin.js'):
             (work / name).parent.mkdir(parents=True, exist_ok=True)
@@ -222,7 +222,7 @@ def main():
             db = json.loads(dbfile.read_text())
             secret = bytes.fromhex((work / 'data' / 'secret.key').read_text().strip())
             owner = 'local:' + made['user']['id']
-            parts = [owner, 'solve', 'maths', 10, 'en', 'owner fixture question']
+            parts = [owner, 'solve', 'maths', 10, 'en', 'find the HCF of 12 and 18']
             payload = json.dumps(parts, ensure_ascii=False, separators=(',', ':')).encode()
             key = 'v2:' + hmac.new(secret, payload, hashlib.sha256).hexdigest()[:32]
             db['aiCache'][key] = {'owner':owner, 'result':'student-only cached answer', 'policyVersion':policy_version, 'approaches':[{'name':str(i),'steps':[{'t':str(i)}]} for i in range(4)]}
@@ -233,7 +233,7 @@ def main():
             # (covered by /api/ai/solve returning 503 above).
             env.update(UPAY_SOLVE_PROVIDER='gemini')
             start()
-            query = '/api/ai/cache?q=owner%20fixture%20question&subject=maths&cls=10&lang=en'
+            query = '/api/ai/cache?q=find%20the%20HCF%20of%2012%20and%2018&subject=maths&cls=10&lang=en'
             cached = expect(port, query, 200, token=student)
             assert cached['found'] is False
             assert not expect(port, query, 200, token=admin)['found']
@@ -246,7 +246,7 @@ def main():
             # never an invented solution and never a leaked cached one.
             for account in (student, admin):
                 solved = expect(port, '/api/ai/solve', 400, token=account, method='POST',
-                        body={'question':'Owner fixture question','subject':'maths','cls':10,'lang':'en'})
+                        body={'question':'Find the HCF of 12 and 18','subject':'maths','cls':10,'lang':'en'})
                 assert solved.get('fallback') is True and 'result' not in solved
             assert 'legacy-fixture' in json.loads(dbfile.read_text())['aiCache']
             # A local mock provider verifies Economics-specific prompts, no
@@ -284,7 +284,9 @@ def main():
             me = expect(port, '/api/auth/me', 200, token=good)
             assert me['user']['role'] == 'student'
             expect(port, '/api/auth/me', 401, token=bad)
-            expect(port, '/api/ai/solve', 400, token=good, method='POST', body={'question':'A test question'})
+            # A real syllabus question: this asserts that a revoked token gets the honest
+            # "no key configured" 400, not that a placeholder is refused by the gate.
+            expect(port, '/api/ai/solve', 400, token=good, method='POST', body={'question':'Find the HCF of 12 and 18','subject':'maths','cls':10})
             expect(port, '/api/auth/logout', 200, token=good, method='POST')
             expect(port, '/api/auth/me', 401, token=good)
             assert (work / 'data' / 'secret.key').stat().st_mode & 0o077 == 0
@@ -312,13 +314,13 @@ def main():
             assert me['user']['role'] == 'student'
             # No key is configured for the mock provider at this point, so the
             # honest answer is "not configured", never an invented solution.
-            solved = expect(port, '/api/ai/solve', 400, method='POST', body={'question':'A test question'})
+            solved = expect(port, '/api/ai/solve', 400, method='POST', body={'question':'Find the HCF of 12 and 18','subject':'maths','cls':10})
             assert solved.get('fallback') is True
             stop()
             env.update(UPAY_SOLVE_PROVIDER='openai-compatible', UPAY_LLM_URL='https://model.example.test/v1/chat/completions', UPAY_LLM_MODEL='isolated-model', UPAY_LLM_KEY='isolated-model-token')
             start(open_mode=True)
             custom = expect(port, '/api/ai/solve', 200, method='POST', body={'question':'What is photosynthesis?', 'subject':'science'})
-            assert custom['result'] == 'A mocked custom model answer.' and len(custom['approaches']) == 4
+            assert custom.get('result') == 'A mocked custom model answer.' and len(custom.get('approaches') or []) == 4, json.dumps(custom)[:600]
             assert 'isolated-model-token' not in json.dumps(custom)
             print('PASS local custom provider without a Gemini key, mocked four-approach response')
             print('Isolated server authentication, revocation, spoofing, fresh solve behavior, static paths and permissions: PASS')
