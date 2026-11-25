@@ -5017,9 +5017,14 @@ window.UP = window.UP || {};
     if (hindi12Track() && !UP.loaded.packs[S.subject]) UP.loadPack(S.subject).then(() => render());
     // A shared deep link (?sub=) can land on a subject whose pack was never
     // fetched in this session. Load it once, then repaint with the data.
-    if (r.params.sub && UP.loaded && UP.loadPack && !UP.loaded.packs[S.subject]) {
+    /* Resolve the subject to the pack that actually carries its data. Asking
+       for a pack named after the subject left Applied Maths (whose chapters
+       ship in the class12 pack) permanently "not loaded", and the repaint
+       below re-entered render() forever -- a frozen tab from a deep link. */
+    const wantedPack = UP.packFor && UP.loaded && UP.loadPack ? UP.packFor(S.subject) : null;
+    if (r.params.sub && wantedPack && S.subject === r.params.sub && !UP.loaded.packs[wantedPack]) {
       const wanted = S.subject;
-      UP.loadPack(wanted).then(() => { if (S.subject === wanted) render(); });
+      UP.loadPack(wantedPack).then(() => { if (S.subject === wanted) render(); });
     }
     syncStudyScope();
     renderShell(); renderTopbar(); renderFooter();

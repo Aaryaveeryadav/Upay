@@ -187,6 +187,23 @@
     'assets/js/data/figures-physics.js'
   ];
 
+  /* Which saved pack actually carries each subject's chapters. Class 12
+     Applied Mathematics, Physics, Chemistry and Biology all ship inside the
+     class12 pack, and Class 11 has no pack of its own; without this table a
+     deep link to one of them asked for a pack that does not exist, the request
+     never recorded itself as loaded, and the caller re-rendered forever. */
+  const SUBJECT_PACK = {
+    'applied-maths': 'class12', physics: 'class12', chemistry: 'class12',
+    biology: 'class12', english: 'class12', 'hindi-core': 'hindi-core',
+    'hindi-elective': 'hindi-elective'
+  };
+  UP.packFor = function (subject) {
+    if (!subject) return null;
+    if (PACKS[subject]) return subject;
+    if (+UP.S.cls === 12) return SUBJECT_PACK[subject] || 'class12';
+    return SUBJECT_PACK[subject] || null;
+  };
+
   UP.loadPack = function (name) {
     if (!PACKS[name] || UP.loaded.packs[name]) return Promise.resolve();
     UP.loaded.packs[name] = true;
