@@ -47,6 +47,7 @@ const { chromium } = require('playwright');
           parts: UP.S.aiAnswer && UP.S.aiAnswer._parts || null,
           more: document.querySelectorAll('[data-action="more-approaches"]').length,
           lastErr: UP.__lastPartError || null,
+          trace: window.__moreDiag && window.__moreDiag.trace || null,
           fetchType: typeof fetch
         })).catch(() => ({}));
         throw new Error(`no ${part || 'whole'} request arrived for ${label}; waiting: ` +
@@ -96,10 +97,26 @@ const { chromium } = require('playwright');
           parts: UP.S.aiAnswer && UP.S.aiAnswer._parts || null };
         window.__moreDiag.before = JSON.stringify(window.__moreDiag);
       });
+      /* Instrument the module the click actually goes through, so a silent
+         no-op names its own cause. */
+      await page.evaluate(() => {
+        const S = UP.solveParts, created = [], nexted = [];
+        const oc = S.create, on = S.next;
+        S.create = function (q, seed) {
+          const st = oc.apply(this, arguments);
+          created.push({ hasAnswer: !!st.answer, have: (st.answer && st.answer.approaches || []).length });
+          return st;
+        };
+        S.next = function (st, base) {
+          const pl = on.apply(this, arguments);
+          nexted.push(pl ? (pl.part + '#' + (pl.index == null ? '' : pl.index)) : 'null');
+          return pl;
+        };
+        window.__moreDiag.trace = { created, nexted };
+      });
       await page.locator('[data-action="more-approaches"]').click();
       await page.waitForTimeout(50);
-      console.log('MORE DIAG ' + JSON.stringify(await page.evaluate(() => ({ ...window.__moreDiag,
-        pendingParts: 0 }))));
+      console.log('MORE DIAG ' + JSON.stringify(await page.evaluate(() => window.__moreDiag.trace)));
       for (const name of ['Substitution', 'Verification', 'Reasoning']) {
         const route = await take('approach', 'a requested method');
         await fulfil(route, 200, method(name));
