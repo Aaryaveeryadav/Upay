@@ -1870,11 +1870,14 @@ window.UP = window.UP || {};
           body: JSON.stringify(payload),
           signal: controller ? controller.signal : undefined
         });
-      } catch (e) { done({ ok: false, j: null }); return; }
+      } catch (e) { UP.__lastPartError = 'request: ' + String((e && e.message) || e); done({ ok: false, j: null }); return; }
       request
         .then((r) => r.json().catch(() => null).then((j) => ({ ok: r.ok, j: j })))
-        .then(done)
-        .catch(() => done({ ok: false, j: null }));
+        .then((value) => { UP.__lastPartError = null; done(value); })
+        /* Swallowing this used to make "request the missing methods" do
+           nothing at all, with no message anywhere: the click looked dead.
+           Keep the reason so the failure is nameable instead of silent. */
+        .catch((e) => { UP.__lastPartError = 'fetch: ' + String((e && e.message) || e); done({ ok: false, j: null }); });
     });
   }
 

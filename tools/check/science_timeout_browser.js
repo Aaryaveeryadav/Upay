@@ -45,7 +45,9 @@ const { chromium } = require('playwright');
           aiState: UP.S.aiState, aiAnswer: !!UP.S.aiAnswer,
           approaches: (UP.S.aiAnswer && UP.S.aiAnswer.approaches || []).length,
           parts: UP.S.aiAnswer && UP.S.aiAnswer._parts || null,
-          more: document.querySelectorAll('[data-action="more-approaches"]').length
+          more: document.querySelectorAll('[data-action="more-approaches"]').length,
+          lastErr: UP.__lastPartError || null,
+          fetchType: typeof fetch
         })).catch(() => ({}));
         throw new Error(`no ${part || 'whole'} request arrived for ${label}; waiting: ` +
           pending.map(p => p.part || 'whole').join(',') + ' | state ' + JSON.stringify(diag));
