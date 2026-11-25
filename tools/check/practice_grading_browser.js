@@ -87,17 +87,24 @@ const { chromium } = require('playwright');
       const card = page.locator('#grade-' + id);
       await card.locator('[data-reveal]').click();
       await card.locator('.sol-answer').waitFor();
-      if (cached) {
-        const diag = await page.evaluate(id => ({
-          stored: !!UP.answers.get(id),
-          approaches: (UP.answers.get(id) || {}).approaches?.length || 0,
-          source: (UP.answers.get(id) || {}).source || null,
-          heads: [...document.querySelectorAll('#sol-' + id + ' .sol-head')].map(h => h.textContent.trim()),
-          reviews: (document.querySelector('#sol-' + id) || {}).innerHTML?.length || 0
-        }), 'grade-' + id).catch(e => ({ error: String(e) }));
-        console.log('CACHED DIAG ' + id + ': ' + JSON.stringify(diag));
+      const headText = await card.locator('.sol-head').innerText();
+      const wantSaved = cached;
+      if (wantSaved && !/Saved AI explanation/i.test(headText)) {
+        /* Put the state into the assertion message: the Actions log cannot be
+           downloaded from here, and "did not match" alone says nothing. */
+        const diag = await page.evaluate(id => {
+          let got = null, err = null;
+          try { got = UP.answers.get(id); } catch (e) { err = String(e); }
+          return {
+            got: !!got, approaches: (got && got.approaches || []).length,
+            source: (got && got.source) || null, err,
+            html: (document.getElementById('sol-' + id) || {}).innerHTML || ''
+          };
+        }, 'grade-' + id).catch(e => ({ error: String(e) }));
+        throw new Error('cached card should read "Saved AI explanation", read ' + JSON.stringify(headText) +
+          ' | state: ' + JSON.stringify(diag).slice(0, 500));
       }
-      assert.match(await card.locator('.sol-head').innerText(), cached ? /Saved AI explanation/i : /AI-generated/i);
+      assert.match(headText, wantSaved ? /Saved AI explanation/i : /AI-generated/i);
       assert.match(await card.locator('.pyq-sol').innerText(), /not been verified against an official answer key/);
       assert.match(await card.locator('.sol-answer').innerText(), /Fixture explanation result/);
       assert.equal(await card.locator('.pyq-ans').count(), eligible ? 1 : 0);
