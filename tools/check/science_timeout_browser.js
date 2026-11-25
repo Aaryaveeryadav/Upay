@@ -41,8 +41,14 @@ const { chromium } = require('playwright');
           if (at >= 0) return pending.splice(at, 1)[0].route;
           await page.waitForTimeout(25);
         }
+        const diag = await page.evaluate(() => ({
+          aiState: UP.S.aiState, aiAnswer: !!UP.S.aiAnswer,
+          approaches: (UP.S.aiAnswer && UP.S.aiAnswer.approaches || []).length,
+          parts: UP.S.aiAnswer && UP.S.aiAnswer._parts || null,
+          more: document.querySelectorAll('[data-action="more-approaches"]').length
+        })).catch(() => ({}));
         throw new Error(`no ${part || 'whole'} request arrived for ${label}; waiting: ` +
-          pending.map(p => p.part || 'whole').join(','));
+          pending.map(p => p.part || 'whole').join(',') + ' | state ' + JSON.stringify(diag));
       };
       const fulfil = (route, status, body) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) });
       const partial = { source: 'ai', part: 'core', complete: false, result: 'The sky looks blue because air scatters short wavelengths of sunlight.',
@@ -81,7 +87,17 @@ const { chromium } = require('playwright');
       assert.match(await page.locator('.parts-note').innerText(), /1 of 4/, 'the banner counts what arrived');
 
       /* 4. The missing methods can be asked for again, and then all four show. */
+      await page.evaluate(() => {
+        const b = document.querySelector('[data-action="more-approaches"]');
+        window.__moreDiag = { found: !!b, aiAnswer: !!UP.S.aiAnswer,
+          approaches: (UP.S.aiAnswer && UP.S.aiAnswer.approaches || []).length,
+          parts: UP.S.aiAnswer && UP.S.aiAnswer._parts || null };
+        window.__moreDiag.before = JSON.stringify(window.__moreDiag);
+      });
       await page.locator('[data-action="more-approaches"]').click();
+      await page.waitForTimeout(50);
+      console.log('MORE DIAG ' + JSON.stringify(await page.evaluate(() => ({ ...window.__moreDiag,
+        pendingParts: 0 }))));
       for (const name of ['Substitution', 'Verification', 'Reasoning']) {
         const route = await take('approach', 'a requested method');
         await fulfil(route, 200, method(name));
