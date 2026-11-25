@@ -17,16 +17,26 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
   await page.evaluate(q=>{UP.S.subject='maths';location.hash='#/ask?q='+encodeURIComponent(q);},typo);
   await page.locator('.question-clarification').waitFor();assert.equal(requests.length,0);
   await page.locator('.question-clarification a').click();
-  /* The corrected question has an exact answer, and the check used to demand
-     it arrive from the local solver (source === 'exact'). That is an internal
-     detail, not the contract, and it pinned the app to one code path: the
-     solver-first ordering was deliberately reverted in a69536e because it
-     stops the model's numbers ever being compared with the calculated ones,
-     which is what raises the mismatch warning. What matters to the student is
-     that confirming the corrected question yields the right four answers, and
-     that the question never silently changes. Both are asserted below, so the
-     check keeps its teeth without dictating where the answer comes from. */
+  /* The stub above parks every /api/ai/solve call in `requests` so the check
+     can drive it by hand. Leaving one parked means the request simply hangs:
+     the app keeps its full client budget (65s here) before it gives up, which
+     is far longer than the 30s a waitForFunction allows, so this step could
+     never pass. Answer the request the way an unavailable provider does, which
+     is the case this section is about -- the corrected question still gets its
+     exact answer, and it never reaches a model that could alter it. */
+  const refuseProvider = async (label) => {
+    for (let i = 0; i < 250 && !requests.length; i++) await page.waitForTimeout(20);
+    assert(requests.length, 'the corrected question asks the provider before falling back (' + label + ')');
+    for (const route of requests.splice(0)) {
+      await route.fulfill({ status: 503, contentType: 'application/json',
+        body: JSON.stringify({ code: 'ai_unavailable', error: 'The AI is unavailable right now.', fallback: true }) });
+    }
+  };
+  await refuseProvider('corrected question');
+  /* The answer itself is the contract: the right four values, from the app's
+     own exact solver, with no further provider traffic. */
   await page.waitForFunction(()=>UP.S.aiAnswer&&String(UP.S.aiAnswer.result||'').length>0, null, {timeout: 20000});
+  assert.equal(await page.evaluate(()=>UP.S.aiAnswer.source),'exact','an unreachable provider still yields the exact answer');
   assert.equal(await page.evaluate(()=>UP.S.aiAnswer.result),'n = 15, 27, 327, 995');assert.equal(requests.length,0);
   await page.evaluate(()=>{
    UP.S.mockTest={scope:'cbse|10|maths',subject:'maths',started:Date.now(),items:[{q:'What is one plus one?',ch:1,source:{m:1,keyVerified:true,ans:'2'}}],answers:{},submitted:{},finished:false};location.hash='#/mock';
