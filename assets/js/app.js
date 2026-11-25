@@ -2557,8 +2557,42 @@ window.UP = window.UP || {};
           <div><div data-parts>${esc(shown)}</div>${retry}</div>
         </div>`;
   }
+  /* A draft can outlive the truth. If the app can prove this question -- the
+     integer-square and integer-radical-sum solvers verify every value against
+     the question -- then a model draft for the same question must never be
+     drawn over it. A stored draft saying 'n = 191' used to survive a redisplay
+     because nothing re-checked it against the solver. Repairing here, at the
+     one place an answer reaches the screen, covers every path that can put a
+     stale draft into state (a reload, a stale tab, an old cached answer). */
+  function proveAnswer(a) {
+    if (!a || typeof a !== 'object') return a;
+    if (a.source === 'exact') return a;
+    const q = a.question || S.aiQuestion || '';
+    if (!q || !['maths','applied-maths'].includes(S.subject)) return a;
+    let solved = null;
+    try { solved = UP.answerQuestion ? UP.answerQuestion(q) : null; } catch (_) { solved = null; }
+    if (!solved || solved.source !== 'exact' || !solved.result ||
+        !Array.isArray(solved.approaches) || !solved.approaches.length) return a;
+    /* Only repair a real disagreement, so a healthy answer is left untouched. */
+    const was = String(a.result || '');
+    const now = String((solved.result && solved.result.en) || solved.result || '');
+    if (was && now && was === now) return a;
+    const text = v => (v && typeof v === 'object' && !Array.isArray(v)) ? P(v) : (v == null ? '' : String(v));
+    return Object.assign({}, solved, {
+      question: q, subjectRouting: a.subjectRouting,
+      result: text(solved.result), summary: text(solved.summary),
+      title: text(solved.title), verify: text(solved.verify),
+      approaches: (solved.approaches || []).map(ap => ({
+        name: text(ap && ap.name),
+        steps: ((ap && ap.steps) || []).map(st => Object.assign({}, st, {
+          t: text(st && st.t), m: text(st && st.m), note: text(st && st.note)
+        }))
+      }))
+    });
+  }
   function renderAIAnswer(a) {
-    a = UP.answerFormat.answer(a);
+    a = proveAnswer(UP.answerFormat.answer(a));
+    S.aiAnswer = a;
     const fig = renderAIDiagram(a);
     const routing = a.subjectRouting || UP.taskRouting.resolve(a.question || S.aiQuestion || '', S.subject);
     const chk = a.check || null;
