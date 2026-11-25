@@ -66,7 +66,7 @@ export default function App() {
   const current = allowed.has(name) ? name : (caps ? (caps.role === 'teacher' ? 'teacher' : caps.role === 'owner' ? 'owner' : 'chat') : 'about');
 
   if (session.status === 'loading' && !session.person) {
-    return <div className="auth"><div className="auth-side"><div className="brand"><span className="brand-mark">उ</span><span className="brand-name">Kritin उpaay<span>study with sources</span></span></div></div><div className="auth-form"><div className="loading">Checking your session…</div></div></div>;
+    return <div className="auth"><div className="auth-side"><div className="brand"><span className="brand-mark">उ</span><span className="brand-name">Kritin Upaay<span>study with sources</span></span></div></div><div className="auth-form"><div className="loading">Checking your session…</div></div></div>;
   }
   if (session.status === 'guest' || !caps) {
     return <Auth session={session} />;
@@ -92,7 +92,7 @@ export default function App() {
     <aside className="rail">
       <a className="brand" href="#/chat" aria-label="Kritin Upaay home">
         <span className="brand-mark" aria-hidden="true">उ</span>
-        <span className="brand-name">Kritin उpaay<span>study with sources</span></span>
+        <span className="brand-name">Kritin Upaay<span>study with sources</span></span>
       </a>
       <nav className="nav" aria-label="Sections">
         <span className="nav-label">{ROLES[caps.role]?.label || 'Sections'}</span>

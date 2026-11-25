@@ -20,7 +20,7 @@ const {chromium} = require('playwright');
    await page.goto(base,{waitUntil:'networkidle'});
    await page.waitForFunction(()=>window.UP&&UP.S&&document.body.classList.contains('up-ready'));
    assert((await page.title()).startsWith('Kritin Upaay'));
-   assert((await page.locator('.brand-name').innerText()).includes('Kritin उpaay'));
+   assert((await page.locator('.brand-name').innerText()).includes('Kritin Upaay'));
    assert(await page.locator('.brand-mark img').evaluate(el=>el.complete&&el.naturalWidth===224));
    const manifest=await page.evaluate(async()=>{
     const response=await fetch(document.querySelector('link[rel="manifest"]').href);

@@ -38,7 +38,7 @@ export function Auth({session}) {
     <aside className="auth-side">
       <div className="brand" style={{color: '#fff'}}>
         <span className="brand-mark" style={{background: 'rgba(255,255,255,.14)', color: '#fff'}} aria-hidden="true">उ</span>
-        <span className="brand-name">Kritin उpaay<span style={{color: '#e9c8c4'}}>study with sources</span></span>
+        <span className="brand-name">Kritin Upaay<span style={{color: '#e9c8c4'}}>study with sources</span></span>
       </div>
       <div>
         <div className="eyebrow" style={{color: '#ffd9d4'}}><span className="dot" style={{background: '#ff8d98'}}/>One login · every role</div>

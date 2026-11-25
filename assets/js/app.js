@@ -1085,7 +1085,7 @@ window.UP = window.UP || {};
     rail.innerHTML = `
       <a class="brand" href="#/home" aria-label="Kritin Upaay home">
         <span class="brand-mark"><img src="/assets/brand/kritin-logo.png" alt="" width="54" height="48"></span>
-        <span class="brand-name">Kritin उpaay<span>${t('brandSub')}</span></span>
+        <span class="brand-name">Kritin Upaay<span>${t('brandSub')}</span></span>
       </a>
       <nav class="nav" aria-label="${S.lang === 'hi' ? 'अनुभाग' : 'Sections'}">
         <span class="nav-label">${t('learn')}</span>
