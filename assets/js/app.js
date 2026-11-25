@@ -2157,6 +2157,42 @@ window.UP = window.UP || {};
         m.insertBefore(d, m.firstChild);
       }
     };
+    /* The built-in solver is asked BEFORE the provider. It is exact, instant
+       and free, and it refuses what it cannot compute, so a real answer always
+       beats waiting on a model. This used to live only in goLocal -- the
+       handler for a FAILED request -- which meant an exactly-solvable question
+       still went to the provider first and sat on "loading" until it answered
+       or timed out. Only a real answer is used here; a 'not-attempted' refusal
+       falls through to the model, which may explain what the solver cannot. */
+    if (!needsAIOnly() && routing.task !== 'writing' &&
+        ['maths','applied-maths'].includes(routing.subject) && UP.answerQuestion) {
+      let solved = null;
+      try { solved = UP.answerQuestion(q); } catch (_) { solved = null; }
+      if (solved && solved.kind && solved.kind !== 'not-attempted' &&
+          Array.isArray(solved.approaches) && solved.approaches.length && solved.result) {
+        /* The solver is bilingual ({en, hi} fields); the card reads plain
+           strings, and passing the objects through printed [object Object]. */
+        const text = v => (v && typeof v === 'object' && !Array.isArray(v)) ? P(v) : (v == null ? '' : String(v));
+        const local = Object.assign({}, solved, {
+          source: 'exact', question: q, subjectRouting: routing,
+          result: text(solved.result),
+          summary: text(solved.summary),
+          title: text(solved.title),
+          verify: text(solved.verify),
+          approaches: (solved.approaches || []).map(ap => ({
+            name: text(ap && ap.name),
+            steps: ((ap && ap.steps) || []).map(st => Object.assign({}, st, {
+              t: text(st && st.t), m: text(st && st.m), note: text(st && st.note)
+            }))
+          }))
+        });
+        S.aiState = 'local'; S.aiRetry = false; S.aiNote = '';
+        S.aiAnswer = local; S.answer = local;
+        paint(); bumpProgress(S.subject);
+        pushRecent(q, S.subject, S.chapterId ? (chapterById(S.chapterId) ? P(chapterById(S.chapterId).en || {}) : '') : '');
+        return;
+      }
+    }
     if (routing.subject === 'business-studies') { goLocal('Business Studies AI is not enabled; use the supplied outlines.', false); return; }
     // "taking a moment" nudge — after 6s swap the spinner text
     let slowTimer = setTimeout(() => {
