@@ -8,17 +8,31 @@ const BASE = (process.env.UPAY_BASE || 'http://127.0.0.1:8004').replace(/\/$/, '
 // recovered choices and others have arrays that are intentionally withheld.
 async function checkSubjectCoverage(page) {
   const scopes = await page.evaluate(async () => {
-    await UP.loadClass12();
-    for (const subject of new Set(UP.classes.flatMap(c => c.subjects))) await UP.loadPack(subject);
-    await UP.loadBoardPack('rajasthan');
+    /* Every pack is best-effort: this check is about which cards render in
+       which scope, not about every data pack existing. A pack that will not
+       load must not stop the sweep (and must not hang it: loadScript now
+       rejects instead of waiting forever on an aborted request). */
+    const best = p => Promise.resolve(p).catch(() => {});
+    await best(UP.loadClass12());
+    for (const subject of new Set(UP.classes.flatMap(c => c.subjects))) await best(UP.loadPack(subject));
+    await best(UP.loadBoardPack('rajasthan'));
     return UP.classes.flatMap(c => c.subjects.map(subject => [c.id, subject, 'cbse'])).concat([[10, 'maths', 'rajasthan']]);
   });
+  if (!scopes.length) throw new Error('no class/subject scopes were available to sweep');
   const populated = [];
   for (const scope of scopes) {
     const summary = await page.evaluate(async ([cls, subject, board]) => {
-      const rendered = new Promise(resolve => window.addEventListener('hashchange', resolve, { once: true }));
+      /* If the hash is already this scope no hashchange fires, and the old
+         handler waited on an event that would never come. Resolve on either
+         the event or the next task after the route renders. */
+      const next = `#/pyq?cls=${cls}&sub=${subject}&board=${board}`;
+      const rendered = new Promise(resolve => {
+        if (location.hash === next) { resolve(); return; }
+        window.addEventListener('hashchange', resolve, { once: true });
+        setTimeout(resolve, 4000);
+      });
       UP.S.board = board;
-      location.hash = `#/pyq?cls=${cls}&sub=${subject}&board=${board}`;
+      location.hash = next;
       await rendered;
       const cards = [...document.querySelectorAll('.q-card.pyq')];
       return { count: cards.length, missingOrBoth: cards.filter(card =>

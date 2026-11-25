@@ -24,10 +24,31 @@
       s.async = false;                 // preserve execution order
       if (opts && opts.defer) s.defer = true;
       if (opts && opts.fetchPriority) s.fetchPriority = opts.fetchPriority;
-      s.onload = function () { loaded.add(src); resolve(); };
-      s.onerror = function () { reject(new Error('load failed: ' + src)); };
+      let settled = false;
+      const done = function (ok, why) {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        if (ok) loaded.add(src);
+        /* Keep the cache honest: a failed script must be retryable, and the
+           rejection must not be stored forever where nothing awaits it. */
+        else delete loading[src];
+        ok ? resolve() : reject(new Error(why));
+      };
+      s.onload = function () { done(true); };
+      s.onerror = function () { done(false, 'load failed: ' + src); };
+      /* A script whose request is aborted or blocked fires NEITHER load nor
+         error in some browsers, so the promise never settled. Everything that
+         awaited it — UP.loadPack, UP.loadClass12, and any page waiting for a
+         data pack — then waited forever. Bound it, and say what happened. */
+      const timer = setTimeout(function () {
+        done(false, 'load timed out: ' + src);
+      }, (opts && opts.timeoutMs) || 20000);
       document.head.appendChild(s);
     });
+    /* A rejection nobody awaits (a prefetch) must not become an unhandled
+       rejection that kills the page; callers still see the rejection. */
+    loading[src].catch(function () {});
     return loading[src];
   }
 
