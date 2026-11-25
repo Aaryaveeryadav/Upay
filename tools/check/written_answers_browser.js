@@ -49,6 +49,11 @@ async function checkSubjectCoverage(page) {
   console.log('PASS checked answer modes in: ' + populated.join(', '));
 }
 
+/* Named progress: a stall in this check used to report only that the whole
+   file timed out. Each phase says which step it reached, so a failure names a
+   step instead of the file. */
+const phase = (name) => console.log('PHASE ' + name);
+
 async function checkPage(browser, width) {
   const ctx = await browser.newContext({ viewport: { width, height: 844 }, serviceWorkers: 'block' });
   const page = await ctx.newPage(), errors = [], requests = [];
