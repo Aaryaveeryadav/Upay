@@ -11,6 +11,7 @@ const { aiFailure } = require('../../lib/ai-status.js');
 const { readBody, json, firstJSON } = require('../../lib/gemini.js');
 const { generateSolve } = require('../../lib/ai-provider.js');
 const { requireStudent } = require('../../lib/supabase-auth.js');
+const syllabusGuard = require('../../lib/syllabus-guard.js');
 
 function repairNumericDots(text) {
   const s = String(text || '');
@@ -103,6 +104,29 @@ module.exports = async function handler(req, res) {
       if(contextRequest)return json(res,422,contextRequest);
       if (subjectRouting.language) b.lang = subjectRouting.language;
       if (subjectRouting.changed) b.chapter = 0;
+
+  /* THE SYLLABUS GATE.
+     This is the route that actually answers students in production: assets/js/app.js
+     posts every question from the Ask box here, and nothing else. Until now this
+     handler imported no gate at all, so the promise on the site - "off-syllabus
+     questions are refused before the model runs" - was not true on the hosted
+     deployment. The gate lived only in server.js, which .vercelignore excludes.
+
+     It runs before the cache, the quota and any prompt: a refused question costs
+     nothing and is never sent to Gemini. A normal 200 with an explanation, not an
+     error, because being told why is more useful than being told nothing.
+     tools/check/solve_gate.js holds this wiring in place. */
+  const gate = syllabusGuard.check(question, { class: Number(b.cls) || 10, subject });
+  if (!gate.ok) {
+    return json(res, 200, {
+      ok: false, refused: gate.code, severity: gate.severity || 'none',
+      answer: gate.message, summary: '', approaches: [],
+      notice: gate.severity === 'notice'
+        ? 'This question is outside the syllabus, so it was not sent to the model.'
+        : 'This question was stopped before the model ran.',
+      check: '', diagram: null, conceptDiagram: null
+    });
+  }
   /* A long question can exhaust one call's budget. The client then asks for it
      in parts: 'core' is the answer plus the first method, 'approach' is one
      more method at a time. Each part has its own small budget, so a single
