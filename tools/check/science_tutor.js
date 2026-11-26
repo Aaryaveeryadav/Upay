@@ -418,10 +418,10 @@ async function uiChecks() {
 }
 
 /* ---------- 9. the live app route (JSDOM) ---------- */
-/* There is no separate tutor section any more. The one ask-a-question screen
-   is the Study chat at /app#/chat; the legacy rail links to it, and the old
-   #/tutor deep links forward there instead of rendering a second copy of the
-   same chat. This checks that contract on the real page. */
+/* There is one ask-a-question screen: #/ask. The separate tutor section is
+   gone, and the React Study chat at /app is no longer offered in the rail, so
+   the old #/tutor deep links forward to #/ask instead of rendering a second
+   copy of the same chat. This checks that contract on the real page. */
 async function routeChecks() {
   let JSDOM, ResourceLoader;
   try { ({ JSDOM, ResourceLoader } = require('jsdom')); }
