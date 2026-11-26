@@ -1095,7 +1095,6 @@ window.UP = window.UP || {};
         <a href="#/test" data-nav="test">${icon('list')} ${t('nav_test')}</a>
         <a href="#/mcq" data-nav="mcq">${icon('check')} ${t('nav_mcq')}</a>
         <a href="#/pyq" data-nav="pyq">${icon('book')} ${t('nav_pyq')}</a>
-        <a href="/app" data-nav="app">${icon('atom')} ${S.lang==='hi'?'अध्ययन चैट':'Study chat'}</a>
         <a href="#/syllabus" data-nav="syllabus">${icon('layers')} ${t('nav_syllabus')}<span class="badge">${catalogue().length}</span></a>
         <span class="nav-label">${t('library')}</span>
         <a href="#/boards" data-nav="boards">${icon('board')} ${t('nav_boards')}</a>
@@ -5100,32 +5099,24 @@ window.UP = window.UP || {};
      there so a bookmark or a chapter deep-link is never a dead end. */
   function viewStudyChatForward(params) {
     const q = params && params.q ? String(params.q).slice(0, 800) : '';
-    const hash = '#/chat' + (q ? '?q=' + encodeURIComponent(q) : '');
-    /* The Study chat is a signed-in screen: it answers from the student's own
-       class and subject, which it takes from the account rather than the URL.
-       A guest therefore gets the sign-in page, not a bounced chat. Say that
-       plainly instead of sending them somewhere that will ask for a password
-       without explanation. */
-    const signedIn = !!(S && S.user);
+    /* There is one ask-a-question screen: #/ask. The separate React Study chat
+       at /app is no longer offered in the rail, so an old #/tutor bookmark is
+       sent to the Ask screen instead of to a page the site no longer links.
+       The question in the URL carries over, so the bookmark still lands on its
+       own question. */
+    const hash = '#/ask' + (q ? '?q=' + encodeURIComponent(q) : '');
     setTimeout(() => {
       if (navigator.userAgent && /jsdom/i.test(navigator.userAgent)) return;
-      try { location.replace('/app' + hash); } catch (_) {}
+      try { location.replace(hash); } catch (_) {}
     }, 0);
-    const title = S.lang === 'hi' ? 'अध्ययन चैट' : 'Study chat';
-    const line = signedIn
-      ? (S.lang === 'hi'
-        ? 'प्रश्न अब अध्ययन चैट में पूछे जाते हैं — किताब के अपने उत्तर से।'
-        : 'Questions are answered in the Study chat now, from the book\'s own answer key.')
-      : (S.lang === 'hi'
-        ? 'अध्ययन चैट में प्रवेश करने के लिए साइन इन करें; वह आपकी कक्षा और विषय अपने आप चुनती है।'
-        : 'Sign in to use the Study chat; it reads your class and subject from your account.');
-    const button = signedIn
-      ? (S.lang === 'hi' ? 'चैट खोलें' : 'Open the chat')
-      : (S.lang === 'hi' ? 'साइन इन करें' : 'Sign in');
-    const href = signedIn ? '/app' + hash : '/app';
+    const title = S.lang === 'hi' ? 'प्रश्न पूछें' : 'Ask a question';
+    const line = S.lang === 'hi'
+      ? 'प्रश्न अब इसी पृष्ठ पर पूछे जाते हैं — हर उत्तर के साथ पुस्तक का पृष्ठ दिखाया जाता है।'
+      : 'Questions are asked on the Ask page now: one question worked out by several methods, with the page it comes from.';
+    const button = S.lang === 'hi' ? 'प्रश्न पूछें' : 'Ask a question';
     return `<section class="page-head"><h1>${title}</h1></section>
       <div class="callout"><div>${line}</div>
-        <p><a class="btn btn-primary btn-sm" href="${href}" data-app>${button}</a></p></div>`;
+        <p><a class="btn btn-primary btn-sm" href="${hash}">${button}</a></p></div>`;
   }
 
   /* ================================ ROUTER ================================ */
@@ -5749,7 +5740,7 @@ window.UP = window.UP || {};
         ? 'यह पाठ NCERT की पुस्तक से सीधे लिया गया है — वही धाराएँ, वही चित्र, वही अभ्यास प्रश्न।'
         : 'Read straight from the NCERT textbook — the same sections, the same printed diagrams, the same exercise questions.'}</p>
       <div class="pactions" style="margin-top:12px">
-        <a class="btn btn-primary btn-sm" href="/app#/chat?ch=${encodeURIComponent(ch.id)}" data-app>${icon('atom')} ${S.lang === 'hi' ? 'इस अध्याय पर पूछें' : 'Ask about this chapter'}</a>
+        <a class="btn btn-primary btn-sm" href="#/ask" data-ask-chapter="${esc(ch.id)}">${icon('sparkle')} ${S.lang === 'hi' ? 'इस अध्याय पर पूछें' : 'Ask about this chapter'}</a>
       </div>
       <div class="paper-meta">
         <span class="tag">${(ch.sections || []).length} ${S.lang === 'hi' ? 'धाराएँ' : 'sections'}</span>

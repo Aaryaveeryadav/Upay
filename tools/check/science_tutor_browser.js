@@ -38,12 +38,13 @@ const { chromium } = require('playwright');
       await page.goto((process.env.UPAY_BASE || 'http://127.0.0.1:8005') + '/', { waitUntil: 'networkidle' });
       await page.waitForFunction(() => window.UP && UP.S && document.body.classList.contains('up-ready'));
 
-      // One entry point, and it is the Study chat.
-      assert.equal(await page.locator('[data-nav="app"]').count(), 1, width + ': the rail offers the Study chat');
-      const href = await page.locator('[data-nav="app"]').getAttribute('href');
-      assert.equal(href, '/app', width + ': the rail link opens the React Study chat');
+      /* The rail no longer offers the React Study chat, which was a second
+         parallel ask screen. The one Ask screen is #/ask. */
+      assert.equal(await page.locator('[data-nav="app"]').count(), 0, width + ': the rail no longer offers the Study chat');
       assert.equal(await page.locator('[data-nav="tutor"]').count(), 0, width + ': no separate subject-tutor entry');
       assert.equal(await page.locator('form[data-form="science-tutor"]').count(), 0, width + ': no second ask form');
+      const askHref = await page.locator('[data-nav="ask"]').getAttribute('href');
+      assert.equal(askHref, '#/ask', width + ': the rail offers the one Ask a question screen');
 
       /* An old #/tutor bookmark must land somewhere useful. The app navigates
          itself: on the next tick it replaces the location with /app#/chat, so
