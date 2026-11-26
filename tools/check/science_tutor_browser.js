@@ -44,8 +44,16 @@ const { chromium } = require('playwright');
       assert.equal(await page.locator('[data-nav="app"]').count(), 0, width + ': the rail no longer offers the Study chat');
       assert.equal(await page.locator('[data-nav="tutor"]').count(), 0, width + ': no separate subject-tutor entry');
       assert.equal(await page.locator('form[data-form="science-tutor"]').count(), 0, width + ': no second ask form');
-      const askHref = await page.locator('[data-nav="ask"]').getAttribute('href');
-      assert.equal(askHref, '#/ask', width + ': the rail offers the one Ask a question screen');
+      /* index.html ships two static [data-nav="ask"] links (the desktop rail
+         and the mobile bar), so this must assert on the set, not on a single
+         node. Both must point at the one Ask screen. */
+      const askLinks = page.locator('[data-nav="ask"]');
+      const askCount = await askLinks.count();
+      assert.ok(askCount >= 1, width + ': the rail offers the one Ask a question screen');
+      for (let i = 0; i < askCount; i++) {
+        assert.equal(await askLinks.nth(i).getAttribute('href'), '#/ask',
+          width + ': every Ask entry points at #/ask');
+      }
 
       /* An old #/tutor bookmark must land somewhere useful. The app navigates
          itself: on the next tick it replaces the location with #/ask, so the
