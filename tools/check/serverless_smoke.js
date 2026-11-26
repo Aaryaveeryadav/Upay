@@ -122,7 +122,7 @@ async function main() {
   assert.equal(r.code,200); assert.equal(r.body.result,'Debit X'); assert.equal(r.body.questionUnderstood,'Capital accounts');
   assert.equal(r.body.check.state,'unchecked'); assert.equal(r.body.diagram,null);
   assert.match(lastPrompt,/Class 12 Accountancy/); assert.doesNotMatch(lastPrompt,/Class 10 Mathematics/);
-  r = await invoke(solve,{method:'POST', token:'valid', body:{question:'Record a partnership entry in the ledger', subject:'computerized-accounting', cls:12}});
+  r = await invoke(solve,{method:'POST', token:'valid', body:{question:'Which spreadsheet formula applies?', subject:'computerized-accounting', cls:12}});
   assert.equal(r.code,200); assert.match(lastPrompt,/Computerised Accounting/);
   const beforeEconomics = providerCalls;
   const economicsQuestion = {question:'Explain the difference between GDP and NDP', subject:'economics', cls:12, lang:'en'};
@@ -156,7 +156,7 @@ async function main() {
   r = await invoke(solve,{method:'POST', token:'valid', body:{question:'Describe electromagnetic induction', subject:'physics', cls:12}});
   assert.equal(r.code,200); assert.match(lastPrompt,/Science teacher/);
   const beforeCache = providerCalls;
-  const privateQuestion = {question:'Describe electromagnetic induction', subject:'physics', cls:12, lang:'en'};
+  const privateQuestion = {question:'Owner-isolation fixture question', subject:'physics', cls:12, lang:'en'};
   r = await invoke(solve,{method:'POST', token:'valid', body:privateQuestion});
   assert.equal(r.code,200); assert.equal(providerCalls,beforeCache+1); assert.notEqual(r.body.cached,true);
   r = await invoke(solve,{method:'POST', token:'valid', body:privateQuestion});
@@ -181,31 +181,10 @@ async function main() {
   const short = JSON.stringify({answer:'A theory answer', approaches:[]});
   const complete = JSON.stringify({answer:'A theory answer', approaches:four(),
     diagram:{type:'flow',nodes:['Cause','Mechanism','Effect'],caption:'Cause leads to effect through a mechanism.'}});
-  /* One realistic question per subject. /api/ai/solve now runs the syllabus
-     gate before the model (lib/syllabus-guard.js), so a placeholder such as
-     "Explain a policy test hindi" is correctly refused: it shares no word with
-     the course and returns nothing from the subject index. The fixture has to
-     be a question the subject actually teaches, which is the point of the
-     gate. */
-  const SUBJECT_QUESTION = {
-    maths: 'integration by parts',
-    'applied-maths': 'simple interest and compound interest',
-    physics: 'photoelectric effect',
-    chemistry: 'Nernst equation',
-    biology: 'DNA replication',
-    accountancy: 'debit and credit in the ledger',
-    'computerized-accounting': 'debit and credit in the ledger',
-    economics: 'demand curve and elasticity',
-    english: 'The Last Lesson — Franz view change',
-    hindi: 'कबीर की साखी का भावार्थ',
-    social: 'Explain federalism in India',
-    business: 'marketing management and branding'
-  };
-  for (const subject of Object.keys(SUBJECT_QUESTION)) {
+  for (const subject of ['maths','applied-maths','physics','chemistry','biology','accountancy','computerized-accounting','economics','english','hindi','social','business']) {
     const before = providerCalls;
     queuedReplies = [short, complete];
-    const q = SUBJECT_QUESTION[subject];
-    r = await invoke(solve,{method:'POST',token:'valid',body:{question:q,subject,cls:12,minMethods:0}});
+    r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Explain a policy test '+subject,subject,cls:12,minMethods:0}});
     assert.equal(r.code,200,subject); assert.equal(providerCalls,before+2);
     assert.equal(r.body.approaches.length,4); assert.equal(r.body.diagram.type,'flow');
     assert.match(lastPrompt,/at least FOUR/);
@@ -251,7 +230,7 @@ async function main() {
   assert.equal(r.code,502);
   // A part without an answer field cannot be the core part.
   queuedReplies = [JSON.stringify({ approaches:[four()[0]] })];
-  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Explain the difference between GDP and NDP',subject:'physics',part:'core'}});
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Long answerless fixture',subject:'physics',part:'core'}});
   assert.equal(r.code,502);
   queuedReplies = [];
   r = await invoke(readImage,{method:'POST',token:'valid',body:{}}); assert.equal(r.code,400);
@@ -265,7 +244,7 @@ async function main() {
   const incompleteJSON = JSON.stringify({answer:'The partial structure is closed safely.',approaches:four()});
   const truncatedAfterNestedStep = incompleteJSON.slice(0,incompleteJSON.lastIndexOf('}]')+1);
   replyText = truncatedAfterNestedStep;
-  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Record a partnership entry in the ledger',subject:'accountancy',cls:12}});
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Check safe nested JSON closure',subject:'accountancy',cls:12}});
   assert.equal(r.code,200,'a truncated nested JSON structure is repaired before shape validation');
   assert.equal(r.body.result,'The partial structure is closed safely.');
   assert.equal(r.body.approaches.length,4);
@@ -273,7 +252,7 @@ async function main() {
 
   const regenerationCalls = providerCalls;
   queuedReplies = ['not JSON',JSON.stringify({answer:'Regenerated answer',approaches:four()})];
-  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Record a partnership entry in the ledger',subject:'accountancy',cls:12}});
+  r = await invoke(solve,{method:'POST',token:'valid',body:{question:'Regenerate a malformed provider response',subject:'accountancy',cls:12}});
   assert.equal(r.code,200,'unrecoverable JSON triggers one bounded provider repair');
   assert.equal(r.body.result,'Regenerated answer');
   assert.equal(providerCalls,regenerationCalls+2);
@@ -281,7 +260,7 @@ async function main() {
   queuedReplies = [];
 
   replyText = 'not JSON';
-  r = await invoke(solve,{method:'POST',token:'valid',body:JSON.stringify({question:'Record a partnership entry in the ledger',subject:'accountancy',cls:12})});
+  r = await invoke(solve,{method:'POST',token:'valid',body:JSON.stringify({question:'different test input',subject:'accountancy',cls:12})});
   assert.equal(r.code,502);
   const stream = Readable.from([Buffer.from('{"one":1}')]);
   assert.deepEqual(await lib.readBody(stream), {one:1});
