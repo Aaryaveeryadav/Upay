@@ -1,17 +1,18 @@
-/* Real-browser check for where the tutor went.
+/* Real-browser check for where asking a question lives.
  *
- * The separate Science-tutor page (#/tutor) is gone: there is one
- * ask-a-question screen now, the Study chat at /app#/chat. That change is only
- * trustworthy if a real browser can still get there, so this checks the route
- * a student actually takes:
+ * There is one ask-a-question screen, #/ask. The separate Science-tutor page
+ * (#/tutor) is gone, and the React Study chat at /app is no longer offered in
+ * the rail. That is only trustworthy if a real browser can still get to the
+ * Ask screen, so this checks the route a student actually takes:
  *
- *   - the rail offers "Study chat" and it points at /app;
+ *   - the rail offers no separate Study chat entry;
+ *   - it does offer the one Ask a question screen, at #/ask;
  *   - there is no separate tutor entry any more;
- *   - an old #/tutor bookmark forwards to the chat instead of dead-ending;
+ *   - an old #/tutor bookmark forwards to #/ask instead of dead-ending;
  *   - nothing throws while that happens.
  *
- * The chat itself (citations, source cards, stored answers) is covered where
- * it lives: tools/check/react_app.js and tools/check/answer_bank.js.
+ * The chat app itself (citations, source cards, stored answers) is covered
+ * where it lives: tools/check/react_app.js and tools/check/answer_bank.js.
  *
  *   NODE_PATH=... UPAY_BASE=http://127.0.0.1:8004 node tools/check/science_tutor_browser.js
  */
@@ -38,37 +39,39 @@ const { chromium } = require('playwright');
       await page.goto((process.env.UPAY_BASE || 'http://127.0.0.1:8005') + '/', { waitUntil: 'networkidle' });
       await page.waitForFunction(() => window.UP && UP.S && document.body.classList.contains('up-ready'));
 
-      // One entry point, and it is the Study chat.
-      assert.equal(await page.locator('[data-nav="app"]').count(), 1, width + ': the rail offers the Study chat');
-      const href = await page.locator('[data-nav="app"]').getAttribute('href');
-      assert.equal(href, '/app', width + ': the rail link opens the React Study chat');
+      /* The rail no longer offers the React Study chat, which was a second
+         parallel ask screen. The one Ask screen is #/ask. */
+      assert.equal(await page.locator('[data-nav="app"]').count(), 0, width + ': the rail no longer offers the Study chat');
       assert.equal(await page.locator('[data-nav="tutor"]').count(), 0, width + ': no separate subject-tutor entry');
       assert.equal(await page.locator('form[data-form="science-tutor"]').count(), 0, width + ': no second ask form');
+      /* index.html ships two static [data-nav="ask"] links (the desktop rail
+         and the mobile bar), so this must assert on the set, not on a single
+         node. Both must point at the one Ask screen. */
+      const askLinks = page.locator('[data-nav="ask"]');
+      const askCount = await askLinks.count();
+      assert.ok(askCount >= 1, width + ': the rail offers the one Ask a question screen');
+      for (let i = 0; i < askCount; i++) {
+        assert.equal(await askLinks.nth(i).getAttribute('href'), '#/ask',
+          width + ': every Ask entry points at #/ask');
+      }
 
       /* An old #/tutor bookmark must land somewhere useful. The app navigates
-         itself: on the next tick it replaces the location with /app#/chat, so
-         the correct outcome of opening #/tutor is arriving at the chat, not
-         sitting on a page that offers a link. Wait for that arrival. */
+         itself: on the next tick it replaces the location with #/ask, so the
+         correct outcome of opening #/tutor is arriving at the one Ask screen,
+         not sitting on a page that offers a link. Wait for that arrival. */
       await page.goto((process.env.UPAY_BASE || 'http://127.0.0.1:8005') + '/#/tutor', { waitUntil: 'domcontentloaded' });
-      await page.waitForURL(url => url.pathname === '/app', { timeout: 20000 }).catch(() => {});
+      await page.waitForURL(url => url.hash.startsWith('#/ask'), { timeout: 20000 }).catch(() => {});
       const landed = new URL(page.url());
-      assert.equal(landed.pathname, '/app', width + ': an old #/tutor link forwards to the Study chat');
-      /* A signed-in student lands on the chat route; a guest lands on the same
-         shell, which shows sign-in because the chat reads class and subject
-         from the account. Both are the Study chat. */
-      assert.match(landed.hash, /^(#\/chat)?$/, width + ': the forwarded page opens the chat');
+      assert.equal(landed.hash.split('?')[0], '#/ask', width + ': an old #/tutor link forwards to the Ask screen');
 
-      // And the shell it lands on is the Study chat: reachable, bundled, and
-      // rendering something a visitor can act on (sign-in, for a guest).
-      await page.waitForLoadState('networkidle');
-      const chat = await page.evaluate(() => ({
-        hasRoot: !!document.getElementById('root'),
-        booted: !!document.querySelector('#root > *'),
-        script: !!document.querySelector('script[src*="/assets/app/"]')
+      // And the screen it lands on really renders the ask box.
+      await page.waitForSelector('form[data-form="ask"]', { timeout: 20000 });
+      const ask = await page.evaluate(() => ({
+        box: !!document.querySelector('form[data-form="ask"]'),
+        label: (document.querySelector('form[data-form="ask"] textarea') || {}).name || ''
       }));
-      assert.equal(chat.script, true, width + ': the Study chat shell loads its bundle');
-      assert.equal(chat.hasRoot, true, width + ': the Study chat shell has its mount point');
-      assert.equal(chat.booted, true, width + ': the Study chat shell renders');
+      assert.equal(ask.box, true, width + ': the forwarded page renders the Ask box');
+      assert.equal(ask.label, 'q', width + ': the Ask box is the question field');
 
       assert.deepEqual(errors, [], width + ': no page errors');
       await context.close();

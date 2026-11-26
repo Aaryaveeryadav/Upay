@@ -418,10 +418,10 @@ async function uiChecks() {
 }
 
 /* ---------- 9. the live app route (JSDOM) ---------- */
-/* There is no separate tutor section any more. The one ask-a-question screen
-   is the Study chat at /app#/chat; the legacy rail links to it, and the old
-   #/tutor deep links forward there instead of rendering a second copy of the
-   same chat. This checks that contract on the real page. */
+/* There is one ask-a-question screen: #/ask. The separate tutor section is
+   gone, and the React Study chat at /app is no longer offered in the rail, so
+   the old #/tutor deep links forward to #/ask instead of rendering a second
+   copy of the same chat. This checks that contract on the real page. */
 async function routeChecks() {
   let JSDOM, ResourceLoader;
   try { ({ JSDOM, ResourceLoader } = require('jsdom')); }
@@ -463,12 +463,17 @@ async function routeChecks() {
     for (let i = 0; i < 200 && !(window.UP?.S && document.body.classList.contains('up-ready')); i++) await pause(50);
     assert(window.UP?.S, 'the app boots');
 
-    // One entry point, and it is the Study chat, not a second tutor page.
-    const rail = document.querySelector('[data-nav="app"]');
-    assert(rail, 'the rail offers the Study chat');
-    assert.equal(rail.getAttribute('href'), '/app', 'the rail link opens the React Study chat');
+    /* The rail no longer offers the React Study chat. It linked to a second,
+       parallel ask-a-question screen; the one Ask screen is #/ask, and that is
+       what a student should reach from the rail. The /app route still exists
+       for anyone with the link; it is simply not advertised here. */
+    assert(!document.querySelector('[data-nav="app"]'),
+      'the rail no longer offers a separate Study chat entry');
     assert(!document.querySelector('[data-nav="tutor"]'), 'no separate subject-tutor section in the rail');
     assert(!document.querySelector('form[data-form="science-tutor"]'), 'no second ask form on the page');
+    const askLink = document.querySelector('[data-nav="ask"]');
+    assert(askLink, 'the rail still offers the one Ask a question screen');
+    assert.equal(askLink.getAttribute('href'), '#/ask', 'and it is the legacy Ask screen');
 
     // An old #/tutor link forwards instead of dead-ending. jsdom refuses
     // cross-document navigation, so the click is intercepted and the intent is
@@ -478,32 +483,24 @@ async function routeChecks() {
     let forwardLink = null;
     for (let i = 0; i < 120 && !forwardLink; i++) {
       await pause(25);
-      forwardLink = document.querySelector('a[data-app]');
+      forwardLink = document.querySelector('.callout a[href^="#/ask"]');
     }
-    assert(forwardLink, 'an old #/tutor link renders a link into the Study chat, not a dead end');
-    /* A guest gets /app (which is the sign-in screen); a signed-in student gets
-       /app#/chat with the shared question. Both are the Study chat shell. */
-    assert(/^\/app(?:#\/chat)?$/.test(forwardLink.getAttribute('href')), 'the forward target is the Study chat');
+    assert(forwardLink, 'an old #/tutor link forwards to the Ask screen, not a dead end');
+    assert.equal(forwardLink.getAttribute('href'), '#/ask', 'the forward target is the one Ask screen');
     assert(!document.querySelector('form[data-form="science-tutor"]'), 'the old tutor form is gone, not re-rendered');
 
-    // The chapter page asks in that same chat, carrying the chapter.
-    /* Leave the forward page behind before looking at the chapter page: its
-       link is also a[data-app], so a stale one would be measured instead. */
-    window.location.hash = '#/home';
-    for (let i = 0; i < 80 && document.querySelector('a[data-app]'); i++) await pause(25);
-    assert(!document.querySelector('a[data-app]'), 'the forward page is gone once another route renders');
+    /* The chapter page asks on that same screen. The chapter view renders only
+       once its subject pack is loaded; in this harness that may not happen, so
+       the assertion is conditional in the same way as before. */
     window.location.hash = '#/chapter/11?sub=science&cls=10';
-    for (let i = 0; i < 160 && !document.querySelector('a[data-app]'); i++) await pause(25);
-    const chapterAsk = document.querySelector('a[data-app]');
-    /* The chapter view renders only once its subject pack is loaded; in this
-       harness that may not happen. When it does, its button must point at the
-       chat with that chapter, not at the removed tutor page. */
+    for (let i = 0; i < 160 && !document.querySelector('[data-ask-chapter]'); i++) await pause(25);
+    const chapterAsk = document.querySelector('[data-ask-chapter]');
     if (chapterAsk) {
-      assert(/^\/app#\/chat/.test(chapterAsk.getAttribute('href')), 'the chapter page opens the Study chat');
-      assert(chapterAsk.getAttribute('href').includes('ch='), 'the chapter link carries the chapter');
+      assert.equal(chapterAsk.getAttribute('href'), '#/ask', 'the chapter page opens the Ask screen');
+      assert.equal(chapterAsk.getAttribute('data-ask-chapter'), '11', 'the button still names its chapter');
     }
     assert(errors.length === 0, 'no page errors: ' + errors.slice(0, 3).join(' | '));
-    pass('app route: one Study chat entry, no separate tutor, old #/tutor forwards, chapter link carries scope');
+    pass('app route: no separate Study chat entry, old #/tutor forwards to #/ask, chapter button names its chapter');
   } finally {
     dom.window.close();
   }
