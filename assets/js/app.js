@@ -5091,11 +5091,10 @@ window.UP = window.UP || {};
       : 'Before writing an answer in an exam, match it to your textbook’s method — board marking schemes are built on the textbook method.'}</div></div>`;
   }
 
-  /* ============================== STUDY CHAT ==============================
-     There is no separate science-tutor section any more. The one
-     ask-a-question screen is the Study chat (the React app at /app#/chat): it
-     answers for every subject from the stored answer key first, then the book's
-     own key, and only then the local model. Old #/tutor links are forwarded
+  /* ============================ ASK FORWARD ==============================
+     There is one ask-a-question screen: #/ask. The separate Science-tutor
+     section is gone and the React chat at /app is no longer linked. Old
+     #/tutor links are forwarded
      there so a bookmark or a chapter deep-link is never a dead end. */
   function viewStudyChatForward(params) {
     const q = params && params.q ? String(params.q).slice(0, 800) : '';
@@ -5283,9 +5282,8 @@ window.UP = window.UP || {};
     else if (r.name === 'cheatsheet') html = viewCheatsheet({ch:r.id});
     else if (r.name === 'search') html = viewSearch(r.params);
     /* The separate science-tutor section is gone: there is one ask-a-question
-       flow now, the Study chat, and it answers for every subject from the same
-       stored key. Old links (with a chapter, from a chapter page) still work
-       and land in that chat with the chapter as context. */
+       flow now, #/ask. Old links (with a chapter, from a chapter page) still
+       work and land there with the question carried across. */
     else if (r.name === 'tutor') html = viewStudyChatForward(r.params);
     else html = viewHome();
 
